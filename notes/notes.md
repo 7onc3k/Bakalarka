@@ -3,18 +3,26 @@ sem si musim sepsat napady
 1. erp system integrovany s MCP nativne
 2. system na psani specfikaci a planovani a jejich evaluace
 3. mozna neco o nazvoslovi lingivistice
-4.  s
+4. 
 
 
-literatura
+# PROBLEM & MOTIVACE
+
+# CIL PRACE
+
+# HLAVNI VYSTUPY
+
+
+
+# LITERATURA
 
 https://arxiv.org/abs/2509.16941
 
-design patterns knizka
+https://www.amazon.com/Learning-Domain-Driven-Design-Aligning-Architecture/dp/1098100131
 
-benchmark specification for LLM on erp system specification, branching and evaluation
+https://github.com/github/spec-kit
 
-glm model
+https://metr.org/
 
 
 

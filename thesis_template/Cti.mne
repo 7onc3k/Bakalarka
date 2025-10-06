@@ -1,0 +1,37 @@
+Šablona pro sazbu bakalářských/diplomových práce na VŠE FIS v LaTeXu
+
+	Vilém Sklenák <sklenak@vse.cz>
+
+Povinné náležitosti úpravy bakalářských/diplomových prací jsou dány opatřením děkana FIS č. 11/2018. 
+Další doporučení jsou uvedena v rámci Intranetu v Náležitostech bakalářské/diplomové práce.
+
+Pokud LaTeX ještě moc neznáte, na webu lze najít mnoho úvodních textů:
+- LaTeX pro pragmatiky: http://www.nti.tul.cz/~satrapa/docs/latex/
+- Ne úplně nejkratší úvod do formátu LaTeX2e: http://ftp.cstug.cz/pub/tex/CTAN/documentation/lshort/czech/lshort-cs.pdf
+- nejpodrobnější - http://en.wikibooks.org/wiki/LaTeX
+
+Pokud nemáte na "domácím" počítači instalaci TeXu/LaTeXu, pak můžete využít 
+instalaci dostupnou zde: https://eso.vse.cz/~sklenak/4iz552/instalace/ Berte 
+vždy tu nejnovější. (Máte-li z téhož zdroje instalaci starší než 2017-09, pak 
+doporučuji rovněž přejít na novější). Součásti adresáře je vždy jednostránkový 
+návod. Instalace je rychlá a jednoduchá. Úspěšnost instalace ověřte na 
+testovacích dokumentech. Součástí instalace je LaTeXové vývojové prostředí 
+TeXmaker. Instalace je určena jen pro prostředí Windows. Pro platformu Mac OS 
+lze uvést odkazy http://tug.org/mactex/ a 
+http://www.xm1math.net/texmaker/download.html.
+
+Základní nastavení sazby naleznete v souboru prace.tex, ten se také odkazuje na 
+ostatní soubory s jednotlivými kapitolami práce. Pečlivě si hlavní soubor 
+přečtěte a doplňte všechny chybějící údaje. Také je doplňte do metadatového 
+souboru prace.xmpdata.
+
+Pro překlad práce zřejmě bude nejčastější pdflatex. Při použití prostředí 
+TeXmaker k tomu vede nejrychleji klávesa F6. Pokud budete používat samostatnou 
+bibliografickou databázi, je zapotřebí tříkrokový překlad pdflatex-biber-
+pfdlatex, který můžete buď volat ručně klávesami F6-F11-F6, nebo si to nastavit 
+jako možnost pro tzv. rychlý překlad ve Volbách prostředí TeXmaker. Šablona je 
+však univerzální a přeloží ji i xelatex nebo lualatex. Pokud byste používali 
+xelatex, pak je nutno zkontrolovat příkazový řádek pro spouštění xelatexu: 
+	xelatex - shell-escape -output-driver="xdvipdfmx -z 0" <filename> 
+Toto nastavení je důležité pro generování výsledného formátu PDF dle standardu PDF/A.
+
