@@ -55,6 +55,9 @@ vyresit provlem tim ze udelam erp ktere je architektonicky spravne, bude mit vse
 
 pak bych vam chtel sdelit vizi, informacni systemy pro zdravotnictvi, sber dat na trenovani AI modelu pro chapani biologie problem nebude jak doletet na mars sle jak tam prezit.
 
+MCP alternative - https://blog.cloudflare.com/code-mode/ 
+
+
 
 # OTAZKY
 
@@ -68,3 +71,9 @@ zotero alternativa ? do vscode ?
 methodology ? prompt engineering ? context engeinnering ? agents/subagents ?bmad ? DDD
 
 citovat videa ?
+
+
+# KONZULTACE 6-10-25
+
+
+
