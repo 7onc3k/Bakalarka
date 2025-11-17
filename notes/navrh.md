@@ -10,13 +10,21 @@ nedostatecny context engineering(specifikace, konvence, architektura) pro LLMs
 
 syntaxe je nerelevantni, relevantni je architektura a design.
 
+centralizace contextu, odeleni storefront od backendu, web/erps a interni nastroje, centralizovat to vsechno,  pro zvyseni schopnosti jednat pro LLM agents
+
+
+centralizace contextu, odeleni storefront od backendu, web/erps a interni nastroje, centralizovat to vsechno,  pro zvyseni schopnosti jednat pro LLM agents
+
+
 # CIL PRACE
 
 Zjistit jaka architektura je nejvice idealni pro podnikove systemy ktere jsou nativne integrovane s LLM
 
 Zjistit jake jsou limity a nedostatky LLMs a jake jsou moznosti jak se jim vyhnout
 
+pouzit opensource repos ? brownfield, greenfield
 
+prompt learning feedback loop ?
 
 # VYZKUMNE OTAZKY
 
@@ -51,6 +59,10 @@ GIT workflow
 
 # LITERATURA
 
+BMAD-method https://github.com/bmad-code-org/BMAD-METHOD
+
+BMAD-method https://github.com/bmad-code-org/BMAD-METHOD
+
 https://arxiv.org/abs/2509.16941
 
 https://www.amazon.com/Learning-Domain-Driven-Design-Aligning-Architecture/dp/1098100131
@@ -59,6 +71,7 @@ https://github.com/github/spec-kit
 
 https://metr.org/
 
+thinking in systems(book)
 
 # VZOROVE BAKALARSKE PRACE
 
