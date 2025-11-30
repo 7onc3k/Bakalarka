@@ -32,19 +32,19 @@
 
 ---
 
-## 3. Teoretický Rámec (Fáze 0: Rešerše)
+## 3. Teoretický Rámec (Fáze 0: Plán Rešerše)
 
-* **Analýza nositelů informací (Terminologie):**
-    * [Zde doplnit: Např. "Systémová analýza (Thinking in Systems)", "DDD - Ubiquitous Language"]
-* **Standardy pro specifikace (Primitiva):**
-    * [Zde doplnit: Např. "Datové kontrakty (OpenAPI, JSON Schema)", "Architektonické záznamy (ADRs, C4 Model)"]
-* **Existující Spec-Driven Frameworky (Inspirace):**
-    * [Zde doplnit: Např. "GitHub Spec-Kit", "BMAD"]
-* **IT Governance (Zarámování procesu):**
-    * [Zde doplnit: Např. "ITIL Change Enablement"]
-* **Metodiky měření LLM (Inspirace pro metriky):**
-    * [Zde doplnit: Např. "SWE-Bench", "METR"]
+Cílem této fáze není definovat finální řešení, ale zmapovat možnosti. Rešerše se zaměří na identifikaci a kategorizaci dostupných "informačních artefaktů".
 
+* **Oblast 1: Nositelé Sémantiky a Intentu**
+    * *Otázka:* Jaké existují standardizované formáty (např. OpenAPI, User Stories, Gherkin) pro přenos zadání a jaká je jejich srozumitelnost pro LLM?
+* **Oblast 2: Struktura a Navigace v Kódu**
+    * *Otázka:* Jaké metody (např. C4 model, dependency graphs, stromové mapy) existují pro efektivní popis architektury softwaru?
+* **Oblast 3: Governance a Kvalita**
+    * *Otázka:* Jaké mechanismy (lintery, testy, ADRs) lze využít jako "mantinely" pro probabilistické výstupy agentů?
+* **Oblast 4: Existující Frameworky (Benchmark)**
+    * *Otázka:* Jak k problému kontextu přistupují existující nástroje (např. Spec-Kit) a co se z nich lze naučit?
+    
 ---
 
 ## 4. Metodika Experimentu (Jak?)
