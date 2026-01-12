@@ -12,6 +12,8 @@ Tento seznam slouží jako podklad pro rešeršní část bakalářské práce. 
     *   *Technický popis problémů s dlouhodobou pamětí agentů.*
 *   **METR.** *Model Evaluation and Threat Research* [online]. 2024 [cit. 2025-11-30]. Dostupné z: https://metr.org/
     *   *Standardy pro hodnocení bezpečnosti a schopností modelů.*
+*   **THEDOTMACK.** *claude-mem: Persistent Memory System for Claude Code* [online]. GitHub, 2025 [cit. 2025-12-15]. Dostupné z: https://github.com/thedotmack/claude-mem
+    *   *Příklad implementace hooks v CLI agentech - persistentní paměť přes session.*
 
 ## 2. Odborné studie (State-of-the-Art ve výzkumu LLM)
 
