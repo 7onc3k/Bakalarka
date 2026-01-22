@@ -1,0 +1,50 @@
+2025/03/13
+- zmena umisteni poznamek u obrazku a tabulek v souladu s APA7
+
+2025/02/20
+- doplnena podpora pro slovenstinu v citacich dle APA7
+- zruseno odsazeni u polozek v seznamu zdrojovych kodu
+
+2025/02/01
+- upraveny popisky obrazku, tabulek a vypisu dle APA7
+
+2024/09/01
+- doplneny navodne informace v uvodu sablony
+
+2023/11/30
+- zmena citacniho stylu z ISO-690 na APA7
+- opravena chyba s cestinou v zalozkach
+
+2022/10/05
+- zrusena klasifikace JEL
+
+2022/06/12
+- odlisena uprava zahlavi v zavislosti, zda se jedna o jednostrannou nebo oboustrannou sazbu
+- zpresneno formatovani autoru u citaci, aby to bylo presne v souladu s normou ISO 690
+- jednostranna sazba nastavena jako vychozi s ohledem na to, ze se prace odevzdavaji jen elektronicky (moznost prepnuti do oboustranne sazby zustala zachovana - viz zacatek souboru prace.tex)
+
+2021/11/25
+- na titulni stranu doplnena specializace
+
+2020/10/06
+- upraven anglicky nazev pro VSE
+
+2020/09/29
+- odebrano prohlaseni
+
+2018/12/20
+- sablona je nyni univerzalni - lze pouzit jak pdfLaTeX, tak XeLaTeX i LuaLaTeX. V teto souvislosti je potreba si zkontrolovat spousteni pro xelatex:
+	xelatex -shell-escape -output-driver="xdvipdfmx -z 0" <filename>
+- krome cestiny sablona pocita i s pracemi psanymi ve slovenstine nebo anglictine - nastaveni je na pocatku souboru prace.tex
+
+2018/11/19
+- logo na titulni strane ve vektorovem formatu
+
+2018/11/16
+- na titulni stranu doplneno logo FIS
+
+2018/11/13
+- opravena chyba typu clash pri zavadeni balicku xcolor
+
+2018/11/03
+ - prvni verze

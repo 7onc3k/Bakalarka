@@ -1,0 +1,24 @@
+\babel@toc {czech}{}\relax 
+\contentsline {chapter}{Úvod}{9}{chapter*.8}%
+\contentsline {chapter}{\numberline {1}Vymezení problému a cílů práce}{10}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Kontext a motivace}{10}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Vymezení problému}{10}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Cíle práce a výzkumné otázky}{10}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Struktura práce}{10}{section.1.4}%
+\contentsline {chapter}{\numberline {2}Teoretická východiska a související práce}{11}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Vymezení klíčových pojmů}{11}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Přehled relevantní literatury}{11}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Závěry pro návrh a další kapitoly}{11}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Mezery ve stavu poznání}{11}{subsection.2.3.1}%
+\contentsline {chapter}{\numberline {3}Metodika}{12}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Postup zpracování práce}{12}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Použité nástroje a prostředky}{12}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Kritéria hodnocení}{12}{section.3.3}%
+\contentsline {chapter}{\numberline {4}Praktická část}{13}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Návrh řešení / experimentu}{13}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Implementace / realizace}{13}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Průběh a reprodukovatelnost}{13}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Výsledky (stručně)}{13}{section.4.4}%
+\contentsline {chapter}{Závěr}{14}{chapter*.9}%
+\contentsline {chapter}{\numberline {A}Formulář v plném znění}{16}{appendix.A}%
+\contentsline {chapter}{\numberline {B}Zdrojové kódy výpočetních procedur}{17}{appendix.B}%

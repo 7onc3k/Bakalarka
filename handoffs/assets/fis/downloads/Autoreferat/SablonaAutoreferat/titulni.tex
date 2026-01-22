@@ -1,0 +1,58 @@
+%%% Titulní strana
+
+\pagestyle{empty}
+\hypersetup{pageanchor=false}
+
+\begin{center}
+\Huge\sffamily
+\VSE\\
+\FIS
+
+\vspace{\stretch{1}}
+
+\includegraphics[width=.3\textwidth]{img/logo-FIS}
+
+\vspace{\stretch{2}}
+
+\bfseries\NazevPrace
+
+\vspace{8mm}
+\mdseries\TypPraceText
+
+\vspace{8mm}
+\large
+\begin{tabular}{rl}
+\StudijniProgramText: & \StudijniProgram \\
+\ifthenelse{\equal{\Specializace}{}}{%
+	% empty value
+	}{
+	\rule{0pt}{6mm}%
+	\SpecializaceText: & \Specializace \\
+}
+\ifthenelse{\equal{\StudijniObor}{}}{%
+	% empty value
+	}{
+	\rule{0pt}{6mm}%
+	\StudijniOborText: & \StudijniObor \\
+}
+\end{tabular}
+
+\vspace{\stretch{8}}
+
+\begin{tabular}{rl}
+\AutorText: & \AutorPrace \\
+\noalign{\vspace{2mm}}
+\VedouciText: & \Vedouci \\
+\ifthenelse{\equal{\Konzultant}{}}{%
+	% empty value
+	}{
+	\rule{0pt}{6mm}%
+	\KonzultantText: & \Konzultant \\
+}
+\end{tabular}
+
+\vspace{8mm}
+\Praha, \DatumOdevzdani
+\end{center}
+
+\newpage

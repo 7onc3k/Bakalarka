@@ -1,0 +1,8 @@
+2025/05/03
+- slouceni souboru s makry do jednoho
+
+2021/11/25
+- na titulni stranu doplnena specializace
+
+2021/10/06
+- prvni verze
