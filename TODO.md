@@ -21,7 +21,7 @@ Zdrojové podklady (uložené v repu):
 
 ## Obsah a struktura práce (to, co budeme doplňovat “chirurgicky”)
 - [ ] Sep sat “vědecký kontrakt” práce na 1 stranu (problém → cíl/RQ → artefakt → evaluace) a držet se toho v textu
-- [ ] Dopsat experimentální protokol (směr A): páky + signály + QA rubriky pro issue/decision packet + konfigurace běhů
+- [ ] Dopsat experimentální protokol (směr A / test cheating): konfigurace běhů + QA rubriky pro “dobré testy” + definice cheat patternů
 - [ ] V `thesis/uvod.tex` doplnit:
   - [ ] motivaci/kontext
   - [ ] vymezení problému
@@ -38,4 +38,20 @@ Zdrojové podklady (uložené v repu):
 ## Přílohy / artefakty
 - [ ] Přílohy (`thesis/app01.tex`, `thesis/app02.tex`) naplnit pouze věcmi, na které se v textu odkazuje
 - [ ] U praktické části rozhodnout, co je “artefakt”: kód, logy, experimentální protokoly, dataset popis
+
+## Praktická část (nově vybraný testbed)
+- [ ] Zafixovat scope Billing Reminder Engine (minimální core pro BP):
+  - [ ] `DunningStateMachine`
+  - [ ] `BusinessDaysCalculator`
+  - [ ] (volitelně) `ReminderScheduler`
+- [ ] Napsat specifikace komponent (bez implementace) do `specs/` (invarianty, příklady, edge cases)
+- [ ] Implementovat domain logiku (vlastní kód) podle spec
+- [ ] Nastavit mutation testing (např. Stryker nebo jednoduchý custom harness)
+- [ ] Definovat taxonomii “test cheating” + automaticky detekovat základní patterns (triviální asserty, tautologie, hardcode, chybějící negativní testy)
+- [ ] Spustit experimenty:
+  - [ ] A: agent má implementaci + spec
+  - [ ] B1: agent má jen spec
+  - [ ] B2: spec + test-plan šablona
+  - [ ] B3: spec + adversarial reviewer
+- [ ] Vyhodnocení: mutation score + edge-case coverage + negative test ratio + cheat pattern count (a krátká kvalitativní analýza selhání)
 

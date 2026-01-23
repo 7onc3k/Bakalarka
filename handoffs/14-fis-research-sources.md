@@ -12,11 +12,13 @@ Uloženo pod `handoffs/assets/fis/downloads/` (viz index `handoffs/assets/fis/do
 - **Doporučení pro tvorbu závěrečných prací na FIS**:
   - PDF: `handoffs/assets/fis/downloads/Doporučení pro tvorbu závěrečných prací na FIS.pdf`
   - Převod do Markdown: `handoffs/10-fis-doporuceni.md`
+  - Zdroj (SharePoint, může vyžadovat přihlášení): `https://vse.sharepoint.com/:b:/s/intranet-studenti-FIS/EYILumt5UR1Fv0VV4kuvihAB8xc3Wze5TT91uYmTgFkIzw?e=RAmMsK`
   - Důležitý bod: v části *Originalita* je explicitně uvedeno **citování v souladu s APA 7** a zmínka o pravidlech k použití nástrojů pro generování textu.
 
 - **Formátování vzorců a modelů**:
   - PDF: `handoffs/assets/fis/downloads/Formatovani vzorcu a modelu.pdf`
   - Převod do Markdown: `handoffs/11-fis-formatovani-vzorcu-a-modelu.md`
+  - Zdroj (SharePoint, může vyžadovat přihlášení): `https://vse.sharepoint.com/:b:/s/intranet-studenti-FIS/Eex5gunqx99Lt5v4DBcbRcQB-OfGdOir_dXPaBh5fpIAiA?e=zvH22U`
 
 - **Šablona podoby práce (LaTeX) — BP/DP ZIP**:
   - Rozbaleno: `handoffs/assets/fis/downloads/BP-DP/`
@@ -32,6 +34,7 @@ Uloženo pod `handoffs/assets/fis/downloads/public/`:
 - **Opatření děkana FIS č. 11/2018** (odkazováno z FIS stránky):
   - PDF: `handoffs/assets/fis/downloads/public/Opatreni_2018_11.pdf`
   - Převod do Markdown: `handoffs/12-fis-opatreni-dekana-11-2018.md`
+  - Zdroj: `https://fis.vse.cz/wp-content/uploads/page/579/Opatreni_2018_11.pdf`
 
 - **VŠE knihovna — Formální požadavky na závěrečné práce** (veřejná stránka):
   - HTML snapshot: `handoffs/assets/fis/downloads/public/vse-knihovna-formalni-pozadavky.html`

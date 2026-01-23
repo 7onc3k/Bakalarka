@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.1.21)  21 JAN 2026 20:54
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.1.21)  23 JAN 2026 19:15
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -900,27 +900,27 @@ Package biblatex Warning: Load 'inputenc' before biblatex.
 
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
-(./prace.aux (./zacatek.aux) (./zkratky.aux) (./uvod.aux) (./kap01.aux) (./kap02.aux) (./kap03.aux) (./kap04.aux) (./zaver.aux) (./literatura.aux) (./app01.aux) (./app02.aux))
+(./prace.aux (./zacatek.aux) (./zkratky.aux) (./uvod.aux) (./kap01.aux) (./kap02.aux) (./kap03.aux) (./kap04.aux) (./kap05.aux) (./zaver.aux) (./literatura.aux) (./app01.aux) (./app02.aux))
 \openout1 = `prace.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -975,7 +975,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
  (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Package hyperref Info: Link coloring OFF on input line 76.
+Package hyperref Info: Link coloring OFF on input line 78.
  (./prace.out) (./prace.out)
 \@outlinefile=\write5
 \openout5 = `prace.out'.
@@ -1020,8 +1020,8 @@ Package biblatex Info: Data encoding 'UTF8' specified.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'prace.bbl' found.
  (./prace.bbl)
-Package biblatex Info: Reference section=0 on input line 76.
-Package biblatex Info: Reference segment=0 on input line 76.
+Package biblatex Info: Reference section=0 on input line 78.
+Package biblatex Info: Reference segment=0 on input line 78.
 \c@lstlisting=\count470
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
@@ -1033,7 +1033,7 @@ LaTeX Font Info:    Trying to load font information for T1+lmss on input line 9.
  (/usr/share/texmf/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-<img/FIS_2_logo_2_rgb_CZ.pdf, id=99, 426.79147pt x 426.79147pt>
+<img/FIS_2_logo_2_rgb_CZ.pdf, id=71, 426.79147pt x 426.79147pt>
 File: img/FIS_2_logo_2_rgb_CZ.pdf Graphic file (type pdf)
 <use img/FIS_2_logo_2_rgb_CZ.pdf>
 Package pdftex.def Info: img/FIS_2_logo_2_rgb_CZ.pdf  used on input line 19.
@@ -1158,9 +1158,19 @@ Kapitola 4.
 
 
 ]
+\openout2 = `kap05.aux'.
+
+ (./kap05.tex
+Kapitola 5.
+) [14
+
+
+
+
+]
 \openout2 = `zaver.aux'.
 
- (./zaver.tex) [14
+ (./zaver.tex) [15
 
 
 
@@ -1172,7 +1182,7 @@ Kapitola 4.
 
 LaTeX Warning: Empty bibliography on input line 2.
 
-) [15
+) [16
 
 
 
@@ -1184,7 +1194,7 @@ LaTeX Warning: Empty bibliography on input line 2.
 
  (./app01.tex
 P\v {r}\'{\i }loha A.
-) [16
+) [17
 
 
 ]
@@ -1192,12 +1202,12 @@ P\v {r}\'{\i }loha A.
 
  (./app02.tex
 P\v {r}\'{\i }loha B.
-) [17
+) [18
 
 
 
 
-] (./prace.aux (./zacatek.aux) (./zkratky.aux) (./uvod.aux) (./kap01.aux) (./kap02.aux) (./kap03.aux) (./kap04.aux) (./zaver.aux) (./literatura.aux) (./app01.aux) (./app02.aux))
+] (./prace.aux (./zacatek.aux) (./zkratky.aux) (./uvod.aux) (./kap01.aux) (./kap02.aux) (./kap03.aux) (./kap04.aux) (./kap05.aux) (./zaver.aux) (./literatura.aux) (./app01.aux) (./app02.aux))
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -1207,7 +1217,7 @@ L3 programming layer <2024-01-22>
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `prace.out' has not changed.
-(rerunfilecheck)             Checksum: F403FCCAB99A63A543F84318B6FDD1AD;4080.
+(rerunfilecheck)             Checksum: C9173558930BA5D58BC7E65E10EB908D;2106.
 
 Package biblatex Warning: Please (re)run Biber on the file:
 (biblatex)                prace
@@ -1218,18 +1228,18 @@ Package logreq Info: Writing requests to 'prace.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 28313 strings out of 475350
- 476291 string characters out of 5770204
- 1934975 words of memory out of 5000000
- 49849 multiletter control sequences out of 15000+600000
- 633951 words of font info for 85 fonts, out of 8000000 for 9000
+ 28324 strings out of 475350
+ 476604 string characters out of 5770204
+ 1931975 words of memory out of 5000000
+ 49860 multiletter control sequences out of 15000+600000
+ 629688 words of font info for 84 fonts, out of 8000000 for 9000
  428 hyphenation exceptions out of 8191
  97i,11n,98p,710b,5052s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmss12.pfb></usr/share/texmf/fonts/type1/public/lm/lmss17.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb>
-Output written on prace.pdf (17 pages, 220302 bytes).
+</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmss12.pfb></usr/share/texmf/fonts/type1/public/lm/lmss17.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb>
+Output written on prace.pdf (18 pages, 194016 bytes).
 PDF statistics:
- 258 PDF objects out of 1000 (max. 8388607)
- 219 compressed objects within 3 object streams
- 47 named destinations out of 1000 (max. 500000)
- 202 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 220 PDF objects out of 1000 (max. 8388607)
+ 183 compressed objects within 2 object streams
+ 41 named destinations out of 1000 (max. 500000)
+ 146 words of extra memory for PDF output out of 10000 (max. 10000000)
 

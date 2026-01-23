@@ -1,7 +1,13 @@
-# Opatření
-# děkana Fakulty informatiky a statistiky
-# č. 11/2018
-# k plnění studijních povinností
+# Opatření děkana Fakulty informatiky a statistiky č. 11/2018 (snapshot)
+
+Zdroj:
+- PDF (veřejné): `https://fis.vse.cz/wp-content/uploads/page/579/Opatreni_2018_11.pdf`
+- Odkazované ze stránky FIS intranetu „Náležitosti bakalářské práce“: `https://vse.sharepoint.com/sites/intranet-studenti-FIS/SitePages/N%C3%A1le%C5%BEitosti-bakal%C3%A1%C5%99sk%C3%A9-pr%C3%A1ce.aspx`
+
+Originál v repozitáři:
+- PDF: `handoffs/assets/fis/downloads/public/Opatreni_2018_11.pdf`
+
+Poznámka: Níže je textový snapshot obsahu PDF pro rychlé vyhledávání a audit.
 
 Toto opatření upravuje v souladu se Studijním a zkušebním řádem Vysoké školy ekonomické v Praze
 (dále „SZŘ“) některé podmínky plnění studijních povinností studentů zapsaných v bakalářských a

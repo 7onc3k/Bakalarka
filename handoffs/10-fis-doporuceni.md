@@ -1,4 +1,13 @@
-# Doporučení pro tvorbu závěrečných prací na FIS
+# Doporučení pro tvorbu závěrečných prací na FIS (snapshot)
+
+Zdroj (FIS intranet / SharePoint odkazovaný ze stránky „Náležitosti bakalářské práce“):
+- Stránka s odkazy: `https://vse.sharepoint.com/sites/intranet-studenti-FIS/SitePages/N%C3%A1le%C5%BEitosti-bakal%C3%A1%C5%99sk%C3%A9-pr%C3%A1ce.aspx`
+- Přímý odkaz na PDF (může vyžadovat přihlášení): `https://vse.sharepoint.com/:b:/s/intranet-studenti-FIS/EYILumt5UR1Fv0VV4kuvihAB8xc3Wze5TT91uYmTgFkIzw?e=RAmMsK`
+
+Originál v repozitáři:
+- PDF: `handoffs/assets/fis/downloads/Doporučení pro tvorbu závěrečných prací na FIS.pdf`
+
+Poznámka: Níže je textový převod PDF do Markdown pro rychlé vyhledávání a audit.
 
 Následující doporučení pro tvorbu závěrečných prací (dále jen „doporučení“) jsou určena
 k hodnocení obhajitelnosti závěrečné práce. Jsou určena pro všechny typy závěrečných prací na

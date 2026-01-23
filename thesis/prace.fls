@@ -334,6 +334,9 @@ INPUT kap03.aux
 INPUT ./kap04.aux
 INPUT ./kap04.aux
 INPUT kap04.aux
+INPUT ./kap05.aux
+INPUT ./kap05.aux
+INPUT kap05.aux
 INPUT ./zaver.aux
 INPUT ./zaver.aux
 INPUT zaver.aux
@@ -488,7 +491,6 @@ OUTPUT uvod.aux
 INPUT ./uvod.tex
 INPUT ./uvod.tex
 INPUT uvod.tex
-INPUT /usr/share/texmf/fonts/tfm/public/lm/ec-lmri10.tfm
 INPUT ./kap01.tex
 INPUT ./kap01.tex
 OUTPUT kap01.aux
@@ -513,6 +515,12 @@ OUTPUT kap04.aux
 INPUT ./kap04.tex
 INPUT ./kap04.tex
 INPUT kap04.tex
+INPUT ./kap05.tex
+INPUT ./kap05.tex
+OUTPUT kap05.aux
+INPUT ./kap05.tex
+INPUT ./kap05.tex
+INPUT kap05.tex
 INPUT ./zaver.tex
 INPUT ./zaver.tex
 OUTPUT zaver.aux
@@ -559,6 +567,9 @@ INPUT kap03.aux
 INPUT ./kap04.aux
 INPUT ./kap04.aux
 INPUT kap04.aux
+INPUT ./kap05.aux
+INPUT ./kap05.aux
+INPUT kap05.aux
 INPUT ./zaver.aux
 INPUT ./zaver.aux
 INPUT zaver.aux
@@ -577,7 +588,6 @@ INPUT prace.run.xml
 OUTPUT prace.run.xml
 INPUT /usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb
 INPUT /usr/share/texmf/fonts/type1/public/lm/lmr10.pfb
-INPUT /usr/share/texmf/fonts/type1/public/lm/lmri10.pfb
 INPUT /usr/share/texmf/fonts/type1/public/lm/lmss12.pfb
 INPUT /usr/share/texmf/fonts/type1/public/lm/lmss17.pfb
 INPUT /usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb

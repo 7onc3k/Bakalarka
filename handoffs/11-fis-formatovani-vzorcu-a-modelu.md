@@ -1,4 +1,14 @@
-# Formátování vzorců a modelů
+# Formátování vzorců a modelů (snapshot)
+
+Zdroj (FIS intranet / SharePoint odkazovaný ze stránky „Náležitosti bakalářské práce“):
+- Stránka s odkazy: `https://vse.sharepoint.com/sites/intranet-studenti-FIS/SitePages/N%C3%A1le%C5%BEitosti-bakal%C3%A1%C5%99sk%C3%A9-pr%C3%A1ce.aspx`
+- Přímý odkaz na PDF (může vyžadovat přihlášení): `https://vse.sharepoint.com/:b:/s/intranet-studenti-FIS/Eex5gunqx99Lt5v4DBcbRcQB-OfGdOir_dXPaBh5fpIAiA?e=zvH22U`
+
+Originál v repozitáři:
+- PDF: `handoffs/assets/fis/downloads/Formatovani vzorcu a modelu.pdf`
+
+Poznámka: Níže je textový převod PDF do Markdown pro rychlé vyhledávání a audit.
+
        Pro sazbu všech vzorců doporučuji používat Editor rovnic, což je doplněk aplikace MS
 Word, případně je možné zdarma si stáhnout trial verzi doplňku MathType, který nahrazuje
 editor rovnic a má více funkcí. Máte-li MS Office 2007 nebo vyšší, bude vám MS Word nabízet
