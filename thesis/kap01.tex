@@ -1,8 +1,39 @@
 \chapter{Vymezení problému a cílů práce}
 \label{kap:vymezeni}
 
-\section{Problém}
+\section{Motivace}
+
+\begin{draft}
+Studie společnosti METR.ORG ukazuje, že LLM zkušené vývojáře spíše zpomaluje. S rychlým vývojem schopností modelů se situace pravděpodobně mění. Ale to neznamená, že je LLM samo o sobě dostatečné k vypracování dlouhotrvajících úkolů. Není to problém pouze LLM, když projekt roste, bývá těžší jej rozšiřovat jak pro člověka, tak i pro LLM. AI programování tenhle problém ještě více prohlubuje. Vývojáři přicházejí o kontext a hlubokou znalost kódové základny (codebase), zatímco velké jazykové modely (LLM) jsou limitovány omezenou pamětí (context window). Jak nastavit harness/scaffolding tak, aby v tom mohli fungovat agenti a lidé to stále měli pod kontrolou?
+\end{draft}
 
 \section{Cíle práce}
 
+\begin{draft}
+\begin{enumerate}
+    \item Popsat jak se řízení SWE projektů mění v kontextu agentních systémů (teoretický rámec)
+    \item Navrhnout a implementovat experimentální prostředí (case study: systém upomínek faktur)
+    \item Prozkoumat vliv různých nastavení scaffoldingu na schopnost agenta provést kvalitní práci
+    \item Identifikovat jaký kontext je pro agenty klíčový a jak instrukce/procesy ovlivňují schopnost agenta tento kontext vytvářet a využívat
+\end{enumerate}
+\end{draft}
+
 \section{Rozsah práce}
+
+\begin{draft}
+Práce pokrývá celý SDLC na jednoduchém projektu. Součástí je vlastní implementace, která poskytuje hloubku porozumění potřebnou pro návrh experimentů.
+
+\subsection*{Práce se zaměřuje na:}
+\begin{itemize}
+    \item Nastavení a použití existujících nástrojů (GitHub, CLI agents)
+    \item Exploratory case study - hledání vzorů a doporučení
+\end{itemize}
+
+\subsection*{Práce se nezaměřuje na:}
+\begin{itemize}
+    \item Programování nových nástrojů od nuly
+    \item Porovnávání různých LLM modelů
+    \item Porovnávání různých programovacích jazyků
+    \item Vývoj produkčního nástroje/produktu
+\end{itemize}
+\end{draft}

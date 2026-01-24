@@ -1,9 +1,0 @@
-[0] Config.pm:307> INFO - This is Biber 2.19
-[0] Config.pm:310> INFO - Logfile is 'prace.blg'
-[48] biber:340> INFO - === Wed Jan 21, 2026, 20:54:25
-[58] Biber.pm:419> INFO - Reading 'prace.bcf'
-[96] Biber.pm:979> INFO - Found 0 citekeys in bib section 0
-[106] bbl.pm:660> INFO - Writing 'prace.bbl' with encoding 'UTF-8'
-[107] bbl.pm:763> INFO - Output to prace.bbl
-[107] Biber.pm:131> WARN - The file 'prace.bcf' does not contain any citations!
-[107] Biber.pm:133> INFO - WARNINGS: 1

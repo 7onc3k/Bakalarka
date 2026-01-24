@@ -1,5 +1,7 @@
 # Zdroje a Literatura
 
+> **Poznámka:** Obsah tohoto souboru byl přesunut do `thesis/literatura.tex` jako raw zdroje k zpracování do BibTeX formátu (2025-01-23). Tento soubor slouží jako archiv.
+
 Tento seznam slouží jako podklad pro rešeršní část bakalářské práce. Zdroje jsou rozděleny do kategorií dle jejich role v textu.
 
 ## 1. Primární zdroje (Frameworky a Metodiky)
@@ -42,7 +44,27 @@ Tento seznam slouží jako podklad pro rešeršní část bakalářské práce. 
 *   **METR.** *Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity* [online]. 2025 [cit. 2025-12-10]. Dostupné z: https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/
     *   *RCT studie: zkušení vývojáři s AI jsou o 19% pomalejší - překvapivé zjištění.*
 
-### 2.4 Základní LLM studie
+### 2.4 Metriky kvality software a AI agentů
+
+*   **ISO/IEC.** *ISO/IEC 25010:2023 - Systems and software Quality Requirements and Evaluation (SQuaRE) — Product quality model* [online]. 2023 [cit. 2025-01-23]. Dostupné z: https://www.iso.org/standard/78176.html
+    *   *Industry standard pro kvalitu software. 8 charakteristik, Functional Suitability obsahuje Completeness, Correctness, Appropriateness.*
+*   **ISO 25000.** *ISO 25010 Software Quality Model* [online]. 2023 [cit. 2025-01-23]. Dostupné z: https://iso25000.com/index.php/en/iso-25000-standards/iso-25010
+    *   *Přehledný popis ISO 25010 modelu kvality.*
+*   **LXT.** *AI Agent Evaluation: Comprehensive Framework for Measuring Agent Performance* [online]. 2024 [cit. 2025-01-23]. Dostupné z: https://www.lxt.ai/blog/ai-agent-evaluation/
+    *   *Moderní framework pro evaluaci AI agentů: Task completion, Accuracy, Safety/trust (policy compliance, transparency), Tool usage.*
+*   **Weights & Biases.** *AI Agent Evaluation: Metrics, Strategies, and Best Practices* [online]. 2024 [cit. 2025-01-23]. Dostupné z: https://wandb.ai/onlineinference/genai-research/reports/AI-agent-evaluation-Metrics-strategies-and-best-practices--VmlldzoxMjM0NjQzMQ
+    *   *Praktický průvodce metrikami pro AI agenty.*
+
+### 2.5 Kanban a project management pro akademický research
+
+*   **Dr Veronika CH.** *Keeping track of your research projects with Kanban* [online]. 2024 [cit. 2025-01-23]. Dostupné z: https://veronikach.com/habits-productivity/keeping-track-of-your-research-projects-with-kanban/
+    *   *Kanban pro akademický research - proč funguje (kontinuální procesy bez deadlines).*
+*   **TeamHub.** *How to Implement Kanban in Research Management* [online]. 2024 [cit. 2025-01-23]. Dostupné z: https://teamhub.com/blog/how-to-implement-kanban-in-research-management/
+    *   *Praktická implementace Kanban pro výzkum.*
+*   **ResearchGate.** *Thesis Supervision Mobile System for Enhancing Student-supervisor Communication* [online]. 2019 [cit. 2025-01-23]. Dostupné z: https://www.researchgate.net/publication/333913967_Thesis_Supervision_Mobile_System_for_Enhancing_Student-supervisor_Communication
+    *   *Systém pro spolupráci student-vedoucí s Kanban boards a collaboration score.*
+
+### 2.6 Základní LLM studie
 
 *   **JIMENEZ, Carlos E. et al.** *SWE-bench: Can Language Models Resolve Real-world Github Issues?* [online]. In: The Twelfth International Conference on Learning Representations (ICLR). 2024 [cit. 2025-11-30]. Dostupné z: https://arxiv.org/abs/2310.06770
     *   *Hlavní benchmark pro hodnocení schopností programovacích agentů.*

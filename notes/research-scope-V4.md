@@ -1,4 +1,4 @@
-# Návrh a testování prostředí pro AI agenty v softwarovém vývoji
+# Návrh a testování běhových prostředí pro autonomni coding agenty v softwarovém vývoji
 
 ## Motivace
 

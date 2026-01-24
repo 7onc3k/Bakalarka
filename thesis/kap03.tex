@@ -1,10 +1,83 @@
 \chapter{Metodika}
 \label{kap:metodika}
 
-\section{Rešerše}
+\section{Výběr projektu pro case study}
+
+\begin{raw}
+Práce se zaměřuje na řízení a scaffolding - jde více do šířky než do hloubky. Proto potřebujeme menší projekt, na kterém můžeme spustit více běhů s různými nastaveními scaffoldingu a měřit výsledky.
+
+Pro experiment potřebujeme projekt který:
+\begin{itemize}
+    \item \textbf{Hard logic} - jasná business pravidla, ne subjektivní výstupy (např. generování textu)
+    \item \textbf{Jasné invarianty} - deterministické chování, matematicky ověřitelné správnost
+    \item \textbf{Testovatelné} - lze objektivně měřit kvalitu výstupu
+    \item \textbf{Přiměřená velikost} - menší projekt umožňuje více experimentálních běhů
+    \item \textbf{Reálný use case} - prakticky využitelné, ne umělý příklad
+\end{itemize}
+\end{raw}
+
+\subsection*{Systém upomínek faktur}
+
+\begin{raw}
+Systém pro automatické odesílání připomínek k nezaplaceným fakturám. Obsahuje:
+\begin{itemize}
+    \item Stavový automat pro sledování stavu faktury (nová, po splatnosti, upomínaná, eskalovaná)
+    \item Časové výpočty (pracovní dny, ochranné lhůty)
+    \item Pravidla pro eskalaci (kdy poslat další upomínku, kdy předat k vymáhání)
+    \item Plánování odesílání upomínek
+\end{itemize}
+\end{raw}
 
 \section{Referenční implementace}
 
+\begin{raw}
+Vlastní vývoj systému upomínek faktur se všemi náležitostmi softwarového inženýrství:
+\begin{itemize}
+    \item Specifikace a dokumentace
+    \item Implementace (TypeScript)
+    \item Testy (unit, integration)
+    \item Git workflow (issues, commits, PR conventions)
+    \item Quality gates (linting, type checking)
+\end{itemize}
+
+Tato implementace slouží jako "ground truth" pro porovnání.
+\end{raw}
+
 \section{Experimenty}
 
+\begin{raw}
+Příprava různých nastavení scaffoldingu pro agenty:
+\begin{itemize}
+    \item Instrukce a procesy (jak má agent postupovat)
+    \item Git automatizace a skripty
+    \item Kontext který má agent k dispozici a který si vytváří
+    \item Nastavení odvozená z literatury a spec-driven development přístupů
+\end{itemize}
+
+Spuštění agentů s různými nastaveními scaffoldingu na stejném zadání. Zaznamenání průběhu a výstupů.
+\end{raw}
+
 \section{Analýza}
+
+\begin{raw}
+Měření výstupů proti referenční implementaci:
+\begin{itemize}
+    \item \textbf{Functional Quality} (dle ISO 25010):
+    \begin{itemize}
+        \item Completeness - míra pokrytí požadované funkcionality
+        \item Correctness - správnost výsledků
+    \end{itemize}
+    \item \textbf{Compliance} (dodržování procesů):
+    \begin{itemize}
+        \item Workflow (issues → branch → PR)
+        \item Konvence (commit messages, dokumentace)
+        \item Transparentnost (vysvětluje co dělá a proč)
+    \end{itemize}
+\end{itemize}
+
+Identifikace vzorů - která nastavení scaffoldingu vedla k lepším výsledkům.
+\end{raw}
+
+\begin{raw}
+Poznámka: Konkrétní metriky pro hodnocení výstupu agentů jsou aktivní oblast výzkumu. V rámci práce bude provedena dodatečná rešerše dostupných akademických přístupů.
+\end{raw}

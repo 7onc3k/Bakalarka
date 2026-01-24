@@ -1,19 +1,159 @@
 %% Toto platí v případě použití samostatné bibliografické databáze
 \printbibliography[title={\bibname},heading={bibintoc}]
 
-%% Toto platí v případě použití prostředí thebibliography
-%% Pro sestavení citačních údajů lze doporučit:
-%%     https://knihovna.vse.cz/citace/priklady/
-%%     https://www.citace.com/
-%\openright
-%\phantomsection
-%\addcontentsline{toc}{chapter}{\bibname}
-%\begin{thebibliography}{99}
-%\bibitem{Cermak2018}ČERMÁK, Radim, SMUTNÝ, Zdeněk. A Framework for Cultural Localization of Websites and for Improving Their Commercial Utilization. In:  \emph{Global Observations of the Influence of Culture on Consumer Buying Behavior} [online]. Hershey~: IGI Global, 2018, s. 206--232. ISBN 978-1-5225-2727-5. DOI: 10.4018/978-1-5225-2727-5.
-%
-%\bibitem{Hladik2018}HLADÍK, Milan, ČERNÝ, Michal. The Shape of the Optimal Value of a Fuzzy Linear Programming Problem. In: \emph{Fuzzy Logic in Intelligent System Design} [online]. Cancum, 16.10.2017 -- 18.10.2017. Cham~: Springer, 2018, s. 281--286. Advances in Intelligent Systems and Computing 648. ISBN 978-3-319-67136-9. DOI: 10.1007/978-3-319-67137-6\_31.
-%
-%\bibitem{Jasek2018}JAŠEK, Pavel, VRANÁ, Lenka, ŠPERKOVÁ, Lucie, SMUTNÝ, Zdeněk, KOBULSKÝ, Marek. Modeling and Application of Customer Lifetime Value in Online Retail. \emph{Informatics} [online]. 2018, roč. 5, č. 1. 22 s. eISSN 2227-9709. DOI: 10.3390/informatics5010002. Dostupné také z: \url{http://www.mdpi.com/2227-9709/5/1/2/pdf}.
-%
-%\bibitem{Pecakova2018}PECÁKOVÁ, Iva. \emph{Statistika v terénních průzkumech}. 3. přeprac. vyd. Praha~: Professional Publishing, 2018. 254 s. ISBN 978-80-88260-10-3.
-%\end{thebibliography}
+%% ============================================================================
+%% RAW ZDROJE K ZPRACOVÁNÍ DO BIBTEX
+%% ============================================================================
+
+\begin{raw}
+\textbf{Zdroje k zpracování do BibTeX} (původně z notes/sources.md)
+
+\textbf{1. PRIMÁRNÍ ZDROJE (Frameworky a Metodiky)}
+
+GITHUB NEXT. Spec Kit: Spec-Driven Development for AI Agents [online]. 2024.
+\url{https://github.com/github/spec-kit}
+-- Klíčový zdroj pro koncept "Spec-Driven Development".
+
+BMAD-CODE-ORG. BMAD METHOD: Breakthrough Method for Agile AI-Driven Development [online]. GitHub, 2025.
+\url{https://github.com/bmad-code-org/BMAD-METHOD}
+-- Metodika pro řízení AI agentů v agilním vývoji.
+
+ANTHROPIC. Effective Harnesses for Long-Running Agents [online]. Anthropic Engineering Blog, 2024.
+\url{https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents}
+-- Technický popis problémů s dlouhodobou pamětí agentů.
+
+METR. Model Evaluation and Threat Research [online]. 2024.
+\url{https://metr.org/}
+-- Standardy pro hodnocení bezpečnosti a schopností modelů.
+
+THEDOTMACK. claude-mem: Persistent Memory System for Claude Code [online]. GitHub, 2025.
+\url{https://github.com/thedotmack/claude-mem}
+-- Příklad implementace hooks v CLI agentech - persistentní paměť přes session.
+
+\textbf{2. ODBORNÉ STUDIE}
+
+\textbf{2.1 Přehledové studie (Surveys) - LLM agenti v SE}
+
+LIU, Junwei et al. Large Language Model-Based Agents for Software Engineering: A Survey.
+arXiv preprint arXiv:2409.02977. 2024.
+\url{https://arxiv.org/abs/2409.02977}
+-- Komplexní přehled 106 prací o LLM agentech v SE, kategorizace z pohledu SE i agentů.
+
+JIN, Haolin et al. From LLMs to LLM-based Agents for Software Engineering: A Survey of Current, Challenges and Future.
+arXiv preprint arXiv:2408.02479. 2024.
+\url{https://arxiv.org/abs/2408.02479}
+-- Pokrývá requirements, code generation, testing, maintenance - celý SDLC.
+
+Comprehensive Survey on Benchmarks and Solutions in Software Engineering of LLM-Empowered Agentic System.
+arXiv preprint arXiv:2510.09721. 2025.
+\url{https://arxiv.org/html/2510.09721}
+-- Přes 150 paperů, taxonomie řešení a benchmarků.
+
+A Survey on Code Generation with LLM-based Agents.
+arXiv preprint arXiv:2508.00083. 2025.
+\url{https://arxiv.org/abs/2508.00083}
+-- Single-agent a multi-agent architektury, aplikace napříč SDLC.
+
+\textbf{2.2 Agentic Software Engineering - Klíčové práce}
+
+Agentic Software Engineering: Foundational Pillars and a Research Roadmap.
+arXiv preprint arXiv:2509.06216. 2025.
+\url{https://arxiv.org/html/2509.06216v2}
+-- Přehodnocení SE pro spolupráci člověk-agent. Framework podobný SAE úrovním autonomie.
+Rozlišuje SE 2.0 (AI-augmented) vs SE 3.0 (Agentic SE).
+
+AKBAR, Muhammad Azeem et al. Agentic AI in Software Engineering: Practitioner Perspectives Across the Software Development Life Cycle.
+SSRN. 2025.
+\url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5520159}
+-- Rozhovory s 21 experty, pokrývá celý SDLC. Zjištění: agenti redefinují hranice mezi fázemi SDLC.
+
+Autonomous Agents in Software Development: A Vision Paper.
+Springer, 2024.
+\url{https://link.springer.com/chapter/10.1007/978-3-031-72781-8_2}
+-- 12 LLM agentů spolupracujících na celém SDLC.
+
+\textbf{2.3 Evaluace a produktivita}
+
+METR. Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity. 2025.
+\url{https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/}
+-- RCT studie: zkušení vývojáři s AI jsou o 19\% pomalejší - překvapivé zjištění.
+
+\textbf{2.4 Metriky kvality software a AI agentů}
+
+ISO/IEC. ISO/IEC 25010:2023 - Systems and software Quality Requirements and Evaluation (SQuaRE) — Product quality model. 2023.
+\url{https://www.iso.org/standard/78176.html}
+-- Industry standard pro kvalitu software. 8 charakteristik, Functional Suitability obsahuje Completeness, Correctness, Appropriateness.
+
+ISO 25000. ISO 25010 Software Quality Model. 2023.
+\url{https://iso25000.com/index.php/en/iso-25000-standards/iso-25010}
+-- Přehledný popis ISO 25010 modelu kvality.
+
+LXT. AI Agent Evaluation: Comprehensive Framework for Measuring Agent Performance. 2024.
+\url{https://www.lxt.ai/blog/ai-agent-evaluation/}
+-- Moderní framework pro evaluaci AI agentů: Task completion, Accuracy, Safety/trust (policy compliance, transparency), Tool usage.
+
+Weights \& Biases. AI Agent Evaluation: Metrics, Strategies, and Best Practices. 2024.
+\url{https://wandb.ai/onlineinference/genai-research/reports/AI-agent-evaluation-Metrics-strategies-and-best-practices--VmlldzoxMjM0NjQzMQ}
+-- Praktický průvodce metrikami pro AI agenty.
+
+\textbf{2.5 Základní LLM studie}
+
+JIMENEZ, Carlos E. et al. SWE-bench: Can Language Models Resolve Real-world Github Issues?
+In: The Twelfth International Conference on Learning Representations (ICLR). 2024.
+\url{https://arxiv.org/abs/2310.06770}
+-- Hlavní benchmark pro hodnocení schopností programovacích agentů.
+
+LIU, Nelson F. et al. Lost in the Middle: How Language Models Use Long Contexts.
+arXiv preprint arXiv:2307.03172. 2023.
+\url{https://arxiv.org/abs/2307.03172}
+-- Klíčová studie vysvětlující, proč pouhé zvětšení kontextového okna nestačí.
+
+VASWANI, Ashish et al. Attention Is All You Need.
+Advances in Neural Information Processing Systems, 2017.
+\url{https://arxiv.org/abs/1706.03762}
+-- Základní paper definující Transformer architekturu a mechanismus pozornosti (self-attention).
+
+WEI, Jason et al. Chain-of-Thought Prompting Elicits Reasoning in Large Language Models.
+Advances in Neural Information Processing Systems, 2022.
+\url{https://arxiv.org/abs/2201.11903}
+-- Základ pro techniky prompt engineeringu používané v práci.
+
+\textbf{3. TEORIE SOFTWAROVÉHO INŽENÝRSTVÍ A ARCHITEKTURY}
+
+RICHARDS, Mark a FORD, Neal. Fundamentals of Software Architecture: An Engineering Approach.
+O'Reilly Media, 2020. ISBN 978-1492043454.
+-- Moderní přehled architektonických stylů a charakteristik ("ilities").
+
+FOWLER, Martin. Patterns of Enterprise Application Architecture.
+Addison-Wesley Professional, 2002. ISBN 978-0321127426.
+-- Katalog základních návrhových vzorů pro podnikové aplikace.
+
+KHONONOV, Vlad. Learning Domain-Driven Design: Aligning Software Architecture and Business Strategy.
+1. vyd. O'Reilly Media, 2021. ISBN 978-1098100131.
+-- Definuje pojmy jako "Bounded Context" a "Ubiquitous Language", které jsou analogií pro kontext LLM.
+
+ISO/IEC. ISO/IEC/IEEE 42010:2011 Systems and software engineering — Architecture description. 2011.
+-- Mezinárodní standard definující základní pojmy popisu architektury.
+
+IEEE COMPUTER SOCIETY. SWEBOK: Guide to the Software Engineering Body of Knowledge.
+Version 3.0. IEEE, 2014.
+\url{https://www.swebok.org/}
+-- Standardní taxonomie softwarového inženýrství.
+
+BROWN, Simon. The C4 model for visualising software architecture. 2024.
+\url{https://c4model.com/}
+-- Metodika pro hierarchický popis architektury, vhodná pro strojové zpracování.
+
+ARC42. arc42 Template for Software Architecture Documentation. 2024.
+\url{https://arc42.org/}
+-- Pragmatická šablona pro strukturování architektonické dokumentace.
+
+\textbf{4. DALŠÍ ZDROJE (Historický kontext a Procesy)}
+
+NATO SCIENCE COMMITTEE. Software Engineering: Report on a conference sponsored by the NATO Science Committee.
+Garmisch, Germany, 1968.
+-- Historický kontext vzniku disciplíny.
+
+KAUR, Rupinder a SENGUPTA, Jyotsna. Software Process Models and Analysis on Failure of Software Development Projects.
+In: arXiv preprint arXiv:1306.1068. 2013.
+\end{raw}

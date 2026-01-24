@@ -183,3 +183,11 @@
 %%% programs. (Requires package listings - fancy verbatim.)
 \lstnewenvironment{code}{\lstset{basicstyle=\small, frame=single}}{}
 
+%%% Prostředí pro označení stavu obsahu (workflow: raw → draft → finální)
+%%% Environments for marking content status (workflow: raw → draft → final)
+%%% Konvence: [RAW]/[DRAFT] je vždy na vlastním řádku
+\definecolor{rawcolor}{RGB}{120, 80, 120}      % tlumená fialová
+\definecolor{draftcolor}{RGB}{80, 100, 120}    % tlumená modro-šedá
+\newenvironment{raw}{\par\noindent\textcolor{rawcolor}{[RAW]}\par\color{rawcolor}}{\par}
+\newenvironment{draft}{\par\noindent\textcolor{draftcolor}{[DRAFT]}\par\color{draftcolor}}{\par}
+
