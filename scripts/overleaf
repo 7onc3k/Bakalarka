@@ -1,0 +1,15 @@
+#!/bin/bash
+# Overleaf sync wrapper
+# Použití: ./overleaf pull|push|status
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+VENV="/tmp/cookie-env/bin/python3"
+
+# Zkontroluj venv
+if [ ! -f "$VENV" ]; then
+    echo "Vytvářím Python venv..."
+    python3 -m venv /tmp/cookie-env
+    /tmp/cookie-env/bin/pip install pyoverleaf browser-cookie3 requests --quiet
+fi
+
+exec "$VENV" "$SCRIPT_DIR/overleaf-sync.py" "$@"

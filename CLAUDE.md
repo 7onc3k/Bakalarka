@@ -111,3 +111,30 @@ Workflow: raw → draft → finální (odstraníme prostředí)
 - Nevyplňovat věci jen proto aby se něco stalo
 - Nepřidávat velké kusy textu najednou
 - Neměnit nic bez předchozího souhlasu
+
+## Overleaf synchronizace
+
+Thesis je synchronizována s Overleafem pro spolupráci s vedoucím.
+
+**Projekt:** https://www.overleaf.com/project/6974b85faa53f50a27ab247e
+
+**Příkazy:**
+```bash
+./scripts/overleaf status   # zobrazí stav
+./scripts/overleaf diff     # zobrazí rozdíly
+./scripts/overleaf pull     # stáhne z Overleafu (s potvrzením)
+./scripts/overleaf push     # nahraje do Overleafu (s potvrzením)
+./scripts/overleaf pull -y  # stáhne bez potvrzení
+```
+
+**Workflow:**
+1. Před pull/push vždy zkontroluj `diff` - vidíš co se změní
+2. Pull/push ukáže změny a zeptá se na potvrzení
+3. Po pull zkontroluj `git diff` - co se změnilo lokálně
+4. Commitni změny do Gitu - Git je hlavní source of truth
+
+**Důležité:**
+- Overleaf free má jen 24h historii - Git je záloha
+- Před pull commitni lokální změny (aby se daly obnovit)
+- Vedoucí edituje v Overleafu, ty v lokálním editoru
+- Sync děláme ručně, ne automaticky (kvůli kontrole změn)
