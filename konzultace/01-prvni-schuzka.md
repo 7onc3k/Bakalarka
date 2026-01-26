@@ -1,6 +1,28 @@
 # Konzultace 1 — První schůzka s vedoucím
 Datum: 2026-01-22
 
+## Email vedoucímu (odesláno po schůzce)
+
+```
+Dobrý den,
+
+Navazuji na naši konzultaci v Pondělí. Diskutovali jsme rozsah práce a vymezení na konkrétní část. Měl jsem za úkol definovat projekt.
+
+Uvažoval jsem a vybral jsem si systém upomínek placení. Abychom měli lepší představu tak jsem se snažil nějak brainstormovat a strukturovat přímo do šablony BP.
+
+https://www.overleaf.com/6298731441crhkhzhdjqmv#066600
+
+Dbal jsem na vaše doporučení abych obstál u obhajoby a stihl vše včas a rád bych vám to vše vysvětlil proč jsem to vybral takhle a jaký je plán.
+
+Chtěl bych s vámi domluvit na další konzultaci, kde bychom si ujasnili a řekli co dál.
+
+S pozdravem Tony Nguyen
+
+P. S. Ohledně latexu a wordu, bych preferoval latex/overleaf, moc by mi to usnadnilo práci.
+```
+
+---
+
 ## Průběh schůzky
 
 ### Background

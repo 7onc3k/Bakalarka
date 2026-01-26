@@ -20,6 +20,30 @@ Studie společnosti METR.ORG ukazuje, že LLM zkušené vývojáře spíše zpom
 
 \section{Rozsah práce}
 
+\begin{raw}
+\textbf{Poznámky k propojení:}
+\begin{itemize}
+    \item Řízení vyžaduje holistický pohled (vidět celek, ne jen část) - proto celý SDLC, ne jedna fáze
+    \item Billing Reminder Engine jako case study: malý projekt, ale reálné nuance (state machine, business days, edge cases)
+    \item Deterministická logika (stejný vstup = stejný výstup) + jasná pravidla správnosti = objektivně testovatelné
+    \item Hraniční případy (víkendy, svátky, grace periods) = místa kde lze testovat kvalitu agentní práce
+\end{itemize}
+
+\textbf{TODO: Vysvětlit termíny:}
+\begin{itemize}
+    \item state machine - ?
+    \item edge cases / hraniční případy - ?
+    \item SDLC - ?
+\end{itemize}
+
+\textbf{Scope SDLC (k diskuzi):}
+\begin{itemize}
+    \item Primární plán: celý SDLC včetně deployment/maintenance
+    \item Fallback: zúžit na implementation + testing (hlavní doména coding agents)
+    \item Poznámka: i impl + testing má feedback loop (implementace → testy → chyba → úprava) = stále systémový pohled
+\end{itemize}
+\end{raw}
+
 \begin{draft}
 Práce pokrývá celý SDLC na jednoduchém projektu. Součástí je vlastní implementace, která poskytuje hloubku porozumění potřebnou pro návrh experimentů.
 
