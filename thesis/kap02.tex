@@ -1,21 +1,53 @@
 \chapter{Teoretická východiska}
 \label{kap:teorie}
 
-\section{Softwarový vývoj a jeho řízení}
+\begin{draft}
+Tato kapitola vysvětluje, co je softwarové inženýrství, proč vzniklo a jaké jsou jeho současné trendy. Nejprve je popsáno tradiční softwarové inženýrství, následně je zkoumáno, jak se oblast mění díky AI coding agentům, a nakonec jsou představeny prvky scaffoldingu (podpůrných struktur), které agenti využívají.
+\end{draft}
 
-\subsection{Tradiční SWE}
+\section{Tradiční SWE}
 
 \begin{raw}
-\textbf{Co sem patří:}
+\textbf{Hlavní body sekce (co má čtenář pochopit):}
+\begin{enumerate}
+    \item \textbf{Proč SWE vzniklo} - software je komplexní, bez struktury to nefunguje
+    \begin{itemize}
+        \item NATO 1968 konference - "software crisis"
+        \item Projekty selhávaly, potřeba disciplíny
+    \end{itemize}
+
+    \item \textbf{Proč procesy existují} - nejsou byrokracie, jsou odpověď na reálné problémy:
+    \begin{itemize}
+        \item Koordinace mezi lidmi
+        \item Udržení konzistence
+        \item Předávání znalostí
+    \end{itemize}
+
+    \item \textbf{Role lidí a komunikace} - klíčové pro kontext agentů:
+    \begin{itemize}
+        \item SWE je fundamentálně týmová disciplína
+        \item Hodně znalostí je implicitních (v hlavách lidí, ne v dokumentaci)
+        \item Brooks's Law - komunikační režie roste exponenciálně s velikostí týmu
+    \end{itemize}
+
+    \item \textbf{SDLC jako struktura} - fáze existují z důvodu
+    \begin{itemize}
+        \item requirements → design → implementation → testing → maintenance
+        \item Každá fáze řeší specifické problémy
+    \end{itemize}
+\end{enumerate}
+
+\textbf{Proč tyhle body:} Když pak v 2.2 řekneme "agenti nepotřebují meetingy ale vše musí být explicitní" - čtenář pochopí co se mění. Implicitní znalosti v týmu → explicitní instrukce pro agenta.
+
+\textbf{Zdroje:}
 \begin{itemize}
-    \item Co je SWE, SDLC, fáze vývoje
-    \item Nástroje pro řízení (BPMN, dokumentace, CI/CD)
-    \item Proč je řízení důležité
-    \item SWEBOK jako reference
+    \item SWEBOK v4 - referenční příručka pro terminologii a strukturu oboru
+    \item NATO 1968 - historický kontext
+    \item Brooks - Mythical Man-Month (Brooks's Law)
 \end{itemize}
 \end{raw}
 
-\subsection{SWE s coding agents}
+\section{SWE s coding agents}
 
 \begin{raw}
 \textbf{Co sem patří:}
@@ -24,6 +56,15 @@
     \item Nástroje pro řízení agentů (agents.md, skills.md, CLAUDE.md, hooks)
     \item Co je stejné, co je jiné oproti tradičnímu SWE
     \item Zdroje: surveys o LLM agentech v SE (máme v literatuře)
+\end{itemize}
+
+\textbf{Poznámka - trade-off agenti vs týmy:}
+\begin{itemize}
+    \item Tradiční SWE = hodně o organizaci a lidech (komunikace, koordinace, předávání znalostí)
+    \item Velké týmy = komunikační režie (Brooks's Law)
+    \item Agenti nepotřebují meetingy, ale nerozumí nuancím - vše musí být explicitní
+    \item Žádné implicitní porozumění z konverzace ("řekli jsme si na meetingu")
+    \item Hypotéza: malé týmy s agenty mohou růst rychleji než velké týmy bez nich
 \end{itemize}
 \end{raw}
 
