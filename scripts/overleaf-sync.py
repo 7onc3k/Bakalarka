@@ -37,6 +37,7 @@ SYNC_EXTENSIONS = {'.tex', '.bib', '.txt', '.xmpdata', '.pdf'}
 IGNORE_PATTERNS = {'*.aux', '*.log', '*.fls', '*.fdb_latexmk', '*.synctex.gz',
                    '*.toc', '*.out', '*.bbl', '*.blg', '*.bcf', '*.run.xml',
                    '*.xmpi', '*.lof', '*.lot'}
+IGNORE_DIRS = {'sources'}  # Složky k ignorování (PDF knihy pro RAG)
 
 
 def get_api():
@@ -46,9 +47,14 @@ def get_api():
     return api
 
 
-def should_sync(filename):
+def should_sync(filepath):
     """Určí zda soubor synchronizovat."""
-    path = Path(filename)
+    path = Path(filepath)
+
+    # Kontrola ignorovaných složek
+    for part in path.parts:
+        if part in IGNORE_DIRS:
+            return False
 
     # Kontrola přípony
     if path.suffix.lower() not in SYNC_EXTENSIONS:
@@ -132,7 +138,7 @@ def push(api):
 
         rel_path = filepath.relative_to(THESIS_DIR)
 
-        if not should_sync(filepath.name):
+        if not should_sync(rel_path):
             continue
 
         # Určí folder ID
@@ -187,9 +193,10 @@ def get_diff(api):
         # Sbírej lokální soubory
         local_files = {}
         for filepath in THESIS_DIR.rglob("*"):
-            if filepath.is_file() and should_sync(filepath.name):
+            if filepath.is_file():
                 rel_path = str(filepath.relative_to(THESIS_DIR))
-                local_files[rel_path] = file_hash(filepath)
+                if should_sync(rel_path):
+                    local_files[rel_path] = file_hash(filepath)
 
         # Porovnej
         only_local = set(local_files.keys()) - set(remote_files.keys())
@@ -257,9 +264,10 @@ def status(api):
     # Lokální soubory
     print("\nLokální soubory (thesis/):")
     for filepath in sorted(THESIS_DIR.rglob("*")):
-        if filepath.is_file() and should_sync(filepath.name):
+        if filepath.is_file():
             rel_path = filepath.relative_to(THESIS_DIR)
-            print(f"  📄 {rel_path}")
+            if should_sync(str(rel_path)):
+                print(f"  📄 {rel_path}")
 
 
 def main():

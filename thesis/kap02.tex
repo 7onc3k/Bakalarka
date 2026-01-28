@@ -1,64 +1,243 @@
 \chapter{Teoretická východiska}
 \label{kap:teorie}
 
+% === ÚVOD KAPITOLY (mezi 2 a 2.1) - ROADMAP ===
 \begin{draft}
-Tato kapitola vysvětluje, co je softwarové inženýrství, proč vzniklo a jaké jsou jeho současné trendy. Nejprve je popsáno tradiční softwarové inženýrství, následně je zkoumáno, jak se oblast mění díky AI coding agentům, a nakonec jsou představeny prvky scaffoldingu (podpůrných struktur), které agenti využívají.
+Tato kapitola vysvětluje teoretická východiska práce. Nejprve je popsáno softwarové inženýrství jako disciplína, následně životní cyklus a metodiky vývoje software. Poté je zkoumáno, jak se oblast mění díky AI coding agentům, a nakonec jsou představeny prvky scaffoldingu (podpůrných struktur), které agenti využívají.
 \end{draft}
 
-\section{Tradiční SWE}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Softwarové inženýrství}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{raw}
-\textbf{Hlavní body sekce (co má čtenář pochopit):}
-\begin{enumerate}
-    \item \textbf{Proč SWE vzniklo} - software je komplexní, bez struktury to nefunguje
-    \begin{itemize}
-        \item NATO 1968 konference - "software crisis"
-        \item Projekty selhávaly, potřeba disciplíny
-    \end{itemize}
-
-    \item \textbf{Proč procesy existují} - nejsou byrokracie, jsou odpověď na reálné problémy:
-    \begin{itemize}
-        \item Koordinace mezi lidmi
-        \item Udržení konzistence
-        \item Předávání znalostí
-    \end{itemize}
-
-    \item \textbf{Role lidí a komunikace} - klíčové pro kontext agentů:
-    \begin{itemize}
-        \item SWE je fundamentálně týmová disciplína
-        \item Hodně znalostí je implicitních (v hlavách lidí, ne v dokumentaci)
-        \item Brooks's Law - komunikační režie roste exponenciálně s velikostí týmu
-    \end{itemize}
-
-    \item \textbf{SDLC jako struktura} - fáze existují z důvodu
-    \begin{itemize}
-        \item requirements → design → implementation → testing → maintenance
-        \item Každá fáze řeší specifické problémy
-    \end{itemize}
-\end{enumerate}
-
-\textbf{Proč tyhle body:} Když pak v 2.2 řekneme "agenti nepotřebují meetingy ale vše musí být explicitní" - čtenář pochopí co se mění. Implicitní znalosti v týmu → explicitní instrukce pro agenta.
-
-\textbf{Zdroje:}
-\begin{itemize}
-    \item SWEBOK v4 - referenční příručka pro terminologii a strukturu oboru
-    \item NATO 1968 - historický kontext
-    \item Brooks - Mythical Man-Month (Brooks's Law)
-\end{itemize}
+\textbf{Úvod sekce 2.1 (1-2 věty):}
+Tato sekce definuje softwarové inženýrství, vysvětluje proč je software inherentně složitý a jak tato složitost vedla ke vzniku oboru.
 \end{raw}
 
-\section{SWE s coding agents}
+% === PODSEKCE 2.1.1 ===
+\subsection{Definice a vymezení oboru}
 
 \begin{raw}
 \textbf{Co sem patří:}
 \begin{itemize}
-    \item Jak agenti mění vývoj
-    \item Nástroje pro řízení agentů (agents.md, skills.md, CLAUDE.md, hooks)
-    \item Co je stejné, co je jiné oproti tradičnímu SWE
-    \item Zdroje: surveys o LLM agentech v SE (máme v literatuře)
+    \item IEEE/SWEBOK definice softwarového inženýrství
+    \item Vymezení vůči příbuzným oborům (computer science, programování)
+    \item Proč "inženýrství" - systematický, disciplinovaný přístup
+    \item SWE je víc než psaní kódu - zahrnuje procesy, kvalitu, údržbu
 \end{itemize}
 
-\textbf{Poznámka - trade-off agenti vs týmy:}
+\textbf{Zdroje:}
+\begin{itemize}
+    \item SWEBOK v4 - definice, knowledge areas
+    \item IEEE Standard Glossary of Software Engineering Terminology
+\end{itemize}
+\end{raw}
+
+% === PODSEKCE 2.1.2 ===
+\subsection{Komplexita software}
+
+\begin{raw}
+\textbf{Co sem patří:}
+\begin{itemize}
+    \item \textbf{Proč je software složitý} (Brooks - No Silver Bullet):
+    \begin{itemize}
+        \item Essential complexity - inherentní složitost problému (business logika, requirements)
+        \item Accidental complexity - složitost kterou si přidáváme (nástroje, technologie)
+        \item Software je neviditelný, snadno měnitelný, nemá fyzická omezení
+    \end{itemize}
+\end{itemize}
+
+\textbf{Zdroje:}
+\begin{itemize}
+    \item Brooks - No Silver Bullet (1986) - essential vs accidental complexity
+    \item McConnell - Code Complete (cituje Brookse)
+\end{itemize}
+\end{raw}
+
+% === PODSEKCE 2.1.3 ===
+\subsection{Historický kontext}
+
+\begin{raw}
+\textbf{Co sem patří:}
+\begin{itemize}
+    \item NATO 1968 konference - "software crisis"
+    \item Projekty selhávaly, překračovaly rozpočty, nedodávaly včas
+    \item Potřeba inženýrské disciplíny místo ad-hoc programování
+    \item Vznik SWE jako reakce na komplexitu a krizi
+\end{itemize}
+
+\textbf{Zdroje:}
+\begin{itemize}
+    \item NATO 1968 - historický kontext vzniku oboru
+    \item Sommerville - Software Engineering (úvod, historie)
+\end{itemize}
+\end{raw}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Životní cyklus a metodiky}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{raw}
+\textbf{Úvod sekce 2.2 (1-2 věty):}
+Tato sekce popisuje jak se software vyvíjí v praxi: co se dělá (fáze), jak se to organizuje (metodiky), čím se to dělá (nástroje), co vzniká (artefakty), a kdo to dělá (role a komunikace).
+\end{raw}
+
+% === PODSEKCE 2.2.1 ===
+\subsection{Fáze životního cyklu}
+
+\begin{raw}
+\textbf{Co sem patří:}
+\begin{itemize}
+    \item Sommerville - 4 základní aktivity:
+    \begin{enumerate}
+        \item Software specification
+        \item Software development
+        \item Software validation
+        \item Software evolution
+    \end{enumerate}
+    \item Každá fáze produkuje artefakty
+    \item Cyklický charakter - software se neustále vyvíjí
+\end{itemize}
+
+\textbf{Zdroje:}
+\begin{itemize}
+    \item Sommerville - Software Engineering (SDLC)
+    \item SWEBOK v4 - Software Engineering Process KA
+\end{itemize}
+\end{raw}
+
+% === PODSEKCE 2.2.2 ===
+\subsection{Modely a metodiky}
+
+\begin{raw}
+\textbf{Co sem patří:}
+\begin{itemize}
+    \item Waterfall - sekvenční, dokumentace dopředu
+    \item Iterativní/inkrementální - opakované cykly
+    \item Agile - flexibilita, rychlý feedback, spolupráce
+    \item Různé modely = různé způsoby organizace stejných fází
+    \item Trade-offs: prediktabilita vs flexibilita
+\end{itemize}
+
+\textbf{Zdroje:}
+\begin{itemize}
+    \item Sommerville - process models
+    \item Boehm - Spiral Model (1988)
+    \item Beck - Extreme Programming Explained
+    \item Agile Manifesto
+\end{itemize}
+\end{raw}
+
+% === PODSEKCE 2.2.3 ===
+\subsection{Nástroje}
+
+\begin{raw}
+\textbf{Co sem patří:}
+\begin{itemize}
+    \item IDE - integrovaná vývojová prostředí
+    \item Version control (Git) - správa verzí, spolupráce
+    \item CI/CD - automatizace buildů, testů, deploymentu
+    \item Issue tracking, dokumentace
+    \item Nástroje jako součást procesů - umožňují škálování
+\end{itemize}
+
+\textbf{Proč je to důležité pro BP:}
+Agenti využívají tyto nástroje - musí s nimi umět pracovat. Scaffolding staví na existujících nástrojích.
+
+\textbf{Zdroje:}
+\begin{itemize}
+    \item SWEBOK v4 - Software Engineering Tools KA
+    \item Praktické znalosti (Git, GitHub Actions, etc.)
+\end{itemize}
+\end{raw}
+
+% === PODSEKCE 2.2.4 ===
+\subsection{Artefakty}
+
+\begin{raw}
+\textbf{Co sem patří:}
+\begin{itemize}
+    \item Specifikace a požadavky (requirements)
+    \item Návrhy a architektura (design docs)
+    \item Zdrojový kód
+    \item Testy (unit, integration, e2e)
+    \item Dokumentace (technická, uživatelská)
+    \item Artefakty jako vstup/výstup fází životního cyklu
+\end{itemize}
+
+\textbf{Proč je to důležité pro BP:}
+Agenti produkují a konzumují tyto artefakty. Kvalita artefaktů ovlivňuje kvalitu výstupu agenta.
+
+\textbf{Zdroje:}
+\begin{itemize}
+    \item Sommerville - Software Engineering
+    \item SWEBOK v4
+\end{itemize}
+\end{raw}
+
+% === PODSEKCE 2.2.5 ===
+\subsection{Role a komunikace}
+
+\begin{raw}
+\textbf{Co sem patří:}
+\begin{itemize}
+    \item SWE je fundamentálně týmová disciplína
+    \item Hodně znalostí je implicitních (v hlavách lidí, ne v dokumentaci)
+    \item Brooks's Law - komunikační režie roste exponenciálně s velikostí týmu
+    \item Procesy slouží ke koordinaci, konzistenci, předávání znalostí
+    \item Nástroje a artefakty jako prostředky komunikace (CSCW perspektiva)
+\end{itemize}
+
+\textbf{Proč je to důležité pro BP:}
+Když pak v 2.3 řekneme "agenti nepotřebují meetingy ale vše musí být explicitní" - čtenář pochopí co se mění. Implicitní znalosti v týmu → explicitní instrukce pro agenta.
+
+\textbf{Zdroje:}
+\begin{itemize}
+    \item Brooks - Mythical Man-Month (Brooks's Law)
+    \item Beck - Extreme Programming Explained (týmová spolupráce)
+    \item CSCW literatura (viz issue \#9)
+\end{itemize}
+\end{raw}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Agentic coding}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{raw}
+\textbf{Co může sekce obsahovat:}
+\begin{itemize}
+    \item Co jsou coding agents (definice, typy)
+    \item Jak agenti mění vývoj (co zůstává, co se mění)
+    \item Konvergence SDLC - micro-waterfall hypotéza
+    \item Trade-off agenti vs týmy
+\end{itemize}
+
+\rule{\textwidth}{0.4pt}
+
+\textbf{[K ROZPRACOVÁNÍ] Konvergence SDLC modelů - micro-waterfall hypotéza:}
+
+Zajímavý postřeh: nevracíme se s AI agenty zpět k waterfall, jen v menší časové škále?
+
+\begin{itemize}
+    \item \textbf{Waterfall (klasický):} Requirements → Design → Implementation → Testing → Deployment [měsíce per fáze]
+    \item \textbf{Agile (sprint):} Planning → Dev → Testing → Review [2-4 týdny per cyklus]
+    \item \textbf{AI agenti:} Prompt → Generate → Review → Fix [minuty per cyklus]
+\end{itemize}
+
+Ve všech případech máš sekvenční kroky (specifikace → implementace → validace). Agile je nezrušil - jen zmenšil a zrychlil. AI agenti je zmenšují ještě víc.
+
+\textbf{Klíčové rozdíly:}
+\begin{itemize}
+    \item Batch size: celý projekt → feature → jeden prompt
+    \item Feedback loop: měsíce → týdny → minuty
+    \item Kdo specifikuje: analytik (dokument) → PO + tým (stories) → developer (prompt)
+    \item Kdo validuje: QA na konci → tým průběžně → developer okamžitě
+\end{itemize}
+
+\rule{\textwidth}{0.4pt}
+
+\textbf{[K ROZPRACOVÁNÍ] Trade-off agenti vs týmy:}
 \begin{itemize}
     \item Tradiční SWE = hodně o organizaci a lidech (komunikace, koordinace, předávání znalostí)
     \item Velké týmy = komunikační režie (Brooks's Law)
@@ -66,19 +245,29 @@ Tato kapitola vysvětluje, co je softwarové inženýrství, proč vzniklo a jak
     \item Žádné implicitní porozumění z konverzace ("řekli jsme si na meetingu")
     \item Hypotéza: malé týmy s agenty mohou růst rychleji než velké týmy bez nich
 \end{itemize}
+
+\textbf{Zdroje:}
+\begin{itemize}
+    \item Surveys o LLM agentech v SE (máme v literatuře)
+    \item Jin et al. - LLM Agents for SWE Survey
+    \item Foundational Pillars of Agentic SE
+\end{itemize}
 \end{raw}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Scaffolding pro agenty}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{raw}
-\textbf{Co sem patří:}
+\textbf{Co může sekce obsahovat:}
 \begin{itemize}
-    \item Co je scaffolding (definice)
-    \item Jak propojit nástroje s agenty
-    \item Co agent potřebuje aby fungoval dobře
+    \item Co je scaffolding (definice, proč je potřeba)
     \item Spec-driven development (BMAD, SpecKit...)
-    \item Metriky pro hodnocení agentů
+    \item Nástroje pro řízení agentů (CLAUDE.md, hooks, agents.md)
+    \item Metriky a hodnocení (jak měřit úspěšnost agentů)
 \end{itemize}
+
+\rule{\textwidth}{0.4pt}
 
 \textbf{Poznámky k zapracování:}
 \begin{itemize}

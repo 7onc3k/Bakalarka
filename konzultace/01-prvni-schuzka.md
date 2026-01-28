@@ -71,3 +71,5 @@ P. S. Ohledně latexu a wordu, bych preferoval latex/overleaf, moc by mi to usna
 | Zúžit scope | Široký záběr (governance) | Úzká implementace + široké zkoumání |
 | Vlastní kód | Něco užitečného | Billing Reminder = vlastní + pro DF |
 | QA v průběhu | Testovat agenty | QA jako průběžná aktivita v celém SDLC |
+
+

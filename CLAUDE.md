@@ -87,12 +87,42 @@ Workflow: raw → draft → finální (odstraníme prostředí)
   - Co tam je užitečného
   - Jak to souvisí s BP
 
+**Když uživatel řekne:**
+- **"jaké zdroje"** → `ls thesis/sources/` (seznam co máme)
+- **"jaké jiné zdroje"** → zamysli se co chybí, udělej web search, navrhni alternativy
+
+**Jak pracovat se zdroji:**
+- **Seznam zdrojů:** `ls thesis/sources/` (názvy souborů)
+- **Hledání v obsahu:** RAG query (semantic search v textu zdrojů)
+- **Nové zdroje:** web search → stáhnout → indexovat
+
+**Aktivní validace zdrojů:**
+- Vždy zhodnoť kvalitu navržených zdrojů (peer-reviewed? aktuální? relevantní?)
+- Navrhuj lepší alternativy pokud existují
+- Upozorni když zdroj není ideální (starý, nepeer-reviewed, bias)
+
 ## Pojmenování v BP textu
 
 - **Doménové termíny** (specifické pro case study) → česky
   - Příklad: "systém upomínek faktur" místo "Billing Reminder Engine"
 - **Industry standard termíny** (IT/AI oblast) → anglicky
   - Příklad: scaffolding, SDLC, CLI, context window, LLM
+
+## Styl a ambice BP
+
+**Kam míříme:**
+- Metodicky jako disertace, scope jako BP
+- Kvalitní zdroje (peer-reviewed > knihy > weby)
+- Čistá práce s citacemi - každé tvrzení má oporu
+- Jeden jasný přínos: case study s konkrétními výsledky
+
+**Co to znamená v praxi:**
+- Rozlišovat fakta (+ citace) vs. vlastní závěry (explicitně označit)
+- Od obecného ke konkrétnímu (SWE → životní cyklus → agenti → scaffolding)
+- Kritické myšlení, ne jen popis ("X říká Y" → "X říká Y, což pro nás znamená Z")
+- Propojovat teorii s BP ("proč to tu je")
+
+**Viz:** `notes/jak-psat-vedecky.md` - mantra pro akademické psaní
 
 ## Psaní BP textu
 
@@ -138,3 +168,55 @@ Thesis je synchronizována s Overleafem pro spolupráci s vedoucím.
 - Před pull commitni lokální změny (aby se daly obnovit)
 - Vedoucí edituje v Overleafu, ty v lokálním editoru
 - Sync děláme ručně, ne automaticky (kvůli kontrole změn)
+
+## RAG - Semantic search přes BP zdroje
+
+Složka `RAG/` obsahuje nástroje pro semantic search přes PDF zdroje v `thesis/sources/`.
+
+### Prerekvizity
+
+Chroma server musí běžet:
+```bash
+docker start chroma-bp
+# nebo pokud neexistuje:
+docker run -d --name chroma-bp -p 8000:8000 -v /home/dev/code/Bakalarka/RAG/data:/chroma/chroma chromadb/chroma:latest
+```
+
+### Příkazy
+
+```bash
+cd RAG
+
+# Indexování nových PDF (skipne už zaindexované)
+npm run index
+
+# Semantic search
+npm run query -- "cognitive biases in code review"
+npm run query -- "Brooks law adding manpower" --n=3
+
+# Nápověda
+npm run query -- --help
+```
+
+### Výstup query
+
+```
+📄 mohanani-2020-cognitive-biases-swe.pdf (page 5)
+📊 Similarity: 0.72
+
+[text chunku...]
+```
+
+→ Použij pro `\cite[s.~5]{mohanani2020}` v LaTeXu.
+
+### Kdy použít
+
+- Hledání citací k tématu ("co říkají zdroje o X")
+- Ověření že něco je v literatuře
+- Nalezení konkrétní pasáže pro parafrázi
+
+### Technické detaily
+
+- **Embeddings:** Qwen3-8B přes OpenRouter
+- **Vector DB:** Chroma (localhost:8000)
+- **OCR:** Mistral OCR pro skenované PDF (auto-detect)
