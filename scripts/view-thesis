@@ -1,0 +1,11 @@
+#!/bin/bash
+# Otevření BP v PDF prohlížeči
+
+PDF="$(dirname "$0")/../thesis/prace.pdf"
+
+if [ -f "$PDF" ]; then
+    evince "$PDF" &
+    echo "✓ Otevřeno v evince"
+else
+    echo "✗ PDF neexistuje. Spusť nejdřív: ./scripts/build-thesis"
+fi

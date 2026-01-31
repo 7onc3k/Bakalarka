@@ -10,68 +10,122 @@ Tato kapitola vysvětluje teoretická východiska práce. Nejprve je popsáno so
 \section{Softwarové inženýrství}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{raw}
-\textbf{Úvod sekce 2.1 (1-2 věty):}
-Tato sekce definuje softwarové inženýrství, vysvětluje proč je software inherentně složitý a jak tato složitost vedla ke vzniku oboru.
-\end{raw}
+\begin{draft}
+Pro pochopení toho, jak AI agenti mění vývoj software, je nezbytné nejprve porozumět zavedeným postupům a standardům softwarového inženýrství. Tato sekce definuje softwarové inženýrství, vysvětluje proč je software inherentně složitý a jak tato složitost vedla ke vzniku oboru.
+\end{draft}
 
 % === PODSEKCE 2.1.1 ===
 \subsection{Definice a vymezení oboru}
 
-\begin{raw}
-\textbf{Co sem patří:}
-\begin{itemize}
-    \item IEEE/SWEBOK definice softwarového inženýrství
-    \item Vymezení vůči příbuzným oborům (computer science, programování)
-    \item Proč "inženýrství" - systematický, disciplinovaný přístup
-    \item SWE je víc než psaní kódu - zahrnuje procesy, kvalitu, údržbu
-\end{itemize}
+\begin{draft}
+Softwarové inženýrství je disciplína, která se zabývá celým životním cyklem software -- od specifikace až po údržbu \cite[s.~xxxvii]{swebok2024}.
 
-\textbf{Zdroje:}
-\begin{itemize}
-    \item SWEBOK v4 - definice, knowledge areas
-    \item IEEE Standard Glossary of Software Engineering Terminology
-\end{itemize}
+Na rozdíl od programování, které se soustředí na implementaci a technické aspekty jako algoritmy a datové struktury, softwarové inženýrství přistupuje k vývoji software holisticky -- zahrnuje nejen technickou stránku, ale i organizační aspekty jako řízení projektů a rozpočty \cite[s.~21]{sommerville2016}.
+\end{draft}
+
+\begin{raw}
+\textbf{TODO:} Rozšířit definice a vymezení oboru (1-2 odstavce).
 \end{raw}
 
 % === PODSEKCE 2.1.2 ===
-\subsection{Komplexita software}
+\subsection{Historický kontext}
+
+\begin{draft}
+Systémy jako software jsou čím dál složitější \cite[s.~582]{sommerville2016}.
+\end{draft}
 
 \begin{raw}
-\textbf{Co sem patří:}
-\begin{itemize}
-    \item \textbf{Proč je software složitý} (Brooks - No Silver Bullet):
-    \begin{itemize}
-        \item Essential complexity - inherentní složitost problému (business logika, requirements)
-        \item Accidental complexity - složitost kterou si přidáváme (nástroje, technologie)
-        \item Software je neviditelný, snadno měnitelný, nemá fyzická omezení
-    \end{itemize}
-\end{itemize}
+\textbf{Narativní flow (revidovaný):}
+\begin{enumerate}
+    \item \textbf{Složitost systémů roste} -- software je čím dál komplexnější
+          \\ → \texttt{sommerville2016} s.~582:
+          \\ \textit{``The root cause of these problems is, as it was in the 1960s, that we are trying to build systems that are larger and more complex than before. We are attempting to build these `mega-systems' using methods and technology that were never designed for this purpose.''}
 
-\textbf{Zdroje:}
-\begin{itemize}
-    \item Brooks - No Silver Bullet (1986) - essential vs accidental complexity
-    \item McConnell - Code Complete (cituje Brookse)
-\end{itemize}
+    \item \textbf{Abstrakce jako nástroj} -- reakce na složitost:
+    \begin{itemize}
+        \item Assembler → C → Java → frameworky
+        \item Každá vrstva skrývá detaily (information hiding)
+              \\ → \texttt{colburn2000} s.~1:
+              \\ \textit{``Abstraction through information hiding is a primary factor in computer science progress and success through an examination of the ubiquitous role of information hiding in programming languages, operating systems, network architecture, and design patterns.''}
+        \item Dijkstra: abstrakce pomáhá být přesný, ne vágní
+              \\ → \texttt{swebok2024} s.~370:
+              \\ \textit{``Dijkstra states: `The purpose of abstracting is not to be vague, but to create a new semantic level in which one can be absolutely precise.'''}
+    \end{itemize}
+
+    \item \textbf{Přesto 1968 krize} -- proč?
+    \begin{itemize}
+        \item Složitost rostla rychleji než naše schopnost ji zvládat
+        \item NATO konference: ``software crisis''
+              \\ → \texttt{nato1968} s.~78 (Perlis keynote):
+              \\ \textit{``I believe it is because we recognize that a practical problem of considerable difficulty and importance has arisen: The successful design, production and maintenance of useful software systems.''}
+    \end{itemize}
+
+    \item \textbf{Reakce: vznik SWE} -- disciplína pro řízení složitosti
+          \\ → \texttt{sommerville2016} s.~592:
+          \\ \textit{``In software engineering, we have seen the incredibly rapid development of the discipline to help manage the increasing size and complexity of software systems... the approach that has been the basis of complexity management in software engineering is called reductionism.''}
+
+    \item \textbf{Dnes: AI jako nový problém}
+    \begin{itemize}
+        \item Není to jen další vrstva abstrakce
+        \item Je to ztráta determinismu -- ``black box''
+        \item Proto mechanistic interpretability
+              \\ → \texttt{bereska2024} s.~1:
+              \\ \textit{``Understanding AI systems' inner workings is critical for ensuring value alignment and safety. This review explores mechanistic interpretability: reverse engineering the computational mechanisms and representations learned by neural networks into human-understandable algorithms and concepts to provide a granular, causal understanding.''}
+    \end{itemize}
+\end{enumerate}
+
+\textbf{Klíčový insight:}
+Abstrakce $\neq$ složitost. Abstrakce je NÁSTROJ pro zvládání složitosti.
+AI přináší kvalitativně nový problém (nedeterminismus), ne jen ``více abstrakce''.
 \end{raw}
 
 % === PODSEKCE 2.1.3 ===
-\subsection{Historický kontext}
+\subsection{Komplexita software}
 
 \begin{raw}
-\textbf{Co sem patří:}
+\textbf{Co sem patří (Brooks -- No Silver Bullet):}
 \begin{itemize}
-    \item NATO 1968 konference - "software crisis"
-    \item Projekty selhávaly, překračovaly rozpočty, nedodávaly včas
-    \item Potřeba inženýrské disciplíny místo ad-hoc programování
-    \item Vznik SWE jako reakce na komplexitu a krizi
+    \item \textbf{Essential complexity} -- inherentní složitost problému
+          \\ → \texttt{brooks1987} s.~6:
+          \\ \textit{``The complexity of software is an essential property, not an accidental one. Hence descriptions of a software entity that abstract away its complexity often abstract away its essence.''}
+    \begin{itemize}
+        \item Business logika, requirements, doménová znalost
+        \item Nelze odstranit -- je to podstata toho co řešíme
+    \end{itemize}
+
+    \item \textbf{Accidental complexity} -- složitost kterou si přidáváme
+    \begin{itemize}
+        \item Nástroje, technologie, jazyky, frameworky
+        \item Lze redukovat lepšími nástroji a abstrakcemi
+    \end{itemize}
+
+    \item \textbf{Vlastnosti software} -- proč je jiný než fyzické systémy:
+          \\ → \texttt{brooks1987} s.~6:
+          \\ \textit{``Software entities are more complex for their size than perhaps any other human construct, because no two parts are alike.''}
+    \begin{itemize}
+        \item Neviditelný, snadno měnitelný, nemá fyzická omezení
+        \item \textbf{Nelineární růst komplexity:} Na rozdíl od fyzických systémů
+              (např. stavba zdi -- cihla na cihlu, proces stále stejný),
+              u software každý nový prvek interaguje s ostatními a přidává nové stavy.
+              \\ → \texttt{brooks1987} s.~6:
+              \\ \textit{``A scaling-up of a software entity is not merely a repetition of the same elements in larger size, it is necessarily an increase in the number of different elements. In most cases, the elements interact with each other in some non-linear fashion, and the complexity of the whole increases much more than linearly.''}
+        \item → \texttt{mcconnell2004} s.~127:
+              \\ \textit{``People use abstraction continuously. If you had to deal with individual wood fibers, varnish molecules, and steel molecules every time you used your front door, you'd hardly make it in or out of your house each day. Abstraction is a big part of how we deal with complexity in the real world.''}
+    \end{itemize}
+
+    \item \textbf{Evoluce a růst komplexity v čase} (Lehman's Laws):
+          \\ → \texttt{lehman1980} s.~9:
+          \\ \textit{``I. Continuing Change -- A program that is used... undergoes continual change or becomes progressively less useful. The change or decay process continues until it is judged more cost effective to replace the system with a recreated version.''}
+          \\ \textit{``II. Increasing Complexity -- As an evolving program is continually changed, its complexity increases unless work is done to maintain or reduce it.''}
+    \begin{itemize}
+        \item Software musí být neustále adaptován (zákon I)
+        \item Komplexita roste s časem pokud se aktivně neredukuje (zákon II)
+        \item Doplňuje Brookse: Brooks říká PROČ je software složitý, Lehman říká že komplexita navíc ROSTE
+    \end{itemize}
 \end{itemize}
 
-\textbf{Zdroje:}
-\begin{itemize}
-    \item NATO 1968 - historický kontext vzniku oboru
-    \item Sommerville - Software Engineering (úvod, historie)
-\end{itemize}
+\textbf{Propojení s 2.1.2:}
+Abstrakce (kompilátory, frameworky) řeší accidental complexity -- ale essential zůstává. To je důvod proč ``no silver bullet''.
 \end{raw}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

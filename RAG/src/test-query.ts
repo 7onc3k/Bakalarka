@@ -27,7 +27,7 @@ async function main() {
   console.log(`Query: "${query}"\n`);
 
   const client = new ChromaClient({ path: "http://localhost:8000" });
-  const collection = await client.getCollection({ name: "bp-sources" });
+  const collection = await client.getCollection({ name: "bp-sources", embeddingFunction: undefined as never });
 
   const queryEmbedding = await getEmbedding(query);
 

@@ -1,0 +1,14 @@
+#!/bin/bash
+# Kompilace BP do PDF
+
+cd "$(dirname "$0")/../thesis"
+
+echo "Kompiluji prace.tex..."
+pdflatex -interaction=nonstopmode prace.tex > /dev/null 2>&1
+
+if [ $? -eq 0 ]; then
+    echo "✓ PDF vygenerováno: thesis/prace.pdf"
+else
+    echo "✗ Chyba při kompilaci. Spouštím znovu s výstupem:"
+    pdflatex -interaction=nonstopmode prace.tex 2>&1 | grep -E "^!|Error|Missing" | head -10
+fi

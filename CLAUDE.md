@@ -124,9 +124,38 @@ Workflow: raw → draft → finální (odstraníme prostředí)
 
 **Viz:** `notes/jak-psat-vedecky.md` - mantra pro akademické psaní
 
+## Metody společného psaní
+
+Různé způsoby jak společně psát text BP:
+
+**Metoda A - Varianty:**
+- Claude nabídne různé varianty jak něco napsat
+- Uživatel syntetizuje a napíše podle sebe
+- Dobré pro: kostru, strukturu
+
+**Metoda B - Rozhovor (aktuálně zkoušíme):**
+- Claude se ptá otázky ("co je podle tebe X?")
+- Uživatel odpovídá jak umí
+- Když neví nebo chce vidět zdroje:
+  1. Claude najde relevantní pasáže přes RAG
+  2. **Zobrazí citace přímo v chatu** (text + zdroj + stránka)
+  3. Pak otevře dokument pro ověření: `evince -p [strana] [soubor]`
+- **Pozor:** PDF stránka ≠ číslo stránky v knize (offset kvůli obsahu, předmluvě)
+- **Pozor:** RAG vrací PDF stránku, ne číslo v knize → vždy ověřit v dokumentu
+- Uživatel přečte, pak odpoví vlastními slovy
+- Společně zformulují do akademického textu
+
+**Metoda D - Bullet points → text:**
+- Uživatel napíše body co chce říct (česky, jednoduše)
+- Společně rozepíšou do vět
+
 ## Psaní BP textu
 
-**Workflow:**
+**Workflow celé BP:**
+1. **RAW struktura** - nejdřív pro celou BP (co kde bude, jaké zdroje, jaké citace)
+2. **Draft** - pak teprve psát vlastními slovy, odstavec po odstavci
+
+**Workflow jednotlivých změn:**
 1. Claude MUSÍ nejdřív navrhnout/prezentovat co chce udělat
 2. Uživatel musí explicitně souhlasit
 3. Teprve potom provést změny
@@ -187,18 +216,41 @@ docker run -d --name chroma-bp -p 8000:8000 -v /home/dev/code/Bakalarka/RAG/data
 ```bash
 cd RAG
 
-# Indexování nových PDF (skipne už zaindexované)
+# Indexování (sentence-based chunking, přesné stránky)
 npm run index
 
-# Semantic search
+# Základní semantic search
 npm run query -- "cognitive biases in code review"
-npm run query -- "Brooks law adding manpower" --n=3
+npm run query -- "Brooks law manpower" --n=3
+
+# Filtry
+npm run query -- "SDLC phases" --doc=sommerville      # podle dokumentu
+npm run query -- "software crisis" --keyword=NATO     # podle klíčového slova
+
+# Pokročilé funkce
+npm run query -- "agile" --expand                     # rozšíří query o synonyma (LLM)
+npm run query -- "agile" --rerank                     # přeřadí výsledky (Cohere)
+npm run query -- "agile" --expand --rerank            # obojí
+
+# Rychlý mód (bez LLM features)
+npm run query -- "agile" --raw
 
 # Nápověda
 npm run query -- --help
 ```
 
-### Výstup query
+### Parametry query
+
+| Parametr | Popis |
+|----------|-------|
+| `--n=N` | Počet výsledků (default: 5) |
+| `--doc=X` | Filtr podle názvu dokumentu (partial match) |
+| `--keyword=X` | Filtr podle klíčového slova v textu |
+| `--expand` | Rozšíří query o související termíny (LLM) |
+| `--rerank` | Přeřadí výsledky pomocí Cohere rerank |
+| `--raw` | Bez expanze a reranku (rychlejší) |
+
+### Výstup
 
 ```
 📄 mohanani-2020-cognitive-biases-swe.pdf (page 5)
@@ -207,16 +259,22 @@ npm run query -- --help
 [text chunku...]
 ```
 
-→ Použij pro `\cite[s.~5]{mohanani2020}` v LaTeXu.
+→ `page` je přesná PDF stránka, použij pro `\cite[s.~5]{mohanani2020}`
 
-### Kdy použít
+### Kdy použít co
 
-- Hledání citací k tématu ("co říkají zdroje o X")
-- Ověření že něco je v literatuře
-- Nalezení konkrétní pasáže pro parafrázi
+- **Základní query** - explorativní hledání ("co mám o X?")
+- **--doc** - víš z jakého zdroje hledáš
+- **--keyword** - hledáš přesnou frázi nebo termín
+- **--expand** - široké téma, chceš pokrýt synonyma
+- **--rerank** - chceš nejrelevantnější výsledky (pomalejší)
 
 ### Technické detaily
 
+- **Chunking:** Sentence-based (respektuje hranice vět)
+- **Stránky:** Přesné PDF stránky (ne odhady)
 - **Embeddings:** Qwen3-8B přes OpenRouter
+- **Reranking:** Cohere rerank-v3.5 (vyžaduje COHERE_API_KEY)
+- **Query expansion:** Claude 3 Haiku
 - **Vector DB:** Chroma (localhost:8000)
 - **OCR:** Mistral OCR pro skenované PDF (auto-detect)

@@ -116,3 +116,18 @@ Systém pro automatické připomínky nezaplacených faktur a správu dunning fl
 
 *Verze: V4.1 (2025-01-23)*
 *Status: Draft pro konzultaci s vedoucím*
+
+---
+
+Zkrácená verze (formát zadání BP)
+
+Téma: Návrh a testování běhových prostředí pro autonomní coding agenty v softwarovém vývoji
+
+Cílem tématu je prozkoumat, jak nastavit pracovní prostředí (scaffolding) pro AI coding agenty, aby mohli efektivně pracovat v rámci softwarového projektu. Práce se zaměřuje na analýzu současných přístupů k řízení SDLC v kontextu agentních systémů a praktické ověření vlivu různých nastavení scaffoldingu na kvalitu výstupů agenta.
+
+Rámcový obsah:
+- Rešerše SDLC a současných přístupů k AI agentům v softwarovém vývoji
+- Návrh a implementace experimentálního prostředí (case study: Billing Reminder Engine)
+- Experimenty s různými nastaveními scaffoldingu a vyhodnocení výsledků
+
+Rozsah práce: 7 ECTS kreditů
