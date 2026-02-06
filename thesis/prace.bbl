@@ -19,6 +19,47 @@
 
 \refsection{0}
   \datalist[entry]{apa/apasortcite//global/global}
+    \entry{llmjudge2024}{article}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=5991953edf30650a94759e62ac9a4282}{%
+           family={Gu},
+           familyi={G\bibinitperiod},
+           given={Jiawei},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1712d12117daa3901f6496dd5cfcf5fb}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Xuhui},
+           giveni={X\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{517f2bede99a40df61dab9a3b2e08b96}
+      \strng{fullhash}{517f2bede99a40df61dab9a3b2e08b96}
+      \strng{bibnamehash}{517f2bede99a40df61dab9a3b2e08b96}
+      \strng{authorbibnamehash}{517f2bede99a40df61dab9a3b2e08b96}
+      \strng{authornamehash}{517f2bede99a40df61dab9a3b2e08b96}
+      \strng{authorfullhash}{517f2bede99a40df61dab9a3b2e08b96}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:2411.15594}
+      \field{note}{Comprehensive survey on using LLMs as evaluators - reliability, bias mitigation, evaluation scenarios}
+      \field{title}{A Survey on {LLM}-as-a-Judge}
+      \field{year}{2024}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2411.15594
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2411.15594
+      \endverb
+    \endentry
     \entry{swebok2024}{book}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=6b600542ba3d4a21aea8e7d8ee988932}{%
@@ -83,6 +124,47 @@
     \endentry
   \enddatalist
   \datalist[entry]{apa/global//global/global}
+    \entry{llmjudge2024}{article}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=5991953edf30650a94759e62ac9a4282}{%
+           family={Gu},
+           familyi={G\bibinitperiod},
+           given={Jiawei},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1712d12117daa3901f6496dd5cfcf5fb}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Xuhui},
+           giveni={X\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{517f2bede99a40df61dab9a3b2e08b96}
+      \strng{fullhash}{517f2bede99a40df61dab9a3b2e08b96}
+      \strng{bibnamehash}{517f2bede99a40df61dab9a3b2e08b96}
+      \strng{authorbibnamehash}{517f2bede99a40df61dab9a3b2e08b96}
+      \strng{authornamehash}{517f2bede99a40df61dab9a3b2e08b96}
+      \strng{authorfullhash}{517f2bede99a40df61dab9a3b2e08b96}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:2411.15594}
+      \field{note}{Comprehensive survey on using LLMs as evaluators - reliability, bias mitigation, evaluation scenarios}
+      \field{title}{A Survey on {LLM}-as-a-Judge}
+      \field{year}{2024}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2411.15594
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2411.15594
+      \endverb
+    \endentry
     \entry{swebok2024}{book}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=6b600542ba3d4a21aea8e7d8ee988932}{%

@@ -41,6 +41,39 @@ Vlastní vývoj systému upomínek faktur se všemi náležitostmi softwarového
 \end{itemize}
 
 Tato implementace slouží jako "ground truth" pro porovnání.
+
+\rule{\textwidth}{0.4pt}
+
+\textbf{Formát specifikace: GitHub Issues}
+
+Specifikace referenční implementace je strukturována jako GitHub Issues. Volba tohoto formátu vychází z:
+
+\begin{enumerate}
+    \item \textbf{Akademický standard} -- SWE-bench \cite{swebench2024}, de facto benchmark pro AI coding agenty (ICLR 2024), používá GitHub Issues jako specifikaci. 2294 úloh z reálných repozitářů.
+    \item \textbf{Agilní RE praxe} -- v agilních týmech user stories a backlog items nahrazují formální SRS dokumenty \cite{cao2008}.
+    \item \textbf{Open source praxe} -- issue trackery fungují jako de facto requirements management \cite{scacchi2002}.
+    \item \textbf{Nativní čitelnost pro agenty} -- agent čte issues přes GitHub API nebo CLI, propojuje je s branches a PR.
+    \item \textbf{Traceability} -- Issue \#N $\rightarrow$ branch $\rightarrow$ commits $\rightarrow$ PR $\rightarrow$ merge. Přirozená provázanost specifikace s implementací \cite{gotel1994}.
+\end{enumerate}
+
+Struktura každého issue vychází z empirického výzkumu o optimální specifikaci pro LLM agenty
+(viz sekce 2.4.2, bod 7):
+
+\textbf{Šablona issue:}
+\begin{enumerate}
+    \item \textbf{Title} -- stručný popis funkcionality
+    \item \textbf{Description} -- co a proč (structured natural language \cite[kap.~4.4]{sommerville2016})
+    \item \textbf{Domain glossary} -- klíčové pojmy z business domény \cite{domaincodegen2024}
+    \item \textbf{Inputs / Outputs} -- konkrétní I/O příklady (redukuje misinterpretaci \cite{specine2025})
+    \item \textbf{Preconditions / Postconditions} -- stavové podmínky
+    \item \textbf{Acceptance criteria} -- Given/When/Then, mapovatelné na testy \cite{ticoder2024}
+    \item \textbf{Behavioral model} -- state diagram (Mermaid) pro event-driven logiku \cite[kap.~5.4]{sommerville2016}
+\end{enumerate}
+
+Tato šablona kombinuje čtyři přístupy podložené výzkumem:
+structured natural language (Sommerville), test-driven specifikaci (TiCoder),
+doménový kontext (ACM TOSEM domain-specific study),
+a redukci specification misalignment (Specine).
 \end{raw}
 
 \section{Experimenty}
@@ -60,24 +93,91 @@ Spuštění agentů s různými nastaveními scaffoldingu na stejném zadání. 
 \section{Analýza}
 
 \begin{raw}
-Měření výstupů proti referenční implementaci:
+Hodnocení výstupů agentů probíhá ve čtyřech dimenzích: funkční kvalita, procesní kvalita, efektivita a alignment.
+
+\subsection{Functional Quality (Funkční kvalita)}
+
+Měření funkčních vlastností výstupu dle ISO 25010:
+
+\textbf{Completeness (Úplnost):}
 \begin{itemize}
-    \item \textbf{Functional Quality} (dle ISO 25010):
-    \begin{itemize}
-        \item Completeness - míra pokrytí požadované funkcionality
-        \item Correctness - správnost výsledků
-    \end{itemize}
-    \item \textbf{Compliance} (dodržování procesů):
-    \begin{itemize}
-        \item Workflow (issues → branch → PR)
-        \item Konvence (commit messages, dokumentace)
-        \item Transparentnost (vysvětluje co dělá a proč)
-    \end{itemize}
+    \item Míra pokrytí požadované funkcionality
+    \item Měření: Checklist požadavků ze specifikace → procento implementovaných
 \end{itemize}
 
-Identifikace vzorů - která nastavení scaffoldingu vedla k lepším výsledkům.
-\end{raw}
+\textbf{Correctness (Správnost):}
+\begin{itemize}
+    \item Správnost implementace - funguje to jak má?
+    \item Měření: Spuštění referenčních testů na kód agenta (pass rate)
+    \item Kvalita testů agenta: Mutation testing (Stryker) - mutation score určuje jak dobře testy detekují chyby
+\end{itemize}
 
-\begin{raw}
-Poznámka: Konkrétní metriky pro hodnocení výstupu agentů jsou aktivní oblast výzkumu. V rámci práce bude provedena dodatečná rešerše dostupných akademických přístupů.
+\subsection{Compliance (Procesní kvalita)}
+
+Dodržování softwarově-inženýrských praktik:
+
+\textbf{Workflow:}
+\begin{itemize}
+    \item Dodržení flow: issues → branch → commits → PR
+    \item Měření: Automatická kontrola git historie a GitHub artefaktů
+\end{itemize}
+
+\textbf{Conventions (Konvence):}
+\begin{itemize}
+    \item Kvalita commit messages (formát, atomicita, srozumitelnost)
+    \item Kvalita issues (popis, acceptance criteria)
+    \item Kvalita dokumentace a PR description
+    \item Měření: LLM-as-a-judge s definovaným rubrikem \cite{llmjudge2024}
+\end{itemize}
+
+\textbf{Transparency (Transparentnost):}
+\begin{itemize}
+    \item Vysvětluje agent svá rozhodnutí?
+    \item Dokumentuje postup a důvody?
+    \item Měření: LLM-as-a-judge + manuální review
+\end{itemize}
+
+\subsection{Efficiency (Efektivita)}
+
+Náklady na dosažení výsledku:
+
+\begin{itemize}
+    \item \textbf{Token usage} - spotřeba tokenů (náklady na API)
+    \item \textbf{Iterations} - počet pokusů a oprav potřebných k dokončení
+    \item \textbf{Time} - celkový čas do dokončení
+    \item \textbf{Human intervention} - míra nutných lidských zásahů a korekcí
+\end{itemize}
+
+Měření: Logování z agenta a konverzačních sessions.
+
+\subsection{Metody měření}
+
+Kombinace tří přístupů:
+\begin{itemize}
+    \item \textbf{Automatické} - testy, mutation testing, git log analýza, token counting
+    \item \textbf{LLM-as-a-judge} - hodnocení subjektivních aspektů (kvalita commit messages, dokumentace) pomocí LLM s definovaným rubrikem
+    \item \textbf{Manuální review} - kvalitativní zhodnocení celku autorem
+\end{itemize}
+
+LLM-as-a-judge přístup využívá strukturované hodnocení kde LLM dostane kritéria a škálu, a konzistentně hodnotí všechny běhy. Validace tohoto přístupu probíhá porovnáním s manuálním hodnocením na vzorku \cite{llmjudge2024}.
+
+\subsection{Alignment (Soulad se záměrem)}
+
+Alignment měří, zda agent pochopil skutečný záměr zadání - ne jen doslovnou instrukci, ale co uživatel skutečně chtěl \cite{llmjudge2024}.
+
+Agent může mít 100\% Correctness a Completeness, ale být misaligned - technicky splnil zadání, ale výsledek neodpovídá záměru.
+
+\textbf{Co se hodnotí:}
+\begin{itemize}
+    \item \textbf{Over-engineering} - přidal agent funkcionalitu která nebyla požadována?
+    \item \textbf{Under-delivering} - vynechal agent implicitní požadavky které byly zřejmé z kontextu?
+    \item \textbf{Misinterpretation} - pochopil agent zadání špatně?
+    \item \textbf{Scope adherence} - držel se agent vymezeného rozsahu?
+\end{itemize}
+
+\textbf{Měření:} Manuální review autorem + LLM-as-a-judge porovnávající zadání vs. skutečný výstup.
+
+\subsection{Vyhodnocení}
+
+Identifikace vzorů - která nastavení scaffoldingu vedla k lepším výsledkům v jednotlivých dimenzích. Porovnání trade-offs (např. vyšší kvalita vs. vyšší náklady).
 \end{raw}

@@ -79,6 +79,18 @@ Obsah v LaTeXu označujeme podle stavu zpracování (používáme prostředí):
 
 Workflow: raw → draft → finální (odstraníme prostředí)
 
+## Workflow pro budování kostry sekce
+
+Pro každou sekci/podsekci postupujeme:
+
+1. **Kostra** - definovat strukturu (podsekce, body)
+2. **Obsah** - diskuze: co by měla sekce říkat? jak se vztahuje k BP?
+3. **Check zdrojů** - máme relevantní zdroje? co chybí?
+4. **Stáhnout zdroje** - dohledat a stáhnout chybějící
+5. **Vložit citace** - doplnit do RAW kostry v thesis
+
+Teprve až je kostra celé kapitoly hotová → iterativně přepisovat do draftu vlastními slovy.
+
 ## Research a zdroje
 
 - Při jakémkoliv research **vždy citovat zdroje** (název, URL)
@@ -86,6 +98,26 @@ Workflow: raw → draft → finální (odstraníme prostředí)
 - U každého zdroje poznamenat:
   - Co tam je užitečného
   - Jak to souvisí s BP
+
+## Hierarchie zdrojů a citování
+
+**Typy zdrojů:**
+- **Primární** = originální autoři konceptu (Parnas, Brooks, Dijkstra...)
+- **Sekundární** = učebnice, přehledy (Sommerville, SWEBOK, McConnell)
+- **Terciární** = blogy, tutoriály (jen když není jiný zdroj)
+
+**Jak citovat podle typu sekce:**
+
+| Typ sekce | Přístup |
+|-----------|---------|
+| Klíčové koncepty (abstrakce, modularita...) | Primární zdroje |
+| Přehledové/podpůrné sekce (nástroje, artefakty) | Sekundární ok, nebo konkrétní zdroje nástrojů |
+| Jádro BP (agenti, scaffolding) | Primární zdroje - akademické papers |
+
+**Workflow:**
+1. SWEBOK/Sommerville pro **orientaci** - co existuje, jak se to jmenuje
+2. Pak najít **primární zdroj** pro důležité koncepty
+3. Pro podpůrné sekce ok citovat učebnice
 
 **Když uživatel řekne:**
 - **"jaké zdroje"** → `ls thesis/sources/` (seznam co máme)
