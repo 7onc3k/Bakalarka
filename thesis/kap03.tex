@@ -28,6 +28,29 @@ Systém pro automatické odesílání připomínek k nezaplaceným fakturám. Ob
 \end{itemize}
 \end{raw}
 
+\section{Zvolená metodika: Spec-Driven Development}
+
+\begin{raw}
+Pro referenční implementaci i experimenty je zvolena metodika \textbf{Spec-Driven Development (SDD)}
+na úrovni \textbf{spec-first} \cite{sdd2026}.
+
+\textbf{Zdůvodnění volby:}
+\begin{enumerate}
+    \item \textbf{Specifikace řídí implementaci} -- kvalita specifikace přímo ovlivňuje kvalitu výstupu agenta (viz 2.4.2 bod 7). SDD formalizuje tento princip.
+    \item \textbf{Waterfall per increment} -- každý issue = jeden increment s detailní specifikací, ale mezi incrementy iterativní přístup. Odpovídá micro-waterfall hypotéze (2.3.4) podpořené empirickými daty \cite{watanabe2025agentprs, ehsani2026failedprs}.
+    \item \textbf{Malé, focused úkoly} -- empirická data ukazují že malé agent PRs mají vyšší úspěšnost \cite{ehsani2026failedprs}. SDD spec-first přirozeně vede k dekompozici na testovatelné incrementy.
+    \item \textbf{Spec-first stačí} -- pro jednorázový experiment není potřeba spec-anchored (udržovat sync spec-kód). Spec se napíše, agent implementuje, vyhodnotí se.
+\end{enumerate}
+
+\textbf{SDD workflow v kontextu BP:}
+\begin{enumerate}
+    \item \textbf{Specify} -- napsat GitHub Issue se strukturovanou specifikací (šablona viz níže)
+    \item \textbf{Plan} -- (pro agenty: agent sám plánuje; pro referenci: autor plánuje)
+    \item \textbf{Implement} -- implementace podle specifikace
+    \item \textbf{Validate} -- testy (unit, acceptance criteria), review
+\end{enumerate}
+\end{raw}
+
 \section{Referenční implementace}
 
 \begin{raw}
@@ -57,23 +80,83 @@ Specifikace referenční implementace je strukturována jako GitHub Issues. Volb
 \end{enumerate}
 
 Struktura každého issue vychází z empirického výzkumu o optimální specifikaci pro LLM agenty
-(viz sekce 2.4.2, bod 7):
+(viz sekce 2.4.2, bod 7). Studie ukazují, že kvalita requirements přímo koreluje s kvalitou
+LLM výstupu \cite{rope2024} a že tradiční user stories jsou příliš abstraktní pro přímý
+vstup do LLM \cite{ullrich2025} -- je nutná dekompozice a obohacení o konkrétní kontext.
 
-\textbf{Šablona issue:}
+\textbf{Tři vrstvy specifikace:}
+
+Obsah issue pokrývá tři úrovně abstrakce, které odpovídají standardní posloupnosti
+v softwarovém inženýrství \cite[kap.~2]{sommerville2016}:
+
 \begin{enumerate}
-    \item \textbf{Title} -- stručný popis funkcionality
-    \item \textbf{Description} -- co a proč (structured natural language \cite[kap.~4.4]{sommerville2016})
-    \item \textbf{Domain glossary} -- klíčové pojmy z business domény \cite{domaincodegen2024}
-    \item \textbf{Inputs / Outputs} -- konkrétní I/O příklady (redukuje misinterpretaci \cite{specine2025})
-    \item \textbf{Preconditions / Postconditions} -- stavové podmínky
-    \item \textbf{Acceptance criteria} -- Given/When/Then, mapovatelné na testy \cite{ticoder2024}
-    \item \textbf{Behavioral model} -- state diagram (Mermaid) pro event-driven logiku \cite[kap.~5.4]{sommerville2016}
+    \item \textbf{Requirements} (problémová doména -- CO business potřebuje):
+    \begin{itemize}
+        \item Title, Description -- účel a kontext funkcionality
+        \item Acceptance criteria -- Given/When/Then, pozorovatelné chování \cite{ticoder2024}.
+              Pokud jsou formulována s konkrétními hodnotami (vstupy, výstupy, stavy),
+              jsou přímo mapovatelná na unit testy -- explicitní test cases tedy
+              nejsou nutnou součástí specifikace, ale odvozitelným artefaktem
+        \item Domain glossary -- sdílený slovník z business domény \cite{domaincodegen2024}
+    \end{itemize}
+
+    \item \textbf{Specification} (řešení -- CO přesně systém dělá):
+    \begin{itemize}
+        \item Inputs / Outputs -- datové typy, formáty, struktury \cite{wen2024io, specine2025}
+        \item Preconditions / Postconditions -- stavové podmínky, invarianty \cite{newcomb2025prepost}
+    \end{itemize}
+
+    \item \textbf{Architecture} (struktura -- JAK je řešení organizované):
+    \begin{itemize}
+        \item Behavioral model -- state diagram, sekvenční logika \cite[kap.~5.4]{sommerville2016}
+        \item Technické constraints -- tech stack, patterns, rozhraní
+    \end{itemize}
 \end{enumerate}
 
-Tato šablona kombinuje čtyři přístupy podložené výzkumem:
-structured natural language (Sommerville), test-driven specifikaci (TiCoder),
-doménový kontext (ACM TOSEM domain-specific study),
-a redukci specification misalignment (Specine).
+Toto rozdělení slouží i jako základ pro experimentální dimenzi ``úroveň detailu specifikace'' (viz sekce Experimenty):
+referenční implementace používá plnou specifikaci (všechny tři vrstvy),
+experimenty mohou poskytovat agentovi pouze vybrané vrstvy.
+
+\textbf{Překryv elementů a problém redundance:}
+
+Jednotlivé elementy šablony se částečně překrývají -- acceptance criteria implicitně
+obsahují vstupy/výstupy (Given/Then), pre/postconditions (Given = precondition,
+Then = postcondition) i behavioral model (přechody mezi stavy).
+Tato redundance není žádoucí: pro člověka znamená vyšší cognitive overload,
+pro LLM agenta zabírá vzácný context window duplicitními informacemi.
+
+Otázkou je, která reprezentace je \textbf{nejefektivnější} --
+diagramy jsou pro člověka ``high-bandwidth'' komunikace (rychlé pochopení
+celkové struktury), ale LLM je zpracovávají jako text, ne vizuálně.
+Konkrétní Given/When/Then scénáře mohou být pro agenta užitečnější
+než abstraktní typové definice, nebo naopak.
+
+Experimenty mohou ukázat optimální kombinaci elementů --
+ne ``čím víc, tím lépe'', ale \textbf{která minimální sada}
+reprezentací vede k nejlepším výsledkům.
+
+\textbf{Empirické pořadí důležitosti:}
+
+Studie Specine \cite{specine2025} empiricky měřila dopad jednotlivých elementů
+na kvalitu generovaného kódu (Pass@1, 4 LLM, 5 benchmarků):
+
+\textit{Tier 1 -- nejvyšší dopad:}
+\begin{itemize}
+    \item Příklady s vysvětlením ($\sim$14.5\%) $\rightarrow$ Acceptance criteria
+    \item Účel specifikace ($\sim$13.5\%) $\rightarrow$ Description
+    \item Výstupní požadavky ($\sim$11.6\%) $\rightarrow$ Outputs
+\end{itemize}
+
+\textit{Tier 2 -- silně doporučené:}
+vstupní požadavky, klíčové pojmy, edge/corner cases.
+
+\textit{Tier 3 -- hodnotné pro složité úlohy:}
+pre/postconditions \cite{newcomb2025prepost}, error handling, behavioral model.
+
+Tato šablona kombinuje přístupy podložené výzkumem:
+structured natural language \cite[kap.~4.4]{sommerville2016}, test-driven specifikaci \cite{ticoder2024},
+doménový kontext \cite{domaincodegen2024}, redukci specification misalignment \cite{specine2025},
+design constraints \cite{newcomb2025prepost} a klarifikaci ambiguity \cite{clarifygpt2024}.
 \end{raw}
 
 \section{Experimenty}
@@ -87,10 +170,80 @@ Příprava různých nastavení scaffoldingu pro agenty:
     \item Nastavení odvozená z literatury a spec-driven development přístupů
 \end{itemize}
 
+\textbf{Scaffolding jako experimentální dimenze:}
+
+Kromě úrovně detailu specifikace je další dimenzí míra scaffoldingu v repozitáři.
+Instrukce pro agenta jsou definovány v souboru \texttt{agents.md} (emerging standard
+pro AI coding agenty), který obsahuje konvence pro git workflow, testování,
+code quality a proces vývoje. Experimenty mohou testovat i schopnost agenta
+nastavit si scaffolding sám (linting, test framework, project structure) vs.
+dostat ho předpřipravený.
+
+\textbf{Klíčová experimentální dimenze -- úroveň detailu specifikace:}
+
+Referenční implementace používá plnou specifikaci (requirements + specification + architecture).
+Experimenty poskytují agentovi různé podmnožiny:
+
+\begin{itemize}
+    \item \textbf{Full} -- všechny tři vrstvy (requirements + specification + architecture)
+    \item \textbf{Medium} -- requirements + specification (bez architektonických rozhodnutí)
+    \item \textbf{Minimal} -- pouze requirements (Title, Description, Acceptance criteria, Glossary)
+\end{itemize}
+
+Toto měří dopad úrovně specifikace na kvalitu výstupu agenta -- empiricky
+podpořeno studiemi \cite{specine2025, rope2024, yang2025underspec}.
+
 Spuštění agentů s různými nastaveními scaffoldingu na stejném zadání. Zaznamenání průběhu a výstupů.
+
+\textbf{Odvozování testů z acceptance criteria:}
+
+Acceptance criteria ve formátu Given/When/Then (BDD) s konkrétními hodnotami
+jsou přímo mapovatelná na unit testy. Schopnost agenta korektně odvodit test suite
+z~acceptance criteria je měřitelná dimenze experimentu -- odpovídá zjištění
+TiCoder \cite{ticoder2024}, kde formalizace záměru přes testy vedla k~45.97\%
+zlepšení Pass@1.
 \end{raw}
 
 \section{Analýza}
+
+\begin{raw}
+[RAW]
+Tradiční přístupy k měření kvality SW (podpora pro volbu dimenzí):
+
+\textbf{Sommerville (Ch. 24, s. 705--728):}
+\begin{itemize}
+    \item Rozlišuje \textbf{control metrics} (procesní -- sledují proces vývoje) vs. \textbf{predictor metrics} (produktové -- měří vlastnosti kódu/dokumentů)
+    \item Vztah proces-produkt u SW není přímočarý jako ve výrobě -- SW je designován, ne vyráběn, vliv individuálních dovedností je velký (s. 706)
+    \item Produktové metriky (LOC, cyklomatická složitost) nemají jasný a konzistentní vztah ke kvalitativním atributům (s. 721)
+    \item → Naše dimenze Functional Quality = predictor metrics, Compliance = control metrics
+\end{itemize}
+
+\textbf{McConnell -- Code Complete (Ch. 28, s. 715, Table 28-2):}
+\begin{itemize}
+    \item Kategorie měření: Size (LOC, třídy, komentáře) a Overall Quality (počet defektů, defekty/KLOC, mean time between failures)
+    \item Praktický pohled -- co se dá reálně měřit v projektu
+\end{itemize}
+
+\textbf{SWEBOK v4 (Ch. 12, s. 248--256; Ch. 6, s. 176):}
+\begin{itemize}
+    \item Software Quality Measurement (s. 253) -- kvantifikace atributů pro rozhodování
+    \item Míry údržby (s. 176): complexity, maintainability, testability, supportability, reliability
+    \item Odkaz na ISO 25010 jako standard pro kvalitativní charakteristiky (s. 46, 256)
+\end{itemize}
+
+\textbf{SWE-bench (Appendix C.7, s. 28):}
+\begin{itemize}
+    \item Cyklomatická složitost (McCabe) a Halstead measures jako metriky pro hodnocení kódu v benchmarku
+    \item Příklad jak existující benchmarky měří kvalitu kódu agentů -- ale jen funkční/strukturální, ne procesní
+\end{itemize}
+
+\textbf{Jin et al. 2024 -- LLM Agents SWE Survey (Table VII, s. 21):}
+\begin{itemize}
+    \item Přehled evaluačních metrik: Accuracy, Pass@k, Task Completion Time, Task Success, Execution Accuracy, Win-Rate
+    \item Většina existující literatury měří hlavně funkční kvalitu výstupu
+    \item → Naše dimenze Compliance a Alignment jsou méně pokryté v literatuře -- vlastní přínos
+\end{itemize}
+\end{raw}
 
 \begin{raw}
 Hodnocení výstupů agentů probíhá ve čtyřech dimenzích: funkční kvalita, procesní kvalita, efektivita a alignment.
