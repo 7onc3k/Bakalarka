@@ -474,6 +474,32 @@
 %  Zdroje pro specifikaci, requirements a LLM
 %  ===========================================================================
 
+@techreport{sdd2026,
+  author = {Piskala, Deepak Babu},
+  title = {Spec-Driven Development: From Code to Contract in the Age of {AI} Coding Assistants},
+  institution = {arXiv},
+  year = {2026},
+  url = {https://arxiv.org/abs/2602.00180},
+  note = {Technical report. Three levels: spec-first, spec-anchored, spec-as-source. SDD workflow: Specify $\rightarrow$ Plan $\rightarrow$ Implement $\rightarrow$ Validate}
+}
+
+@article{watanabe2025agentprs,
+  author = {Watanabe, Miku and Li, Hao and Kashiwa, Yutaro and Reid, Brittany and Iida, Hajimu and Hassan, Ahmed E.},
+  title = {On the Use of Agentic Coding: An Empirical Study of Pull Requests on {GitHub}},
+  journal = {ACM Transactions on Software Engineering and Methodology},
+  year = {2025},
+  note = {Under review. 567 Claude Code PRs, 157 projects, 83.8\% acceptance rate}
+}
+
+@inproceedings{ehsani2026failedprs,
+  author = {Ehsani, Ramtin and others},
+  title = {Where Do {AI} Coding Agents Fail? An Empirical Study of Failed Agentic Pull Requests in {GitHub}},
+  booktitle = {Proceedings of MSR 2026},
+  year = {2026},
+  url = {https://arxiv.org/abs/2601.15195},
+  note = {33k agent PRs, 5 coding agents, taxonomy of failures}
+}
+
 @article{ticoder2024,
   author = {Fakhoury, Sarah and Naik, Aaditya and Sakkas, Georgios and Chakraborty, Saikat and Lahiri, Shuvendu K.},
   title = {{TiCoder}: {LLM}-Based Test-Driven Interactive Code Generation},
@@ -494,22 +520,103 @@
   note = {Domain context in prompts improves code quality, supports DDD ubiquitous language}
 }
 
-@article{specine2025,
-  author = {Tian, Zhao and others},
-  title = {Specine: Aligning Requirement for Large Language Model's Code Generation},
-  journal = {arXiv preprint arXiv:2509.01313},
-  year = {2025},
+@inproceedings{specine2025,
+  author = {Tian, Zhao and Chen, Junjie},
+  title = {Aligning Requirement for Large Language Model's Code Generation},
+  booktitle = {Proceedings of the IEEE/ACM 48th International Conference on Software Engineering (ICSE)},
+  year = {2026},
   url = {https://arxiv.org/abs/2509.01313},
-  note = {Preprint. Specification misalignment, 29.60\% improvement in Pass@1}
+  note = {10 alignment rules from RE, empirical: 29.60\% improvement in Pass@1 across 4 LLMs and 5 benchmarks}
 }
 
 @article{reprompt2025,
-  author = {{REprompt Authors}},
+  author = {Shi, Junjie and Sun, Weisong and Chen, Zhenpeng and Wu, Zhujun and Chen, Xiaohong and Jin, Zhi and Liu, Yang},
   title = {{REprompt}: Prompt Generation for Intelligent Software Development Guided by Requirements Engineering},
   journal = {arXiv preprint arXiv:2601.16507},
-  year = {2025},
+  year = {2026},
   url = {https://arxiv.org/abs/2601.16507},
-  note = {Preprint. Applies IEEE 29148 RE standard to prompt optimization}
+  note = {Maps 4 RE stages to prompt optimization, 5-component agent prompt structure}
+}
+
+@inproceedings{clarifygpt2024,
+  author = {Mu, Fangwen and Shi, Lin and Wang, Song and Yang, Zhuohao and Li, Bingyi and Wang, Shuo and Yu, Qing},
+  title = {{ClarifyGPT}: A Framework for Enhancing {LLM}-Based Code Generation via Requirements Clarification},
+  booktitle = {Proceedings of the ACM International Conference on the Foundations of Software Engineering (FSE)},
+  year = {2024},
+  doi = {10.1145/3660810},
+  note = {Clarifying ambiguous requirements improves GPT-4 Pass@1 from 70.96\% to 80.80\%}
+}
+
+@article{rope2024,
+  author = {Ma, Yuanyi and Peng, Zihan and Wu, Tongshuang},
+  title = {What Should We Engineer in Prompts? Training Humans in Requirement-Driven {LLM} Use},
+  journal = {ACM Transactions on Computer-Human Interaction},
+  year = {2024},
+  doi = {10.1145/3731756},
+  note = {ROPE: 20\% vs 1\% improvement, strong correlation between requirement quality and LLM output quality}
+}
+
+@article{wei2024requirements,
+  author = {Wei, Bingyang},
+  title = {Requirements Are All You Need: From Requirements to Code with {LLMs}},
+  journal = {arXiv preprint arXiv:2406.10101},
+  year = {2024},
+  url = {https://arxiv.org/abs/2406.10101},
+  note = {Progressive Prompting: glossary, vision/scope, use cases as minimum spec}
+}
+
+@inproceedings{swebenchpro2025,
+  author = {{Scale AI}},
+  title = {{SWE}-Bench Pro: Can {AI} Agents Solve Long-Horizon Software Engineering Tasks?},
+  booktitle = {arXiv preprint arXiv:2509.16941},
+  year = {2025},
+  url = {https://arxiv.org/abs/2509.16941},
+  note = {1865 human-verified tasks, adds explicit Requirements and Interface sections to issues}
+}
+
+@article{ullrich2025,
+  author = {Ullrich, Christoph and Koch, Matthias and Vogelsang, Andreas},
+  title = {From Requirements to Code: Understanding Developer Practices in {LLM}-Assisted Software Engineering},
+  journal = {arXiv preprint arXiv:2507.07548},
+  year = {2025},
+  url = {https://arxiv.org/abs/2507.07548},
+  note = {RE 2025, 18 practitioners from 14 companies: requirements too abstract for direct LLM input}
+}
+
+@article{newcomb2025prepost,
+  author = {Newcomb, Ethan and Newcomb, Julie L. and Ochoa, Mario},
+  title = {Preconditions and Postconditions as Design Constraints for {LLM} Code Generation},
+  journal = {IEEE Access},
+  year = {2025},
+  doi = {10.1109/ACCESS.2025.3573889},
+  note = {Design constraints significantly boost initial generation accuracy, especially for smaller models}
+}
+
+@article{yang2025underspec,
+  author = {Yang, Jie and Peng, Zihan and Ma, Yuanyi and Wu, Tongshuang},
+  title = {What Prompts Don't Say: Understanding and Managing Underspecification in {LLM} Prompts},
+  journal = {arXiv preprint},
+  year = {2025},
+  url = {https://www.cs.cmu.edu/~sherryw/assets/pubs/2025-underspec.pdf},
+  note = {CMU. Under-specified prompts 2x more likely to regress, accuracy drops exceeding 20\%}
+}
+
+@article{wen2024io,
+  author = {Wen, Jiarong and Liu, Yanlin and Xie, Daya and Shi, Jiahui and Zhu, Wei and Pei, Ke},
+  title = {Grounding Data Science Code Generation with Input-Output Specifications},
+  journal = {arXiv preprint arXiv:2402.08073},
+  year = {2024},
+  url = {https://arxiv.org/abs/2402.08073},
+  note = {NL I/O summaries better than concrete examples alone, reduces executable-but-incorrect outputs}
+}
+
+@article{rosa2026specdriven,
+  author = {Rosa, M. and others},
+  title = {Understanding Specification-Driven Code Generation with {LLMs}},
+  journal = {arXiv preprint arXiv:2601.03878},
+  year = {2026},
+  url = {https://arxiv.org/abs/2601.03878},
+  note = {Empirical study design on spec-driven TDD workflows}
 }
 
 @inproceedings{swebench2024,
@@ -545,6 +652,43 @@
   publisher = {IEEE},
   doi = {10.1109/MS.2008.1},
   note = {16 organizations, 7 agile RE practices identified}
+}
+
+@online{anthropic2025context,
+  author = {{Anthropic}},
+  title = {Effective Context Engineering for {AI} Agents},
+  year = {2025},
+  url = {https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents},
+  note = {Introduces ``context rot'' -- model recall degrades with token count. Recommends minimal high-signal token sets}
+}
+
+@techreport{ieee830,
+  author = {{IEEE}},
+  title = {{IEEE} Std 830-1998: Recommended Practice for Software Requirements Specifications},
+  institution = {IEEE},
+  year = {1998},
+  note = {``Redundancy itself is not an error, but it can easily lead to errors''}
+}
+
+@article{kruchten1995,
+  author = {Kruchten, Philippe B.},
+  title = {The 4+1 View Model of Architecture},
+  journal = {IEEE Software},
+  volume = {12},
+  number = {6},
+  pages = {42--50},
+  year = {1995},
+  publisher = {IEEE},
+  doi = {10.1109/52.469759},
+  note = {Multiple architectural views are complementary for different stakeholders}
+}
+
+@online{bockeler2025sdd,
+  author = {Bockeler, Birgitta},
+  title = {Understanding Spec-Driven-Development: {Kiro}, spec-kit, and {Tessl}},
+  year = {2025},
+  url = {https://martinfowler.com/articles/exploring-gen-ai/sdd-3-tools.html},
+  note = {Critical analysis of SDD tools. Spec-kit files ``repetitive, both with each other, and with the code''}
 }
 
 @article{llmjudge2024,

@@ -264,8 +264,36 @@ Tyto 4 aktivity jsou abstrakce -- každá metodika je organizuje jinak (viz 2.2.
 
 \rule{\textwidth}{0.4pt}
 
+\textbf{5. Spec-Driven Development (SDD):}
+
+\par\noindent $\rightarrow$ \texttt{sdd2026} -- Emerging metodika pro éru AI coding agentů:
+\par\noindent Specifikace je source of truth, kód je odvozený/generovaný artefakt.
+
+\textbf{Tři úrovně rigidity:}
+\begin{enumerate}
+    \item \textbf{Spec-first} -- specifikace před kódem, ale nemusí se udržovat po implementaci. Vhodné pro initial development s AI.
+    \item \textbf{Spec-anchored} -- specifikace žije vedle kódu, testy vynucují synchronizaci (BDD, Cucumber). Sweet spot pro produkční systémy.
+    \item \textbf{Spec-as-source} -- specifikace JE kód, nikdy se needituje přímo. Zatím jen specializované domény (embedded, Simulink).
+\end{enumerate}
+
+\textbf{SDD workflow:} Specify $\rightarrow$ Plan $\rightarrow$ Implement $\rightarrow$ Validate (human review mezi každou fází).
+
+\textbf{Propojení s ostatními metodikami:}
+\begin{itemize}
+    \item SDD není náhrada agile/waterfall -- je to vrstva nad nimi
+    \item TDD = SDD na úrovni unit testů
+    \item BDD = SDD s Gherkin scénáři
+    \item DDD ubiquitous language = základ pro SDD specifikace
+\end{itemize}
+
+\textbf{Thoughtworks Technology Radar 2025:} SDD identifikován jako jeden z nejdůležitějších emerging trendů.
+
+\rule{\textwidth}{0.4pt}
+
 \textbf{Klíčový bod:}
 Většina reálných projektů používá hybrid -- ``the challenge is to balance the two approaches'' \texttt{boehm2003balancing}.
+S příchodem AI agentů se přidává nová dimenze: SDD spec-first umožňuje ``waterfall per increment'' --
+sekvenční fáze (spec $\rightarrow$ implement $\rightarrow$ validate) v rámci malých incrementů, ale iterativní mezi incrementy.
 \end{raw}
 
 % === PODSEKCE 2.2.3 ===
@@ -666,6 +694,23 @@ Nevracíme se s AI agenty zpět k waterfall, jen v menší časové škále?
 
 Sekvenční kroky zůstávají -- jen se zmenšuje batch size a zrychluje feedback loop.
 
+Tento pattern je formalizován jako Spec-Driven Development (viz 2.2.2): ``waterfall per increment'' --
+detailní specifikace v rámci každého malého incrementu, ale iterativní přístup mezi incrementy \cite{sdd2026}.
+
+\textbf{Empirická podpora:}
+\par\noindent $\rightarrow$ \texttt{watanabe2025agentprs} (ACM TOSEM, under review):
+567 Claude Code PRs, 157 projektů. 83.8\% acceptance rate (vs 91\% human PRs).
+54.9\% merged bez úprav. Agenti dělají víc refactoring (25\% vs 15\%), testing (19\% vs 5\%), docs (22\% vs 14\%).
+Ale 45\% potřebovalo revizi -- hlavně bug fixes a project-specific standardy.
+
+\par\noindent $\rightarrow$ \texttt{ehsani2026failedprs} (MSR 2026):
+33k agent PRs od 5 agentů. Agent PRs by měly být malé a focused --
+velké PRs mají víc CI selhání. Documentation a build úkoly mají nejvyšší úspěšnost (84\%, 74\%),
+bug fixes a performance nejnižší (64\%, 55\%).
+
+\textbf{Důsledek pro workflow:} Malé, focused incrementy s jasnou specifikací
+vedou k lepším výsledkům než velké, komplexní úkoly. Podporuje SDD spec-first přístup.
+
 \rule{\textwidth}{0.4pt}
 
 \textbf{4. Další výzvy:}
@@ -864,32 +909,79 @@ Důsledky pro scaffolding:
 
 \textbf{7. Co dělá specifikaci efektivní pro LLM agenty:}
 
-Empirický výzkum ukazuje které vlastnosti specifikace vedou k lepším výstupům agentů:
+Empirický výzkum ukazuje které vlastnosti specifikace vedou k lepším výstupům agentů.
 
-\textbf{a) Strukturovanost $>$ čistý natural language:}
-\par\noindent $\rightarrow$ \texttt{specine2025}: LLM často špatně interpretuje specifikaci (``specification misalignment'').
-Explicitní zarovnání vnímané vs. zamýšlené specifikace zvedlo Pass@1 o 29.6\%.
-\par\noindent $\rightarrow$ Důsledek: strukturované formáty (šablony, I/O příklady) redukují misinterpretaci.
+\textbf{Klíčový nález -- kvalita requirements = kvalita výstupu:}
+\par\noindent $\rightarrow$ \texttt{rope2024} (ACM TOCHI): Silná korelace mezi kvalitou requirements a kvalitou LLM výstupu.
+Trénink zaměřený na psaní requirements (ROPE) zvedl kvalitu o 20\%, zatímco běžný prompt engineering trénink jen o 1\%.
+\par\noindent $\rightarrow$ \texttt{ullrich2025} (RE 2025): 18 praktiků z 14 firem -- requirements ve stávající podobě jsou \textbf{příliš abstraktní}
+pro přímý LLM vstup. Musí se manuálně dekomponovat a obohatit o design decisions a architekturální kontext.
+\par\noindent $\rightarrow$ \texttt{yang2025underspec} (CMU): Pod-specifikované prompty jsou \textbf{2$\times$ náchylnější k regresi}
+při změnách modelu, s poklesy přesnosti přes 20\%.
+
+\textbf{a) 10 alignment rules -- empirické pořadí důležitosti:}
+\par\noindent $\rightarrow$ \texttt{specine2025} (ICSE 2026): Odvozeno 10 pravidel zarovnání specifikace z RE principů,
+testováno na 4 LLM a 5 benchmarcích. Tři s nejvyšším dopadem:
+\begin{enumerate}
+    \item \textbf{Příklady s vysvětlením} ($\sim$14.5\% řešených problémů) -- konkrétní I/O s explanací
+    \item \textbf{Účel specifikace} ($\sim$13.5\%) -- co má kód dělat a proč
+    \item \textbf{Výstupní požadavky} ($\sim$11.6\%) -- jak má vypadat output
+\end{enumerate}
+Průměrné zlepšení Pass@1: 29.60\%. Dalších 7 pravidel (background, key concepts, input requirements,
+edge cases, APIs, error handling, hints) má nižší ale stále měřitelný dopad.
 
 \textbf{b) Testy jako součást specifikace:}
 \par\noindent $\rightarrow$ \texttt{ticoder2024} (IEEE TSE): Formalizace záměru přes testy (pass/fail feedback)
 dosáhla 45.97\% zlepšení v Pass@1. Navíc výrazně snížila kognitivní zátěž pro člověka.
-\par\noindent $\rightarrow$ Důsledek: acceptance criteria mapovatelná na testy jsou efektivnější než slovní popis.
+\par\noindent $\rightarrow$ Důsledek: acceptance criteria mapovatelná na testy jsou \textbf{empiricky nejdůležitější element}.
 
 \textbf{c) Doménový kontext (ubiquitous language):}
 \par\noindent $\rightarrow$ \texttt{domaincodegen2024} (ACM TOSEM): Zahrnutí domain-specific API knowledge
 do promptů vedlo k profesionálnějšímu kódu. Podporuje DDD koncept sdíleného doménového slovníku.
 
-\textbf{d) RE metodologie aplikovaná na prompty:}
-\par\noindent $\rightarrow$ \texttt{reprompt2025}: Aplikace IEEE 29148 RE standardu na optimalizaci promptů
-zlepšila výstupy. Ukazuje že tradiční RE postupy (elicitation, specification, validation) jsou aplikovatelné i pro LLM.
+\textbf{d) Pre/post conditions jako design constraints:}
+\par\noindent $\rightarrow$ \texttt{newcomb2025prepost} (IEEE Access): Explicitní pre/postconditions
+``significantly boost initial generation accuracy'', zejména u menších modelů.
 
-\textbf{Syntéza -- optimální specifikace pro agenty kombinuje:}
+\textbf{e) I/O specifikace na různých úrovních abstrakce:}
+\par\noindent $\rightarrow$ \texttt{wen2024io}: NL popisy I/O fungují lépe než samotné konkrétní příklady,
+výrazně snižují ``executable but incorrect'' výstupy.
+
+\textbf{f) Klarifikace ambiguity:}
+\par\noindent $\rightarrow$ \texttt{clarifygpt2024} (FSE 2024): Když LLM před generováním kódu klarifikuje
+nejednoznačné requirements, GPT-4 Pass@1 stoupne z 70.96\% na 80.80\%.
+
+\textbf{g) RE metodologie aplikovaná na prompty:}
+\par\noindent $\rightarrow$ \texttt{reprompt2025}: 4 RE fáze (elicitation, analysis, specification, validation)
+mapovány na optimalizaci promptů. Ukazuje že tradiční RE postupy jsou aplikovatelné i pro LLM.
+
+\textbf{h) Strukturované requirements v benchmarcích:}
+\par\noindent $\rightarrow$ \texttt{swebenchpro2025}: Rozšiřuje SWE-bench o explicitní ``Requirements'' a ``Interface''
+sekce psané lidmi. Jasnější specifikace korelují s vyšší úspěšností agentů.
+
+\textbf{Syntéza -- empiricky podložené tiers specifikačních elementů:}
+
+\textbf{Tier 1 (nejvyšší dopad):}
 \begin{enumerate}
-    \item \textbf{Structured natural language} -- šablona s Function, Inputs/Outputs, Pre/Post conditions \cite[kap.~4.4]{sommerville2016}
-    \item \textbf{I/O příklady} -- konkrétní vstupy a očekávané výstupy (redukuje misinterpretaci)
-    \item \textbf{Acceptance criteria} -- BDD Given/When/Then, mapovatelné na testy \cite{ticoder2024}
-    \item \textbf{Doménový slovník} -- jasné pojmy a definice z business domény \cite{domaincodegen2024}
+    \item \textbf{Description / účel} -- co a proč \cite{specine2025, sommerville2016}
+    \item \textbf{Acceptance criteria s příklady} -- Given/When/Then, mapovatelné na testy \cite{ticoder2024, specine2025}
+    \item \textbf{Výstupní specifikace} -- formát a struktura výstupu \cite{specine2025, wen2024io}
+\end{enumerate}
+
+\textbf{Tier 2 (silně doporučené):}
+\begin{enumerate}
+    \setcounter{enumi}{3}
+    \item \textbf{Vstupní specifikace} -- datové typy, formáty, constraints
+    \item \textbf{Doménový slovník} -- klíčové pojmy z business domény \cite{domaincodegen2024}
+    \item \textbf{Edge/corner cases} -- hraniční podmínky
+\end{enumerate}
+
+\textbf{Tier 3 (hodnotné pro složité úlohy):}
+\begin{enumerate}
+    \setcounter{enumi}{6}
+    \item \textbf{Pre/postconditions} -- stavové podmínky \cite{newcomb2025prepost}
+    \item \textbf{Error handling} -- chování při nevalidním vstupu
+    \item \textbf{Behavioral model} -- state machines pro event-driven logiku \cite[kap.~5.4]{sommerville2016}
 \end{enumerate}
 
 \rule{\textwidth}{0.4pt}

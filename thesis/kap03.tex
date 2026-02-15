@@ -121,19 +121,32 @@ experimenty mohou poskytovat agentovi pouze vybrané vrstvy.
 
 Jednotlivé elementy šablony se částečně překrývají -- acceptance criteria implicitně
 obsahují vstupy/výstupy (Given/Then), pre/postconditions (Given = precondition,
-Then = postcondition) i behavioral model (přechody mezi stavy).
-Tato redundance není žádoucí: pro člověka znamená vyšší cognitive overload,
-pro LLM agenta zabírá vzácný context window duplicitními informacemi.
+Then = postcondition) i behavioral model (přechody mezi stavy). Tato redundance
+představuje problém: pro člověka vyšší cognitive overload, pro LLM agenta
+plýtvání vzácným context window duplicitními informacemi.
 
-Otázkou je, která reprezentace je \textbf{nejefektivnější} --
-diagramy jsou pro člověka ``high-bandwidth'' komunikace (rychlé pochopení
-celkové struktury), ale LLM je zpracovávají jako text, ne vizuálně.
-Konkrétní Given/When/Then scénáře mohou být pro agenta užitečnější
-než abstraktní typové definice, nebo naopak.
+Anthropic \cite{anthropic2025context} zavádí pojem \textbf{context rot} --
+s rostoucím počtem tokenů klesá schopnost modelu přesně vzpomínat informace.
+Doporučuje ``nejmenší možnou sadu high-signal tokenů''. IEEE 830 \cite{ieee830}
+upozorňuje, že ``redundance sama o sobě není chyba, ale snadno k chybám vede''.
+Bockeler \cite{bockeler2025sdd} kritizuje spec-kit (GitHub) za to, že specifikační
+soubory jsou ``repetitive, both with each other, and with the code'' --
+označuje to jako \textit{Verschlimmbesserung} (zhoršení snahou o zlepšení).
+
+\textbf{Dvě publikum, různé potřeby:}
+
+Specifikace slouží dvěma publikům současně: \textbf{AI agentovi} (implementuje
+z~ní kód) a \textbf{lidskému vývojáři} (rozumí co se staví a kontroluje
+co agent vytvořil). Kruchtenův 4+1 model \cite{kruchten1995} argumentuje,
+že více pohledů je komplementárních \textbf{pro různá publika}.
+Diagramy jsou pro člověka ``high-bandwidth'' komunikace (rychlé pochopení
+celkové struktury), zatímco LLM zpracovávají Mermaid diagramy jako text.
+Konkrétní Given/When/Then scénáře mohou být pro agenta účinnější
+než vizuální model, ale pro člověka méně přehledné u~komplexních systémů.
 
 Experimenty mohou ukázat optimální kombinaci elementů --
 ne ``čím víc, tím lépe'', ale \textbf{která minimální sada}
-reprezentací vede k nejlepším výsledkům.
+reprezentací je efektivní pro obě publika současně.
 
 \textbf{Empirické pořadí důležitosti:}
 

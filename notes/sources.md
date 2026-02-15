@@ -54,6 +54,14 @@ Tento seznam slouží jako podklad pro rešeršní část bakalářské práce. 
     *   *Moderní framework pro evaluaci AI agentů: Task completion, Accuracy, Safety/trust (policy compliance, transparency), Tool usage.*
 *   **Weights & Biases.** *AI Agent Evaluation: Metrics, Strategies, and Best Practices* [online]. 2024 [cit. 2025-01-23]. Dostupné z: https://wandb.ai/onlineinference/genai-research/reports/AI-agent-evaluation-Metrics-strategies-and-best-practices--VmlldzoxMjM0NjQzMQ
     *   *Praktický průvodce metrikami pro AI agenty.*
+*   **SOMMERVILLE, Ian.** *Software Engineering*. 10th ed. Pearson, 2016. Chapter 24: Quality Management (s. 705-728).
+    *   *Rozlišení control metrics (procesní) vs. predictor metrics (produktové). Vztah proces-produkt u SW. Produktové metriky (LOC, cyklomatická složitost) a jejich omezení. Relevantní pro oporu dimenzí Functional Quality a Compliance v kap03.*
+*   **McCONNELL, Steve.** *Code Complete: A Practical Handbook of Software Construction*. 2nd ed. Microsoft Press, 2004. Chapter 28 (s. 715, Table 28-2).
+    *   *Tabulka "Useful Software-Development Measurements" - kategorie Size a Overall Quality (defekty, defekty/KLOC, mean time between failures). Praktický pohled na měření kvality.*
+*   **IEEE COMPUTER SOCIETY.** *SWEBOK: Guide to the Software Engineering Body of Knowledge*. Version 4.0. IEEE, 2024. Chapter 12: Software Quality (s. 248-256), Chapter 6: Software Maintenance (s. 176).
+    *   *Software Quality Measurement (s. 253) - kvantifikace atributů pro rozhodování. Míry údržby (s. 176): complexity, maintainability, testability, reliability. Odkaz na ISO 25010 (s. 46, 256).*
+*   **JIMENEZ, Carlos E. et al.** *SWE-bench: Can Language Models Resolve Real-world Github Issues?* In: ICLR. 2024. Appendix C.7 (s. 28).
+    *   *Software Engineering Metrics pro hodnocení kódu v benchmarku - cyklomatická složitost (McCabe), Halstead measures. Relevantní jako příklad jak benchmarky měří kvalitu kódu agentů.*
 
 ### 2.5 Kanban a project management pro akademický research
 
