@@ -84,54 +84,58 @@ Struktura každého issue vychází z empirického výzkumu o optimální specif
 LLM výstupu \cite{rope2024} a že tradiční user stories jsou příliš abstraktní pro přímý
 vstup do LLM \cite{ullrich2025} -- je nutná dekompozice a obohacení o konkrétní kontext.
 
-\textbf{Tři vrstvy specifikace:}
+\textbf{Dvě vrstvy specifikace:}
 
-Obsah issue pokrývá tři úrovně abstrakce, které odpovídají standardní posloupnosti
-v softwarovém inženýrství \cite[kap.~2]{sommerville2016}:
+Původní návrh obsahoval tři vrstvy (requirements, specification, architecture).
+Analýza redundance (viz níže) ukázala, že prostřední vrstva (specification: inputs/outputs,
+pre/postconditions) je implicitně obsažena v~acceptance criteria a~invariantech.
+Výsledná šablona proto obsahuje dvě vrstvy:
 
 \begin{enumerate}
     \item \textbf{Requirements} (problémová doména -- CO business potřebuje):
     \begin{itemize}
         \item Title, Description -- účel a kontext funkcionality
-        \item Acceptance criteria -- Given/When/Then, pozorovatelné chování \cite{ticoder2024}.
-              Pokud jsou formulována s konkrétními hodnotami (vstupy, výstupy, stavy),
-              jsou přímo mapovatelná na unit testy -- explicitní test cases tedy
+        \item Acceptance criteria -- Given/When/Then s~konkrétními hodnotami \cite{ticoder2024}.
+              Implicitně obsahují vstupy/výstupy (Given/Then), pre/postconditions
+              (Given = precondition, Then = postcondition) i~přechody stavů.
+              Jsou přímo mapovatelná na unit testy -- explicitní test cases tedy
               nejsou nutnou součástí specifikace, ale odvozitelným artefaktem
         \item Domain glossary -- sdílený slovník z business domény \cite{domaincodegen2024}
     \end{itemize}
 
-    \item \textbf{Specification} (řešení -- CO přesně systém dělá):
-    \begin{itemize}
-        \item Inputs / Outputs -- datové typy, formáty, struktury \cite{wen2024io, specine2025}
-        \item Preconditions / Postconditions -- stavové podmínky, invarianty \cite{newcomb2025prepost}
-    \end{itemize}
-
     \item \textbf{Architecture} (struktura -- JAK je řešení organizované):
     \begin{itemize}
+        \item Type definitions -- datové typy, interfaces, enums \cite{wen2024io, specine2025}
+        \item Invariants -- business pravidla která musí vždy platit \cite{newcomb2025prepost}
         \item Behavioral model -- state diagram, sekvenční logika \cite[kap.~5.4]{sommerville2016}
         \item Technické constraints -- tech stack, patterns, rozhraní
     \end{itemize}
 \end{enumerate}
 
 Toto rozdělení slouží i jako základ pro experimentální dimenzi ``úroveň detailu specifikace'' (viz sekce Experimenty):
-referenční implementace používá plnou specifikaci (všechny tři vrstvy),
+referenční implementace používá plnou specifikaci (obě vrstvy),
 experimenty mohou poskytovat agentovi pouze vybrané vrstvy.
 
-\textbf{Překryv elementů a problém redundance:}
+\textbf{Zdůvodnění redukce z~tří na dvě vrstvy:}
 
-Jednotlivé elementy šablony se částečně překrývají -- acceptance criteria implicitně
-obsahují vstupy/výstupy (Given/Then), pre/postconditions (Given = precondition,
-Then = postcondition) i behavioral model (přechody mezi stavy). Tato redundance
-představuje problém: pro člověka vyšší cognitive overload, pro LLM agenta
-plýtvání vzácným context window duplicitními informacemi.
+Původní třívrstvý návrh obsahoval prostřední vrstvu \textit{Specification}
+(inputs/outputs, pre/postconditions). Analýza ukázala překryv s~ostatními vrstvami:
+acceptance criteria implicitně obsahují vstupy/výstupy (Given/Then),
+pre/postconditions (Given = precondition, Then = postcondition) i~přechody stavů.
+Tato redundance představuje problém: pro člověka vyšší cognitive overload,
+pro LLM agenta plýtvání vzácným context window duplicitními informacemi.
 
 Anthropic \cite{anthropic2025context} zavádí pojem \textbf{context rot} --
-s rostoucím počtem tokenů klesá schopnost modelu přesně vzpomínat informace.
+s~rostoucím počtem tokenů klesá schopnost modelu přesně vzpomínat informace.
 Doporučuje ``nejmenší možnou sadu high-signal tokenů''. IEEE 830 \cite{ieee830}
-upozorňuje, že ``redundance sama o sobě není chyba, ale snadno k chybám vede''.
+upozorňuje, že ``redundance sama o sobě není chyba, ale snadno k~chybám vede''.
 Bockeler \cite{bockeler2025sdd} kritizuje spec-kit (GitHub) za to, že specifikační
 soubory jsou ``repetitive, both with each other, and with the code'' --
-označuje to jako \textit{Verschlimmbesserung} (zhoršení snahou o zlepšení).
+označuje to jako \textit{Verschlimmbesserung} (zhoršení snahou o~zlepšení).
+
+Obsah zrušené vrstvy byl absorbován: vstupy/výstupy do acceptance criteria
+(konkrétní hodnoty v~Given/When/Then), datové typy do \textit{type definitions}
+a~pre/postconditions do \textit{invariants} v~architektonické vrstvě.
 
 \textbf{Dvě publikum, různé potřeby:}
 
@@ -194,13 +198,13 @@ dostat ho předpřipravený.
 
 \textbf{Klíčová experimentální dimenze -- úroveň detailu specifikace:}
 
-Referenční implementace používá plnou specifikaci (requirements + specification + architecture).
+Referenční implementace používá plnou specifikaci (requirements + architecture).
 Experimenty poskytují agentovi různé podmnožiny:
 
 \begin{itemize}
-    \item \textbf{Full} -- všechny tři vrstvy (requirements + specification + architecture)
-    \item \textbf{Medium} -- requirements + specification (bez architektonických rozhodnutí)
-    \item \textbf{Minimal} -- pouze requirements (Title, Description, Acceptance criteria, Glossary)
+    \item \textbf{Full} -- obě vrstvy (requirements + architecture)
+    \item \textbf{Medium} -- requirements + partial architecture (typy a invarianty, bez behavioral modelu)
+    \item \textbf{Minimal} -- pouze requirements (Description, Acceptance criteria, Glossary)
 \end{itemize}
 
 Toto měří dopad úrovně specifikace na kvalitu výstupu agenta -- empiricky
