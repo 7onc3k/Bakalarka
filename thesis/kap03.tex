@@ -152,6 +152,28 @@ Experimenty mohou ukázat optimální kombinaci elementů --
 ne ``čím víc, tím lépe'', ale \textbf{která minimální sada}
 reprezentací je efektivní pro obě publika současně.
 
+\textbf{Zasazení do SASE frameworku:}
+
+Hassan et al. \cite{hassan2025sase} navrhují framework Structured Agentic Software
+Engineering (SASE), který rozlišuje \textbf{SE4H} (SE for Humans -- člověk jako
+``Agent Coach'' zaměřený na intent, strategii a mentoring) a \textbf{SE4A}
+(SE for Agents -- strukturované prostředí pro agenty). Definují tři typy
+artefaktů: \textbf{BriefingScript} (mission brief -- co agent má udělat),
+\textbf{LoopScript} (workflow playbook -- jak má postupovat)
+a~\textbf{MentorScript} (quality normy -- jaké standardy dodržovat).
+
+Naše specifikační šablona odpovídá BriefingScript: obsahuje intent (Description),
+ověřitelná kritéria (Acceptance Criteria) a~doménový kontext (Glossary).
+Soubor \texttt{agents.md} se scaffoldingem odpovídá LoopScript a~MentorScript:
+definuje workflow (git conventions, testování) a~kvalitativní normy (code quality).
+Experimentální dimenze ``úroveň detailu specifikace'' přímo testuje to, co
+Hassan et al. nazývají \textbf{duality of control} -- kdy dát agentovi strukturu
+a~kdy ho nechat rozhodovat autonomně.
+
+Kruchtenův Scenarios (+1) view \cite{kruchten1995}, který sloužil jako validační
+most mezi všemi pohledy pro všechny stakeholdery, nachází paralelu
+v~acceptance criteria -- ty fungují jako most mezi záměrem člověka a~exekucí agenta.
+
 \textbf{Empirické pořadí důležitosti:}
 
 Studie Specine \cite{specine2025} empiricky měřila dopad jednotlivých elementů
