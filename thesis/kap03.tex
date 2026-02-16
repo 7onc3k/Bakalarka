@@ -203,10 +203,12 @@ design constraints \cite{newcomb2025prepost} a klarifikaci ambiguity \cite{clari
 \begin{raw}
 \subsection{Experimentální design}
 
-Experiment používá \textbf{2$\times$2 faktoriální design} se dvěma nezávislými
-proměnnými (dimenzemi). Každá dimenze má dvě úrovně, což dává 4~experimentální
-kombinace. Každá kombinace se spouští 2--3$\times$ pro zachycení variance.
-Celkem 8--12 agent runs + 1~referenční implementace (human-guided baseline).
+Experiment používá \textbf{hypothesis-driven ablation study} -- systematické
+odebírání komponent specifikace a~scaffoldingu za účelem měření jejich
+individuálního přínosu ke kvalitě výstupu agenta. Na rozdíl od slepého
+faktoriálního designu, kde se testují všechny kombinace, každý experimentální
+běh ověřuje konkrétní hypotézu odvozenou z~literatury. Jako baseline slouží
+referenční implementace (human-guided) s~plnou specifikací a~scaffoldingem.
 
 \textbf{Fixní proměnné:}
 \begin{itemize}
@@ -245,25 +247,43 @@ MentorScript (quality normy) a~AEE (Agent Execution Environment).
           Agent si musí veškeré konvence a~tooling definovat sám.
 \end{itemize}
 
-\textbf{Zdůvodnění sloučení LoopScript + MentorScript + AEE do jedné dimenze:}
+\textbf{Scaffolding jako bundle:}
 Procesní instrukce (\texttt{agents.md}) a~nakonfigurované prostředí (CI, linting)
 jsou komplementární mechanismy -- \texttt{agents.md} říká ``používej conventional
-commits'' a~CI pipeline to vynucuje. Separace by zdvojnásobila experimentální
-matici bez jasného přínosu pro BP scope.
+commits'' a~CI pipeline to vynucuje. V~hlavním experimentu se testují jako celek;
+ablace jednotlivých komponent (např. odebrání TDD instrukcí, odebrání CI) je
+možným rozšířením.
 
-\textbf{Experimentální matice:}
+\textbf{Ablační experimenty:}
+
+Každý běh testuje konkrétní hypotézu z~literatury odebráním jedné nebo více
+komponent oproti baseline (full spec + full scaffolding):
 
 \begin{center}
-\begin{tabular}{l|c|c}
- & \textbf{Spec: Full} & \textbf{Spec: Minimal} \\
+\begin{tabular}{p{5cm}|p{3.5cm}|p{4cm}}
+\textbf{Hypotéza (zdroj)} & \textbf{Co odebíráme} & \textbf{Co měříme} \\
 \hline
-\textbf{Scaffolding: Full} & A: nejlepší podmínky & B: dobrý proces, vágní zadání \\
-\textbf{Scaffolding: None} & C: přesné zadání, žádný guidance & D: nejhorší podmínky \\
+Architektura ve spec je kritická \cite{specine2025} &
+  Architecture vrstvu (types, invariants, behavioral model) &
+  Dopad na correctness a~completeness \\
+\hline
+Scaffolding zlepšuje procesní kvalitu \cite{hassan2025sase} &
+  Celý scaffolding (agents.md + CI + env) &
+  Dopad na compliance a~conventions \\
+\hline
+TDD ze spec brání validaci bugů \cite{mathews2024} &
+  TDD instrukce ze scaffoldingu &
+  Kvalita testů (mutation score) \\
+\hline
+CI vynucování je nutné nad rámec písemných instrukcí &
+  CI pipeline (ponechat agents.md) &
+  Dodržování konvencí bez automatické kontroly \\
 \end{tabular}
 \end{center}
 
-Referenční implementace (human-guided) odpovídá kombinaci A (Full/Full)
-a~slouží jako gold standard pro porovnání.
+Baseline (referenční implementace, human-guided, full spec + full scaffolding)
+slouží jako gold standard. Počet a~výběr ablačních běhů závisí na dostupném
+scope -- prioritu mají hypotézy s~nejsilnější oporou v~literatuře.
 
 \textbf{Odvozování testů z acceptance criteria:}
 
@@ -272,6 +292,43 @@ jsou přímo mapovatelná na unit testy. Schopnost agenta korektně odvodit test
 z~acceptance criteria je měřitelná dimenze experimentu -- odpovídá zjištění
 TiCoder \cite{ticoder2024}, kde formalizace záměru přes testy vedla k~45.97\%
 zlepšení Pass@1.
+
+\textbf{Strategie testování a mutation testing:}
+
+Klíčovým rizikem LLM-generovaných testů je tzv. \textbf{test oracle problem}
+\cite{mathews2024}. Mathews et al. ukázali, že nástroje pro automatické generování
+testů (CoverAgent, CoverUp) systematicky filtrují failing testy a~ponechávají
+pouze passing -- výsledkem je, že až 68,1\,\% vygenerovaných test suites
+\textbf{validuje chybné chování} místo jeho odhalení. Příčinou je, že expected
+values jsou odvozeny z~pozorování kódu, ne ze specifikace.
+
+Chen et al. \cite{rethinking2025} empiricky potvrdili na 500 úlohách SWE-bench,
+že agent-generované testy slouží primárně jako \textbf{observační feedback}
+(value-revealing prints), ne jako validační nástroj -- 83,2\,\% úloh má stejný
+výsledek bez ohledu na to, zda agent testy píše. Relační a~boundary kontroly
+(nejcennější pro detekci chyb) tvoří pouze 3--8\,\% assertions.
+
+Obrana proti těmto anti-patterns:
+\begin{itemize}
+    \item \textbf{TDD ze specifikace} -- expected values vycházejí z~acceptance
+          criteria, ne z~pozorování kódu. Agent píše testy \textbf{před}
+          implementací (red $\rightarrow$ green $\rightarrow$ refactor).
+    \item \textbf{Failing test = opravit kód, ne test} -- zabraňuje selection
+          biasu, kde se zahazují testy odhalující chyby.
+    \item \textbf{Mutation testing jako metrika kvality testů} -- strukturální
+          coverage (branch, statement) je nutná, ale nedostatečná podmínka.
+          Papadakis et al. \cite{papadakis2019} v~přehledové studii ukázali, že
+          mutation score je silnější prediktor detekce reálných chyb než
+          strukturální coverage -- 36\,\% chyb je odhalitelných pouze mutation
+          testingem. Harman et al. \cite{meta2025} potvrdili v~produkčním
+          nasazení na Meta (10\,795 tříd), že 70\,\% mutantů zůstává
+          neodhalených i~při plném coverage.
+\end{itemize}
+
+Pro referenční implementaci volíme Stryker (mutation testing framework pro
+TypeScript) jako objektivní metriku kvality testů agenta. Mutation score měří,
+jak dobře testy detekují simulované chyby -- na rozdíl od coverage, která měří
+pouze dosažitelnost kódu.
 
 \textbf{Doplňková dimenze -- formát/reprezentace specifikace:}
 
