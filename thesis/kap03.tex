@@ -112,9 +112,9 @@ Výsledná šablona proto obsahuje dvě vrstvy:
     \end{itemize}
 \end{enumerate}
 
-Toto rozdělení slouží i jako základ pro experimentální dimenzi ``úroveň detailu specifikace'' (viz sekce Experimenty):
+Toto rozdělení slouží jako základ pro experimentální dimenzi ``specifikace'' (viz sekce Experimenty):
 referenční implementace používá plnou specifikaci (obě vrstvy),
-experimenty mohou poskytovat agentovi pouze vybrané vrstvy.
+experimenty variují úroveň detailu -- Full (obě vrstvy) vs. Minimal (pouze requirements).
 
 \textbf{Zdůvodnění redukce z~tří na dvě vrstvy:}
 
@@ -201,38 +201,69 @@ design constraints \cite{newcomb2025prepost} a klarifikaci ambiguity \cite{clari
 \section{Experimenty}
 
 \begin{raw}
-Příprava různých nastavení scaffoldingu pro agenty:
+\subsection{Experimentální design}
+
+Experiment používá \textbf{2$\times$2 faktoriální design} se dvěma nezávislými
+proměnnými (dimenzemi). Každá dimenze má dvě úrovně, což dává 4~experimentální
+kombinace. Každá kombinace se spouští 2--3$\times$ pro zachycení variance.
+Celkem 8--12 agent runs + 1~referenční implementace (human-guided baseline).
+
+\textbf{Fixní proměnné:}
 \begin{itemize}
-    \item Instrukce a procesy (jak má agent postupovat)
-    \item Git automatizace a skripty
-    \item Kontext který má agent k dispozici a který si vytváří
-    \item Nastavení odvozená z literatury a spec-driven development přístupů
+    \item \textbf{Model} -- Claude (Anthropic), fixní verze
+    \item \textbf{Task} -- systém upomínek faktur (dunning system)
+    \item \textbf{Human intervention} -- žádná (agent pracuje plně autonomně)
 \end{itemize}
 
-\textbf{Scaffolding jako experimentální dimenze:}
+\textbf{Dimenze 1: Specifikace (BriefingScript)}
 
-Kromě úrovně detailu specifikace je další dimenzí míra scaffoldingu v repozitáři.
-Instrukce pro agenta jsou definovány v souboru \texttt{agents.md} (emerging standard
-pro AI coding agenty), který obsahuje konvence pro git workflow, testování,
-code quality a proces vývoje. Experimenty mohou testovat i schopnost agenta
-nastavit si scaffolding sám (linting, test framework, project structure) vs.
-dostat ho předpřipravený.
-
-\textbf{Klíčová experimentální dimenze -- úroveň detailu specifikace:}
-
-Referenční implementace používá plnou specifikaci (requirements + architecture).
-Experimenty poskytují agentovi různé podmnožiny:
+Měří dopad úrovně detailu specifikace na kvalitu výstupu agenta.
+V~terminologii SASE \cite{hassan2025sase} odpovídá BriefingScript --
+co agent má udělat.
 
 \begin{itemize}
-    \item \textbf{Full} -- obě vrstvy (requirements + architecture)
-    \item \textbf{Medium} -- requirements + partial architecture (typy a invarianty, bez behavioral modelu)
-    \item \textbf{Minimal} -- pouze requirements (Description, Acceptance criteria, Glossary)
+    \item \textbf{Full} -- obě vrstvy (requirements + architecture):
+          description, acceptance criteria, glossary, type definitions,
+          invariants, behavioral model, technické constraints
+    \item \textbf{Minimal} -- pouze vrstva requirements: description
+          a~základní acceptance criteria bez architektonických detailů
 \end{itemize}
 
-Toto měří dopad úrovně specifikace na kvalitu výstupu agenta -- empiricky
-podpořeno studiemi \cite{specine2025, rope2024, yang2025underspec}.
+Empiricky podpořeno studiemi \cite{specine2025, rope2024, yang2025underspec}.
 
-Spuštění agentů s různými nastaveními scaffoldingu na stejném zadání. Zaznamenání průběhu a výstupů.
+\textbf{Dimenze 2: Scaffolding (LoopScript + MentorScript + AEE)}
+
+Měří dopad procesního a~prostředího scaffoldingu na kvalitu výstupu agenta.
+V~terminologii SASE odpovídá kombinaci LoopScript (workflow playbook),
+MentorScript (quality normy) a~AEE (Agent Execution Environment).
+
+\begin{itemize}
+    \item \textbf{Full} -- \texttt{agents.md} s~konvencemi (git workflow,
+          commit conventions, testování, code quality) + nakonfigurované
+          prostředí (CI pipeline, tsconfig, ESLint, Vitest, project structure)
+    \item \textbf{None} -- prázdné repo, pouze specifikace v~GitHub Issue.
+          Agent si musí veškeré konvence a~tooling definovat sám.
+\end{itemize}
+
+\textbf{Zdůvodnění sloučení LoopScript + MentorScript + AEE do jedné dimenze:}
+Procesní instrukce (\texttt{agents.md}) a~nakonfigurované prostředí (CI, linting)
+jsou komplementární mechanismy -- \texttt{agents.md} říká ``používej conventional
+commits'' a~CI pipeline to vynucuje. Separace by zdvojnásobila experimentální
+matici bez jasného přínosu pro BP scope.
+
+\textbf{Experimentální matice:}
+
+\begin{center}
+\begin{tabular}{l|c|c}
+ & \textbf{Spec: Full} & \textbf{Spec: Minimal} \\
+\hline
+\textbf{Scaffolding: Full} & A: nejlepší podmínky & B: dobrý proces, vágní zadání \\
+\textbf{Scaffolding: None} & C: přesné zadání, žádný guidance & D: nejhorší podmínky \\
+\end{tabular}
+\end{center}
+
+Referenční implementace (human-guided) odpovídá kombinaci A (Full/Full)
+a~slouží jako gold standard pro porovnání.
 
 \textbf{Odvozování testů z acceptance criteria:}
 
@@ -241,6 +272,14 @@ jsou přímo mapovatelná na unit testy. Schopnost agenta korektně odvodit test
 z~acceptance criteria je měřitelná dimenze experimentu -- odpovídá zjištění
 TiCoder \cite{ticoder2024}, kde formalizace záměru přes testy vedla k~45.97\%
 zlepšení Pass@1.
+
+\textbf{Doplňková dimenze -- formát/reprezentace specifikace:}
+
+Nezávisle na úrovni detailu ovlivňuje kvalitu výstupu i~způsob strukturování
+informace. Volba kombinovaného formátu (structured text + tabulky + behavioral
+model) vychází z~teorie vizuálních notací \cite{moody2009} a~výzkumu informační
+hustoty diagramů \cite{larkin1987}. Systematické porovnání formátů je navrženo
+jako future work.
 \end{raw}
 
 \section{Analýza}
