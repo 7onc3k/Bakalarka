@@ -226,11 +226,22 @@ referenční implementace (human-guided) s~plnou specifikací a~scaffoldingem.
     \item \textbf{Task} -- systém upomínek faktur (dunning system)
     \item \textbf{Human intervention} -- žádná (agent pracuje plně autonomně)
     \item \textbf{Orchestrace} -- agent-internal orchestration. Agent dostane celý
-          projekt a~sám rozhoduje o~dekompozici, pořadí, delegaci na subtasky.
-          Vnější script slouží pouze jako spouštěč experimentu a~sběrač metrik.
+          projekt jedním promptem a~sám rozhoduje o~dekompozici, pořadí,
+          delegaci na sub-agenty. Vnější mechanismus (\texttt{session.idle} hook)
+          pouze ověřuje podmínku dokončení -- pokud zbývají otevřené issues,
+          re-injektuje prompt; počet restartů je sbíranou metrikou.
           Orchestrační \textbf{schopnost} agenta je součástí měřeného výstupu,
           orchestrační \textbf{instrukce} v~\texttt{agents.md} jsou součástí
           ablované proměnné (scaffolding).
+    \item \textbf{Agent architektura} -- dvou-agentní design: (1)~orchestrátor
+          (řízení flow + psaní testů z~AC) a~(2)~executor (implementace +
+          verifikace). Separace testování od implementace je architektonická
+          garance proti test oracle problému \cite{mathews2024} --
+          oddělený agent na testy nemůže být ovlivněn implementačním kódem.
+          AgentCoder \cite{agentcoder2024} empiricky validuje tento přístup
+          (96,3\,\% HumanEval). Minimální hybridní architektura --
+          multi-agent jen tam, kde je architektonický důvod
+          \cite{singleormulti2025}.
 \end{itemize}
 
 \textbf{Spektrum scaffoldingu:}
@@ -380,11 +391,17 @@ Anthropic \cite{anthropic2025harness} identifikuje failure-specific komponenty.
           meta-instrukci navrhnout si vlastní workflow; task-agnostic
           scaffolding pattern \cite{suzgun2024metaprompt}; automatizovaný
           design agentních systémů \cite{hu2024adas}
-    \item Iterativní loop (Ralph Loop) -- agent běží v~cyklu s~čistým
-          kontextem per iteraci; stav se předává přes soubory na disku
-          (plán, git historie, issues). Řeší context degradaci bez nutnosti
-          sub-agentů. Implementován v~Claude Code i~OpenCode jako
-          built-in feature.
+    \item Completion verification loop -- mechanismus zajišťující, že agent
+          dokončí celý projekt, ne jen jeden krok. Tři varianty:
+          (1)~Ralph Loop -- vnější cyklus s~čistým kontextem per iteraci,
+          stav přes soubory/issues, implementován v~Claude Code i~OpenCode;
+          (2)~session.idle hook -- plugin uvnitř agentního frameworku,
+          při ukončení agenta ověří podmínku dokončení (např. počet
+          otevřených issues přes GitHub API) a~pokud není splněna,
+          re-injektuje prompt s~aktuálním stavem; počet restartů slouží
+          jako metrika autonomie agenta;
+          (3)~instruktážní -- agent dostane instrukci ``neskončí dokud
+          všechny issues nejsou uzavřeny'', bez vnější kontroly.
     \item Retry strategie -- single-shot vs. fresh-context retry vs.
           child fix issues; scaffolding a~retry jsou nezávisle hodnotné
           a~multiplikativní \cite{neurosymbolic2025}
