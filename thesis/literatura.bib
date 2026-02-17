@@ -769,3 +769,91 @@
   year = {2025},
   note = {70\% mutants unkilled despite full coverage; 73\% engineer acceptance rate; deployed on 10,795 classes}
 }
+
+@INPROCEEDINGS{yang2024sweagent,
+  author = {Yang, John and Jimenez, Carlos E. and Wettig, Alexander and Liber, Kilian and Narasimhan, Karthik and Press, Ofir},
+  title = {{SWE}-agent: Agent-Computer Interfaces Enable Automated Software Engineering},
+  booktitle = {NeurIPS},
+  year = {2024},
+  note = {ACI ablation: +10.7pp over baseline shell; context management and error guardrails largest gains}
+}
+
+@ARTICLE{wang2025cca,
+  author = {Wang, Yuntong and others},
+  title = {Confucius Code Agent: Scalable Agentic Scaffolding for {SWE} Tasks},
+  journal = {arXiv preprint arXiv:2512.10398},
+  year = {2025},
+  note = {4 scaffolding features ablated; ``scaffolding, not model capability, is primary determinant of agent performance''}
+}
+
+@ONLINE{anthropic2025harness,
+  author = {{Anthropic}},
+  title = {Effective Harnesses for Long-Running Agents},
+  year = {2025},
+  url = {https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents},
+  note = {Two-agent architecture; ablatable: feature list, progress file, init scripts, testing instructions}
+}
+
+@ONLINE{spotify2025context,
+  author = {{Spotify Engineering}},
+  title = {Context Engineering: Background Coding Agents (Part 2)},
+  year = {2025},
+  url = {https://engineering.atspotify.com/2025/11/context-engineering-background-coding-agents-part-2},
+  note = {1500+ merged PRs; ``do one change at a time''; 10 turns per session, 3 retries}
+}
+
+@ARTICLE{featurebench2026,
+  author = {others},
+  title = {{FeatureBench}: Benchmarking Agentic Coding for Complex Feature Development},
+  journal = {arXiv preprint arXiv:2602.10975},
+  year = {2026},
+  note = {Agents struggle when scope exceeds single-issue; feature-level tasks significantly harder}
+}
+
+@INPROCEEDINGS{chainofagents2024,
+  author = {Kang, Yusen and Kim, Jinwoo},
+  title = {Chain of Agents: Large Language Models Collaborating on Long-Context Tasks},
+  booktitle = {NeurIPS},
+  year = {2024},
+  note = {Task decomposition as context management strategy; +10\% over RAG and multi-agent baselines}
+}
+
+@ARTICLE{longcodebench2025,
+  author = {others},
+  title = {{LongCodeBench}: Evaluating Coding {LLMs} at 1M Context Windows},
+  journal = {arXiv preprint arXiv:2505.07897},
+  year = {2025},
+  note = {Claude drops from 29\% to 3\% on long-context coding; all models degrade}
+}
+
+@ARTICLE{liu2024lost,
+  author = {Liu, Nelson F. and Lin, Kevin and Hewitt, John and Paranjape, Ashwin and Bevilacqua, Michele and Petroni, Fabio and Liang, Percy},
+  title = {Lost in the Middle: How Language Models Use Long Contexts},
+  journal = {Transactions of the Association for Computational Linguistics},
+  volume = {12},
+  year = {2024},
+  note = {U-shaped performance curve; info in middle performs worse than no-context baseline}
+}
+
+@ARTICLE{contextrot2025,
+  author = {Hong, Kelly and Troynikov, Anton and Huber, Jeff},
+  title = {Context Rot: How Increasing Input Tokens Impacts {LLM} Performance},
+  year = {2025},
+  note = {18 LLMs tested; performance increasingly unreliable with input length; distractors amplify degradation}
+}
+
+@INPROCEEDINGS{jetbrains2025complexity,
+  author = {Lindenbauer, Tobias and others},
+  title = {The Complexity Trap: Simple Observation Masking Is as Efficient as {LLM} Summarization for Agent Context Management},
+  booktitle = {NeurIPS},
+  year = {2025},
+  note = {Observation masking halves cost, matches LLM summarization; hybrid reduces cost 7--11\% further}
+}
+
+@ARTICLE{neurosymbolic2025,
+  author = {others},
+  title = {Agentic Program Repair with Neuro-Symbolic Approach},
+  journal = {arXiv preprint arXiv:2507.18755},
+  year = {2025},
+  note = {Agent alone 28.5\%; + scaffolding 42.3\%; + retry 61.0\%; scaffolding and retry are multiplicative}
+}

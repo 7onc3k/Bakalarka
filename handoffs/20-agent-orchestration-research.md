@@ -119,10 +119,26 @@ opencode run "Implement issue #3 to pass tests"
 - Aider docs: Repository map, Git integration
 - OpenCode docs: Agents, CLI, Config
 
-## Otevřené otázky
-1. Jaký orchestrační vzorec pro naše experimenty? (B vs C vs E?)
-2. Session per issue nebo session per fáze?
-3. Jak nastavit GLM-5 v OpenCode?
-4. Jak sbírat token usage z GLM-5 API?
-5. Orchestrace jako další experimentální dimenze nebo fixní proměnná?
-6. Docker izolace pro reprodukovatelnost?
+## Rozhodnutí (2026-02-17)
+
+1. **Agent-internal orchestration** — agent dostane celý projekt, sám orchestruje.
+   Vnější script = jen spouštěč + sběrač metrik. Žádná orchestrační logika ve scriptu.
+
+2. **Orchestrace = fixní infrastruktura, ne experimentální dimenze.**
+   Co ablujeme = instrukce v AGENTS.md (jak agent má orchestrovat), ne mechanismus.
+
+3. **Spektrum scaffoldingu:**
+   - Maximum: detailní AGENTS.md + sub-issues + dependencies + TDD + procesy
+   - Minimum: jen spec v issue + prázdný repo
+   - Agent vždy rozhoduje sám (interpretuje instrukce), ne script
+
+4. **OpenCode subtasky** pro delegaci — orchestrátor agent deleguje na subagenty
+   pro jednotlivé issues/fáze.
+
+5. **Metriky:** opencode export (session JSON), gh api (issues), npm test, stryker
+
+## Zbývající otevřené otázky
+1. Jak nastavit GLM-5 v OpenCode? (custom provider config)
+2. Jak sbírat token usage z GLM-5 API?
+3. Docker izolace pro reprodukovatelnost?
+4. Formát dokumentace v issues pro agent-to-agent handoff (task #2)

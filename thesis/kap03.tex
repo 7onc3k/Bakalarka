@@ -54,16 +54,26 @@ na úrovni \textbf{spec-first} \cite{sdd2026}.
 \section{Referenční implementace}
 
 \begin{raw}
-Vlastní vývoj systému upomínek faktur se všemi náležitostmi softwarového inženýrství:
-\begin{itemize}
-    \item Specifikace a dokumentace
-    \item Implementace (TypeScript)
-    \item Testy (unit, integration)
-    \item Git workflow (issues, commits, PR conventions)
-    \item Quality gates (linting, type checking)
-\end{itemize}
+Experiment má tři úrovně:
 
-Tato implementace slouží jako "ground truth" pro porovnání.
+\begin{enumerate}
+    \item \textbf{Referenční implementace} (human-guided) -- autor dekomponuje
+          specifikaci do sub-issues, kontroluje průběh, agent implementuje
+          podle předpřipravených issues. Slouží jako ground truth pro metriky
+          (referenční testy, mutation score, kvalita kódu).
+    \item \textbf{Baseline experiment} (full-scale autonomní) -- agent dostane
+          pouze specifikaci (issue \#1) + plný \texttt{agents.md} + plné prostředí.
+          Sám dekomponuje, orchestruje, implementuje. Maximum instrukcí,
+          žádný lidský zásah. Měří výkon plně autonomního agenta s~nejlepším
+          scaffoldingem.
+    \item \textbf{Ablační běhy} -- jako baseline, ale s~odebranými komponentami
+          scaffoldingu (viz katalog ablatable komponent). Měří dopad
+          jednotlivých komponent.
+\end{enumerate}
+
+Porovnání referenční vs. baseline ukazuje vzdálenost autonomního agenta
+od human-guided vývoje. Porovnání baseline vs. ablace ukazuje dopad
+jednotlivých scaffolding komponent.
 
 \rule{\textwidth}{0.4pt}
 
@@ -212,10 +222,30 @@ referenční implementace (human-guided) s~plnou specifikací a~scaffoldingem.
 
 \textbf{Fixní proměnné:}
 \begin{itemize}
-    \item \textbf{Model} -- Claude (Anthropic), fixní verze
+    \item \textbf{Model} -- fixní verze LLM pro všechny běhy
     \item \textbf{Task} -- systém upomínek faktur (dunning system)
     \item \textbf{Human intervention} -- žádná (agent pracuje plně autonomně)
+    \item \textbf{Orchestrace} -- agent-internal orchestration. Agent dostane celý
+          projekt a~sám rozhoduje o~dekompozici, pořadí, delegaci na subtasky.
+          Vnější script slouží pouze jako spouštěč experimentu a~sběrač metrik.
+          Orchestrační \textbf{schopnost} agenta je součástí měřeného výstupu,
+          orchestrační \textbf{instrukce} v~\texttt{agents.md} jsou součástí
+          ablované proměnné (scaffolding).
 \end{itemize}
+
+\textbf{Spektrum scaffoldingu:}
+
+Ablace se pohybuje na spektru mezi dvěma extrémy:
+\begin{itemize}
+    \item \textbf{Maximum} -- detailní \texttt{agents.md} s~procesy pro každou fázi,
+          předdefinované sub-issues s~dependencies, přesné instrukce pro TDD,
+          git workflow, dokumentaci, code review. Agent exekuje podle předpisu.
+    \item \textbf{Minimum} -- pouze specifikace v~GitHub Issue a~prázdný repozitář.
+          Agent sám rozhoduje jak dekomponovat, testovat, commitovat, dokumentovat.
+\end{itemize}
+
+Tento přístup odpovídá SASE \textit{duality of control} \cite{hassan2025sase}
+-- měříme kdy dát agentovi strukturu a~kdy ho nechat rozhodovat autonomně.
 
 \textbf{Dimenze 1: Specifikace (BriefingScript)}
 
@@ -281,9 +311,74 @@ CI vynucování je nutné nad rámec písemných instrukcí &
 \end{tabular}
 \end{center}
 
-Baseline (referenční implementace, human-guided, full spec + full scaffolding)
-slouží jako gold standard. Počet a~výběr ablačních běhů závisí na dostupném
-scope -- prioritu mají hypotézy s~nejsilnější oporou v~literatuře.
+Baseline (full-scale autonomní běh s~plným scaffoldingem, bez lidského zásahu)
+slouží jako referenční bod pro ablace. Referenční implementace (human-guided)
+slouží jako gold standard pro metriky. Počet a~výběr ablačních běhů závisí
+na dostupném scope -- prioritu mají hypotézy s~nejsilnější oporou v~literatuře.
+
+\textbf{Katalog ablatable komponent (brainstorm):}
+
+Následující seznam identifikuje komponenty, které lze jednotlivě odebrat
+a~měřit jejich dopad. Vychází z~empirických ablačních studií v~literatuře
+-- SWE-agent \cite{yang2024sweagent} abluje ACI komponenty,
+CCA \cite{wang2025cca} abluje scaffolding features,
+Anthropic \cite{anthropic2025harness} identifikuje failure-specific komponenty.
+
+\textit{Specifikace (BriefingScript):}
+\begin{itemize}
+    \item Architecture vrstva (types, invariants, behavioral model) \cite{specine2025}
+    \item Doménový glossary \cite{domaincodegen2024}
+    \item Detail acceptance criteria (konkrétní hodnoty vs. obecný popis) \cite{ticoder2024}
+    \item Behavioral model / state diagram \cite{sommerville2016}
+\end{itemize}
+
+\textit{Instrukce (LoopScript + MentorScript):}
+\begin{itemize}
+    \item \texttt{agents.md} jako celek \cite{hassan2025sase}
+    \item TDD instrukce (testy před implementací) \cite{mathews2024}
+    \item Git workflow konvence (branching, commits, PR)
+    \item Code quality standardy (strict mode, no-any)
+    \item Code review instrukce
+\end{itemize}
+
+\textit{Prostředí (Agent Execution Environment):}
+\begin{itemize}
+    \item CI pipeline (automatická kontrola)
+    \item Pre-konfigurovaný tooling (tsconfig, eslint, vitest, stryker)
+    \item Project structure (adresářová struktura, package.json)
+\end{itemize}
+
+\textit{Orchestrace a~session management:}
+\begin{itemize}
+    \item Session-per-issue granularita -- empiricky validovaná jako optimální
+          scope \cite{spotify2025context}; agenti selhávají při feature-level
+          scope \cite{featurebench2026}
+    \item Issue-based task decomposition -- dekompozice úkolů do sub-issues
+          s~dependencies; task decomposition jako context management
+          strategie \cite{chainofagents2024}
+    \item Retry strategie -- single-shot vs. fresh-context retry vs.
+          child fix issues; scaffolding a~retry jsou nezávisle hodnotné
+          a~multiplikativní \cite{neurosymbolic2025}
+    \item Strukturovaná dokumentace v~issues -- záznam pro následující
+          agent session (co bylo zkušeno, co selhalo, aktuální stav)
+          \cite{anthropic2025harness}
+\end{itemize}
+
+\textit{Context window management:}
+\begin{itemize}
+    \item Context window degraduje s~délkou, ne jen ``dojde'' --
+          coding performance klesá z~29\,\% na 3\,\% při long-context
+          úlohách \cite{longcodebench2025}; U-shaped křivka, informace
+          uprostřed se ztrácí \cite{liu2024lost}; nerovnoměrná degradace
+          napříč 18 modely \cite{contextrot2025}
+    \item Observation masking (skrytí detailů tool outputu) je stejně
+          efektivní jako LLM summarization za poloviční cenu
+          \cite{jetbrains2025complexity}
+\end{itemize}
+
+Tento katalog slouží jako zásobník pro výběr experimentálních běhů.
+Ne všechny komponenty budou ablované -- výběr závisí na dostupném scope
+a~síle literární opory pro konkrétní hypotézu.
 
 \textbf{Odvozování testů z acceptance criteria:}
 
