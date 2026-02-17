@@ -356,12 +356,47 @@ Anthropic \cite{anthropic2025harness} identifikuje failure-specific komponenty.
     \item Issue-based task decomposition -- dekompozice úkolů do sub-issues
           s~dependencies; task decomposition jako context management
           strategie \cite{chainofagents2024}
+    \item Sub-agent delegace -- orchestrátor deleguje issues na sub-agenty
+          s~čistým kontextem; hierarchická orchestrace dosahuje SOTA
+          \cite{agentorchestra2025}; trust calibration mezi delegátorem
+          a~delegátem \cite{googledelegation2026}
+    \item Role separation -- oddělení analytických a~exekučních rolí.
+          MASAI \cite{masai2024} definuje 5~specializovaných sub-agentů
+          se structured artifact passing (ne konverzací); AgentCoder
+          \cite{agentcoder2024} empiricky validuje separaci test designu
+          od implementace (96,3\,\% HumanEval); Agyn \cite{agyn2026}
+          replikuje inženýrský tým s~dedikovanými rolemi a~dosahuje
+          72,2\,\% SWE-bench~500. Studie ukazují, že organizační design
+          je stejně důležitý jako schopnosti modelu.
+    \item Single vs. multi-agent trade-off -- přínos multi-agent architektury
+          klesá s~rostoucí schopností modelů \cite{singleormulti2025};
+          hybridní přístup (multi-agent jen tam kde je potřeba) přináší
+          +1--12\,\% accuracy při --88\,\% cost. Multi-agent systémy
+          mají 14~identifikovaných failure modes ve 3~kategoriích
+          (system design, inter-agent misalignment, task verification)
+          \cite{mast2025}. Minimální efektivní rozdělení = separace
+          testování od implementace.
+    \item Meta-prompting -- místo explicitních instrukcí agent dostane
+          meta-instrukci navrhnout si vlastní workflow; task-agnostic
+          scaffolding pattern \cite{suzgun2024metaprompt}; automatizovaný
+          design agentních systémů \cite{hu2024adas}
+    \item Iterativní loop (Ralph Loop) -- agent běží v~cyklu s~čistým
+          kontextem per iteraci; stav se předává přes soubory na disku
+          (plán, git historie, issues). Řeší context degradaci bez nutnosti
+          sub-agentů. Implementován v~Claude Code i~OpenCode jako
+          built-in feature.
     \item Retry strategie -- single-shot vs. fresh-context retry vs.
           child fix issues; scaffolding a~retry jsou nezávisle hodnotné
           a~multiplikativní \cite{neurosymbolic2025}
     \item Strukturovaná dokumentace v~issues -- záznam pro následující
           agent session (co bylo zkušeno, co selhalo, aktuální stav)
-          \cite{anthropic2025harness}
+          \cite{anthropic2025harness}. Každá inter-agent zpráva je potenciální
+          failure point; chain-style error propagation kaskáduje malé nepřesnosti
+          do systémových selhání \cite{agentask2025}. Tři validované mechanismy
+          předávání stavu: (1)~progress file + git commity \cite{anthropic2025harness},
+          (2)~GitHub issues jako komunikační kanál (issue $\to$ PR $\to$ review),
+          (3)~structured artifact passing s~formální output specifikací
+          \cite{masai2024}
 \end{itemize}
 
 \textit{Context window management:}
@@ -379,6 +414,17 @@ Anthropic \cite{anthropic2025harness} identifikuje failure-specific komponenty.
 Tento katalog slouží jako zásobník pro výběr experimentálních běhů.
 Ne všechny komponenty budou ablované -- výběr závisí na dostupném scope
 a~síle literární opory pro konkrétní hypotézu.
+
+\textbf{Multi-issue gap:}
+
+Stávající benchmarky ukazují výrazný propad výkonu agentů při přechodu
+od single-issue k~multi-issue úlohám: SWE-EVO \cite{sweevo2025} reportuje
+pouze 21\,\% úspěšnost na evolučních úlohách (průměrně 21~souborů) oproti
+65\,\% na single-issue SWE-Bench; FeatureBench \cite{featurebench2026} měří
+11\,\% na feature-level úlohách; ACE-Bench \cite{acebench2025} 7,5\,\%
+na end-to-end feature development. Tato case study (5~issues, celý dunning
+system) cílí přesně do tohoto rozsahu, kde scaffolding může přinést
+měřitelný rozdíl.
 
 \textbf{Odvozování testů z acceptance criteria:}
 
