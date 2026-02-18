@@ -127,16 +127,25 @@ for ISSUE_NUM in 3 4 5 6 7; do
     echo "  Created issue #$((ISSUE_NUM)): $ISSUE_TITLE"
 done
 
-# --- Step 5: Summary ---
+# --- Step 5: Clone and run agent ---
+echo "→ Cloning repo for agent run..."
+RUN_DIR="/tmp/${REPO_NAME}"
+rm -rf "$RUN_DIR"
+git clone "$REPO_URL" "$RUN_DIR"
+cd "$RUN_DIR"
+
 echo ""
-echo "=== Run ready ==="
+echo "=== Starting agent ==="
+echo "    Dir: ${RUN_DIR}"
+echo "    Model: zai-coding-plan/glm-5 (from .opencode/config.json)"
+echo ""
+
+opencode run "Implement the project."
+
+echo ""
+echo "=== Run complete ==="
 echo "    Repo: https://github.com/${GITHUB_ORG}/${REPO_NAME}"
-echo "    Issues: $(gh issue list --repo "${GITHUB_ORG}/${REPO_NAME}" --json number --jq length)"
-echo ""
-echo "To start the agent:"
-echo "    git clone ${REPO_URL} /tmp/${REPO_NAME}"
-echo "    cd /tmp/${REPO_NAME}"
-echo "    opencode run -m zai-coding-plan/glm-5 \"Implement all open issues following AGENTS.md\""
+echo "    Metrics: ${RUN_DIR}/.opencode/metrics.csv"
 echo ""
 echo "To delete after analysis:"
 echo "    gh repo delete ${GITHUB_ORG}/${REPO_NAME} --yes"
