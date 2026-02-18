@@ -292,154 +292,137 @@ commits'' a~CI pipeline to vynucuje. V~hlavním experimentu se testují jako cel
 ablace jednotlivých komponent (např. odebrání TDD instrukcí, odebrání CI) je
 možným rozšířením.
 
-\textbf{Vrstvová ablace:}
+\begin{raw}
+[RAW]
+\textbf{Ablace meta-instrukcí:}
 
-Scaffolding má přirozenou vrstvovou strukturu, kde každá vrstva představuje
-jiný typ podpory. Experiment používá izolované ablace po vrstvách -- v~každém
-běhu se odebere jedna vrstva, ostatní zůstanou beze změny. To umožňuje měřit
-individuální přínos každé vrstvy. Kumulativní běh (R5) ukazuje celkový gap.
+Experiment testuje přínos jednotlivých meta-instrukcí pro kvalitu výstupu
+AI agenta. Místo explicitního scaffoldingu (předpřipravené konfigurace,
+workflow instrukce, architektura) dostane agent sadu meta-instrukcí --
+každá říká \textit{co} udělat a~\textit{proč}, ale nikoliv \textit{jak}.
+Agent si na základě meta-instrukce navrhne vlastní přístup.
+
+Tento design je motivován dvěma zjištěními: (1)~Suzgun a~Kalai
+\cite{suzgun2024metaprompt} ukázali, že meta-prompting (task-agnostic
+scaffolding) přináší 17,1\,\% zlepšení oproti standardnímu promptingu;
+(2)~Breunig \cite{breunig2026} empiricky demonstroval, že záměna system
+promptů mezi coding agenty mění chování agenta více než volba modelu --
+tentýž model s~promptem Codex produkuje metodický workflow, s~promptem
+Claude iterativní. Žádná studie dosud neablovala \textit{jednotlivé}
+meta-instrukce u~coding agentů -- toto je hlavní metodologický příspěvek
+této práce.
+
+\textbf{Fixní proměnné (stejné pro všechny běhy):}
+\begin{itemize}
+    \item Prázdné GitHub repo (pouze \texttt{package.json},
+          \texttt{tsconfig.json})
+    \item Specifikace v~GitHub Issue \#1 -- plné acceptance criteria
+          a~doménový glossary, bez architecture layer
+    \item Auto-continue plugin (\texttt{session.idle} hook s~počítadlem
+          restartů)
+    \item Model: GLM-5, výchozí temperature OpenCode
+    \item Fixní části system promptu: role definition, tool instructions,
+          output format, fighting-the-weights instrukce
+          \cite{breunig2026}
+\end{itemize}
+
+\textbf{Standardizovaná šablona meta-instrukce:}
+
+Každá meta-instrukce má identickou strukturu -- variuje pouze obsah.
+Šablona vychází ze systematické analýzy prompt komponent napříč čtyřmi
+frameworky \cite{promptstotemplates2025}: Directive (87\,\% prevalence),
+Context (56\,\%), Output Format (40\,\%), Constraints (36\,\%).
+
+\begin{verbatim}
+[CÍL]: <co udělat>
+[KONTEXT]: <proč je to důležité pro kvalitu výstupu>
+[VÝSTUP]: <očekávaný artefakt>
+[OMEZENÍ]: <co nedělat>
+\end{verbatim}
+
+Standardizace eliminuje formulační bias -- všechny instrukce mají
+stejnou délku, specifičnost a~strukturu. Prompt sensitivity
+\cite{razavi2025} je přiznána jako limitation; mitigace: fixní šablona,
+deterministická temperature, behavioral trace.
+
+\textbf{Meta-instrukce (experimentální proměnné):}
 
 \begin{center}
-\begin{tabular}{p{0.8cm}|p{4.5cm}|p{3.5cm}|p{3.5cm}}
-\textbf{Run} & \textbf{Co agent dostane} & \textbf{Co chybí} & \textbf{Co měříme} \\
+\begin{tabular}{p{0.6cm}|p{4cm}|p{4cm}|p{3cm}}
+\textbf{\#} & \textbf{Meta-instrukce} & \textbf{Očekávaný artefakt} &
+\textbf{SDLC fáze} \\
 \hline
-R0 & Vše (spec + agents + CI + tooling) &
-  Nic (reference) &
-  Baseline pro porovnání \\
+M1 & Vytvoř si sub-agents pro různé role &
+  \texttt{.opencode/agents/*.md} & Design \\
 \hline
-R1 & Jeden agent místo orchestrátor + builder &
-  Agentní separace (\texttt{.opencode/agents/}) &
-  Přínos role separation \cite{agentcoder2024, singleormulti2025} \\
+M2 & Navrhni architekturu před implementací &
+  Design decisions v~issues & Design \\
 \hline
-R2 & Žádné TDD, phases, when-stuck instrukce &
-  Procesní instrukce (LoopScript) &
-  Přínos workflow scaffoldingu \cite{hassan2025sase} \\
+M3 & Rozděl spec na sub-issues s~dependencies &
+  GitHub Issues & Design \\
 \hline
-R3 & Žádné CI, ESLint, Stryker, coverage thresholds &
-  Quality enforcement (AEE) &
-  Přínos automatizovaného vynucování \\
+M4 & Definuj si workflow a~proces &
+  Workflow v~AGENTS.md & Design \\
 \hline
-R4 & Vysokoúrovňový popis místo detailních AC &
-  Detail specifikace (BriefingScript) &
-  Přínos spec detailu \cite{specine2025} \\
-\hline
-R5 & Pouze \texttt{AGENTS.md} (project context) + spec &
-  Vše ostatní (kumulativní) &
-  Celkový gap; spontánní self-scaffolding \\
+M5 & Nastav si quality nástroje &
+  CI, linting, testing config & Implementation \\
 \end{tabular}
 \end{center}
 
-R0 (plný scaffolding, autonomní běh bez lidského zásahu) slouží jako referenční
-bod pro ablace. R1--R4 jsou \textbf{izolované ablace} -- odebírají jednu vrstvu,
-čímž izolují její přínos. R5 je \textbf{kumulativní ablace} -- odebírá vše
-kromě project contextu a~specifikace; pokud agent spontánně vytvoří vlastní
-workflow (meta-prompting chování), jedná se o~pozorování, ne o~experimentální
-manipulaci.
+\textbf{Ablační běhy:}
 
-Každý běh probíhá v~separátním GitHub repozitáři vytvořeném ze společného
-snapshot (skript \texttt{new-run.sh}). Tím je zaručen čistý stav bez artefaktů
-z~předchozích běhů (issues, komentáře, child issues). Artefakty každého běhu
-(commit history, PRs, issue komentáře) zůstávají zachovány pro post-hoc analýzu.
+\begin{center}
+\begin{tabular}{p{0.7cm}|p{4cm}|p{7cm}}
+\textbf{Run} & \textbf{Meta-instrukce} & \textbf{Co měříme} \\
+\hline
+R0 & M1+M2+M3+M4+M5 & Baseline -- plný meta-prompt \\
+\hline
+R1 & M2+M3+M4+M5 (bez M1) &
+  Přínos sub-agent separace \cite{agentcoder2024, singleormulti2025} \\
+\hline
+R2 & M1+M3+M4+M5 (bez M2) &
+  Přínos upfront architecture designu \\
+\hline
+R3 & M1+M2+M4+M5 (bez M3) &
+  Přínos issue decomposition \cite{masai2024, wang2025cca} \\
+\hline
+R4 & M1+M2+M3+M5 (bez M4) &
+  Přínos explicitního workflow \cite{hassan2025sase} \\
+\hline
+R5 & M1+M2+M3+M4 (bez M5) &
+  Přínos quality tooling \\
+\end{tabular}
+\end{center}
+
+Šest běhů, single run per podmínku. Každý běh probíhá v~separátním GitHub
+repozitáři (čistý stav). Artefakty (commit history, issues, PR) zachovány
+pro post-hoc analýzu.
+
+\textbf{Metriky:}
+\begin{itemize}
+    \item \textbf{Primární:} mutation score (Stryker), test pass rate
+          (referenční testy), počet restartů (auto-continue)
+    \item \textbf{Sekundární:} spotřeba tokenů, čas do dokončení,
+          compliance a~alignment (LLM-as-a-judge)
+    \item \textbf{Behavioral trace:} co agent reálně udělal -- vytvořil
+          sub-agents? navrhl architekturu? nastavil CI? Ověřuje, že
+          ablace meta-instrukce měla skutečný efekt na chování agenta.
+\end{itemize}
 
 \textbf{Pilot studie:} Před experimentálními běhy proběhne pilotní validace
-setupu na referenčním běhu (R0). Pilot identifikuje technické problémy
-(timeouty, bugy v~orchestraci, nedostatky v~instrukcích) a~kalibruje metriky.
-Iterace na pilotu se nepočítají do výsledků studie.
+setupu na R0. Pilot identifikuje technické problémy (timeouty, bugy
+v~orchestraci, nedostatky v~šabloně) a~kalibruje metriky. Iterace na
+pilotu se nepočítají do výsledků studie.
 
-\begin{raw}
-[RAW]
-\textbf{Návrh: Fázově orientovaný experimentální design (revize R0-R5)}
+\textbf{Deployment a~Maintenance mimo scope:} experiment měří co agent
+vytvoří; npm package nemá reálné uživatele ani provoz.
 
-Vrstvový design R0-R5 odebírá scaffolding globálně (celá vrstva najednou),
-ale nezohledňuje, ve které fázi vývoje absence konkrétní komponenty skutečně
-škodí. Scaffolding pro Requirements fázi (architecture layer v~spec) je jiný
-problém než scaffolding pro Implementation fázi (CI, linting) nebo Design fázi
-(issue decomposition).
-
-Revidovaný design je organizován podle tří SDLC fází které agent
-v~rámci case study prochází: Requirements $\to$ Design $\to$ Implementation.
-
-\textbf{Proč tři fáze, ne čtyři (Testing):}
-
-Klasická Testing fáze se v~kontextu TDD rozpadá na dvě oddělené aktivity
-s~různou povahou. Psaní testů je interpretací požadavků -- testy odvozené
-z~acceptance criteria jsou \textit{spustitelná specifikace}, nikoliv
-verifikační artefakt \cite{sommerville2016, swebok2024}. Sommerville
-explicitně říká, že v~TDD jsou ``testy vyvíjeny spolu s~požadavky
-\textit{před} začátkem vývoje'' \cite{sommerville2016}. Spouštění testů
-a~CI pipeline naopak slouží jako verifikační feedback loop implementace --
-jsou součástí Implementation fáze, nikoliv samostatnou fází.
-
-Tento pohled potvrzuje i~test oracle problem \cite{swebok2024}: test je
-validní pouze tehdy, má-li za základ jasnou specifikaci expected outcomes
-z~requirements, ne pozorování existujícího kódu. Mathews et al.\
-\cite{mathews2024} empiricky ukázali, že 68,1\,\% testů generovaných
-z~kódu (nikoliv ze specifikace) validuje chybné chování místo jeho
-odhalení -- právě proto, že postrádají kotvení v~requirements.
-
-V~naší architektuře toto odpovídá separaci orchestrátor (test design
-ze specifikace = Requirements aktivita) a~builder (test execution =
-Implementation verifikace).
-
-\textbf{Deployment a Maintenance mimo scope:} experiment měří co agent
-\textit{vytvoří}, nikoliv co se s~artefaktem děje po dokončení;
-npm package nemá reálné uživatele ani provoz.
-
-\textbf{Prioritizace podle research gap:}
-
-Literární průzkum identifikoval kde existují empirická data a~kde ne.
-Fáze s~menším pokrytím v~literatuře jsou prioritní -- ablace tam přinese
-nový příspěvek, nikoliv replikaci známého výsledku.
-
-\textbf{(1) Design fáze -- nejvyšší priorita (research gap)}
-
-Klíčová otázka: dostane agent hotové sub-issues (\#3--\#7, human-prepared)
-nebo pouze spec (\#1) a~dekompozici si provede sám?
-
-Empirické porovnání human-prepared vs.\ agent-decomposed neexistuje.
-Nepřímý důkaz: MASAI \cite{masai2024} s~5 specializovanými sub-agenty
-dosáhl 28,3\,\% na SWE-bench Lite; Confucius \cite{wang2025cca} s~unified
-orchestratorem (bez explicitní dekompozice) dosáhl 54,3\,\% na SWE-Bench-Pro.
-Tento výsledek \textit{zpochybňuje} intuici, že granulární dekompozice pomáhá
--- může přidávat overhead bez odpovídajícího zisku. Naše case study může
-poskytnout první izolovaný test.
-
-\textbf{(2) Requirements fáze -- druhá priorita (kombinovaný efekt znám,
-izolace ne)}
-
-Klíčová otázka: přispívá architecture layer (types, invariants, behavioral
-model) samostatně, nebo je efekt celé specifikace pohánělý jiným prvkem?
-
-SWE-Bench-Pro \cite{swebenchpro2025} abloval kombinaci requirements +
-interface specification a~naměřil pokles z~25,9\,\% na 8,4\,\% (3$\times$
-multiplikátor). Ale efekt architecture layer \textit{izolovaně} nebyl měřen.
-Invarianty a~stavový diagram jsou specifické pro domain-heavy systémy
-(dunning); jejich přínos u~stavového automatu je otevřená otázka.
-
-\textbf{(3) Implementation fáze -- třetí priorita}
-
-Klíčová otázka: zlepší agent výsledek s~pre-konfigurovaným toolingem
-(tsconfig strict, ESLint, Stryker) oproti self-setup?
-
-Empirické studie neexistují. AGENTS.md \cite{lulla2026agentsmd} snižuje
-runtime o~29\,\%, ale jde o~procesní instrukce, ne tooling konfiguraci.
-Hypotéza: pre-konfigurovaný Stryker může motivovat agenta k~lepším testům,
-protože mutation score je viditelná metrika v~CI feedbacku.
-
-\textbf{(4) Testing fáze -- nejnižší priorita (dobře pokryto v~literatuře)}
-
-TDD instrukce a~test oracle problem jsou empiricky zdokumentovány
-\cite{mathews2024, rethinking2025}. Ablace TDD v~tomto scope by
-replikovala existující výsledky bez nového příspěvku.
-
-\textbf{Vztah k~R0-R5:}
-
-Fázový design nenahrazuje R0-R5 kompletně -- spíše ho zpřesňuje.
-R0 (reference) zůstává jako baseline. Nové ablační běhy odpovídají
-konkrétním fázím: Design ablace = agent dostane jen \#1 (bez \#3--\#7);
-Requirements ablace = bez architecture layer v~\#1; Implementation ablace
-= bez pre-konfigurovaného toolingu. R5 (bare minimum) zůstává jako
-kumulativní benchmark.
+\textbf{Proč tři SDLC fáze (bez Testing):} Testing fáze se v~kontextu
+TDD rozpadá na dvě aktivity: psaní testů = interpretace requirements
+(spustitelná specifikace \cite{sommerville2016, swebok2024}),
+spouštění testů = verifikační feedback loop implementace. Test oracle
+problem \cite{mathews2024} potvrzuje, že testy odvozené z~kódu (nikoliv
+ze specifikace) validují chybné chování v~68,1\,\% případů.
 \end{raw}
 
 \textbf{Katalog ablatable komponent (brainstorm):}
