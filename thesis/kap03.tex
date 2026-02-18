@@ -294,6 +294,35 @@ možným rozšířením.
 
 \begin{raw}
 [RAW]
+\textbf{Volba experimentálního přístupu:}
+
+Při návrhu experimentu byly zváženy tři přístupy k~ablaci scaffoldingu:
+
+\textit{(1) Vrstvová ablace} (SWE-agent \cite{yang2024sweagent},
+Confucius \cite{wang2025cca}): odebírání celých vrstev (CI, agent configs,
+spec detail). Problém: vrstvy míchají fáze SDLC -- odebrání ``procesních
+instrukcí'' zasahuje do Requirements (TDD), Design (workflow) i~Implementation
+(git konvence) současně. Nelze izolovat přínos konkrétní komponenty.
+
+\textit{(2) Fázová ablace}: organizace podle SDLC fází (Requirements $\to$
+Design $\to$ Implementation). Čistější rámec, ale naráží na cascade
+dependencies -- Requirements ablace závisí na tom co bylo v~Design fázi.
+Izolace vyžaduje fixaci jedné dimenze a~variaci druhé, což exponenciálně
+zvyšuje počet běhů.
+
+\textit{(3) Meta-instrukční ablace}: místo explicitního scaffoldingu
+(předpřipravené soubory, konfigurace) dostane agent meta-instrukce které
+říkají \textit{co} udělat, ale nikoliv \textit{jak}. Ablace = odebrání
+jedné meta-instrukce. Výhody: (a)~binární manipulace (instrukce přítomna
+nebo ne), (b)~výsledky jsou univerzální -- meta-instrukce nejsou vázané
+na konkrétní projekt, (c)~žádná studie dosud neablovala jednotlivé
+meta-instrukce u~coding agentů.
+
+Zvolen přístup (3) -- meta-instrukční ablace. Přístupy (1) a~(2) jsou
+pokryty existující literaturou (SWE-agent abluje ACI komponenty,
+Confucius abluje scaffolding features, FeatureBench \cite{featurebench2026}
+abluje spec tiers). Přístup (3) přináší nový metodologický příspěvek.
+
 \textbf{Ablace meta-instrukcí:}
 
 Experiment testuje přínos jednotlivých meta-instrukcí pro kvalitu výstupu
