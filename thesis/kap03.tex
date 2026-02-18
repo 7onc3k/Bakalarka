@@ -750,4 +750,36 @@ Agent může mít 100\% Correctness a Completeness, ale být misaligned - techni
 \subsection{Vyhodnocení}
 
 Identifikace vzorů - která nastavení scaffoldingu vedla k lepším výsledkům v jednotlivých dimenzích. Porovnání trade-offs (např. vyšší kvalita vs. vyšší náklady).
+
+\begin{raw}
+[RAW]
+\textbf{Rozšíření: meta-prompting jako navazující výzkum}
+
+Ablační série testuje co se stane když explicitní scaffolding \textit{chybí}.
+Přirozenou navazující otázkou je: co když ho nahradíme meta-instrukcí?
+Místo ``použi tento workflow'' dostane agent ``navrhni si vlastní workflow
+pro tento projekt''. Meta-prompting \cite{suzgun2024metaprompt} je
+task-agnostic scaffolding pattern -- agent dostane strukturu myšlení,
+ne konkrétní instrukce.
+
+Tato substituce je metodologicky odlišná od ablace: neměříme absenci
+scaffoldingu ale alternativní přístup k~němu. Výsledky ablační série
+(které komponenty jsou klíčové) by určily kde má meta-prompting
+největší potenciál -- tam kde explicitní instrukce prokazatelně pomáhají,
+je zajímavé testovat jestli agent dokáže totéž odvodit sám.
+
+Konkrétní varianty pro navazující studii:
+\begin{itemize}
+    \item Decomposition meta-prompt: ``rozděl projekt na logické části
+          a~navrhni pořadí implementace'' místo human-prepared sub-issues
+    \item Role meta-prompt: ``navrhni si jak strukturovat svou práci''
+          místo orchestrator+builder separace
+    \item Full meta-prompt baseline: veškerý scaffolding nahrazen
+          meta-instrukcí; porovnání s~R0 ukáže celkový potenciál
+          self-designed workflow
+\end{itemize}
+
+Toto rozšíření je mimo scope této BP -- vyžaduje samostatnou sérii běhů
+a~hlubší analýzu interaction efektů. Je navrženo jako přímé pokračování.
+\end{raw}
 \end{raw}
