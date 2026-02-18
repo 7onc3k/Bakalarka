@@ -213,84 +213,14 @@ design constraints \cite{newcomb2025prepost} a klarifikaci ambiguity \cite{clari
 \begin{raw}
 \subsection{Experimentální design}
 
-Experiment používá \textbf{hypothesis-driven ablation study} -- systematické
-odebírání komponent specifikace a~scaffoldingu za účelem měření jejich
-individuálního přínosu ke kvalitě výstupu agenta. Na rozdíl od slepého
-faktoriálního designu, kde se testují všechny kombinace, každý experimentální
-běh ověřuje konkrétní hypotézu odvozenou z~literatury. Jako baseline slouží
-referenční implementace (human-guided) s~plnou specifikací a~scaffoldingem.
-
-\textbf{Fixní proměnné:}
-\begin{itemize}
-    \item \textbf{Model} -- fixní verze LLM pro všechny běhy
-    \item \textbf{Task} -- systém upomínek faktur (dunning system)
-    \item \textbf{Human intervention} -- žádná (agent pracuje plně autonomně)
-    \item \textbf{Orchestrace} -- agent-internal orchestration. Agent dostane celý
-          projekt jedním promptem a~sám rozhoduje o~dekompozici, pořadí,
-          delegaci na sub-agenty. Vnější mechanismus (\texttt{session.idle} hook)
-          pouze ověřuje podmínku dokončení -- pokud zbývají otevřené issues,
-          re-injektuje prompt; počet restartů je sbíranou metrikou.
-          Orchestrační \textbf{schopnost} agenta je součástí měřeného výstupu,
-          orchestrační \textbf{instrukce} v~\texttt{agents.md} jsou součástí
-          ablované proměnné (scaffolding).
-    \item \textbf{Agent architektura} -- v~referenčním běhu dvou-agentní design:
-          (1)~orchestrátor (řízení flow + psaní testů z~AC) a~(2)~executor
-          (implementace + verifikace). Separace testování od implementace je
-          architektonická garance proti test oracle problému \cite{mathews2024}.
-          Agent architektura je zároveň jednou z~ablovaných vrstev (R1) --
-          odebrání separace agentů měří přínos cílené role separation.
-\end{itemize}
-
-\textbf{Spektrum scaffoldingu:}
-
-Ablace se pohybuje na spektru mezi dvěma extrémy:
-\begin{itemize}
-    \item \textbf{Maximum} -- detailní \texttt{agents.md} s~procesy pro každou fázi,
-          předdefinované sub-issues s~dependencies, přesné instrukce pro TDD,
-          git workflow, dokumentaci, code review. Agent exekuje podle předpisu.
-    \item \textbf{Minimum} -- pouze specifikace v~GitHub Issue a~prázdný repozitář.
-          Agent sám rozhoduje jak dekomponovat, testovat, commitovat, dokumentovat.
-\end{itemize}
-
-Tento přístup odpovídá SASE \textit{duality of control} \cite{hassan2025sase}
--- měříme kdy dát agentovi strukturu a~kdy ho nechat rozhodovat autonomně.
-
-\textbf{Dimenze 1: Specifikace (BriefingScript)}
-
-Měří dopad úrovně detailu specifikace na kvalitu výstupu agenta.
-V~terminologii SASE \cite{hassan2025sase} odpovídá BriefingScript --
-co agent má udělat.
-
-\begin{itemize}
-    \item \textbf{Full} -- obě vrstvy (requirements + architecture):
-          description, acceptance criteria, glossary, type definitions,
-          invariants, behavioral model, technické constraints
-    \item \textbf{Minimal} -- pouze vrstva requirements: description
-          a~základní acceptance criteria bez architektonických detailů
-\end{itemize}
-
-Empiricky podpořeno studiemi \cite{specine2025, rope2024, yang2025underspec}.
-
-\textbf{Dimenze 2: Scaffolding (LoopScript + MentorScript + AEE)}
-
-Měří dopad procesního a~prostředího scaffoldingu na kvalitu výstupu agenta.
-V~terminologii SASE odpovídá kombinaci LoopScript (workflow playbook),
-MentorScript (quality normy) a~AEE (Agent Execution Environment).
-
-\begin{itemize}
-    \item \textbf{Full} -- \texttt{agents.md} s~konvencemi (git workflow,
-          commit conventions, testování, code quality) + nakonfigurované
-          prostředí (CI pipeline, tsconfig, ESLint, Vitest, project structure)
-    \item \textbf{None} -- prázdné repo, pouze specifikace v~GitHub Issue.
-          Agent si musí veškeré konvence a~tooling definovat sám.
-\end{itemize}
-
-\textbf{Scaffolding jako bundle:}
-Procesní instrukce (\texttt{agents.md}) a~nakonfigurované prostředí (CI, linting)
-jsou komplementární mechanismy -- \texttt{agents.md} říká ``používej conventional
-commits'' a~CI pipeline to vynucuje. V~hlavním experimentu se testují jako celek;
-ablace jednotlivých komponent (např. odebrání TDD instrukcí, odebrání CI) je
-možným rozšířením.
+Experiment používá \textbf{meta-instrukční ablaci} -- systematické
+odebírání meta-instrukcí (co + proč, nikoliv jak) za účelem měření
+jejich individuálního přínosu ke kvalitě výstupu agenta. Místo
+explicitního scaffoldingu (předpřipravené soubory, konfigurace)
+dostane agent sadu meta-instrukcí a~sám si navrhne konkrétní přístup.
+Ablace = odebrání jedné dimenze meta-instrukcí. Baseline (R0) obsahuje
+všechny tři dimenze; referenční implementace (human-guided) slouží
+jako ground truth pro metriky.
 
 \begin{raw}
 [RAW]
@@ -374,58 +304,81 @@ stejnou délku, specifičnost a~strukturu. Prompt sensitivity
 \cite{razavi2025} je přiznána jako limitation; mitigace: fixní šablona,
 deterministická temperature, behavioral trace.
 
-\textbf{Meta-instrukce (experimentální proměnné):}
+\textbf{Tři dimenze meta-instrukcí:}
+
+Původní návrh obsahoval pět granulárních meta-instrukcí (sub-agents,
+architektura, dekompozice, workflow, quality tooling). Analýza nezávislosti
+ukázala, že dekompozice, role separation, workflow a~testovací strategie
+jsou facety téhož procesu (What/Who/How/When organizace práce) -- nejsou
+vzájemně nezávislé a~jejich izolovaná ablace by vytvářela nesmyslné
+konfigurace (např. sub-agenti bez issues k~delegaci).
+
+Výsledný design používá tři ortogonální dimenze, odvozené systematicky
+ze tří zdrojů: (1)~SASE framework \cite{hassan2025sase} rozlišuje
+BriefingScript (fixní specifikace), LoopScript $\to$~O, MentorScript/AEE
+$\to$~Q a~architektonické rozhodnutí $\to$~P; (2)~Wang et al.
+\cite{wang2024llmagentsse} klasifikují agentní aktivity na Team
+Organization $\to$~O, Decision Making $\to$~P, Testing/QA $\to$~Q;
+(3)~RepairAgent \cite{bouzenia2025repairagent} abluje funkčně nezávislé
+komponenty -- náš design toto respektuje.
 
 \begin{center}
-\begin{tabular}{p{0.6cm}|p{4cm}|p{4cm}|p{3cm}}
-\textbf{\#} & \textbf{Meta-instrukce} & \textbf{Očekávaný artefakt} &
-\textbf{SDLC fáze} \\
+\begin{tabular}{p{0.5cm}|p{2.5cm}|p{4.5cm}|p{4.5cm}}
+\textbf{Dim.} & \textbf{Název} & \textbf{Meta-instrukce (CÍL)} &
+\textbf{Očekávané artefakty} \\
 \hline
-M1 & Vytvoř si sub-agents pro různé role &
-  \texttt{.opencode/agents/*.md} & Design \\
+P & Planning/Design &
+  Navrhni architekturu řešení před implementací -- typy, moduly, rozhraní &
+  Design decisions v~issues, type definitions \\
 \hline
-M2 & Navrhni architekturu před implementací &
-  Design decisions v~issues & Design \\
+O & Organization &
+  Zorganizuj si práci -- rozděl na části, definuj role, nastav testovací
+  strategii (testy ze specifikace před implementací) &
+  Sub-issues, agent configs, workflow v~AGENTS.md \\
 \hline
-M3 & Rozděl spec na sub-issues s~dependencies &
-  GitHub Issues & Design \\
-\hline
-M4 & Definuj si workflow a~proces &
-  Workflow v~AGENTS.md & Design \\
-\hline
-M5 & Nastav si quality nástroje &
-  CI, linting, testing config & Implementation \\
+Q & Quality &
+  Nastav si quality feedback mechanismy -- linting, testy, CI &
+  Nakonfigurované nástroje, CI pipeline \\
 \end{tabular}
 \end{center}
+
+Každá dimenze operuje na jiné úrovni: P~rozhoduje \textit{co} stavět
+(technická struktura), O~rozhoduje \textit{jak} pracovat (organizace
+procesu), Q~rozhoduje \textit{čím} kontrolovat kvalitu (feedback
+mechanismy). Tato ortogonalita zajišťuje, že odebrání jedné dimenze
+neovlivní logiku ostatních.
 
 \textbf{Ablační běhy:}
 
 \begin{center}
-\begin{tabular}{p{0.7cm}|p{4cm}|p{7cm}}
-\textbf{Run} & \textbf{Meta-instrukce} & \textbf{Co měříme} \\
+\begin{tabular}{p{0.7cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{5.5cm}}
+\textbf{Run} & \textbf{P} & \textbf{O} & \textbf{Q} &
+\textbf{Co měříme} \\
 \hline
-R0 & M1+M2+M3+M4+M5 & Baseline -- plný meta-prompt \\
+R0 & \checkmark & \checkmark & \checkmark &
+  Baseline -- plný meta-prompt \\
 \hline
-R1 & M2+M3+M4+M5 (bez M1) &
-  Přínos sub-agent separace \cite{agentcoder2024, singleormulti2025} \\
+R1 & -- & \checkmark & \checkmark &
+  Přínos upfront designu
+  \cite{perry1992, sommerville2016} \\
 \hline
-R2 & M1+M3+M4+M5 (bez M2) &
-  Přínos upfront architecture designu \\
+R2 & \checkmark & -- & \checkmark &
+  Přínos organizace práce
+  \cite{featurebench2026, mathews2024, agentcoder2024} \\
 \hline
-R3 & M1+M2+M4+M5 (bez M3) &
-  Přínos issue decomposition \cite{masai2024, wang2025cca} \\
-\hline
-R4 & M1+M2+M3+M5 (bez M4) &
-  Přínos explicitního workflow \cite{hassan2025sase} \\
-\hline
-R5 & M1+M2+M3+M4 (bez M5) &
-  Přínos quality tooling \\
+R3 & \checkmark & \checkmark & -- &
+  Přínos quality infrastruktury
+  \cite{papadakis2019, meta2025, lulla2026} \\
 \end{tabular}
 \end{center}
 
-Šest běhů, single run per podmínku. Každý běh probíhá v~separátním GitHub
-repozitáři (čistý stav). Artefakty (commit history, issues, PR) zachovány
-pro post-hoc analýzu.
+Čtyři běhy, single run per podmínku. Každý běh probíhá v~separátním
+GitHub repozitáři (čistý stav). Artefakty (commit history, issues, PR)
+zachovány pro post-hoc analýzu. Variace obsahu meta-instrukcí
+(meta vs. explicit formulace) je navržena jako future work --
+explicit instrukce jsou vysoce citlivé na konkrétní obsah
+\cite{razavi2025}, zatímco meta-instrukce jsou robustnější
+vůči formulaci.
 
 \textbf{Metriky:}
 \begin{itemize}
@@ -433,9 +386,10 @@ pro post-hoc analýzu.
           (referenční testy), počet restartů (auto-continue)
     \item \textbf{Sekundární:} spotřeba tokenů, čas do dokončení,
           compliance a~alignment (LLM-as-a-judge)
-    \item \textbf{Behavioral trace:} co agent reálně udělal -- vytvořil
-          sub-agents? navrhl architekturu? nastavil CI? Ověřuje, že
-          ablace meta-instrukce měla skutečný efekt na chování agenta.
+    \item \textbf{Behavioral trace:} co agent reálně udělal -- navrhl
+          architekturu před kódem~(P)? rozložil práci na sub-issues~(O)?
+          nastavil CI a~linting~(Q)? Ověřuje, že ablace meta-instrukce
+          měla skutečný efekt na chování agenta.
 \end{itemize}
 
 \textbf{Pilot studie:} Před experimentálními běhy proběhne pilotní validace
@@ -555,18 +509,14 @@ Anthropic \cite{anthropic2025harness} identifikuje failure-specific komponenty.
           \cite{jetbrains2025complexity}
 \end{itemize}
 
-Tento katalog slouží jako zásobník pro výběr experimentálních běhů.
-Ne všechny komponenty budou ablované -- výběr závisí na dostupném scope
-a~síle literární opory pro konkrétní hypotézu.
-
-\textit{Ablace vs. substituce:}
-Primární experimentální manipulací je čistá ablace -- odebrání komponenty bez
-náhrady. Pokud agent při absenci scaffoldingu spontánně vytvoří vlastní workflow
-(meta-prompting chování), jedná se o~pozorování, ne o~experimentální manipulaci.
-Explicitní substituce (nahrazení scaffoldingu meta-instrukcí ``navrhni si vlastní
-postup'') je možným rozšířením katalogu, ale není součástí primární sady běhů.
-Důvod: čistá ablace izoluje dopad absence konkrétní komponenty; substituce měří
-rozdíl mezi dvěma přístupy, což ztěžuje kauzální interpretaci.
+Tento katalog byl při návrhu experimentu seskupen do tří ortogonálních
+dimenzí: \textbf{P}~(Planning/Design) pokrývá architektonické rozhodnutí,
+\textbf{O}~(Organization) pokrývá orchestraci, dekompozici, role separation,
+workflow a~testovací strategii, \textbf{Q}~(Quality) pokrývá tooling
+a~CI. Položky z~katalogu, které se týkají specifikace (BriefingScript),
+jsou fixní proměnnou -- specifikace je stejná pro všechny běhy.
+Položky z~context window management jsou infrastrukturní a~řeší je
+agentní framework (OpenCode).
 
 \textbf{Multi-issue gap:}
 
@@ -761,37 +711,30 @@ Agent může mít 100\% Correctness a Completeness, ale být misaligned - techni
 
 \subsection{Vyhodnocení}
 
-Identifikace vzorů - která nastavení scaffoldingu vedla k lepším výsledkům v jednotlivých dimenzích. Porovnání trade-offs (např. vyšší kvalita vs. vyšší náklady).
+Identifikace vzorů -- které dimenze meta-instrukcí (P, O, Q) měly
+největší dopad na kvalitu výstupu agenta. Porovnání trade-offs
+(např. vyšší kvalita vs. vyšší spotřeba tokenů).
 
 \begin{raw}
 [RAW]
-\textbf{Rozšíření: meta-prompting jako navazující výzkum}
+\textbf{Rozšíření: meta vs. explicit instrukce}
 
-Ablační série testuje co se stane když explicitní scaffolding \textit{chybí}.
-Přirozenou navazující otázkou je: co když ho nahradíme meta-instrukcí?
-Místo ``použi tento workflow'' dostane agent ``navrhni si vlastní workflow
-pro tento projekt''. Meta-prompting \cite{suzgun2024metaprompt} je
-task-agnostic scaffolding pattern -- agent dostane strukturu myšlení,
-ne konkrétní instrukce.
+Ablační série měří přínos jednotlivých dimenzí meta-instrukcí.
+Přirozenou navazující otázkou je: záleží na \textit{formulaci}
+instrukce? Meta-instrukce říkají co a~proč (``navrhni architekturu
+před implementací''); explicit instrukce říkají přesně jak
+(``vytvoř type definitions v~\texttt{src/types.ts}, rozděl moduly
+na \texttt{transition.ts} a~\texttt{business-days.ts}'').
 
-Tato substituce je metodologicky odlišná od ablace: neměříme absenci
-scaffoldingu ale alternativní přístup k~němu. Výsledky ablační série
-(které komponenty jsou klíčové) by určily kde má meta-prompting
-největší potenciál -- tam kde explicitní instrukce prokazatelně pomáhají,
-je zajímavé testovat jestli agent dokáže totéž odvodit sám.
+Porovnání meta vs. explicit by přímo testovalo SASE \textit{duality
+of control} \cite{hassan2025sase} -- kdy dát agentovi strukturu
+a~kdy ho nechat rozhodovat autonomně. Explicit instrukce jsou však
+vysoce citlivé na konkrétní obsah \cite{razavi2025} -- tentýž záměr
+lze formulovat mnoha způsoby s~odlišnými výsledky. Meta-instrukce
+jsou robustnější vůči formulaci, protože abstrahují nad konkrétním
+provedením.
 
-Konkrétní varianty pro navazující studii:
-\begin{itemize}
-    \item Decomposition meta-prompt: ``rozděl projekt na logické části
-          a~navrhni pořadí implementace'' místo human-prepared sub-issues
-    \item Role meta-prompt: ``navrhni si jak strukturovat svou práci''
-          místo orchestrator+builder separace
-    \item Full meta-prompt baseline: veškerý scaffolding nahrazen
-          meta-instrukcí; porovnání s~R0 ukáže celkový potenciál
-          self-designed workflow
-\end{itemize}
-
-Toto rozšíření je mimo scope této BP -- vyžaduje samostatnou sérii běhů
-a~hlubší analýzu interaction efektů. Je navrženo jako přímé pokračování.
+Toto rozšíření je mimo scope této BP -- vyžaduje vlastní sérii běhů
+s~kontrolou formulačního biasu. Je navrženo jako přímé pokračování.
 \end{raw}
 \end{raw}

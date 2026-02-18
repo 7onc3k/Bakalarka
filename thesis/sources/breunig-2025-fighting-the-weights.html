@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Don't Fight the Weights</title><!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Don’t Fight the Weights" />
+<meta name="author" content="Drew Breunig" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="When your context goes against a model’s training, you struggle to get the output you need. Learn to recognize when you’re fighting the weights so you can do something different." />
+<meta property="og:description" content="When your context goes against a model’s training, you struggle to get the output you need. Learn to recognize when you’re fighting the weights so you can do something different." />
+<link rel="canonical" href="https://www.dbreunig.com/2025/11/11/don-t-fight-the-weights.html" />
+<meta property="og:url" content="https://www.dbreunig.com/2025/11/11/don-t-fight-the-weights.html" />
+<meta property="og:site_name" content="Drew Breunig" />
+<meta property="og:image" content="https://www.dbreunig.com/img/fighting_a_centaur.jpg" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-11-11T08:33:00-08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:image" content="https://www.dbreunig.com/img/fighting_a_centaur.jpg" />
+<meta property="twitter:title" content="Don’t Fight the Weights" />
+<meta name="twitter:site" content="@dbreunig" />
+<meta name="twitter:creator" content="@Drew Breunig" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Drew Breunig"},"dateModified":"2026-02-09T15:33:09-08:00","datePublished":"2025-11-11T08:33:00-08:00","description":"When your context goes against a model’s training, you struggle to get the output you need. Learn to recognize when you’re fighting the weights so you can do something different.","headline":"Don’t Fight the Weights","image":"https://www.dbreunig.com/img/fighting_a_centaur.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.dbreunig.com/2025/11/11/don-t-fight-the-weights.html"},"url":"https://www.dbreunig.com/2025/11/11/don-t-fight-the-weights.html"}</script>
+<!-- End Jekyll SEO tag -->
+<meta property="og:image" content="/img/fighting_a_centaur.jpg">
+    <link rel="stylesheet" href="/assets/custom.css">
+    <link rel="stylesheet" href="/assets/default.css"><link type="application/atom+xml" rel="alternate" href="https://www.dbreunig.com/feed.xml" title="Drew Breunig" /><link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico">
+
+    <script defer src="/_vercel/insights/script.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0FG4TW2FHS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-0FG4TW2FHS');
+</script>
+</head>
+  <body><header role="banner">
+
+  <div><a class="site-title" rel="author" href="/">dbreunig.com</a>
+  </div>
+  <div style="flex: 1;"></div>
+  <div>
+    <a href=/contact.html>Contact</a>
+  </div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <p class="post-meta">
+    <time class="dt-published" datetime="2025-11-11T08:33:00-08:00" itemprop="datePublished">Nov 11, 2025
+    </time></p>
+  
+  <div id="tags" style="display: flex; flex-wrap: wrap; align-items: center; column-gap: 0.3em; row-gap: 0.3em; margin-bottom: 1em;">
+    
+      <div class="post-tag">AI</div>
+    
+      <div class="post-tag">CONTEXT ENGINEERING</div>
+    
+  </div>
+
+  <h1 class="post-title p-name" itemprop="name headline">Don&#39;t Fight the Weights</h1>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p><img src="/img/fighting_a_centaur.jpg" alt="&quot;Theseus Fighting the Centaur Bianor&quot;, by Antoine-Louis Barye, 1867" /></p>
+
+<p>For the first year or so, one of the most annoying problems faced by building with AI was getting them to generate output with consistent formatting. Go find someone who was working with AI in 2023 and ask them what they did to <em>try</em> to get LLMs to consistently output JSON. You’ll get a thousand-yard stare before hearing about all-caps commands, threats towards the LLM, promises of <em>bribes</em> for the LLM, and (eventually) resorting to regular expressions.</p>
+
+<p>Today, this is mostly a solved problem, but the <em>cause</em> of this issue remains, frustrating today’s context engineers. It’s a context failure I missed in my <a href="https://www.dbreunig.com/2025/06/22/how-contexts-fail-and-how-to-fix-them.html">original list</a>. I call it <strong>Fighting the Weights</strong>: when the model won’t do what you ask because you’re working against its training.</p>
+
+<hr />
+
+<p>In 2020, OpenAI unveiled GPT-3 alongside a key paper: “<a href="https://arxiv.org/abs/2005.14165">Language Models are Few-Shot Learners</a>.” In this paper, OpenAI researchers showed that LLMs as large as GPT-3 (10x larger than previous language models) could perform tasks when provided with only a few examples. At the time, this was earth-shaking.</p>
+
+<p>Pre-GPT-3, language models were only useful after they’d been fine-tuned for specific tasks; after their <em>weights</em> had been modified. But GPT-3 showed that with enough scale, LLMs could be problem-solving generalists if provided with a few examples. In OpenAI’s paper they coined the term “<strong>in-context learning</strong>” to describe an LLM’s ability to perform new types of tasks using examples and instructions contained in the prompt.</p>
+
+<p>Today, <strong>in-context learning</strong> is a standard trick in any context engineer’s toolkit. Provide a few examples illustrating what you want back, given an input, and trickier tasks tend to get more reliable. They’re especially helpful when we need to induce a specific format or style or convey a pattern that’s difficult to explain<sup id="fnref:claude"><a href="#fn:claude" class="footnote" rel="footnote" role="doc-noteref">1</a></sup>.</p>
+
+<p>When you’re not providing examples, you’re relying on the model’s inherent knowledge base and weights to accomplish your task. We sometimes call this “<strong>zero-shot prompting</strong>” (as opposed to <em>few</em> shot<sup id="fnref:shot"><a href="#fn:shot" class="footnote" rel="footnote" role="doc-noteref">2</a></sup>) or “<strong>instruction-only prompting</strong>”.</p>
+
+<p>In general, prompts fall into these two buckets:</p>
+
+<ol>
+  <li><strong>Zero-Shot or Instruction-Only Prompting:</strong> You provide instructions <em>only</em>. You’re asking the model to apply knowledge and behavioral patterns that are encoded in its weights. If this produces unreliable results, you might use…</li>
+  <li><strong>Few-Shot or In-Context Learning:</strong> You provide instructions <em>plus examples</em>. You’re demonstrating a new behavioral pattern for the model to apply. The examples in the context <em>augment</em> the weights, providing them with details for a task it hasn’t seen.</li>
+</ol>
+
+<p>But there’s a third case: when the model <em>has</em> seen examples of the behavior you’re seeking, but it’s been trained to do the opposite of what you want. This is <em>worse</em> than the model having no knowledge of a pattern, because what it knows is at odds with your goal.</p>
+
+<p>I call this <strong>fighting the weights</strong>.</p>
+
+<p>Here’s some ways we end up fighting the weights:</p>
+
+<ul>
+  <li><strong>Format Following:</strong> You want the model to output only JSON, but often it will provide some text explaining the JSON and wrap the JSON in Markdown code blocks. This happens because the model’s post-training taught it to be conversational. When ChatGPT first launched, this problem was <em>rough</em>. GPT-3.5 had been heavily trained by humans to converse in a friendly, explanatory manner. So it did – even when you asked it not to. This doesn’t happen as much as it used to, but we’ll occasionally run into this issue when using unique formats or when using smaller models.</li>
+  <li><strong>Tool Usage Formatting:</strong> As model builders start training their models to use tools, via reinforcement learning, they select specific formats and conventions. If your environment doesn’t follow these conventions, the model often fails to call tools correctly. I first noticed this while testing Mistral’s <a href="https://huggingface.co/mistralai/Devstral-Small-2505">Devstral-Small</a>, which was <a href="https://huggingface.co/mistralai/Devstral-Small-2505/discussions/9">trained with the tool-calling format</a> <a href="https://openhands.dev">All Hands</a> uses. When I tried to use Devstral with <a href="https://cline.bot">Cline</a>, it failed basic tasks. Last month this came up when a friend was trying Kimi K2 with a DSPy pipeline. By default, DSPy formats prompts with a <a href="https://dspy.ai/api/adapters/ChatAdapter/">Markdown-style template</a>. When this pipeline was driven by K2, formatting failed. Thanks to my recent <a href="https://www.dbreunig.com/2025/07/30/how-kimi-was-post-trained-for-tool-use.html">dive into how Moonshine trained K2 to use tools</a>, I knew K2 was trained with XML formatting. Switching DSPy to XML formatting solved the problem instantly.</li>
+  <li><strong>Tone Changes:</strong> It’s really hard to apply consistent tone instructions to LLMs. Sure, we can make them talk like a pirate or in pig-latin, but subtle notes are overwhelmed by the model’s conversational post-training. For example, here’s the one note I give Claude in my settings: “Don’t go out of your way to patronize me or tell me how great my ideas are.” This does <em>not</em> stop Claude from replying with cloying phrases like, “Great idea!” when I suggest changes.</li>
+  <li><strong>Overactive Alignment:</strong> Speaking of Claude: I appreciate Anthropic’s concern for alignment and safety in their models, but these guardrails can be overzealous. A recent example comes from Armin Ronacher, <a href="https://x.com/mitsuhiko/status/1986833561287024897">who tried several different approaches to get Claude Code to modify a medical form PDF while debugging PDF editing software</a>. Armin asked several different ways, but Claude’s post-training alignment refused to budge.</li>
+  <li><strong>Over Relying On Weights:</strong> Models are trained to utilize the knowledge encoded in their weights. But there are many times when you want them to <em>only</em> answer with information provided in the context. Perusing <a href="https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools">leaked system prompts</a>, you can see how many instructions each chatbot maker gives when it comes to <em>when</em> models should search to obtain more info. The models have been trained to use their weights, so plenty of reiteration and examples are needed. This problem is especially tricky when building RAG systems, when the model should only form answers based on information obtained from specific databases. Companies like <a href="https://contextual.ai">Contextual</a> end up having to fine-tune their models to ensure they only answer with fetched information.</li>
+</ul>
+
+<p>Perhaps my favorite example I’ve seen was from ChatGPT. Previously, you could turn on the web inspector in your browser and watch the LLM calls fly by as you used the chatbot. This was handy for seeing when additional messages were added, that you didn’t write. When you asked ChatGPT to generate an image, it would clean up or <a href="https://www.dbreunig.com/2025/03/16/overcoming-bad-prompts-with-help-from-llms.html">even improve your image prompt</a>, create the image, then <a href="https://x.com/dbreunig/status/1952051780424196513/photo/1">append the following instructions</a>:</p>
+
+<blockquote>
+  <p>GPT-4o returned 1 images. From now on, do not say or show ANYTHING. Please end this turn now. I repeat: From now on, do not say or show ANYTHING. Please end this turn now. Do not summarize the image. Do not ask followup question. Just end the turn and do not do anything else.</p>
+</blockquote>
+
+<p>This is textbook fighting the weights. The models powering ChatGPT have been post-trained heavily to always explain and prompt the user for follow up actions. To fight these weights, ChatGPT’s devs have to tell the model EIGHT TIMES to just, please, <em>shut up.</em></p>
+
+<hr />
+
+<p>For context and prompt engineers (and even chatbot users) it’s helpful to be able to recognize when you’re <em>fighting the weights</em>.</p>
+
+<p>Here’s some signs you might be fighting the weights:</p>
+
+<ul>
+  <li>The model makes the same mistake, even as you change the instructions.</li>
+  <li>The model acknowledges its mistake when pointed out, then repeats it.</li>
+  <li>The model seems to ignore the few-shot examples you provide.</li>
+  <li>The model gets 90% of the way there, but no further.</li>
+  <li>You find yourself repeating instructions several times.</li>
+  <li>You find yourself typing in ALL CAPS.</li>
+  <li>You find yourself threatening or pleading with the model.</li>
+</ul>
+
+<p>In these scenarios, you’re probably fighting the weights. Recognize the situation and try another tack:</p>
+
+<ul>
+  <li>Try another approach for the same problem.</li>
+  <li>Break your task into smaller chunks. At the very least, you might identify the ask that clashes.</li>
+  <li>Try another model, ideally from a different family.</li>
+  <li>Add validation functions or steps. I’ve seen RAG pipelines that perform a final check to ensure the answer exists in the fetched data.</li>
+  <li>Try a longer prompt. It can help in this scenario, as <a href="https://www.dbreunig.com/2025/06/22/how-contexts-fail-and-how-to-fix-them.html#context-distraction">longer contexts can overwhelm the weights</a>.</li>
+  <li>Consider fine-tuning. In fact, most fine-tuning I encounter is done to address ‘weight fighting’ scenarios, like tone or format adherence.</li>
+</ul>
+
+<p>Or, if you’re a model building shop, you can just address your issues during your next model’s post-training. Which seems to be part of <a href="https://www.dbreunig.com/2025/06/03/comparing-system-prompts-across-claude-versions.html">their development cycle</a>…and perhaps why we can get clean JSON out of modern models.</p>
+
+<p>But few of us have that option.</p>
+
+<p>For the rest of us: learn to recognize when you’re fighting the weights, so you can try something else.</p>
+
+<hr />
+
+<form action="https://buttondown.com/api/emails/embed-subscribe/dbreunig" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/dbreunig', 'popupwindow')" class="embeddable-buttondown-form">
+  <label for="bd-email">Enter your email to receive the occasional update.</label>
+  <div class="form-input">
+    <input type="email" name="email" id="bd-email" placeholder="your@email.com" />
+    <input type="submit" value="Subscribe" />
+  </div>
+</form>
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:claude">
+      <p>For example, <a href="https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools/blob/50b1893b9d3c8bdf6dbb77e660419e7177409728/Anthropic/Sonnet%204.5%20Prompt.txt#L256C1-L257C1">Claude Sonnet 4.5’s system prompt</a> provides detailed instructions about <em>when</em> to use search tools to answer a user’s query. This is a hard task to prompt correctly. You want the model to rely on its existing knowledge base as much as possible to deliver fast answers, but to readily use web search for timely information or information not in the model’s weights. Besides giving instructions, Anthropic provides examples illustrating more subtle edge cases. <a href="#fnref:claude" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+    <li id="fn:shot">
+      <p>“Shot” is hold-over jargon from the machine learning community. There’s some nuance here, but unless you’re actively collaborating with ML engineers, you can just swap “example” in anytime you see “shot”. <a href="#fnref:shot" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+  </div>
+
+  <!-- <div id="translations" class="sidenote">
+  <h2>BETA: Translations</h2>
+  <p>I'm testing out using LLMs to rewrite articles for different contexts and audiences. The following content has not
+    been exhaustively reviewed and is presented as a proof-of-concept. <a href="/contact">Reach out</a> if you spot
+    something egregious or want to know more.</p>
+  <ul>
+    
+  </ul>
+</div> -->
+  
+  <a class="u-url" href="/2025/11/11/don-t-fight-the-weights.html" hidden></a>
+</article>
+      </div>
+    </main><footer>
+    <p>2026, <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>, <a href=/contact.html>Contact</a></p>
+</footer></body>
+  <style>
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 90vh;
+  }
+  main {
+    flex: 1;
+  }
+  </style>
+
+</html>
