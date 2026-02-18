@@ -233,15 +233,12 @@ referenční implementace (human-guided) s~plnou specifikací a~scaffoldingem.
           Orchestrační \textbf{schopnost} agenta je součástí měřeného výstupu,
           orchestrační \textbf{instrukce} v~\texttt{agents.md} jsou součástí
           ablované proměnné (scaffolding).
-    \item \textbf{Agent architektura} -- dvou-agentní design: (1)~orchestrátor
-          (řízení flow + psaní testů z~AC) a~(2)~executor (implementace +
-          verifikace). Separace testování od implementace je architektonická
-          garance proti test oracle problému \cite{mathews2024} --
-          oddělený agent na testy nemůže být ovlivněn implementačním kódem.
-          AgentCoder \cite{agentcoder2024} empiricky validuje tento přístup
-          (96,3\,\% HumanEval). Minimální hybridní architektura --
-          multi-agent jen tam, kde je architektonický důvod
-          \cite{singleormulti2025}.
+    \item \textbf{Agent architektura} -- v~referenčním běhu dvou-agentní design:
+          (1)~orchestrátor (řízení flow + psaní testů z~AC) a~(2)~executor
+          (implementace + verifikace). Separace testování od implementace je
+          architektonická garance proti test oracle problému \cite{mathews2024}.
+          Agent architektura je zároveň jednou z~ablovaných vrstev (R1) --
+          odebrání separace agentů měří přínos cílené role separation.
 \end{itemize}
 
 \textbf{Spektrum scaffoldingu:}
@@ -295,37 +292,59 @@ commits'' a~CI pipeline to vynucuje. V~hlavním experimentu se testují jako cel
 ablace jednotlivých komponent (např. odebrání TDD instrukcí, odebrání CI) je
 možným rozšířením.
 
-\textbf{Ablační experimenty:}
+\textbf{Vrstvová ablace:}
 
-Každý běh testuje konkrétní hypotézu z~literatury odebráním jedné nebo více
-komponent oproti baseline (full spec + full scaffolding):
+Scaffolding má přirozenou vrstvovou strukturu, kde každá vrstva představuje
+jiný typ podpory. Experiment používá izolované ablace po vrstvách -- v~každém
+běhu se odebere jedna vrstva, ostatní zůstanou beze změny. To umožňuje měřit
+individuální přínos každé vrstvy. Kumulativní běh (R5) ukazuje celkový gap.
 
 \begin{center}
-\begin{tabular}{p{5cm}|p{3.5cm}|p{4cm}}
-\textbf{Hypotéza (zdroj)} & \textbf{Co odebíráme} & \textbf{Co měříme} \\
+\begin{tabular}{p{0.8cm}|p{4.5cm}|p{3.5cm}|p{3.5cm}}
+\textbf{Run} & \textbf{Co agent dostane} & \textbf{Co chybí} & \textbf{Co měříme} \\
 \hline
-Architektura ve spec je kritická \cite{specine2025} &
-  Architecture vrstvu (types, invariants, behavioral model) &
-  Dopad na correctness a~completeness \\
+R0 & Vše (spec + agents + CI + tooling) &
+  Nic (reference) &
+  Baseline pro porovnání \\
 \hline
-Scaffolding zlepšuje procesní kvalitu \cite{hassan2025sase} &
-  Celý scaffolding (agents.md + CI + env) &
-  Dopad na compliance a~conventions \\
+R1 & Jeden agent místo orchestrátor + builder &
+  Agentní separace (\texttt{.opencode/agents/}) &
+  Přínos role separation \cite{agentcoder2024, singleormulti2025} \\
 \hline
-TDD ze spec brání validaci bugů \cite{mathews2024} &
-  TDD instrukce ze scaffoldingu &
-  Kvalita testů (mutation score) \\
+R2 & Žádné TDD, phases, when-stuck instrukce &
+  Procesní instrukce (LoopScript) &
+  Přínos workflow scaffoldingu \cite{hassan2025sase} \\
 \hline
-CI vynucování je nutné nad rámec písemných instrukcí &
-  CI pipeline (ponechat agents.md) &
-  Dodržování konvencí bez automatické kontroly \\
+R3 & Žádné CI, ESLint, Stryker, coverage thresholds &
+  Quality enforcement (AEE) &
+  Přínos automatizovaného vynucování \\
+\hline
+R4 & Vysokoúrovňový popis místo detailních AC &
+  Detail specifikace (BriefingScript) &
+  Přínos spec detailu \cite{specine2025} \\
+\hline
+R5 & Pouze \texttt{AGENTS.md} (project context) + spec &
+  Vše ostatní (kumulativní) &
+  Celkový gap; spontánní self-scaffolding \\
 \end{tabular}
 \end{center}
 
-Baseline (full-scale autonomní běh s~plným scaffoldingem, bez lidského zásahu)
-slouží jako referenční bod pro ablace. Referenční implementace (human-guided)
-slouží jako gold standard pro metriky. Počet a~výběr ablačních běhů závisí
-na dostupném scope -- prioritu mají hypotézy s~nejsilnější oporou v~literatuře.
+R0 (plný scaffolding, autonomní běh bez lidského zásahu) slouží jako referenční
+bod pro ablace. R1--R4 jsou \textbf{izolované ablace} -- odebírají jednu vrstvu,
+čímž izolují její přínos. R5 je \textbf{kumulativní ablace} -- odebírá vše
+kromě project contextu a~specifikace; pokud agent spontánně vytvoří vlastní
+workflow (meta-prompting chování), jedná se o~pozorování, ne o~experimentální
+manipulaci.
+
+Každý běh probíhá v~separátním GitHub repozitáři vytvořeném ze společného
+snapshot (skript \texttt{new-run.sh}). Tím je zaručen čistý stav bez artefaktů
+z~předchozích běhů (issues, komentáře, child issues). Artefakty každého běhu
+(commit history, PRs, issue komentáře) zůstávají zachovány pro post-hoc analýzu.
+
+\textbf{Pilot studie:} Před experimentálními běhy proběhne pilotní validace
+setupu na referenčním běhu (R0). Pilot identifikuje technické problémy
+(timeouty, bugy v~orchestraci, nedostatky v~instrukcích) a~kalibruje metriky.
+Iterace na pilotu se nepočítají do výsledků studie.
 
 \textbf{Katalog ablatable komponent (brainstorm):}
 
