@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>How System Prompts Define Agent Behavior</title><!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="How System Prompts Define Agent Behavior" />
+<meta name="author" content="Drew Breunig" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="System prompts matter far more than most assume. A given model sets the theoretical ceiling of an agent’s performance, but the system prompt determines whether this peak is reached." />
+<meta property="og:description" content="System prompts matter far more than most assume. A given model sets the theoretical ceiling of an agent’s performance, but the system prompt determines whether this peak is reached." />
+<link rel="canonical" href="https://www.dbreunig.com/2026/02/10/system-prompts-define-the-agent-as-much-as-the-model.html" />
+<meta property="og:url" content="https://www.dbreunig.com/2026/02/10/system-prompts-define-the-agent-as-much-as-the-model.html" />
+<meta property="og:site_name" content="Drew Breunig" />
+<meta property="og:image" content="https://www.dbreunig.com/img/waffle_comparison.jpg" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-02-10T21:34:00-08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:image" content="https://www.dbreunig.com/img/waffle_comparison.jpg" />
+<meta property="twitter:title" content="How System Prompts Define Agent Behavior" />
+<meta name="twitter:site" content="@dbreunig" />
+<meta name="twitter:creator" content="@Drew Breunig" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Drew Breunig"},"dateModified":"2026-02-15T09:26:50-08:00","datePublished":"2026-02-10T21:34:00-08:00","description":"System prompts matter far more than most assume. A given model sets the theoretical ceiling of an agent’s performance, but the system prompt determines whether this peak is reached.","headline":"How System Prompts Define Agent Behavior","image":"https://www.dbreunig.com/img/waffle_comparison.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.dbreunig.com/2026/02/10/system-prompts-define-the-agent-as-much-as-the-model.html"},"url":"https://www.dbreunig.com/2026/02/10/system-prompts-define-the-agent-as-much-as-the-model.html"}</script>
+<!-- End Jekyll SEO tag -->
+<meta property="og:image" content="/img/waffle_comparison.jpg">
+    <link rel="stylesheet" href="/assets/custom.css">
+    <link rel="stylesheet" href="/assets/default.css"><link type="application/atom+xml" rel="alternate" href="https://www.dbreunig.com/feed.xml" title="Drew Breunig" /><link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico">
+
+    <script defer src="/_vercel/insights/script.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0FG4TW2FHS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-0FG4TW2FHS');
+</script>
+</head>
+  <body><header role="banner">
+
+  <div><a class="site-title" rel="author" href="/">dbreunig.com</a>
+  </div>
+  <div style="flex: 1;"></div>
+  <div>
+    <a href=/contact.html>Contact</a>
+  </div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <p class="post-meta">
+    <time class="dt-published" datetime="2026-02-10T21:34:00-08:00" itemprop="datePublished">Feb 10, 2026
+    </time></p>
+  
+  <div id="tags" style="display: flex; flex-wrap: wrap; align-items: center; column-gap: 0.3em; row-gap: 0.3em; margin-bottom: 1em;">
+    
+      <div class="post-tag">AI</div>
+    
+      <div class="post-tag">AGENTS</div>
+    
+      <div class="post-tag">SYSTEM PROMPTS</div>
+    
+      <div class="post-tag">CONTEXT</div>
+    
+      <div class="post-tag">COLLABORATION</div>
+    
+      <div class="post-tag">CONTEXT ENGINEERING</div>
+    
+  </div>
+
+  <h1 class="post-title p-name" itemprop="name headline">How System Prompts Define Agent Behavior</h1>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p><em>This post was <a href="https://blog.nilenso.com/blog/2026/02/10/how-system-prompts-define-agent-behaviiour/">co-authored with Srihari Sriraman</a></em></p>
+
+<p>Coding agents are fascinating to study. They help us build software in a new way, while themselves exemplifying a novel approach to architecting and implementing software. At their core is an AI model, but wrapped around it is a mix of code, tools, and prompts: the harness.</p>
+
+<p>A critical part of this harness is the system prompt, the baseline instructions for the application. This context is present in every call to the model, no matter what skills, tools, or instructions are loaded. The system prompt is always present, defining a core set of behaviors, strategies, and tone.</p>
+
+<p>Once you start analyzing agent design and behavior, a question emerges: how much does the system prompt actually determine an agent’s effectiveness? We take for granted that the model is the most important component of any agent, but how much can a system prompt contribute? Could a great system prompt paired with a mediocre model challenge a mediocre prompt paired with a frontier model?</p>
+
+<p>To find out, we obtained and analyzed system prompts from six different coding agents. We clustered them semantically, comparing where their instructions diverged and where they converged. Then we swapped system prompts between agents and observed how behavior changed.</p>
+
+<p>System prompts matter far more than most assume. A given model sets the theoretical ceiling of an agent’s performance, but the system prompt determines whether this peak is reached.</p>
+
+<hr />
+
+<h3 id="the-variety-of-system-prompts">The Variety of System Prompts</h3>
+
+<p>To understand the range of system prompts, we looked at six CLI coding agents: Claude Code, Cursor, Gemini CLI, Codex CLI, OpenHands, and Kimi CLI. Each performs the same basic function: given a task they gather information, understands the code base, writes code, tracks their progress, and runs commands. But despite these similarities, the system prompts are <em>quite</em> different.</p>
+
+<p><img src="/img/waffle_comparison.jpg" alt="Waffle chart comparisons of 6 coding agent system prompts" /></p>
+
+<div class="callout callout--try-it-out">
+  <span class="callout__label">Try It Out</span>
+  <div class="callout__content">
+    
+<p><a href="https://nilenso.github.io/context-viewer/g/960d42ad-314c-44cf-8594-4b009ef528a1/comparison?sidebar=0&amp;panel=0&amp;sortBy=category&amp;sortDir=asc&amp;import=https://raw.githubusercontent.com/nilenso/long-prompts-analysis/refs/heads/main/context-viewer-exports/system-prompts-simpler.json">Explore the above figures interactively in <strong>context viewer</strong></a>.</p>
+
+  </div>
+</div>
+
+<p>We’re analyzing <a href="https://github.com/asgeirtj/system_prompts_leaks">exfiltrated system prompts</a>, which we clean up and <a href="https://github.com/nilenso/long-prompts-analysis/tree/main/data/prompts/filtered">host here</a><sup id="fnref:exfiltrated"><a href="#fn:exfiltrated" class="footnote" rel="footnote" role="doc-noteref">1</a></sup>. Each of these is fed into <a href="https://github.com/nilenso/context-viewer">context-viewer</a>, a tool Srihari developed that chunks contexts in semantic components for exploration and analysis.</p>
+
+<p>Looking at the above visualizations, there is plenty of variety. Claude, Codex, Gemini, and OpenHands roughly prioritize the same instructions, but vary their distributions. Further, prompts for Claude Code and OpenHands both are less than half the length of prompts in Codex and Gemini.</p>
+
+<p>Cursor’s and Kimi’s prompts are dramatically different. Here we’re looking at Cursor’s prompt that’s paired with GPT-5 (<a href="https://www.adiasg.com/blog/comparing-cursors-prompts-across-models">Cursor uses slightly different prompts when hooked to different models</a>), and it spends over a third of its tokens on personality and steering instructions. Kimi CLI, meanwhile, contains zero workflow guidance, barely hints at personality instructions, and is the shortest prompt by far.</p>
+
+<p>Given the similar interfaces of these apps, we’re left wondering: why are their system prompts so different?</p>
+
+<p>There’s two main reasons the system prompts vary: <em>model calibration</em> and <em>user experience</em>.</p>
+
+<p>Each model has its own quirks, rough edges, and baseline behaviors. If the goal is to produce a measured, helpful TUI coding assistant, each system prompt will have to deal with and adjust for unique aspects of the underlying model to achieve this goal. This <em>model calibration</em> reins in problematic behavior.</p>
+
+<p>System prompts also vary because they specify slightly different <em>user experience</em>. Sure, they’re all text-only, terminal interfaces that explore and manipulate code. But some are more talkative, more autonomous, more direct, or require more detailed instructions. System prompts define this UX and, as we’ll see later, we can make a coding agent “feel” like a different agent just by swapping out the system prompt.</p>
+
+<p>We can get a glimpse of these two functions together by looking at how a given system prompt changes over time, especially as new versions of models arrive. For example:</p>
+
+<p><img src="/img/claude_over_time.jpg" alt="Claude's system prompt vascilates as new models are released, but trends steadily longer" /></p>
+
+<div class="callout callout--try-it-out">
+  <span class="callout__label">Try It Out</span>
+  <div class="callout__content">
+    
+<p><a href="https://nilenso.github.io/context-viewer/g/b179a05f-2bd4-4012-83ab-42a0cb1e79fd/comparison?sidebar=0&amp;panel=0&amp;legend=compact&amp;sortBy=category&amp;sortDir=asc&amp;cols=5&amp;import=https://raw.githubusercontent.com/nilenso/long-prompts-analysis/refs/heads/main/context-viewer-exports/claude-prompt-evolution-export-simpler.json">Explore the above figures interactively in <strong>context viewer</strong></a>. Or, <a href="https://nilenso.github.io/context-viewer/g/56b68fb5-7221-4c04-807e-b590f138c1fe/comparison?sidebar=0&amp;panel=0&amp;view=tokens-absolute&amp;legend=compact&amp;sortBy=category&amp;sortDir=asc&amp;cols=10&amp;spr=4&amp;import=https://raw.githubusercontent.com/nilenso/long-prompts-analysis/refs/heads/main/context-viewer-exports/codex-prompt-evolution-export-only-codex.json">check out Codex’s system prompt evolution in similar detail</a>.</p>
+
+  </div>
+</div>
+
+<p>Note how the system prompt isn’t stable, nor growing in a straight line. It bounces around a bit, as the Claude Code team tweaks the prompt to both adjust new behaviors and smooth over the quirks of new models. Though the trend is a march upward, as the coding agent matures.</p>
+
+<p>If you want to dive further into Claude Code’s prompt history, Mario Zechner has <a href="https://cchistory.mariozechner.at">an excellent site</a> where he highlights the exact changes from version to version.</p>
+
+<div class="callout callout--go-deeper">
+  <span class="callout__label">Go Deeper</span>
+  <div class="callout__content">
+    
+<p>Sometimes instructions are just…<em>weird</em>. Srihari <a href="https://blog.nilenso.com/blog/2026/02/12/weird-system-prompt-artefacts/">cataloged some of the odder instructions he found while exploring coding agent system prompts</a>.</p>
+
+  </div>
+</div>
+
+<hr />
+
+<h3 id="the-common-jobs-of-a-coding-agent-system-prompt">The Common Jobs of a Coding Agent System Prompt</h3>
+
+<p>While these prompts vary from tool to tool, there are many commonalities that each prompt features. There is clear evidence that these teams are <a href="https://www.dbreunig.com/2025/11/11/don-t-fight-the-weights.html">fighting the weights</a>: they use repeated instructions, all-caps admonishments, and stern warnings to adjust common behaviors. This shared effort suggests common patterns in their training datasets, which each has to mitigate.</p>
+
+<p>For example, there are <em>many</em> notes about how these agents should use comments in their code. Cursor specifies that the model should, “not add comments for trivial or obvious code.” Claude states there should be no added comments, “unless the user asks you to.” Codex takes the same stance. Gemini instructions the model to, “Add code comments sparingly… NEVER talk to the user through comments.”</p>
+
+<p>These consistent, repeated instructions are warranted. They fight against examples of conversation in code comments, present in countless codebases and Github repo. This behavior goes deep: we’ve even seen that Opus 4.5 will <a href="https://x.com/aidenybai/status/1993901129210712129">reason in code comments if you turn off thinking</a>.</p>
+
+<p>System prompts also repeatedly specify that tool calls should be parallel whenever possible. Claude should, “maximize use of parallel tool calls where possible.” Cursor is sternly told, “CRITICAL INSTRUCTION: involve all relevant tools concurrently… DEFAULT TO PARALLEL.” Kimi adopts all-caps as well, stating, “you are HIGHLY RECOMMENDED to make [tool calls] in parallel.”</p>
+
+<p>This likley reflects the face that most post-training reasoning and agentic examples are <em>serial</em> in nature. This is perhaps easier to debug and a bit of delay when synthesizing these datasets isn’t a hinderence. However, in real world situations, users certainly appreciate the speed, so system prompts need to override this training.</p>
+
+<p>Both of these examples of <em>fighting the weights</em> demonstrate how system prompts are used to smooth over the quirks of each model (which they pick up during training) and improve the user experience in an agentic coding application.</p>
+
+<p>Much of what these prompts specify is shared; common adjustments, common desired behaviors, and common UX. But their differences notably affect application behavior.</p>
+
+<div class="callout callout--go-deeper">
+  <span class="callout__label">Go Deeper</span>
+  <div class="callout__content">
+    
+<p>Srihari looked at more examples of fighting the weights to understand <a href="https://blog.nilenso.com/blog/2026/02/12/how-system-prompts-reveal-model-biases/">how system prompts reveal model biases</a>.</p>
+
+  </div>
+</div>
+
+<hr />
+
+<h3 id="do-the-prompts-change-the-agent">Do the Prompts Change the Agent?</h3>
+
+<p>Helpfully, <a href="https://opencode.ai">OpenCode</a> <a href="https://opencode.ai/docs/modes/#prompt">allows users to specify custom system prompts</a>. With this feature, we can drop in prompts from Kimi, Gemini, Codex and more, removing and swapping instructions to measure their contribution.</p>
+
+<p>We gave SWE-Bench Pro test questions to two applications: two agents running the OpenCode harness, calling Opus 4.5, but with one one using the Claude Code system prompt and the other armed with Codex’s instructions.</p>
+
+<p>Time and time again, the agent workflows diverged immediately. For example:</p>
+
+<p><img src="/img/prompt_swap.jpg" alt="Claude's system prompt defines a more iterative agent" /></p>
+
+<p>The Codex prompt produced a methodical, documentation-first approach: understand fully, then implement once. The Claude prompt produced an iterative approach: try something, see what breaks, fix it.</p>
+
+<p>This pattern remains consistent over many SWE Bench problems. If we average the contexts for each model and system prompt pair, we get the following:</p>
+
+<p><img src="/img/swe_bench_prompts.jpg" alt="Swapping system prompts yielded different behavior for each model" /></p>
+
+<div class="callout callout--try-it-out">
+  <span class="callout__label">Try It Out</span>
+  <div class="callout__content">
+    
+<p><a href="https://nilenso.github.io/context-viewer/g/67175678-6244-45bc-b022-238b72f8e646/comparison?sidebar=0&amp;panel=0&amp;legend=compact&amp;sortBy=category&amp;sortDir=asc&amp;cols=5&amp;import=https://raw.githubusercontent.com/nilenso/long-prompts-analysis/refs/heads/main/context-viewer-exports/swapping-prompts-swe-tasks.json">Explore the above figures interactively in <strong>context viewer</strong></a>.</p>
+
+  </div>
+</div>
+
+<p>All prompt-model combinations correctly answered this subset of SWE Bench Pro questions. But <em>how</em> they suceeded was rather different. The system prompts shaped the workflows.</p>
+
+<div class="callout callout--go-deeper">
+  <span class="callout__label">Go Deeper</span>
+  <div class="callout__content">
+    
+<p>Srihari explored <a href="https://blog.nilenso.com/blog/2026/02/12/codex-cli-vs-claude-code-on-autonomy/">Codex CLI and Claude Code autonomy</a>, and how the system prompt may shape their behavior.</p>
+
+  </div>
+</div>
+
+<hr />
+
+<h3 id="system-prompts-deserve-more-attention">System Prompts Deserve More Attention</h3>
+
+<p>Last week, when Opus 4.6 and Codex 5.3 landed, people began putting them through the paces, trying to decide which would be their daily driver. Many tout the capabilities of one option over another, but just as often are complaints about approach, tone, or other discretionary choices. Further, it seems every week brings discussion of a new coding harness, especially for managing swarms of agents.</p>
+
+<p>There is markedly less discussion about the system prompts that define the behaviors of these agents<sup id="fnref:foursix"><a href="#fn:foursix" class="footnote" rel="footnote" role="doc-noteref">2</a></sup>. System prompts define the UX and smooth over the rough edges of models. They’re given to the model with <em>every</em> instruction, yet we prefer to talk Opus vs. GPT-5.3 or Gastown vs. Pi.</p>
+
+<p>Context engineering starts with the system prompt.</p>
+
+<hr />
+
+<form action="https://buttondown.com/api/emails/embed-subscribe/dbreunig" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/dbreunig', 'popupwindow')" class="embeddable-buttondown-form">
+  <label for="bd-email">Enter your email to receive the occasional update.</label>
+  <div class="form-input">
+    <input type="email" name="email" id="bd-email" placeholder="your@email.com" />
+    <input type="submit" value="Subscribe" />
+  </div>
+</form>
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:exfiltrated">
+      <p>Exfiltrated system prompts represent versions of the system prompt for a given session. It’s not 100% canonical, as many AI harnesses assemble system prompts from multiple snippets, given the task at hand. But given the consistent manner with which we can extrac these prompts, and comparing them with <a href="https://platform.claude.com/docs/en/release-notes/system-prompts">public</a> <a href="https://github.com/openai/codex/blob/d452bb3ae5b5e0f715bba3a44d7d30a51b5f28ae/codex-rs/core/prompt.md">examples</a>, we feel they are sufficiently representative for this analysis. <a href="#fnref:exfiltrated" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+    <li id="fn:foursix">
+      <p>Though you can use Mario’s <a href="https://cchistory.mariozechner.at/?from=2.1.31&amp;to=2.1.34">system prompt diff tool to explore the changes accompanying Opus 4.6’s release</a>. <a href="#fnref:foursix" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+  </div>
+
+  <!-- <div id="translations" class="sidenote">
+  <h2>BETA: Translations</h2>
+  <p>I'm testing out using LLMs to rewrite articles for different contexts and audiences. The following content has not
+    been exhaustively reviewed and is presented as a proof-of-concept. <a href="/contact">Reach out</a> if you spot
+    something egregious or want to know more.</p>
+  <ul>
+    
+  </ul>
+</div> -->
+  
+  <a class="u-url" href="/2026/02/10/system-prompts-define-the-agent-as-much-as-the-model.html" hidden></a>
+</article>
+      </div>
+    </main><footer>
+    <p>2026, <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>, <a href=/contact.html>Contact</a></p>
+</footer></body>
+  <style>
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 90vh;
+  }
+  main {
+    flex: 1;
+  }
+  </style>
+
+</html>
