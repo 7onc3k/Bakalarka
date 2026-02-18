@@ -45,7 +45,7 @@ async function expandQuery(query: string): Promise<string> {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "anthropic/claude-3-haiku",
+      model: "moonshotai/kimi-k2.5",
       messages: [
         {
           role: "user",
