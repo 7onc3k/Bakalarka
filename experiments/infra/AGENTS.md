@@ -44,4 +44,3 @@ Set up GitHub Actions to run tests, lint, and type-check on every PR.
 
 Satisfy all acceptance criteria with correct, working code and tests.
 Include a README with installation and usage instructions.
-Use your best judgment for everything not covered above.
