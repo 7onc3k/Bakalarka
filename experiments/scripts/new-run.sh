@@ -32,6 +32,7 @@ AGENTS_MD_DIR="$EXPERIMENTS_DIR/agents-md"
 INFRA_DIR="$EXPERIMENTS_DIR/infra"
 RUNS_DIR="$EXPERIMENTS_DIR/runs"
 GITHUB_ORG="7onc3k"
+MODEL="opencode/minimax-m2.5-free"
 
 # --- Parse arguments ---
 RUN_NAME="${1:?Usage: $0 <run-name> --run R0|R1|R2|R3|R4|R5}"
@@ -64,6 +65,7 @@ RUN_DIR="$RUNS_DIR/$RUN_NAME"
 
 echo "=== Experiment run: ${RUN_NAME} ==="
 echo "    Type: ${RUN_TYPE} (P=${P}, T=${T}, C=${C})"
+echo "    Model: ${MODEL}"
 echo "    Repo: ${GITHUB_ORG}/${REPO_NAME}"
 echo "    Dir:  ${RUN_DIR}"
 echo ""
@@ -101,9 +103,9 @@ reports/
 *.tsbuildinfo
 EOF
 
-# .opencode/config.json — GLM-5 via zai-coding-plan
+# .opencode/config.json
 cat > "$RUN_DIR/.opencode/config.json" << 'EOF'
-{"$schema": "https://opencode.ai/config.json", "model": "zai-coding-plan/glm-5"}
+{"$schema": "https://opencode.ai/config.json"}
 EOF
 
 # .opencode/agents/build.md — replaces default qwen.txt system prompt
@@ -151,7 +153,7 @@ echo ""
 echo "=== Starting agent ==="
 echo ""
 
-opencode run "Implement the dunning system according to AGENTS.md and Issue #1."
+opencode run -m "$MODEL" "Implement the dunning system according to AGENTS.md and Issue #1."
 
 # --- Step 7: Export transcript ---
 echo ""

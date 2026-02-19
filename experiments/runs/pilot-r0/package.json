@@ -1,0 +1,28 @@
+{
+  "name": "@7onc3k/dunning-system",
+  "version": "1.0.0",
+  "description": "Automated billing reminder workflow - dunning state machine",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/7onc3k/bp-billing-reminder-pilot-r0.git"
+  },
+  "keywords": ["billing", "dunning", "state-machine", "invoice"],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/7onc3k/bp-billing-reminder-pilot-r0/issues"
+  },
+  "homepage": "https://github.com/7onc3k/bp-billing-reminder-pilot-r0#readme",
+  "devDependencies": {
+    "@types/node": "^25.3.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  }
+}
