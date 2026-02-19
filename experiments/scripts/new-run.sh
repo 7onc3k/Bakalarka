@@ -4,17 +4,11 @@ set -euo pipefail
 # Creates a new experiment run.
 #
 # Usage:
-#   ./experiments/scripts/new-run.sh <run-name> --run R0|R1|R2|R3|R4|R5
+#   ./experiments/scripts/new-run.sh <run-name> [--agents path/to/AGENTS.md]
 #
-# Balanced fractional factorial (3 per level per dimension):
-#
-#   Run  P          T            C
-#   R0   plan       tdd          minimal
-#   R1   plan       implfirst    comprehensive
-#   R2   plan       implfirst    minimal
-#   R3   noplan     tdd          comprehensive
-#   R4   noplan     tdd          minimal
-#   R5   noplan     implfirst    comprehensive
+# Examples:
+#   ./experiments/scripts/new-run.sh pilot-r1
+#   ./experiments/scripts/new-run.sh ablation-no-tdd --agents experiments/infra/variants/no-tdd.md
 #
 # What it does:
 #   1. Creates a new private GitHub repo
@@ -28,46 +22,34 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 EXPERIMENTS_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-AGENTS_MD_DIR="$EXPERIMENTS_DIR/agents-md"
 INFRA_DIR="$EXPERIMENTS_DIR/infra"
 RUNS_DIR="$EXPERIMENTS_DIR/runs"
 GITHUB_ORG="7onc3k"
 MODEL="opencode/minimax-m2.5-free"
 
 # --- Parse arguments ---
-RUN_NAME="${1:?Usage: $0 <run-name> --run R0|R1|R2|R3|R4|R5}"
+RUN_NAME="${1:?Usage: $0 <run-name> [--agents path/to/AGENTS.md]}"
 shift
 
-RUN_TYPE=""
+AGENTS_MD="$INFRA_DIR/AGENTS.md"
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        --run) RUN_TYPE="$2"; shift 2 ;;
+        --agents) AGENTS_MD="$2"; shift 2 ;;
         *) echo "Unknown option: $1"; exit 1 ;;
     esac
 done
 
-[[ -z "$RUN_TYPE" ]] && { echo "Error: --run is required (R0-R5)"; exit 1; }
-
-# Determine instruction variant per dimension
-case "$RUN_TYPE" in
-    R0) P=plan;   T=tdd;       C=minimal         ;;
-    R1) P=plan;   T=implfirst; C=comprehensive    ;;
-    R2) P=plan;   T=implfirst; C=minimal          ;;
-    R3) P=noplan; T=tdd;       C=comprehensive    ;;
-    R4) P=noplan; T=tdd;       C=minimal          ;;
-    R5) P=noplan; T=implfirst; C=comprehensive    ;;
-    *)  echo "Error: --run must be R0, R1, R2, R3, R4, or R5"; exit 1 ;;
-esac
+[[ -f "$AGENTS_MD" ]] || { echo "Error: AGENTS.md not found: $AGENTS_MD"; exit 1; }
 
 REPO_NAME="bp-billing-reminder-${RUN_NAME}"
 REPO_URL="https://github.com/${GITHUB_ORG}/${REPO_NAME}.git"
 RUN_DIR="$RUNS_DIR/$RUN_NAME"
 
 echo "=== Experiment run: ${RUN_NAME} ==="
-echo "    Type: ${RUN_TYPE} (P=${P}, T=${T}, C=${C})"
-echo "    Model: ${MODEL}"
-echo "    Repo: ${GITHUB_ORG}/${REPO_NAME}"
-echo "    Dir:  ${RUN_DIR}"
+echo "    Model:  ${MODEL}"
+echo "    Agents: ${AGENTS_MD}"
+echo "    Repo:   ${GITHUB_ORG}/${REPO_NAME}"
+echo "    Dir:    ${RUN_DIR}"
 echo ""
 
 # Guard: repo must not exist
@@ -87,7 +69,7 @@ fi
 echo "→ Creating repository..."
 gh repo create "${GITHUB_ORG}/${REPO_NAME}" \
     --private \
-    --description "Experiment ${RUN_TYPE}: ${RUN_NAME}"
+    --description "Experiment run: ${RUN_NAME}"
 
 # --- Step 2: Create local run directory ---
 echo "→ Creating local repo..."
@@ -104,9 +86,7 @@ reports/
 EOF
 
 # .opencode/config.json
-cat > "$RUN_DIR/.opencode/config.json" << 'EOF'
-{"$schema": "https://opencode.ai/config.json"}
-EOF
+cp "$INFRA_DIR/config.json" "$RUN_DIR/.opencode/config.json"
 
 # .opencode/agents/build.md — replaces default qwen.txt system prompt
 cp "$INFRA_DIR/build.md" "$RUN_DIR/.opencode/agents/build.md"
@@ -114,19 +94,16 @@ cp "$INFRA_DIR/build.md" "$RUN_DIR/.opencode/agents/build.md"
 # .opencode/plugins/auto-continue.ts
 cp "$INFRA_DIR/auto-continue.ts" "$RUN_DIR/.opencode/plugins/auto-continue.ts"
 
-# --- Step 3: Compose AGENTS.md ---
-echo "→ Composing AGENTS.md (P=${P}, T=${T}, C=${C})..."
-cat "$AGENTS_MD_DIR/header.md"     > "$RUN_DIR/AGENTS.md"
-cat "$AGENTS_MD_DIR/p-${P}.md"   >> "$RUN_DIR/AGENTS.md"
-cat "$AGENTS_MD_DIR/t-${T}.md"   >> "$RUN_DIR/AGENTS.md"
-cat "$AGENTS_MD_DIR/c-${C}.md"   >> "$RUN_DIR/AGENTS.md"
+# --- Step 3: Copy AGENTS.md ---
+echo "→ Copying AGENTS.md from ${AGENTS_MD}..."
+cp "$AGENTS_MD" "$RUN_DIR/AGENTS.md"
 
 # --- Step 4: Push to GitHub ---
 echo "→ Pushing to GitHub..."
 cd "$RUN_DIR"
 git init -b main
 git add -A
-git commit -m "chore: init experiment ${RUN_TYPE} (P=${P}, T=${T}, C=${C})"
+git commit -m "chore: init run ${RUN_NAME}"
 git remote add origin "$REPO_URL"
 git push -u origin main
 
@@ -153,7 +130,7 @@ echo ""
 echo "=== Starting agent ==="
 echo ""
 
-opencode run -m "$MODEL" "Implement the dunning system according to AGENTS.md and Issue #1."
+opencode run -m "$MODEL" "Work on Issue #1 according to AGENTS.md."
 
 # --- Step 7: Export transcript ---
 echo ""
@@ -171,9 +148,6 @@ opencode export "$SESSION_ID" > "$RUN_DIR/transcript.json"
 echo "  Saved: $RUN_DIR/transcript.json"
 
 # Recursively export sub-agent sessions.
-# Sub-agents get their own sessionID (parent_id in SQLite). They appear in the
-# parent transcript as ToolParts with tool=="task" and state.metadata.sessionId.
-# opencode export only returns the single session — children must be fetched separately.
 collect_sub_sessions() {
     local transcript_file="$1"
     local out_dir="$2"
@@ -189,7 +163,7 @@ collect_sub_sessions() {
     for child_id in $children; do
         [[ -z "$child_id" || "$child_id" == "null" ]] && continue
         local child_file="$out_dir/${child_id}.json"
-        [[ -f "$child_file" ]] && continue  # already exported (avoid loops)
+        [[ -f "$child_file" ]] && continue
 
         echo "  Sub-session: $child_id"
         opencode export "$child_id" > "$child_file"
