@@ -12,6 +12,8 @@ Read GitHub Issue #1 — it contains the full specification including:
 
 OpenCode with GitHub CLI (`gh`), Git, and Node.js tooling available.
 
+Use **Vitest** for testing (not Jest). Use **TypeScript** with ESM (`"type": "module"` in package.json).
+
 ## Output
 
 Working, tested npm package committed to the repository.
