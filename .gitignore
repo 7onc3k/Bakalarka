@@ -32,6 +32,10 @@ venv/
 
 # Node
 node_modules/
+dist/
+coverage/
+.stryker-tmp/
+*.tsbuildinfo
 
 # IDE
 .idea/

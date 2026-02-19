@@ -89,7 +89,7 @@ gh repo create "${GITHUB_ORG}/${REPO_NAME}" \
 
 # --- Step 2: Create local run directory ---
 echo "→ Creating local repo..."
-mkdir -p "$RUN_DIR/.opencode/plugins"
+mkdir -p "$RUN_DIR/.opencode/plugins" "$RUN_DIR/.opencode/agents"
 
 # .gitignore
 cat > "$RUN_DIR/.gitignore" << 'EOF'
@@ -105,6 +105,9 @@ EOF
 cat > "$RUN_DIR/.opencode/config.json" << 'EOF'
 {"$schema": "https://opencode.ai/config.json", "model": "zai-coding-plan/glm-5"}
 EOF
+
+# .opencode/agents/build.md — replaces default qwen.txt system prompt
+cp "$INFRA_DIR/build.md" "$RUN_DIR/.opencode/agents/build.md"
 
 # .opencode/plugins/auto-continue.ts
 cp "$INFRA_DIR/auto-continue.ts" "$RUN_DIR/.opencode/plugins/auto-continue.ts"
