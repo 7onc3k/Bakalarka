@@ -6,15 +6,15 @@ set -euo pipefail
 # Usage:
 #   ./experiments/scripts/new-run.sh <run-name> --run R0|R1|R2|R3|R4|R5
 #
-# Balanced fractional factorial (3 meta, 3 explicit per dimension):
+# Balanced fractional factorial (3 per level per dimension):
 #
-#   Run  P         O         Q
-#   R0   meta      meta      meta       ← all meta baseline
-#   R1   meta      meta      explicit
-#   R2   meta      explicit  explicit
-#   R3   explicit  meta      meta
-#   R4   explicit  explicit  meta
-#   R5   explicit  explicit  explicit   ← all explicit baseline
+#   Run  P          T            C
+#   R0   plan       tdd          minimal
+#   R1   plan       implfirst    comprehensive
+#   R2   plan       implfirst    minimal
+#   R3   noplan     tdd          comprehensive
+#   R4   noplan     tdd          minimal
+#   R5   noplan     implfirst    comprehensive
 #
 # What it does:
 #   1. Creates a new private GitHub repo
@@ -47,14 +47,14 @@ done
 
 [[ -z "$RUN_TYPE" ]] && { echo "Error: --run is required (R0-R5)"; exit 1; }
 
-# Determine instruction type per dimension
+# Determine instruction variant per dimension
 case "$RUN_TYPE" in
-    R0) P=meta;     O=meta;     Q=meta     ;;
-    R1) P=meta;     O=meta;     Q=explicit ;;
-    R2) P=meta;     O=explicit; Q=explicit ;;
-    R3) P=explicit; O=meta;     Q=meta     ;;
-    R4) P=explicit; O=explicit; Q=meta     ;;
-    R5) P=explicit; O=explicit; Q=explicit ;;
+    R0) P=plan;   T=tdd;       C=minimal         ;;
+    R1) P=plan;   T=implfirst; C=comprehensive    ;;
+    R2) P=plan;   T=implfirst; C=minimal          ;;
+    R3) P=noplan; T=tdd;       C=comprehensive    ;;
+    R4) P=noplan; T=tdd;       C=minimal          ;;
+    R5) P=noplan; T=implfirst; C=comprehensive    ;;
     *)  echo "Error: --run must be R0, R1, R2, R3, R4, or R5"; exit 1 ;;
 esac
 
@@ -63,7 +63,7 @@ REPO_URL="https://github.com/${GITHUB_ORG}/${REPO_NAME}.git"
 RUN_DIR="$RUNS_DIR/$RUN_NAME"
 
 echo "=== Experiment run: ${RUN_NAME} ==="
-echo "    Type: ${RUN_TYPE} (P=${P}, O=${O}, Q=${Q})"
+echo "    Type: ${RUN_TYPE} (P=${P}, T=${T}, C=${C})"
 echo "    Repo: ${GITHUB_ORG}/${REPO_NAME}"
 echo "    Dir:  ${RUN_DIR}"
 echo ""
@@ -113,18 +113,18 @@ cp "$INFRA_DIR/build.md" "$RUN_DIR/.opencode/agents/build.md"
 cp "$INFRA_DIR/auto-continue.ts" "$RUN_DIR/.opencode/plugins/auto-continue.ts"
 
 # --- Step 3: Compose AGENTS.md ---
-echo "→ Composing AGENTS.md (P=${P}, O=${O}, Q=${Q})..."
+echo "→ Composing AGENTS.md (P=${P}, T=${T}, C=${C})..."
 cat "$AGENTS_MD_DIR/header.md"     > "$RUN_DIR/AGENTS.md"
 cat "$AGENTS_MD_DIR/p-${P}.md"   >> "$RUN_DIR/AGENTS.md"
-cat "$AGENTS_MD_DIR/o-${O}.md"   >> "$RUN_DIR/AGENTS.md"
-cat "$AGENTS_MD_DIR/q-${Q}.md"   >> "$RUN_DIR/AGENTS.md"
+cat "$AGENTS_MD_DIR/t-${T}.md"   >> "$RUN_DIR/AGENTS.md"
+cat "$AGENTS_MD_DIR/c-${C}.md"   >> "$RUN_DIR/AGENTS.md"
 
 # --- Step 4: Push to GitHub ---
 echo "→ Pushing to GitHub..."
 cd "$RUN_DIR"
 git init -b main
 git add -A
-git commit -m "chore: init experiment ${RUN_TYPE} (P=${P}, O=${O}, Q=${Q})"
+git commit -m "chore: init experiment ${RUN_TYPE} (P=${P}, T=${T}, C=${C})"
 git remote add origin "$REPO_URL"
 git push -u origin main
 

@@ -135,9 +135,9 @@ Výsledná šablona proto obsahuje dvě vrstvy:
     \end{itemize}
 \end{enumerate}
 
-Toto rozdělení slouží jako základ pro experimentální dimenzi ``specifikace'' (viz sekce Experimenty):
-referenční implementace používá plnou specifikaci (obě vrstvy),
-experimenty variují úroveň detailu -- Full (obě vrstvy) vs. Minimal (pouze requirements).
+Referenční implementace používá plnou specifikaci (obě vrstvy).
+Experimentální běhy používají pouze requirements vrstvu (bez architecture) —
+úroveň specifikace je fixní proměnná, ne experimentální dimenze.
 
 \textbf{Zdůvodnění redukce z~tří na dvě vrstvy:}
 
@@ -171,9 +171,9 @@ celkové struktury), zatímco LLM zpracovávají Mermaid diagramy jako text.
 Konkrétní Given/When/Then scénáře mohou být pro agenta účinnější
 než vizuální model, ale pro člověka méně přehledné u~komplexních systémů.
 
-Experimenty mohou ukázat optimální kombinaci elementů --
-ne ``čím víc, tím lépe'', ale \textbf{která minimální sada}
-reprezentací je efektivní pro obě publika současně.
+Dimenze C~(constraint density) testuje právě tuto otázku —
+ne ``čím víc, tím lépe'', ale zda minimální sada instrukcí
+je efektivnější než komprehensivní procesní předpisy.
 
 \textbf{Zasazení do SASE frameworku:}
 
@@ -189,9 +189,9 @@ Naše specifikační šablona odpovídá BriefingScript: obsahuje intent (Descri
 ověřitelná kritéria (Acceptance Criteria) a~doménový kontext (Glossary).
 Soubor \texttt{agents.md} se scaffoldingem odpovídá LoopScript a~MentorScript:
 definuje workflow (git conventions, testování) a~kvalitativní normy (code quality).
-Experimentální dimenze ``úroveň detailu specifikace'' přímo testuje to, co
-Hassan et al. nazývají \textbf{duality of control} -- kdy dát agentovi strukturu
-a~kdy ho nechat rozhodovat autonomně.
+Experimentální dimenze C~(constraint density) přímo testuje to, co
+Hassan et al. nazývají \textbf{duality of control} — kdy dát agentovi
+strukturu a~kdy ho nechat rozhodovat autonomně.
 
 Kruchtenův Scenarios (+1) view \cite{kruchten1995}, který sloužil jako validační
 most mezi všemi pohledy pro všechny stakeholdery, nachází paralelu
@@ -225,199 +225,146 @@ design constraints \cite{newcomb2025prepost} a klarifikaci ambiguity \cite{clari
 \begin{raw}
 \subsection{Experimentální design}
 
-Experiment používá \textbf{vyvážený frakční faktoriální design} porovnávající
-dva instrukční styly -- \textit{meta} (co + proč) a~\textit{explicit}
-(co + jak) -- napříč třemi dimenzemi scaffoldingu. Meta-instrukce říkají
-agentovi co udělat a~proč je to důležité; agent si sám zvolí konkrétní
-přístup. Explicit instrukce říkají co udělat a~jak na to jít podle
-literatury; agent následuje doporučenou metodu. Šest běhů (R0--R5)
-pokrývá všechny kombinace tak, že každá dimenze je testována
-3$\times$ jako meta a~3$\times$ jako explicit.
-Referenční implementace (human-guided) slouží jako ground truth pro metriky.
+[RAW] Nový design — evidence-based dimension selection (Posun 7, 2026-02-19)
 
-\begin{raw}
-[RAW]
-\textbf{Volba experimentálního přístupu:}
+\textbf{Evoluce designu:}
 
-Při návrhu experimentu byly zváženy tři přístupy k~ablaci scaffoldingu:
+Původní design porovnával dva instrukční styly (meta vs. explicit) napříč
+třemi dimenzemi P/O/Q odvozenými z~SASE frameworku a~taxonomie Wang et al.
+Pilotní běh R0 a~dvě nezávislé literature review (Gemini Deep Research,
+ChatGPT Deep Research — viz \texttt{docs/}) odhalily tři problémy:
 
-\textit{(1) Vrstvová ablace} (SWE-agent \cite{yang2024sweagent},
-Confucius \cite{wang2025cca}): odebírání celých vrstev (CI, agent configs,
-spec detail). Problém: vrstvy míchají fáze SDLC -- odebrání ``procesních
-instrukcí'' zasahuje do Requirements (TDD), Design (workflow) i~Implementation
-(git konvence) současně. Nelze izolovat přínos konkrétní komponenty.
+\begin{enumerate}
+    \item \textbf{Delivery mechanism konflikt:} OpenCode defaultní system
+          prompt (\texttt{qwen.txt}) obsahuje ``NEVER commit unless asked'',
+          což přebíjel naši instrukci ``commit as you progress''. Agent
+          v~pilotu commitnul jednou na konci. Řešení: \texttt{build.md}
+          s~\texttt{mode: primary} nahrazuje \texttt{qwen.txt} (ověřeno
+          empiricky).
+    \item \textbf{Meta instrukce nebyly meta-prompting:} Naše ``meta''
+          instrukce (co + proč) neodpovídaly meta-promptingu ve smyslu
+          Suzgun \cite{suzgun2024metaprompt} (orchestration scaffolding).
+          Byly to soft explicit instrukce — agent je ignoroval stejně
+          jako by ignoroval hard explicit.
+    \item \textbf{Dimenze neodpovídaly empirické nejistotě:} Oba nezávislé
+          research reporty identifikovaly jako oblasti s~genuinely uncertain
+          evidence jiné dimenze než P/O/Q. Původní dimenze byly odvozeny
+          taxonomicky (SASE, Wang); nové jsou odvozeny z~empirických
+          rozporů v~literatuře.
+\end{enumerate}
 
-\textit{(2) Fázová ablace}: organizace podle SDLC fází (Requirements $\to$
-Design $\to$ Implementation). Čistější rámec, ale naráží na cascade
-dependencies -- Requirements ablace závisí na tom co bylo v~Design fázi.
-Izolace vyžaduje fixaci jedné dimenze a~variaci druhé, což exponenciálně
-zvyšuje počet běhů.
+\textbf{Princip výběru dimenzí:}
 
-\textit{(3) Porovnání instrukčních stylů}: agent dostane pro každou
-dimenzi scaffoldingu instrukci buď ve stylu \textit{meta} (co + proč)
-nebo \textit{explicit} (co + jak). Meta-instrukce říkají co udělat
-a~proč (motivace), agent si zvolí metodu sám. Explicit instrukce říkají
-co udělat a~jak (metoda z~literatury), agent následuje doporučený přístup.
-Výhody: (a)~testuje přímo otázku z~literatury -- Suzgun
-\cite{suzgun2024metaprompt} a~Tessl.io tvrdí meta $>$ explicit,
-Lulla \cite{lulla2026} ukazuje efektivitu explicitních arch. informací,
-(b)~vyvážený faktoriální design umožňuje párové srovnání per dimenze,
-(c)~žádná studie dosud neporovnala tyto instrukční styly u~coding agentů.
+Experiment testuje aspekty scaffoldingu, kde existuje \textbf{konfliktní
+nebo nedostatečná evidence} — ne ty, kde je výsledek předem jasný.
+Settled practices (minimální instrukce, explicit scope constraints,
+lightweight verification) jsou zafixovány do baseline. Proven anti-patterns
+(verbose auto-generated context, exhaustive enumeration) jsou vyloučeny.
 
-Zvolen přístup (3). Přístupy (1) a~(2) jsou pokryty existující literaturou
-(SWE-agent abluje ACI komponenty, Confucius abluje scaffolding features,
-FeatureBench \cite{featurebench2026} abluje spec tiers). Přístup (3)
-přináší nový metodologický příspěvek -- přímé porovnání instrukčních
-stylů.
+Dimenze byly vybrány na základě dvou nezávislých deep research reportů,
+které identifikovaly tři oblasti s~největší empirickou nejistotou
+a~nejvyšším potenciálem pro měřitelné rozdíly:
 
-\textbf{Dva instrukční styly:}
+\textbf{Tři experimentální dimenze:}
 
-Experiment porovnává dva přístupy k~instruování coding agenta,
-odvozené ze tří nezávislých zdrojů v~literatuře:
+\begin{center}
+\begin{tabular}{p{0.5cm}|p{2.2cm}|p{4cm}|p{4cm}}
+\textbf{Dim.} & \textbf{Název} & \textbf{Varianta A} &
+\textbf{Varianta B} \\
+\hline
+P & Planning artifact &
+  Před kódem vytvoř explicitní plán/design doc (moduly, typy, sekvence). &
+  Žádný plánovací artefakt; rovnou iteruj s~kódem a~testy. \\
+\hline
+T & Testing workflow &
+  Strict TDD: pro každé AC napiš failing test ze spec $\to$ implementuj
+  $\to$ green $\to$ další AC. &
+  Implementuj nejdřív; po stabilizaci napiš testy proti spec. \\
+\hline
+C & Constraint density &
+  Minimální: jen cíle a~acceptance criteria, agent rozhoduje o~procesu. &
+  Komprehensivní: explicit proces, quality gates, lint/typecheck/CI. \\
+\end{tabular}
+\end{center}
 
-\textit{Meta (co + proč):} Instrukce stanoví cíl a~motivaci; agent si
-zvolí konkrétní metodu sám. Odpovídá Directive + Context komponentám
-\cite{promptstotemplates2025}, goal-level meta-promptingu
-\cite{suzgun2024metaprompt} a~BriefingScript v~SASE
-\cite{hassan2025sase}.
+\textbf{Zdůvodnění per dimenze:}
 
-\textit{Explicit (co + jak):} Instrukce stanoví cíl a~doporučenou
-metodu z~literatury; agent následuje předepsaný přístup. Odpovídá
-Directive + Method \cite{promptstotemplates2025}, task-specific
-promptingu \cite{suzgun2024metaprompt} a~LoopScript v~SASE
-\cite{hassan2025sase}.
+\textit{P — Planning artifact.} Jiang et al. (2024, TOSEM) ukazují
++25\,\% Pass@1 při self-planning code generation. Naopak novější
+evaluace (2025) zjišťují, že planning-like prompting ztrácí benefit
+na moderních modelech a~concise objective-style prompting dosahuje
+srovnatelné accuracy s~menší spotřebou tokenů. Pro agentic setting
+s~tool use je otázka otevřená.
 
-Tento design je motivován třemi zjištěními: (1)~Suzgun a~Kalai
-\cite{suzgun2024metaprompt} ukázali, že meta-prompting přináší
-17,1\,\% zlepšení; (2)~Lulla et al. \cite{lulla2026} ukázali, že
-explicitní architektonické informace v~AGENTS.md snižují runtime
-o~28\,\%; (3)~Breunig \cite{breunig2026} demonstroval, že záměna
-system promptů mění chování agenta více než volba modelu. Žádná studie
-dosud neporovnala meta a~explicit instrukční styly per dimenze
-u~coding agentů.
+\textit{T — Testing workflow.} TDD ze specifikace brání test oracle
+problému \cite{mathews2024}. Ale LLM jsou trénované na code-before-tests
+distribuci — vynucení test-first může produkovat tautologické testy
+(``Context Pollution''). V~agentic settings extra testing zvyšuje cost
+a~může snížit success rate (AGENTbench 2026). Agentless \cite{xia2024agentless}
+ukazuje, že fixní pipeline bez autonomního plánování dosahuje 32\,\%
+na SWE-bench Lite.
+
+\textit{C — Constraint density.} Lulla et al. \cite{lulla2026} ukazují,
+že AGENTS.md s~explicitními informacemi snižuje runtime o~28\,\%.
+AGENTbench (2026) naopak zjišťuje, že verbose context files snižují
+success rate a~zvyšují cost o~20\,\%+. Přímý rozpor — záleží na tom
+CO je v~instrukcích, ne jen zda existují.
 
 \textbf{Fixní proměnné (stejné pro všechny běhy):}
 \begin{itemize}
-    \item Prázdné GitHub repo (pouze \texttt{AGENTS.md},
-          \texttt{.opencode/config.json}, auto-continue plugin)
-    \item Specifikace v~GitHub Issue \#1 -- plné acceptance criteria
+    \item Prázdné GitHub repo (\texttt{AGENTS.md},
+          \texttt{.opencode/config.json}, \texttt{.opencode/agents/build.md},
+          auto-continue plugin)
+    \item Specifikace v~GitHub Issue \#1 — plné acceptance criteria
           a~doménový glossary, bez architecture layer
     \item Auto-continue plugin (\texttt{session.idle} hook s~počítadlem
           restartů a~build/test kontrolou)
-    \item Model: GLM-5 přes OpenCode (system prompt \texttt{qwen.txt}
-          se základními pravidly -- no comments, run lint/typecheck)
-    \item Fixní hlavička AGENTS.md: odkaz na specifikaci, popis prostředí
-          (OpenCode + dostupné nástroje), výstupní požadavek
+    \item Model: GLM-5 přes OpenCode; system prompt \texttt{build.md}
+          (nahrazuje defaultní \texttt{qwen.txt} — kódové konvence,
+          žádné procesní instrukce)
+    \item Fixní hlavička AGENTS.md: odkaz na specifikaci, popis prostředí,
+          výstupní požadavek, commit policy, scope constraints
 \end{itemize}
 
-\textbf{Standardizovaná struktura instrukce:}
+\textbf{Confound mitigation — délka instrukcí:}
 
-Oba instrukční styly mají identickou strukturu -- variuje obsah
-a~abstrakční úroveň. Meta-instrukce obsahuje cíl + motivaci (proč),
-explicit instrukce obsahuje cíl + metodu (jak). Obě končí constraintem.
-
-\begin{center}
-\begin{tabular}{p{2cm}|p{5cm}|p{5cm}}
-\textbf{Sekce} & \textbf{Meta (co + proč)} & \textbf{Explicit (co + jak)} \\
-\hline
-Instrukce & Cíl na procesní úrovni & Cíl + konkrétní metoda z~literatury \\
-\hline
-Why / How & Motivace a~rationale & Principy a~postupy \\
-\hline
-Constraint & Co nedělat & Co nedělat \\
-\end{tabular}
-\end{center}
-
-Standardizace struktury izoluje proměnnou (instrukční styl) od formátu.
-Prompt sensitivity \cite{razavi2025} je přiznána jako limitation;
-mitigace: identická struktura, srovnatelná délka, literature-backed
-obsah obou stylů.
-
-\textbf{Tři dimenze meta-instrukcí:}
-
-Původní návrh obsahoval pět granulárních meta-instrukcí (sub-agents,
-architektura, dekompozice, workflow, quality tooling). Analýza nezávislosti
-ukázala, že dekompozice, role separation, workflow a~testovací strategie
-jsou facety téhož procesu (What/Who/How/When organizace práce) -- nejsou
-vzájemně nezávislé a~jejich izolovaná ablace by vytvářela nesmyslné
-konfigurace (např. sub-agenti bez issues k~delegaci).
-
-Výsledný design používá tři ortogonální dimenze, odvozené systematicky
-ze tří zdrojů: (1)~SASE framework \cite{hassan2025sase} rozlišuje
-BriefingScript (fixní specifikace), LoopScript $\to$~O, MentorScript/AEE
-$\to$~Q a~architektonické rozhodnutí $\to$~P; (2)~Wang et al.
-\cite{wang2024llmagentsse} klasifikují agentní aktivity na Team
-Organization $\to$~O, Decision Making $\to$~P, Testing/QA $\to$~Q;
-(3)~RepairAgent \cite{bouzenia2025repairagent} abluje funkčně nezávislé
-komponenty -- náš design toto respektuje.
-
-\begin{center}
-\begin{tabular}{p{0.5cm}|p{2cm}|p{4.2cm}|p{4.2cm}}
-\textbf{Dim.} & \textbf{Název} & \textbf{Meta (co + proč)} &
-\textbf{Explicit (co + jak)} \\
-\hline
-P & Planning/ Design &
-  Navrhni strukturu řešení před kódem. \textit{Proč:} ad-hoc rozhodnutí
-  vedou k~nekonzistentní struktuře (Perry \& Wolf 1992). &
-  Navrhni strukturu pomocí: information hiding (Parnas 1972),
-  type-driven design, separation of concerns, interface-first. \\
-\hline
-O & Organization &
-  Rozděl práci na sub-tasky, odděl role, TDD ze specifikace.
-  \textit{Proč:} feature-level úlohy selhávají (FeatureBench 2026),
-  test oracle problem (Mathews 2024). &
-  Dekomponuj dle závislostí (FeatureBench 2026), odděl role
-  (Wang 2024), TDD ze specifikace (Mathews 2024), trackuj postup. \\
-\hline
-Q & Quality &
-  Nastav quality feedback před implementací.
-  \textit{Proč:} bez zpětné vazby se chyby kumulují (Papadakis 2019). &
-  Nastav: static analysis + formatter, coverage gates,
-  CI pipeline (Lulla 2026), mutation testing (Papadakis 2019). \\
-\end{tabular}
-\end{center}
-
-Každá dimenze operuje na jiné úrovni: P~rozhoduje \textit{co} stavět
-(technická struktura), O~rozhoduje \textit{jak} pracovat (organizace
-procesu), Q~rozhoduje \textit{čím} kontrolovat kvalitu (feedback
-mechanismy). Tato ortogonalita zajišťuje, že odebrání jedné dimenze
-neovlivní logiku ostatních.
+Délka instrukcí sama o~sobě ovlivňuje výsledky (IFScale benchmark,
+lost-in-the-middle efekt). Varianta C-comprehensive je záměrně delší
+než C-minimal — to JE treatment, ne confound. Pro dimenze P a~T jsou
+varianty normalizovány na srovnatelný word count. Prompt sensitivity
+\cite{razavi2025} je přiznána jako limitation.
 
 \textbf{Experimentální běhy (vyvážený frakční faktoriální design):}
 
 \begin{center}
-\begin{tabular}{p{0.7cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{5.5cm}}
-\textbf{Run} & \textbf{P} & \textbf{O} & \textbf{Q} &
+\begin{tabular}{p{0.7cm}|p{2cm}|p{2.5cm}|p{2.5cm}|p{3.5cm}}
+\textbf{Run} & \textbf{P} & \textbf{T} & \textbf{C} &
 \textbf{Popis} \\
 \hline
-R0 & meta & meta & meta &
-  Plně meta baseline \\
+R0 & plan & test-first & minimal &
+  Plánování + TDD, minimum instrukcí \\
 \hline
-R1 & meta & meta & explicit &
-  Explicit quality (industry standards) \\
+R1 & plan & impl-first & comprehensive &
+  Plánování + impl-first, detailní instrukce \\
 \hline
-R2 & meta & explicit & explicit &
-  Explicit organizace + quality \\
+R2 & plan & impl-first & minimal &
+  Plánování + impl-first, minimum \\
 \hline
-R3 & explicit & meta & meta &
-  Explicit planning (design principles) \\
+R3 & no-plan & test-first & comprehensive &
+  Bez plánu + TDD, detailní instrukce \\
 \hline
-R4 & explicit & explicit & meta &
-  Explicit planning + organizace \\
+R4 & no-plan & test-first & minimal &
+  Bez plánu + TDD, minimum \\
 \hline
-R5 & explicit & explicit & explicit &
-  Plně explicit baseline \\
+R5 & no-plan & impl-first & comprehensive &
+  Bez plánu + impl-first, detailní \\
 \end{tabular}
 \end{center}
 
-Šest běhů, single run per podmínku. Každá dimenze je testována přesně
-3$\times$ jako meta a~3$\times$ jako explicit (dokonalá balance).
-Design umožňuje čisté párové srovnání per dimenze -- pro každou dimenzi
-existují dva páry běhů lišící se pouze v~dané dimenzi:
-P: R0$\leftrightarrow$R3 a~R2$\leftrightarrow$R5;
-O: R1$\leftrightarrow$R2 a~R3$\leftrightarrow$R4;
-Q: R0$\leftrightarrow$R1 a~R4$\leftrightarrow$R5.
-Celkové srovnání instrukčních stylů: R0 (plně meta) vs. R5 (plně explicit).
+Šest běhů, single run per podmínku. Každá dimenze testována přesně
+3$\times$ per úroveň (balanced). Design umožňuje párové srovnání
+per dimenze — pro každou dimenzi existují páry běhů lišící se pouze
+v~dané dimenzi.
 
 Každý běh probíhá v~separátním GitHub repozitáři (čistý stav).
 Artefakty (commit history, issues, PR) zachovány pro post-hoc analýzu.
@@ -428,11 +375,14 @@ Artefakty (commit history, issues, PR) zachovány pro post-hoc analýzu.
           (referenční testy), počet restartů (auto-continue)
     \item \textbf{Sekundární:} spotřeba tokenů, čas do dokončení,
           compliance a~alignment (LLM-as-a-judge)
-    \item \textbf{Behavioral trace:} co agent reálně udělal -- navrhl
-          architekturu před kódem~(P)? rozložil práci na sub-issues~(O)?
-          nastavil CI a~linting~(Q)? Ověřuje, že instrukční styl měl
-          skutečný efekt na chování agenta a~porovnává přístupy
-          zvolené při meta vs. explicit instrukci.
+    \item \textbf{Behavioral trace:} co agent reálně udělal — vytvořil
+          plánovací artefakt před kódem~(P)? psal testy před implementací~(T)?
+          Jak reagoval na minimální vs. komprehensivní instrukce~(C)?
+          Ověřuje, že treatment měl skutečný efekt na chování agenta.
+    \item \textbf{Entropy signály:} behaviorální patterny indikující
+          nejistotu agenta — opakované čtení souborů, testy bez změn kódu,
+          cyklická exploration, commit bursts. Identifikace momentů kde
+          agent ``tápe'' umožňuje retrospektivní kauzální analýzu.
 \end{itemize}
 
 \textbf{Pilot studie:} Před experimentálními běhy proběhne pilotní validace
@@ -451,6 +401,7 @@ problem \cite{mathews2024} potvrzuje, že testy odvozené z~kódu (nikoliv
 ze specifikace) validují chybné chování v~68,1\,\% případů.
 \end{raw}
 
+\begin{raw}
 \textbf{Katalog ablatable komponent (brainstorm):}
 
 Následující seznam identifikuje komponenty, které lze jednotlivě odebrat
@@ -552,12 +503,14 @@ Anthropic \cite{anthropic2025harness} identifikuje failure-specific komponenty.
           \cite{jetbrains2025complexity}
 \end{itemize}
 
-Tento katalog byl při návrhu experimentu seskupen do tří ortogonálních
-dimenzí: \textbf{P}~(Planning/Design) pokrývá architektonické rozhodnutí,
-\textbf{O}~(Organization) pokrývá orchestraci, dekompozici, role separation,
-workflow a~testovací strategii, \textbf{Q}~(Quality) pokrývá tooling
-a~CI. Položky z~katalogu, které se týkají specifikace (BriefingScript),
-jsou fixní proměnnou -- specifikace je stejná pro všechny běhy.
+Tento katalog byl při návrhu experimentu mapován na tři dimenze
+vybrané na základě empirické nejistoty v~literatuře:
+\textbf{P}~(Planning artifact) pokrývá plánovací a~architektonické
+rozhodnutí, \textbf{T}~(Testing workflow) pokrývá testovací strategii
+a~pořadí test/implementace, \textbf{C}~(Constraint density) pokrývá
+procesní instrukce, quality gates, tooling a~CI.
+Položky z~katalogu týkající se specifikace (BriefingScript)
+jsou fixní proměnnou — specifikace je stejná pro všechny běhy.
 Položky z~context window management jsou infrastrukturní a~řeší je
 agentní framework (OpenCode).
 
@@ -754,10 +707,11 @@ Agent může mít 100\% Correctness a Completeness, ale být misaligned - techni
 
 \subsection{Vyhodnocení}
 
-Identifikace vzorů -- pro které dimenze (P, O, Q) je efektivnější
-meta nebo explicit instrukční styl. Porovnání R0 (plně meta) vs. R5
-(plně explicit) jako celkové srovnání přístupů. Analýza trade-offs
-(např. vyšší kvalita vs. vyšší spotřeba tokenů).
+Identifikace efektu každé dimenze: pomáhá plánovací artefakt~(P)?
+je test-first lepší než implementation-first~(T)? pomáhají nebo škodí
+detailní instrukce~(C)? Analýza trade-offs (kvalita vs. spotřeba tokenů)
+a~identifikace behaviorálních vzorů indikujících nejistotu agenta.
+\end{raw}
 
 \begin{raw}
 [RAW]
@@ -785,10 +739,12 @@ již obsahují -- jde o post-hoc analýzu, ne o změnu designu experimentu.
 
 \textbf{Co extrahovat z git logu:}
 \begin{itemize}
-    \item Pořadí prvních souborů v \texttt{src/} -- vznikl \texttt{types.ts} před \texttt{transition.ts}?
+    \item Vznikl plánovací artefakt (design doc, checklist) před prvním \texttt{.ts} souborem?
           (adopce P instrukce)
-    \item Vznikly sub-issues před prvním \texttt{.ts} souborem? (adopce O instrukce)
-    \item Vznikl CI workflow před první business logikou? (adopce Q instrukce)
+    \item Vznikly testovací soubory před odpovídajícími implementačními soubory?
+          (adopce T instrukce — test-first file creation order)
+    \item Nastavil agent quality infrastructure (lint, CI) v~rané fázi?
+          (reakce na C instrukce)
     \item Shluky commitů (commit bursts) -- mnoho commitů v krátkém čase = agent bojoval
     \item Reverty a velké přepisy (\texttt{git log -{}-diff-filter=R})
 \end{itemize}
@@ -800,14 +756,13 @@ již obsahují -- jde o post-hoc analýzu, ne o změnu designu experimentu.
 \end{itemize}
 
 \textbf{Mediátorové proměnné (adoption indicators):}
-Tři binární hodnoty (jedna per dimenze) měřitelné automaticky z git logu
-a GitHub API. Umožňují rozlišit dva scénáře:
-(a) instrukce způsobila adoptování praktiky → praktika způsobila lepší výsledek
-    (instrukce fungovala přes mechanismus),
-(b) agent dosáhl výsledku bez adoptování praktiky (model to měl v weights).
-Bez těchto mediátorů lze vidět korelaci treatment → outcome, ale ne mechanismus.
+Tři binární hodnoty (jedna per dimenze P/T/C) měřitelné automaticky z~git
+logu a~GitHub API. Umožňují rozlišit dva scénáře:
+(a)~instrukce způsobila adoptování praktiky $\to$ praktika způsobila lepší
+výsledek (instrukce fungovala přes mechanismus),
+(b)~agent dosáhl výsledku bez adoptování praktiky (model to měl v~weights).
+Bez těchto mediátorů lze vidět korelaci treatment $\to$ outcome, ale ne mechanismus.
 
 Tato analýza je plně retrospektivní -- data jsou dostupná po spuštění běhů,
 žádná změna experimentálního designu není nutná.
-\end{raw}
 \end{raw}

@@ -271,85 +271,6 @@
       \verb https://martinfowler.com/articles/exploring-gen-ai/sdd-3-tools.html
       \endverb
     \endentry
-    \entry{bouzenia2025repairagent}{article}{}
-      \name{author}{3}{}{%
-        {{un=0,uniquepart=base,hash=7d5900786d6201a44ebe5d3a46eb6d15}{%
-           family={Bouzenia},
-           familyi={B\bibinitperiod},
-           given={Islem},
-           giveni={I\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=b14eb0759a69e6f4dca80cc529ce30de}{%
-           family={Devanbu},
-           familyi={D\bibinitperiod},
-           given={Premkumar},
-           giveni={P\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=862571674423e73a60c8076124bb119a}{%
-           family={Pradel},
-           familyi={P\bibinitperiod},
-           given={Michael},
-           giveni={M\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{4038f15ae65d737c80057774158404a1}
-      \strng{fullhash}{879af544ea892a8489cdd164b60b323c}
-      \strng{bibnamehash}{879af544ea892a8489cdd164b60b323c}
-      \strng{authorbibnamehash}{879af544ea892a8489cdd164b60b323c}
-      \strng{authornamehash}{4038f15ae65d737c80057774158404a1}
-      \strng{authorfullhash}{879af544ea892a8489cdd164b60b323c}
-      \field{sortinit}{B}
-      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{Proceedings of the ACM on Software Engineering}
-      \field{note}{Component ablation study: tools, state machine, memory, localization; each removed independently}
-      \field{number}{FSE}
-      \field{title}{RepairAgent: An Autonomous, LLM-Based Agent for Program Repair}
-      \field{volume}{2}
-      \field{year}{2025}
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/2403.17134
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/2403.17134
-      \endverb
-    \endentry
-    \entry{breunig2026}{misc}{}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=cad5558a1ddb001284d6b12d1aa129d9}{%
-           family={Breunig},
-           familyi={B\bibinitperiod},
-           given={Drew},
-           giveni={D\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{cad5558a1ddb001284d6b12d1aa129d9}
-      \strng{fullhash}{cad5558a1ddb001284d6b12d1aa129d9}
-      \strng{bibnamehash}{cad5558a1ddb001284d6b12d1aa129d9}
-      \strng{authorbibnamehash}{cad5558a1ddb001284d6b12d1aa129d9}
-      \strng{authornamehash}{cad5558a1ddb001284d6b12d1aa129d9}
-      \strng{authorfullhash}{cad5558a1ddb001284d6b12d1aa129d9}
-      \field{sortinit}{B}
-      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{note}{Analyzed 6 coding agent prompts; prompt swaps change behavior more than model choice; fighting-the-weights pattern}
-      \field{title}{How System Prompts Define Agent Behavior}
-      \field{year}{2026}
-      \verb{urlraw}
-      \verb https://www.dbreunig.com/2026/02/10/system-prompts-define-the-agent-as-much-as-the-model.html
-      \endverb
-      \verb{url}
-      \verb https://www.dbreunig.com/2026/02/10/system-prompts-define-the-agent-as-much-as-the-model.html
-      \endverb
-    \endentry
     \entry{cao2008}{article}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=89a78a6c1db9a8cbe278376cd0c0e7cb}{%
@@ -1740,45 +1661,6 @@
       \verb 10.1016/bs.adcom.2018.03.015
       \endverb
     \endentry
-    \entry{perry1992}{article}{}
-      \name{author}{2}{}{%
-        {{un=0,uniquepart=base,hash=84e2147a4377e734a1a1436e812c150d}{%
-           family={Perry},
-           familyi={P\bibinitperiod},
-           given={Dewayne\bibnamedelima E.},
-           giveni={D\bibinitperiod\bibinitdelim E\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=e2d0e8b4c156e264da805c27020202b5}{%
-           family={Wolf},
-           familyi={W\bibinitperiod},
-           given={Alexander\bibnamedelima L.},
-           giveni={A\bibinitperiod\bibinitdelim L\bibinitperiod},
-           givenun=0}}%
-      }
-      \list{publisher}{1}{%
-        {ACM}%
-      }
-      \strng{namehash}{9c3d7541996a9be8704c356499e33264}
-      \strng{fullhash}{9c3d7541996a9be8704c356499e33264}
-      \strng{bibnamehash}{9c3d7541996a9be8704c356499e33264}
-      \strng{authorbibnamehash}{9c3d7541996a9be8704c356499e33264}
-      \strng{authornamehash}{9c3d7541996a9be8704c356499e33264}
-      \strng{authorfullhash}{9c3d7541996a9be8704c356499e33264}
-      \field{sortinit}{P}
-      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{ACM SIGSOFT Software Engineering Notes}
-      \field{number}{4}
-      \field{title}{Foundations for the Study of Software Architecture}
-      \field{volume}{17}
-      \field{year}{1992}
-      \field{pages}{40\bibrangedash 52}
-      \range{pages}{13}
-    \endentry
     \entry{sdd2026}{report}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=4c08f1200fd973c55793aae32d062e22}{%
@@ -2093,72 +1975,16 @@
       \verb https://arxiv.org/abs/2507.07548
       \endverb
     \endentry
-    \entry{wang2024llmagentsse}{article}{}
-      \name{author}{5}{}{%
-        {{un=1,uniquepart=given,hash=d718aa52fa2ca9a05a7e657b30cbef00}{%
-           family={Wang},
-           familyi={W\bibinitperiod},
-           given={Junwei},
-           giveni={J\bibinitperiod},
-           givenun=1}}%
-        {{un=0,uniquepart=base,hash=25ed19d0f6aba236008500bafd0aa3fe}{%
-           family={Wang},
-           familyi={W\bibinitperiod},
-           given={Kaixin},
-           giveni={K\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=e2f78aa81f2821dc09c8b3cea8bea883}{%
-           family={Chen},
-           familyi={C\bibinitperiod},
-           given={Yixuan},
-           giveni={Y\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=f62bda44bcb17e2fe2bc0ab2560e37a4}{%
-           family={Peng},
-           familyi={P\bibinitperiod},
-           given={Xin},
-           giveni={X\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=94aeb96f7bbdfa5f304dc958ab7f265c}{%
-           family={Zheng},
-           familyi={Z\bibinitperiod},
-           given={Zibin},
-           giveni={Z\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{ef06736179ac7535c95b707d7a51d735}
-      \strng{fullhash}{609c5dfde119c1e9783736703aaa17e1}
-      \strng{bibnamehash}{609c5dfde119c1e9783736703aaa17e1}
-      \strng{authorbibnamehash}{609c5dfde119c1e9783736703aaa17e1}
-      \strng{authornamehash}{ef06736179ac7535c95b707d7a51d735}
-      \strng{authorfullhash}{609c5dfde119c1e9783736703aaa17e1}
-      \field{sortinit}{W}
-      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{arXiv preprint arXiv:2409.02977}
-      \field{note}{Survey of 124 papers on LLM agents for SE; 59.7\% are multi-agent; taxonomy of agent roles (manager, assistant, specialist)}
-      \field{title}{LLM-based Agents for Software Engineering: A Survey}
-      \field{year}{2024}
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/2409.02977
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/2409.02977
-      \endverb
-    \endentry
     \entry{wang2025cca}{article}{}
       \true{moreauthor}
       \true{morelabelname}
       \name{author}{1}{}{%
-        {{un=1,uniquepart=given,hash=acd0f9118978e1a6f3448be34f3e3fe8}{%
+        {{un=0,uniquepart=base,hash=acd0f9118978e1a6f3448be34f3e3fe8}{%
            family={Wang},
            familyi={W\bibinitperiod},
            given={Yuntong},
            giveni={Y\bibinitperiod},
-           givenun=1}}%
+           givenun=0}}%
       }
       \strng{namehash}{921b380f36727f5f1c906c4e864da8c3}
       \strng{fullhash}{921b380f36727f5f1c906c4e864da8c3}
@@ -2170,6 +1996,7 @@
       \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
       \field{extradatescope}{labelyear}
       \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{arXiv preprint arXiv:2512.10398}
@@ -2332,6 +2159,56 @@
       \verb https://arxiv.org/abs/2402.08073
       \endverb
     \endentry
+    \entry{xia2024agentless}{article}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=ffe8b04c5c80790ca8aa4eb742b4a135}{%
+           family={Xia},
+           familyi={X\bibinitperiod},
+           given={Chunqiu\bibnamedelima Steven},
+           giveni={C\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b8388ada898085df60c10b7115b2cf48}{%
+           family={Deng},
+           familyi={D\bibinitperiod},
+           given={Yinlin},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=735bde8e9489ddeb2ff169d7774bdafd}{%
+           family={Dunn},
+           familyi={D\bibinitperiod},
+           given={Soren},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d4bc38109c3bdedeccb478acb4c658b9}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Lingming},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{ef095bd6b8af283cc8865d11bc60d056}
+      \strng{fullhash}{a93e84d70404b6f9c285dee47adbe9da}
+      \strng{bibnamehash}{a93e84d70404b6f9c285dee47adbe9da}
+      \strng{authorbibnamehash}{a93e84d70404b6f9c285dee47adbe9da}
+      \strng{authornamehash}{ef095bd6b8af283cc8865d11bc60d056}
+      \strng{authorfullhash}{a93e84d70404b6f9c285dee47adbe9da}
+      \field{sortinit}{X}
+      \field{sortinithash}{1965c258adceecf23ce3d67b05113442}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Fixed 3-phase pipeline (localize, repair, validate) without autonomous planning; 32\% SWE-bench Lite at \$0.70/issue}
+      \field{title}{Agentless: Demystifying LLM-based Software Engineering Agents}
+      \field{year}{2024}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2407.01489
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2407.01489
+      \endverb
+    \endentry
     \entry{yang2024sweagent}{article}{}
       \name{author}{6}{}{%
         {{un=1,uniquepart=given,hash=6d7f2cb81cb28fc59ce872d27eeaee07}{%
@@ -2422,63 +2299,6 @@
       \endverb
       \verb{url}
       \verb https://arxiv.org/abs/2506.12508
-      \endverb
-    \endentry
-    \entry{promptstotemplates2025}{article}{}
-      \name{author}{5}{}{%
-        {{un=0,uniquepart=base,hash=c91029b18768c38d93b0e20c8637402a}{%
-           family={Zheng},
-           familyi={Z\bibinitperiod},
-           given={Yiming},
-           giveni={Y\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=1c8cd499dc77e49bdb4fb85caaf9fad3}{%
-           family={Rao},
-           familyi={R\bibinitperiod},
-           given={Bingzheng},
-           giveni={B\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=3421cd55be1f59dc6044dcf9b10a48fb}{%
-           family={Yang},
-           familyi={Y\bibinitperiod},
-           given={Song},
-           giveni={S\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=a4ca005207f2438a713dedef8caf94ef}{%
-           family={Chen},
-           familyi={C\bibinitperiod},
-           given={Shanshan},
-           giveni={S\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=d78211c50a244e86728a00933d466003}{%
-           family={Jiang},
-           familyi={J\bibinitperiod},
-           given={He},
-           giveni={H\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{84c54608e3040943f3e16fcb22bff2a0}
-      \strng{fullhash}{a1323de8f07feb15e8334d343d98e13f}
-      \strng{bibnamehash}{a1323de8f07feb15e8334d343d98e13f}
-      \strng{authorbibnamehash}{a1323de8f07feb15e8334d343d98e13f}
-      \strng{authornamehash}{84c54608e3040943f3e16fcb22bff2a0}
-      \strng{authorfullhash}{a1323de8f07feb15e8334d343d98e13f}
-      \field{sortinit}{Z}
-      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{Proceedings of the ACM International Conference on the Foundations of Software Engineering (FSE)}
-      \field{note}{Merged 4 frameworks (Google Cloud, Elavis Saravia, CRISPE, LangGPT); 7 component types; Directive 87\% prevalence}
-      \field{title}{From Prompts to Templates: A Systematic Prompt Template Analysis for Real-world {LLM} Applications}
-      \field{year}{2025}
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/2504.02052
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/2504.02052
       \endverb
     \endentry
   \enddatalist
@@ -2735,85 +2555,6 @@
       \verb https://martinfowler.com/articles/exploring-gen-ai/sdd-3-tools.html
       \endverb
     \endentry
-    \entry{bouzenia2025repairagent}{article}{}
-      \name{author}{3}{}{%
-        {{un=0,uniquepart=base,hash=7d5900786d6201a44ebe5d3a46eb6d15}{%
-           family={Bouzenia},
-           familyi={B\bibinitperiod},
-           given={Islem},
-           giveni={I\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=b14eb0759a69e6f4dca80cc529ce30de}{%
-           family={Devanbu},
-           familyi={D\bibinitperiod},
-           given={Premkumar},
-           giveni={P\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=862571674423e73a60c8076124bb119a}{%
-           family={Pradel},
-           familyi={P\bibinitperiod},
-           given={Michael},
-           giveni={M\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{4038f15ae65d737c80057774158404a1}
-      \strng{fullhash}{879af544ea892a8489cdd164b60b323c}
-      \strng{bibnamehash}{879af544ea892a8489cdd164b60b323c}
-      \strng{authorbibnamehash}{879af544ea892a8489cdd164b60b323c}
-      \strng{authornamehash}{4038f15ae65d737c80057774158404a1}
-      \strng{authorfullhash}{879af544ea892a8489cdd164b60b323c}
-      \field{sortinit}{B}
-      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{Proceedings of the ACM on Software Engineering}
-      \field{note}{Component ablation study: tools, state machine, memory, localization; each removed independently}
-      \field{number}{FSE}
-      \field{title}{RepairAgent: An Autonomous, LLM-Based Agent for Program Repair}
-      \field{volume}{2}
-      \field{year}{2025}
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/2403.17134
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/2403.17134
-      \endverb
-    \endentry
-    \entry{breunig2026}{misc}{}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=cad5558a1ddb001284d6b12d1aa129d9}{%
-           family={Breunig},
-           familyi={B\bibinitperiod},
-           given={Drew},
-           giveni={D\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{cad5558a1ddb001284d6b12d1aa129d9}
-      \strng{fullhash}{cad5558a1ddb001284d6b12d1aa129d9}
-      \strng{bibnamehash}{cad5558a1ddb001284d6b12d1aa129d9}
-      \strng{authorbibnamehash}{cad5558a1ddb001284d6b12d1aa129d9}
-      \strng{authornamehash}{cad5558a1ddb001284d6b12d1aa129d9}
-      \strng{authorfullhash}{cad5558a1ddb001284d6b12d1aa129d9}
-      \field{sortinit}{B}
-      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{note}{Analyzed 6 coding agent prompts; prompt swaps change behavior more than model choice; fighting-the-weights pattern}
-      \field{title}{How System Prompts Define Agent Behavior}
-      \field{year}{2026}
-      \verb{urlraw}
-      \verb https://www.dbreunig.com/2026/02/10/system-prompts-define-the-agent-as-much-as-the-model.html
-      \endverb
-      \verb{url}
-      \verb https://www.dbreunig.com/2026/02/10/system-prompts-define-the-agent-as-much-as-the-model.html
-      \endverb
-    \endentry
     \entry{cao2008}{article}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=89a78a6c1db9a8cbe278376cd0c0e7cb}{%
@@ -4204,45 +3945,6 @@
       \verb 10.1016/bs.adcom.2018.03.015
       \endverb
     \endentry
-    \entry{perry1992}{article}{}
-      \name{author}{2}{}{%
-        {{un=0,uniquepart=base,hash=84e2147a4377e734a1a1436e812c150d}{%
-           family={Perry},
-           familyi={P\bibinitperiod},
-           given={Dewayne\bibnamedelima E.},
-           giveni={D\bibinitperiod\bibinitdelim E\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=e2d0e8b4c156e264da805c27020202b5}{%
-           family={Wolf},
-           familyi={W\bibinitperiod},
-           given={Alexander\bibnamedelima L.},
-           giveni={A\bibinitperiod\bibinitdelim L\bibinitperiod},
-           givenun=0}}%
-      }
-      \list{publisher}{1}{%
-        {ACM}%
-      }
-      \strng{namehash}{9c3d7541996a9be8704c356499e33264}
-      \strng{fullhash}{9c3d7541996a9be8704c356499e33264}
-      \strng{bibnamehash}{9c3d7541996a9be8704c356499e33264}
-      \strng{authorbibnamehash}{9c3d7541996a9be8704c356499e33264}
-      \strng{authornamehash}{9c3d7541996a9be8704c356499e33264}
-      \strng{authorfullhash}{9c3d7541996a9be8704c356499e33264}
-      \field{sortinit}{P}
-      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{ACM SIGSOFT Software Engineering Notes}
-      \field{number}{4}
-      \field{title}{Foundations for the Study of Software Architecture}
-      \field{volume}{17}
-      \field{year}{1992}
-      \field{pages}{40\bibrangedash 52}
-      \range{pages}{13}
-    \endentry
     \entry{sdd2026}{report}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=4c08f1200fd973c55793aae32d062e22}{%
@@ -4557,72 +4259,16 @@
       \verb https://arxiv.org/abs/2507.07548
       \endverb
     \endentry
-    \entry{wang2024llmagentsse}{article}{}
-      \name{author}{5}{}{%
-        {{un=1,uniquepart=given,hash=d718aa52fa2ca9a05a7e657b30cbef00}{%
-           family={Wang},
-           familyi={W\bibinitperiod},
-           given={Junwei},
-           giveni={J\bibinitperiod},
-           givenun=1}}%
-        {{un=0,uniquepart=base,hash=25ed19d0f6aba236008500bafd0aa3fe}{%
-           family={Wang},
-           familyi={W\bibinitperiod},
-           given={Kaixin},
-           giveni={K\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=e2f78aa81f2821dc09c8b3cea8bea883}{%
-           family={Chen},
-           familyi={C\bibinitperiod},
-           given={Yixuan},
-           giveni={Y\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=f62bda44bcb17e2fe2bc0ab2560e37a4}{%
-           family={Peng},
-           familyi={P\bibinitperiod},
-           given={Xin},
-           giveni={X\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=94aeb96f7bbdfa5f304dc958ab7f265c}{%
-           family={Zheng},
-           familyi={Z\bibinitperiod},
-           given={Zibin},
-           giveni={Z\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{ef06736179ac7535c95b707d7a51d735}
-      \strng{fullhash}{609c5dfde119c1e9783736703aaa17e1}
-      \strng{bibnamehash}{609c5dfde119c1e9783736703aaa17e1}
-      \strng{authorbibnamehash}{609c5dfde119c1e9783736703aaa17e1}
-      \strng{authornamehash}{ef06736179ac7535c95b707d7a51d735}
-      \strng{authorfullhash}{609c5dfde119c1e9783736703aaa17e1}
-      \field{sortinit}{W}
-      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{arXiv preprint arXiv:2409.02977}
-      \field{note}{Survey of 124 papers on LLM agents for SE; 59.7\% are multi-agent; taxonomy of agent roles (manager, assistant, specialist)}
-      \field{title}{LLM-based Agents for Software Engineering: A Survey}
-      \field{year}{2024}
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/2409.02977
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/2409.02977
-      \endverb
-    \endentry
     \entry{wang2025cca}{article}{}
       \true{moreauthor}
       \true{morelabelname}
       \name{author}{1}{}{%
-        {{un=1,uniquepart=given,hash=acd0f9118978e1a6f3448be34f3e3fe8}{%
+        {{un=0,uniquepart=base,hash=acd0f9118978e1a6f3448be34f3e3fe8}{%
            family={Wang},
            familyi={W\bibinitperiod},
            given={Yuntong},
            giveni={Y\bibinitperiod},
-           givenun=1}}%
+           givenun=0}}%
       }
       \strng{namehash}{921b380f36727f5f1c906c4e864da8c3}
       \strng{fullhash}{921b380f36727f5f1c906c4e864da8c3}
@@ -4634,6 +4280,7 @@
       \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
       \field{extradatescope}{labelyear}
       \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{arXiv preprint arXiv:2512.10398}
@@ -4796,6 +4443,56 @@
       \verb https://arxiv.org/abs/2402.08073
       \endverb
     \endentry
+    \entry{xia2024agentless}{article}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=ffe8b04c5c80790ca8aa4eb742b4a135}{%
+           family={Xia},
+           familyi={X\bibinitperiod},
+           given={Chunqiu\bibnamedelima Steven},
+           giveni={C\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b8388ada898085df60c10b7115b2cf48}{%
+           family={Deng},
+           familyi={D\bibinitperiod},
+           given={Yinlin},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=735bde8e9489ddeb2ff169d7774bdafd}{%
+           family={Dunn},
+           familyi={D\bibinitperiod},
+           given={Soren},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d4bc38109c3bdedeccb478acb4c658b9}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Lingming},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{ef095bd6b8af283cc8865d11bc60d056}
+      \strng{fullhash}{a93e84d70404b6f9c285dee47adbe9da}
+      \strng{bibnamehash}{a93e84d70404b6f9c285dee47adbe9da}
+      \strng{authorbibnamehash}{a93e84d70404b6f9c285dee47adbe9da}
+      \strng{authornamehash}{ef095bd6b8af283cc8865d11bc60d056}
+      \strng{authorfullhash}{a93e84d70404b6f9c285dee47adbe9da}
+      \field{sortinit}{X}
+      \field{sortinithash}{1965c258adceecf23ce3d67b05113442}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Fixed 3-phase pipeline (localize, repair, validate) without autonomous planning; 32\% SWE-bench Lite at \$0.70/issue}
+      \field{title}{Agentless: Demystifying LLM-based Software Engineering Agents}
+      \field{year}{2024}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2407.01489
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2407.01489
+      \endverb
+    \endentry
     \entry{yang2024sweagent}{article}{}
       \name{author}{6}{}{%
         {{un=1,uniquepart=given,hash=6d7f2cb81cb28fc59ce872d27eeaee07}{%
@@ -4886,63 +4583,6 @@
       \endverb
       \verb{url}
       \verb https://arxiv.org/abs/2506.12508
-      \endverb
-    \endentry
-    \entry{promptstotemplates2025}{article}{}
-      \name{author}{5}{}{%
-        {{un=0,uniquepart=base,hash=c91029b18768c38d93b0e20c8637402a}{%
-           family={Zheng},
-           familyi={Z\bibinitperiod},
-           given={Yiming},
-           giveni={Y\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=1c8cd499dc77e49bdb4fb85caaf9fad3}{%
-           family={Rao},
-           familyi={R\bibinitperiod},
-           given={Bingzheng},
-           giveni={B\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=3421cd55be1f59dc6044dcf9b10a48fb}{%
-           family={Yang},
-           familyi={Y\bibinitperiod},
-           given={Song},
-           giveni={S\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=a4ca005207f2438a713dedef8caf94ef}{%
-           family={Chen},
-           familyi={C\bibinitperiod},
-           given={Shanshan},
-           giveni={S\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=d78211c50a244e86728a00933d466003}{%
-           family={Jiang},
-           familyi={J\bibinitperiod},
-           given={He},
-           giveni={H\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{84c54608e3040943f3e16fcb22bff2a0}
-      \strng{fullhash}{a1323de8f07feb15e8334d343d98e13f}
-      \strng{bibnamehash}{a1323de8f07feb15e8334d343d98e13f}
-      \strng{authorbibnamehash}{a1323de8f07feb15e8334d343d98e13f}
-      \strng{authornamehash}{84c54608e3040943f3e16fcb22bff2a0}
-      \strng{authorfullhash}{a1323de8f07feb15e8334d343d98e13f}
-      \field{sortinit}{Z}
-      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{Proceedings of the ACM International Conference on the Foundations of Software Engineering (FSE)}
-      \field{note}{Merged 4 frameworks (Google Cloud, Elavis Saravia, CRISPE, LangGPT); 7 component types; Directive 87\% prevalence}
-      \field{title}{From Prompts to Templates: A Systematic Prompt Template Analysis for Real-world {LLM} Applications}
-      \field{year}{2025}
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/2504.02052
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/2504.02052
       \endverb
     \endentry
   \enddatalist
