@@ -1,104 +1,133 @@
-# Meta-instrukce pro ablační experiment
+# Experiment Design — Meta vs Explicit Instructions
 
-Šablona: CÍL/KONTEXT/VÝSTUP/OMEZENÍ
-(z FSE 2025 "From Prompts to Templates": Directive 87%, Context 56%, Output 40%, Constraints 36%)
+## Research Question
 
-## P — Planning/Design (technický design)
+Do meta-level instructions (what + why) outperform explicit method-based
+instructions (what + how) for coding agent scaffolding?
+
+## Instruction Style Distinction
+
+| Aspect | Meta (what + why) | Explicit (what + how) |
+|--------|-------------------|----------------------|
+| Goal | ✓ States what to do | ✓ States what to do |
+| Motivation | ✓ Explains WHY (rationale) | - |
+| Method | - Agent decides | ✓ Specifies HOW (approach from literature) |
+| Constraint | ✓ What not to do | ✓ What not to do |
+
+Literature grounding for the distinction:
+- FSE 2025 "From Prompts to Templates": Directive (what) + Context (why) vs Method (how)
+- Suzgun 2024: meta-prompting = goal-level, task-specific = method-level
+- SASE (Hassan 2025): BriefingScript (goal+context) vs LoopScript (method+steps)
+
+## Three Dimensions
+
+### P — Planning/Design
+
+**Meta (what + why):**
+Design solution structure before coding. WHY: upfront design prevents
+ad-hoc decisions (Perry & Wolf 1992).
+
+**Explicit (what + how):**
+Design using: information hiding (Parnas 1972), type-driven design,
+separation of concerns, interface-first approach.
+
+### O — Organization
+
+**Meta (what + why):**
+Organize into sub-tasks, separate roles, TDD from spec. WHY: feature-level
+tasks fail more (FeatureBench 2026), test oracle problem (Mathews 2024).
+
+**Explicit (what + how):**
+Use: feature decomposition with dependency ordering, role separation
+(Wang 2024), spec-first TDD (Mathews 2024), tracked progress via issues.
+
+### Q — Quality
+
+**Meta (what + why):**
+Set up quality feedback before implementation. WHY: quality gates catch
+problems early (Papadakis 2019).
+
+**Explicit (what + how):**
+Use: static analysis + formatter, test coverage gates, CI pipeline
+(Lulla 2026), mutation testing (Papadakis 2019).
+
+## Balanced Fractional Factorial Design (6 runs)
+
+| Run | P | O | Q |
+|-----|---|---|---|
+| R0  | meta | meta | meta |
+| R1  | meta | meta | explicit |
+| R2  | meta | explicit | explicit |
+| R3  | explicit | meta | meta |
+| R4  | explicit | explicit | meta |
+| R5  | explicit | explicit | explicit |
+
+Each dimension: exactly 3× meta, 3× explicit (perfectly balanced).
+
+### Clean Pairwise Comparisons
+
+| Dimension | Pair 1 (one context) | Pair 2 (other context) |
+|-----------|---------------------|----------------------|
+| P | R0 ↔ R3 (O=m, Q=m) | R2 ↔ R5 (O=e, Q=e) |
+| O | R1 ↔ R2 (P=m, Q=e) | R3 ↔ R4 (P=e, Q=m) |
+| Q | R0 ↔ R1 (P=m, O=m) | R4 ↔ R5 (P=e, O=e) |
+
+Plus: R0 vs R5 = overall meta vs explicit.
+
+## Fixed Components (same for all runs)
+
+- **OpenCode system prompt** (qwen.txt) — model identity, no-comments rule,
+  lint/typecheck advice, security (not ours to modify)
+- **AGENTS.md header** — spec reference (Issue #1), environment (OpenCode +
+  docs link), output expectation (committed, tested code)
+- **Minimal repo** — AGENTS.md, .opencode/config.json (GLM-5), auto-continue plugin, .gitignore
+- **Spec** — Issue #1 requirements only (no architecture layer)
+
+## File Structure
 
 ```
-[CÍL]: Navrhni architekturu řešení před implementací — datové typy,
-       moduly, rozhraní mezi nimi.
-[KONTEXT]: Upfront design decisions zabraňují ad-hoc rozhodnutím
-       během kódování. Bez explicitního designu vzniká
-       nekonzistentní struktura kterou je těžké refaktorovat.
-[VÝSTUP]: Design decisions zaznamenané v GitHub issues — typy,
-       moduly, API contracts, návrhové vzory.
-[OMEZENÍ]: Nezačínej psát implementační kód dokud nemáš
-       zdokumentovaný design. Neskákej rovnou na kód.
+experiments/
+  agents-md/
+    header.md         ← fixed (spec + environment + output)
+    p-meta.md         ← what + why
+    p-explicit.md     ← what + how (info hiding, type-driven, SoC)
+    o-meta.md         ← what + why
+    o-explicit.md     ← what + how (decomposition, roles, TDD)
+    q-meta.md         ← what + why
+    q-explicit.md     ← what + how (static analysis, CI, mutation testing)
+  infra/
+    auto-continue.ts  ← OpenCode plugin (idle → check → restart)
+  runs/
+    <run-name>/       ← created by new-run.sh per experiment
+      AGENTS.md
+      .opencode/
+      transcript.json ← opencode export after run
+  scripts/
+    new-run.sh        ← --run R0-R5, creates repo + runs agent
+    issue-1-req-only.json
 ```
 
-Literární opora:
-- Brooks 1975: architecture/implementation/realization jako distinct phases
-- Clean Code (Martin): "good upfront design ≠ BDUF"
-- Perry & Wolf 1992: software architecture foundations
-- Fighting the weights: code-first bias (modely skáčou rovnou na implementaci)
+## Metrics
 
-## O — Organization (organizace práce)
+- **Mutation score** (Stryker) — test quality
+- **Test pass rate** — correctness
+- **Restart count** — auto-continue triggers
+- **Token usage** — efficiency
+- **Behavioral trace** — git log, issue count, file structure, CI presence
+- **LLM-as-judge** — code quality assessment
 
-```
-[CÍL]: Zorganizuj si práci — rozděl specifikaci na menší části
-       s jasnými dependencies, definuj kdo co dělá, nastav
-       testovací strategii (testy ze specifikace před implementací).
-[KONTEXT]: Feature-level úlohy mají výrazně nižší úspěšnost než
-       izolované sub-úlohy. Separace testování od implementace
-       zabraňuje tomu, aby testy validovaly chybné chování místo
-       jeho odhalení. Explicitní proces zajišťuje konzistenci.
-[VÝSTUP]: Sub-issues v GitHub s dependencies, definice rolí/agentů,
-       workflow pravidla v AGENTS.md.
-[OMEZENÍ]: Neimplementuj celý projekt v jednom průchodu.
-       Neodvozuj expected values testů z kódu — vždy ze specifikace.
-       Nedělej procesní rozhodnutí ad-hoc.
-```
+## Dimension Selection Justification
 
-Literární opora:
-- FeatureBench 2026: 11% na feature-level úlohách
-- SWE-EVO 2025: 21% na multi-issue evolučních úlohách
-- Mathews 2024: test oracle problem — 68.1% testů validuje chybné chování
-- AgentCoder 2024: separace test/impl → 96.3% HumanEval
-- Wang 2024: 59.7% SE agentů je multi-agent
-- Beck & Fowler 2000: "dependencies dominate planning"
-- Fighting the weights: monolithic bias + self-validation bias
+Three dimensions derived from systematic analysis:
+1. SASE (Hassan 2025): BriefingScript → fixed, LoopScript → O,
+   MentorScript/AEE → Q, architectural → P
+2. Wang 2024 taxonomy: Team Organization → O, Decision Making → P,
+   Testing/QA → Q
+3. RepairAgent (Bouzenia 2025): component ablation precedent for
+   independent dimensions
+4. Independence: P (what to build), O (how to work), Q (how to verify)
+5. Observability: each produces distinct artifacts
 
-## Q — Quality (quality infrastruktura)
-
-```
-[CÍL]: Nastav si quality feedback mechanismy — linting, formátování,
-       testy, CI pipeline, případně mutation testing.
-[KONTEXT]: Automatizované quality gates zachytí problémy dříve než
-       manuální review. Bez nich se chyby kumulují a agent nemá
-       feedback jestli jeho kód funguje správně.
-[VÝSTUP]: Nakonfigurované nástroje — linter, formatter, test runner,
-       CI pipeline s automatickými kontrolami.
-[OMEZENÍ]: Neimplementuj business logiku bez funkčních quality gates.
-       Nepřeskakuj konfiguraci nástrojů "protože to jde i bez nich."
-```
-
-Literární opora:
-- Papadakis 2019: mutation score silnější prediktor než coverage
-- Meta 2025 (Harman): 70% mutantů neodhaleno i při plném coverage
-- Lulla 2026: AGENTS.md s konvencemi → -28% runtime, -20% tokens
-- Fighting the weights: get-it-done bias (modely přeskakují setup)
-
----
-
-## Fixní hlavička (stejná pro všechny běhy)
-
-Obsahuje:
-- Role definition (jsi coding agent, implementuješ podle specifikace)
-- Tool instructions (jak používat GitHub, git, OpenCode nástroje)
-- Output format (jak reportovat výsledky)
-- Fighting-the-weights instrukce (nepřidávej komentáře, paralelní tool calls, etc.)
-- Reference na spec issue #1
-
-## Ablační běhy
-
-| Run | P | O | Q | Co měříme |
-|-----|---|---|---|-----------|
-| R0  | ✓ | ✓ | ✓ | Baseline — plný meta-prompt |
-| R1  | - | ✓ | ✓ | Přínos design instrukce |
-| R2  | ✓ | - | ✓ | Přínos organizační instrukce |
-| R3  | ✓ | ✓ | - | Přínos quality instrukce |
-
-## Zdůvodnění výběru dimenzí
-
-Tři dimenze vychází ze systematické analýzy:
-1. SASE framework (Hassan 2025): BriefingScript (fixed) + LoopScript → O + MentorScript/AEE → Q + architectural → P
-2. Wang 2024 agent taxonomy: Team Organization → O, Decision Making → P, Testing/QA → Q
-3. Breunig 2026 common categories: workflow guidance (P+O), model calibration (fixed)
-4. Independence: P, O, Q operují na různých úrovních (co stavět / jak pracovat / čím kontrolovat)
-5. Pozorovatelnost: každá produkuje distinktní artefakty
-
-Korelované proměnné (M1-M5) byly sloučeny do O na základě:
-- Decomposition, role separation, workflow, TDD jsou facety organizace práce (What/Who/How/When)
-- Nejsou nezávislé — agent který dekomponuje dobře typicky i separuje role
-- RepairAgent (Bouzenia 2025) abloval funkčně nezávislé komponenty — náš design to respektuje
+Previously correlated variables (M1-M5) were consolidated into O:
+decomposition, role separation, workflow, TDD are facets of work
+organization (What/Who/How/When of the same process).

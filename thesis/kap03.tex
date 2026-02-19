@@ -53,27 +53,40 @@ na úrovni \textbf{spec-first} \cite{sdd2026}.
 
 \section{Referenční implementace}
 
-\begin{raw}
-Experiment má tři úrovně:
+\begin{draft}
+Referenční implementace slouží dvěma účelům: validaci specifikace a~vytvoření
+\textbf{behavioral test suite}, která se následně spouští na výstupech všech
+experimentálních běhů jako objektivní metrika correctness.
 
-\begin{enumerate}
-    \item \textbf{Referenční implementace} (human-guided) -- autor dekomponuje
-          specifikaci do sub-issues, kontroluje průběh, agent implementuje
-          podle předpřipravených issues. Slouží jako ground truth pro metriky
-          (referenční testy, mutation score, kvalita kódu).
-    \item \textbf{Baseline experiment} (full-scale autonomní) -- agent dostane
-          pouze specifikaci (issue \#1) + plný \texttt{agents.md} + plné prostředí.
-          Sám dekomponuje, orchestruje, implementuje. Maximum instrukcí,
-          žádný lidský zásah. Měří výkon plně autonomního agenta s~nejlepším
-          scaffoldingem.
-    \item \textbf{Ablační běhy} -- jako baseline, ale s~odebranými komponentami
-          scaffoldingu (viz katalog ablatable komponent). Měří dopad
-          jednotlivých komponent.
-\end{enumerate}
+\textbf{Metoda: TDD z acceptance criteria.}
+Postup odpovídá spec-first TDD \cite{mathews2024}: nejprve se napíší
+behavioral testy přímo z~AC ve formátu Given/When/Then -- testy jsou
+zpočátku červené (implementace neexistuje). Následně se implementuje
+dunning system tak, aby testy postupně zelenaly. Tato sekvence zajišťuje,
+že expected values pochází ze specifikace, nikoliv z~pozorování kódu
+(test oracle problem \cite{mathews2024}).
 
-Porovnání referenční vs. baseline ukazuje vzdálenost autonomního agenta
-od human-guided vývoje. Porovnání baseline vs. ablace ukazuje dopad
-jednotlivých scaffolding komponent.
+\textbf{Behavioral testy, ne unit testy.}
+Referenční testy testují chování systému přes veřejné API (vstupy a~výstupy
+definované specifikací), nikoliv interní implementaci. Tento přístup
+odpovídá black-box testování funkčních požadavků \cite{swebok2024}
+a~metodice SWE-bench \cite{swebench2024}, která používá behavioral test
+suite jako primární metriku pro hodnocení AI agentů. Výhodou je
+přenositelnost: stejné testy lze spustit na implementaci libovolného
+agentního běhu bez znalosti jeho interní struktury.
+
+\textbf{Validace specifikace.}
+Implementace referenčního řešení odhaluje nejednoznačnosti a~mezery
+v~acceptance criteria dříve než experimentální běhy. Pokud referenční
+implementace narazí na nedostatečně specifikované chování, AC se
+upřesní -- to zaručuje, že všechny experimentální běhy pracují
+se stejnou, kompletní specifikací.
+
+\textbf{Výstup:} behavioral test suite (TypeScript/Vitest) spustitelná
+na libovolné implementaci se standardizovaným vstupním bodem API
+(viz Technical Requirements v~Issue~\#1). Test suite tvoří základ
+metriky correctness pro všechny experimentální běhy R0--R5.
+\end{draft}
 
 \rule{\textwidth}{0.4pt}
 
@@ -206,21 +219,21 @@ Tato šablona kombinuje přístupy podložené výzkumem:
 structured natural language \cite[kap.~4.4]{sommerville2016}, test-driven specifikaci \cite{ticoder2024},
 doménový kontext \cite{domaincodegen2024}, redukci specification misalignment \cite{specine2025},
 design constraints \cite{newcomb2025prepost} a klarifikaci ambiguity \cite{clarifygpt2024}.
-\end{raw}
 
 \section{Experimenty}
 
 \begin{raw}
 \subsection{Experimentální design}
 
-Experiment používá \textbf{meta-instrukční ablaci} -- systematické
-odebírání meta-instrukcí (co + proč, nikoliv jak) za účelem měření
-jejich individuálního přínosu ke kvalitě výstupu agenta. Místo
-explicitního scaffoldingu (předpřipravené soubory, konfigurace)
-dostane agent sadu meta-instrukcí a~sám si navrhne konkrétní přístup.
-Ablace = odebrání jedné dimenze meta-instrukcí. Baseline (R0) obsahuje
-všechny tři dimenze; referenční implementace (human-guided) slouží
-jako ground truth pro metriky.
+Experiment používá \textbf{vyvážený frakční faktoriální design} porovnávající
+dva instrukční styly -- \textit{meta} (co + proč) a~\textit{explicit}
+(co + jak) -- napříč třemi dimenzemi scaffoldingu. Meta-instrukce říkají
+agentovi co udělat a~proč je to důležité; agent si sám zvolí konkrétní
+přístup. Explicit instrukce říkají co udělat a~jak na to jít podle
+literatury; agent následuje doporučenou metodu. Šest běhů (R0--R5)
+pokrývá všechny kombinace tak, že každá dimenze je testována
+3$\times$ jako meta a~3$\times$ jako explicit.
+Referenční implementace (human-guided) slouží jako ground truth pro metriky.
 
 \begin{raw}
 [RAW]
@@ -240,69 +253,85 @@ dependencies -- Requirements ablace závisí na tom co bylo v~Design fázi.
 Izolace vyžaduje fixaci jedné dimenze a~variaci druhé, což exponenciálně
 zvyšuje počet běhů.
 
-\textit{(3) Meta-instrukční ablace}: místo explicitního scaffoldingu
-(předpřipravené soubory, konfigurace) dostane agent meta-instrukce které
-říkají \textit{co} udělat, ale nikoliv \textit{jak}. Ablace = odebrání
-jedné meta-instrukce. Výhody: (a)~binární manipulace (instrukce přítomna
-nebo ne), (b)~výsledky jsou univerzální -- meta-instrukce nejsou vázané
-na konkrétní projekt, (c)~žádná studie dosud neablovala jednotlivé
-meta-instrukce u~coding agentů.
+\textit{(3) Porovnání instrukčních stylů}: agent dostane pro každou
+dimenzi scaffoldingu instrukci buď ve stylu \textit{meta} (co + proč)
+nebo \textit{explicit} (co + jak). Meta-instrukce říkají co udělat
+a~proč (motivace), agent si zvolí metodu sám. Explicit instrukce říkají
+co udělat a~jak (metoda z~literatury), agent následuje doporučený přístup.
+Výhody: (a)~testuje přímo otázku z~literatury -- Suzgun
+\cite{suzgun2024metaprompt} a~Tessl.io tvrdí meta $>$ explicit,
+Lulla \cite{lulla2026} ukazuje efektivitu explicitních arch. informací,
+(b)~vyvážený faktoriální design umožňuje párové srovnání per dimenze,
+(c)~žádná studie dosud neporovnala tyto instrukční styly u~coding agentů.
 
-Zvolen přístup (3) -- meta-instrukční ablace. Přístupy (1) a~(2) jsou
-pokryty existující literaturou (SWE-agent abluje ACI komponenty,
-Confucius abluje scaffolding features, FeatureBench \cite{featurebench2026}
-abluje spec tiers). Přístup (3) přináší nový metodologický příspěvek.
+Zvolen přístup (3). Přístupy (1) a~(2) jsou pokryty existující literaturou
+(SWE-agent abluje ACI komponenty, Confucius abluje scaffolding features,
+FeatureBench \cite{featurebench2026} abluje spec tiers). Přístup (3)
+přináší nový metodologický příspěvek -- přímé porovnání instrukčních
+stylů.
 
-\textbf{Ablace meta-instrukcí:}
+\textbf{Dva instrukční styly:}
 
-Experiment testuje přínos jednotlivých meta-instrukcí pro kvalitu výstupu
-AI agenta. Místo explicitního scaffoldingu (předpřipravené konfigurace,
-workflow instrukce, architektura) dostane agent sadu meta-instrukcí --
-každá říká \textit{co} udělat a~\textit{proč}, ale nikoliv \textit{jak}.
-Agent si na základě meta-instrukce navrhne vlastní přístup.
+Experiment porovnává dva přístupy k~instruování coding agenta,
+odvozené ze tří nezávislých zdrojů v~literatuře:
 
-Tento design je motivován dvěma zjištěními: (1)~Suzgun a~Kalai
-\cite{suzgun2024metaprompt} ukázali, že meta-prompting (task-agnostic
-scaffolding) přináší 17,1\,\% zlepšení oproti standardnímu promptingu;
-(2)~Breunig \cite{breunig2026} empiricky demonstroval, že záměna system
-promptů mezi coding agenty mění chování agenta více než volba modelu --
-tentýž model s~promptem Codex produkuje metodický workflow, s~promptem
-Claude iterativní. Žádná studie dosud neablovala \textit{jednotlivé}
-meta-instrukce u~coding agentů -- toto je hlavní metodologický příspěvek
-této práce.
+\textit{Meta (co + proč):} Instrukce stanoví cíl a~motivaci; agent si
+zvolí konkrétní metodu sám. Odpovídá Directive + Context komponentám
+\cite{promptstotemplates2025}, goal-level meta-promptingu
+\cite{suzgun2024metaprompt} a~BriefingScript v~SASE
+\cite{hassan2025sase}.
+
+\textit{Explicit (co + jak):} Instrukce stanoví cíl a~doporučenou
+metodu z~literatury; agent následuje předepsaný přístup. Odpovídá
+Directive + Method \cite{promptstotemplates2025}, task-specific
+promptingu \cite{suzgun2024metaprompt} a~LoopScript v~SASE
+\cite{hassan2025sase}.
+
+Tento design je motivován třemi zjištěními: (1)~Suzgun a~Kalai
+\cite{suzgun2024metaprompt} ukázali, že meta-prompting přináší
+17,1\,\% zlepšení; (2)~Lulla et al. \cite{lulla2026} ukázali, že
+explicitní architektonické informace v~AGENTS.md snižují runtime
+o~28\,\%; (3)~Breunig \cite{breunig2026} demonstroval, že záměna
+system promptů mění chování agenta více než volba modelu. Žádná studie
+dosud neporovnala meta a~explicit instrukční styly per dimenze
+u~coding agentů.
 
 \textbf{Fixní proměnné (stejné pro všechny běhy):}
 \begin{itemize}
-    \item Prázdné GitHub repo (pouze \texttt{package.json},
-          \texttt{tsconfig.json})
+    \item Prázdné GitHub repo (pouze \texttt{AGENTS.md},
+          \texttt{.opencode/config.json}, auto-continue plugin)
     \item Specifikace v~GitHub Issue \#1 -- plné acceptance criteria
           a~doménový glossary, bez architecture layer
     \item Auto-continue plugin (\texttt{session.idle} hook s~počítadlem
-          restartů)
-    \item Model: GLM-5, výchozí temperature OpenCode
-    \item Fixní části system promptu: role definition, tool instructions,
-          output format, fighting-the-weights instrukce
-          \cite{breunig2026}
+          restartů a~build/test kontrolou)
+    \item Model: GLM-5 přes OpenCode (system prompt \texttt{qwen.txt}
+          se základními pravidly -- no comments, run lint/typecheck)
+    \item Fixní hlavička AGENTS.md: odkaz na specifikaci, popis prostředí
+          (OpenCode + dostupné nástroje), výstupní požadavek
 \end{itemize}
 
-\textbf{Standardizovaná šablona meta-instrukce:}
+\textbf{Standardizovaná struktura instrukce:}
 
-Každá meta-instrukce má identickou strukturu -- variuje pouze obsah.
-Šablona vychází ze systematické analýzy prompt komponent napříč čtyřmi
-frameworky \cite{promptstotemplates2025}: Directive (87\,\% prevalence),
-Context (56\,\%), Output Format (40\,\%), Constraints (36\,\%).
+Oba instrukční styly mají identickou strukturu -- variuje obsah
+a~abstrakční úroveň. Meta-instrukce obsahuje cíl + motivaci (proč),
+explicit instrukce obsahuje cíl + metodu (jak). Obě končí constraintem.
 
-\begin{verbatim}
-[CÍL]: <co udělat>
-[KONTEXT]: <proč je to důležité pro kvalitu výstupu>
-[VÝSTUP]: <očekávaný artefakt>
-[OMEZENÍ]: <co nedělat>
-\end{verbatim}
+\begin{center}
+\begin{tabular}{p{2cm}|p{5cm}|p{5cm}}
+\textbf{Sekce} & \textbf{Meta (co + proč)} & \textbf{Explicit (co + jak)} \\
+\hline
+Instrukce & Cíl na procesní úrovni & Cíl + konkrétní metoda z~literatury \\
+\hline
+Why / How & Motivace a~rationale & Principy a~postupy \\
+\hline
+Constraint & Co nedělat & Co nedělat \\
+\end{tabular}
+\end{center}
 
-Standardizace eliminuje formulační bias -- všechny instrukce mají
-stejnou délku, specifičnost a~strukturu. Prompt sensitivity
-\cite{razavi2025} je přiznána jako limitation; mitigace: fixní šablona,
-deterministická temperature, behavioral trace.
+Standardizace struktury izoluje proměnnou (instrukční styl) od formátu.
+Prompt sensitivity \cite{razavi2025} je přiznána jako limitation;
+mitigace: identická struktura, srovnatelná délka, literature-backed
+obsah obou stylů.
 
 \textbf{Tři dimenze meta-instrukcí:}
 
@@ -323,22 +352,28 @@ Organization $\to$~O, Decision Making $\to$~P, Testing/QA $\to$~Q;
 komponenty -- náš design toto respektuje.
 
 \begin{center}
-\begin{tabular}{p{0.5cm}|p{2.5cm}|p{4.5cm}|p{4.5cm}}
-\textbf{Dim.} & \textbf{Název} & \textbf{Meta-instrukce (CÍL)} &
-\textbf{Očekávané artefakty} \\
+\begin{tabular}{p{0.5cm}|p{2cm}|p{4.2cm}|p{4.2cm}}
+\textbf{Dim.} & \textbf{Název} & \textbf{Meta (co + proč)} &
+\textbf{Explicit (co + jak)} \\
 \hline
-P & Planning/Design &
-  Navrhni architekturu řešení před implementací -- typy, moduly, rozhraní &
-  Design decisions v~issues, type definitions \\
+P & Planning/ Design &
+  Navrhni strukturu řešení před kódem. \textit{Proč:} ad-hoc rozhodnutí
+  vedou k~nekonzistentní struktuře (Perry \& Wolf 1992). &
+  Navrhni strukturu pomocí: information hiding (Parnas 1972),
+  type-driven design, separation of concerns, interface-first. \\
 \hline
 O & Organization &
-  Zorganizuj si práci -- rozděl na části, definuj role, nastav testovací
-  strategii (testy ze specifikace před implementací) &
-  Sub-issues, agent configs, workflow v~AGENTS.md \\
+  Rozděl práci na sub-tasky, odděl role, TDD ze specifikace.
+  \textit{Proč:} feature-level úlohy selhávají (FeatureBench 2026),
+  test oracle problem (Mathews 2024). &
+  Dekomponuj dle závislostí (FeatureBench 2026), odděl role
+  (Wang 2024), TDD ze specifikace (Mathews 2024), trackuj postup. \\
 \hline
 Q & Quality &
-  Nastav si quality feedback mechanismy -- linting, testy, CI &
-  Nakonfigurované nástroje, CI pipeline \\
+  Nastav quality feedback před implementací.
+  \textit{Proč:} bez zpětné vazby se chyby kumulují (Papadakis 2019). &
+  Nastav: static analysis + formatter, coverage gates,
+  CI pipeline (Lulla 2026), mutation testing (Papadakis 2019). \\
 \end{tabular}
 \end{center}
 
@@ -348,37 +383,44 @@ procesu), Q~rozhoduje \textit{čím} kontrolovat kvalitu (feedback
 mechanismy). Tato ortogonalita zajišťuje, že odebrání jedné dimenze
 neovlivní logiku ostatních.
 
-\textbf{Ablační běhy:}
+\textbf{Experimentální běhy (vyvážený frakční faktoriální design):}
 
 \begin{center}
 \begin{tabular}{p{0.7cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{5.5cm}}
 \textbf{Run} & \textbf{P} & \textbf{O} & \textbf{Q} &
-\textbf{Co měříme} \\
+\textbf{Popis} \\
 \hline
-R0 & \checkmark & \checkmark & \checkmark &
-  Baseline -- plný meta-prompt \\
+R0 & meta & meta & meta &
+  Plně meta baseline \\
 \hline
-R1 & -- & \checkmark & \checkmark &
-  Přínos upfront designu
-  \cite{perry1992, sommerville2016} \\
+R1 & meta & meta & explicit &
+  Explicit quality (industry standards) \\
 \hline
-R2 & \checkmark & -- & \checkmark &
-  Přínos organizace práce
-  \cite{featurebench2026, mathews2024, agentcoder2024} \\
+R2 & meta & explicit & explicit &
+  Explicit organizace + quality \\
 \hline
-R3 & \checkmark & \checkmark & -- &
-  Přínos quality infrastruktury
-  \cite{papadakis2019, meta2025, lulla2026} \\
+R3 & explicit & meta & meta &
+  Explicit planning (design principles) \\
+\hline
+R4 & explicit & explicit & meta &
+  Explicit planning + organizace \\
+\hline
+R5 & explicit & explicit & explicit &
+  Plně explicit baseline \\
 \end{tabular}
 \end{center}
 
-Čtyři běhy, single run per podmínku. Každý běh probíhá v~separátním
-GitHub repozitáři (čistý stav). Artefakty (commit history, issues, PR)
-zachovány pro post-hoc analýzu. Variace obsahu meta-instrukcí
-(meta vs. explicit formulace) je navržena jako future work --
-explicit instrukce jsou vysoce citlivé na konkrétní obsah
-\cite{razavi2025}, zatímco meta-instrukce jsou robustnější
-vůči formulaci.
+Šest běhů, single run per podmínku. Každá dimenze je testována přesně
+3$\times$ jako meta a~3$\times$ jako explicit (dokonalá balance).
+Design umožňuje čisté párové srovnání per dimenze -- pro každou dimenzi
+existují dva páry běhů lišící se pouze v~dané dimenzi:
+P: R0$\leftrightarrow$R3 a~R2$\leftrightarrow$R5;
+O: R1$\leftrightarrow$R2 a~R3$\leftrightarrow$R4;
+Q: R0$\leftrightarrow$R1 a~R4$\leftrightarrow$R5.
+Celkové srovnání instrukčních stylů: R0 (plně meta) vs. R5 (plně explicit).
+
+Každý běh probíhá v~separátním GitHub repozitáři (čistý stav).
+Artefakty (commit history, issues, PR) zachovány pro post-hoc analýzu.
 
 \textbf{Metriky:}
 \begin{itemize}
@@ -388,8 +430,9 @@ vůči formulaci.
           compliance a~alignment (LLM-as-a-judge)
     \item \textbf{Behavioral trace:} co agent reálně udělal -- navrhl
           architekturu před kódem~(P)? rozložil práci na sub-issues~(O)?
-          nastavil CI a~linting~(Q)? Ověřuje, že ablace meta-instrukce
-          měla skutečný efekt na chování agenta.
+          nastavil CI a~linting~(Q)? Ověřuje, že instrukční styl měl
+          skutečný efekt na chování agenta a~porovnává přístupy
+          zvolené při meta vs. explicit instrukci.
 \end{itemize}
 
 \textbf{Pilot studie:} Před experimentálními běhy proběhne pilotní validace
@@ -711,30 +754,60 @@ Agent může mít 100\% Correctness a Completeness, ale být misaligned - techni
 
 \subsection{Vyhodnocení}
 
-Identifikace vzorů -- které dimenze meta-instrukcí (P, O, Q) měly
-největší dopad na kvalitu výstupu agenta. Porovnání trade-offs
+Identifikace vzorů -- pro které dimenze (P, O, Q) je efektivnější
+meta nebo explicit instrukční styl. Porovnání R0 (plně meta) vs. R5
+(plně explicit) jako celkové srovnání přístupů. Analýza trade-offs
 (např. vyšší kvalita vs. vyšší spotřeba tokenů).
 
 \begin{raw}
 [RAW]
-\textbf{Rozšíření: meta vs. explicit instrukce}
+\textbf{Rozšíření: ablace instrukčních dimenzí}
 
-Ablační série měří přínos jednotlivých dimenzí meta-instrukcí.
-Přirozenou navazující otázkou je: záleží na \textit{formulaci}
-instrukce? Meta-instrukce říkají co a~proč (``navrhni architekturu
-před implementací''); explicit instrukce říkají přesně jak
-(``vytvoř type definitions v~\texttt{src/types.ts}, rozděl moduly
-na \texttt{transition.ts} a~\texttt{business-days.ts}'').
+Hlavní experiment porovnává meta vs. explicit instrukční styl per dimenze.
+Přirozeným rozšířením je \textit{ablace} -- co se stane když dimenzi
+odebereme úplně (ani meta, ani explicit)? Ablační běhy by doplnily
+faktoriální design o~baseline bez instrukce, což umožní měřit absolutní
+přínos každé dimenze nezávisle na stylu.
 
-Porovnání meta vs. explicit by přímo testovalo SASE \textit{duality
-of control} \cite{hassan2025sase} -- kdy dát agentovi strukturu
-a~kdy ho nechat rozhodovat autonomně. Explicit instrukce jsou však
-vysoce citlivé na konkrétní obsah \cite{razavi2025} -- tentýž záměr
-lze formulovat mnoha způsoby s~odlišnými výsledky. Meta-instrukce
-jsou robustnější vůči formulaci, protože abstrahují nad konkrétním
-provedením.
+Toto rozšíření je mimo scope této BP -- vyžaduje další 3--7 běhů.
+Je navrženo jako přímé pokračování.
+\end{raw}
 
-Toto rozšíření je mimo scope této BP -- vyžaduje vlastní sérii běhů
-s~kontrolou formulačního biasu. Je navrženo jako přímé pokračování.
+\begin{raw}
+[RAW] TODO: probrat, zatím nápady
+
+\textbf{Retrospektivní kauzální analýza -- hledání ``prvního špatného obratu''}
+
+Místo čekání na zpožděné finální metriky (mutation score, test pass rate)
+lze zpětně rekonstruovat \textit{kdy} agent udělal rozhodnutí, které způsobilo
+kaskádu problémů. Git log a session transkript (opencode export) tato data
+již obsahují -- jde o post-hoc analýzu, ne o změnu designu experimentu.
+
+\textbf{Co extrahovat z git logu:}
+\begin{itemize}
+    \item Pořadí prvních souborů v \texttt{src/} -- vznikl \texttt{types.ts} před \texttt{transition.ts}?
+          (adopce P instrukce)
+    \item Vznikly sub-issues před prvním \texttt{.ts} souborem? (adopce O instrukce)
+    \item Vznikl CI workflow před první business logikou? (adopce Q instrukce)
+    \item Shluky commitů (commit bursts) -- mnoho commitů v krátkém čase = agent bojoval
+    \item Reverty a velké přepisy (\texttt{git log -{}-diff-filter=R})
+\end{itemize}
+
+\textbf{Co extrahovat ze session transkripu:}
+\begin{itemize}
+    \item Opakované edity stejného souboru = agent uvízl (proxy pro obtížnost)
+    \item Kde agent poprvé vyjádřil nejistotu nebo přepisoval svůj plán
+\end{itemize}
+
+\textbf{Mediátorové proměnné (adoption indicators):}
+Tři binární hodnoty (jedna per dimenze) měřitelné automaticky z git logu
+a GitHub API. Umožňují rozlišit dva scénáře:
+(a) instrukce způsobila adoptování praktiky → praktika způsobila lepší výsledek
+    (instrukce fungovala přes mechanismus),
+(b) agent dosáhl výsledku bez adoptování praktiky (model to měl v weights).
+Bez těchto mediátorů lze vidět korelaci treatment → outcome, ale ne mechanismus.
+
+Tato analýza je plně retrospektivní -- data jsou dostupná po spuštění běhů,
+žádná změna experimentálního designu není nutná.
 \end{raw}
 \end{raw}
