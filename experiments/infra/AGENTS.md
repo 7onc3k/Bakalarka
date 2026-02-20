@@ -19,23 +19,34 @@ Working, tested npm package committed to the repository.
 
 ## Git Workflow
 
-Track all work through GitHub Issues and Pull Requests:
+**Before writing any code**, decompose the spec into sub-tasks and create a GitHub issue for each one:
 
-1. **Decompose** the spec into sub-issues — decide yourself how to break up the work
-2. **For each issue:** create a feature branch → implement → open PR → merge → close issue
-3. **Commit** as you progress — commit after each meaningful change, not all at once
-4. **If you discover a bug or unplanned work**, open a new issue before addressing it
-5. Do not rewrite git history (no amend, squash, rebase, or force-push)
+```bash
+gh issue create --title "..." --body "..."
+```
+
+Then for each issue:
+1. Create a feature branch: `git checkout -b issue-N-description`
+2. Follow TDD (see Testing section)
+3. Open a PR when the issue is complete: `gh pr create`
+4. Merge the PR: `gh pr merge --merge`
+5. Close the issue: `gh issue close N`
+
+Commit after each test-implementation cycle — do not accumulate changes into one final commit.
+
+Do not rewrite git history (no amend, squash, rebase, or force-push).
 
 ## Testing
 
-Follow Test-Driven Development from the specification:
+**Do not write any implementation code until you have a failing test for it.**
 
-For each acceptance criterion:
-1. Write a failing test derived from the spec (expected values from AC, not from code)
-2. Verify it fails
-3. Write minimum implementation to make it pass
-4. Commit, then move to the next criterion
+For each acceptance criterion from Issue #1:
+1. Write a failing test — derive expected values from the spec, not from code
+2. Run `npm test` and verify it fails
+3. Write the minimum implementation to make it pass
+4. Run `npm test` and verify it passes
+5. Commit both the test and implementation
+6. Move to the next criterion
 
 ## CI
 
