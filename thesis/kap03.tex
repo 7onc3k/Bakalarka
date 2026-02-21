@@ -56,27 +56,86 @@ Více experimentálních běhů na jednom projektu odpovídá tomu, co Yin nazý
 \section{Experimentální design}
 \label{sec:experimentalni-design}
 
-\begin{raw}
-[RAW] Tato sekce popisuje co agent dostane, co měříme, proč tyto metriky,
-a referenční implementaci jako měřicí nástroj.
-\end{raw}
-
-\subsection{Specifikací řízený přístup}
+\subsection{Setup experimentu}
 
 \begin{raw}
-[RAW] Obsah z bývalé sekce 3.2 (SDD) --- přesunut sem jako zdůvodnění
-experimentálního setupu, NE jako výzkumná metodika.
+[RAW] Fixní proměnné a cílové chování agenta.
 
-Pro experiment je zvolen přístup kde specifikace řídí implementaci
-(spec-first), na úrovni definované v~\cite{sdd2026}.
+\textbf{Fixní proměnné (stejné pro všechny běhy):}
+\begin{itemize}
+    \item Prázdné GitHub repo (\texttt{AGENTS.md},
+          \texttt{.opencode/config.json}, \texttt{.opencode/agents/build.md},
+          auto-continue plugin)
+    \item Specifikace v~GitHub Issue \#1 --- plné acceptance criteria
+          a~doménový glossary, bez architecture layer
+    \item Auto-continue plugin (\texttt{session.idle} hook s~počítadlem
+          restartů a~build/test kontrolou)
+    \item Model: minimax-m2.5-free přes OpenCode
+    \item System prompt \texttt{build.md} (nahrazuje defaultní \texttt{qwen.txt}
+          --- kódové konvence, žádné procesní instrukce; \texttt{mode: primary})
+\end{itemize}
 
-\textbf{Zdůvodnění volby pro experimentální design:}
-\begin{enumerate}
-    \item \textbf{Specifikace řídí implementaci} -- kvalita specifikace přímo ovlivňuje kvalitu výstupu agenta (viz 2.4.2 bod 7). Formalizace tohoto principu umožňuje kontrolovaný experiment.
-    \item \textbf{Waterfall per increment} -- každý issue = jeden increment s detailní specifikací, ale mezi incrementy iterativní přístup. Odpovídá micro-waterfall hypotéze (2.3.4) podpořené empirickými daty \cite{watanabe2025agentprs, ehsani2026failedprs}.
-    \item \textbf{Malé, focused úkoly} -- empirická data ukazují že malé agent PRs mají vyšší úspěšnost \cite{ehsani2026failedprs}. Spec-first přirozeně vede k dekompozici na testovatelné incrementy.
-    \item \textbf{Spec-first stačí} -- pro jednorázový experiment není potřeba udržovat sync spec-kód. Spec se napíše, agent implementuje, vyhodnotí se.
-\end{enumerate}
+\textbf{Cílové chování agenta (compliance checklist):}
+
+Experiment definuje sedm procesních chování (P1--P7), která scaffolding má vyvolat. Každé je měřitelné z~git logu a~session trace --- agent buď chování demonstroval, nebo ne. Checklist (tabulka~\ref{tab:compliance-checklist}) slouží jako primární nástroj pilotních iterací: po každém běhu se vyhodnotí compliance a~nesplněná chování řídí úpravu instrukcí.
+
+\begin{table}[htbp]
+\centering
+\caption{Compliance checklist --- cílová procesní chování agenta (P1--P7)}\label{tab:compliance-checklist}
+\begin{tabular}{p{0.6cm} p{3.8cm} p{4.5cm} p{2.8cm}}
+\toprule
+\textbf{\#} & \textbf{Chování} & \textbf{Proč} & \textbf{Jak ověřit} \\
+\midrule
+P1 & Přečte Issue~\#1 před kódem &
+  Agent musí začít specifikací, ne kódem. Bez toho implementuje z~vlastních
+  ``znalostí'' (model weights), ne z~požadavků. &
+  Transcript: první tool call \\
+P2 & Decomponuje do sub-issues &
+  Empirická data ukazují, že malé focused úkoly mají vyšší úspěšnost
+  \cite{ehsani2026failedprs}. Dekompozice = agent plánuje, ne jen kóduje. &
+  \texttt{gh issue list} \\
+P3 & 1 branch per issue &
+  Izolace změn. Bez toho agent kombinuje nesouvisející práci do jednoho
+  commitu/branch a~ztrácí traceability \cite{gotel1994}. &
+  \texttt{git branch -a} vs issue count \\
+P4 & TDD test-first (red $\to$ green) &
+  Expected values musí vycházet ze specifikace, ne z~pozorování kódu.
+  Obrana proti test oracle problému --- 68,1\,\% LLM-generovaných testů
+  validuje chybné chování \cite{mathews2024}. &
+  Git log: \texttt{test:} commit před \texttt{feat:} commit \\
+P5 & Separátní commity (test/feat) &
+  Oddělení testovacího a~implementačního kódu do separátních commitů
+  umožňuje ověřit TDD sekvenci z~git logu --- commit history je
+  primární data source. &
+  Git log: commit message prefixes \\
+P6 & PR $\to$ merge $\to$ close per issue &
+  Kompletní workflow: branch $\to$ PR $\to$ merge $\to$ close issue.
+  Bez toho agent nechává otevřené branches a~issues, ztrácí přehled
+  o~stavu projektu. &
+  \texttt{gh pr list} + \texttt{gh issue list} \\
+P7 & Průběžné commity (ne blob) &
+  Agent commituje po logických celcích, ne jednou na konci.
+  Blob commit znemožňuje retrospektivní analýzu procesu
+  a~ukazuje na chybějící inkrementální přístup. &
+  Git log: commit count $>$ 1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Kromě procesní compliance se měří tři funkční výstupy (F1--F3): testy passing, API contract kompatibilní s~Technical Requirements, a~počet testů. Tyto slouží jako basic sanity check --- bez funkčního výstupu nemá smysl hodnotit proces.
+
+\textbf{Zdůvodnění checklistu:}
+
+Git log a~session transcript jsou primárním zdrojem dat --- agent po sobě zanechává kompletní trace, na rozdíl od lidského vývojáře. Každý bod checklistu je navržen tak, aby byl ověřitelný z~těchto artefaktů bez subjektivního posouzení. Většina (P2, P3, P5, P6, P7, F1--F3) je automatizovatelná skriptem (\texttt{analyze-run.sh}), P1 a~P4 vyžadují kontrolu transkriptu.
+
+Volba chování vychází z~empirické evidence: spec-first přístup \cite{sdd2026} zajišťuje, že specifikace řídí implementaci. Malé focused incrementy mají vyšší úspěšnost \cite{ehsani2026failedprs}. TDD ze specifikace brání test oracle problému \cite{mathews2024}. Průběžné commity zajišťují auditovatelnost a~umožňují retrospektivní analýzu z~git logu.
+
+Pro experiment je zvolen spec-first přístup na úrovni definované
+v~\cite{sdd2026}. Kvalita specifikace přímo ovlivňuje kvalitu výstupu
+agenta (viz sekce~2.4.2). Každý issue = jeden increment s~detailní
+specifikací, ale mezi incrementy iterativní přístup --- odpovídá
+micro-waterfall hypotéze (sekce~2.3.4) podpořené empirickými daty
+\cite{watanabe2025agentprs, ehsani2026failedprs}.
 \end{raw}
 
 \subsection{Referenční implementace jako měřicí nástroj}
@@ -88,7 +147,7 @@ experimentálních běhů jako objektivní metrika correctness.
 
 \textbf{Metoda: TDD z acceptance criteria.}
 Postup odpovídá spec-first TDD \cite{mathews2024}: nejprve se napíší
-behavioral testy přímo z~AC ve formátu Given/When/Then -- testy jsou
+behavioral testy přímo z~AC ve formátu Given/When/Then --- testy jsou
 zpočátku červené (implementace neexistuje). Následně se implementuje
 dunning system tak, aby testy postupně zelenaly. Tato sekvence zajišťuje,
 že expected values pochází ze specifikace, nikoliv z~pozorování kódu
@@ -107,7 +166,7 @@ agentního běhu bez znalosti jeho interní struktury.
 Implementace referenčního řešení odhaluje nejednoznačnosti a~mezery
 v~acceptance criteria dříve než experimentální běhy. Pokud referenční
 implementace narazí na nedostatečně specifikované chování, AC se
-upřesní -- to zaručuje, že všechny experimentální běhy pracují
+upřesní --- to zaručuje, že všechny experimentální běhy pracují
 se stejnou, kompletní specifikací.
 
 \textbf{Výstup:} behavioral test suite (TypeScript/Vitest) spustitelná
@@ -116,448 +175,121 @@ na libovolné implementaci se standardizovaným vstupním bodem API
 metriky correctness pro všechny experimentální běhy.
 \end{raw}
 
-\rule{\textwidth}{0.4pt}
+\subsection{Pilotní iterace}
 
 \begin{raw}
-\textbf{Formát specifikace: GitHub Issues}
+[RAW] DSR build-evaluate cyklus aplikovaný na instrukce.
 
-Specifikace referenční implementace je strukturována jako GitHub Issues. Volba tohoto formátu vychází z:
+\textbf{Postup:}
 
+Každá iterace je jeden DSR build-evaluate cyklus:
 \begin{enumerate}
-    \item \textbf{Akademický standard} -- SWE-bench \cite{swebench2024}, de facto benchmark pro AI coding agenty (ICLR 2024), používá GitHub Issues jako specifikaci. 2294 úloh z reálných repozitářů.
-    \item \textbf{Agilní RE praxe} -- v agilních týmech user stories a backlog items nahrazují formální SRS dokumenty \cite{cao2008}.
-    \item \textbf{Open source praxe} -- issue trackery fungují jako de facto requirements management \cite{scacchi2002}.
-    \item \textbf{Nativní čitelnost pro agenty} -- agent čte issues přes GitHub API nebo CLI, propojuje je s branches a PR.
-    \item \textbf{Traceability} -- Issue \#N $\rightarrow$ branch $\rightarrow$ commits $\rightarrow$ PR $\rightarrow$ merge. Přirozená provázanost specifikace s implementací \cite{gotel1994}.
+    \item Spustit agenta s~aktuální verzí \texttt{AGENTS.md}
+    \item Analyzovat výstup (git log, session trace, kód, testy)
+    \item Diagnostikovat selhání --- kde a~proč agent nedodržel cílové chování
+    \item Upravit instrukce s~odkazem na literaturu
+    \item Opakovat dokud agent konzistentně demonstruje target behaviors
 \end{enumerate}
 
-Struktura každého issue vychází z empirického výzkumu o optimální specifikaci pro LLM agenty
-(viz sekce 2.4.2, bod 7). Studie ukazují, že kvalita requirements přímo koreluje s kvalitou
-LLM výstupu \cite{rope2024} a že tradiční user stories jsou příliš abstraktní pro přímý
-vstup do LLM \cite{ullrich2025} -- je nutná dekompozice a obohacení o konkrétní kontext.
-
-\textbf{Dvě vrstvy specifikace:}
-
-Původní návrh obsahoval tři vrstvy (requirements, specification, architecture).
-Analýza redundance (viz níže) ukázala, že prostřední vrstva (specification: inputs/outputs,
-pre/postconditions) je implicitně obsažena v~acceptance criteria a~invariantech.
-Výsledná šablona proto obsahuje dvě vrstvy:
-
-\begin{enumerate}
-    \item \textbf{Requirements} (problémová doména -- CO business potřebuje):
-    \begin{itemize}
-        \item Title, Description -- účel a kontext funkcionality
-        \item Acceptance criteria -- Given/When/Then s~konkrétními hodnotami \cite{ticoder2024}.
-              Implicitně obsahují vstupy/výstupy (Given/Then), pre/postconditions
-              (Given = precondition, Then = postcondition) i~přechody stavů.
-              Jsou přímo mapovatelná na unit testy -- explicitní test cases tedy
-              nejsou nutnou součástí specifikace, ale odvozitelným artefaktem
-        \item Domain glossary -- sdílený slovník z business domény \cite{domaincodegen2024}
-    \end{itemize}
-
-    \item \textbf{Architecture} (struktura -- JAK je řešení organizované):
-    \begin{itemize}
-        \item Type definitions -- datové typy, interfaces, enums \cite{wen2024io, specine2025}
-        \item Invariants -- business pravidla která musí vždy platit \cite{newcomb2025prepost}
-        \item Behavioral model -- state diagram, sekvenční logika \cite[kap.~5.4]{sommerville2016}
-        \item Technické constraints -- tech stack, patterns, rozhraní
-    \end{itemize}
-\end{enumerate}
-
-Referenční implementace používá plnou specifikaci (obě vrstvy).
-Experimentální běhy používají pouze requirements vrstvu (bez architecture) —
-úroveň specifikace je fixní proměnná, ne experimentální dimenze.
-
-\textbf{Zdůvodnění redukce z~tří na dvě vrstvy:}
-
-Původní třívrstvý návrh obsahoval prostřední vrstvu \textit{Specification}
-(inputs/outputs, pre/postconditions). Analýza ukázala překryv s~ostatními vrstvami:
-acceptance criteria implicitně obsahují vstupy/výstupy (Given/Then),
-pre/postconditions (Given = precondition, Then = postcondition) i~přechody stavů.
-Tato redundance představuje problém: pro člověka vyšší cognitive overload,
-pro LLM agenta plýtvání vzácným context window duplicitními informacemi.
-
-Anthropic \cite{anthropic2025context} zavádí pojem \textbf{context rot} --
-s~rostoucím počtem tokenů klesá schopnost modelu přesně vzpomínat informace.
-Doporučuje ``nejmenší možnou sadu high-signal tokenů''. IEEE 830 \cite{ieee830}
-upozorňuje, že ``redundance sama o sobě není chyba, ale snadno k~chybám vede''.
-Bockeler \cite{bockeler2025sdd} kritizuje spec-kit (GitHub) za to, že specifikační
-soubory jsou ``repetitive, both with each other, and with the code'' --
-označuje to jako \textit{Verschlimmbesserung} (zhoršení snahou o~zlepšení).
-
-Obsah zrušené vrstvy byl absorbován: vstupy/výstupy do acceptance criteria
-(konkrétní hodnoty v~Given/When/Then), datové typy do \textit{type definitions}
-a~pre/postconditions do \textit{invariants} v~architektonické vrstvě.
-
-\textbf{Dvě publikum, různé potřeby:}
-
-Specifikace slouží dvěma publikům současně: \textbf{AI agentovi} (implementuje
-z~ní kód) a \textbf{lidskému vývojáři} (rozumí co se staví a kontroluje
-co agent vytvořil). Kruchtenův 4+1 model \cite{kruchten1995} argumentuje,
-že více pohledů je komplementárních \textbf{pro různá publika}.
-Diagramy jsou pro člověka ``high-bandwidth'' komunikace (rychlé pochopení
-celkové struktury), zatímco LLM zpracovávají Mermaid diagramy jako text.
-Konkrétní Given/When/Then scénáře mohou být pro agenta účinnější
-než vizuální model, ale pro člověka méně přehledné u~komplexních systémů.
-
-\textbf{Zasazení do SASE frameworku:}
-
-Hassan et al. \cite{hassan2025sase} navrhují framework Structured Agentic Software
-Engineering (SASE), který rozlišuje \textbf{SE4H} (SE for Humans -- člověk jako
-``Agent Coach'' zaměřený na intent, strategii a mentoring) a \textbf{SE4A}
-(SE for Agents -- strukturované prostředí pro agenty). Definují tři typy
-artefaktů: \textbf{BriefingScript} (mission brief -- co agent má udělat),
-\textbf{LoopScript} (workflow playbook -- jak má postupovat)
-a~\textbf{MentorScript} (quality normy -- jaké standardy dodržovat).
-
-Naše specifikační šablona odpovídá BriefingScript: obsahuje intent (Description),
-ověřitelná kritéria (Acceptance Criteria) a~doménový kontext (Glossary).
-Soubor \texttt{agents.md} se scaffoldingem odpovídá LoopScript a~MentorScript:
-definuje workflow (git conventions, testování) a~kvalitativní normy (code quality).
-
-Kruchtenův Scenarios (+1) view \cite{kruchten1995}, který sloužil jako validační
-most mezi všemi pohledy pro všechny stakeholdery, nachází paralelu
-v~acceptance criteria -- ty fungují jako most mezi záměrem člověka a~exekucí agenta.
-
-\textbf{Empirické pořadí důležitosti:}
-
-Studie Specine \cite{specine2025} empiricky měřila dopad jednotlivých elementů
-na kvalitu generovaného kódu (Pass@1, 4 LLM, 5 benchmarků):
-
-\textit{Tier 1 -- nejvyšší dopad:}
+\textbf{Výstup každé iterace:}
 \begin{itemize}
-    \item Příklady s vysvětlením ($\sim$14.5\%) $\rightarrow$ Acceptance criteria
-    \item Účel specifikace ($\sim$13.5\%) $\rightarrow$ Description
-    \item Výstupní požadavky ($\sim$11.6\%) $\rightarrow$ Outputs
+    \item Aktualizovaný \texttt{AGENTS.md}
+    \item CHANGELOG záznam: co se změnilo, proč, jaká evidence vedla ke~změně
+    \item Behavioral trace z~git logu a~session trace
 \end{itemize}
 
-\textit{Tier 2 -- silně doporučené:}
-vstupní požadavky, klíčové pojmy, edge/corner cases.
-
-\textit{Tier 3 -- hodnotné pro složité úlohy:}
-pre/postconditions \cite{newcomb2025prepost}, error handling, behavioral model.
-
-Tato šablona kombinuje přístupy podložené výzkumem:
-structured natural language \cite[kap.~4.4]{sommerville2016}, test-driven specifikaci \cite{ticoder2024},
-doménový kontext \cite{domaincodegen2024}, redukci specification misalignment \cite{specine2025},
-design constraints \cite{newcomb2025prepost} a klarifikaci ambiguity \cite{clarifygpt2024}.
+\textbf{Exit kritérium:}
+Agent konzistentně demonstruje všech pět cílových chování
+(TDD ze spec, průběžné commity, design doc, kompatibilní API, branch-per-issue).
+``Konzistentně'' = v~posledním běhu bez manuálního zásahu.
 \end{raw}
 
-\subsection{Experimentální dimenze a běhy}
+\subsection{Komparativní variace}
 
 \begin{raw}
-[RAW] POZOR: Tento obsah popisuje faktoriální design R0--R5 z Posunu 7.
-Design je ZASTARALÝ --- aktuální přístup je DSR iterativní pilot + ablace
-(Posun 8, viz sekce~\ref{sec:vyzkumny-pristup}). Obsah potřebuje přepsat
-na nový design. Zachováno pro referenci a přepracování.
+[RAW] Systematická variace jednotlivých komponent fungujících instrukcí.
 
-\rule{\textwidth}{0.4pt}
+\textbf{Princip:}
 
-Posun 8 — iterativní pilot + ablace/variace (2026-02-19)
+Z~fungující sady instrukcí (výstup pilotní fáze) systematicky měníme
+jednotlivé komponenty a~měříme dopad na chování agenta.
 
-\textbf{Dvě metody experimentálních změn:}
-
+\textbf{Dva typy změn:}
 \begin{enumerate}
-    \item \textbf{Ablace} -- odebrání komponenty instrukce úplně.
+    \item \textbf{Ablace} --- odebrání komponenty úplně.
           Měří \textit{nutnost}: funguje agent bez této instrukce?
           Příklad: odebrat TDD instrukci $\rightarrow$ dělá agent TDD přirozeně?
-    \item \textbf{Komparativní variace} -- změna obsahu komponenty.
+    \item \textbf{Substituce} --- nahrazení komponenty alternativou.
           Měří \textit{efekt obsahu}: která varianta produkuje lepší výsledky?
-          Příklad: TDD instrukce vs. impl-first instrukce $\rightarrow$ co je lepší?
+          Příklad: ``strict TDD'' vs. ``impl-first, testy po stabilizaci''.
 \end{enumerate}
 
-Ablace a variace odpovídají různým výzkumným otázkám a lze je kombinovat:
-ablace nejprve ukáže které instrukce jsou nutné, variace pak porovná jejich varianty.
+Ablace ukáže \textit{jestli} komponenta záleží, substituce ukáže
+\textit{proč} a~\textit{v~jaké formě}.
 
 \rule{\textwidth}{0.4pt}
 
-[RAW] Nový design — evidence-based dimension selection (Posun 7, 2026-02-19)
-
-\textbf{Evoluce designu:}
-
-Původní design porovnával dva instrukční styly (meta vs. explicit) napříč
-třemi dimenzemi P/O/Q odvozenými z~SASE frameworku a~taxonomie Wang et al.
-Pilotní běh R0 a~dvě nezávislé literature review (Gemini Deep Research,
-ChatGPT Deep Research — viz \texttt{docs/}) odhalily tři problémy:
-
-\begin{enumerate}
-    \item \textbf{Delivery mechanism konflikt:} OpenCode defaultní system
-          prompt (\texttt{qwen.txt}) obsahuje ``NEVER commit unless asked'',
-          což přebíjel naši instrukci ``commit as you progress''. Agent
-          v~pilotu commitnul jednou na konci. Řešení: \texttt{build.md}
-          s~\texttt{mode: primary} nahrazuje \texttt{qwen.txt} (ověřeno
-          empiricky).
-    \item \textbf{Meta instrukce nebyly meta-prompting:} Naše ``meta''
-          instrukce (co + proč) neodpovídaly meta-promptingu ve smyslu
-          Suzgun \cite{suzgun2024metaprompt} (orchestration scaffolding).
-          Byly to soft explicit instrukce — agent je ignoroval stejně
-          jako by ignoroval hard explicit.
-    \item \textbf{Dimenze neodpovídaly empirické nejistotě:} Oba nezávislé
-          research reporty identifikovaly jako oblasti s~genuinely uncertain
-          evidence jiné dimenze než P/O/Q. Původní dimenze byly odvozeny
-          taxonomicky (SASE, Wang); nové jsou odvozeny z~empirických
-          rozporů v~literatuře.
-\end{enumerate}
-
-\textbf{Princip výběru dimenzí:}
+\textbf{Dimenze variace:}
 
 Experiment testuje aspekty scaffoldingu, kde existuje \textbf{konfliktní
-nebo nedostatečná evidence} — ne ty, kde je výsledek předem jasný.
-Settled practices (minimální instrukce, explicit scope constraints,
-lightweight verification) jsou zafixovány do baseline. Proven anti-patterns
-(verbose auto-generated context, exhaustive enumeration) jsou vyloučeny.
+nebo nedostatečná evidence} v~literatuře. Dimenze byly vybrány na základě
+dvou nezávislých deep research reportů, které identifikovaly tři oblasti
+s~největší empirickou nejistotou (tabulka~\ref{tab:dimenze-variace}):
 
-Dimenze byly vybrány na základě dvou nezávislých deep research reportů,
-které identifikovaly tři oblasti s~největší empirickou nejistotou
-a~nejvyšším potenciálem pro měřitelné rozdíly:
-
-\textbf{Tři experimentální dimenze:}
-
-\begin{center}
-\begin{tabular}{p{0.5cm}|p{2.2cm}|p{4cm}|p{4cm}}
+\begin{table}[htbp]
+\centering
+\caption{Dimenze variace scaffoldingu}\label{tab:dimenze-variace}
+\begin{tabular}{p{0.5cm} p{2.2cm} p{4cm} p{4cm}}
+\toprule
 \textbf{Dim.} & \textbf{Název} & \textbf{Varianta A} &
 \textbf{Varianta B} \\
-\hline
+\midrule
 P & Planning artifact &
   Před kódem vytvoř explicitní plán/design doc (moduly, typy, sekvence). &
   Žádný plánovací artefakt; rovnou iteruj s~kódem a~testy. \\
-\hline
 T & Testing workflow &
   Strict TDD: pro každé AC napiš failing test ze spec $\to$ implementuj
   $\to$ green $\to$ další AC. &
   Implementuj nejdřív; po stabilizaci napiš testy proti spec. \\
-\hline
 C & Constraint density &
   Minimální: jen cíle a~acceptance criteria, agent rozhoduje o~procesu. &
   Komprehensivní: explicit proces, quality gates, lint/typecheck/CI. \\
+\bottomrule
 \end{tabular}
-\end{center}
+\end{table}
 
 \textbf{Zdůvodnění per dimenze:}
 
-\textit{P — Planning artifact.} Jiang et al. (2024, TOSEM) ukazují
+\textit{P --- Planning artifact.} Jiang et al. (2024, TOSEM) ukazují
 +25\,\% Pass@1 při self-planning code generation. Naopak novější
 evaluace (2025) zjišťují, že planning-like prompting ztrácí benefit
 na moderních modelech a~concise objective-style prompting dosahuje
 srovnatelné accuracy s~menší spotřebou tokenů. Pro agentic setting
 s~tool use je otázka otevřená.
 
-\textit{T — Testing workflow.} TDD ze specifikace brání test oracle
+\textit{T --- Testing workflow.} TDD ze specifikace brání test oracle
 problému \cite{mathews2024}. Ale LLM jsou trénované na code-before-tests
-distribuci — vynucení test-first může produkovat tautologické testy
+distribuci --- vynucení test-first může produkovat tautologické testy
 (``Context Pollution''). V~agentic settings extra testing zvyšuje cost
 a~může snížit success rate (AGENTbench 2026). Agentless \cite{xia2024agentless}
 ukazuje, že fixní pipeline bez autonomního plánování dosahuje 32\,\%
 na SWE-bench Lite.
 
-\textit{C — Constraint density.} Lulla et al. \cite{lulla2026} ukazují,
+\textit{C --- Constraint density.} Lulla et al. \cite{lulla2026} ukazují,
 že AGENTS.md s~explicitními informacemi snižuje runtime o~28\,\%.
 AGENTbench (2026) naopak zjišťuje, že verbose context files snižují
-success rate a~zvyšují cost o~20\,\%+. Přímý rozpor — záleží na tom
+success rate a~zvyšují cost o~20\,\%+. Přímý rozpor --- záleží na tom
 CO je v~instrukcích, ne jen zda existují.
 
-\textbf{Fixní proměnné (stejné pro všechny běhy):}
-\begin{itemize}
-    \item Prázdné GitHub repo (\texttt{AGENTS.md},
-          \texttt{.opencode/config.json}, \texttt{.opencode/agents/build.md},
-          auto-continue plugin)
-    \item Specifikace v~GitHub Issue \#1 — plné acceptance criteria
-          a~doménový glossary, bez architecture layer
-    \item Auto-continue plugin (\texttt{session.idle} hook s~počítadlem
-          restartů a~build/test kontrolou)
-    \item Model: GLM-5 přes OpenCode; system prompt \texttt{build.md}
-          (nahrazuje defaultní \texttt{qwen.txt} — kódové konvence,
-          žádné procesní instrukce)
-    \item Fixní hlavička AGENTS.md: odkaz na specifikaci, popis prostředí,
-          výstupní požadavek, commit policy, scope constraints
-\end{itemize}
+\rule{\textwidth}{0.4pt}
 
-\textbf{Confound mitigation — délka instrukcí:}
+\textbf{Confound mitigation --- délka instrukcí:}
 
 Délka instrukcí sama o~sobě ovlivňuje výsledky (IFScale benchmark,
 lost-in-the-middle efekt). Varianta C-comprehensive je záměrně delší
-než C-minimal — to JE treatment, ne confound. Pro dimenze P a~T jsou
+než C-minimal --- to JE treatment, ne confound. Pro dimenze P a~T jsou
 varianty normalizovány na srovnatelný word count. Prompt sensitivity
 \cite{razavi2025} je přiznána jako limitation.
-
-\textbf{Experimentální běhy (vyvážený frakční faktoriální design):}
-
-\textit{ZASTARALÝ --- tento design bude nahrazen DSR iterativní pilot + ablace.}
-
-\begin{center}
-\begin{tabular}{p{0.7cm}|p{2cm}|p{2.5cm}|p{2.5cm}|p{3.5cm}}
-\textbf{Run} & \textbf{P} & \textbf{T} & \textbf{C} &
-\textbf{Popis} \\
-\hline
-R0 & plan & test-first & minimal &
-  Plánování + TDD, minimum instrukcí \\
-\hline
-R1 & plan & impl-first & comprehensive &
-  Plánování + impl-first, detailní instrukce \\
-\hline
-R2 & plan & impl-first & minimal &
-  Plánování + impl-first, minimum \\
-\hline
-R3 & no-plan & test-first & comprehensive &
-  Bez plánu + TDD, detailní instrukce \\
-\hline
-R4 & no-plan & test-first & minimal &
-  Bez plánu + TDD, minimum \\
-\hline
-R5 & no-plan & impl-first & comprehensive &
-  Bez plánu + impl-first, detailní \\
-\end{tabular}
-\end{center}
-
-Šest běhů, single run per podmínku. Každá dimenze testována přesně
-3$\times$ per úroveň (balanced). Design umožňuje párové srovnání
-per dimenze — pro každou dimenzi existují páry běhů lišící se pouze
-v~dané dimenzi.
-
-Každý běh probíhá v~separátním GitHub repozitáři (čistý stav).
-Artefakty (commit history, issues, PR) zachovány pro post-hoc analýzu.
-
-\textbf{Pilot studie:} Před experimentálními běhy proběhne pilotní validace
-setupu na R0. Pilot identifikuje technické problémy (timeouty, bugy
-v~orchestraci, nedostatky v~šabloně) a~kalibruje metriky. Iterace na
-pilotu se nepočítají do výsledků studie.
-
-\textbf{Deployment a~Maintenance mimo scope:} experiment měří co agent
-vytvoří; npm package nemá reálné uživatele ani provoz.
-
-\textbf{Proč tři SDLC fáze (bez Testing):} Testing fáze se v~kontextu
-TDD rozpadá na dvě aktivity: psaní testů = interpretace requirements
-(spustitelná specifikace \cite{sommerville2016, swebok2024}),
-spouštění testů = verifikační feedback loop implementace. Test oracle
-problem \cite{mathews2024} potvrzuje, že testy odvozené z~kódu (nikoliv
-ze specifikace) validují chybné chování v~68,1\,\% případů.
-\end{raw}
-
-\subsection{Katalog ablatable komponent}
-
-\begin{raw}
-\textbf{Katalog ablatable komponent (brainstorm):}
-
-Následující seznam identifikuje komponenty, které lze jednotlivě odebrat
-a~měřit jejich dopad. Vychází z~empirických ablačních studií v~literatuře
--- SWE-agent \cite{yang2024sweagent} abluje ACI komponenty,
-CCA \cite{wang2025cca} abluje scaffolding features,
-Anthropic \cite{anthropic2025harness} identifikuje failure-specific komponenty.
-
-\textit{Specifikace (BriefingScript):}
-\begin{itemize}
-    \item Architecture vrstva (types, invariants, behavioral model) \cite{specine2025}
-    \item Doménový glossary \cite{domaincodegen2024}
-    \item Detail acceptance criteria (konkrétní hodnoty vs. obecný popis) \cite{ticoder2024}
-    \item Behavioral model / state diagram \cite{sommerville2016}
-\end{itemize}
-
-\textit{Instrukce (LoopScript + MentorScript):}
-\begin{itemize}
-    \item \texttt{agents.md} jako celek \cite{hassan2025sase}
-    \item TDD instrukce (testy před implementací) \cite{mathews2024}
-    \item Git workflow konvence (branching, commits, PR)
-    \item Code quality standardy (strict mode, no-any)
-    \item Code review instrukce
-\end{itemize}
-
-\textit{Prostředí (Agent Execution Environment):}
-\begin{itemize}
-    \item CI pipeline (automatická kontrola)
-    \item Pre-konfigurovaný tooling (tsconfig, eslint, vitest, stryker)
-    \item Project structure (adresářová struktura, package.json)
-\end{itemize}
-
-\textit{Orchestrace a~session management:}
-\begin{itemize}
-    \item Session-per-issue granularita -- empiricky validovaná jako optimální
-          scope \cite{spotify2025context}; agenti selhávají při feature-level
-          scope \cite{featurebench2026}
-    \item Issue-based task decomposition -- dekompozice úkolů do sub-issues
-          s~dependencies; task decomposition jako context management
-          strategie \cite{chainofagents2024}
-    \item Sub-agent delegace -- orchestrátor deleguje issues na sub-agenty
-          s~čistým kontextem; hierarchická orchestrace dosahuje SOTA
-          \cite{agentorchestra2025}; trust calibration mezi delegátorem
-          a~delegátem \cite{googledelegation2026}
-    \item Role separation -- oddělení analytických a~exekučních rolí.
-          MASAI \cite{masai2024} definuje 5~specializovaných sub-agentů
-          se structured artifact passing (ne konverzací); AgentCoder
-          \cite{agentcoder2024} empiricky validuje separaci test designu
-          od implementace (96,3\,\% HumanEval); Agyn \cite{agyn2026}
-          replikuje inženýrský tým s~dedikovanými rolemi a~dosahuje
-          72,2\,\% SWE-bench~500. Studie ukazují, že organizační design
-          je stejně důležitý jako schopnosti modelu.
-    \item Single vs. multi-agent trade-off -- přínos multi-agent architektury
-          klesá s~rostoucí schopností modelů \cite{singleormulti2025};
-          hybridní přístup (multi-agent jen tam kde je potřeba) přináší
-          +1--12\,\% accuracy při --88\,\% cost. Multi-agent systémy
-          mají 14~identifikovaných failure modes ve 3~kategoriích
-          (system design, inter-agent misalignment, task verification)
-          \cite{mast2025}. Minimální efektivní rozdělení = separace
-          testování od implementace.
-    \item Meta-prompting -- místo explicitních instrukcí agent dostane
-          meta-instrukci navrhnout si vlastní workflow; task-agnostic
-          scaffolding pattern \cite{suzgun2024metaprompt}; automatizovaný
-          design agentních systémů \cite{hu2024adas}
-    \item Completion verification loop -- mechanismus zajišťující, že agent
-          dokončí celý projekt, ne jen jeden krok. Tři varianty:
-          (1)~Ralph Loop -- vnější cyklus s~čistým kontextem per iteraci,
-          stav přes soubory/issues, implementován v~Claude Code i~OpenCode;
-          (2)~session.idle hook -- plugin uvnitř agentního frameworku,
-          při ukončení agenta ověří podmínku dokončení (např. počet
-          otevřených issues přes GitHub API) a~pokud není splněna,
-          re-injektuje prompt s~aktuálním stavem; počet restartů slouží
-          jako metrika autonomie agenta;
-          (3)~instruktážní -- agent dostane instrukci ``neskončí dokud
-          všechny issues nejsou uzavřeny'', bez vnější kontroly.
-    \item Retry strategie -- single-shot vs. fresh-context retry vs.
-          child fix issues; scaffolding a~retry jsou nezávisle hodnotné
-          a~multiplikativní \cite{neurosymbolic2025}
-    \item Strukturovaná dokumentace v~issues -- záznam pro následující
-          agent session (co bylo zkušeno, co selhalo, aktuální stav)
-          \cite{anthropic2025harness}. Každá inter-agent zpráva je potenciální
-          failure point; chain-style error propagation kaskáduje malé nepřesnosti
-          do systémových selhání \cite{agentask2025}. Tři validované mechanismy
-          předávání stavu: (1)~progress file + git commity \cite{anthropic2025harness},
-          (2)~GitHub issues jako komunikační kanál (issue $\to$ PR $\to$ review),
-          (3)~structured artifact passing s~formální output specifikací
-          \cite{masai2024}
-\end{itemize}
-
-\textit{Context window management:}
-\begin{itemize}
-    \item Context window degraduje s~délkou, ne jen ``dojde'' --
-          coding performance klesá z~29\,\% na 3\,\% při long-context
-          úlohách \cite{longcodebench2025}; U-shaped křivka, informace
-          uprostřed se ztrácí \cite{liu2024lost}; nerovnoměrná degradace
-          napříč 18 modely \cite{contextrot2025}
-    \item Observation masking (skrytí detailů tool outputu) je stejně
-          efektivní jako LLM summarization za poloviční cenu
-          \cite{jetbrains2025complexity}
-\end{itemize}
-
-Tento katalog byl při návrhu experimentu mapován na tři dimenze
-vybrané na základě empirické nejistoty v~literatuře:
-\textbf{P}~(Planning artifact) pokrývá plánovací a~architektonické
-rozhodnutí, \textbf{T}~(Testing workflow) pokrývá testovací strategii
-a~pořadí test/implementace, \textbf{C}~(Constraint density) pokrývá
-procesní instrukce, quality gates, tooling a~CI.
-Položky z~katalogu týkající se specifikace (BriefingScript)
-jsou fixní proměnnou — specifikace je stejná pro všechny běhy.
-Položky z~context window management jsou infrastrukturní a~řeší je
-agentní framework (OpenCode).
-
-\textbf{Multi-issue gap:}
-
-Stávající benchmarky ukazují výrazný propad výkonu agentů při přechodu
-od single-issue k~multi-issue úlohám: SWE-EVO \cite{sweevo2025} reportuje
-pouze 21\,\% úspěšnost na evolučních úlohách (průměrně 21~souborů) oproti
-65\,\% na single-issue SWE-Bench; FeatureBench \cite{featurebench2026} měří
-11\,\% na feature-level úlohách; ACE-Bench \cite{acebench2025} 7,5\,\%
-na end-to-end feature development. Tato case study (5~issues, celý dunning
-system) cílí přesně do tohoto rozsahu, kde scaffolding může přinést
-měřitelný rozdíl.
 \end{raw}
 
 \subsection{Testovací strategie a mutation testing}
@@ -567,48 +299,26 @@ měřitelný rozdíl.
 
 Acceptance criteria ve formátu Given/When/Then (BDD) s konkrétními hodnotami
 jsou přímo mapovatelná na unit testy. Schopnost agenta korektně odvodit test suite
-z~acceptance criteria je měřitelná dimenze experimentu -- odpovídá zjištění
+z~acceptance criteria je měřitelná dimenze experimentu --- odpovídá zjištění
 TiCoder \cite{ticoder2024}, kde formalizace záměru přes testy vedla k~45.97\%
 zlepšení Pass@1.
 
-\textbf{Strategie testování a mutation testing:}
+\textbf{Mutation testing jako metrika kvality testů:}
 
-Klíčovým rizikem LLM-generovaných testů je tzv. \textbf{test oracle problem}
-\cite{mathews2024}. Mathews et al. ukázali, že nástroje pro automatické generování
-testů (CoverAgent, CoverUp) systematicky filtrují failing testy a~ponechávají
-pouze passing -- výsledkem je, že až 68,1\,\% vygenerovaných test suites
-\textbf{validuje chybné chování} místo jeho odhalení. Příčinou je, že expected
-values jsou odvozeny z~pozorování kódu, ne ze specifikace.
-
-Chen et al. \cite{rethinking2025} empiricky potvrdili na 500 úlohách SWE-bench,
-že agent-generované testy slouží primárně jako \textbf{observační feedback}
-(value-revealing prints), ne jako validační nástroj -- 83,2\,\% úloh má stejný
-výsledek bez ohledu na to, zda agent testy píše. Relační a~boundary kontroly
-(nejcennější pro detekci chyb) tvoří pouze 3--8\,\% assertions.
-
-Obrana proti těmto anti-patterns:
-\begin{itemize}
-    \item \textbf{TDD ze specifikace} -- expected values vycházejí z~acceptance
-          criteria, ne z~pozorování kódu. Agent píše testy \textbf{před}
-          implementací (red $\rightarrow$ green $\rightarrow$ refactor).
-    \item \textbf{Failing test = opravit kód, ne test} -- zabraňuje selection
-          biasu, kde se zahazují testy odhalující chyby.
-    \item \textbf{Mutation testing jako metrika kvality testů} -- strukturální
-          coverage (branch, statement) je nutná, ale nedostatečná podmínka.
-          Papadakis et al. \cite{papadakis2019} v~přehledové studii ukázali, že
-          mutation score je silnější prediktor detekce reálných chyb než
-          strukturální coverage -- 36\,\% chyb je odhalitelných pouze mutation
-          testingem. Harman et al. \cite{meta2025} potvrdili v~produkčním
-          nasazení na Meta (10\,795 tříd), že 70\,\% mutantů zůstává
-          neodhalených i~při plném coverage.
-\end{itemize}
+Strukturální coverage (branch, statement) je nutná, ale nedostatečná podmínka.
+Papadakis et al. \cite{papadakis2019} v~přehledové studii ukázali, že
+mutation score je silnější prediktor detekce reálných chyb než
+strukturální coverage --- 36\,\% chyb je odhalitelných pouze mutation
+testingem. Harman et al. \cite{meta2025} potvrdili v~produkčním
+nasazení na Meta (10\,795 tříd), že 70\,\% mutantů zůstává
+neodhalených i~při plném coverage.
 
 Pro referenční implementaci volíme Stryker (mutation testing framework pro
 TypeScript) jako objektivní metriku kvality testů agenta. Mutation score měří,
-jak dobře testy detekují simulované chyby -- na rozdíl od coverage, která měří
+jak dobře testy detekují simulované chyby --- na rozdíl od coverage, která měří
 pouze dosažitelnost kódu.
 
-\textbf{Doplňková dimenze -- formát/reprezentace specifikace:}
+\textbf{Doplňková dimenze --- formát/reprezentace specifikace:}
 
 Nezávisle na úrovni detailu ovlivňuje kvalitu výstupu i~způsob strukturování
 informace. Volba kombinovaného formátu (structured text + tabulky + behavioral

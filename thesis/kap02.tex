@@ -1089,3 +1089,169 @@ Klíčové poznatky:
     \item \texttt{humanai2024} -- human-AI collaboration
 \end{itemize}
 \end{raw}
+
+%% === PŘESUNUTO Z KAP03 (2026-02-21) — zařadit do správných sekcí ===
+
+\begin{raw}
+\textbf{Formát specifikace: GitHub Issues}
+
+Specifikace referenční implementace je strukturována jako GitHub Issues. Volba tohoto formátu vychází z:
+
+\begin{enumerate}
+    \item \textbf{Akademický standard} -- SWE-bench \cite{swebench2024}, de facto benchmark pro AI coding agenty (ICLR 2024), používá GitHub Issues jako specifikaci. 2294 úloh z reálných repozitářů.
+    \item \textbf{Agilní RE praxe} -- v agilních týmech user stories a backlog items nahrazují formální SRS dokumenty \cite{cao2008}.
+    \item \textbf{Open source praxe} -- issue trackery fungují jako de facto requirements management \cite{scacchi2002}.
+    \item \textbf{Nativní čitelnost pro agenty} -- agent čte issues přes GitHub API nebo CLI, propojuje je s branches a PR.
+    \item \textbf{Traceability} -- Issue \#N $\rightarrow$ branch $\rightarrow$ commits $\rightarrow$ PR $\rightarrow$ merge. Přirozená provázanost specifikace s implementací \cite{gotel1994}.
+\end{enumerate}
+
+Struktura každého issue vychází z empirického výzkumu o optimální specifikaci pro LLM agenty
+(viz sekce 2.4.2, bod 7). Studie ukazují, že kvalita requirements přímo koreluje s kvalitou
+LLM výstupu \cite{rope2024} a že tradiční user stories jsou příliš abstraktní pro přímý
+vstup do LLM \cite{ullrich2025} -- je nutná dekompozice a obohacení o konkrétní kontext.
+
+\textbf{Dvě vrstvy specifikace:}
+
+Původní návrh obsahoval tři vrstvy (requirements, specification, architecture).
+Analýza redundance (viz níže) ukázala, že prostřední vrstva (specification: inputs/outputs,
+pre/postconditions) je implicitně obsažena v~acceptance criteria a~invariantech.
+Výsledná šablona proto obsahuje dvě vrstvy:
+
+\begin{enumerate}
+    \item \textbf{Requirements} (problémová doména -- CO business potřebuje):
+    \begin{itemize}
+        \item Title, Description -- účel a kontext funkcionality
+        \item Acceptance criteria -- Given/When/Then s~konkrétními hodnotami \cite{ticoder2024}.
+              Implicitně obsahují vstupy/výstupy (Given/Then), pre/postconditions
+              (Given = precondition, Then = postcondition) i~přechody stavů.
+              Jsou přímo mapovatelná na unit testy -- explicitní test cases tedy
+              nejsou nutnou součástí specifikace, ale odvozitelným artefaktem
+        \item Domain glossary -- sdílený slovník z business domény \cite{domaincodegen2024}
+    \end{itemize}
+
+    \item \textbf{Architecture} (struktura -- JAK je řešení organizované):
+    \begin{itemize}
+        \item Type definitions -- datové typy, interfaces, enums \cite{wen2024io, specine2025}
+        \item Invariants -- business pravidla která musí vždy platit \cite{newcomb2025prepost}
+        \item Behavioral model -- state diagram, sekvenční logika \cite[kap.~5.4]{sommerville2016}
+        \item Technické constraints -- tech stack, patterns, rozhraní
+    \end{itemize}
+\end{enumerate}
+
+Referenční implementace používá plnou specifikaci (obě vrstvy).
+Experimentální běhy používají pouze requirements vrstvu (bez architecture) —
+úroveň specifikace je fixní proměnná, ne experimentální dimenze.
+
+\textbf{Zdůvodnění redukce z~tří na dvě vrstvy:}
+
+Původní třívrstvý návrh obsahoval prostřední vrstvu \textit{Specification}
+(inputs/outputs, pre/postconditions). Analýza ukázala překryv s~ostatními vrstvami:
+acceptance criteria implicitně obsahují vstupy/výstupy (Given/Then),
+pre/postconditions (Given = precondition, Then = postcondition) i~přechody stavů.
+Tato redundance představuje problém: pro člověka vyšší cognitive overload,
+pro LLM agenta plýtvání vzácným context window duplicitními informacemi.
+
+Anthropic \cite{anthropic2025context} zavádí pojem \textbf{context rot} --
+s~rostoucím počtem tokenů klesá schopnost modelu přesně vzpomínat informace.
+Doporučuje ``nejmenší možnou sadu high-signal tokenů''. IEEE 830 \cite{ieee830}
+upozorňuje, že ``redundance sama o sobě není chyba, ale snadno k~chybám vede''.
+Bockeler \cite{bockeler2025sdd} kritizuje spec-kit (GitHub) za to, že specifikační
+soubory jsou ``repetitive, both with each other, and with the code'' --
+označuje to jako \textit{Verschlimmbesserung} (zhoršení snahou o~zlepšení).
+
+Obsah zrušené vrstvy byl absorbován: vstupy/výstupy do acceptance criteria
+(konkrétní hodnoty v~Given/When/Then), datové typy do \textit{type definitions}
+a~pre/postconditions do \textit{invariants} v~architektonické vrstvě.
+
+\textbf{Dvě publikum, různé potřeby:}
+
+Specifikace slouží dvěma publikům současně: \textbf{AI agentovi} (implementuje
+z~ní kód) a \textbf{lidskému vývojáři} (rozumí co se staví a kontroluje
+co agent vytvořil). Kruchtenův 4+1 model \cite{kruchten1995} argumentuje,
+že více pohledů je komplementárních \textbf{pro různá publika}.
+Diagramy jsou pro člověka ``high-bandwidth'' komunikace (rychlé pochopení
+celkové struktury), zatímco LLM zpracovávají Mermaid diagramy jako text.
+Konkrétní Given/When/Then scénáře mohou být pro agenta účinnější
+než vizuální model, ale pro člověka méně přehledné u~komplexních systémů.
+
+\textbf{Zasazení do SASE frameworku:}
+
+Hassan et al. \cite{hassan2025sase} navrhují framework Structured Agentic Software
+Engineering (SASE), který rozlišuje \textbf{SE4H} (SE for Humans -- člověk jako
+``Agent Coach'' zaměřený na intent, strategii a mentoring) a \textbf{SE4A}
+(SE for Agents -- strukturované prostředí pro agenty). Definují tři typy
+artefaktů: \textbf{BriefingScript} (mission brief -- co agent má udělat),
+\textbf{LoopScript} (workflow playbook -- jak má postupovat)
+a~\textbf{MentorScript} (quality normy -- jaké standardy dodržovat).
+
+Naše specifikační šablona odpovídá BriefingScript: obsahuje intent (Description),
+ověřitelná kritéria (Acceptance Criteria) a~doménový kontext (Glossary).
+Soubor \texttt{agents.md} se scaffoldingem odpovídá LoopScript a~MentorScript:
+definuje workflow (git conventions, testování) a~kvalitativní normy (code quality).
+
+Kruchtenův Scenarios (+1) view \cite{kruchten1995}, který sloužil jako validační
+most mezi všemi pohledy pro všechny stakeholdery, nachází paralelu
+v~acceptance criteria -- ty fungují jako most mezi záměrem člověka a~exekucí agenta.
+
+\textbf{Empirické pořadí důležitosti:}
+
+Studie Specine \cite{specine2025} empiricky měřila dopad jednotlivých elementů
+na kvalitu generovaného kódu (Pass@1, 4 LLM, 5 benchmarků):
+
+\textit{Tier 1 -- nejvyšší dopad:}
+\begin{itemize}
+    \item Příklady s vysvětlením ($\sim$14.5\%) $\rightarrow$ Acceptance criteria
+    \item Účel specifikace ($\sim$13.5\%) $\rightarrow$ Description
+    \item Výstupní požadavky ($\sim$11.6\%) $\rightarrow$ Outputs
+\end{itemize}
+
+\textit{Tier 2 -- silně doporučené:}
+vstupní požadavky, klíčové pojmy, edge/corner cases.
+
+\textit{Tier 3 -- hodnotné pro složité úlohy:}
+pre/postconditions \cite{newcomb2025prepost}, error handling, behavioral model.
+
+Tato šablona kombinuje přístupy podložené výzkumem:
+structured natural language \cite[kap.~4.4]{sommerville2016}, test-driven specifikaci \cite{ticoder2024},
+doménový kontext \cite{domaincodegen2024}, redukci specification misalignment \cite{specine2025},
+design constraints \cite{newcomb2025prepost} a klarifikaci ambiguity \cite{clarifygpt2024}.
+
+\rule{\textwidth}{0.4pt}
+
+\textbf{Multi-issue gap:}
+
+Stávající benchmarky ukazují výrazný propad výkonu agentů při přechodu
+od single-issue k~multi-issue úlohám: SWE-EVO \cite{sweevo2025} reportuje
+pouze 21\,\% úspěšnost na evolučních úlohách (průměrně 21~souborů) oproti
+65\,\% na single-issue SWE-Bench; FeatureBench \cite{featurebench2026} měří
+11\,\% na feature-level úlohách; ACE-Bench \cite{acebench2025} 7,5\,\%
+na end-to-end feature development. Tato case study (5~issues, celý dunning
+system) cílí přesně do tohoto rozsahu, kde scaffolding může přinést
+měřitelný rozdíl.
+
+\rule{\textwidth}{0.4pt}
+
+\textbf{Test oracle problem — teoretické východisko:}
+
+Klíčovým rizikem LLM-generovaných testů je tzv. \textbf{test oracle problem}
+\cite{mathews2024}. Mathews et al. ukázali, že nástroje pro automatické generování
+testů (CoverAgent, CoverUp) systematicky filtrují failing testy a~ponechávají
+pouze passing -- výsledkem je, že až 68,1\,\% vygenerovaných test suites
+\textbf{validuje chybné chování} místo jeho odhalení. Příčinou je, že expected
+values jsou odvozeny z~pozorování kódu, ne ze specifikace.
+
+Chen et al. \cite{rethinking2025} empiricky potvrdili na 500 úlohách SWE-bench,
+že agent-generované testy slouží primárně jako \textbf{observační feedback}
+(value-revealing prints), ne jako validační nástroj -- 83,2\,\% úloh má stejný
+výsledek bez ohledu na to, zda agent testy píše. Relační a~boundary kontroly
+(nejcennější pro detekci chyb) tvoří pouze 3--8\,\% assertions.
+
+Obrana proti těmto anti-patterns:
+\begin{itemize}
+    \item \textbf{TDD ze specifikace} -- expected values vycházejí z~acceptance
+          criteria, ne z~pozorování kódu. Agent píše testy \textbf{před}
+          implementací (red $\rightarrow$ green $\rightarrow$ refactor).
+    \item \textbf{Failing test = opravit kód, ne test} -- zabraňuje selection
+          biasu, kde se zahazují testy odhalující chyby.
+\end{itemize}
+\end{raw}
