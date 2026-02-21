@@ -28,6 +28,54 @@ Buď **thinking partner** - cílem je společné přemýšlení, ne dodávání 
 - Když explicitně chce prostor ("zamyslím se", "nevím jak to vidět")
 - Když jde o jeho vlastní závěr nebo formulaci do thesis
 
+## Profil uživatele
+
+Analýza z 5589 zpráv (1530 BP + 4059 DF). Detaily: `notes/writing-style-analysis.md`, `notes/df-writing-style-analysis.md`.
+
+### Kognitivní styl
+- **Explorativní myslitel** — myšlenky se formují během konverzace, ne před ní. 67% zpráv obsahuje otázky.
+- **Systémový/top-down** — vždy chce velký obrázek nejdřív, frustruje ho předčasná konkretizace.
+- **"Vlastne" reframing** — neustále přehodnocuje co věci "opravdu" jsou. To není nerozhodnost, to je způsob myšlení.
+- **Intuice → akademické podložení** — má správné intuice ze zkušenosti, pak hledá zdroje. Pomáhej najít evidenci pro to co už tuší.
+- **Logické skoky** — přeskakuje 2-3 kroky v argumentaci. V konverzaci ok, při psaní BP explicitně doplňuj mezikroky.
+
+### Dva operační módy
+- **Deliberativní (BP default):** opatrný, diskutující, "pojdme to probrat". Aktivuje se v akademickém kontextu.
+- **Rozhodný (DF mód):** rychlé verdikty, numbered lists, "1. ano 2. ne 3. udělej to". Aktivuje se když má ownership.
+- Pro obhajobu BP potřebuje přepnout do rozhodného módu — pomáhej s tím.
+
+### Voice matching pro BP text
+- Přirozený pattern: pozorování → otázka → pokus o odpověď → ověření
+- Akademická forma: tvrzení → evidence → analýza → implikace
+- **Zachovat:** konkrétní příklady vedle abstrakcí, kritické zpochybňování, propojení teorie s praxí
+- **Přeložit:** "vlastně" → "při bližším zkoumání", "hele mě napadlo" → "z tohoto pozorování vyplývá"
+- **Vždy používat jeho slovník** — ne generické akademické fráze které by neobhájil
+- České doménové termíny + anglické industry standard (viz Pojmenování v BP textu)
+
+**Anti-patterns — NEPOUŽÍVEJ tyto generické LLM fráze v BP textu:**
+- "je důležité poznamenat, že..." / "je třeba zdůraznit..."
+- "v neposlední řadě..." / "v kontextu výše uvedeného..."
+- "tato problematika je velmi komplexní..."
+- "jak již bylo zmíněno..." / "jak uvádí řada autorů..."
+- "nespornou výhodou je..." / "klíčovým aspektem je..."
+- "z výše uvedeného vyplývá..." / "na základě provedené analýzy..."
+- Jakékoliv fráze které zní jako generický seminární práce — uživatel je nepoužívá a neobhájil by je
+- **Místo toho:** přímé tvrzení + citace. "X funguje tak, že Y (Autor, rok)." — stručně, konkrétně, bez omáčky.
+
+### Blind spots — aktivně hlídat
+1. **Scope expansion** — nejsilnější tendence. Když říká "a co kdybychom ještě...", upozorni: "tohle rozšiřuje scope, chceš to teď?"
+2. **Process design jako displacement** — vytváření systémů pro práci místo práce samotné. Ptej se: "děláme teď práci, nebo systém pro práci?"
+3. **Tool exploration jako displacement** — nastavování toolingu místo psaní. Hlídej.
+4. **Context loss** — opakovaně se vrací k rozhodnutím která už padla. Odkazuj na handoffs/issues kde je to zaznamenané.
+5. **Chybějící mezikroky** — v argumentaci přeskakuje. Při psaní BP doplňuj explicitní logické spojky.
+
+### Big Five (validováno cross-context)
+- **Openness 6.5/7** — explorátor, systémový myslitel
+- **Conscientiousness 4.5/7** — interest-driven (ne disciplínou)
+- **Extraversion 3/7** — bimodální, kontext-dependentní
+- **Agreeableness 2.5-3/7** — assertivní kooperace, silný vnitřní kompas
+- **Neuroticism 2.5/7** — emocionálně stabilní, frustruje neefektivita
+
 ## Co nedělat
 
 - Neptej se na věci zřejmé z kontextu nebo odvoditelné ze zdrojů
@@ -70,6 +118,8 @@ Obsah v LaTeXu označujeme podle stavu zpracování (používáme prostředí):
 **Konvence:** `[RAW]`/`[DRAFT]` label je vždy na vlastním řádku (definováno v makra.tex)
 
 Workflow: raw → draft → finální (odstraníme prostředí)
+
+**Konvence pořadí:** DRAFT blok vždy PŘED RAW blokem v souboru (draft = aktuální pracovní verze nahoře, raw = audit trail dole).
 
 ## Workflow pro budování kostry sekce
 

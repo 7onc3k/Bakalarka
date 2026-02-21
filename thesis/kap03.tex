@@ -3,57 +3,85 @@
 
 \section{Výběr projektu pro case study}
 
-\begin{raw}
-Práce se zaměřuje na řízení a scaffolding - jde více do šířky než do hloubky. Proto potřebujeme menší projekt, na kterém můžeme spustit více běhů s různými nastaveními scaffoldingu a měřit výsledky.
+\begin{draft}
+Experiment potřebuje projekt, na kterém lze spustit více běhů s~různým nastavením instrukcí a~objektivně měřit výsledky. Zvolený projekt musí splňovat:
 
-Pro experiment potřebujeme projekt který:
 \begin{itemize}
-    \item \textbf{Hard logic} - jasná business pravidla, ne subjektivní výstupy (např. generování textu)
-    \item \textbf{Jasné invarianty} - deterministické chování, matematicky ověřitelné správnost
-    \item \textbf{Testovatelné} - lze objektivně měřit kvalitu výstupu
-    \item \textbf{Přiměřená velikost} - menší projekt umožňuje více experimentálních běhů
-    \item \textbf{Reálný use case} - prakticky využitelné, ne umělý příklad
+    \item \textbf{Hard logic} --- jasná business pravidla, ne subjektivní výstupy
+    \item \textbf{Jasné invarianty} --- deterministické chování, ověřitelná správnost
+    \item \textbf{Testovatelné} --- kvalitu výstupu lze měřit objektivně (testy, mutation score)
+    \item \textbf{Přiměřená velikost} --- menší projekt umožňuje více experimentálních běhů
+    \item \textbf{Reálný use case} --- prakticky využitelné, ne umělý příklad
 \end{itemize}
-\end{raw}
+\end{draft}
 
 \subsection*{Systém upomínek faktur}
 
-\begin{raw}
-Systém pro automatické odesílání připomínek k nezaplaceným fakturám. Obsahuje:
-\begin{itemize}
-    \item Stavový automat pro sledování stavu faktury (nová, po splatnosti, upomínaná, eskalovaná)
-    \item Časové výpočty (pracovní dny, ochranné lhůty)
-    \item Pravidla pro eskalaci (kdy poslat další upomínku, kdy předat k vymáhání)
-    \item Plánování odesílání upomínek
-\end{itemize}
-\end{raw}
+\begin{draft}
+Systém pro automatické odesílání připomínek k~nezaplaceným fakturám. Obsahuje stavový automat pro sledování stavu faktury (nová, po splatnosti, upomínaná, eskalovaná), časové výpočty (pracovní dny, ochranné lhůty), pravidla pro eskalaci a~plánování odesílání upomínek.
+\end{draft}
 
-\section{Zvolená metodika: Spec-Driven Development}
+%% ==========================================================================
+%% 3.2 Výzkumný přístup — NEW SECTION
+%% ==========================================================================
 
-\begin{raw}
-Pro referenční implementaci i experimenty je zvolena metodika \textbf{Spec-Driven Development (SDD)}
-na úrovni \textbf{spec-first} \cite{sdd2026}.
-
-\textbf{Zdůvodnění volby:}
-\begin{enumerate}
-    \item \textbf{Specifikace řídí implementaci} -- kvalita specifikace přímo ovlivňuje kvalitu výstupu agenta (viz 2.4.2 bod 7). SDD formalizuje tento princip.
-    \item \textbf{Waterfall per increment} -- každý issue = jeden increment s detailní specifikací, ale mezi incrementy iterativní přístup. Odpovídá micro-waterfall hypotéze (2.3.4) podpořené empirickými daty \cite{watanabe2025agentprs, ehsani2026failedprs}.
-    \item \textbf{Malé, focused úkoly} -- empirická data ukazují že malé agent PRs mají vyšší úspěšnost \cite{ehsani2026failedprs}. SDD spec-first přirozeně vede k dekompozici na testovatelné incrementy.
-    \item \textbf{Spec-first stačí} -- pro jednorázový experiment není potřeba spec-anchored (udržovat sync spec-kód). Spec se napíše, agent implementuje, vyhodnotí se.
-\end{enumerate}
-
-\textbf{SDD workflow v kontextu BP:}
-\begin{enumerate}
-    \item \textbf{Specify} -- napsat GitHub Issue se strukturovanou specifikací (šablona viz níže)
-    \item \textbf{Plan} -- (pro agenty: agent sám plánuje; pro referenci: autor plánuje)
-    \item \textbf{Implement} -- implementace podle specifikace
-    \item \textbf{Validate} -- testy (unit, acceptance criteria), review
-\end{enumerate}
-\end{raw}
-
-\section{Referenční implementace}
+\section{Výzkumný přístup: návrhový výzkum (DSR)}
+\label{sec:vyzkumny-pristup}
 
 \begin{draft}
+Hevner et al. \cite{hevner2004} rozlišují v~informatickém výzkumu dva přístupy. Behaviorální výzkum popisuje a~vysvětluje existující jevy --- například jak vývojáři pracují s~AI nástroji. Návrhový výzkum (Design Science Research, DSR) naopak navrhuje nové artefakty a~ověřuje, jestli řeší daný problém. Rozdíl je v~tom, co je výstupem: popis světa, nebo nástroj který ho mění.
+
+Tato práce spadá do návrhového výzkumu. Artefaktem je sada instrukcí pro AI coding agenta. Instrukce se navrhnou, agent s~nimi projede vývojový úkol, z~výstupu (kód, testy, git log) se vyhodnotí co fungovalo a~co ne, a~instrukce se podle toho upraví. Hevner tento postup formalizuje jako build-evaluate cyklus --- iterativní smyčku návrhu a~vyhodnocení, která se opakuje dokud artefakt nedosáhne požadované kvality.
+
+\subsubsection*{Dvě fáze výzkumu}
+
+Výzkum má dvě fáze, které odpovídají DSR cyklu:
+
+\begin{enumerate}
+    \item \textbf{Pilotní iterace} --- opakovaně navrhujeme a~vyhodnocujeme instrukce. Každá iterace je jeden build-evaluate cyklus: spustíme agenta, analyzujeme výstup, diagnostikujeme problém, upravíme instrukce. Zaznamenáváme co se měnilo a~proč. Konkrétní cílové chování a~metriky compliance popisuje sekce~\ref{sec:experimentalni-design}.
+    \item \textbf{Komparativní variace} --- z~fungujících instrukcí systematicky měníme jednotlivé komponenty a~měříme dopad na chování agenta. Změna může být odebrání (ablace --- funguje agent bez této instrukce?) nebo nahrazení alternativou (substituce --- funguje jiná formulace stejného záměru?). Ablace ukáže \textit{jestli} komponenta záleží, substituce ukáže \textit{proč} a~\textit{v~jaké formě}.
+\end{enumerate}
+
+\subsubsection*{Case study a~generalizace}
+
+Výzkum probíhá formou case study na jednom projektu (systém upomínek faktur). Yin \cite{yin2018} rozlišuje dva typy generalizace: statistickou (ze vzorku na populaci) a~analytickou (z~případu na teorii). Case study neumožňuje říct ``tento scaffolding funguje vždy'' --- k~tomu by byl potřeba velký vzorek projektů. Umožňuje ale identifikovat principy a~mechanismy: \textit{proč} určité instrukce fungují a~jiné ne, a~za jakých podmínek.
+
+Více experimentálních běhů na jednom projektu odpovídá tomu, co Yin nazývá embedded single-case design --- jeden případ (projekt) s~více vnořenými jednotkami analýzy (jednotlivé běhy). DSR poskytuje celkový rámec (jak iterovat artefakt), case study poskytuje kontext (reálný projekt s~deterministickou logikou a~ověřitelnými výstupy).
+\end{draft}
+
+%% ==========================================================================
+%% 3.3 Experimentální design
+%% ==========================================================================
+
+\section{Experimentální design}
+\label{sec:experimentalni-design}
+
+\begin{raw}
+[RAW] Tato sekce popisuje co agent dostane, co měříme, proč tyto metriky,
+a referenční implementaci jako měřicí nástroj.
+\end{raw}
+
+\subsection{Specifikací řízený přístup}
+
+\begin{raw}
+[RAW] Obsah z bývalé sekce 3.2 (SDD) --- přesunut sem jako zdůvodnění
+experimentálního setupu, NE jako výzkumná metodika.
+
+Pro experiment je zvolen přístup kde specifikace řídí implementaci
+(spec-first), na úrovni definované v~\cite{sdd2026}.
+
+\textbf{Zdůvodnění volby pro experimentální design:}
+\begin{enumerate}
+    \item \textbf{Specifikace řídí implementaci} -- kvalita specifikace přímo ovlivňuje kvalitu výstupu agenta (viz 2.4.2 bod 7). Formalizace tohoto principu umožňuje kontrolovaný experiment.
+    \item \textbf{Waterfall per increment} -- každý issue = jeden increment s detailní specifikací, ale mezi incrementy iterativní přístup. Odpovídá micro-waterfall hypotéze (2.3.4) podpořené empirickými daty \cite{watanabe2025agentprs, ehsani2026failedprs}.
+    \item \textbf{Malé, focused úkoly} -- empirická data ukazují že malé agent PRs mají vyšší úspěšnost \cite{ehsani2026failedprs}. Spec-first přirozeně vede k dekompozici na testovatelné incrementy.
+    \item \textbf{Spec-first stačí} -- pro jednorázový experiment není potřeba udržovat sync spec-kód. Spec se napíše, agent implementuje, vyhodnotí se.
+\end{enumerate}
+\end{raw}
+
+\subsection{Referenční implementace jako měřicí nástroj}
+
+\begin{raw}
 Referenční implementace slouží dvěma účelům: validaci specifikace a~vytvoření
 \textbf{behavioral test suite}, která se následně spouští na výstupech všech
 experimentálních běhů jako objektivní metrika correctness.
@@ -85,11 +113,12 @@ se stejnou, kompletní specifikací.
 \textbf{Výstup:} behavioral test suite (TypeScript/Vitest) spustitelná
 na libovolné implementaci se standardizovaným vstupním bodem API
 (viz Technical Requirements v~Issue~\#1). Test suite tvoří základ
-metriky correctness pro všechny experimentální běhy R0--R5.
-\end{draft}
+metriky correctness pro všechny experimentální běhy.
+\end{raw}
 
 \rule{\textwidth}{0.4pt}
 
+\begin{raw}
 \textbf{Formát specifikace: GitHub Issues}
 
 Specifikace referenční implementace je strukturována jako GitHub Issues. Volba tohoto formátu vychází z:
@@ -171,10 +200,6 @@ celkové struktury), zatímco LLM zpracovávají Mermaid diagramy jako text.
 Konkrétní Given/When/Then scénáře mohou být pro agenta účinnější
 než vizuální model, ale pro člověka méně přehledné u~komplexních systémů.
 
-Dimenze C~(constraint density) testuje právě tuto otázku —
-ne ``čím víc, tím lépe'', ale zda minimální sada instrukcí
-je efektivnější než komprehensivní procesní předpisy.
-
 \textbf{Zasazení do SASE frameworku:}
 
 Hassan et al. \cite{hassan2025sase} navrhují framework Structured Agentic Software
@@ -189,9 +214,6 @@ Naše specifikační šablona odpovídá BriefingScript: obsahuje intent (Descri
 ověřitelná kritéria (Acceptance Criteria) a~doménový kontext (Glossary).
 Soubor \texttt{agents.md} se scaffoldingem odpovídá LoopScript a~MentorScript:
 definuje workflow (git conventions, testování) a~kvalitativní normy (code quality).
-Experimentální dimenze C~(constraint density) přímo testuje to, co
-Hassan et al. nazývají \textbf{duality of control} — kdy dát agentovi
-strukturu a~kdy ho nechat rozhodovat autonomně.
 
 Kruchtenův Scenarios (+1) view \cite{kruchten1995}, který sloužil jako validační
 most mezi všemi pohledy pro všechny stakeholdery, nachází paralelu
@@ -219,11 +241,19 @@ Tato šablona kombinuje přístupy podložené výzkumem:
 structured natural language \cite[kap.~4.4]{sommerville2016}, test-driven specifikaci \cite{ticoder2024},
 doménový kontext \cite{domaincodegen2024}, redukci specification misalignment \cite{specine2025},
 design constraints \cite{newcomb2025prepost} a klarifikaci ambiguity \cite{clarifygpt2024}.
+\end{raw}
 
-\section{Experimenty}
+\subsection{Experimentální dimenze a běhy}
 
 \begin{raw}
-[RAW] Posun 8 — iterativní pilot + ablace/variace (2026-02-19)
+[RAW] POZOR: Tento obsah popisuje faktoriální design R0--R5 z Posunu 7.
+Design je ZASTARALÝ --- aktuální přístup je DSR iterativní pilot + ablace
+(Posun 8, viz sekce~\ref{sec:vyzkumny-pristup}). Obsah potřebuje přepsat
+na nový design. Zachováno pro referenci a přepracování.
+
+\rule{\textwidth}{0.4pt}
+
+Posun 8 — iterativní pilot + ablace/variace (2026-02-19)
 
 \textbf{Dvě metody experimentálních změn:}
 
@@ -239,7 +269,7 @@ design constraints \cite{newcomb2025prepost} a klarifikaci ambiguity \cite{clari
 Ablace a variace odpovídají různým výzkumným otázkám a lze je kombinovat:
 ablace nejprve ukáže které instrukce jsou nutné, variace pak porovná jejich varianty.
 
-\subsection{Experimentální design}
+\rule{\textwidth}{0.4pt}
 
 [RAW] Nový design — evidence-based dimension selection (Posun 7, 2026-02-19)
 
@@ -352,6 +382,8 @@ varianty normalizovány na srovnatelný word count. Prompt sensitivity
 
 \textbf{Experimentální běhy (vyvážený frakční faktoriální design):}
 
+\textit{ZASTARALÝ --- tento design bude nahrazen DSR iterativní pilot + ablace.}
+
 \begin{center}
 \begin{tabular}{p{0.7cm}|p{2cm}|p{2.5cm}|p{2.5cm}|p{3.5cm}}
 \textbf{Run} & \textbf{P} & \textbf{T} & \textbf{C} &
@@ -385,22 +417,6 @@ v~dané dimenzi.
 Každý běh probíhá v~separátním GitHub repozitáři (čistý stav).
 Artefakty (commit history, issues, PR) zachovány pro post-hoc analýzu.
 
-\textbf{Metriky:}
-\begin{itemize}
-    \item \textbf{Primární:} mutation score (Stryker), test pass rate
-          (referenční testy), počet restartů (auto-continue)
-    \item \textbf{Sekundární:} spotřeba tokenů, čas do dokončení,
-          compliance a~alignment (LLM-as-a-judge)
-    \item \textbf{Behavioral trace:} co agent reálně udělal — vytvořil
-          plánovací artefakt před kódem~(P)? psal testy před implementací~(T)?
-          Jak reagoval na minimální vs. komprehensivní instrukce~(C)?
-          Ověřuje, že treatment měl skutečný efekt na chování agenta.
-    \item \textbf{Entropy signály:} behaviorální patterny indikující
-          nejistotu agenta — opakované čtení souborů, testy bez změn kódu,
-          cyklická exploration, commit bursts. Identifikace momentů kde
-          agent ``tápe'' umožňuje retrospektivní kauzální analýzu.
-\end{itemize}
-
 \textbf{Pilot studie:} Před experimentálními běhy proběhne pilotní validace
 setupu na R0. Pilot identifikuje technické problémy (timeouty, bugy
 v~orchestraci, nedostatky v~šabloně) a~kalibruje metriky. Iterace na
@@ -416,6 +432,8 @@ spouštění testů = verifikační feedback loop implementace. Test oracle
 problem \cite{mathews2024} potvrzuje, že testy odvozené z~kódu (nikoliv
 ze specifikace) validují chybné chování v~68,1\,\% případů.
 \end{raw}
+
+\subsection{Katalog ablatable komponent}
 
 \begin{raw}
 \textbf{Katalog ablatable komponent (brainstorm):}
@@ -540,7 +558,11 @@ pouze 21\,\% úspěšnost na evolučních úlohách (průměrně 21~souborů) op
 na end-to-end feature development. Tato case study (5~issues, celý dunning
 system) cílí přesně do tohoto rozsahu, kde scaffolding může přinést
 měřitelný rozdíl.
+\end{raw}
 
+\subsection{Testovací strategie a mutation testing}
+
+\begin{raw}
 \textbf{Odvozování testů z acceptance criteria:}
 
 Acceptance criteria ve formátu Given/When/Then (BDD) s konkrétními hodnotami
@@ -595,7 +617,19 @@ hustoty diagramů \cite{larkin1987}. Systematické porovnání formátů je navr
 jako future work.
 \end{raw}
 
-\section{Analýza}
+%% ==========================================================================
+%% 3.4 Způsob analýzy
+%% ==========================================================================
+
+\section{Způsob analýzy}
+\label{sec:zpusob-analyzy}
+
+\begin{raw}
+[RAW] Tato sekce popisuje jak budeme analyzovat výstupy experimentálních běhů:
+behavioral coding z git logu, compliance checklist, entropy signály.
+\end{raw}
+
+\subsection{Metriky}
 
 \begin{raw}
 [RAW]
@@ -639,7 +673,7 @@ Tradiční přístupy k měření kvality SW (podpora pro volbu dimenzí):
 \begin{raw}
 Hodnocení výstupů agentů probíhá ve čtyřech dimenzích: funkční kvalita, procesní kvalita, efektivita a alignment.
 
-\subsection{Functional Quality (Funkční kvalita)}
+\subsubsection*{Functional Quality (Funkční kvalita)}
 
 Měření funkčních vlastností výstupu dle ISO 25010:
 
@@ -656,7 +690,7 @@ Měření funkčních vlastností výstupu dle ISO 25010:
     \item Kvalita testů agenta: Mutation testing (Stryker) - mutation score určuje jak dobře testy detekují chyby
 \end{itemize}
 
-\subsection{Compliance (Procesní kvalita)}
+\subsubsection*{Compliance (Procesní kvalita)}
 
 Dodržování softwarově-inženýrských praktik:
 
@@ -681,7 +715,7 @@ Dodržování softwarově-inženýrských praktik:
     \item Měření: LLM-as-a-judge + manuální review
 \end{itemize}
 
-\subsection{Efficiency (Efektivita)}
+\subsubsection*{Efficiency (Efektivita)}
 
 Náklady na dosažení výsledku:
 
@@ -694,18 +728,7 @@ Náklady na dosažení výsledku:
 
 Měření: Logování z agenta a konverzačních sessions.
 
-\subsection{Metody měření}
-
-Kombinace tří přístupů:
-\begin{itemize}
-    \item \textbf{Automatické} - testy, mutation testing, git log analýza, token counting
-    \item \textbf{LLM-as-a-judge} - hodnocení subjektivních aspektů (kvalita commit messages, dokumentace) pomocí LLM s definovaným rubrikem
-    \item \textbf{Manuální review} - kvalitativní zhodnocení celku autorem
-\end{itemize}
-
-LLM-as-a-judge přístup využívá strukturované hodnocení kde LLM dostane kritéria a škálu, a konzistentně hodnotí všechny běhy. Validace tohoto přístupu probíhá porovnáním s manuálním hodnocením na vzorku \cite{llmjudge2024}.
-
-\subsection{Alignment (Soulad se záměrem)}
+\subsubsection*{Alignment (Soulad se záměrem)}
 
 Alignment měří, zda agent pochopil skutečný záměr zadání - ne jen doslovnou instrukci, ale co uživatel skutečně chtěl \cite{llmjudge2024}.
 
@@ -720,38 +743,50 @@ Agent může mít 100\% Correctness a Completeness, ale být misaligned - techni
 \end{itemize}
 
 \textbf{Měření:} Manuální review autorem + LLM-as-a-judge porovnávající zadání vs. skutečný výstup.
-
-\subsection{Vyhodnocení}
-
-Identifikace efektu každé dimenze: pomáhá plánovací artefakt~(P)?
-je test-first lepší než implementation-first~(T)? pomáhají nebo škodí
-detailní instrukce~(C)? Analýza trade-offs (kvalita vs. spotřeba tokenů)
-a~identifikace behaviorálních vzorů indikujících nejistotu agenta.
 \end{raw}
 
+\subsection{Metody měření}
+
 \begin{raw}
-[RAW]
-\textbf{Rozšíření: ablace instrukčních dimenzí}
+Kombinace tří přístupů:
+\begin{itemize}
+    \item \textbf{Automatické} - testy, mutation testing, git log analýza, token counting
+    \item \textbf{LLM-as-a-judge} - hodnocení subjektivních aspektů (kvalita commit messages, dokumentace) pomocí LLM s definovaným rubrikem
+    \item \textbf{Manuální review} - kvalitativní zhodnocení celku autorem
+\end{itemize}
 
-Hlavní experiment porovnává meta vs. explicit instrukční styl per dimenze.
-Přirozeným rozšířením je \textit{ablace} -- co se stane když dimenzi
-odebereme úplně (ani meta, ani explicit)? Ablační běhy by doplnily
-faktoriální design o~baseline bez instrukce, což umožní měřit absolutní
-přínos každé dimenze nezávisle na stylu.
+LLM-as-a-judge přístup využívá strukturované hodnocení kde LLM dostane kritéria a škálu, a konzistentně hodnotí všechny běhy. Validace tohoto přístupu probíhá porovnáním s manuálním hodnocením na vzorku \cite{llmjudge2024}.
 
-Toto rozšíření je mimo scope této BP -- vyžaduje další 3--7 běhů.
-Je navrženo jako přímé pokračování.
+\textbf{Primární metriky:}
+\begin{itemize}
+    \item Mutation score (Stryker)
+    \item Test pass rate (referenční testy)
+    \item Počet restartů (auto-continue)
+\end{itemize}
+
+\textbf{Sekundární metriky:}
+\begin{itemize}
+    \item Spotřeba tokenů
+    \item Čas do dokončení
+    \item Compliance a~alignment (LLM-as-a-judge)
+\end{itemize}
 \end{raw}
 
+\subsection{Behavioral trace a compliance checklist}
+
 \begin{raw}
-[RAW] TODO: probrat, zatím nápady
+\textbf{Behavioral trace:} co agent reálně udělal — vytvořil
+plánovací artefakt před kódem~(P)? psal testy před implementací~(T)?
+Jak reagoval na minimální vs. komprehensivní instrukce~(C)?
+Ověřuje, že treatment měl skutečný efekt na chování agenta.
 
-\textbf{Retrospektivní kauzální analýza -- hledání ``prvního špatného obratu''}
-
-Místo čekání na zpožděné finální metriky (mutation score, test pass rate)
-lze zpětně rekonstruovat \textit{kdy} agent udělal rozhodnutí, které způsobilo
-kaskádu problémů. Git log a session transkript (opencode export) tato data
-již obsahují -- jde o post-hoc analýzu, ne o změnu designu experimentu.
+\textbf{Mediátorové proměnné (adoption indicators):}
+Tři binární hodnoty (jedna per dimenze P/T/C) měřitelné automaticky z~git
+logu a~GitHub API. Umožňují rozlišit dva scénáře:
+(a)~instrukce způsobila adoptování praktiky $\to$ praktika způsobila lepší
+výsledek (instrukce fungovala přes mechanismus),
+(b)~agent dosáhl výsledku bez adoptování praktiky (model to měl v~weights).
+Bez těchto mediátorů lze vidět korelaci treatment $\to$ outcome, ale ne mechanismus.
 
 \textbf{Co extrahovat z git logu:}
 \begin{itemize}
@@ -770,15 +805,41 @@ již obsahují -- jde o post-hoc analýzu, ne o změnu designu experimentu.
     \item Opakované edity stejného souboru = agent uvízl (proxy pro obtížnost)
     \item Kde agent poprvé vyjádřil nejistotu nebo přepisoval svůj plán
 \end{itemize}
+\end{raw}
 
-\textbf{Mediátorové proměnné (adoption indicators):}
-Tři binární hodnoty (jedna per dimenze P/T/C) měřitelné automaticky z~git
-logu a~GitHub API. Umožňují rozlišit dva scénáře:
-(a)~instrukce způsobila adoptování praktiky $\to$ praktika způsobila lepší
-výsledek (instrukce fungovala přes mechanismus),
-(b)~agent dosáhl výsledku bez adoptování praktiky (model to měl v~weights).
-Bez těchto mediátorů lze vidět korelaci treatment $\to$ outcome, ale ne mechanismus.
+\subsection{Entropy signály}
+
+\begin{raw}
+\textbf{Entropy signály:} behaviorální patterny indikující
+nejistotu agenta — opakované čtení souborů, testy bez změn kódu,
+cyklická exploration, commit bursts. Identifikace momentů kde
+agent ``tápe'' umožňuje retrospektivní kauzální analýzu.
+
+\textbf{Retrospektivní kauzální analýza -- hledání ``prvního špatného obratu'':}
+
+Místo čekání na zpožděné finální metriky (mutation score, test pass rate)
+lze zpětně rekonstruovat \textit{kdy} agent udělal rozhodnutí, které způsobilo
+kaskádu problémů. Git log a session transkript (opencode export) tato data
+již obsahují -- jde o post-hoc analýzu, ne o změnu designu experimentu.
+
+[RAW] TODO: probrat, zatím nápady
 
 Tato analýza je plně retrospektivní -- data jsou dostupná po spuštění běhů,
 žádná změna experimentálního designu není nutná.
+\end{raw}
+
+\subsection{Vyhodnocení}
+
+\begin{raw}
+Identifikace efektu každé dimenze: pomáhá plánovací artefakt~(P)?
+je test-first lepší než implementation-first~(T)? pomáhají nebo škodí
+detailní instrukce~(C)? Analýza trade-offs (kvalita vs. spotřeba tokenů)
+a~identifikace behaviorálních vzorů indikujících nejistotu agenta.
+
+\textbf{Rozšíření: ablace instrukčních dimenzí}
+
+Hlavní experiment porovnává varianty instrukčního stylu per dimenze.
+Přirozeným rozšířením je \textit{ablace} -- co se stane když dimenzi
+odebereme úplně? Ablační běhy doplní design o~baseline bez instrukce,
+což umožní měřit absolutní přínos každé dimenze nezávisle na stylu.
 \end{raw}

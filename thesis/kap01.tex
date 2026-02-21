@@ -4,21 +4,55 @@
 \section{Motivace}
 
 \begin{draft}
-Studie společnosti METR.ORG ukazuje, že LLM zkušené vývojáře spíše zpomaluje. S rychlým vývojem schopností modelů se situace pravděpodobně mění. Ale to neznamená, že je LLM samo o sobě dostatečné k vypracování dlouhotrvajících úkolů. Není to problém pouze LLM, když projekt roste, bývá těžší jej rozšiřovat jak pro člověka, tak i pro LLM. AI programování tenhle problém ještě více prohlubuje. Vývojáři přicházejí o kontext a hlubokou znalost kódové základny (codebase), zatímco velké jazykové modely (LLM) jsou limitovány omezenou pamětí (context window). Jak nastavit harness/scaffolding tak, aby v tom mohli fungovat agenti a lidé to stále měli pod kontrolou?
+Velké jazykové modely (LLM) dnes umí generovat kód, ale to neznamená, že umí vyvíjet software. Randomizovaná studie METR \cite{metr2025} na 16 zkušených vývojářích a~246 úlohách ukázala, že s~AI nástroji byli vývojáři o~19\,\% pomalejší --- přestože sami odhadovali zrychlení o~24\,\%. Když projekt roste, bývá těžší jej rozšiřovat --- jak pro člověka, tak pro LLM. Vývojáři přicházejí o~kontext a hlubokou znalost kódové základny, zatímco agenti jsou limitováni omezeným context window. Otázka tedy není, co modely umí, ale jak je zasadit do vývojového procesu tak, aby produkovaly kvalitní výstup.
+
+Ukazuje se, že odpověď leží spíš v~instrukcích než v~samotných modelech. Breunig \cite{breunig2025} zjistil, že změna promptu mění chování agenta výrazněji než výměna modelu. Lulla et al. \cite{lulla2026} dokládají, že přidání architektonických konvencí do instrukčního souboru zkrátí dobu běhu o~28\,\% a sníží spotřebu tokenů o~20\,\%. Scaffolding --- struktura instrukcí a procesních pravidel, která agenta provází vývojem --- má na výsledek zásadní vliv. Ale nikdo systematicky nezkoumal, \emph{které} složky tohoto scaffoldingu jsou pro dodržování softwarově-inženýrských praktik nezbytné a které jsou zbytečné.
+
+Tato práce zkoumá právě to: jak musí být strukturovány instrukce pro AI coding agenta, aby dodržoval specifikací řízený vývoj, test-driven development a granulární správu verzí --- a co z~těch instrukcí je skutečně kritické.
 \end{draft}
+
+\begin{raw}
+Studie společnosti METR.ORG ukazuje, že LLM zkušené vývojáře spíše zpomaluje. S rychlým vývojem schopností modelů se situace pravděpodobně mění. Ale to neznamená, že je LLM samo o sobě dostatečné k vypracování dlouhotrvajících úkolů. Není to problém pouze LLM, když projekt roste, bývá těžší jej rozšiřovat jak pro člověka, tak i pro LLM. AI programování tenhle problém ještě více prohlubuje. Vývojáři přicházejí o kontext a hlubokou znalost kódové základny (codebase), zatímco velké jazykové modely (LLM) jsou limitovány omezenou pamětí (context window). Jak nastavit harness/scaffolding tak, aby v tom mohli fungovat agenti a lidé to stále měli pod kontrolou?
+\end{raw}
 
 \section{Cíle práce}
 
 \begin{draft}
+\begin{enumerate}
+    \item Popsat, jak se řízení softwarových projektů mění v~kontextu AI agentů, a zmapovat co víme o~vlivu instrukcí na jejich chování.
+    \item Iterativně navrhnout instrukce, které dovedou AI coding agenta k~dodržování vývojového workflow na case study projektu (systém upomínek faktur).
+    \item Zjistit, které složky těchto instrukcí jsou pro dodržování workflow nezbytné, které jsou zbytečné, a jaký kontext agent potřebuje k~tomu, aby vytvářel a využíval projektové artefakty.
+\end{enumerate}
+\end{draft}
+
+\begin{raw}
 \begin{enumerate}
     \item Popsat jak se řízení SWE projektů mění v kontextu agentních systémů (teoretický rámec)
     \item Navrhnout a implementovat experimentální prostředí (case study: systém upomínek faktur)
     \item Prozkoumat vliv různých nastavení scaffoldingu na schopnost agenta provést kvalitní práci
     \item Identifikovat jaký kontext je pro agenty klíčový a jak instrukce/procesy ovlivňují schopnost agenta tento kontext vytvářet a využívat
 \end{enumerate}
-\end{draft}
+\end{raw}
 
 \section{Rozsah práce}
+
+\begin{draft}
+Práce zkoumá vliv struktury instrukcí na chování jednoho AI coding agenta při vývoji z~formální specifikace. Case study je systém upomínek faktur --- projekt s~deterministickou logikou, jasnými pravidly správnosti a objektivně ověřitelnými výstupy. Experiment pokrývá fáze requirements, design a implementation.
+
+\subsection*{Práce se zaměřuje na:}
+\begin{itemize}
+    \item Vliv struktury a obsahu instrukcí na to, jak agent dodržuje vývojový workflow
+    \item Iterativní návrh instrukcí metodou Design Science Research
+    \item Identifikaci toho, co z~instrukcí je potřeba a co ne, prostřednictvím ablace
+\end{itemize}
+
+\subsection*{Práce se nezaměřuje na:}
+\begin{itemize}
+    \item Porovnávání LLM modelů
+    \item Porovnávání programovacích jazyků a frameworků
+    \item Projekty s~převážně subjektivními výstupy (UI, kreativní tvorba, ML)
+\end{itemize}
+\end{draft}
 
 \begin{raw}
 \textbf{Poznámky k propojení:}
@@ -43,21 +77,3 @@ Studie společnosti METR.ORG ukazuje, že LLM zkušené vývojáře spíše zpom
     \item Poznámka: i impl + testing má feedback loop (implementace → testy → chyba → úprava) = stále systémový pohled
 \end{itemize}
 \end{raw}
-
-\begin{draft}
-Práce pokrývá celý SDLC na jednoduchém projektu. Součástí je vlastní implementace, která poskytuje hloubku porozumění potřebnou pro návrh experimentů.
-
-\subsection*{Práce se zaměřuje na:}
-\begin{itemize}
-    \item Nastavení a použití existujících nástrojů (GitHub, CLI agents)
-    \item Exploratory case study - hledání vzorů a doporučení
-\end{itemize}
-
-\subsection*{Práce se nezaměřuje na:}
-\begin{itemize}
-    \item Programování nových nástrojů od nuly
-    \item Porovnávání různých LLM modelů
-    \item Porovnávání různých programovacích jazyků
-    \item Vývoj produkčního nástroje/produktu
-\end{itemize}
-\end{draft}
