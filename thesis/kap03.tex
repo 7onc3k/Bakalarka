@@ -82,53 +82,36 @@ Experiment definuje sedm procesních chování (P1--P7), která scaffolding má 
 \begin{table}[htbp]
 \centering
 \caption{Compliance checklist --- cílová procesní chování agenta (P1--P7)}\label{tab:compliance-checklist}
-\begin{tabular}{p{0.6cm} p{3.8cm} p{4.5cm} p{2.8cm}}
+\begin{tabular}{l l l}
 \toprule
-\textbf{\#} & \textbf{Chování} & \textbf{Proč} & \textbf{Jak ověřit} \\
+\textbf{\#} & \textbf{Chování} & \textbf{Jak ověřit} \\
 \midrule
-P1 & Přečte Issue~\#1 před kódem &
-  Agent musí začít specifikací, ne kódem. Bez toho implementuje z~vlastních
-  ``znalostí'' (model weights), ne z~požadavků. &
-  Transcript: první tool call \\
-P2 & Decomponuje do sub-issues &
-  Empirická data ukazují, že malé focused úkoly mají vyšší úspěšnost
-  \cite{ehsani2026failedprs}. Dekompozice = agent plánuje, ne jen kóduje. &
-  \texttt{gh issue list} \\
-P3 & 1 branch per issue &
-  Izolace změn. Bez toho agent kombinuje nesouvisející práci do jednoho
-  commitu/branch a~ztrácí traceability \cite{gotel1994}. &
-  \texttt{git branch -a} vs issue count \\
-P4 & TDD test-first (red $\to$ green) &
-  Expected values musí vycházet ze specifikace, ne z~pozorování kódu.
-  Obrana proti test oracle problému --- 68,1\,\% LLM-generovaných testů
-  validuje chybné chování \cite{mathews2024}. &
-  Git log: \texttt{test:} commit před \texttt{feat:} commit \\
-P5 & Separátní commity (test/feat) &
-  Oddělení testovacího a~implementačního kódu do separátních commitů
-  umožňuje ověřit TDD sekvenci z~git logu --- commit history je
-  primární data source. &
-  Git log: commit message prefixes \\
-P6 & PR $\to$ merge $\to$ close per issue &
-  Kompletní workflow: branch $\to$ PR $\to$ merge $\to$ close issue.
-  Bez toho agent nechává otevřené branches a~issues, ztrácí přehled
-  o~stavu projektu. &
-  \texttt{gh pr list} + \texttt{gh issue list} \\
-P7 & Průběžné commity (ne blob) &
-  Agent commituje po logických celcích, ne jednou na konci.
-  Blob commit znemožňuje retrospektivní analýzu procesu
-  a~ukazuje na chybějící inkrementální přístup. &
-  Git log: commit count $>$ 1 \\
+P1 & Přečte specifikaci před kódem          & Transcript: první tool call \\
+P2 & Decomponuje do sub-issues              & \texttt{gh issue list} \\
+P3 & 1 branch per issue                     & \texttt{git branch -a} vs issue count \\
+P4 & TDD test-first (red $\to$ green)       & Git log: \texttt{test:} před \texttt{feat:} \\
+P5 & Separátní commity (test/feat)          & Git log: commit message prefixes \\
+P6 & PR $\to$ merge $\to$ close per issue   & \texttt{gh pr list} + \texttt{gh issue list} \\
+P7 & Průběžné commity (ne blob)             & Git log: commit count $>$ 1 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Kromě procesní compliance se měří tři funkční výstupy (F1--F3): testy passing, API contract kompatibilní s~Technical Requirements, a~počet testů. Tyto slouží jako basic sanity check --- bez funkčního výstupu nemá smysl hodnotit proces.
+Zdůvodnění jednotlivých chování:
 
-\textbf{Zdůvodnění checklistu:}
+\begin{description}
+    \item[P1 --- specifikace jako vstup.] Agent musí začít čtením specifikace, ne kódem. Bez toho implementuje z~vlastních ``znalostí'' (model weights), ne z~požadavků.
+    \item[P2 --- dekompozice.] Malé focused úkoly mají vyšší úspěšnost \cite{ehsani2026failedprs}. Dekompozice do sub-issues ukazuje, že agent plánuje, ne jen kóduje.
+    \item[P3 --- izolace změn.] Bez branch-per-issue agent kombinuje nesouvisející práci a~ztrácí traceability \cite{gotel1994}.
+    \item[P4 --- TDD ze specifikace.] Expected values musí vycházet z~acceptance criteria, ne z~pozorování kódu. Obrana proti test oracle problému --- 68,1\,\% LLM-generovaných testů validuje chybné chování \cite{mathews2024}.
+    \item[P5 --- oddělení test/impl commitů.] Separátní commity umožňují ověřit TDD sekvenci z~git logu. Commit history je primární data source experimentu.
+    \item[P6 --- kompletní workflow.] Bez uzavření cyklu branch $\to$ PR $\to$ merge $\to$ close agent nechává otevřené branches a~issues a~ztrácí přehled o~stavu projektu.
+    \item[P7 --- inkrementální práce.] Blob commit (vše najednou) znemožňuje retrospektivní analýzu procesu.
+\end{description}
 
-Git log a~session transcript jsou primárním zdrojem dat --- agent po sobě zanechává kompletní trace, na rozdíl od lidského vývojáře. Každý bod checklistu je navržen tak, aby byl ověřitelný z~těchto artefaktů bez subjektivního posouzení. Většina (P2, P3, P5, P6, P7, F1--F3) je automatizovatelná skriptem (\texttt{analyze-run.sh}), P1 a~P4 vyžadují kontrolu transkriptu.
+Kromě procesní compliance se měří tři funkční výstupy (F1--F3): testy passing, API contract kompatibilní s~Technical Requirements a~počet testů. Tyto slouží jako basic sanity check --- bez funkčního výstupu nemá smysl hodnotit proces.
 
-Volba chování vychází z~empirické evidence: spec-first přístup \cite{sdd2026} zajišťuje, že specifikace řídí implementaci. Malé focused incrementy mají vyšší úspěšnost \cite{ehsani2026failedprs}. TDD ze specifikace brání test oracle problému \cite{mathews2024}. Průběžné commity zajišťují auditovatelnost a~umožňují retrospektivní analýzu z~git logu.
+Git log a~session transcript jsou primárním zdrojem dat --- agent po sobě zanechává kompletní trace, na rozdíl od lidského vývojáře. Většina bodů (P2, P3, P5, P6, P7, F1--F3) je automatizovatelná skriptem, P1 a~P4 vyžadují kontrolu transkriptu.
 
 Pro experiment je zvolen spec-first přístup na úrovni definované
 v~\cite{sdd2026}. Kvalita specifikace přímo ovlivňuje kvalitu výstupu
