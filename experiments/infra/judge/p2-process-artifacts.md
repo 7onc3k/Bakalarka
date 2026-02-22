@@ -1,4 +1,4 @@
-# P5 — Process Artifacts Quality
+# P2 — Process Artifacts Quality
 
 You are evaluating the quality of process artifacts (commit messages, issue descriptions, PR descriptions) produced by a coding agent during a development task.
 

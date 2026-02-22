@@ -1,8 +1,12 @@
 # AGENTS.md — Dunning System
 
+## Goal
+
+Implement the dunning system specified in Issue #1. Use test-driven development — write a failing test before any implementation code. Organize work into GitHub issues, one branch per issue.
+
 ## Specification
 
-Read GitHub Issue #1 — it contains the full specification including:
+Read GitHub Issue #1 for the full specification:
 - **Acceptance Criteria** — your implementation must satisfy all of them
 - **API Contract** — the exact TypeScript types and function signatures you must export
 - **Domain Glossary** — use these terms consistently in code
@@ -10,49 +14,61 @@ Read GitHub Issue #1 — it contains the full specification including:
 
 ## Environment
 
-OpenCode with GitHub CLI (`gh`), Git, and Node.js tooling available.
+- Runtime: Node.js with TypeScript (strict mode, ESM)
+- Test runner: Vitest (`npm test`)
+- Build: `tsc` (`npm run build`)
+- Tools: GitHub CLI (`gh`), Git
 
+## Project Structure
 
-## Output
+```
+src/index.ts          -- public API: createInstance(), process(), types
+tests/                -- test files (one per feature area)
+.github/workflows/    -- CI pipeline
+```
 
-Working, tested npm package committed to the repository.
+## Workflow
 
-## Git Workflow
-
-**Before writing any code**, decompose the spec into sub-tasks and create a GitHub issue for each one:
+**Step 1: Decompose.** Before writing any code, create a GitHub issue for each sub-task. The first issue must be project setup including CI pipeline (GitHub Actions running `npm test` and `npm run build`).
 
 ```bash
 gh issue create --title "..." --body "..."
 ```
 
-Then for each issue:
-1. Create a feature branch: `git checkout -b issue-N-description`
-2. Follow TDD (see Testing section)
-3. Open a PR when the issue is complete: `gh pr create`
-4. Merge the PR: `gh pr merge --merge`
-5. Close the issue: `gh issue close N`
+**Step 2: Implement.** Work through issues one at a time:
 
-Commit after each test-implementation cycle — do not accumulate changes into one final commit.
+```bash
+# Start from main
+git checkout main && git pull
+git checkout -b issue-N-short-description
 
-Do not rewrite git history (no amend, squash, rebase, or force-push).
+# TDD cycle (repeat for each acceptance criterion in this issue):
+#   write failing test → commit → implement → commit
 
-## Testing
+npm test                          # MUST fail (red)
+git add tests/ && git commit -m "test: ..."
+npm test                          # MUST pass (green)
+git add src/ && git commit -m "feat: ..."
 
-**Do not write any implementation code until you have a failing test for it.**
+# Verify before PR
+tsc --noEmit                      # MUST pass (no type errors)
 
-For each acceptance criterion from Issue #1:
-1. Write a failing test — derive expected values from the spec, not from code
-2. Run `npm test` and verify it fails
-3. Write the minimum implementation to make it pass
-4. Run `npm test` and verify it passes
-5. Commit both the test and implementation
-6. Move to the next criterion
+# Done with this issue — PR, merge, next
+gh pr create --title "..." --body "Closes #N"
+gh pr checks --watch              # wait for CI to pass
+gh pr merge --merge
 
-## CI
+# THEN start the next issue from main
+git checkout main && git pull
+git checkout -b issue-M-next-description
+# ... repeat TDD cycle ...
+```
 
-Set up GitHub Actions to run tests, lint, and type-check on every PR.
+**Step 3: Finalize.** Write a README.
 
-## Process
+## Constraints
 
-Satisfy all acceptance criteria with correct, working code and tests.
-Include a README with installation and usage instructions.
+- **One issue per branch.** Never combine multiple issues into one branch, even if they seem related or interdependent. `issue-5-11-dunning-core` is wrong — implement `issue-5-createinstance`, merge it, then start `issue-6-transitions` from updated main.
+- **Never implement without a failing test.** Run `npm test` and see it fail before writing implementation code.
+- **Never modify a test to match your implementation.** Tests encode the spec. If a test fails after implementation, fix `src/` — never change `tests/`.
+- **Never rewrite git history.** No amend, squash, rebase, or force-push.

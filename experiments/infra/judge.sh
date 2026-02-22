@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # LLM-as-judge evaluation using GLM-5
-# Usage: ./scripts/judge.sh <run-dir>
-# Example: ./scripts/judge.sh runs/pilot-r6
+# Usage: ./infra/judge.sh <run-dir>
+# Example: ./infra/judge.sh runs/pilot-r6
 #
-# Evaluates P5 (process artifacts) and Q8 (code quality) using
+# Evaluates P2 (process artifacts) and Q8 (code quality) using
 # GLM-5 as judge model (different family from minimax generator).
 
 set -euo pipefail
@@ -24,8 +24,8 @@ echo "Run: $RUN_DIR"
 echo "Model: $JUDGE_MODEL"
 echo ""
 
-# --- P5: Process Artifacts ---
-echo "--- P5: Collecting process artifacts ---"
+# --- P2: Process Artifacts ---
+echo "--- P2: Collecting process artifacts ---"
 
 # Collect commit messages
 COMMITS=$(cd "$REPO_DIR" && git log --format="%h %s" --no-merges 2>/dev/null || echo "No commits found")
@@ -36,7 +36,7 @@ ISSUES=$(cd "$REPO_DIR" && gh issue list --state all --json number,title,body --
 # Collect PRs
 PRS=$(cd "$REPO_DIR" && gh pr list --state all --json number,title,body --limit 50 2>/dev/null || echo "No PRs found (gh not configured)")
 
-P5_INPUT="## Commit Messages
+P2_INPUT="## Commit Messages
 $COMMITS
 
 ## Issue Descriptions
@@ -45,15 +45,15 @@ $ISSUES
 ## PR Descriptions
 $PRS"
 
-P5_RUBRIC=$(cat "$JUDGE_DIR/p5-process-artifacts.md")
+P2_RUBRIC=$(cat "$JUDGE_DIR/p2-process-artifacts.md")
 
-echo "Calling GLM-5 for P5..."
-P5_RESULT=$(cd "$REPO_DIR" && opencode run -m "$JUDGE_MODEL" --format json \
-  "$P5_RUBRIC
+echo "Calling GLM-5 for P2..."
+P2_RESULT=$(cd "$REPO_DIR" && opencode run -m "$JUDGE_MODEL" --format json \
+  "$P2_RUBRIC
 
 ---
 
-$P5_INPUT" 2>&1 | python3 -c "
+$P2_INPUT" 2>&1 | python3 -c "
 import sys, json
 for line in sys.stdin:
     line = line.strip()
@@ -67,9 +67,9 @@ for line in sys.stdin:
         pass
 " 2>/dev/null || echo '{"error": "GLM-5 call failed"}')
 
-echo "$P5_RESULT" > "$OUTPUT_DIR/p5-result.json"
-echo "P5 result saved to $OUTPUT_DIR/p5-result.json"
-echo "$P5_RESULT"
+echo "$P2_RESULT" > "$OUTPUT_DIR/p2-result.json"
+echo "P2 result saved to $OUTPUT_DIR/p2-result.json"
+echo "$P2_RESULT"
 echo ""
 
 # --- Q8: Code Quality ---

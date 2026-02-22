@@ -1,63 +1,90 @@
 \chapter{Praktická část}
-\label{kap:experiment}
+\label{kap:prakticka-cast}
 
 \begin{raw}
-[RAW] Kostra kapitoly --- zde budou výsledky experimentu.
-\end{raw}
-
-\section{Referenční implementace}
-
-\begin{raw}
-[RAW] Výsledky referenční implementace --- konkrétní čísla, ne design rozhodnutí
-(ta jsou v kap03 sekce 3.3).
-
-TODO: Přesunout sem z experimentu:
-\begin{itemize}
-    \item Počet testů v behavioral test suite
-    \item Mutation score referenční implementace (Stryker)
-    \item Pokrytí acceptance criteria
-    \item Případné problémy nalezené při implementaci a úpravy specifikace
-\end{itemize}
+[RAW] Tato kapitola popisuje provedení experimentu a jeho výsledky.
 \end{raw}
 
 \section{Pilotní iterace}
+\label{sec:pilotni-vysledky}
+
+\subsection{Konstrukce baseline instrukcí}
+\label{sec:konstrukce-instrukci}
 
 \begin{raw}
-[RAW] Výsledky pilotních běhů --- DSR build-evaluate cykly.
+[RAW] Konstrukce výchozí verze AGENTS.md na základě empirických frameworků.
 
-Pro každou iteraci:
+Výchozí instrukce staví na empirických zjištěních z~literatury:
+
 \begin{itemize}
-    \item Co se změnilo v instrukcích oproti předchozí iteraci (a proč)
-    \item Co agent udělal (behavioral trace)
-    \item Compliance score
-    \item Co se naučilo (jaké úpravy instrukcí z toho vyplynuly)
+    \item \textbf{Strukturální principy} --- Mao et al. \cite{mao2025} identifikovali
+          kategorii ``requirement'' promptů (role, cíle, omezení) jako nejefektivnější
+          pro řízení agentního chování. Instrukce explicitně definují roli agenta,
+          procesní požadavky a~quality gates.
+    \item \textbf{TDD jako procesní scaffolding} --- spec-first TDD \cite{mathews2024}
+          zajišťuje, že testy vychází ze specifikace (ne z~pozorování kódu).
+          Instrukce vyžadují sekvenci test $\to$ implementace $\to$ commit.
+    \item \textbf{Dekompozice} --- rozložení práce do sub-issues před kódem
+          snižuje kognitivní zátěž a~umožňuje branch-per-issue workflow.
+    \item \textbf{Anti-patterns z~pilotu} --- instrukce explicitně zakazují
+          chování pozorované v~předchozích iteracích (sycophantic test
+          modification, monolitické commity, přeskočení specifikace).
 \end{itemize}
 
-TODO: Popsat pilot-r1 až pilot-r5 (nebo kolik jich bude).
+Konkrétní mapování: každý řádek AGENTS.md má odůvodnění
+buď v~literatuře (citace), nebo v~diagnostice z~pilotního běhu (odkaz
+na iteraci kde se problém projevil).
 \end{raw}
 
-\section{Ablační fáze}
+\subsection{Baseline AGENTS.md}
 
 \begin{raw}
-[RAW] Výsledky ablačních běhů --- systematické odebírání komponent.
+[RAW] Kompletní znění výchozích instrukcí. Mapování exit kritérií na konkrétní řádky.
+\end{raw}
 
-Pro každý ablační běh:
+\subsection{Průběh iterací}
+
+\begin{raw}
+[RAW] Jednotlivé pilotní běhy. Pro každý běh:
 \begin{itemize}
-    \item Která komponenta byla odebrána
-    \item Výsledné chování agenta
-    \item Změna v metrikách oproti baseline (pilotní fungující konfigurace)
-    \item Interpretace: je komponenta nutná / redundantní?
+    \item Verze AGENTS.md (diff oproti předchozímu)
+    \item Behavioral trace (co agent udělal)
+    \item P/Q/E metriky
+    \item Diagnostika: co selhalo a proč
+    \item Změna instrukcí s odkazem na literaturu
 \end{itemize}
 \end{raw}
 
-\section{Přehled výsledků}
+\section{Komparativní variace}
+\label{sec:komparativni-vysledky}
 
 \begin{raw}
-[RAW] Souhrnná tabulka výsledků všech běhů.
+[RAW] Systematické variace fungujících instrukcí.
 
+\subsection{Ablace}
+
+Pro každou ablaci:
 \begin{itemize}
-    \item Tabulka: běh × metriky (mutation score, test pass rate, tokeny, compliance, ...)
-    \item Grafy pokud relevantní
-    \item Konkrétní hodnoty metrik --- definice metrik jsou v kap03 sekce 3.4
+    \item Odebraná komponenta
+    \item Hypotéza: co očekáváme
+    \item P/Q/E metriky
+    \item Pozorované chování vs. baseline
 \end{itemize}
+
+\subsection{Substituce}
+
+Pro každou substituci:
+\begin{itemize}
+    \item Nahrazená komponenta a alternativa
+    \item Hypotéza
+    \item P/Q/E metriky
+    \item Srovnání variant
+\end{itemize}
+\end{raw}
+
+\section{Souhrnné výsledky}
+
+\begin{raw}
+[RAW] Across-run srovnání všech běhů (pilot + variace).
+Tabulka se všemi P/Q/E metrikami per run.
 \end{raw}

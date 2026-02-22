@@ -34,6 +34,14 @@ Rate each dimension on a 1–3 scale.
 
 **3 — Good:** Strict mode compliant (no `any`). Discriminated unions with exhaustive checks. Type guards. Readonly where applicable.
 
+### Documentation Quality
+
+**1 — Poor:** No comments, or only trivial/redundant comments (`// set status`). No JSDoc on public API. Code intent unclear without reading every line.
+
+**2 — Acceptable:** Public API has JSDoc or clear signatures. Some inline comments explaining non-obvious logic. Occasional redundant comments.
+
+**3 — Good:** Public API documented (JSDoc or self-documenting types). Inline comments explain *why*, not *what*. No redundant comments. Domain-specific logic (e.g. business day rules, escalation thresholds) has context.
+
 ### Unnecessary Complexity (inverse — lower is worse)
 
 **1 — Poor:** Over-engineered abstractions for simple operations. Premature generalization. Deep inheritance or excessive indirection. Code is hard to follow despite simple requirements.
@@ -50,9 +58,10 @@ Respond with ONLY a JSON object:
   "naming": {"score": <1|2|3>, "reasoning": "<1-2 sentences>"},
   "separation": {"score": <1|2|3>, "reasoning": "<1-2 sentences>"},
   "idiomatic": {"score": <1|2|3>, "reasoning": "<1-2 sentences>"},
+  "documentation": {"score": <1|2|3>, "reasoning": "<1-2 sentences>"},
   "complexity": {"score": <1|2|3>, "reasoning": "<1-2 sentences>"},
   "overall": <1|2|3>
 }
 ```
 
-The overall score is the rounded mean of the four dimensions.
+The overall score is the rounded mean of the five dimensions.

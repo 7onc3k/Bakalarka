@@ -4,11 +4,11 @@ set -euo pipefail
 # Creates a new experiment run.
 #
 # Usage:
-#   ./experiments/scripts/new-run.sh <run-name> [--agents path/to/AGENTS.md]
+#   ./experiments/infra/new-run.sh <run-name> [--agents path/to/AGENTS.md]
 #
 # Examples:
-#   ./experiments/scripts/new-run.sh pilot-r1
-#   ./experiments/scripts/new-run.sh ablation-no-tdd --agents experiments/infra/variants/no-tdd.md
+#   ./experiments/infra/new-run.sh pilot-r1
+#   ./experiments/infra/new-run.sh ablation-no-tdd --agents experiments/infra/variants/no-tdd.md
 #
 # What it does:
 #   1. Creates a new private GitHub repo
