@@ -206,30 +206,58 @@ ne inferenční (žádné p-hodnoty).
 \begin{raw}
 [RAW] Metriky P5 (procesní artefakty) a~Q8 (kvalita kódu) hodnotí
 aspekty které nelze měřit deterministicky. Pro obě používáme metodu
-LLM-as-judge \cite{llmjudge2024} --- LLM hodnotí výstup agenta podle
-fixního rubriku.
+LLM-as-judge \cite{zheng2023mtbench} --- LLM hodnotí výstup agenta
+podle fixního rubriku.
 
-\textbf{Společný design:}
+\subsubsection*{Self-preference bias a~volba modelu}
+
+Panickssery et al. \cite{panickssery2024} prokázali kauzální vztah
+mezi schopností LLM rozpoznat vlastní výstupy a~preferencí těchto
+výstupů při hodnocení. Model který generoval hodnocený text má
+tendenci ho hodnotit výše --- mechanismem je nižší perplexita
+vlastních výstupů. Zheng et al. \cite{zheng2023mtbench} identifikovali
+self-enhancement bias jako jeden ze tří systematických biasů
+LLM-as-judge (spolu s~position bias a~verbosity bias).
+
+Z~toho plyne: model hodnotitele musí být z~\textbf{jiné rodiny}
+než model který generoval hodnocený kód \cite{verga2024poll}.
+V~našem experimentu generuje kód minimax-m2.5-free (rodina MiniMax).
+Jako hodnotitele volíme GLM-5 (rodina Zhipu AI) --- odlišná
+architektura i~trénovací data, čímž je eliminován perplexitní
+mechanismus self-preference.
+
+\subsubsection*{Design hodnocení}
+
 \begin{itemize}
-    \item Škála 1--5 per dimenze
-    \item Rubric (prompt + příklady per úroveň) fixní pro všechny běhy
-    \item Validace: porovnání s~manuálním hodnocením autora na vzorku
+    \item \textbf{Model:} GLM-5 (Zhipu AI) přes OpenCode
+    \item \textbf{Škála:} 1--3 per dimenze (poor / acceptable / good) ---
+          nižší granularita je spolehlivější při malém N
+    \item \textbf{Rubric:} fixní prompt s~definicí per úroveň
+          a~příklady, totožný pro všechny běhy (příloha~X)
+    \item \textbf{Separátní prompty} per dimenze --- model nehodnotí
+          více aspektů najednou
+    \item \textbf{Validace:} autor ohodnotí podmnožinu běhů manuálně,
+          shoda s~LLM-as-judge vyjádřena Cohenovým $\kappa$
 \end{itemize}
 
-\textbf{P5 --- procesní artefakty} hodnotí:
+\subsubsection*{Hodnocené dimenze}
+
+\textbf{P5 --- procesní artefakty:}
 commit messages (popisnost, atomicita, konvenční prefix),
 issue descriptions (scope, AC, kontext),
 PR descriptions (co a~proč, odkaz na issue).
 
-\textbf{Q8 --- kvalita kódu} hodnotí:
+\textbf{Q8 --- kvalita kódu:}
 naming conventions, separation of concerns, idiomatický TypeScript,
 zbytečná komplexita (inverzně).
 
 Rozdíl: P5 měří jak agent \textit{komunikuje} (procesní dimenze),
 Q8 měří co agent \textit{vyrobil} (produktová dimenze).
 
-[RAW] TODO: definovat přesné rubriky (prompt + příklady per škála)
-pro P5 i~Q8
+[RAW] Rubriky jsou definovány v~experimentální infrastruktuře
+(\texttt{infra/judge/p5-process-artifacts.md}
+a~\texttt{infra/judge/q8-code-quality.md}). Kompletní znění
+rubriků včetně příkladů bude v~příloze.
 \end{raw}
 
 %% ==========================================================================

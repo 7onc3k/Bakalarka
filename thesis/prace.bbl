@@ -1235,6 +1235,51 @@
       \verb 10.1109/ACCESS.2025.3573889
       \endverb
     \endentry
+    \entry{panickssery2024}{article}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=6e11ff7b9c29d5c21f09a5e47d3964b0}{%
+           family={Panickssery},
+           familyi={P\bibinitperiod},
+           given={Arjun},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=fc3587de57b6b9868eab5cb9c8efc3fb}{%
+           family={Bowman},
+           familyi={B\bibinitperiod},
+           given={Samuel\bibnamedelima R.},
+           giveni={S\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1fdbe6573824ffd09db88df8bfcf769f}{%
+           family={Feng},
+           familyi={F\bibinitperiod},
+           given={Shi},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{cc636a97774e0b9630bfdedd703679b0}
+      \strng{fullhash}{efb3202083d32370588a08c0b812934a}
+      \strng{bibnamehash}{efb3202083d32370588a08c0b812934a}
+      \strng{authorbibnamehash}{efb3202083d32370588a08c0b812934a}
+      \strng{authornamehash}{cc636a97774e0b9630bfdedd703679b0}
+      \strng{authorfullhash}{efb3202083d32370588a08c0b812934a}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Advances in Neural Information Processing Systems (NeurIPS)}
+      \field{note}{Causal link: self-recognition $\to$ self-preference; linear correlation; fine-tuning pushes recognition to 90\%+}
+      \field{title}{{LLM} Evaluators Recognize and Favor Their Own Generations}
+      \field{year}{2024}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2404.13076
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2404.13076
+      \endverb
+    \endentry
     \entry{papadakis2019}{article}{}
       \name{author}{6}{}{%
         {{un=0,uniquepart=base,hash=7d9fc28f6f65f290ffddfb7e4a604586}{%
@@ -1612,6 +1657,57 @@
       \verb https://arxiv.org/abs/2507.07548
       \endverb
     \endentry
+    \entry{verga2024poll}{article}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=0a5ab031ca4d9ecd4e2939eb839f1137}{%
+           family={Verga},
+           familyi={V\bibinitperiod},
+           given={Pat},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4e062d5aab7ae0ae6ac0f9fe40b106cd}{%
+           family={Hofstätter},
+           familyi={H\bibinitperiod},
+           given={Sebastian},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=73291503692ca44df1071d1d8a59a3a1}{%
+           family={Cer},
+           familyi={C\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=dd549e066aa8013fdd8fda1835236922}{%
+           family={Thorne},
+           familyi={T\bibinitperiod},
+           given={James},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{ff480ec8e116c5f0a8f703ebf1be913a}
+      \strng{fullhash}{2a7dd043ddcfb6d71a0ccd4d1ff82a67}
+      \strng{bibnamehash}{2a7dd043ddcfb6d71a0ccd4d1ff82a67}
+      \strng{authorbibnamehash}{2a7dd043ddcfb6d71a0ccd4d1ff82a67}
+      \strng{authornamehash}{ff480ec8e116c5f0a8f703ebf1be913a}
+      \strng{authorfullhash}{2a7dd043ddcfb6d71a0ccd4d1ff82a67}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:2404.18796}
+      \field{note}{Panel of LLM evaluators (PoLL) outperforms single GPT-4 judge; disjoint model families reduce intra-model bias; 7x cheaper}
+      \field{title}{Replacing Judges with Juries: Evaluating {LLM} Generations with a Panel of Diverse Models}
+      \field{year}{2024}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2404.18796
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2404.18796
+      \endverb
+    \endentry
     \entry{sweevo2025}{article}{}
       \true{moreauthor}
       \true{morelabelname}
@@ -1740,6 +1836,111 @@
       \field{note}{Embedded single-case design; analytic generalization (to theory, not population)}
       \field{title}{Case Study Research and Applications: Design and Methods}
       \field{year}{2018}
+    \endentry
+    \entry{zheng2023mtbench}{article}{}
+      \name{author}{13}{}{%
+        {{un=0,uniquepart=base,hash=0beb8f75088bfac1e81ca3840d0e89f0}{%
+           family={Zheng},
+           familyi={Z\bibinitperiod},
+           given={Lianmin},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d5030c6327cf9a55d5a372b89093395a}{%
+           family={Chiang},
+           familyi={C\bibinitperiod},
+           given={Wei-Lin},
+           giveni={W\bibinithyphendelim L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b99fbe22103d2d6f803495267ee1cac9}{%
+           family={Sheng},
+           familyi={S\bibinitperiod},
+           given={Ying},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d922f0e30f0817f9514b3360b791d760}{%
+           family={Zhuang},
+           familyi={Z\bibinitperiod},
+           given={Siyuan},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8b10808456d34160e841fd9eac30a4ce}{%
+           family={Wu},
+           familyi={W\bibinitperiod},
+           given={Zhanghao},
+           giveni={Z\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=329b3ab9fbc7cbf15e931d5f693d0e81}{%
+           family={Zhuang},
+           familyi={Z\bibinitperiod},
+           given={Yonghao},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=14378cef37bf00d8a8fcc705a62d573e}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Zi},
+           giveni={Z\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a57e6ad48b4f46462aa4a0aa5a0f704e}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Zhuohan},
+           giveni={Z\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0d9e6cedc08528d9cc2c770f5726e8bc}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Dacheng},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b80203b0ba1299db35073382e835b485}{%
+           family={Xing},
+           familyi={X\bibinitperiod},
+           given={Eric\bibnamedelima P.},
+           giveni={E\bibinitperiod\bibinitdelim P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8c6d18e2d167e1a3dc88c0166bbc3471}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Hao},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=80175f489665023b28dbb4cf1775c0ef}{%
+           family={Gonzalez},
+           familyi={G\bibinitperiod},
+           given={Joseph\bibnamedelima E.},
+           giveni={J\bibinitperiod\bibinitdelim E\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=51d9ef26181e2e8a9dc546b401e0bb26}{%
+           family={Stoica},
+           familyi={S\bibinitperiod},
+           given={Ion},
+           giveni={I\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{293dcbfb5b9446f7f90cf8d346a542fe}
+      \strng{fullhash}{5d79fd4ebbbfd5b26e4a0e35e41dae2f}
+      \strng{bibnamehash}{5d79fd4ebbbfd5b26e4a0e35e41dae2f}
+      \strng{authorbibnamehash}{5d79fd4ebbbfd5b26e4a0e35e41dae2f}
+      \strng{authornamehash}{293dcbfb5b9446f7f90cf8d346a542fe}
+      \strng{authorfullhash}{5d79fd4ebbbfd5b26e4a0e35e41dae2f}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Advances in Neural Information Processing Systems (NeurIPS)}
+      \field{note}{Foundational LLM-as-judge paper; position bias, verbosity bias, self-enhancement bias; GPT-4 >80\% human agreement}
+      \field{title}{Judging {LLM}-as-a-Judge with {MT-Bench} and {Chatbot Arena}}
+      \field{year}{2023}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2306.05685
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2306.05685
+      \endverb
     \endentry
   \enddatalist
   \datalist[entry]{apa/global//global/global}
@@ -2959,6 +3160,51 @@
       \verb 10.1109/ACCESS.2025.3573889
       \endverb
     \endentry
+    \entry{panickssery2024}{article}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=6e11ff7b9c29d5c21f09a5e47d3964b0}{%
+           family={Panickssery},
+           familyi={P\bibinitperiod},
+           given={Arjun},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=fc3587de57b6b9868eab5cb9c8efc3fb}{%
+           family={Bowman},
+           familyi={B\bibinitperiod},
+           given={Samuel\bibnamedelima R.},
+           giveni={S\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1fdbe6573824ffd09db88df8bfcf769f}{%
+           family={Feng},
+           familyi={F\bibinitperiod},
+           given={Shi},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{cc636a97774e0b9630bfdedd703679b0}
+      \strng{fullhash}{efb3202083d32370588a08c0b812934a}
+      \strng{bibnamehash}{efb3202083d32370588a08c0b812934a}
+      \strng{authorbibnamehash}{efb3202083d32370588a08c0b812934a}
+      \strng{authornamehash}{cc636a97774e0b9630bfdedd703679b0}
+      \strng{authorfullhash}{efb3202083d32370588a08c0b812934a}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Advances in Neural Information Processing Systems (NeurIPS)}
+      \field{note}{Causal link: self-recognition $\to$ self-preference; linear correlation; fine-tuning pushes recognition to 90\%+}
+      \field{title}{{LLM} Evaluators Recognize and Favor Their Own Generations}
+      \field{year}{2024}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2404.13076
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2404.13076
+      \endverb
+    \endentry
     \entry{papadakis2019}{article}{}
       \name{author}{6}{}{%
         {{un=0,uniquepart=base,hash=7d9fc28f6f65f290ffddfb7e4a604586}{%
@@ -3336,6 +3582,57 @@
       \verb https://arxiv.org/abs/2507.07548
       \endverb
     \endentry
+    \entry{verga2024poll}{article}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=0a5ab031ca4d9ecd4e2939eb839f1137}{%
+           family={Verga},
+           familyi={V\bibinitperiod},
+           given={Pat},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4e062d5aab7ae0ae6ac0f9fe40b106cd}{%
+           family={Hofstätter},
+           familyi={H\bibinitperiod},
+           given={Sebastian},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=73291503692ca44df1071d1d8a59a3a1}{%
+           family={Cer},
+           familyi={C\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=dd549e066aa8013fdd8fda1835236922}{%
+           family={Thorne},
+           familyi={T\bibinitperiod},
+           given={James},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{ff480ec8e116c5f0a8f703ebf1be913a}
+      \strng{fullhash}{2a7dd043ddcfb6d71a0ccd4d1ff82a67}
+      \strng{bibnamehash}{2a7dd043ddcfb6d71a0ccd4d1ff82a67}
+      \strng{authorbibnamehash}{2a7dd043ddcfb6d71a0ccd4d1ff82a67}
+      \strng{authornamehash}{ff480ec8e116c5f0a8f703ebf1be913a}
+      \strng{authorfullhash}{2a7dd043ddcfb6d71a0ccd4d1ff82a67}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:2404.18796}
+      \field{note}{Panel of LLM evaluators (PoLL) outperforms single GPT-4 judge; disjoint model families reduce intra-model bias; 7x cheaper}
+      \field{title}{Replacing Judges with Juries: Evaluating {LLM} Generations with a Panel of Diverse Models}
+      \field{year}{2024}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2404.18796
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2404.18796
+      \endverb
+    \endentry
     \entry{sweevo2025}{article}{}
       \true{moreauthor}
       \true{morelabelname}
@@ -3464,6 +3761,111 @@
       \field{note}{Embedded single-case design; analytic generalization (to theory, not population)}
       \field{title}{Case Study Research and Applications: Design and Methods}
       \field{year}{2018}
+    \endentry
+    \entry{zheng2023mtbench}{article}{}
+      \name{author}{13}{}{%
+        {{un=0,uniquepart=base,hash=0beb8f75088bfac1e81ca3840d0e89f0}{%
+           family={Zheng},
+           familyi={Z\bibinitperiod},
+           given={Lianmin},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d5030c6327cf9a55d5a372b89093395a}{%
+           family={Chiang},
+           familyi={C\bibinitperiod},
+           given={Wei-Lin},
+           giveni={W\bibinithyphendelim L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b99fbe22103d2d6f803495267ee1cac9}{%
+           family={Sheng},
+           familyi={S\bibinitperiod},
+           given={Ying},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d922f0e30f0817f9514b3360b791d760}{%
+           family={Zhuang},
+           familyi={Z\bibinitperiod},
+           given={Siyuan},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8b10808456d34160e841fd9eac30a4ce}{%
+           family={Wu},
+           familyi={W\bibinitperiod},
+           given={Zhanghao},
+           giveni={Z\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=329b3ab9fbc7cbf15e931d5f693d0e81}{%
+           family={Zhuang},
+           familyi={Z\bibinitperiod},
+           given={Yonghao},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=14378cef37bf00d8a8fcc705a62d573e}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Zi},
+           giveni={Z\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a57e6ad48b4f46462aa4a0aa5a0f704e}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Zhuohan},
+           giveni={Z\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0d9e6cedc08528d9cc2c770f5726e8bc}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Dacheng},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b80203b0ba1299db35073382e835b485}{%
+           family={Xing},
+           familyi={X\bibinitperiod},
+           given={Eric\bibnamedelima P.},
+           giveni={E\bibinitperiod\bibinitdelim P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8c6d18e2d167e1a3dc88c0166bbc3471}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Hao},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=80175f489665023b28dbb4cf1775c0ef}{%
+           family={Gonzalez},
+           familyi={G\bibinitperiod},
+           given={Joseph\bibnamedelima E.},
+           giveni={J\bibinitperiod\bibinitdelim E\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=51d9ef26181e2e8a9dc546b401e0bb26}{%
+           family={Stoica},
+           familyi={S\bibinitperiod},
+           given={Ion},
+           giveni={I\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{293dcbfb5b9446f7f90cf8d346a542fe}
+      \strng{fullhash}{5d79fd4ebbbfd5b26e4a0e35e41dae2f}
+      \strng{bibnamehash}{5d79fd4ebbbfd5b26e4a0e35e41dae2f}
+      \strng{authorbibnamehash}{5d79fd4ebbbfd5b26e4a0e35e41dae2f}
+      \strng{authornamehash}{293dcbfb5b9446f7f90cf8d346a542fe}
+      \strng{authorfullhash}{5d79fd4ebbbfd5b26e4a0e35e41dae2f}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Advances in Neural Information Processing Systems (NeurIPS)}
+      \field{note}{Foundational LLM-as-judge paper; position bias, verbosity bias, self-enhancement bias; GPT-4 >80\% human agreement}
+      \field{title}{Judging {LLM}-as-a-Judge with {MT-Bench} and {Chatbot Arena}}
+      \field{year}{2023}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2306.05685
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2306.05685
+      \endverb
     \endentry
   \enddatalist
 \endrefsection
