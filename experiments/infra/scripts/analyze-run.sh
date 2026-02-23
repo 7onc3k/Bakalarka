@@ -153,9 +153,9 @@ REF_EXPECTED=${REF_EXPECTED:-0}
 if [[ -d "$REF_DIR/src/__tests__" && -f "src/index.ts" ]]; then
     mkdir -p tests/_ref_tests
     for tf in "$REF_DIR"/src/__tests__/*.test.ts; do
-        # Rewrite import paths: ref tests import from "../index.js",
-        # when placed in tests/_ref_tests/ they need "../../src/index.js"
-        sed 's|from "\.\./index\.js"|from "../../src/index.js"|g' "$tf" > "tests/_ref_tests/$(basename "$tf")"
+        # Rewrite import paths: ref tests import from "../*.js" (e.g. "../index.js",
+        # "../business-days.js"). In tests/_ref_tests/ the correct path is "../../src/*.js".
+        sed 's|from "\.\./\([^"]*\)"|from "../../src/\1"|g' "$tf" > "tests/_ref_tests/$(basename "$tf")"
     done
 
     REF_OUTPUT=$(npx vitest run tests/_ref_tests/ 2>&1 || true)

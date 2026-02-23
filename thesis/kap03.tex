@@ -8,26 +8,31 @@
 \section{Výzkumný přístup: návrhový výzkum (DSR)}
 \label{sec:vyzkumny-pristup}
 
-\begin{draft}
+\begin{raw}
 Hevner et al. \cite{hevner2004} rozlišují v~informatickém výzkumu dva přístupy. Behaviorální výzkum popisuje a~vysvětluje existující jevy --- například jak vývojáři pracují s~AI nástroji. Návrhový výzkum (Design Science Research, DSR) naopak navrhuje nové artefakty a~ověřuje, jestli řeší daný problém. Rozdíl je v~tom, co je výstupem: popis světa, nebo nástroj který ho mění.
 
 Tato práce spadá do návrhového výzkumu. Artefaktem je sada instrukcí pro AI coding agenta. Instrukce se navrhnou, agent s~nimi projede vývojový úkol, z~výstupu (kód, testy, git log) se vyhodnotí co fungovalo a~co ne, a~instrukce se podle toho upraví. Hevner tento postup formalizuje jako build-evaluate cyklus --- iterativní smyčku návrhu a~vyhodnocení, která se opakuje dokud artefakt nedosáhne požadované kvality.
 
+\end{raw}
+
 \subsubsection*{Dvě fáze výzkumu}
 
+\begin{draft}
 Výzkum má dvě fáze, které odpovídají DSR cyklu:
 
 \begin{enumerate}
     \item \textbf{Pilotní iterace} --- opakovaně navrhujeme a~vyhodnocujeme instrukce. Každá iterace je jeden build-evaluate cyklus: spustíme agenta, analyzujeme výstup, diagnostikujeme problém, upravíme instrukce. Zaznamenáváme co se měnilo a~proč. Způsob měření popisuje sekce~\ref{sec:zpusob-mereni}, exit kritéria sekce~\ref{sec:exit-kriteria}.
     \item \textbf{Komparativní variace} --- z~fungujících instrukcí systematicky měníme jednotlivé komponenty a~měříme dopad na chování agenta. Změna může být odebrání (ablace --- funguje agent bez této instrukce?) nebo nahrazení alternativou (substituce --- funguje jiná formulace stejného záměru?). Ablace ukáže \textit{jestli} komponenta záleží, substituce ukáže \textit{proč} a~\textit{v~jaké formě}.
 \end{enumerate}
+\end{draft}
 
+\begin{raw}
 \subsubsection*{Case study a~generalizace}
 
 Výzkum probíhá formou case study na jednom projektu (systém upomínek faktur). Yin \cite{yin2018} rozlišuje dva typy generalizace: statistickou (ze vzorku na populaci) a~analytickou (z~případu na teorii). Case study neumožňuje říct ``tento scaffolding funguje vždy'' --- k~tomu by byl potřeba velký vzorek projektů. Umožňuje ale identifikovat principy a~mechanismy: \textit{proč} určité instrukce fungují a~jiné ne, a~za jakých podmínek.
 
 Více experimentálních běhů na jednom projektu odpovídá tomu, co Yin nazývá embedded single-case design --- jeden případ (projekt) s~více vnořenými jednotkami analýzy (jednotlivé běhy). DSR poskytuje celkový rámec (jak iterovat artefakt), case study poskytuje kontext (reálný projekt s~deterministickou logikou a~ověřitelnými výstupy).
-\end{draft}
+\end{raw}
 
 %% ==========================================================================
 %% 3.2 Výběr projektu
@@ -61,8 +66,17 @@ Systém pro automatické odesílání připomínek k~nezaplaceným fakturám. Ob
 \section{Cíle artefaktu}
 \label{sec:cile-artefaktu}
 
-\begin{draft}
-[DRAFT] V~terminologii DSR \cite{hevner2004} je artefaktem sada instrukcí
+\begin{raw}
+\textbf{REFRAME:} ``Cíle artefaktu'' $\to$ ``Sledované dimenze chování'' (nebo podobně).
+Nezkoumáme artefakt (AGENTS.md), zkoumáme CHOVÁNÍ agenta.
+AGENTS.md = nezávislá proměnná, chování = závislá proměnná.
+``Cíle'' $\to$ ``dimenze v~kterých měříme vliv instrukcí na chování''.
+Obsah (spec-first, TDD, kvalita kódu\ldots) zůstává --- jen jiný framing.
+Pozor: na tuto sekci odkazují 3.5 exit kritéria i~kap04.
+
+\medskip
+
+V~terminologii DSR \cite{hevner2004} je artefaktem sada instrukcí
 pro AI coding agenta (\texttt{AGENTS.md}). Cíle artefaktu definují
 co má artefakt způsobit --- z~nich se odvíjí volba metrik
 (sekce~\ref{sec:zpusob-mereni}) i~exit kritéria pilotní fáze
@@ -82,7 +96,9 @@ než vyčerpávající dokumentace.
 Cíle artefaktu proto reflektují procedurální charakter --- definují
 \textit{jak} má agent pracovat (proces) a~\textit{co} má být
 výsledkem (produkt), nikoliv popis repository.
+\end{raw}
 
+\begin{draft}
 \textbf{Procesní cíle} --- agent dodržuje strukturovaný vývojový proces:
 \begin{enumerate}
     \item \textbf{Spec-first} --- agent odvozuje veškerou práci ze specifikace,
@@ -118,7 +134,7 @@ prahy pro přechod z~pilotní do komparativní fáze.
 \label{sec:zpusob-mereni}
 
 \begin{draft}
-[DRAFT] Metriky experimentu jsou organizovány podle taxonomie Fenton
+Metriky experimentu jsou organizovány podle taxonomie Fenton
 a~Biemana \cite{fenton2014}: \textbf{procesní metriky} (jak agent
 pracuje), \textbf{produktové metriky} (co agent vyrobil)
 a~\textbf{metriky efektivity} (za jakou cenu). Toto členění je
@@ -145,7 +161,7 @@ Primární zdroje dat:
 \label{sec:procesni-metriky}
 
 \begin{draft}
-[DRAFT] Procesní metriky \cite{fenton2014} měří \textit{jak} agent
+Procesní metriky \cite{fenton2014} měří \textit{jak} agent
 pracuje. Místo jednotlivých kvantitativních metrik pro každý aspekt
 procesu používáme dvě komplementární měření: binární compliance
 checklist (P1) a~kvalitativní hodnocení procesních artefaktů (P2).
@@ -182,7 +198,7 @@ checklist (P1) a~kvalitativní hodnocení procesních artefaktů (P2).
 \label{sec:produktove-metriky}
 
 \begin{draft}
-[DRAFT] Produktové metriky (kód Q --- quality) \cite{fenton2014} měří
+Produktové metriky (kód Q --- quality) \cite{fenton2014} měří
 \textit{co} agent vyrobil --- funguje to? Jsou testy kvalitní? Je kód
 udržovatelný?
 
@@ -247,7 +263,7 @@ kvalita dokumentace, zbytečná komplexita. Hodnocení LLM-as-judge
 \label{sec:metriky-efektivity}
 
 \begin{draft}
-[DRAFT] Metriky efektivity měří zdroje spotřebované při vývoji ---
+Metriky efektivity měří zdroje spotřebované při vývoji ---
 standardní dimenze v~agent benchmarcích (SWE-bench, AgentBench).
 
 \begin{description}
@@ -266,7 +282,7 @@ ne inferenční (žádné p-hodnoty).
 \label{sec:llm-as-judge}
 
 \begin{draft}
-[DRAFT] Metriky P2 (procesní artefakty), Q4 (AC coverage)
+Metriky P2 (procesní artefakty), Q4 (AC coverage)
 a~Q8 (kvalita kódu) hodnotí aspekty které nelze měřit čistě
 deterministicky. Pro všechny používáme metodu LLM-as-judge
 \cite{zheng2023mtbench} --- LLM hodnotí výstup agenta podle
@@ -324,7 +340,7 @@ kvalita dokumentace, zbytečná komplexita (inverzně).
 Rozdíl: P2 měří jak agent \textit{komunikuje} (procesní dimenze),
 Q4 a~Q8 měří co agent \textit{vyrobil} (produktová dimenze).
 
-[DRAFT] Rubriky jsou definovány v~experimentální infrastruktuře
+Rubriky jsou definovány v~experimentální infrastruktuře
 (\texttt{infra/judge/p2-process-artifacts.md}
 a~\texttt{infra/judge/q8-code-quality.md}). Kompletní znění
 rubriků včetně příkladů bude v~příloze.
@@ -334,7 +350,7 @@ rubriků včetně příkladů bude v~příloze.
 \label{sec:referencni-testy}
 
 \begin{draft}
-[DRAFT] Metrika Q1 (funkční korektnost) vyžaduje sadu referenčních testů
+Metrika Q1 (funkční korektnost) vyžaduje sadu referenčních testů
 nezávislou na agentově implementaci. Tato test suite je měřicí nástroj
 --- analogicky k~tomu jak LLM-as-judge je nástrojem pro P2 a~Q8.
 
@@ -366,7 +382,7 @@ score, pokrytí AC) jsou v~sekci~\ref{sec:pilotni-vysledky}.
 \label{sec:prehled-metrik}
 
 \begin{draft}
-[DRAFT] Tabulka~\ref{tab:metriky-prehled} shrnuje metrický rámec.
+Tabulka~\ref{tab:metriky-prehled} shrnuje metrický rámec.
 Procesní metriky P1--P2 ověřují dodržování spec-first workflow a~TDD,
 produktové Q1--Q8 pokrývají funkční korektnost, kvalitu testů
 a~kvalitu kódu, efektivita E1--E3 slouží ke~srovnání mezi běhy.
@@ -418,7 +434,7 @@ Automatizované metriky (P1, Q1--Q3, Q5--Q7, E1--E3) sbírá skript
 \subsection{Fixní proměnné}
 
 \begin{draft}
-[DRAFT] Všechny běhy sdílejí stejný setup --- jedinou proměnnou je obsah
+Všechny běhy sdílejí stejný setup --- jedinou proměnnou je obsah
 \texttt{AGENTS.md}. Na rozdíl od generických context files, které
 typicky obsahují popis adresářové struktury a~build příkazů
 \cite{gloaguen2025agentsmd}, náš \texttt{AGENTS.md} je procedurální
@@ -462,7 +478,7 @@ procedurami místo vyčerpávající dokumentace.
 \label{sec:pilotni-iterace}
 
 \begin{draft}
-[DRAFT] DSR build-evaluate cyklus aplikovaný na instrukce. Pilot končí
+DSR build-evaluate cyklus aplikovaný na instrukce. Pilot končí
 když agent splní exit kritéria (sekce~\ref{sec:exit-kriteria}).
 
 \textbf{Každá iterace:}
@@ -518,8 +534,12 @@ Konkrétní skripty a~jejich konfigurace jsou v~příloze~X.
 \subsection{Exit kritéria pilotní fáze}
 \label{sec:exit-kriteria}
 
+\begin{raw}
+\textbf{REFRAME:} ``odvozeno z~cíle artefaktu'' $\to$ ``odvozeno z~dimenzí chování'' + hlavička tabulek ``Cíl'' $\to$ ``Dimenze'' (oba výskyty níže).
+\end{raw}
+
 \begin{draft}
-[DRAFT] Exit kritéria definují minimální prahy pro přechod z~pilotní
+Exit kritéria definují minimální prahy pro přechod z~pilotní
 do komparativní fáze. Každé kritérium je odvozeno z~cíle artefaktu
 (sekce~\ref{sec:cile-artefaktu}) a~operacionalizováno metrikou
 ze sekce~\ref{sec:zpusob-mereni}.
@@ -581,8 +601,8 @@ kritériem jeden úspěšný run --- ne opakovaná replikace.
 
 \subsection{Komparativní variace}
 
-\begin{draft}
-[DRAFT] Z~fungující sady instrukcí (výstup pilotní fáze) systematicky
+\begin{raw}
+Z~fungující sady instrukcí (výstup pilotní fáze) systematicky
 měníme jednotlivé komponenty a~měříme dopad na chování agenta.
 
 \textbf{Možné typy změn:}
@@ -639,4 +659,4 @@ mění se pouze obsah \texttt{AGENTS.md}.
           branches, merge conflicty z~vnějšku). Reálné nasazení
           typicky zahrnuje interakci s~lidskými vývojáři.
 \end{itemize}
-\end{draft}
+\end{raw}

@@ -2,7 +2,7 @@
 \label{kap:prakticka-cast}
 
 \begin{raw}
-[RAW] Tato kapitola popisuje provedení experimentu a jeho výsledky.
+Tato kapitola popisuje provedení experimentu a jeho výsledky.
 Struktura sleduje chronologii: příprava artefaktů (specifikace,
 referenční implementace, instrukce) $\to$ pilotní iterace $\to$
 komparativní variace $\to$ souhrnné výsledky.
@@ -14,7 +14,7 @@ komparativní variace $\to$ souhrnné výsledky.
 %% ================================================================
 
 \begin{raw}
-[RAW] Před spuštěním pilotních běhů bylo nutné připravit tři artefakty:
+Před spuštěním pilotních běhů bylo nutné připravit tři artefakty:
 specifikaci projektu (co má agent implementovat), referenční implementaci
 (baseline pro měření kvality) a~výchozí instrukce (jak má agent pracovat).
 \end{raw}
@@ -24,7 +24,7 @@ specifikaci projektu (co má agent implementovat), referenční implementaci
 \label{sec:konstrukce-specifikace}
 
 \begin{raw}
-[RAW] Jak vznikla specifikace dunning systému (Issue \#1).
+Jak vznikla specifikace dunning systému (Issue \#1).
 
 Specifikace definuje \textit{co} má agent implementovat. Její konstrukce
 je součástí provedení experimentu --- metodické zdůvodnění výběru projektu
@@ -109,7 +109,7 @@ Na základě šablony byla vytvořena specifikace dunning systému
 \label{sec:ref-implementace-postup}
 
 \begin{raw}
-[RAW] Human-expert baseline pro měření kvality.
+Human-expert baseline pro měření kvality.
 
 Referenční implementace slouží jako měřicí nástroj --- definuje strop
 kvality proti kterému se porovnávají agentovy běhy. Podrobnosti o~jejím
@@ -134,7 +134,7 @@ a~že exit kritéria (kap.~3) jsou dosažitelná lidským vývojářem.
 \label{sec:konstrukce-instrukci}
 
 \begin{raw}
-[RAW] Konstrukce výchozí verze AGENTS.md na základě empirických frameworků.
+Konstrukce výchozí verze AGENTS.md na základě empirických frameworků.
 
 Na rozdíl od přístupu ``napsat instrukce a~iterovat'' byla baseline verze
 konstruována čistě z~literatury, bez vlivu předchozích experimentálních
@@ -149,6 +149,7 @@ opodstatnění v~empirických zjištěních.
     \item Návrh struktury podle FSE 2025 component order \cite{mao2025fse}:
           Role $\to$ Goal $\to$ Specification $\to$ Environment $\to$
           Process $\to$ Package Quality $\to$ Constraints
+    %% REFRAME: "cílů artefaktu" → "dimenzí chování" (závisí na kap03)
     \item Mapování cílů artefaktu (sekce~\ref{sec:cile-artefaktu}) na
           konkrétní instrukce
 \end{enumerate}
@@ -194,7 +195,7 @@ sekce~\ref{sec:baseline-agents-md}.
 \label{sec:baseline-agents-md}
 
 \begin{raw}
-[RAW] Kompletní znění výchozích instrukcí (konstruovaných v~sekci~\ref{sec:konstrukce-instrukci}).
+Kompletní znění výchozích instrukcí (konstruovaných v~sekci~\ref{sec:konstrukce-instrukci}).
 
 \begin{lstlisting}[language={},basicstyle=\ttfamily\footnotesize,breaklines=true,
   literate={—}{{--}}1]
@@ -249,6 +250,7 @@ Structure the code as a production-grade npm package:
 - Do not add dependencies beyond the dev toolchain.
 \end{lstlisting}
 
+%% REFRAME: "cíle artefaktu" → "dimenze chování" (závisí na kap03)
 \textbf{Mapování na cíle artefaktu} (sekce~\ref{sec:cile-artefaktu}):
 
 \begin{tabular}{@{}lll@{}}
@@ -268,7 +270,7 @@ API kompatibilita   & Specification (API Contract) & Q2 \\
 \subsection{Průběh iterací}
 
 \begin{raw}
-[RAW] Každá iterace: metriky $\to$ diagnostika $\to$ změna instrukcí.
+Každá iterace: metriky $\to$ diagnostika $\to$ změna instrukcí.
 
 %% ---- Pilot-r1 (baseline run) ----
 
@@ -284,15 +286,15 @@ Jedna session, žádná compaction, žádný auto-continue restart.
 \textbf{Kód} & \textbf{Metrika} & \textbf{Hodnota} & \textbf{Pass?} \\
 \midrule
 P1 & Process compliance    & 3/6     & $\times$ \\
-P2 & Artifact quality      & 3/3     & \checkmark \\
+P2 & Artifact quality      & 2/3     & $\times$ \\
 Q1 & Ref test pass rate    & 34/45   & $\times$ \\
 Q2 & API contract          & match   & \checkmark \\
 Q3 & Mutation score         & 84\,\% & \checkmark \\
-Q4 & AC coverage           & 25/25   & \checkmark \\
+Q4 & AC coverage           & 23/24   & $\times$ \\
 Q5 & Lint warnings         & 2       & $\times$ \\
 Q6 & Typecheck errors      & 0       & \checkmark \\
 Q7 & Complexity            & 2 viol. & $\times$ \\
-Q8 & Design quality        & 3/3     & \checkmark \\
+Q8 & Design quality        & 1/3     & $\times$ \\
 \midrule
 E1 & Tokeny               & 143k    & --- \\
 E2 & Trvání               & 33 min  & --- \\
@@ -300,7 +302,7 @@ E3 & Dokončení            & ano     & --- \\
 \bottomrule
 \end{tabular}
 
-6 metrik pass, 4 fail.
+3 metriky pass, 7 fail.
 
 \textbf{Behavioral trace:}
 
@@ -323,12 +325,15 @@ procházejí. Žádné \texttt{test:} commity --- vše jako \texttt{feat:}.
         \item P1.5 (test modifications): 1 soubor modifikován ---
               agent upravil test po implementaci
     \end{itemize}
+    \item[P2 = 2/3] Commits 2/3 (chybí \texttt{test:} prefix),
+          PRs 2/3 (PR~\#16 zavírá 7 issues najednou). Issues 3/3.
     \item[Q1 = 34/45] 11 referenčních testů selhává --- pause/resume
           logika a~edge cases v~business day výpočtech
+    \item[Q4 = 23/24] Jedno AC nepokryto testovým případem
     \item[Q5 = 2, Q7 = 2] Lint warnings a~complexity violations ---
           dvě funkce překračují McCabe threshold 10
-    \item[Q8 documentation = 1/3] Žádný JSDoc na exportech (ale overall
-          Q8 = 3/3, protože median 5 dimenzí)
+    \item[Q8 = 1/3] Documentation 1/3 (žádný JSDoc na exportech),
+          overall = minimum dimenzí = 1
 \end{description}
 
 \textbf{Změna instrukcí:} TODO --- diagnostika $\to$ literature-grounded fix.
@@ -340,13 +345,13 @@ procházejí. Žádné \texttt{test:} commity --- vše jako \texttt{feat:}.
 %% ================================================================
 
 \begin{raw}
-[RAW] Systematické variace fungujících instrukcí.
+Systematické variace fungujících instrukcí.
 \end{raw}
 
 \subsection{Ablace}
 
 \begin{raw}
-[RAW] Pro každou ablaci:
+Pro každou ablaci:
 \begin{itemize}
     \item Odebraná komponenta
     \item Hypotéza: co očekáváme
@@ -358,7 +363,7 @@ procházejí. Žádné \texttt{test:} commity --- vše jako \texttt{feat:}.
 \subsection{Substituce}
 
 \begin{raw}
-[RAW] Pro každou substituci:
+Pro každou substituci:
 \begin{itemize}
     \item Nahrazená komponenta a alternativa
     \item Hypotéza
@@ -373,7 +378,7 @@ procházejí. Žádné \texttt{test:} commity --- vše jako \texttt{feat:}.
 %% ================================================================
 
 \begin{raw}
-[RAW] Across-run srovnání všech běhů (pilot + variace).
+Across-run srovnání všech běhů (pilot + variace).
 Tabulka se všemi P/Q/E metrikami per run.
 
 \textbf{Kontext pro diskuzi:}

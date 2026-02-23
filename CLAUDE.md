@@ -143,7 +143,7 @@ Obsah v LaTeXu označujeme podle stavu zpracování (používáme prostředí):
 - `\begin{draft}...\end{draft}` (modro-šedá) - rozpracovaný text
 - normální text = finální
 
-**Konvence:** `[RAW]`/`[DRAFT]` label je vždy na vlastním řádku (definováno v makra.tex)
+**Konvence:** `[RAW]`/`[DRAFT]` label se generuje automaticky z prostředí (definováno v makra.tex). **NEPSAT `[RAW]`/`[DRAFT]` ručně do textu** — zobrazí se duplicitně.
 
 Workflow: raw → draft → finální (odstraníme prostředí)
 

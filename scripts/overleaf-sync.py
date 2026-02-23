@@ -11,6 +11,12 @@ Použití:
 
 Flags:
     --yes, -y    Přeskočí potvrzení
+
+Push automaticky:
+    1. Nahraje .tex, .bib, .pdf, ... soubory
+    2. Nahraje upravenou makra.tex (pdfx → hyperref, pro rychlou kompilaci)
+    3. Nahraje předkompilovaný output.bbl (přeskočí biber)
+    4. Nahraje latexmkrc (přeskočí biber, max 2 průchody)
 """
 
 import sys
@@ -19,6 +25,7 @@ import zipfile
 import tempfile
 import shutil
 import hashlib
+import re
 from pathlib import Path
 
 # Přidej venv do path
@@ -38,6 +45,9 @@ IGNORE_PATTERNS = {'*.aux', '*.log', '*.fls', '*.fdb_latexmk', '*.synctex.gz',
                    '*.toc', '*.out', '*.bbl', '*.blg', '*.bcf', '*.run.xml',
                    '*.xmpi', '*.lof', '*.lot'}
 IGNORE_DIRS = {'sources'}  # Složky k ignorování (PDF knihy pro RAG)
+
+# Overleaf-specific: latexmkrc content (skip biber, max 2 passes)
+LATEXMKRC_CONTENT = '$biber = "true";\n$max_repeat = 2;\n'
 
 
 def get_api():
@@ -70,6 +80,65 @@ def should_sync(filepath):
     return True
 
 
+def make_overleaf_makra(content):
+    """Upraví makra.tex pro Overleaf: pdfx → hyperref."""
+    # Nahraď pdfx za hyperref (plain string replace, ne regex)
+    content = content.replace(
+        '\\usepackage[a-2u]{pdfx}     % výsledné PDF bude ve standardu PDF/A-2u\n'
+        '                            % resulting PDF will be in the PDF / A-2u standard',
+        '% pdfx disabled for Overleaf (too slow on free plan)\n'
+        '% Final PDF/A version: compile locally with original makra.tex\n'
+        '\\usepackage{hyperref}\n'
+        '\\usepackage[usenames]{xcolor}'
+    )
+
+    # Odstraň podmíněné načítání xcolor (už je načtené výše)
+    content = content.replace(
+        '\\makeatletter\n'
+        '\\@ifpackageloaded{xcolor}{\n'
+        '   \\@ifpackagewith{xcolor}{usenames}{}{\\PassOptionsToPackage{usenames}{xcolor}}\n'
+        '  }{\\usepackage[usenames]{xcolor}} % barevná sazba / color typesetting\n'
+        '\\makeatother',
+        '% xcolor already loaded above'
+    )
+
+    return content
+
+
+def push_overleaf_extras(api, root_folder_id):
+    """Nahraje Overleaf-specific soubory (upravená makra, .bbl, latexmkrc)."""
+    extras = 0
+
+    # 1. Upravená makra.tex (pdfx → hyperref)
+    makra_path = THESIS_DIR / "makra.tex"
+    if makra_path.exists():
+        with open(makra_path, 'r') as f:
+            original = f.read()
+        modified = make_overleaf_makra(original)
+        if modified != original:
+            api.project_upload_file(PROJECT_ID, root_folder_id, 'makra.tex', modified.encode('utf-8'))
+            print("  ⚡ makra.tex (pdfx → hyperref pro Overleaf)")
+            extras += 1
+
+    # 2. Předkompilovaný output.bbl
+    bbl_path = THESIS_DIR / "prace.bbl"
+    if bbl_path.exists():
+        with open(bbl_path, 'rb') as f:
+            content = f.read()
+        api.project_upload_file(PROJECT_ID, root_folder_id, 'output.bbl', content)
+        print(f"  ⚡ output.bbl ({len(content)} bytes)")
+        extras += 1
+    else:
+        print("  ⚠️  prace.bbl neexistuje — spusť 'latexmk -pdf prace.tex' lokálně")
+
+    # 3. latexmkrc (skip biber)
+    api.project_upload_file(PROJECT_ID, root_folder_id, 'latexmkrc', LATEXMKRC_CONTENT.encode('utf-8'))
+    print("  ⚡ latexmkrc (skip biber)")
+    extras += 1
+
+    return extras
+
+
 def pull(api):
     """Stáhne projekt z Overleafu."""
     print(f"Stahuji projekt {PROJECT_ID}...")
@@ -87,17 +156,28 @@ def pull(api):
             zf.extractall(extract_dir)
 
         # Kopíruj soubory do thesis/
+        # Přeskakuj Overleaf-specific soubory (output.bbl, latexmkrc)
+        overleaf_only = {'output.bbl', 'latexmkrc'}
         copied = 0
         for root, dirs, files in os.walk(extract_dir):
             rel_root = Path(root).relative_to(extract_dir)
 
             for filename in files:
+                if filename in overleaf_only:
+                    continue
+
                 src = Path(root) / filename
                 rel_path = rel_root / filename
                 dst = THESIS_DIR / rel_path
 
                 # Vytvoř složky
                 dst.parent.mkdir(parents=True, exist_ok=True)
+
+                # Při pull: makra.tex z Overleafu je upravená,
+                # NEPŘEPISUJ lokální originál
+                if filename == 'makra.tex':
+                    print(f"  ⏭ {rel_path} (Overleaf verze, přeskakuji)")
+                    continue
 
                 # Kopíruj
                 shutil.copy2(src, dst)
@@ -130,7 +210,7 @@ def push(api):
         except:
             pass
 
-    # Nahrávej soubory
+    # Nahrávej soubory (kromě makra.tex — tu nahrajeme upravenou)
     uploaded = 0
     for filepath in THESIS_DIR.rglob("*"):
         if not filepath.is_file():
@@ -139,6 +219,10 @@ def push(api):
         rel_path = filepath.relative_to(THESIS_DIR)
 
         if not should_sync(rel_path):
+            continue
+
+        # makra.tex se nahraje upravená v push_overleaf_extras
+        if rel_path.name == 'makra.tex':
             continue
 
         # Určí folder ID
@@ -159,7 +243,11 @@ def push(api):
         except Exception as e:
             print(f"  ✗ {rel_path}: {e}")
 
-    print(f"\nNahráno {uploaded} souborů")
+    # Nahrát Overleaf-specific soubory
+    print("\n⚡ Overleaf optimalizace:")
+    extras = push_overleaf_extras(api, root_folder_id)
+
+    print(f"\nNahráno {uploaded} souborů + {extras} Overleaf extras")
 
 
 def file_hash(filepath):
@@ -170,6 +258,9 @@ def file_hash(filepath):
 
 def get_diff(api):
     """Porovná lokální a vzdálené soubory. Vrátí (only_local, only_remote, modified)."""
+    # Overleaf-only soubory ignorovat v diffu
+    overleaf_only = {'output.bbl', 'latexmkrc'}
+
     # Stáhni vzdálené soubory do temp
     with tempfile.TemporaryDirectory() as tmpdir:
         zip_path = Path(tmpdir) / "project.zip"
@@ -184,6 +275,8 @@ def get_diff(api):
         for root, dirs, files in os.walk(extract_dir):
             rel_root = Path(root).relative_to(extract_dir)
             for filename in files:
+                if filename in overleaf_only:
+                    continue
                 src = Path(root) / filename
                 rel_path = str(rel_root / filename)
                 if rel_path.startswith('.'):
@@ -198,11 +291,13 @@ def get_diff(api):
                 if should_sync(rel_path):
                     local_files[rel_path] = file_hash(filepath)
 
-        # Porovnej
+        # Porovnej (makra.tex je vždy jiná — Overleaf má upravenou verzi)
         only_local = set(local_files.keys()) - set(remote_files.keys())
         only_remote = set(remote_files.keys()) - set(local_files.keys())
         modified = set()
         for path in set(local_files.keys()) & set(remote_files.keys()):
+            if path == 'makra.tex':
+                continue  # vždy jiná (pdfx vs hyperref)
             if local_files[path] != remote_files[path]:
                 modified.add(path)
 
@@ -216,6 +311,7 @@ def diff(api):
 
     if not only_local and not only_remote and not modified:
         print("\n✓ Vše synchronizované, žádné rozdíly.")
+        print("  (makra.tex se vždy liší — Overleaf má lehkou verzi bez pdfx)")
         return
 
     if only_local:
@@ -324,8 +420,7 @@ def main():
                 print(f"  ~ {f}")
 
         if not only_local and not modified:
-            print("\n✓ Žádné změny k nahrání.")
-            return
+            print("\n✓ Žádné změny k nahrání (ale Overleaf extras se aktualizují).")
 
         if not skip_confirm and not confirm("Pokračovat s nahráním?"):
             print("Zrušeno.")
