@@ -38,7 +38,7 @@ Score = počet splněných / 6. Exit: 6/6.
 **P2 — kvalita procesních artefaktů** (LLM-as-judge, GLM-5):
 
 Commit messages, issue descriptions, PR descriptions.
-Rubrik: `infra/judge/p2-process-artifacts.md`. Škála 1-3. Exit: ≥2.
+Rubrik: `infra/judge/p2-process-artifacts.md`. Škála 1-3. Exit: 3/3.
 
 ### Produktové metriky (Q1-Q8)
 
@@ -47,12 +47,13 @@ Rubrik: `infra/judge/p2-process-artifacts.md`. Škála 1-3. Exit: ≥2.
 | Q1 | Ref test pass rate | Funguje implementace? | 40 behavioral testů ze spec | 40/40 |
 | Q2 | API contract match | Sedí veřejné API? | `tsc` import + typecheck | match |
 | Q3 | Mutation score | Detekují agentovy testy chyby? | Stryker | ≥70% |
-| Q4 | AC coverage | Kolik z 24 AC má test? | Mapování test→AC | 24/24 |
+| Q4 | AC coverage | Kolik z 24 AC má test? | LLM-as-judge (GLM-5) | 24/24 |
 | Q5 | Lint warnings | Čistý kód? | `eslint --format json` | 0 |
 | Q6 | Typecheck errors | Kompiluje strict? | `tsc --noEmit` | 0 |
 | Q7 | Složitost kódu | Není zbytečně složitý? | Cyklomatická složitost (ESLint) | ≤10/fn |
-| Q8 | Kvalita kódu (design) | Naming, SoC, idiomatic TS, docs, komplexita | LLM-as-judge (GLM-5) | ≥2/3 |
+| Q8 | Kvalita kódu (design) | Naming, SoC, idiomatic TS, docs, komplexita | LLM-as-judge (GLM-5) | 3/3 |
 
+Q4 rubrik: `infra/judge/q4-ac-coverage.md`.
 Q8 rubrik: `infra/judge/q8-code-quality.md`.
 
 ### Metriky efektivity (E1-E3)
@@ -65,8 +66,8 @@ Q8 rubrik: `infra/judge/q8-code-quality.md`.
 
 E1-E3 nemají pass/fail — slouží k across-run srovnání.
 
-→ Automatizované metriky: `./experiments/infra/analyze-run.sh pilot-rN`
-→ LLM-as-judge (P2, Q8): `./experiments/infra/judge.sh pilot-rN`
+→ Automatizované metriky: `./experiments/infra/scripts/analyze-run.sh pilot-rN`
+→ LLM-as-judge (P2, Q4, Q8): `./experiments/infra/scripts/judge.sh pilot-rN`
 
 ---
 
@@ -74,8 +75,8 @@ E1-E3 nemají pass/fail — slouží k across-run srovnání.
 
 Po každém runu:
 
-1. Spustit `./experiments/infra/analyze-run.sh pilot-rN` → P1, Q1-Q7, E1-E3
-2. Spustit `./experiments/infra/judge.sh pilot-rN` → P2, Q8
+1. Spustit `./experiments/infra/scripts/analyze-run.sh pilot-rN` → P1, Q1-Q7, E1-E3
+2. Spustit `./experiments/infra/scripts/judge.sh pilot-rN` → P2, Q4, Q8
 3. Vyplnit FINDINGS.md (šablona níže)
 
 ### FINDINGS.md šablona
@@ -112,6 +113,16 @@ Po každém runu:
 | Issue descriptions | | |
 | PR descriptions | | |
 | **Overall** | | |
+
+## Q4 — AC Coverage (LLM-as-judge)
+
+| AC | Covered? | Test |
+|----|----------|------|
+| AC1 | | |
+| ... | | |
+| AC24 | | |
+
+**Q4 score:** /24
 
 ## Produktové metriky (Q1-Q8)
 
@@ -234,12 +245,12 @@ Pro každou změnu zapsat do CHANGELOG.md:
 ## Fáze 4: Run
 
 ```bash
-./experiments/infra/new-run.sh pilot-rN
+./experiments/infra/scripts/new-run.sh pilot-rN
 ```
 
 Po dokončení:
-1. Spustit `./experiments/infra/analyze-run.sh pilot-rN`
-2. Spustit `./experiments/infra/judge.sh pilot-rN`
+1. Spustit `./experiments/infra/scripts/analyze-run.sh pilot-rN`
+2. Spustit `./experiments/infra/scripts/judge.sh pilot-rN`
 3. Vyplnit FINDINGS.md (šablona z Fáze 1)
 4. Zpět na Fáze 2 (Diagnose)
 
@@ -258,10 +269,10 @@ Pilotní iterace končí když agent splní všechna kritéria v posledním běh
 - [ ] Q6 = 0 (typecheck errors)
 
 **Minimální standard:**
-- [ ] P2 ≥ 2/3 (kvalita procesních artefaktů)
+- [ ] P2 = 3/3 (kvalita procesních artefaktů)
 - [ ] Q3 ≥ 70% (mutation score)
 - [ ] Q7 ≤ 10 per funkce (cyklomatická složitost)
-- [ ] Q8 ≥ 2/3 (kvalita kódu)
+- [ ] Q8 = 3/3 (kvalita kódu)
 
 **Záznam (bez prahu):**
 - E1, E2, E3 — across-run srovnání

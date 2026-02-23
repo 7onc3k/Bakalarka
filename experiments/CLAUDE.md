@@ -12,7 +12,7 @@ Každá iterace:
 1. **Observe** — behavioral trace z runu (FINDINGS.md šablona)
 2. **Diagnose** — analýza proti FSE 2025 (7 komponent), SASE (script balance), Lulla 2026 (content effectiveness), Breunig (fighting-the-weights)
 3. **Fix** — literature-grounded změna v AGENTS.md (zapsat do CHANGELOG.md s citací)
-4. **Run** — `./infra/new-run.sh pilot-rN`
+4. **Run** — `./infra/scripts/new-run.sh pilot-rN`
 
 ## Analytické nástroje
 
@@ -40,4 +40,4 @@ Agent splní 80%+ cílových chování:
 - `infra/iteration-procedure.md` — kompletní analytický postup
 - `infra/build.md` — system prompt override (fixní)
 - `runs/pilot-rN/FINDINGS.md` — výstupy per run
-- `infra/new-run.sh` — spouštěč runů
+- `infra/scripts/new-run.sh` — spouštěč runů

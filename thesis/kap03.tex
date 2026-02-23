@@ -198,8 +198,8 @@ udržovatelný?
         neodhalených i~při plném coverage.
     \item[Q4 --- AC coverage.] Kolik z~24 acceptance criteria má
         odpovídající test. Měří úplnost pokrytí požadavků, ne jen
-        korektnost implementace. Mapování test $\to$ AC manuální
-        nebo LLM-as-judge.
+        korektnost implementace. Mapování test $\to$ AC přes
+        LLM-as-judge (sekce~\ref{sec:llm-as-judge}).
 \end{description}
 
 \textbf{Referenční hodnoty} (z~referenční implementace):
@@ -250,10 +250,11 @@ ne inferenční (žádné p-hodnoty).
 \label{sec:llm-as-judge}
 
 \begin{draft}
-[DRAFT] Metriky P2 (procesní artefakty) a~Q8 (kvalita kódu) hodnotí
-aspekty které nelze měřit deterministicky. Pro obě používáme metodu
-LLM-as-judge \cite{zheng2023mtbench} --- LLM hodnotí výstup agenta
-podle fixního rubriku.
+[DRAFT] Metriky P2 (procesní artefakty), Q4 (AC coverage)
+a~Q8 (kvalita kódu) hodnotí aspekty které nelze měřit čistě
+deterministicky. Pro všechny používáme metodu LLM-as-judge
+\cite{zheng2023mtbench} --- LLM hodnotí výstup agenta podle
+fixního rubriku.
 
 \subsubsection*{Self-preference bias a~volba modelu}
 
@@ -281,8 +282,9 @@ mechanismus self-preference.
     \item \textbf{Rubric:} fixní prompt s~definicí per úroveň
           a~příklady, totožný pro všechny běhy (příloha~X)
     \item \textbf{Jeden prompt per metriku} --- P2 hodnotí tři dimenze
-          procesních artefaktů, Q8 čtyři dimenze kvality kódu, každý
-          s~vlastním rubrikem
+          procesních artefaktů, Q4 mapuje testy na acceptance criteria,
+          Q8 hodnotí pět dimenzí kvality kódu --- každý s~vlastním
+          rubrikem
     \item \textbf{Validace:} autor ohodnotí podmnožinu běhů manuálně,
           shoda s~LLM-as-judge vyjádřena Cohenovým $\kappa$
 \end{itemize}
@@ -294,12 +296,17 @@ commit messages (popisnost, atomicita, konvenční prefix),
 issue descriptions (scope, AC, kontext),
 PR descriptions (co a~proč, odkaz na issue).
 
+\textbf{Q4 --- AC coverage:}
+LLM dostane 24 acceptance criteria ze specifikace a~kód agentových
+testů. Pro každé AC určí, zda existuje test který ho pokrývá.
+Výstup: počet pokrytých AC / 24.
+
 \textbf{Q8 --- kvalita kódu:}
 naming conventions, separation of concerns, idiomatický TypeScript,
 kvalita dokumentace, zbytečná komplexita (inverzně).
 
 Rozdíl: P2 měří jak agent \textit{komunikuje} (procesní dimenze),
-Q8 měří co agent \textit{vyrobil} (produktová dimenze).
+Q4 a~Q8 měří co agent \textit{vyrobil} (produktová dimenze).
 
 [DRAFT] Rubriky jsou definovány v~experimentální infrastruktuře
 (\texttt{infra/judge/p2-process-artifacts.md}
@@ -337,6 +344,52 @@ v~acceptance criteria dříve než experimentální běhy.
 
 Konkrétní výsledky referenční implementace (počet testů, mutation
 score, pokrytí AC) jsou v~sekci~\ref{sec:pilotni-vysledky}.
+\end{draft}
+
+\subsection{Přehled metrik a~nástrojů}
+\label{sec:prehled-metrik}
+
+\begin{draft}
+[DRAFT] Tabulka~\ref{tab:metriky-prehled} shrnuje metrický rámec.
+Mapování na cíle artefaktu (sekce~\ref{sec:cile-artefaktu}):
+procesní metriky P1--P2 ověřují dodržování spec-first workflow a~TDD,
+produktové Q1--Q8 pokrývají funkční korektnost, kvalitu testů
+a~kvalitu kódu, efektivita E1--E3 slouží ke~srovnání mezi běhy.
+
+\begin{table}[ht]
+\centering
+\caption{Metrický rámec: kód, měřená vlastnost, nástroj a~exit kritérium}
+\label{tab:metriky-prehled}
+\small
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Kód} & \textbf{Metrika} & \textbf{Nástroj} & \textbf{Exit kritérium} \\
+\midrule
+\multicolumn{4}{@{}l}{\textit{Procesní (P) --- jak agent pracuje}} \\
+P1 & Process compliance (6 položek) & git, GitHub API & 6/6 \\
+P2 & Kvalita procesních artefaktů  & LLM-as-judge (GLM-5) & 3/3 \\
+\midrule
+\multicolumn{4}{@{}l}{\textit{Produktové (Q) --- co agent vyrobil}} \\
+Q1 & Referenční test pass rate  & Vitest (40 behavioral testů) & 40/40 \\
+Q2 & API contract match         & tsc (import + typecheck) & match \\
+Q3 & Mutation score              & Stryker & $\geq$ 70\,\% \\
+Q4 & AC coverage (24 kritérií)   & LLM-as-judge (GLM-5) & 24/24 \\
+Q5 & Lint warnings               & ESLint & 0 \\
+Q6 & Typecheck errors            & tsc \texttt{-{}-noEmit} & 0 \\
+Q7 & Cyklomatická složitost      & ESLint (complexity rule) & $\leq$ 10/fn \\
+Q8 & Design quality              & LLM-as-judge (GLM-5) & 3/3 \\
+\midrule
+\multicolumn{4}{@{}l}{\textit{Efektivita (E) --- za jakou cenu}} \\
+E1 & Tokeny (input + output)     & OpenCode export & záznam \\
+E2 & Trvání (minuty)             & session timestamps & záznam \\
+E3 & Dokončení + restarts        & auto-continue log & záznam \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Automatizované metriky (P1, Q1--Q3, Q5--Q7, E1--E3) sbírá skript
+\texttt{analyze-run.sh}; kvalitativní metriky (P2, Q4, Q8) hodnotí
+\texttt{judge.sh} přes LLM-as-judge (sekce~\ref{sec:llm-as-judge}).
 \end{draft}
 
 %% ==========================================================================
@@ -481,13 +534,13 @@ neexistuje, ale lze stanovit odůvodněný minimální standard.
     & \textbf{Metrika} & \textbf{Práh} & \textbf{Zdůvodnění} \\
 \hline
 Transparentní proces
-    & P2 & $\geq$ 2/3 & acceptable na škále LLM-as-judge \\
+    & P2 & 3/3 & good na škále LLM-as-judge \\
 Kvalitní testy
     & Q3 & $\geq$ 70\,\% & industry baseline \cite{meta2025} \\
 Kvalitní kód (složitost)
     & Q7 & $\leq$ 10 per fn & McCabe 1976, de facto standard \\
 Kvalitní kód (design)
-    & Q8 & $\geq$ 2/3 & acceptable na škále LLM-as-judge \\
+    & Q8 & 3/3 & good na škále LLM-as-judge \\
 \end{tabular}
 
 \textbf{Záznam bez prahu} --- metriky efektivity (E1--E3) se

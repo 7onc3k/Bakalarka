@@ -4,11 +4,11 @@ set -euo pipefail
 # Creates a new experiment run.
 #
 # Usage:
-#   ./experiments/infra/new-run.sh <run-name> [--agents path/to/AGENTS.md]
+#   ./experiments/infra/scripts/new-run.sh <run-name> [--agents path/to/AGENTS.md]
 #
 # Examples:
-#   ./experiments/infra/new-run.sh pilot-r1
-#   ./experiments/infra/new-run.sh ablation-no-tdd --agents experiments/infra/variants/no-tdd.md
+#   ./experiments/infra/scripts/new-run.sh pilot-r1
+#   ./experiments/infra/scripts/new-run.sh ablation-no-tdd --agents experiments/infra/variants/no-tdd.md
 #
 # What it does:
 #   1. Creates a new private GitHub repo
@@ -21,7 +21,7 @@ set -euo pipefail
 #   AGENTS.md, .opencode/, transcript.json, .opencode/metrics.csv
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-EXPERIMENTS_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+EXPERIMENTS_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 INFRA_DIR="$EXPERIMENTS_DIR/infra"
 RUNS_DIR="$EXPERIMENTS_DIR/runs"
 GITHUB_ORG="7onc3k"
@@ -114,8 +114,8 @@ gh label create "spec" \
     --color "0052CC" \
     --description "Specification issue" 2>/dev/null || true
 
-SPEC_TITLE=$(jq -r '.title' "$SCRIPT_DIR/issue-1-req-only.json")
-SPEC_BODY=$(jq -r '.body'  "$SCRIPT_DIR/issue-1-req-only.json")
+SPEC_TITLE=$(jq -r '.title' "$SCRIPT_DIR/../issue-1-req-only.json")
+SPEC_BODY=$(jq -r '.body'  "$SCRIPT_DIR/../issue-1-req-only.json")
 
 gh issue create \
     --repo "${GITHUB_ORG}/${REPO_NAME}" \
