@@ -56,7 +56,7 @@ fi
 # --- P1.2: Branch per issue ---
 ISSUE_TOTAL=$(gh issue list --state all --limit 100 --json number 2>/dev/null \
     | python3 -c "import json,sys; data=json.load(sys.stdin); print(len([i for i in data if i['number']>1]))" 2>/dev/null || echo "?")
-BRANCH_COUNT=$(git branch -a | grep -v HEAD | grep -v 'remotes/origin/main$' | grep -c 'remotes/origin/' || echo 0)
+BRANCH_COUNT=$(git branch -a | grep -v HEAD | grep -v 'remotes/origin/main$' | grep -c 'remotes/origin/' || true)
 if [[ "$ISSUE_TOTAL" != "?" && "$BRANCH_COUNT" != "?" && "$BRANCH_COUNT" -ge "$ISSUE_TOTAL" ]]; then
     echo "P1.2 Branch per issue: ✅ (branches: $BRANCH_COUNT, issues: $ISSUE_TOTAL)"
     ((P1_PASS++))
@@ -65,8 +65,8 @@ else
 fi
 
 # --- P1.3: Test commit before implementation ---
-TEST_COMMITS=$(git log --all --oneline --format="%s" | grep -c '^test:' || echo 0)
-FEAT_COMMITS=$(git log --all --oneline --format="%s" | grep -c '^feat:' || echo 0)
+TEST_COMMITS=$(git log --all --oneline --format="%s" | grep -c '^test:' || true)
+FEAT_COMMITS=$(git log --all --oneline --format="%s" | grep -c '^feat:' || true)
 # Check if at least one test: commit exists before first feat: commit
 FIRST_TEST_POS=$(git log --all --oneline --format="%s" | grep -n '^test:' | tail -1 | cut -d: -f1 || echo 999)
 FIRST_FEAT_POS=$(git log --all --oneline --format="%s" | grep -n '^feat:' | tail -1 | cut -d: -f1 || echo 0)
@@ -184,8 +184,8 @@ echo ""
 echo "## Q2: API Contract Match"
 echo ""
 if [[ -f "src/index.ts" ]]; then
-    HAS_CREATE=$(grep -c 'export.*function.*createInstance\|export.*createInstance' src/index.ts || echo 0)
-    HAS_PROCESS=$(grep -c 'export.*function.*process\|export.*process' src/index.ts || echo 0)
+    HAS_CREATE=$(grep -c 'export.*function.*createInstance\|export.*createInstance' src/index.ts || true)
+    HAS_PROCESS=$(grep -c 'export.*function.*process\|export.*process' src/index.ts || true)
     if [[ "$HAS_CREATE" -gt 0 && "$HAS_PROCESS" -gt 0 ]]; then
         echo "**Q2: ✅ Exports createInstance and process**"
     else
@@ -204,8 +204,15 @@ echo ""
 MUTATION_SCORE="?"
 if [[ -f "package.json" && -f "src/index.ts" ]]; then
     if ! npx stryker --version &>/dev/null; then
-        echo "Installing Stryker..."
-        npm install --save-dev @stryker-mutator/core @stryker-mutator/vitest-runner @stryker-mutator/typescript-checker --legacy-peer-deps 2>&1 | tail -1
+        # Detect vitest version to pick compatible Stryker
+        VITEST_VER=$(npx vitest --version 2>/dev/null | grep -oP '^\d+' || echo "0")
+        if [[ "$VITEST_VER" -ge 2 ]]; then
+            STRYKER_TAG="latest"   # Stryker 9.x for vitest >=2
+        else
+            STRYKER_TAG="8"        # Stryker 8.x for vitest <2
+        fi
+        echo "Installing Stryker (${STRYKER_TAG}) for vitest ${VITEST_VER}.x..."
+        npm install --save-dev "@stryker-mutator/core@${STRYKER_TAG}" "@stryker-mutator/vitest-runner@${STRYKER_TAG}" "@stryker-mutator/typescript-checker@${STRYKER_TAG}" --legacy-peer-deps 2>&1 | tail -1
     fi
 
     if [[ ! -f "stryker.config.json" && ! -f "stryker.config.js" ]]; then

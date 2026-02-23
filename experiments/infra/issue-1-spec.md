@@ -14,7 +14,7 @@ The system supports configurable timeouts per dunning instance, configurable pub
 
 - **Language:** TypeScript (strict mode, ESM — `"type": "module"` in package.json)
 - **Runtime:** Node.js (LTS)
-- **Test framework:** Vitest
+- **Test framework:** Vitest (≥2.0)
 - **Output:** publishable npm package with type declarations (`.d.ts`)
 
 ### Package API
