@@ -106,7 +106,7 @@ Na základě šablony byla vytvořena specifikace dunning systému
 
 %% ----------------------------------------------------------------
 \subsection{Referenční implementace}
-\label{sec:referencni-implementace}
+\label{sec:ref-implementace-postup}
 
 \begin{raw}
 [RAW] Human-expert baseline pro měření kvality.
@@ -146,7 +146,7 @@ opodstatnění v~empirických zjištěních.
 \begin{enumerate}
     \item Smazání předchozí ad-hoc verze AGENTS.md (iterace r1--r5
           sloužily k~validaci infrastruktury, ne k~výzkumu)
-    \item Návrh struktury podle FSE 2025 component order \cite{mao2025}:
+    \item Návrh struktury podle FSE 2025 component order \cite{mao2025fse}:
           Role $\to$ Goal $\to$ Specification $\to$ Environment $\to$
           Process $\to$ Package Quality $\to$ Constraints
     \item Mapování cílů artefaktu (sekce~\ref{sec:cile-artefaktu}) na
@@ -156,7 +156,7 @@ opodstatnění v~empirických zjištěních.
 \textbf{Klíčová rozhodnutí:}
 
 \begin{itemize}
-    \item \textbf{FSE component order} --- Mao et al. \cite{mao2025}:
+    \item \textbf{FSE component order} --- Mao et al. \cite{mao2025fse}:
           Role/Directive na začátku (p=0.87), Constraints na konci.
           Empiricky odvozené pořadí z~2\,163 production templates.
     \item \textbf{Package Quality sekce} --- nový blok vyžadující modulární
@@ -168,7 +168,7 @@ opodstatnění v~empirických zjištěních.
     \item \textbf{Zkrácení workflow} --- odstranění bash příkladů
           z~procesní sekce. Lulla et al. \cite{lulla2026}: verbose
           step-by-step instrukce nejsou efektivnější než stručné.
-          AGENTbench \cite{agentbench2026}: redundantní obsah zvyšuje
+          Gloaguen et al. \cite{gloaguen2025agentsmd}: redundantní obsah zvyšuje
           tokeny bez benefitu.
     \item \textbf{Procesní instrukce} --- spec-first TDD \cite{mathews2024},
           dekompozice do sub-issues, branch-per-issue, conventional commits.
@@ -177,7 +177,7 @@ opodstatnění v~empirických zjištěních.
           procedurální guidance efektivnější než dokumentace.
     \item \textbf{Constraints} --- explicitní zákazy (nekombinovat issues,
           nemodifikovat testy, nepřepisovat historii). FSE 2025
-          \cite{mao2025}: exclusion constraints (46\,\%) nejefektivnější
+          \cite{mao2025fse}: exclusion constraints (46\,\%) nejefektivnější
           typ.
 \end{itemize}
 

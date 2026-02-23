@@ -35,23 +35,6 @@
       \verb https://openreview.net/forum?id=41xrZ3uGuI
       \endverb
     \endentry
-    \entry{agentreadmes2025}{article}{}
-      \field{sortinit}{A}
-      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{arXiv preprint arXiv:2511.12884}
-      \field{note}{1925 repos analyzed; AGENTS.md behaves as dynamic configuration; median FRE 16.6 (very difficult reading level)}
-      \field{title}{Agent {READMEs}: An Empirical Study of Context Files for Agentic Coding}
-      \field{year}{2025}
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/2511.12884
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/2511.12884
-      \endverb
-    \endentry
     \entry{anthropic2025context}{online}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=f431db65cea024a5f19eab835afefee2}{%
@@ -64,10 +47,8 @@
       \strng{authorbibnamehash}{f431db65cea024a5f19eab835afefee2}
       \strng{authornamehash}{f431db65cea024a5f19eab835afefee2}
       \strng{authorfullhash}{f431db65cea024a5f19eab835afefee2}
-      \field{extraname}{1}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
-      \field{extradate}{1}
       \field{extradatescope}{labelyear}
       \field{labeldatesource}{}
       \true{uniqueprimaryauthor}
@@ -81,37 +62,6 @@
       \endverb
       \verb{url}
       \verb https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
-      \endverb
-    \endentry
-    \entry{anthropic2025harness}{online}{}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=f431db65cea024a5f19eab835afefee2}{%
-           family={{Anthropic}},
-           familyi={A\bibinitperiod}}}%
-      }
-      \strng{namehash}{f431db65cea024a5f19eab835afefee2}
-      \strng{fullhash}{f431db65cea024a5f19eab835afefee2}
-      \strng{bibnamehash}{f431db65cea024a5f19eab835afefee2}
-      \strng{authorbibnamehash}{f431db65cea024a5f19eab835afefee2}
-      \strng{authornamehash}{f431db65cea024a5f19eab835afefee2}
-      \strng{authorfullhash}{f431db65cea024a5f19eab835afefee2}
-      \field{extraname}{2}
-      \field{sortinit}{A}
-      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
-      \field{extradate}{2}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{note}{Two-agent architecture; ablatable: feature list, progress file, init scripts, testing instructions}
-      \field{title}{Effective Harnesses for Long-Running Agents}
-      \field{year}{2025}
-      \verb{urlraw}
-      \verb https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents
-      \endverb
-      \verb{url}
-      \verb https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents
       \endverb
     \endentry
     \entry{bockeler2025sdd}{online}{}
@@ -221,41 +171,6 @@
       \verb 10.1109/MS.2008.1
       \endverb
     \endentry
-    \entry{ehsani2026failedprs}{article}{}
-      \true{moreauthor}
-      \true{morelabelname}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=4a1dd7b65fe49ef591f66c37344c9599}{%
-           family={Ehsani},
-           familyi={E\bibinitperiod},
-           given={Ramtin},
-           giveni={R\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{74f7e02b015afd90c81a578d81fe1faf}
-      \strng{fullhash}{74f7e02b015afd90c81a578d81fe1faf}
-      \strng{bibnamehash}{74f7e02b015afd90c81a578d81fe1faf}
-      \strng{authorbibnamehash}{74f7e02b015afd90c81a578d81fe1faf}
-      \strng{authornamehash}{74f7e02b015afd90c81a578d81fe1faf}
-      \strng{authorfullhash}{74f7e02b015afd90c81a578d81fe1faf}
-      \field{sortinit}{E}
-      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{Proceedings of MSR 2026}
-      \field{note}{33k agent PRs, 5 coding agents, taxonomy of failures}
-      \field{title}{Where Do {AI} Coding Agents Fail? An Empirical Study of Failed Agentic Pull Requests in {GitHub}}
-      \field{year}{2026}
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/2601.15195
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/2601.15195
-      \endverb
-    \endentry
     \entry{ticoder2024}{article}{}
       \name{author}{5}{}{%
         {{un=0,uniquepart=base,hash=8c22805817ec01fc8741e482eb95b318}{%
@@ -363,6 +278,63 @@
       \field{note}{Process vs. product vs. resource metrics taxonomy; GQM framework}
       \field{title}{Software Metrics: A Rigorous and Practical Approach}
       \field{year}{2014}
+    \endentry
+    \entry{gloaguen2025agentsmd}{article}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=abea0c05e9a734b2bcbcd51e8dea851b}{%
+           family={Gloaguen},
+           familyi={G\bibinitperiod},
+           given={Thibaud},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8c57929eb2c26586e1a45f7fca1109d7}{%
+           family={Mündler},
+           familyi={M\bibinitperiod},
+           given={Niels},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=610f2a3a0913fa2483e8070875a46907}{%
+           family={Müller},
+           familyi={M\bibinitperiod},
+           given={Mark},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4efd151ade022f288ebc0a77496a75e8}{%
+           family={Raychev},
+           familyi={R\bibinitperiod},
+           given={Veselin},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3be48f15f1478336ea1bc8a71ef4fce4}{%
+           family={Vechev},
+           familyi={V\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{0cfcf0ea17dbc5bed611fbb903ea8eec}
+      \strng{fullhash}{747df1babf369232b96278bb0d826ba7}
+      \strng{bibnamehash}{747df1babf369232b96278bb0d826ba7}
+      \strng{authorbibnamehash}{747df1babf369232b96278bb0d826ba7}
+      \strng{authornamehash}{0cfcf0ea17dbc5bed611fbb903ea8eec}
+      \strng{authorfullhash}{747df1babf369232b96278bb0d826ba7}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:2602.11988}
+      \field{note}{LLM-generated context files reduce success rate; developer-written marginally help (+4\%); context files increase cost 20\%+; agents follow instructions but no performance gain; AGENTBENCH benchmark (138 instances, 12 repos)}
+      \field{title}{Evaluating {AGENTS.md}: Are Repository-Level Context Files Helpful for Coding Agents?}
+      \field{year}{2025}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2602.11988
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2602.11988
+      \endverb
     \endentry
     \entry{gotel1994}{article}{}
       \name{author}{2}{}{%
@@ -706,12 +678,12 @@
     \endentry
     \entry{rethinking2025}{article}{}
       \name{author}{6}{}{%
-        {{un=0,uniquepart=base,hash=85049970055d4a4c563f4721339feab4}{%
+        {{un=1,uniquepart=given,hash=85049970055d4a4c563f4721339feab4}{%
            family={Chen},
            familyi={C\bibinitperiod},
            given={Jiawei},
            giveni={J\bibinitperiod},
-           givenun=0}}%
+           givenun=1}}%
         {{un=0,uniquepart=base,hash=63e690a723fcdcfd9bcae064ee071e22}{%
            family={Lin},
            familyi={L\bibinitperiod},
@@ -921,6 +893,77 @@
       \range{pages}{9}
       \verb{doi}
       \verb 10.1109/52.469759
+      \endverb
+    \endentry
+    \entry{skillsbench2025}{article}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{7}{}{%
+        {{un=1,uniquepart=given,hash=8b404dd49c00a7a0af1a0d904feaa7a5}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Xiangyi},
+           giveni={X\bibinitperiod},
+           givenun=1}}%
+        {{un=1,uniquepart=given,hash=584582dd5e1e8e9100b2de7cdaced7b4}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Wenbo},
+           giveni={W\bibinitperiod},
+           givenun=1}}%
+        {{un=0,uniquepart=base,hash=6c04edb0c8a3867dae5a38f549b25f54}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Yimin},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=1,uniquepart=given,hash=34b1bc3d5db80cf03ebbc827ad61334f}{%
+           family={Zheng},
+           familyi={Z\bibinitperiod},
+           given={Shenghan},
+           giveni={S\bibinitperiod},
+           givenun=1}}%
+        {{un=1,uniquepart=given,hash=ad1f5b216a025d84f30de1ea75c16940}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Xiaokun},
+           giveni={X\bibinitperiod},
+           givenun=1}}%
+        {{un=0,uniquepart=base,hash=9c7aec0b763cdc92b9b60a2ce842d3d8}{%
+           family={He},
+           familyi={H\bibinitperiod},
+           given={Yifeng},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=1,uniquepart=given,hash=fd4a49f30089799e1c90859fdbc693ea}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Yubo},
+           giveni={Y\bibinitperiod},
+           givenun=1}}%
+      }
+      \strng{namehash}{1740f70284b104ff2488916fb84d15ee}
+      \strng{fullhash}{8834afb642fd2daa64be7b29b465d16a}
+      \strng{bibnamehash}{8834afb642fd2daa64be7b29b465d16a}
+      \strng{authorbibnamehash}{8834afb642fd2daa64be7b29b465d16a}
+      \strng{authornamehash}{1740f70284b104ff2488916fb84d15ee}
+      \strng{authorfullhash}{8834afb642fd2daa64be7b29b465d16a}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:2602.12670}
+      \field{note}{Curated Skills +16.2pp; self-generated Skills -1.3pp; 2--3 focused modules optimal; comprehensive documentation hurts (-2.9pp); smaller model + Skills can exceed larger model without; 84 tasks, 11 domains, 7308 trajectories}
+      \field{title}{{SkillsBench}: Benchmarking How Well Agent Skills Work Across Diverse Tasks}
+      \field{year}{2025}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2602.12670
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2602.12670
       \endverb
     \endentry
     \entry{lulla2026}{article}{}
@@ -1491,88 +1534,6 @@
       \field{title}{Software Engineering}
       \field{year}{2016}
     \endentry
-    \entry{impossiblebench2025}{article}{}
-      \name{author}{4}{}{%
-        {{un=0,uniquepart=base,hash=bff051b68c0963be4ed03aca2f32ef43}{%
-           family={Song},
-           familyi={S\bibinitperiod},
-           given={Zhaoyang},
-           giveni={Z\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=f15b2b37af03ea367ddf3f3f33593f53}{%
-           family={Zhu},
-           familyi={Z\bibinitperiod},
-           given={Zichen},
-           giveni={Z\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=836b28264fa64c2b3805965b81aad704}{%
-           family={Su},
-           familyi={S\bibinitperiod},
-           given={Yu},
-           giveni={Y\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=15f6c02eecbf829b1f7d34499d1a9e0d}{%
-           family={Yu},
-           familyi={Y\bibinitperiod},
-           given={Tong},
-           giveni={T\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{bbcf779b5e09d581039fec5bba7ff8b9}
-      \strng{fullhash}{2f653220db6a6a24080c0ee697fc0093}
-      \strng{bibnamehash}{2f653220db6a6a24080c0ee697fc0093}
-      \strng{authorbibnamehash}{2f653220db6a6a24080c0ee697fc0093}
-      \strng{authornamehash}{bbcf779b5e09d581039fec5bba7ff8b9}
-      \strng{authorfullhash}{2f653220db6a6a24080c0ee697fc0093}
-      \field{sortinit}{S}
-      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{eprinttype}{arXiv}
-      \field{journaltitle}{arXiv preprint}
-      \field{note}{GPT-5 cheating rate 76\% on impossible tasks; 4 test exploitation strategies}
-      \field{title}{{ImpossibleBench}: How Good Are {LLM}s at Exploiting Test Cases?}
-      \field{year}{2025}
-      \verb{eprint}
-      \verb 2510.20270
-      \endverb
-    \endentry
-    \entry{overmocked2026}{article}{}
-      \true{moreauthor}
-      \true{morelabelname}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=9c3489ffdff91a4c76476e6ab1a19fd2}{%
-           family={Tao},
-           familyi={T\bibinitperiod},
-           given={Yuxia},
-           giveni={Y\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{08a0459e94014565b1f699bfd817189f}
-      \strng{fullhash}{08a0459e94014565b1f699bfd817189f}
-      \strng{bibnamehash}{08a0459e94014565b1f699bfd817189f}
-      \strng{authorbibnamehash}{08a0459e94014565b1f699bfd817189f}
-      \strng{authornamehash}{08a0459e94014565b1f699bfd817189f}
-      \strng{authorfullhash}{08a0459e94014565b1f699bfd817189f}
-      \field{sortinit}{T}
-      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{eprinttype}{arXiv}
-      \field{journaltitle}{Proceedings of MSR}
-      \field{note}{1.2M commits, 2,168 repos; agents more likely to modify tests and add mocks}
-      \field{title}{Are Coding Agents Generating Over-Mocked Tests?}
-      \field{year}{2026}
-      \verb{eprint}
-      \verb 2602.00409
-      \endverb
-    \endentry
     \entry{specine2025}{article}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=05bda09a484fe312dff65d1eb350614f}{%
@@ -1581,12 +1542,12 @@
            given={Zhao},
            giveni={Z\bibinitperiod},
            givenun=0}}%
-        {{un=0,uniquepart=base,hash=c69ee7339b53c7220a54cac68184110a}{%
+        {{un=1,uniquepart=given,hash=c69ee7339b53c7220a54cac68184110a}{%
            family={Chen},
            familyi={C\bibinitperiod},
            given={Junjie},
            giveni={J\bibinitperiod},
-           givenun=0}}%
+           givenun=1}}%
       }
       \strng{namehash}{2caf1d5652982e6199a4f1b7569b39b5}
       \strng{fullhash}{2caf1d5652982e6199a4f1b7569b39b5}
@@ -1839,12 +1800,12 @@
     \endentry
     \entry{zheng2023mtbench}{article}{}
       \name{author}{13}{}{%
-        {{un=0,uniquepart=base,hash=0beb8f75088bfac1e81ca3840d0e89f0}{%
+        {{un=1,uniquepart=given,hash=0beb8f75088bfac1e81ca3840d0e89f0}{%
            family={Zheng},
            familyi={Z\bibinitperiod},
            given={Lianmin},
            giveni={L\bibinitperiod},
-           givenun=0}}%
+           givenun=1}}%
         {{un=0,uniquepart=base,hash=d5030c6327cf9a55d5a372b89093395a}{%
            family={Chiang},
            familyi={C\bibinitperiod},
@@ -1960,23 +1921,6 @@
       \verb https://openreview.net/forum?id=41xrZ3uGuI
       \endverb
     \endentry
-    \entry{agentreadmes2025}{article}{}
-      \field{sortinit}{A}
-      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{arXiv preprint arXiv:2511.12884}
-      \field{note}{1925 repos analyzed; AGENTS.md behaves as dynamic configuration; median FRE 16.6 (very difficult reading level)}
-      \field{title}{Agent {READMEs}: An Empirical Study of Context Files for Agentic Coding}
-      \field{year}{2025}
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/2511.12884
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/2511.12884
-      \endverb
-    \endentry
     \entry{anthropic2025context}{online}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=f431db65cea024a5f19eab835afefee2}{%
@@ -1989,10 +1933,8 @@
       \strng{authorbibnamehash}{f431db65cea024a5f19eab835afefee2}
       \strng{authornamehash}{f431db65cea024a5f19eab835afefee2}
       \strng{authorfullhash}{f431db65cea024a5f19eab835afefee2}
-      \field{extraname}{1}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
-      \field{extradate}{1}
       \field{extradatescope}{labelyear}
       \field{labeldatesource}{}
       \true{uniqueprimaryauthor}
@@ -2006,37 +1948,6 @@
       \endverb
       \verb{url}
       \verb https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
-      \endverb
-    \endentry
-    \entry{anthropic2025harness}{online}{}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=f431db65cea024a5f19eab835afefee2}{%
-           family={{Anthropic}},
-           familyi={A\bibinitperiod}}}%
-      }
-      \strng{namehash}{f431db65cea024a5f19eab835afefee2}
-      \strng{fullhash}{f431db65cea024a5f19eab835afefee2}
-      \strng{bibnamehash}{f431db65cea024a5f19eab835afefee2}
-      \strng{authorbibnamehash}{f431db65cea024a5f19eab835afefee2}
-      \strng{authornamehash}{f431db65cea024a5f19eab835afefee2}
-      \strng{authorfullhash}{f431db65cea024a5f19eab835afefee2}
-      \field{extraname}{2}
-      \field{sortinit}{A}
-      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
-      \field{extradate}{2}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{note}{Two-agent architecture; ablatable: feature list, progress file, init scripts, testing instructions}
-      \field{title}{Effective Harnesses for Long-Running Agents}
-      \field{year}{2025}
-      \verb{urlraw}
-      \verb https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents
-      \endverb
-      \verb{url}
-      \verb https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents
       \endverb
     \endentry
     \entry{bockeler2025sdd}{online}{}
@@ -2146,41 +2057,6 @@
       \verb 10.1109/MS.2008.1
       \endverb
     \endentry
-    \entry{ehsani2026failedprs}{article}{}
-      \true{moreauthor}
-      \true{morelabelname}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=4a1dd7b65fe49ef591f66c37344c9599}{%
-           family={Ehsani},
-           familyi={E\bibinitperiod},
-           given={Ramtin},
-           giveni={R\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{74f7e02b015afd90c81a578d81fe1faf}
-      \strng{fullhash}{74f7e02b015afd90c81a578d81fe1faf}
-      \strng{bibnamehash}{74f7e02b015afd90c81a578d81fe1faf}
-      \strng{authorbibnamehash}{74f7e02b015afd90c81a578d81fe1faf}
-      \strng{authornamehash}{74f7e02b015afd90c81a578d81fe1faf}
-      \strng{authorfullhash}{74f7e02b015afd90c81a578d81fe1faf}
-      \field{sortinit}{E}
-      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{Proceedings of MSR 2026}
-      \field{note}{33k agent PRs, 5 coding agents, taxonomy of failures}
-      \field{title}{Where Do {AI} Coding Agents Fail? An Empirical Study of Failed Agentic Pull Requests in {GitHub}}
-      \field{year}{2026}
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/2601.15195
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/2601.15195
-      \endverb
-    \endentry
     \entry{ticoder2024}{article}{}
       \name{author}{5}{}{%
         {{un=0,uniquepart=base,hash=8c22805817ec01fc8741e482eb95b318}{%
@@ -2288,6 +2164,63 @@
       \field{note}{Process vs. product vs. resource metrics taxonomy; GQM framework}
       \field{title}{Software Metrics: A Rigorous and Practical Approach}
       \field{year}{2014}
+    \endentry
+    \entry{gloaguen2025agentsmd}{article}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=abea0c05e9a734b2bcbcd51e8dea851b}{%
+           family={Gloaguen},
+           familyi={G\bibinitperiod},
+           given={Thibaud},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8c57929eb2c26586e1a45f7fca1109d7}{%
+           family={Mündler},
+           familyi={M\bibinitperiod},
+           given={Niels},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=610f2a3a0913fa2483e8070875a46907}{%
+           family={Müller},
+           familyi={M\bibinitperiod},
+           given={Mark},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4efd151ade022f288ebc0a77496a75e8}{%
+           family={Raychev},
+           familyi={R\bibinitperiod},
+           given={Veselin},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3be48f15f1478336ea1bc8a71ef4fce4}{%
+           family={Vechev},
+           familyi={V\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{0cfcf0ea17dbc5bed611fbb903ea8eec}
+      \strng{fullhash}{747df1babf369232b96278bb0d826ba7}
+      \strng{bibnamehash}{747df1babf369232b96278bb0d826ba7}
+      \strng{authorbibnamehash}{747df1babf369232b96278bb0d826ba7}
+      \strng{authornamehash}{0cfcf0ea17dbc5bed611fbb903ea8eec}
+      \strng{authorfullhash}{747df1babf369232b96278bb0d826ba7}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:2602.11988}
+      \field{note}{LLM-generated context files reduce success rate; developer-written marginally help (+4\%); context files increase cost 20\%+; agents follow instructions but no performance gain; AGENTBENCH benchmark (138 instances, 12 repos)}
+      \field{title}{Evaluating {AGENTS.md}: Are Repository-Level Context Files Helpful for Coding Agents?}
+      \field{year}{2025}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2602.11988
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2602.11988
+      \endverb
     \endentry
     \entry{gotel1994}{article}{}
       \name{author}{2}{}{%
@@ -2631,12 +2564,12 @@
     \endentry
     \entry{rethinking2025}{article}{}
       \name{author}{6}{}{%
-        {{un=0,uniquepart=base,hash=85049970055d4a4c563f4721339feab4}{%
+        {{un=1,uniquepart=given,hash=85049970055d4a4c563f4721339feab4}{%
            family={Chen},
            familyi={C\bibinitperiod},
            given={Jiawei},
            giveni={J\bibinitperiod},
-           givenun=0}}%
+           givenun=1}}%
         {{un=0,uniquepart=base,hash=63e690a723fcdcfd9bcae064ee071e22}{%
            family={Lin},
            familyi={L\bibinitperiod},
@@ -2846,6 +2779,77 @@
       \range{pages}{9}
       \verb{doi}
       \verb 10.1109/52.469759
+      \endverb
+    \endentry
+    \entry{skillsbench2025}{article}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{7}{}{%
+        {{un=1,uniquepart=given,hash=8b404dd49c00a7a0af1a0d904feaa7a5}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Xiangyi},
+           giveni={X\bibinitperiod},
+           givenun=1}}%
+        {{un=1,uniquepart=given,hash=584582dd5e1e8e9100b2de7cdaced7b4}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Wenbo},
+           giveni={W\bibinitperiod},
+           givenun=1}}%
+        {{un=0,uniquepart=base,hash=6c04edb0c8a3867dae5a38f549b25f54}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Yimin},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=1,uniquepart=given,hash=34b1bc3d5db80cf03ebbc827ad61334f}{%
+           family={Zheng},
+           familyi={Z\bibinitperiod},
+           given={Shenghan},
+           giveni={S\bibinitperiod},
+           givenun=1}}%
+        {{un=1,uniquepart=given,hash=ad1f5b216a025d84f30de1ea75c16940}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Xiaokun},
+           giveni={X\bibinitperiod},
+           givenun=1}}%
+        {{un=0,uniquepart=base,hash=9c7aec0b763cdc92b9b60a2ce842d3d8}{%
+           family={He},
+           familyi={H\bibinitperiod},
+           given={Yifeng},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=1,uniquepart=given,hash=fd4a49f30089799e1c90859fdbc693ea}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Yubo},
+           giveni={Y\bibinitperiod},
+           givenun=1}}%
+      }
+      \strng{namehash}{1740f70284b104ff2488916fb84d15ee}
+      \strng{fullhash}{8834afb642fd2daa64be7b29b465d16a}
+      \strng{bibnamehash}{8834afb642fd2daa64be7b29b465d16a}
+      \strng{authorbibnamehash}{8834afb642fd2daa64be7b29b465d16a}
+      \strng{authornamehash}{1740f70284b104ff2488916fb84d15ee}
+      \strng{authorfullhash}{8834afb642fd2daa64be7b29b465d16a}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:2602.12670}
+      \field{note}{Curated Skills +16.2pp; self-generated Skills -1.3pp; 2--3 focused modules optimal; comprehensive documentation hurts (-2.9pp); smaller model + Skills can exceed larger model without; 84 tasks, 11 domains, 7308 trajectories}
+      \field{title}{{SkillsBench}: Benchmarking How Well Agent Skills Work Across Diverse Tasks}
+      \field{year}{2025}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2602.12670
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2602.12670
       \endverb
     \endentry
     \entry{lulla2026}{article}{}
@@ -3416,88 +3420,6 @@
       \field{title}{Software Engineering}
       \field{year}{2016}
     \endentry
-    \entry{impossiblebench2025}{article}{}
-      \name{author}{4}{}{%
-        {{un=0,uniquepart=base,hash=bff051b68c0963be4ed03aca2f32ef43}{%
-           family={Song},
-           familyi={S\bibinitperiod},
-           given={Zhaoyang},
-           giveni={Z\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=f15b2b37af03ea367ddf3f3f33593f53}{%
-           family={Zhu},
-           familyi={Z\bibinitperiod},
-           given={Zichen},
-           giveni={Z\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=836b28264fa64c2b3805965b81aad704}{%
-           family={Su},
-           familyi={S\bibinitperiod},
-           given={Yu},
-           giveni={Y\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=15f6c02eecbf829b1f7d34499d1a9e0d}{%
-           family={Yu},
-           familyi={Y\bibinitperiod},
-           given={Tong},
-           giveni={T\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{bbcf779b5e09d581039fec5bba7ff8b9}
-      \strng{fullhash}{2f653220db6a6a24080c0ee697fc0093}
-      \strng{bibnamehash}{2f653220db6a6a24080c0ee697fc0093}
-      \strng{authorbibnamehash}{2f653220db6a6a24080c0ee697fc0093}
-      \strng{authornamehash}{bbcf779b5e09d581039fec5bba7ff8b9}
-      \strng{authorfullhash}{2f653220db6a6a24080c0ee697fc0093}
-      \field{sortinit}{S}
-      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{eprinttype}{arXiv}
-      \field{journaltitle}{arXiv preprint}
-      \field{note}{GPT-5 cheating rate 76\% on impossible tasks; 4 test exploitation strategies}
-      \field{title}{{ImpossibleBench}: How Good Are {LLM}s at Exploiting Test Cases?}
-      \field{year}{2025}
-      \verb{eprint}
-      \verb 2510.20270
-      \endverb
-    \endentry
-    \entry{overmocked2026}{article}{}
-      \true{moreauthor}
-      \true{morelabelname}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=9c3489ffdff91a4c76476e6ab1a19fd2}{%
-           family={Tao},
-           familyi={T\bibinitperiod},
-           given={Yuxia},
-           giveni={Y\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{08a0459e94014565b1f699bfd817189f}
-      \strng{fullhash}{08a0459e94014565b1f699bfd817189f}
-      \strng{bibnamehash}{08a0459e94014565b1f699bfd817189f}
-      \strng{authorbibnamehash}{08a0459e94014565b1f699bfd817189f}
-      \strng{authornamehash}{08a0459e94014565b1f699bfd817189f}
-      \strng{authorfullhash}{08a0459e94014565b1f699bfd817189f}
-      \field{sortinit}{T}
-      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{eprinttype}{arXiv}
-      \field{journaltitle}{Proceedings of MSR}
-      \field{note}{1.2M commits, 2,168 repos; agents more likely to modify tests and add mocks}
-      \field{title}{Are Coding Agents Generating Over-Mocked Tests?}
-      \field{year}{2026}
-      \verb{eprint}
-      \verb 2602.00409
-      \endverb
-    \endentry
     \entry{specine2025}{article}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=05bda09a484fe312dff65d1eb350614f}{%
@@ -3506,12 +3428,12 @@
            given={Zhao},
            giveni={Z\bibinitperiod},
            givenun=0}}%
-        {{un=0,uniquepart=base,hash=c69ee7339b53c7220a54cac68184110a}{%
+        {{un=1,uniquepart=given,hash=c69ee7339b53c7220a54cac68184110a}{%
            family={Chen},
            familyi={C\bibinitperiod},
            given={Junjie},
            giveni={J\bibinitperiod},
-           givenun=0}}%
+           givenun=1}}%
       }
       \strng{namehash}{2caf1d5652982e6199a4f1b7569b39b5}
       \strng{fullhash}{2caf1d5652982e6199a4f1b7569b39b5}
@@ -3764,12 +3686,12 @@
     \endentry
     \entry{zheng2023mtbench}{article}{}
       \name{author}{13}{}{%
-        {{un=0,uniquepart=base,hash=0beb8f75088bfac1e81ca3840d0e89f0}{%
+        {{un=1,uniquepart=given,hash=0beb8f75088bfac1e81ca3840d0e89f0}{%
            family={Zheng},
            familyi={Z\bibinitperiod},
            given={Lianmin},
            giveni={L\bibinitperiod},
-           givenun=0}}%
+           givenun=1}}%
         {{un=0,uniquepart=base,hash=d5030c6327cf9a55d5a372b89093395a}{%
            family={Chiang},
            familyi={C\bibinitperiod},
@@ -3868,6 +3790,8 @@
       \endverb
     \endentry
   \enddatalist
+  \missing{agentbench2026}
+  \missing{mao2025}
 \endrefsection
 \endinput
 

@@ -34,6 +34,7 @@ Více experimentálních běhů na jednom projektu odpovídá tomu, co Yin nazý
 %% ==========================================================================
 
 \section{Výběr projektu pro case study}
+\label{sec:vyber-projektu}
 
 \begin{draft}
 Experiment potřebuje projekt, na kterém lze spustit více běhů s~různým nastavením instrukcí a~objektivně měřit výsledky. Zvolený projekt musí splňovat:
@@ -66,6 +67,21 @@ pro AI coding agenta (\texttt{AGENTS.md}). Cíle artefaktu definují
 co má artefakt způsobit --- z~nich se odvíjí volba metrik
 (sekce~\ref{sec:zpusob-mereni}) i~exit kritéria pilotní fáze
 (sekce~\ref{sec:exit-kriteria}).
+
+Empirická evidence naznačuje, že typ a~struktura instrukcí zásadně
+ovlivňuje jejich efektivitu. Gloaguen et al. \cite{gloaguen2025agentsmd}
+zjistili, že generické repository-level context files (popisné přehledy
+codebase) mají marginální nebo negativní dopad na úspěšnost agentů
+a~zvyšují inference cost o~více než 20\,\%. Naproti tomu Li et al.
+\cite{skillsbench2025} ukazují, že fokusované procedurální instrukce
+(2--3 modulární balíčky s~workflow a~příklady) zlepšují pass rate
+o~16,2 procentního bodu. Oba výsledky podporují stejný princip:
+\textit{minimální, cílený a~procedurální} kontext je efektivnější
+než vyčerpávající dokumentace.
+
+Cíle artefaktu proto reflektují procedurální charakter --- definují
+\textit{jak} má agent pracovat (proces) a~\textit{co} má být
+výsledkem (produkt), nikoliv popis repository.
 
 \textbf{Procesní cíle} --- agent dodržuje strukturovaný vývojový proces:
 \begin{enumerate}
@@ -175,7 +191,7 @@ udržovatelný?
 \begin{description}
     \item[Q1 --- referenční test pass rate.] 40 behavioral testů
         odvozených z~acceptance criteria metodou TDD ze specifikace
-        \cite{mathews2024} (viz sekce~\ref{sec:referencni-implementace}).
+        \cite{mathews2024} (viz sekce~\ref{sec:referencni-testy}).
         Testují chování přes veřejné API --- nezávislé na interní
         struktuře agentovy implementace. Odpovídá přístupu SWE-bench
         \cite{swebench2024}. Pass rate = projité testy / 40. Binární
@@ -315,7 +331,7 @@ rubriků včetně příkladů bude v~příloze.
 \end{draft}
 
 \subsection{Referenční test suite}
-\label{sec:referencni-implementace}
+\label{sec:referencni-testy}
 
 \begin{draft}
 [DRAFT] Metrika Q1 (funkční korektnost) vyžaduje sadu referenčních testů
@@ -403,7 +419,13 @@ Automatizované metriky (P1, Q1--Q3, Q5--Q7, E1--E3) sbírá skript
 
 \begin{draft}
 [DRAFT] Všechny běhy sdílejí stejný setup --- jedinou proměnnou je obsah
-\texttt{AGENTS.md}.
+\texttt{AGENTS.md}. Na rozdíl od generických context files, které
+typicky obsahují popis adresářové struktury a~build příkazů
+\cite{gloaguen2025agentsmd}, náš \texttt{AGENTS.md} je procedurální
+artefakt --- definuje workflow, constraints a~quality gates.
+Toto odpovídá přístupu který Li et al. \cite{skillsbench2025}
+identifikovali jako efektivní: fokusované instrukce s~konkrétními
+procedurami místo vyčerpávající dokumentace.
 
 \begin{description}
     \item[Prázdné GitHub repo] obsahuje pouze \texttt{AGENTS.md},
@@ -546,6 +568,11 @@ Kvalitní kód (design)
 \textbf{Záznam bez prahu} --- metriky efektivity (E1--E3) se
 zaznamenávají pro across-run srovnání, ale nemají pass/fail
 charakter. Slouží k~porovnání nákladů mezi iteracemi.
+Gloaguen et al. \cite{gloaguen2025agentsmd} zjistili, že context
+files zvyšují inference cost o~více než 20\,\%, což motivuje
+sledování E1 (tokeny) jako kontrolního ukazatele --- instrukce
+které zlepšují proces, ale dramaticky zvyšují spotřebu tokenů,
+nemusí být v~praxi použitelné.
 
 ``Konzistentně'' = v~posledním běhu bez manuálního zásahu.
 S~ohledem na scope práce (jeden projekt, jeden model) je
@@ -581,6 +608,16 @@ z~sekce~\ref{sec:pilotni-iterace}:
     \item Lulla et al. \cite{lulla2026} --- architektura a~konvence
           jsou efektivní, verbose workflow ne. Ablace: odebrat
           workflow detail a~ponechat jen cíle.
+    \item Li et al. \cite{skillsbench2025} --- 2--3 fokusované
+          moduly produkují lepší výsledky než 4+ modulů (+18,6pp
+          vs. +5,9pp). Vyčerpávající dokumentace výkon zhoršuje
+          ($-2{,}9$pp). Ablace: testovat zda redukce instrukcí
+          na jádro zlepší výsledky.
+    \item Gloaguen et al. \cite{gloaguen2025agentsmd} --- agenti
+          instrukce následují (více testů, explorace), ale
+          zbytečné requirements zhoršují úspěšnost. Ablace:
+          identifikovat které instrukce přidávají hodnotu
+          a~které jen tokeny.
 \end{itemize}
 
 \textbf{Měření.}
