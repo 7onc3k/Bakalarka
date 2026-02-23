@@ -50,6 +50,12 @@ Rate each dimension on a 1–3 scale.
 
 **3 — Good:** Complexity matches the problem. Simple operations are simple. No unnecessary layers, wrappers, or abstractions. Easy to trace data flow.
 
+## Overall Score Calculation
+
+The overall score is the MINIMUM of all five dimension scores.
+
+Rationale: each dimension represents a necessary quality attribute. A critical failure in any dimension (e.g. zero documentation despite being required) should not be masked by high scores in other dimensions.
+
 ## Output
 
 Respond with ONLY a JSON object:
@@ -64,4 +70,4 @@ Respond with ONLY a JSON object:
 }
 ```
 
-The overall score is the rounded mean of the five dimensions.
+IMPORTANT: `overall` MUST equal the MINIMUM of the five dimension scores. If any dimension is 1, overall must be 1. If all are 2+, overall is the minimum.
