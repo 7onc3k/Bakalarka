@@ -41,7 +41,7 @@ done
 
 [[ -f "$AGENTS_MD" ]] || { echo "Error: AGENTS.md not found: $AGENTS_MD"; exit 1; }
 
-REPO_NAME="bp-billing-reminder-${RUN_NAME}"
+REPO_NAME="bp-${RUN_NAME}"
 REPO_URL="https://github.com/${GITHUB_ORG}/${REPO_NAME}.git"
 RUN_DIR="$RUNS_DIR/$RUN_NAME"
 
@@ -115,7 +115,7 @@ gh label create "spec" \
     --description "Specification issue" 2>/dev/null || true
 
 SPEC_TITLE=$(jq -r '.title' "$SCRIPT_DIR/../issue-1-req-only.json")
-SPEC_BODY=$(jq -r '.body'  "$SCRIPT_DIR/../issue-1-req-only.json")
+SPEC_BODY=$(<"$SCRIPT_DIR/../issue-1-spec.md")
 
 gh issue create \
     --repo "${GITHUB_ORG}/${REPO_NAME}" \

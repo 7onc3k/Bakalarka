@@ -351,38 +351,38 @@ score, pokrytí AC) jsou v~sekci~\ref{sec:pilotni-vysledky}.
 
 \begin{draft}
 [DRAFT] Tabulka~\ref{tab:metriky-prehled} shrnuje metrický rámec.
-Mapování na cíle artefaktu (sekce~\ref{sec:cile-artefaktu}):
-procesní metriky P1--P2 ověřují dodržování spec-first workflow a~TDD,
+Procesní metriky P1--P2 ověřují dodržování spec-first workflow a~TDD,
 produktové Q1--Q8 pokrývají funkční korektnost, kvalitu testů
 a~kvalitu kódu, efektivita E1--E3 slouží ke~srovnání mezi běhy.
+Exit kritéria (prahové hodnoty) jsou v~sekci~\ref{sec:exit-kriteria}.
 
-\begin{table}[ht]
+\begin{table}[H]
 \centering
-\caption{Metrický rámec: kód, měřená vlastnost, nástroj a~exit kritérium}
+\caption{Metrický rámec: kód, měřená vlastnost a~nástroj měření}
 \label{tab:metriky-prehled}
 \small
-\begin{tabular}{@{}llll@{}}
+\begin{tabular}{@{}lll@{}}
 \toprule
-\textbf{Kód} & \textbf{Metrika} & \textbf{Nástroj} & \textbf{Exit kritérium} \\
+\textbf{Kód} & \textbf{Metrika} & \textbf{Nástroj} \\
 \midrule
-\multicolumn{4}{@{}l}{\textit{Procesní (P) --- jak agent pracuje}} \\
-P1 & Process compliance (6 položek) & git, GitHub API & 6/6 \\
-P2 & Kvalita procesních artefaktů  & LLM-as-judge (GLM-5) & 3/3 \\
+\multicolumn{3}{@{}l}{\textit{Procesní (P) --- jak agent pracuje}} \\
+P1 & Process compliance (6 položek) & git, GitHub API \\
+P2 & Kvalita procesních artefaktů  & LLM-as-judge (GLM-5) \\
 \midrule
-\multicolumn{4}{@{}l}{\textit{Produktové (Q) --- co agent vyrobil}} \\
-Q1 & Referenční test pass rate  & Vitest (40 behavioral testů) & 40/40 \\
-Q2 & API contract match         & tsc (import + typecheck) & match \\
-Q3 & Mutation score              & Stryker & $\geq$ 70\,\% \\
-Q4 & AC coverage (24 kritérií)   & LLM-as-judge (GLM-5) & 24/24 \\
-Q5 & Lint warnings               & ESLint & 0 \\
-Q6 & Typecheck errors            & tsc \texttt{-{}-noEmit} & 0 \\
-Q7 & Cyklomatická složitost      & ESLint (complexity rule) & $\leq$ 10/fn \\
-Q8 & Design quality              & LLM-as-judge (GLM-5) & 3/3 \\
+\multicolumn{3}{@{}l}{\textit{Produktové (Q) --- co agent vyrobil}} \\
+Q1 & Referenční test pass rate  & Vitest (40 behavioral testů) \\
+Q2 & API contract match         & tsc (import + typecheck) \\
+Q3 & Mutation score              & Stryker \\
+Q4 & AC coverage (24 kritérií)   & LLM-as-judge (GLM-5) \\
+Q5 & Lint warnings               & ESLint \\
+Q6 & Typecheck errors            & tsc \texttt{-{}-noEmit} \\
+Q7 & Cyklomatická složitost      & ESLint (complexity rule) \\
+Q8 & Design quality              & LLM-as-judge (GLM-5) \\
 \midrule
-\multicolumn{4}{@{}l}{\textit{Efektivita (E) --- za jakou cenu}} \\
-E1 & Tokeny (input + output)     & OpenCode export & záznam \\
-E2 & Trvání (minuty)             & session timestamps & záznam \\
-E3 & Dokončení + restarts        & auto-continue log & záznam \\
+\multicolumn{3}{@{}l}{\textit{Efektivita (E) --- za jakou cenu}} \\
+E1 & Tokeny (input + output)     & OpenCode export \\
+E2 & Trvání (minuty)             & session timestamps \\
+E3 & Dokončení + restarts        & auto-continue log \\
 \bottomrule
 \end{tabular}
 \end{table}
