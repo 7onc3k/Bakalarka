@@ -21,6 +21,7 @@
 
 import * as path from "node:path";
 import * as fs from "node:fs";
+import { execSync } from "node:child_process";
 import {
   type JudgeResult,
   exec,
@@ -85,33 +86,32 @@ function main(): void {
  */
 function callJudge(cwd: string, prompt: string): string {
   try {
-    // Pouzivame exec s velkym timeoutem — LLM volani muze trvat minuty.
-    // Prompt predavame pres stdin-like mechanismus (v bash verzi pres
-    // inline string). V opencode run se predava jako posledni argument.
-    //
-    // POZOR: Prompt muze byt velmi dlouhy (tisice radku kodu),
-    // proto ho predavame pres environment variable nebo temp file.
-    const tempPromptPath = path.join(cwd, ".judge-prompt.tmp");
-    fs.writeFileSync(tempPromptPath, prompt, "utf-8");
-
-    // Ctime prompt z temp souboru a predame jako argument opencode
-    // Pouzivame subshell $(cat ...) pro predani obsahu souboru
-    const rawOutput = exec(
-      `opencode run -m "${JUDGE_MODEL}" --format json "$(cat .judge-prompt.tmp)"`,
-      { cwd },
-      '{"error": "GLM-5 call failed"}'
+    // Pouzivame execSync primo (ne nasi exec wrapper), protoze:
+    // - Prompt muze byt velmi dlouhy (10-30 KB) — shell argument by mohl selhat
+    // - Predavame prompt pres stdin pomoci `input` parametru execSync
+    // - opencode run podporuje `-` jako posledni argument = cte ze stdin
+    const rawOutput = execSync(
+      `opencode run -m "${JUDGE_MODEL}" --format json -`,
+      {
+        cwd,
+        encoding: "utf-8",
+        // Predame prompt na stdin
+        input: prompt,
+        stdio: ["pipe", "pipe", "pipe"],
+        // LLM volani muze trvat minuty (velke prompty az 10 min)
+        timeout: 10 * 60 * 1000,
+      }
     );
 
-    // Cleanup temp soubor
-    try {
-      fs.unlinkSync(tempPromptPath);
-    } catch {
-      /* ignore */
-    }
-
     // Parsujeme NDJSON vystup — extrahujeme textove casti
-    return parseOpenCodeOutput(rawOutput);
-  } catch (err) {
+    return parseOpenCodeOutput(String(rawOutput ?? "").trim());
+  } catch (err: unknown) {
+    // I pri non-zero exit code muze byt na stdout validni odpoved
+    const e = err as { stdout?: string | Buffer };
+    if (e.stdout) {
+      const output = String(e.stdout).trim();
+      if (output) return parseOpenCodeOutput(output);
+    }
     console.error(`Judge call failed: ${err}`);
     return '{"error": "GLM-5 call failed"}';
   }
@@ -138,12 +138,29 @@ function evaluateP2(runDir: string): void {
     "No commits found"
   );
 
-  // Sebrame issues z GitHubu (JSON format pro uplna data vcetne body)
-  const issues = exec(
+  // Sebrame issues z GitHubu (JSON format pro uplna data vcetne body).
+  // Vyfiltrujeme Issue #1 (spec) — jeho body je cela specifikace (~15KB),
+  // pro hodnoceni procesních artefaktu je nepotrebujeme a zbytecne
+  // zvetsuje prompt (zpusobuje timeouty u LLM).
+  const rawIssues = exec(
     `gh issue list --state all --json number,title,body --limit 50`,
     { cwd: runDir },
     "No issues found (gh not configured)"
   );
+  let issues = rawIssues;
+  try {
+    const parsed = JSON.parse(rawIssues) as Array<{ number: number; title: string; body: string }>;
+    // Zkratime body Issue #1 na prvnich 200 znaku (jen aby judge vedel ze existuje)
+    const filtered = parsed.map((issue) => {
+      if (issue.number === 1 && issue.body.length > 200) {
+        return { ...issue, body: issue.body.slice(0, 200) + "\n\n[... spec truncated for brevity ...]" };
+      }
+      return issue;
+    });
+    issues = JSON.stringify(filtered);
+  } catch {
+    // Pokud neni validni JSON, pouzijeme original
+  }
 
   // Sebrame PR z GitHubu
   const prs = exec(
