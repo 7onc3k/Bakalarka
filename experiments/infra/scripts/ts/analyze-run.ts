@@ -51,6 +51,42 @@ import {
 } from "./shared.js";
 
 // ============================================================================
+// Exportovane pomocne funkce (extrahovane z measureQ1 pro testovatelnost)
+// ============================================================================
+
+/**
+ * Prepise relativni import cesty v referencnich testech.
+ *
+ * Referencni testy importuji z "../*.js" (napr. "../index.js",
+ * "../business-days.js"). Kdyz je kopirujem do tests/_ref_tests/,
+ * spravna cesta je "../../src/*.js".
+ *
+ * @param content - Obsah testoveho souboru
+ * @returns Obsah s prepsanymi import cestami
+ */
+export function rewriteImports(content: string): string {
+  return content.replace(/from "\.\.\/([^"]+)"/g, 'from "../../src/$1"');
+}
+
+/**
+ * Extrahuje pocet projitych testu z vitest vystupu.
+ *
+ * Vitest vypise dva radky s "N passed":
+ *   "Test Files  4 passed (7)"
+ *   "Tests  34 passed (37)"
+ * Nas zajima posledni vyskyt — to je pocet jednotlivych testu (ne souboru).
+ *
+ * @param output - Textovy vystup z vitest
+ * @returns Pocet projitych testu, nebo 0 pokud nenalezeno
+ */
+export function parseVitestPassed(output: string): number {
+  const allMatches = [...output.matchAll(/(\d+)\s+passed/g)];
+  const lastMatch =
+    allMatches.length > 0 ? allMatches[allMatches.length - 1] : null;
+  return lastMatch ? parseInt(lastMatch[1], 10) : 0;
+}
+
+// ============================================================================
 // Hlavni logika
 // ============================================================================
 
@@ -496,15 +532,8 @@ function measureQ1(cwd: string): Q1Result {
     .readdirSync(refTestDir)
     .filter((f) => f.endsWith(".test.ts"));
   for (const f of refFiles) {
-    let content = readFile(path.join(refTestDir, f));
-    // Referencni testy importuji z "../*.js" (napr. "../index.js",
-    // "../business-days.js"). My je umistime do tests/_ref_tests/,
-    // takze spravna cesta je "../../src/*.js".
-    content = content.replace(
-      /from "\.\.\/([^"]+)"/g,
-      'from "../../src/$1"'
-    );
-    fs.writeFileSync(path.join(tmpTestDir, f), content);
+    const content = readFile(path.join(refTestDir, f));
+    fs.writeFileSync(path.join(tmpTestDir, f), rewriteImports(content));
   }
 
   // Spustime vitest na ref testech
@@ -516,12 +545,8 @@ function measureQ1(cwd: string): Q1Result {
   console.log(tail15);
   console.log("");
 
-  // Extrahujeme pocet passed testu z vitest vystupu.
-  // Vitest vypise dva radky: "Test Files  4 passed (7)" a "Tests  34 passed (37)".
-  // Nas zajima posledni vyskyt "N passed" — to je pocet jednotlivych testu (ne souboru).
-  const allMatches = [...refOutput.matchAll(/(\d+)\s+passed/g)];
-  const lastMatch = allMatches.length > 0 ? allMatches[allMatches.length - 1] : null;
-  const passed = lastMatch ? parseInt(lastMatch[1], 10) : 0;
+  // Extrahujeme pocet passed testu z vitest vystupu
+  const passed = parseVitestPassed(refOutput);
   const total = refExpected;
 
   // Uklidime docasny adresar
@@ -1145,4 +1170,11 @@ function printSummary(
 // Spusteni
 // ============================================================================
 
-main();
+// Spustime main() jen pokud je skript spusten primo (ne importovan z testu).
+// V ESM: porovname import.meta.url s process.argv[1] resolveovanym na file URL.
+const isDirectRun =
+  import.meta.url === `file://${process.argv[1]}` ||
+  import.meta.url === `file://${path.resolve(process.argv[1] ?? "")}`;
+if (isDirectRun) {
+  main();
+}
