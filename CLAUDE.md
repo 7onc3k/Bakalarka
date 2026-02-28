@@ -209,6 +209,12 @@ Teprve až je kostra celé kapitoly hotová → iterativně přepisovat do draft
   - Příklad: "systém upomínek faktur" místo "Billing Reminder Engine"
 - **Industry standard termíny** (IT/AI oblast) → anglicky
   - Příklad: scaffolding, SDLC, CLI, context window, LLM
+- **NEPOUŽÍVAT:**
+  - ~~artefakt~~ — dvojznačné. Místo toho: "instrukční sada" (pro AGENTS.md), "projektové výstupy" (pro kód/testy), nebo konkrétně co to je
+  - ~~playbook~~ → "pracovní postup"
+  - ~~workflow~~ (jako české podstatné jméno) → "pracovní postup" nebo "vývojový postup"
+  - Obecně žádné korporátní/sales buzzwordy v českém textu
+- **Citační řetězec u metrik:** každá metrika musí mít odkaz problém (kap01) → teorie (kap02) → metrika (kap03)
 
 ## Styl a ambice BP
 

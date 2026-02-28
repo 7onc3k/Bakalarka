@@ -80,6 +80,12 @@ def should_sync(filepath):
     return True
 
 
+def strip_raw_blocks(content):
+    """Odstraní \\begin{raw}...\\end{raw} bloky z .tex obsahu.
+    Vedoucímu posíláme jen DRAFT a finální text."""
+    return re.sub(r'\\begin\{raw\}.*?\\end\{raw\}', '', content, flags=re.DOTALL)
+
+
 def make_overleaf_makra(content):
     """Upraví makra.tex pro Overleaf: pdfx → hyperref."""
     # Nahraď pdfx za hyperref (plain string replace, ne regex)
@@ -237,6 +243,15 @@ def push(api):
         try:
             with open(filepath, 'rb') as f:
                 content = f.read()
+
+            # Odstraň RAW bloky z .tex souborů (vedoucí vidí jen DRAFT+)
+            if filepath.suffix == '.tex':
+                text = content.decode('utf-8')
+                filtered = strip_raw_blocks(text)
+                if filtered != text:
+                    print(f"  🔸 {rel_path} (RAW bloky odstraněny)")
+                content = filtered.encode('utf-8')
+
             api.project_upload_file(PROJECT_ID, folder_id, filename, content)
             print(f"  ✓ {rel_path}")
             uploaded += 1
