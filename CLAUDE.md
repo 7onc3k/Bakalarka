@@ -216,6 +216,24 @@ Teprve až je kostra celé kapitoly hotová → iterativně přepisovat do draft
   - Obecně žádné korporátní/sales buzzwordy v českém textu
 - **Citační řetězec u metrik:** každá metrika musí mít odkaz problém (kap01) → teorie (kap02) → metrika (kap03)
 
+## Meta-struktura BP — uchopit, vysvětlit, obhájit
+
+BP pracuje na meta-úrovni a čtenář se snadno ztratí. Klíčové je jasně rozlišit 4 úrovně:
+
+```
+úroveň 0: systém upomínek     = testovací prostředí (nezajímá nás)
+úroveň 1: agent píše kód      = chování (to měříme)
+úroveň 2: instrukce (AGENTS.md) = to co navrhujeme (DSR artefakt)
+úroveň 3: poznání jak instrukce navrhovat = přínos BP
+```
+
+- **DSR artefakt** = instrukční sada (AGENTS.md), NE systém upomínek
+- **Systém upomínek** = evaluační prostředí kde artefakt testujeme
+- **Cíle** = co má instrukční sada způsobit v chování agenta
+- **Výstup BP** = poznatky které složky instrukcí jsou nezbytné (úroveň 3)
+
+Při psaní vždy hlídat: je čtenáři jasné na které úrovni se pohybujeme?
+
 ## Styl a ambice BP
 
 **Kam míříme:**

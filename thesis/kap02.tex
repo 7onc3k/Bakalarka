@@ -1302,3 +1302,33 @@ Obrana proti těmto anti-patterns:
           biasu, kde se zahazují testy odhalující chyby.
 \end{itemize}
 \end{raw}
+
+%% ==========================================================================
+%% Poznámka: fine-tuning vs in-context learning / prompt design
+%% ==========================================================================
+
+\begin{raw}
+\textbf{Poznámka k zařazení BP do širšího kontextu (fine-tuning vs prompt design):}
+
+Dva přístupy jak přizpůsobit LLM konkrétnímu úkolu:
+\begin{itemize}
+    \item \textbf{Fine-tuning} --- trénování parametrů modelu na specifických datech.
+          Permanentní, drahé (GPU, data), pomalé.
+    \item \textbf{In-context learning (ICL)} --- instrukce a příklady v~kontextovém okně.
+          Ephemeral, levné, okamžité. Omezené velikostí context window.
+\end{itemize}
+
+Trend: context windows rostou (4K $\to$ 128K $\to$ 1M+), modely jsou lepší v~ICL.
+Čím větší kontext, tím méně fine-tuningu je potřeba.
+Lester et al. (2021) zavedli \textit{prompt tuning} --- trénování jen embeddingů promptu.
+
+Naše BP se pohybuje v~prostoru ICL/prompt designu --- navrhujeme instrukce místo
+trénování modelu. Otázka pro budoucí výzkum: pokud modely dosáhnou dostatečné
+schopnosti učit se z~kontextu, bude fine-tuning pro řízení agentů vůbec potřeba?
+
+\textbf{Souvislost s~evaluací:}
+Existující benchmarky (SWE-bench) měří jen pass/fail výsledek --- ``vyřešil agent bug?''
+Nikdo systematicky neměří \textit{proces} (jak agent pracoval) ani \textit{kvalitu}
+výstupů beyond funkční korektnost. Naše práce tento gap adresuje evaluačním systémem
+který měří proces (P1--P2), kvalitu (Q1--Q8) i~efektivitu (E1--E3).
+\end{raw}
