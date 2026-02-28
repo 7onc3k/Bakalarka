@@ -149,6 +149,8 @@ Workflow: raw → draft → finální (odstraníme prostředí)
 
 **Konvence pořadí:** DRAFT blok vždy PŘED RAW blokem v souboru (draft = aktuální pracovní verze nahoře, raw = audit trail dole).
 
+**Při přepisování:** Starý DRAFT text převést na RAW (audit trail), nový text napsat jako DRAFT nad něj. Tak vidíme co tam bylo dřív a co přibylo.
+
 ## Workflow pro budování kostry sekce
 
 Pro každou sekci/podsekci postupujeme:
