@@ -1,54 +1,30 @@
 \chapter{Teoretická východiska}
 \label{kap:teorie}
 
-% === ÚVOD KAPITOLY (mezi 2 a 2.1) - ROADMAP ===
-\begin{draft}
-Tato kapitola vysvětluje teoretická východiska práce. Nejprve je popsáno softwarové inženýrství jako disciplína, následně životní cyklus a metodiky vývoje software. Poté je zkoumáno, jak se oblast mění díky AI coding agentům, a nakonec jsou představeny prvky scaffoldingu (podpůrných struktur), které agenti využívají.
-\end{draft}
+\begin{raw}
+Tato kapitola vysvětluje teoretická východiska práce. Nejprve je popsáno softwarové inženýrství a~životní cyklus vývoje. Následuje měření kvality software, AI coding agenti a~nakonec scaffolding a~instrukce pro agenty.
+\end{raw}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Softwarové inženýrství}
+\section{Softwarové inženýrství a~životní cyklus}
+\label{sec:swe-zivotni-cyklus}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{draft}
-Pro pochopení toho, jak AI agenti mění vývoj software, je nezbytné nejprve porozumět zavedeným postupům a standardům softwarového inženýrství. Tato sekce definuje softwarové inženýrství, vysvětluje proč je software inherentně složitý a jak tato složitost vedla ke vzniku oboru.
-\end{draft}
+\begin{raw}
+\textbf{Úvod sekce:}
+Sloučení starých 2.1 + 2.2. Základ pro zbytek kapitoly: co je SWE, proč je SW složitý, jak se vyvíjí.
+\end{raw}
 
-% === PODSEKCE 2.1.1 ===
-\subsection{Definice a vymezení oboru}
+% === 2.1.1 ===
+\subsection{Definice a~komplexita software}
+\label{sec:definice-komplexita}
 
-\begin{draft}
+\begin{raw}
+\textbf{Předchozí obsah z 2.1.1 (Definice):}
+
 Softwarové inženýrství je disciplína, která se zabývá celým životním cyklem software -- od specifikace až po údržbu \cite[s.~xxxvii]{swebok2024}.
 
 Na rozdíl od programování, které se soustředí na implementaci a technické aspekty jako algoritmy a datové struktury, softwarové inženýrství přistupuje k vývoji software holisticky -- zahrnuje nejen technickou stránku, ale i organizační aspekty jako řízení projektů a rozpočty \cite[s.~21]{sommerville2016}.
-\end{draft}
-
-\begin{raw}
-\textbf{CS vs SWE -- vymezení:}
-
-\textbf{Computer Science (informatika)} -- fundamentální, teoretické otázky:
-\begin{itemize}
-    \item Algoritmy (sorting, searching, graph algorithms)
-    \item Datové struktury (stromy, hashovací tabulky)
-    \item Teorie výpočetnosti (Turingovy stroje, rozhodnutelnost)
-    \item Formální jazyky a automaty
-    \item Kompilátory, parsery, teorie typů
-\end{itemize}
-
-\textbf{Software Engineering} -- praktické, systémové otázky:
-\begin{itemize}
-    \item Jak spojit tisíce algoritmů do funkčního systému?
-    \item Jak na tom pracovat v týmu?
-    \item Jak to udržovat roky?
-\end{itemize}
-
-\textbf{Rozdíl:}
-\begin{itemize}
-    \item CS = ``Jak napsat správný algoritmus?''
-    \item SWE = ``Jak postavit a udržovat systém z tisíců algoritmů s týmem 50 lidí?''
-\end{itemize}
-
-\rule{\textwidth}{0.4pt}
 
 \textbf{Základní koncepty SWE:}
 
@@ -67,74 +43,17 @@ K řešení těchto otázek SWE využívá tři klíčové koncepty:
 \textbf{3. Architektura}
 \par\noindent → \texttt{perry1992}:
 \par\noindent \textit{``Software architecture is a set of architectural elements that have a particular form.''}
-\par\noindent Definují architekturu jako: elements (processing, data, connecting) + form + rationale.
-
 \par\noindent → \texttt{garlan1993}:
-\par\noindent \textit{``As the size of software systems increases, the algorithms and data structures of the computation no longer constitute the major design problems. When systems are constructed from many components, the organization of the overall system presents a new set of design problems.''}
 \par\noindent High-level struktura systému -- komponenty, konektory, konfigurace.
-\end{raw}
 
-% === PODSEKCE 2.1.2 ===
-\subsection{Historický kontext}
+\medskip
+\textbf{Předchozí obsah z 2.1.3 (Komplexita):}
 
-\begin{draft}
-Systémy jako software jsou čím dál složitější \cite[s.~582]{sommerville2016}.
-\end{draft}
-
-\begin{raw}
-\textbf{Narativní flow (revidovaný):}
-\begin{enumerate}
-    \item \textbf{Složitost systémů roste} -- software je čím dál komplexnější
-          \\ → \texttt{sommerville2016} s.~582:
-          \\ \textit{``The root cause of these problems is, as it was in the 1960s, that we are trying to build systems that are larger and more complex than before. We are attempting to build these `mega-systems' using methods and technology that were never designed for this purpose.''}
-
-    \item \textbf{Abstrakce jako nástroj} -- reakce na složitost:
-    \begin{itemize}
-        \item Assembler → C → Java → frameworky
-        \item Každá vrstva skrývá detaily (information hiding)
-              \\ → \texttt{colburn2000} s.~1:
-              \\ \textit{``Abstraction through information hiding is a primary factor in computer science progress and success through an examination of the ubiquitous role of information hiding in programming languages, operating systems, network architecture, and design patterns.''}
-        \item Dijkstra: abstrakce pomáhá být přesný, ne vágní
-              \\ → \texttt{swebok2024} s.~370:
-              \\ \textit{``Dijkstra states: `The purpose of abstracting is not to be vague, but to create a new semantic level in which one can be absolutely precise.'''}
-    \end{itemize}
-
-    \item \textbf{Přesto 1968 krize} -- proč?
-    \begin{itemize}
-        \item Složitost rostla rychleji než naše schopnost ji zvládat
-        \item NATO konference: ``software crisis''
-              \\ → \texttt{nato1968} s.~78 (Perlis keynote):
-              \\ \textit{``I believe it is because we recognize that a practical problem of considerable difficulty and importance has arisen: The successful design, production and maintenance of useful software systems.''}
-    \end{itemize}
-
-    \item \textbf{Reakce: vznik SWE} -- disciplína pro řízení složitosti
-          \\ → \texttt{sommerville2016} s.~592:
-          \\ \textit{``In software engineering, we have seen the incredibly rapid development of the discipline to help manage the increasing size and complexity of software systems... the approach that has been the basis of complexity management in software engineering is called reductionism.''}
-
-    \item \textbf{Dnes: AI jako nový problém}
-    \begin{itemize}
-        \item Není to jen další vrstva abstrakce
-        \item Je to ztráta determinismu -- ``black box''
-        \item Proto mechanistic interpretability
-              \\ → \texttt{bereska2024} s.~1:
-              \\ \textit{``Understanding AI systems' inner workings is critical for ensuring value alignment and safety. This review explores mechanistic interpretability: reverse engineering the computational mechanisms and representations learned by neural networks into human-understandable algorithms and concepts to provide a granular, causal understanding.''}
-    \end{itemize}
-\end{enumerate}
-
-\textbf{Klíčový insight:}
-Abstrakce $\neq$ složitost. Abstrakce je NÁSTROJ pro zvládání složitosti.
-AI přináší kvalitativně nový problém (nedeterminismus), ne jen ``více abstrakce''.
-\end{raw}
-
-% === PODSEKCE 2.1.3 ===
-\subsection{Komplexita software}
-
-\begin{raw}
-\textbf{Co sem patří (Brooks -- No Silver Bullet):}
+\textbf{Brooks -- No Silver Bullet:}
 \begin{itemize}
     \item \textbf{Essential complexity} -- inherentní složitost problému
           \\ → \texttt{brooks1987} s.~6:
-          \\ \textit{``The complexity of software is an essential property, not an accidental one. Hence descriptions of a software entity that abstract away its complexity often abstract away its essence.''}
+          \\ \textit{``The complexity of software is an essential property, not an accidental one.''}
     \begin{itemize}
         \item Business logika, requirements, doménová znalost
         \item Nelze odstranit -- je to podstata toho co řešíme
@@ -151,54 +70,29 @@ AI přináší kvalitativně nový problém (nedeterminismus), ne jen ``více ab
           \\ \textit{``Software entities are more complex for their size than perhaps any other human construct, because no two parts are alike.''}
     \begin{itemize}
         \item Neviditelný, snadno měnitelný, nemá fyzická omezení
-        \item \textbf{Nelineární růst komplexity:} Na rozdíl od fyzických systémů
-              (např. stavba zdi -- cihla na cihlu, proces stále stejný),
-              u software každý nový prvek interaguje s ostatními a přidává nové stavy.
+        \item \textbf{Nelineární růst komplexity:}
               \\ → \texttt{brooks1987} s.~6:
-              \\ \textit{``A scaling-up of a software entity is not merely a repetition of the same elements in larger size, it is necessarily an increase in the number of different elements. In most cases, the elements interact with each other in some non-linear fashion, and the complexity of the whole increases much more than linearly.''}
-        \item → \texttt{mcconnell2004} s.~127:
-              \\ \textit{``People use abstraction continuously. If you had to deal with individual wood fibers, varnish molecules, and steel molecules every time you used your front door, you'd hardly make it in or out of your house each day. Abstraction is a big part of how we deal with complexity in the real world.''}
+              \\ \textit{``A scaling-up of a software entity is not merely a repetition of the same elements in larger size, it is necessarily an increase in the number of different elements.''}
     \end{itemize}
 
     \item \textbf{Evoluce a růst komplexity v čase} (Lehman's Laws):
           \\ → \texttt{lehman1980} s.~9:
-          \\ \textit{``I. Continuing Change -- A program that is used... undergoes continual change or becomes progressively less useful. The change or decay process continues until it is judged more cost effective to replace the system with a recreated version.''}
-          \\ \textit{``II. Increasing Complexity -- As an evolving program is continually changed, its complexity increases unless work is done to maintain or reduce it.''}
     \begin{itemize}
         \item Software musí být neustále adaptován (zákon I)
         \item Komplexita roste s časem pokud se aktivně neredukuje (zákon II)
-        \item Doplňuje Brookse: Brooks říká PROČ je software složitý, Lehman říká že komplexita navíc ROSTE
     \end{itemize}
 \end{itemize}
 
-\textbf{Propojení s 2.1.2:}
-Abstrakce (kompilátory, frameworky) řeší accidental complexity -- ale essential zůstává. To je důvod proč ``no silver bullet''.
+\textbf{Propojení:}
+Abstrakce řeší accidental complexity -- ale essential zůstává. To motivuje potřebu metrik (sekce~\ref{sec:mereni-kvality}) a~strukturovaných postupů.
 \end{raw}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Životní cyklus a metodiky}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{raw}
-\textbf{Úvod sekce 2.2 (1-2 věty):}
-Tato sekce popisuje jak se software vyvíjí v praxi: co se dělá (fáze), jak se to organizuje (metodiky), čím se to dělá (nástroje), co vzniká (artefakty), a kdo to dělá (role a komunikace).
-\end{raw}
-
-% === PODSEKCE 2.2.1 ===
+% === 2.1.2 ===
 \subsection{Fáze životního cyklu}
+\label{sec:faze-zivotniho-cyklu}
 
 \begin{raw}
-\textbf{Různé přístupy k definici fází:}
-\begin{itemize}
-    \item Různé zdroje definují fáze životního cyklu různě:
-    \begin{itemize}
-        \item SWEBOK/ISO 12207: Concept, Development, Production, Utilization, Support, Retirement
-        \item Waterfall klasický: Requirements, Design, Implementation, Testing, Deployment, Maintenance
-        \item Sommerville: 4 základní aktivity (abstrakce)
-    \end{itemize}
-    \item Každá metodika (Scrum, Waterfall, XP...) má vlastní konkrétní fáze
-    \item Pro účely této práce používáme Sommervillovu abstrakci -- 4 aktivity které jsou společné všem přístupům
-\end{itemize}
+\textbf{Předchozí obsah z 2.2.1:}
 
 \textbf{Sommerville -- 4 základní aktivity:}
 \par\noindent → \texttt{sommerville2016} s.~24:
@@ -212,294 +106,155 @@ Tato sekce popisuje jak se software vyvíjí v praxi: co se dělá (fáze), jak 
 \end{enumerate}
 
 \par\noindent → \texttt{sommerville2016} s.~55:
-\par\noindent \textit{``The four basic process activities of specification, development, validation, and evolution are organized differently in different development processes. In the waterfall model, they are organized in sequence, whereas in incremental development they are interleaved.''}
+\par\noindent \textit{``The the four basic process activities of specification, development, validation, and evolution are organized differently in different development processes.''}
 
 \textbf{Klíčový bod:}
-Tyto 4 aktivity jsou abstrakce -- každá metodika je organizuje jinak (viz 2.2.2).
+Tyto 4 aktivity jsou abstrakce -- každá metodika je organizuje jinak (viz 2.1.3).
 \end{raw}
 
-% === PODSEKCE 2.2.2 ===
-\subsection{Modely a metodiky}
+% === 2.1.3 ===
+\subsection{Modely a~metodiky}
+\label{sec:modely-metodiky}
 
 \begin{raw}
+\textbf{Předchozí obsah z 2.2.2:}
+
 \textbf{Klasifikace metodik (Boehm \& Turner 2003):}
 \par\noindent → \texttt{boehm2003balancing}:
 \par\noindent Metodiky nejsou binární volba, ale \textbf{spektrum} mezi plan-driven a agile.
-\par\noindent 5 dimenzí pro klasifikaci:
-\begin{enumerate}
-    \item \textbf{Size} -- velikost projektu/týmu
-    \item \textbf{Criticality} -- kritičnost systému (life-critical vs comfort)
-    \item \textbf{Dynamism} -- jak moc se mění requirements
-    \item \textbf{Personnel} -- zkušenosti a schopnosti týmu
-    \item \textbf{Culture} -- organizační kultura (chaos vs order)
-\end{enumerate}
+\par\noindent 5 dimenzí pro klasifikaci: Size, Criticality, Dynamism, Personnel, Culture.
 
 \par\noindent → \texttt{boehm2002agile}:
-\par\noindent \textit{``Both agile and plan-driven approaches have their home grounds where each clearly works best, and a danger zone where each has problems.''}
+\par\noindent \textit{``Both agile and plan-driven approaches have their home grounds where each clearly works best.''}
 
 \rule{\textwidth}{0.4pt}
 
 \textbf{Plan-driven metodiky:}
 
 \textbf{1. Waterfall (sekvenční):}
-\par\noindent → \texttt{royce1970} -- \textbf{primární zdroj}, původní popis modelu
+\par\noindent → \texttt{royce1970} -- primární zdroj
 \par\noindent → \texttt{boehm1988} s.~3:
-\par\noindent \textit{``The waterfall model's basic scheme has encountered some fundamental difficulties, and these have led to the formulation of alternative process models.''}
+\par\noindent \textit{``The waterfall model's basic scheme has encountered some fundamental difficulties.''}
 
 \textbf{2. Spiral Model (risk-driven):}
-\par\noindent → \texttt{boehm1988} -- kombinuje iterativní vývoj s analýzou rizik, reakce na problémy waterfall
+\par\noindent → \texttt{boehm1988} -- kombinuje iterativní vývoj s analýzou rizik
 
 \rule{\textwidth}{0.4pt}
 
 \textbf{Agile metodiky:}
 
-\par\noindent → \texttt{agilemanifesto2001} -- 4 hodnoty, 12 principů, reakce na heavyweight procesy
+\par\noindent → \texttt{agilemanifesto2001} -- 4 hodnoty, 12 principů
 
 \textbf{3. Extreme Programming (XP):}
-\par\noindent → \texttt{beck2000} -- pair programming, TDD, continuous integration, short iterations
+\par\noindent → \texttt{beck2000} -- pair programming, TDD, continuous integration
 
 \textbf{4. Scrum:}
-\par\noindent → \texttt{scrumguide2020}:
-\par\noindent Framework pro komplexní problémy. Sprinty (2-4 týdny), role (PO, SM, Developers), artefakty (backlog, increment).
+\par\noindent → \texttt{scrumguide2020}: sprinty, role (PO, SM, Developers)
 
 \rule{\textwidth}{0.4pt}
 
 \textbf{5. Spec-Driven Development (SDD):}
-
 \par\noindent $\rightarrow$ \texttt{sdd2026} -- Emerging metodika pro éru AI coding agentů:
-\par\noindent Specifikace je source of truth, kód je odvozený/generovaný artefakt.
+\par\noindent Specifikace je source of truth, kód je odvozený.
 
 \textbf{Tři úrovně rigidity:}
 \begin{enumerate}
-    \item \textbf{Spec-first} -- specifikace před kódem, ale nemusí se udržovat po implementaci. Vhodné pro initial development s AI.
-    \item \textbf{Spec-anchored} -- specifikace žije vedle kódu, testy vynucují synchronizaci (BDD, Cucumber). Sweet spot pro produkční systémy.
-    \item \textbf{Spec-as-source} -- specifikace JE kód, nikdy se needituje přímo. Zatím jen specializované domény (embedded, Simulink).
+    \item \textbf{Spec-first} -- specifikace před kódem
+    \item \textbf{Spec-anchored} -- specifikace žije vedle kódu, testy vynucují sync
+    \item \textbf{Spec-as-source} -- specifikace JE kód
 \end{enumerate}
 
-\textbf{SDD workflow:} Specify $\rightarrow$ Plan $\rightarrow$ Implement $\rightarrow$ Validate (human review mezi každou fází).
-
-\textbf{Propojení s ostatními metodikami:}
-\begin{itemize}
-    \item SDD není náhrada agile/waterfall -- je to vrstva nad nimi
-    \item TDD = SDD na úrovni unit testů
-    \item BDD = SDD s Gherkin scénáři
-    \item DDD ubiquitous language = základ pro SDD specifikace
-\end{itemize}
-
-\textbf{Thoughtworks Technology Radar 2025:} SDD identifikován jako jeden z nejdůležitějších emerging trendů.
-
-\rule{\textwidth}{0.4pt}
-
 \textbf{Klíčový bod:}
-Většina reálných projektů používá hybrid -- ``the challenge is to balance the two approaches'' \texttt{boehm2003balancing}.
-S příchodem AI agentů se přidává nová dimenze: SDD spec-first umožňuje ``waterfall per increment'' --
-sekvenční fáze (spec $\rightarrow$ implement $\rightarrow$ validate) v rámci malých incrementů, ale iterativní mezi incrementy.
-\end{raw}
-
-% === PODSEKCE 2.2.3 ===
-\subsection{Role a komunikace}
-
-\begin{raw}
-\textbf{1. SWE je fundamentálně týmová disciplína}
-
-\textbf{Brooks's Law -- komunikační overhead:}
-\par\noindent → \texttt{brooks1975} s.~25:
-\par\noindent \textit{``Adding manpower to a late software project makes it later.''}
-\par\noindent → \texttt{mcconnell2004} s.~713:
-\par\noindent \textit{``Merely increasing the number of people increases the complexity and amount of project communication.''}
-\par\noindent Komunikační kanály rostou: $n(n-1)/2$
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{2. Role a zodpovědnosti}
-
-\textbf{Tradiční role:}
-\begin{itemize}
-    \item Developer -- implementace, code review
-    \item Tester/QA -- validace, quality assurance
-    \item Architekt -- design, technická rozhodnutí
-    \item Project Manager -- plánování, koordinace
-    \item Product Owner -- requirements, priorities
-\end{itemize}
-
-\textbf{Role v Scrum:}
-\par\noindent → \texttt{scrumguide2020}:
-\begin{itemize}
-    \item Product Owner -- maximalizuje hodnotu produktu, spravuje backlog
-    \item Scrum Master -- efektivita týmu, odstraňuje překážky
-    \item Developers -- vytváří increment každý sprint
-\end{itemize}
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{3. Conway's Law -- organizace $\leftrightarrow$ architektura}
-
-\par\noindent → \texttt{conway1968}:
-\par\noindent \textit{``Organizations which design systems are constrained to produce designs which are copies of the communication structures of these organizations.''}
-
-Struktura týmu se odráží v architektuře systému. Důsledek: změna architektury často vyžaduje změnu organizace.
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{4. Koordinace práce}
-
-\par\noindent → \texttt{malone1994}:
-\par\noindent Coordination = managing dependencies between activities.
-\par\noindent Typy závislostí: shared resources, producer-consumer, simultaneity constraints.
-
-\textbf{Tacit vs explicit knowledge:}
-\par\noindent → \texttt{nonaka1995}:
-\par\noindent \textit{``There are two types of knowledge: explicit knowledge, contained in manuals and procedures, and tacit knowledge, learned only by experience, and communicated only indirectly.''}
-
-\begin{itemize}
-    \item \textbf{Tacit knowledge} -- v hlavách lidí, těžko artikulovatelné, "know-how"
-    \item \textbf{Explicit knowledge} -- dokumentace, procesy, kód
-    \item Konverze tacit → explicit = klíčový proces (externalization)
-    \item Meetingy, pair programming, code review = mechanismy sdílení tacit knowledge
-\end{itemize}
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{Propojení s BP -- Quality gates pro agenty:}
-
-Každá role má kontrolní body (quality gates):
-\begin{itemize}
-    \item Code review (senior/peer kontroluje kód)
-    \item QA approval (tester ověřuje funkcionalitu)
-    \item Acceptance criteria (PO schvaluje feature)
-    \item Design review (architekt validuje návrh)
-\end{itemize}
-
-\textbf{Pro agenty:}
-\begin{itemize}
-    \item Agent přebírá některé role (developer, částečně tester)
-    \item Quality gates zůstávají -- kdo je teď dělá?
-    \item Implicitní znalosti z meetingů $\rightarrow$ explicitní instrukce pro agenta
-    \item Agent nemá ``kontext z meetingu'' -- vše musí být napsané
-\end{itemize}
-\end{raw}
-
-% === PODSEKCE 2.2.4 ===
-\subsection{Nástroje a artefakty}
-
-\begin{raw}
-\textbf{Propojení s fázemi a rolemi:}
-
-Každá fáze (2.2.1) produkuje artefakty, role (2.2.3) používají nástroje k jejich tvorbě a správě.
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{1. Artefakty podle fází:}
-
-\begin{itemize}
-    \item \textbf{Specification} $\rightarrow$ Requirements (funkční, nefunkční), user stories, use cases, behavioral models (state diagrams pro event-driven systémy \cite{sommerville2016} kap.~5.4)
-
-          \textbf{Spektrum formátů specifikace:}
-          Specifikace může mít různou míru formálnosti \cite[kap.~4]{sommerville2016}:
-          \begin{enumerate}
-              \item \textbf{Formální} -- IEEE 830 SRS dokument, matematické specifikace
-              \item \textbf{Structured} -- šablony (Function/Inputs/Outputs/Pre/Post), structured natural language
-              \item \textbf{Semi-structured} -- GitHub Issues, user stories v backlogu, RFC dokumenty
-              \item \textbf{Neformální} -- konverzace, emaily, chat
-          \end{enumerate}
-
-          V open source komunitách se issue trackery staly de facto nástrojem pro requirements management
-          -- ``software informalisms'' nahrazují formální specifikace \cite{scacchi2002}.
-          V agilních týmech se user stories a backlog items používají místo SRS dokumentů \cite{cao2008}.
-          Viz také sekce 2.4 -- pro AI agenty se GitHub Issues staly standardním vstupním formátem.
-    \item \textbf{Design} $\rightarrow$ Architektura, design docs, diagramy (UML), API kontrakty (OpenAPI)
-    \item \textbf{Implementation} $\rightarrow$ Zdrojový kód, konfigurace
-    \item \textbf{Validation} $\rightarrow$ Testy (unit, integration, e2e), test reports
-    \item \textbf{Evolution} $\rightarrow$ Change requests, release notes, patches
-\end{itemize}
-
-\textbf{Traceability:}
-\par\noindent → \texttt{gotel1994}:
-\par\noindent \textit{``Requirements traceability refers to the ability to describe and follow the life of a requirement, in both a forwards and backwards direction.''}
-\par\noindent Propojení mezi artefakty: Requirement $\rightarrow$ Design $\rightarrow$ Code $\rightarrow$ Test.
-\par\noindent Důležité pro quality gates -- lze ověřit že každý requirement má test.
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{2. Nástroje podle činností:}
-
-\begin{itemize}
-    \item \textbf{Vývoj:} IDE (VS Code, IntelliJ), editory, debuggery
-    \item \textbf{Verzování:} Git -- distribuovaný version control
-          \par → \texttt{chacon2014}: nejen kód, ale i dokumentace, konfigurace (``everything as code'')
-    \item \textbf{Koordinace:} Issue tracking (Jira, GitHub Issues), project management
-    \item \textbf{Kvalita:} CI/CD, test frameworks, linters
-          \par → \texttt{humble2010}: automatizace buildů, testů, deploymentu
-          \par → \texttt{forsgren2018}: DevOps praktiky a jejich měřitelný dopad
-    \item \textbf{Dokumentace:} Wikis, Markdown, generátory dokumentace
-\end{itemize}
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{3. Komunikační nástroje:}
-
-\par\noindent → \texttt{schmidt1992} -- CSCW (Computer Supported Cooperative Work):
-\par\noindent \textit{``Articulation work'' -- práce potřebná ke koordinaci spolupráce.}
-
-\begin{itemize}
-    \item Synchronní: Slack, Teams, meetings, pair programming
-    \item Asynchronní: Email, code review comments, dokumentace
-\end{itemize}
-
-Navazuje na 2.2.3 -- komunikační nástroje slouží k sdílení tacit knowledge.
-Problém: hodně kontextu zůstává v těchto kanálech a není explicitně zachycen.
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{4. Standardy a formáty:}
-
-Strukturované formáty usnadňují automatizaci a konzistenci:
-\begin{itemize}
-    \item UML -- diagramy architektury a designu
-          \par → \texttt{fowler2004uml}: standardní jazyk pro modelování software
-    \item OpenAPI/Swagger -- API kontrakty (strojově čitelné specifikace)
-    \item Markdown -- dokumentace (lidsky i strojově čitelné)
-    \item JSON Schema -- validace dat
-    \item Conventional Commits -- standardizované commit messages
-\end{itemize}
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{Propojení s BP:}
-
-Tato sekce popisuje tradiční nástroje a artefakty v SWE.
-V sekci 2.3 (Agentic coding) ukážeme jak agenti tyto nástroje používají a artefakty čtou/produkují.
-V sekci 2.4 (Scaffolding) ukážeme jak připravit artefakty aby byly pro agenty čitelné.
-
-\textbf{Zdroje:}
-\begin{itemize}
-    \item \texttt{gotel1994} -- traceability definice
-    \item \texttt{chacon2014} -- Git/verzování
-    \item \texttt{humble2010} -- Continuous Delivery, CI/CD
-    \item \texttt{forsgren2018} -- Accelerate, DevOps metriky
-    \item \texttt{schmidt1992} -- CSCW, komunikační nástroje
-    \item \texttt{fowler2004uml} -- UML standardy
-\end{itemize}
+S příchodem AI agentů se přidává nová dimenze: SDD spec-first umožňuje sekvenční fáze v rámci malých incrementů, ale iterativní mezi incrementy.
 \end{raw}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Agentic coding}
+\section{Měření kvality software}
+\label{sec:mereni-kvality}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{raw}
 \textbf{Úvod sekce:}
-Tato sekce definuje základní pojmy (LLM, agent, tool calls) a popisuje jak AI agenti mění softwarové inženýrství.
+Teorie metrik a měření. Kap03 na tuto sekci odkazuje -- zde je CO a PROČ, v kap03 je JAK to použijeme.
 \end{raw}
 
-% === PODSEKCE 2.3.1 ===
+% === 2.2.1 ===
+\subsection{Taxonomie metrik}
+\label{sec:taxonomie-metrik}
+
+\begin{raw}
+\textbf{TODO --- doplnit:}
+
+Fenton \& Bieman (2014): Process / Product / Resource (v~naší práci Process / Quality / Efficiency). Proč měřit proces i~produkt, ne jen výsledek. Interní vs externí metriky.
+
+\textbf{Co sem NEPATŘÍ (to je v kap03):}
+Konkrétní volba metrik (P1-P2, Q1-Q8, E1-E3), prahy, exit kritéria.
+\end{raw}
+
+% === 2.2.2 ===
+\subsection{Testování a~mutation testing}
+\label{sec:testovani-mutation}
+
+\begin{raw}
+\textbf{TODO --- doplnit:}
+
+Co je mutation testing, proč je silnější než strukturální coverage. Papadakis et al. (2019) --- přehledová studie, 36\% chyb odhalitelných pouze mutation testingem. Harman et al. (Meta, 2025) --- produkční nasazení, 70\% mutantů neodhalených i~při plném coverage.
+
+\textbf{Test oracle problem:}
+Mathews et al. \cite{mathews2024} ukázali, že nástroje pro automatické generování testů systematicky filtrují failing testy -- až 68,1\% test suites validuje chybné chování místo jeho odhalení. Chen et al. \cite{rethinking2025} potvrdili na 500 úlohách SWE-bench, že agent-generované testy slouží primárně jako observační feedback, ne validační nástroj.
+
+Obrana: TDD ze specifikace (expected values z AC, ne z pozorování kódu).
+\end{raw}
+
+% === 2.2.3 ===
+\subsection{Statická analýza a~složitost kódu}
+\label{sec:staticka-analyza}
+
+\begin{raw}
+\textbf{TODO --- doplnit:}
+
+McCabe (1976) --- cyklomatická složitost, práh 10 jako de facto standard. Linting jako automatizovaná kontrola konvencí. Type checking (strict mode) jako prevence chyb.
+\end{raw}
+
+% === 2.2.4 ===
+\subsection{LLM-as-judge}
+\label{sec:llm-as-judge}
+
+\begin{raw}
+\textbf{TODO --- doplnit teorii. Aplikace (volba GLM-5, škála, rubric) je v kap03.}
+
+Zheng et al. (2023, MT-Bench) --- metoda LLM-as-judge, tři systematické biasy (position, verbosity, self-enhancement).
+
+Panickssery et al. (2024, NeurIPS) --- kauzální vztah self-recognition $\to$ self-preference, mechanismus nižší perplexity.
+
+Verga et al. (2024, PoLL) --- panel diverse models lepší než single judge.
+
+Implikace: cross-family model pro eliminaci self-preference.
+
+\textbf{Co sem NEPATŘÍ (to je v kap03):}
+Volba GLM-5, škála 1--3, konkrétní rubriky, Cohenovo κ validace.
+\end{raw}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{AI coding agenti}
+\label{sec:ai-coding-agenti}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{raw}
+\textbf{Úvod sekce:}
+Definuje základní pojmy (LLM, agent, tool calls) a popisuje jak AI agenti mění softwarové inženýrství.
+\end{raw}
+
+% === 2.3.1 ===
 \subsection{Základní pojmy}
+\label{sec:zakladni-pojmy}
 
 \begin{raw}
 \textbf{1. Large Language Model (LLM):}
 
 \par\noindent → \texttt{vaswani2017} -- Transformer architektura:
-\par\noindent \textit{``Attention Is All You Need''} -- self-attention mechanismus umožňuje modelovat závislosti bez rekurence.
-\par\noindent LLM = velký jazykový model založený na transformer architektuře, trénovaný na velkém množství textu.
+\par\noindent \textit{``Attention Is All You Need''} -- self-attention mechanismus.
+\par\noindent LLM = velký jazykový model založený na transformer architektuře.
 
 \rule{\textwidth}{0.4pt}
 
@@ -520,44 +275,29 @@ Tato sekce definuje základní pojmy (LLM, agent, tool calls) a popisuje jak AI 
 
 \textbf{3. Tool Calls (Function Calling):}
 
-Klíčová schopnost agentů -- volání externích nástrojů.
-
 \par\noindent → \texttt{yao2022react} -- ReAct framework:
-\par\noindent \textit{``Synergizing Reasoning and Acting in Language Models''}
-\par\noindent Cyklus: Thought $\rightarrow$ Action $\rightarrow$ Observation (opakuje se).
-\par\noindent Agent přemýšlí, provede akci, pozoruje výsledek, přemýšlí znovu.
+\par\noindent Cyklus: Thought $\rightarrow$ Action $\rightarrow$ Observation.
 
 \par\noindent → \texttt{schick2023toolformer}:
-\par\noindent LLM se může naučit kdy a jak použít nástroje (API, kalkulačka, vyhledávání).
-
-\textbf{Příklady tool calls pro coding agenty:}
-\begin{itemize}
-    \item Read/Write soubory
-    \item Bash příkazy (git, npm, make...)
-    \item Grep/Glob pro hledání v kódu
-    \item Web search, fetch dokumentace
-\end{itemize}
+\par\noindent LLM se může naučit kdy a jak použít nástroje.
 
 \rule{\textwidth}{0.4pt}
 
 \textbf{4. Prompt Engineering:}
 
 [DOPLNIT] Definovat prompt engineering jako disciplínu formulování instrukcí pro LLM.
-Klíčové techniky: zero-shot, few-shot, chain-of-thought, role prompting.
-Zdroje: najít vhodnou citaci (survey on prompt engineering).
 
 \textbf{Důležité rozlišení pro BP:}
 \begin{itemize}
-    \item \textbf{Prompt engineering} = jak formuluješ konkrétní instrukci/zadání pro LLM
-    \item \textbf{Context engineering} = co všechno agent dostane jako kontext (viz sekce 2.4)
-    \item \textbf{Scaffolding} = struktury v prostředí které agenta vedou (soubory, konvence, workflow)
+    \item \textbf{Prompt engineering} = jak formuluješ konkrétní instrukci
+    \item \textbf{Context engineering} = co všechno agent dostane jako kontext (viz sekce~\ref{sec:scaffolding})
+    \item \textbf{Scaffolding} = struktury v prostředí které agenta vedou
 \end{itemize}
-Tato práce se primárně zabývá context engineeringem a scaffoldingem, ne prompt engineeringem --
-nejde o to jak formulovat prompt, ale jaké podpůrné struktury agentovi poskytnout.
 \end{raw}
 
-% === PODSEKCE 2.3.2 ===
+% === 2.3.2 ===
 \subsection{Typy coding agentů}
+\label{sec:typy-coding-agentu}
 
 \begin{raw}
 \textbf{Evoluce podle autonomie:}
@@ -576,782 +316,432 @@ nejde o to jak formulovat prompt, ale jaké podpůrné struktury agentovi poskyt
 \textbf{Copilot vs Autonomous Agent:}
 
 \begin{itemize}
-    \item \textbf{Copilot} -- asistuje člověku, návrhy, autocomplete (GitHub Copilot, Cursor Tab)
-    \item \textbf{Autonomous agent} -- samostatně plánuje a vykonává úkoly (Devin, Claude Code agentic mode)
-\end{itemize}
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{Taxonomy agentů:}
-
-\par\noindent → \texttt{liu2024llmagents}:
-
-\begin{itemize}
-    \item \textbf{Reasoning-enhanced} -- chain-of-thought, tree-of-thought
-    \item \textbf{Tool-augmented} -- externí API, knowledge bases
-    \item \textbf{Multi-agent} -- spolupráce více agentů
-    \item \textbf{Memory-augmented} -- persistentní kontext mezi interakcemi
+    \item \textbf{Copilot} -- asistuje člověku, návrhy, autocomplete
+    \item \textbf{Autonomous agent} -- samostatně plánuje a vykonává úkoly
 \end{itemize}
 
 \textbf{Příklady nástrojů (2024-2025):}
-\begin{itemize}
-    \item Devin (Cognition AI) -- první ``AI software engineer''
-    \item Claude Code (Anthropic) -- CLI agent
-    \item Cursor -- IDE s integrovaným agentem
-    \item OpenHands -- open-source platforma
-    \item Agentless -- alternativní přístup bez agentního cyklu → \texttt{xia2025agentless}
-\end{itemize}
+Devin, Claude Code, Cursor, OpenHands, Agentless \cite{xia2025agentless}.
 \end{raw}
 
-% === PODSEKCE 2.3.3 ===
+% === 2.3.3 ===
 \subsection{Jak agenti mění SDLC}
+\label{sec:agenti-meni-sdlc}
 
 \begin{raw}
 \textbf{Které fáze agenti ovlivňují:}
 
 \par\noindent → \texttt{jin2024} -- 6 klíčových oblastí:
-
-\begin{enumerate}
-    \item \textbf{Requirement Engineering} -- generování user stories, analýza požadavků
-    \item \textbf{Code Generation} -- implementace z popisu, autocomplete
-    \item \textbf{Autonomous Decision-making} -- plánování, výběr přístupu
-    \item \textbf{Software Design} -- návrh architektury, API design
-    \item \textbf{Test Generation} -- unit testy, test cases
-    \item \textbf{Software Maintenance} -- bug fixing, refactoring, code review
-\end{enumerate}
+Requirement Engineering, Code Generation, Autonomous Decision-making, Software Design, Test Generation, Software Maintenance.
 
 \rule{\textwidth}{0.4pt}
 
 \textbf{Co zůstává stejné:}
-
-\begin{itemize}
-    \item Fáze životního cyklu (specification, development, validation, evolution)
-    \item Artefakty (requirements, kód, testy, dokumentace)
-    \item Quality gates (code review, testing, acceptance)
-    \item Potřeba jasných requirements
-\end{itemize}
-
-\rule{\textwidth}{0.4pt}
+Fáze, artefakty, quality gates, potřeba jasných requirements.
 
 \textbf{Co se mění:}
-
 \begin{itemize}
     \item \textbf{Rychlost} -- minuty místo hodin/dnů
     \item \textbf{Explicitnost} -- vše musí být napsané (agent nemá tacit knowledge)
-    \item \textbf{Role} -- developer se stává ``reviewer'' a ``specifikátor''
+    \item \textbf{Role} -- developer se stává reviewerem a specifikátorem
     \item \textbf{Batch size} -- menší úkoly, častější iterace
 \end{itemize}
 
 \rule{\textwidth}{0.4pt}
 
-\textbf{Propojení s 2.2:}
-
-\begin{itemize}
-    \item \textbf{Nástroje (2.2.4):} Agent používá stejné nástroje (Git, CI/CD) přes tool calls
-    \item \textbf{Artefakty (2.2.4):} Agent čte/píše stejné artefakty (kód, testy, docs)
-    \item \textbf{Role (2.2.3):} Agent přebírá část rolí (developer, částečně tester)
-    \item \textbf{Tacit knowledge (2.2.3):} Musí být převedeno na explicit (viz 2.4 Scaffolding)
-\end{itemize}
-\end{raw}
-
-% === PODSEKCE 2.3.4 ===
-\subsection{Trade-offs a výzvy}
-
-\begin{raw}
-\textbf{1. Tacit $\rightarrow$ Explicit Knowledge:}
-
-\par\noindent → \texttt{nonaka1995}:
-\par\noindent Agent nemá přístup k tacit knowledge (meetingy, tribal knowledge).
-\par\noindent Vše musí být explicitně zapsáno: CLAUDE.md, README, specs, komentáře.
-
-\textbf{Důsledek:} Kvalita výstupu agenta závisí na kvalitě dokumentace a instrukcí.
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{2. Agenti vs Týmy (Brooks's Law):}
-
-\par\noindent → \texttt{brooks1975}:
-\par\noindent Velké týmy = velká komunikační režie ($n(n-1)/2$ kanálů).
-
-\textbf{S agenty:}
-\begin{itemize}
-    \item Agenti nepotřebují meetingy
-    \item Ale nerozumí nuancím a kontextu
-    \item Hypotéza: malé týmy + agenti mohou být efektivnější než velké týmy bez agentů
-\end{itemize}
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{3. Micro-waterfall hypotéza:}
-
-Nevracíme se s AI agenty zpět k waterfall, jen v menší časové škále?
-
-\begin{itemize}
-    \item \textbf{Waterfall:} Requirements $\rightarrow$ Design $\rightarrow$ Implementation $\rightarrow$ Testing [měsíce]
-    \item \textbf{Agile:} Planning $\rightarrow$ Dev $\rightarrow$ Testing $\rightarrow$ Review [týdny]
-    \item \textbf{AI agent:} Prompt $\rightarrow$ Generate $\rightarrow$ Review $\rightarrow$ Fix [minuty]
-\end{itemize}
-
+\textbf{Micro-waterfall hypotéza:}
 Sekvenční kroky zůstávají -- jen se zmenšuje batch size a zrychluje feedback loop.
-
-Tento pattern je formalizován jako Spec-Driven Development (viz 2.2.2): ``waterfall per increment'' --
-detailní specifikace v rámci každého malého incrementu, ale iterativní přístup mezi incrementy \cite{sdd2026}.
+SDD formalizuje tento pattern \cite{sdd2026}.
 
 \textbf{Empirická podpora:}
-\par\noindent $\rightarrow$ \texttt{watanabe2025agentprs} (ACM TOSEM, under review):
-567 Claude Code PRs, 157 projektů. 83.8\% acceptance rate (vs 91\% human PRs).
-54.9\% merged bez úprav. Agenti dělají víc refactoring (25\% vs 15\%), testing (19\% vs 5\%), docs (22\% vs 14\%).
-Ale 45\% potřebovalo revizi -- hlavně bug fixes a project-specific standardy.
+\par\noindent $\rightarrow$ \texttt{watanabe2025agentprs} (ACM TOSEM):
+567 Claude Code PRs, 83.8\% acceptance rate, 45\% potřebovalo revizi.
 
 \par\noindent $\rightarrow$ \texttt{ehsani2026failedprs} (MSR 2026):
-33k agent PRs od 5 agentů. Agent PRs by měly být malé a focused --
-velké PRs mají víc CI selhání. Documentation a build úkoly mají nejvyšší úspěšnost (84\%, 74\%),
-bug fixes a performance nejnižší (64\%, 55\%).
+33k agent PRs. Malé, focused úkoly mají vyšší úspěšnost.
+\end{raw}
 
-\textbf{Důsledek pro workflow:} Malé, focused incrementy s jasnou specifikací
-vedou k lepším výsledkům než velké, komplexní úkoly. Podporuje SDD spec-first přístup.
+% === 2.3.4 ===
+\subsection{Hodnocení agentů a~benchmarky}
+\label{sec:hodnoceni-agentu}
+
+\begin{raw}
+\textbf{NOVÁ SEKCE --- přesunuto z různých míst + doplnit.}
+
+\textbf{SWE-bench:}
+\par\noindent → \texttt{swebench2024} (ICLR 2024):
+De facto benchmark pro AI coding agenty. 2294 úloh z reálných GitHub repozitářů.
+Měří: vyřešil agent úkol, ano nebo ne (binary pass/fail).
+
+\textbf{Další benchmarky:}
+\begin{itemize}
+    \item SWE-bench Pro \cite{swebenchpro2025} -- rozšíření o explicitní Requirements a Interface sekce
+    \item SWE-EVO \cite{sweevo2025} -- evoluční úlohy, 21\% úspěšnost
+    \item FeatureBench \cite{featurebench2026} -- feature-level, 11\%
+    \item ACE-Bench \cite{acebench2025} -- end-to-end, 7.5\%
+\end{itemize}
+
+\textbf{Co benchmarky měří a co NE:}
+\begin{itemize}
+    \item Měří: funkční korektnost (pass/fail)
+    \item Neměří: proces (jak agent pracoval), kvalita kódu (mutation score, lint, složitost), procesní záznamy (commit messages, issue descriptions)
+\end{itemize}
+
+\textbf{Gap:} Existující benchmarky jsou navržené pro ``vyřešil agent bug?'', ne ``vyvinul agent software správně a~správným postupem?'' Tento gap adresuje naše práce (kap01).
 
 \rule{\textwidth}{0.4pt}
 
-\textbf{4. Další výzvy:}
+\textbf{Fine-tuning vs in-context learning:}
 
+Dva přístupy jak přizpůsobit LLM konkrétnímu úkolu:
 \begin{itemize}
-    \item \textbf{Halucinace} -- agent může generovat neexistující API, chybný kód
-    \item \textbf{Context window} -- omezená velikost kontextu
-    \item \textbf{Bezpečnost} -- agent má přístup k systému (bash, soubory)
-    \item \textbf{Evaluace} -- jak měřit kvalitu agenta? (viz metriky v praktické části)
+    \item \textbf{Fine-tuning} --- trénování parametrů modelu. Permanentní, drahé.
+    \item \textbf{In-context learning (ICL)} --- instrukce v~kontextovém okně. Ephemeral, levné.
 \end{itemize}
 
-\rule{\textwidth}{0.4pt}
+Shin et al. \cite{shin2025prompt} ukazují, že ani jeden přístup systematicky nedominuje, ale explicitní instrukce s~kontextem výrazně zlepšují výkon agenta na úlohách s~kódem.
 
-\textbf{Zdroje sekce 2.3:}
-\begin{itemize}
-    \item \texttt{vaswani2017} -- Transformer/LLM
-    \item \texttt{yao2022react}, \texttt{schick2023toolformer} -- Tool calls
-    \item \texttt{jin2024}, \texttt{liu2024llmagents}, \texttt{guo2025benchmarks} -- Surveys
-    \item \texttt{nonaka1995}, \texttt{brooks1975} -- Knowledge, týmy
-\end{itemize}
+\textbf{Prompt evaluation nástroje:}
+Langfuse, Braintrust, Promptfoo --- měří kvalitu odpovědí LLM, ale nehodnotí proces coding agenta.
+
+\textbf{Cline hill climbing:}
+Praktický příklad iterativního zlepšování instrukcí (47\% → 57\% na Terminal Bench). Totožný přístup s naším, ale bez akademického popisu a měření procesu.
 \end{raw}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Scaffolding pro agenty}
+\section{Scaffolding a~instrukce pro agenty}
+\label{sec:scaffolding}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{raw}
 \textbf{Úvod sekce:}
-Tato sekce navazuje na problém identifikovaný v 2.3.4 -- agenti nemají přístup k tacit knowledge.
-Popisuje state of the art přístupy k řešení tohoto problému a připravuje půdu pro praktickou část,
-kde bude vybrán a evaluován konkrétní přístup.
+Navazuje na problém z~2.3 -- agenti nemají přístup k tacit knowledge.
+Popisuje přístupy k řešení a~připravuje půdu pro kap03.
 \end{raw}
 
-% === PODSEKCE 2.4.1 ===
+% === 2.4.1 ===
 \subsection{Problém kontextu}
+\label{sec:problem-kontextu}
 
 \begin{raw}
-\textbf{Navazuje na 2.3.4:}
+\textbf{Předchozí obsah:}
 
 Agent nemá tacit knowledge $\rightarrow$ potřebuje explicitní kontext.
-Kvalita výstupu agenta přímo závisí na kvalitě poskytnutého kontextu.
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{1. Tacit $\rightarrow$ Explicit Knowledge:}
 
 \par\noindent $\rightarrow$ \texttt{nonaka1995}:
 \par\noindent Articulation = převod tacit knowledge na explicit.
-\par\noindent Pro agenty: vše co člověk ``prostě ví'' musí být explicitně zapsáno.
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{2. Dualita SE4H vs SE4A:}
 
 \par\noindent $\rightarrow$ \texttt{hassan2025sase} -- SASE framework:
-\par\noindent \textit{``SE for Humans (SE4H) vs SE for Agents (SE4A)''}
+\par\noindent SE for Humans (SE4H) vs SE for Agents (SE4A).
 
-\begin{itemize}
-    \item \textbf{SE4H} -- člověk jako ``Agent Coach'', specifikuje intent, mentoruje
-    \item \textbf{SE4A} -- strukturované prostředí pro agenty, explicitní artefakty
-\end{itemize}
-
-Klíčový posun: člověk se stává specifikátorem a reviewerem, ne implementátorem.
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{3. Co agent potřebuje vědět:}
-
-Propojení s artefakty z 2.2.4:
+\textbf{Co agent potřebuje vědět:}
 \begin{itemize}
     \item \textbf{Requirements} -- co má být výsledkem
-    \item \textbf{Architektura} -- kde se změna má udělat, jaké moduly
-    \item \textbf{Konvence} -- coding standards, patterns, ``gotchas''
+    \item \textbf{Architektura} -- kde se změna má udělat
+    \item \textbf{Konvence} -- coding standards, patterns, gotchas
     \item \textbf{Historie} -- proč je kód takový jaký je (rationale)
 \end{itemize}
-
-\textbf{Propojení s BP:}
-Tato sekce definuje \textit{problém}. Následující sekce popisuje různé \textit{přístupy} k řešení.
-V praktické části bude vybrán a evaluován konkrétní přístup.
 \end{raw}
 
-% === PODSEKCE 2.4.2 ===
-\subsection{Přístupy k memory a kontextu}
+% === 2.4.2 ===
+\subsection{Přístupy k~memory a~kontextu}
+\label{sec:pristupy-memory}
 
 \begin{raw}
-\textbf{State of the art -- jaké přístupy existují:}
-
-Tato sekce popisuje různé přístupy k poskytování kontextu agentům.
-Kategorizace podle typu řešení.
-
-\rule{\textwidth}{0.4pt}
+\textbf{Předchozí obsah:}
 
 \textbf{1. Memory systémy pro agenty:}
-
-\par\noindent $\rightarrow$ \texttt{memorymechanism2024} -- Survey on Memory Mechanism:
-\par\noindent Systematický přehled memory mechanismů pro LLM agenty.
-
-\par\noindent $\rightarrow$ \texttt{amem2025} -- A-MEM:
-\par\noindent Agentic memory založená na Zettelkasten metodě -- propojené knowledge networks.
-
-Kategorie memory:
-\begin{itemize}
-    \item \textbf{Short-term} -- kontext aktuální konverzace
-    \item \textbf{Long-term} -- persistentní mezi sessions
-    \item \textbf{Parametric} -- v model weights
-    \item \textbf{Non-parametric} -- external storage (RAG, databáze)
-\end{itemize}
-
-\rule{\textwidth}{0.4pt}
+\par\noindent $\rightarrow$ \texttt{memorymechanism2024}, \texttt{amem2025}
+\par\noindent Kategorie: Short-term, Long-term, Parametric, Non-parametric.
 
 \textbf{2. Context Engineering:}
-
-\par\noindent $\rightarrow$ \texttt{contextengsurvey2025} -- Survey of Context Engineering:
-\par\noindent \textit{``Context Engineering as a formal discipline that transcends simple prompt design''}
-\par\noindent 1400+ papers analyzováno -- definuje context engineering jako disciplínu.
-
-\par\noindent $\rightarrow$ \texttt{ace2025} -- Agentic Context Engineering (ACE):
-\par\noindent Context jako ``evolving playbooks'' -- akumulace, refinement, organizace strategií.
-
-Komponenty context engineering:
-\begin{itemize}
-    \item Context retrieval and generation
-    \item Context processing and management
-    \item RAG (Retrieval-Augmented Generation)
-    \item Tool-integrated reasoning
-\end{itemize}
-
-\rule{\textwidth}{0.4pt}
+\par\noindent $\rightarrow$ \texttt{contextengsurvey2025}, \texttt{ace2025}
 
 \textbf{3. Strukturované artefakty:}
-
-\par\noindent $\rightarrow$ \texttt{hassan2025sase} -- SASE artifacts:
-
-\begin{itemize}
-    \item \textbf{BriefingScript} -- mission plan (Goal, What, Context, Blueprint, Validation)
-    \item \textbf{MentorScript} -- tribal knowledge jako kód, pravidla a normy
-    \item \textbf{LoopScript} -- workflow orchestration, SOP
-\end{itemize}
-
-\par\noindent BriefingScript sekce:
-\begin{enumerate}
-    \item Goal \& Why -- business value, purpose
-    \item What \& Success Criteria -- definition of done, testable properties
-    \item All Needed Context -- curated information, ``Known Gotchas''
-    \item Implementation Blueprint -- strategic guidance, constraints
-    \item Validation Loop -- acceptance testing plan
-\end{enumerate}
-
-\rule{\textwidth}{0.4pt}
+\par\noindent $\rightarrow$ \texttt{hassan2025sase} -- SASE:
+BriefingScript, MentorScript, LoopScript.
 
 \textbf{4. Repository-level context:}
-
-\par\noindent $\rightarrow$ \texttt{contextmodule2024} -- ContextModule:
-\par\noindent Edit history jako kontext pro code completion.
-\par\noindent Tři typy kontextu: user behavior, similar code, symbol definitions.
-
-\par\noindent $\rightarrow$ \texttt{bugfixcontext2025} -- Bug Fixing with Broader Context:
-\par\noindent ``Historical commit information'' pro bug fixing.
-\par\noindent ``Co-occurring files'' -- soubory často commitované společně.
-
-\rule{\textwidth}{0.4pt}
+\par\noindent $\rightarrow$ \texttt{contextmodule2024}, \texttt{bugfixcontext2025}
 
 \textbf{5. Git-based přístupy:}
+\par\noindent $\rightarrow$ \texttt{gcc2025} -- Git Context Controller
 
-\par\noindent $\rightarrow$ \texttt{gcc2025} -- Git Context Controller:
-\par\noindent Git jako \textit{metafora} pro agent memory -- COMMIT/BRANCH/MERGE operace.
+\textbf{6. Specifikace jako vstup (SWE-bench):}
+GitHub Issues jako standardní formát specifikace pro agenty.
+Traceability: Issue → branch → commits → PR → merge \cite{gotel1994}.
 
-\textbf{Alternativní pohled (pro praktickou část):}
-\par\noindent Git není jen metafora -- je to existující infrastruktura pro:
-\begin{itemize}
-    \item Institutional memory (commit history, blame)
-    \item Explicitní knowledge (commit messages, PR descriptions)
-    \item Rationale (proč byla změna udělána)
-    \item Koordinace (branches, merges)
-\end{itemize}
+\textbf{7. Co dělá specifikaci efektivní pro LLM:}
+\par\noindent $\rightarrow$ \texttt{rope2024}: kvalita requirements = kvalita výstupu
+\par\noindent $\rightarrow$ \texttt{ullrich2025}: requirements příliš abstraktní pro přímý LLM vstup
+\par\noindent $\rightarrow$ \texttt{yang2025underspec}: pod-specifikované prompty 2$\times$ náchylnější k regresi
+\par\noindent $\rightarrow$ \texttt{specine2025}: 10 alignment rules, Tier 1: příklady, účel, výstupní požadavky
+\par\noindent $\rightarrow$ \texttt{ticoder2024}: testy jako součást specifikace (+45.97\% Pass@1)
+\par\noindent $\rightarrow$ \texttt{domaincodegen2024}: doménový kontext
+\par\noindent $\rightarrow$ \texttt{newcomb2025prepost}: pre/postconditions
+\par\noindent $\rightarrow$ \texttt{wen2024io}: I/O specifikace
+\par\noindent $\rightarrow$ \texttt{clarifygpt2024}: klarifikace ambiguity
+\par\noindent $\rightarrow$ \texttt{reprompt2025}: RE metodologie na prompty
+\par\noindent $\rightarrow$ \texttt{swebenchpro2025}: strukturované requirements v benchmarcích
 
-Hypotéza: Místo vymýšlení nových memory systémů lze efektivně využít Git.
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{6. Specifikace jako vstup pro agenty (SWE-bench):}
-
-\par\noindent $\rightarrow$ \texttt{swebench2024} -- SWE-bench (ICLR 2024):
-\par\noindent De facto benchmark pro AI coding agenty. 2294 úloh z reálných GitHub repozitářů.
-\par\noindent Specifikace úlohy = \textbf{GitHub Issue} (natural language popis problému) + přístup k codebase.
-
-Důsledky pro scaffolding:
-\begin{itemize}
-    \item GitHub Issues se staly \textbf{standardním formátem specifikace} pro AI agenty v akademickém výzkumu
-    \item Agent čte issue description → plánuje → implementuje → testuje
-    \item Issue propojuje specifikaci s git workflow (branch, commits, PR)
-    \item Traceability: Issue \#N $\rightarrow$ branch $\rightarrow$ commits $\rightarrow$ PR $\rightarrow$ merge (propojení s \cite{gotel1994})
-\end{itemize}
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{7. Co dělá specifikaci efektivní pro LLM agenty:}
-
-Empirický výzkum ukazuje které vlastnosti specifikace vedou k lepším výstupům agentů.
-
-\textbf{Klíčový nález -- kvalita requirements = kvalita výstupu:}
-\par\noindent $\rightarrow$ \texttt{rope2024} (ACM TOCHI): Silná korelace mezi kvalitou requirements a kvalitou LLM výstupu.
-Trénink zaměřený na psaní requirements (ROPE) zvedl kvalitu o 20\%, zatímco běžný prompt engineering trénink jen o 1\%.
-\par\noindent $\rightarrow$ \texttt{ullrich2025} (RE 2025): 18 praktiků z 14 firem -- requirements ve stávající podobě jsou \textbf{příliš abstraktní}
-pro přímý LLM vstup. Musí se manuálně dekomponovat a obohatit o design decisions a architekturální kontext.
-\par\noindent $\rightarrow$ \texttt{yang2025underspec} (CMU): Pod-specifikované prompty jsou \textbf{2$\times$ náchylnější k regresi}
-při změnách modelu, s poklesy přesnosti přes 20\%.
-
-\textbf{a) 10 alignment rules -- empirické pořadí důležitosti:}
-\par\noindent $\rightarrow$ \texttt{specine2025} (ICSE 2026): Odvozeno 10 pravidel zarovnání specifikace z RE principů,
-testováno na 4 LLM a 5 benchmarcích. Tři s nejvyšším dopadem:
-\begin{enumerate}
-    \item \textbf{Příklady s vysvětlením} ($\sim$14.5\% řešených problémů) -- konkrétní I/O s explanací
-    \item \textbf{Účel specifikace} ($\sim$13.5\%) -- co má kód dělat a proč
-    \item \textbf{Výstupní požadavky} ($\sim$11.6\%) -- jak má vypadat output
-\end{enumerate}
-Průměrné zlepšení Pass@1: 29.60\%. Dalších 7 pravidel (background, key concepts, input requirements,
-edge cases, APIs, error handling, hints) má nižší ale stále měřitelný dopad.
-
-\textbf{b) Testy jako součást specifikace:}
-\par\noindent $\rightarrow$ \texttt{ticoder2024} (IEEE TSE): Formalizace záměru přes testy (pass/fail feedback)
-dosáhla 45.97\% zlepšení v Pass@1. Navíc výrazně snížila kognitivní zátěž pro člověka.
-\par\noindent $\rightarrow$ Důsledek: acceptance criteria mapovatelná na testy jsou \textbf{empiricky nejdůležitější element}.
-
-\textbf{c) Doménový kontext (ubiquitous language):}
-\par\noindent $\rightarrow$ \texttt{domaincodegen2024} (ACM TOSEM): Zahrnutí domain-specific API knowledge
-do promptů vedlo k profesionálnějšímu kódu. Podporuje DDD koncept sdíleného doménového slovníku.
-
-\textbf{d) Pre/post conditions jako design constraints:}
-\par\noindent $\rightarrow$ \texttt{newcomb2025prepost} (IEEE Access): Explicitní pre/postconditions
-``significantly boost initial generation accuracy'', zejména u menších modelů.
-
-\textbf{e) I/O specifikace na různých úrovních abstrakce:}
-\par\noindent $\rightarrow$ \texttt{wen2024io}: NL popisy I/O fungují lépe než samotné konkrétní příklady,
-výrazně snižují ``executable but incorrect'' výstupy.
-
-\textbf{f) Klarifikace ambiguity:}
-\par\noindent $\rightarrow$ \texttt{clarifygpt2024} (FSE 2024): Když LLM před generováním kódu klarifikuje
-nejednoznačné requirements, GPT-4 Pass@1 stoupne z 70.96\% na 80.80\%.
-
-\textbf{g) RE metodologie aplikovaná na prompty:}
-\par\noindent $\rightarrow$ \texttt{reprompt2025}: 4 RE fáze (elicitation, analysis, specification, validation)
-mapovány na optimalizaci promptů. Ukazuje že tradiční RE postupy jsou aplikovatelné i pro LLM.
-
-\textbf{h) Strukturované requirements v benchmarcích:}
-\par\noindent $\rightarrow$ \texttt{swebenchpro2025}: Rozšiřuje SWE-bench o explicitní ``Requirements'' a ``Interface''
-sekce psané lidmi. Jasnější specifikace korelují s vyšší úspěšností agentů.
-
-\textbf{Syntéza -- empiricky podložené tiers specifikačních elementů:}
-
-\textbf{Tier 1 (nejvyšší dopad):}
-\begin{enumerate}
-    \item \textbf{Description / účel} -- co a proč \cite{specine2025, sommerville2016}
-    \item \textbf{Acceptance criteria s příklady} -- Given/When/Then, mapovatelné na testy \cite{ticoder2024, specine2025}
-    \item \textbf{Výstupní specifikace} -- formát a struktura výstupu \cite{specine2025, wen2024io}
-\end{enumerate}
-
-\textbf{Tier 2 (silně doporučené):}
-\begin{enumerate}
-    \setcounter{enumi}{3}
-    \item \textbf{Vstupní specifikace} -- datové typy, formáty, constraints
-    \item \textbf{Doménový slovník} -- klíčové pojmy z business domény \cite{domaincodegen2024}
-    \item \textbf{Edge/corner cases} -- hraniční podmínky
-\end{enumerate}
-
-\textbf{Tier 3 (hodnotné pro složité úlohy):}
-\begin{enumerate}
-    \setcounter{enumi}{6}
-    \item \textbf{Pre/postconditions} -- stavové podmínky \cite{newcomb2025prepost}
-    \item \textbf{Error handling} -- chování při nevalidním vstupu
-    \item \textbf{Behavioral model} -- state machines pro event-driven logiku \cite[kap.~5.4]{sommerville2016}
-\end{enumerate}
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{Porovnání přístupů:}
-
-\begin{tabular}{|l|l|l|}
-\hline
-\textbf{Přístup} & \textbf{Výhody} & \textbf{Nevýhody} \\
-\hline
-Memory systémy & Flexibilní, agent-specific & Nová infrastruktura \\
-Context engineering & Systematické & Komplexní setup \\
-Strukturované artefakty & Explicitní, auditovatelné & Overhead pro člověka \\
-Repository-level & Využívá existující kód & Jen aktuální stav \\
-Git-based & Existující infrastruktura & Vyžaduje disciplínu \\
-\hline
-\end{tabular}
-
-\textbf{Propojení s BP:}
-V praktické části bude evaluován Git-based přístup jako memory layer pro agenty.
+\textbf{Syntéza tiers:}
+Tier 1 (nejvyšší dopad): Description/účel, AC s příklady, výstupní specifikace.
+Tier 2: vstupní specifikace, doménový slovník, edge cases.
+Tier 3: pre/postconditions, error handling, behavioral model.
 
 \rule{\textwidth}{0.4pt}
 
 \textbf{8. Empirická evidence: fungují context files?}
 
-Dva nedávné studie empiricky hodnotí efektivitu repository-level context files
-a~agent Skills --- s~protichůdnými, ale komplementárními závěry.
+$\rightarrow$ \texttt{gloaguen2025agentsmd} --- Evaluating AGENTS.md (ETH Zurich):
+LLM-generované context files snižují úspěšnost, developer-written jen marginálně zlepšují.
+Instrukce agent následuje, ale to nezlepšuje výsledky. Redundantní s dokumentací.
 
-\par\noindent $\rightarrow$ \texttt{gloaguen2025agentsmd} --- Evaluating AGENTS.md (ETH Zurich, 2025):
-\par\noindent AGENTBENCH benchmark (138 instancí, 12 repos) + SWE-bench LITE (300 tasků).
-\par\noindent 4 agenti (Claude Code, Codex, Qwen Code), 3 podmínky (no context, LLM-generated, developer-written).
+$\rightarrow$ \texttt{skillsbench2025} --- SkillsBench:
+Curated Skills +16,2pp. Self-generated nulový efekt. 2--3 fokusované moduly optimální.
 
-Klíčové nálezy:
-\begin{itemize}
-    \item LLM-generované context files \textbf{snižují} úspěšnost ($-3\,\%$)
-          a~zvyšují cost ($+20\,\%$+)
-    \item Developer-written context files jen \textbf{marginálně} zlepšují ($+4\,\%$)
-    \item Agenti instrukce \textbf{následují} (více testů, explorace),
-          ale to nezlepšuje výsledky
-    \item Context files jsou redundantní s~existující dokumentací
-    \item Když se odstraní dokumentace, context files najednou pomáhají ($+2{,}7\,\%$)
-\end{itemize}
-
-\par\noindent $\rightarrow$ \texttt{skillsbench2025} --- SkillsBench (BenchFlow, 2025):
-\par\noindent 84 tasků, 11 domén, 7 agent-model konfigurací, 7308 trajektorií.
-\par\noindent 3 podmínky: no Skills, curated Skills, self-generated Skills.
-
-Klíčové nálezy:
-\begin{itemize}
-    \item Curated Skills zlepšují pass rate o~$+16{,}2$pp průměrně
-    \item Self-generated Skills mají nulový nebo negativní efekt ($-1{,}3$pp)
-    \item 2--3 fokusované Skills moduly jsou optimální ($+18{,}6$pp),
-          4+ modulů jen $+5{,}9$pp
-    \item Vyčerpávající (``comprehensive'') dokumentace výkon zhoršuje ($-2{,}9$pp)
-    \item Menší model + Skills může překonat větší model bez Skills
-\end{itemize}
-
-\textbf{Syntéza:} Oba papery se shodují na klíčovém principu:
-\textit{zbytečný kontext škodí, fokusovaný pomáhá}. Gloaguen ukazuje
-že popisné přehledy (``co kde je'') nepřidávají hodnotu. SkillsBench
-ukazuje že procedurální instrukce (``jak řešit'') hodnotu přidávají,
-ale jen pokud jsou fokusované a~modulární.
-
-\textbf{Propojení s BP:}
-Naše AGENTS.md instrukce jsou procedurální artefakt (workflow, constraints,
-quality gates), ne popisný přehled codebase. Experiment měří zda tento
-typ instrukcí překonává baseline zjištěný Gloaguenem.
-\end{raw}
-
-% === PODSEKCE 2.4.3 ===
-\subsection{Praktické techniky}
-
-\begin{raw}
-\textbf{Konkrétní implementační techniky:}
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{1. Agent Harness:}
-
-\par\noindent $\rightarrow$ Anthropic -- ``Effective harnesses for long-running agents'':
-
-Komponenty harnessu:
-\begin{itemize}
-    \item \texttt{init.sh} -- environment setup
-    \item \texttt{claude-progress.txt} -- tracking co je hotovo
-    \item Git commits jako checkpointy
-    \item JSON pro feature list (odolnější než Markdown)
-\end{itemize}
-
-Doporučení:
-\begin{itemize}
-    \item Incremental progress -- jedna feature per session
-    \item Explicit end-to-end testing
-    \item Consistent startup procedures
-\end{itemize}
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{2. Meta-prompt soubory:}
-
-\par\noindent $\rightarrow$ \texttt{hassan2025sase} -- AGENT.md pattern:
-\par\noindent Soubory jako CLAUDE.md, .clinerules, AGENT.md.
-\par\noindent ``Employee handbook'' pro AI teammates.
-
-Obsah:
-\begin{itemize}
-    \item Project-specific konvence
-    \item Architectural decisions
-    \item Known gotchas a warnings
-    \item Coding standards
-\end{itemize}
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{3. Living Documents:}
-
-\par\noindent $\rightarrow$ \texttt{hassan2025sase}:
-\par\noindent \textit{``Briefing Pack must be a living document, not a static one.''}
-
-Principy:
-\begin{itemize}
-    \item Version-controlled (Git)
-    \item Iterativní refinement na základě feedback
-    \item Auditable history změn
-    \item Single source of truth
-\end{itemize}
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{4. Human-AI Collaboration:}
-
-\par\noindent $\rightarrow$ \texttt{humanai2024} -- empirická studie:
-\par\noindent 22 profesionálních vývojářů, 3 hodiny s ChatGPT.
-
-Klíčové poznatky:
-\begin{itemize}
-    \item AI zlepšuje efektivitu code generation
-    \item Human oversight zůstává kritický (complex problem-solving, security)
-    \item Transition from ``tool'' to ``collaborative partner''
-\end{itemize}
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{Zdroje sekce 2.4:}
-\begin{itemize}
-    \item \texttt{nonaka1995} -- tacit $\rightarrow$ explicit
-    \item \texttt{hassan2025sase} -- SASE, BriefingScript, MentorScript
-    \item \texttt{contextengsurvey2025}, \texttt{ace2025} -- context engineering
-    \item \texttt{memorymechanism2024}, \texttt{amem2025} -- memory systémy
-    \item \texttt{contextmodule2024}, \texttt{bugfixcontext2025} -- repository context
-    \item \texttt{gcc2025} -- Git-based přístupy
-    \item \texttt{humanai2024} -- human-AI collaboration
-\end{itemize}
-\end{raw}
-
-%% === PŘESUNUTO Z KAP03 (2026-02-21) — zařadit do správných sekcí ===
-
-\begin{raw}
-\textbf{Formát specifikace: GitHub Issues}
-
-Specifikace referenční implementace je strukturována jako GitHub Issues. Volba tohoto formátu vychází z:
-
-\begin{enumerate}
-    \item \textbf{Akademický standard} -- SWE-bench \cite{swebench2024}, de facto benchmark pro AI coding agenty (ICLR 2024), používá GitHub Issues jako specifikaci. 2294 úloh z reálných repozitářů.
-    \item \textbf{Agilní RE praxe} -- v agilních týmech user stories a backlog items nahrazují formální SRS dokumenty \cite{cao2008}.
-    \item \textbf{Open source praxe} -- issue trackery fungují jako de facto requirements management \cite{scacchi2002}.
-    \item \textbf{Nativní čitelnost pro agenty} -- agent čte issues přes GitHub API nebo CLI, propojuje je s branches a PR.
-    \item \textbf{Traceability} -- Issue \#N $\rightarrow$ branch $\rightarrow$ commits $\rightarrow$ PR $\rightarrow$ merge. Přirozená provázanost specifikace s implementací \cite{gotel1994}.
-\end{enumerate}
-
-Struktura každého issue vychází z empirického výzkumu o optimální specifikaci pro LLM agenty
-(viz sekce 2.4.2, bod 7). Studie ukazují, že kvalita requirements přímo koreluje s kvalitou
-LLM výstupu \cite{rope2024} a že tradiční user stories jsou příliš abstraktní pro přímý
-vstup do LLM \cite{ullrich2025} -- je nutná dekompozice a obohacení o konkrétní kontext.
-
-\textbf{Dvě vrstvy specifikace:}
-
-Původní návrh obsahoval tři vrstvy (requirements, specification, architecture).
-Analýza redundance (viz níže) ukázala, že prostřední vrstva (specification: inputs/outputs,
-pre/postconditions) je implicitně obsažena v~acceptance criteria a~invariantech.
-Výsledná šablona proto obsahuje dvě vrstvy:
-
-\begin{enumerate}
-    \item \textbf{Requirements} (problémová doména -- CO business potřebuje):
-    \begin{itemize}
-        \item Title, Description -- účel a kontext funkcionality
-        \item Acceptance criteria -- Given/When/Then s~konkrétními hodnotami \cite{ticoder2024}.
-              Implicitně obsahují vstupy/výstupy (Given/Then), pre/postconditions
-              (Given = precondition, Then = postcondition) i~přechody stavů.
-              Jsou přímo mapovatelná na unit testy -- explicitní test cases tedy
-              nejsou nutnou součástí specifikace, ale odvozitelným artefaktem
-        \item Domain glossary -- sdílený slovník z business domény \cite{domaincodegen2024}
-    \end{itemize}
-
-    \item \textbf{Architecture} (struktura -- JAK je řešení organizované):
-    \begin{itemize}
-        \item Type definitions -- datové typy, interfaces, enums \cite{wen2024io, specine2025}
-        \item Invariants -- business pravidla která musí vždy platit \cite{newcomb2025prepost}
-        \item Behavioral model -- state diagram, sekvenční logika \cite[kap.~5.4]{sommerville2016}
-        \item Technické constraints -- tech stack, patterns, rozhraní
-    \end{itemize}
-\end{enumerate}
-
-Referenční implementace používá plnou specifikaci (obě vrstvy).
-Experimentální běhy používají pouze requirements vrstvu (bez architecture) —
-úroveň specifikace je fixní proměnná, ne experimentální dimenze.
-
-\textbf{Zdůvodnění redukce z~tří na dvě vrstvy:}
-
-Původní třívrstvý návrh obsahoval prostřední vrstvu \textit{Specification}
-(inputs/outputs, pre/postconditions). Analýza ukázala překryv s~ostatními vrstvami:
-acceptance criteria implicitně obsahují vstupy/výstupy (Given/Then),
-pre/postconditions (Given = precondition, Then = postcondition) i~přechody stavů.
-Tato redundance představuje problém: pro člověka vyšší cognitive overload,
-pro LLM agenta plýtvání vzácným context window duplicitními informacemi.
-
-Anthropic \cite{anthropic2025context} zavádí pojem \textbf{context rot} --
-s~rostoucím počtem tokenů klesá schopnost modelu přesně vzpomínat informace.
-Doporučuje ``nejmenší možnou sadu high-signal tokenů''. IEEE 830 \cite{ieee830}
-upozorňuje, že ``redundance sama o sobě není chyba, ale snadno k~chybám vede''.
-Bockeler \cite{bockeler2025sdd} kritizuje spec-kit (GitHub) za to, že specifikační
-soubory jsou ``repetitive, both with each other, and with the code'' --
-označuje to jako \textit{Verschlimmbesserung} (zhoršení snahou o~zlepšení).
-
-Obsah zrušené vrstvy byl absorbován: vstupy/výstupy do acceptance criteria
-(konkrétní hodnoty v~Given/When/Then), datové typy do \textit{type definitions}
-a~pre/postconditions do \textit{invariants} v~architektonické vrstvě.
-
-\textbf{Dvě publikum, různé potřeby:}
-
-Specifikace slouží dvěma publikům současně: \textbf{AI agentovi} (implementuje
-z~ní kód) a \textbf{lidskému vývojáři} (rozumí co se staví a kontroluje
-co agent vytvořil). Kruchtenův 4+1 model \cite{kruchten1995} argumentuje,
-že více pohledů je komplementárních \textbf{pro různá publika}.
-Diagramy jsou pro člověka ``high-bandwidth'' komunikace (rychlé pochopení
-celkové struktury), zatímco LLM zpracovávají Mermaid diagramy jako text.
-Konkrétní Given/When/Then scénáře mohou být pro agenta účinnější
-než vizuální model, ale pro člověka méně přehledné u~komplexních systémů.
-
-\textbf{Zasazení do SASE frameworku:}
-
-Hassan et al. \cite{hassan2025sase} navrhují framework Structured Agentic Software
-Engineering (SASE), který rozlišuje \textbf{SE4H} (SE for Humans -- člověk jako
-``Agent Coach'' zaměřený na intent, strategii a mentoring) a \textbf{SE4A}
-(SE for Agents -- strukturované prostředí pro agenty). Definují tři typy
-artefaktů: \textbf{BriefingScript} (mission brief -- co agent má udělat),
-\textbf{LoopScript} (workflow playbook -- jak má postupovat)
-a~\textbf{MentorScript} (quality normy -- jaké standardy dodržovat).
-
-Naše specifikační šablona odpovídá BriefingScript: obsahuje intent (Description),
-ověřitelná kritéria (Acceptance Criteria) a~doménový kontext (Glossary).
-Soubor \texttt{agents.md} se scaffoldingem odpovídá LoopScript a~MentorScript:
-definuje workflow (git conventions, testování) a~kvalitativní normy (code quality).
-
-Kruchtenův Scenarios (+1) view \cite{kruchten1995}, který sloužil jako validační
-most mezi všemi pohledy pro všechny stakeholdery, nachází paralelu
-v~acceptance criteria -- ty fungují jako most mezi záměrem člověka a~exekucí agenta.
-
-\textbf{Empirické pořadí důležitosti:}
-
-Studie Specine \cite{specine2025} empiricky měřila dopad jednotlivých elementů
-na kvalitu generovaného kódu (Pass@1, 4 LLM, 5 benchmarků):
-
-\textit{Tier 1 -- nejvyšší dopad:}
-\begin{itemize}
-    \item Příklady s vysvětlením ($\sim$14.5\%) $\rightarrow$ Acceptance criteria
-    \item Účel specifikace ($\sim$13.5\%) $\rightarrow$ Description
-    \item Výstupní požadavky ($\sim$11.6\%) $\rightarrow$ Outputs
-\end{itemize}
-
-\textit{Tier 2 -- silně doporučené:}
-vstupní požadavky, klíčové pojmy, edge/corner cases.
-
-\textit{Tier 3 -- hodnotné pro složité úlohy:}
-pre/postconditions \cite{newcomb2025prepost}, error handling, behavioral model.
-
-Tato šablona kombinuje přístupy podložené výzkumem:
-structured natural language \cite[kap.~4.4]{sommerville2016}, test-driven specifikaci \cite{ticoder2024},
-doménový kontext \cite{domaincodegen2024}, redukci specification misalignment \cite{specine2025},
-design constraints \cite{newcomb2025prepost} a klarifikaci ambiguity \cite{clarifygpt2024}.
+\textbf{Syntéza:} Zbytečný kontext škodí, fokusovaný pomáhá.
 
 \rule{\textwidth}{0.4pt}
 
 \textbf{Multi-issue gap:}
+SWE-EVO 21\%, FeatureBench 11\%, ACE-Bench 7.5\%.
+Naše case study (5 issues, celý dunning system) cílí do tohoto rozsahu.
+\end{raw}
 
-Stávající benchmarky ukazují výrazný propad výkonu agentů při přechodu
-od single-issue k~multi-issue úlohám: SWE-EVO \cite{sweevo2025} reportuje
-pouze 21\,\% úspěšnost na evolučních úlohách (průměrně 21~souborů) oproti
-65\,\% na single-issue SWE-Bench; FeatureBench \cite{featurebench2026} měří
-11\,\% na feature-level úlohách; ACE-Bench \cite{acebench2025} 7,5\,\%
-na end-to-end feature development. Tato case study (5~issues, celý dunning
-system) cílí přesně do tohoto rozsahu, kde scaffolding může přinést
-měřitelný rozdíl.
+% === 2.4.3 ===
+\subsection{Struktura instrukcí}
+\label{sec:struktura-instrukci}
+
+\begin{raw}
+\textbf{Předchozí obsah (přejmenováno z ``Praktické techniky''):}
+
+\textbf{1. Agent Harness:}
+\par\noindent Anthropic -- ``Effective harnesses for long-running agents'':
+init.sh, progress tracking, git commits jako checkpointy.
+
+\textbf{2. Meta-prompt soubory:}
+\par\noindent $\rightarrow$ \texttt{hassan2025sase} -- AGENT.md pattern:
+CLAUDE.md, .clinerules, AGENT.md. ``Employee handbook'' pro AI.
+
+\textbf{3. Living Documents:}
+Version-controlled, iterativní refinement, auditable history.
+
+\textbf{4. Prompt template komponenty (Mao et al.):}
+\par\noindent $\rightarrow$ \texttt{mao2025fse} -- 7 komponent prompt šablony,
+empirické pořadí efektivity.
+
+\textbf{5. Script balance (Hassan et al.):}
+\par\noindent $\rightarrow$ \texttt{hassan2025sase} -- BriefingScript / LoopScript / MentorScript balance.
+
+\textbf{6. Content effectiveness (Lulla et al.):}
+\par\noindent $\rightarrow$ \texttt{lulla2026} -- AGENTS.md -28.6\% runtime,
+architecture+conventions effective, verbose ne.
+
+\textbf{7. Prompt sensitivity:}
+\par\noindent $\rightarrow$ \texttt{razavi2025}, \texttt{breunig2025} --
+přestrukturování > opakování. Malá změna formulace mění chování víc než výměna modelu.
+
+\par\noindent $\rightarrow$ \texttt{shin2025prompt} -- explicitní instrukce s kontextem
+výrazně zlepšují výkon agenta.
 
 \rule{\textwidth}{0.4pt}
 
-\textbf{Test oracle problem — teoretické východisko:}
+\textbf{Formát specifikace: GitHub Issues}
 
-Klíčovým rizikem LLM-generovaných testů je tzv. \textbf{test oracle problem}
-\cite{mathews2024}. Mathews et al. ukázali, že nástroje pro automatické generování
-testů (CoverAgent, CoverUp) systematicky filtrují failing testy a~ponechávají
-pouze passing -- výsledkem je, že až 68,1\,\% vygenerovaných test suites
-\textbf{validuje chybné chování} místo jeho odhalení. Příčinou je, že expected
-values jsou odvozeny z~pozorování kódu, ne ze specifikace.
+Specifikace jako GitHub Issues. Volba vychází z:
+\begin{enumerate}
+    \item Akademický standard -- SWE-bench \cite{swebench2024}
+    \item Agilní RE praxe \cite{cao2008}
+    \item Open source praxe \cite{scacchi2002}
+    \item Nativní čitelnost pro agenty (GitHub API/CLI)
+    \item Traceability \cite{gotel1994}
+\end{enumerate}
 
-Chen et al. \cite{rethinking2025} empiricky potvrdili na 500 úlohách SWE-bench,
-že agent-generované testy slouží primárně jako \textbf{observační feedback}
-(value-revealing prints), ne jako validační nástroj -- 83,2\,\% úloh má stejný
-výsledek bez ohledu na to, zda agent testy píše. Relační a~boundary kontroly
-(nejcennější pro detekci chyb) tvoří pouze 3--8\,\% assertions.
+\textbf{Dvě vrstvy specifikace:}
+\begin{enumerate}
+    \item \textbf{Requirements} (CO): Title, Description, AC (Given/When/Then), Domain glossary
+    \item \textbf{Architecture} (JAK): Type definitions, Invariants, Behavioral model, Constraints
+\end{enumerate}
 
-Obrana proti těmto anti-patterns:
-\begin{itemize}
-    \item \textbf{TDD ze specifikace} -- expected values vycházejí z~acceptance
-          criteria, ne z~pozorování kódu. Agent píše testy \textbf{před}
-          implementací (red $\rightarrow$ green $\rightarrow$ refactor).
-    \item \textbf{Failing test = opravit kód, ne test} -- zabraňuje selection
-          biasu, kde se zahazují testy odhalující chyby.
-\end{itemize}
+\textbf{Zasazení do SASE frameworku:}
+Specifikace = BriefingScript. AGENTS.md = LoopScript + MentorScript.
+
+\textbf{Human-AI Collaboration:}
+\par\noindent $\rightarrow$ \texttt{humanai2024}: AI zlepšuje efektivitu, human oversight zůstává kritický.
 \end{raw}
 
 %% ==========================================================================
-%% Poznámka: fine-tuning vs in-context learning / prompt design
+%% Audit trail — zrušené sekce
 %% ==========================================================================
 
 \begin{raw}
-\textbf{Poznámka k zařazení BP do širšího kontextu (fine-tuning vs prompt design):}
+\textbf{Audit trail --- zrušené sekce při restrukturalizaci (2026-03-01):}
+Kompletní původní obsah zachován pro případ potřeby.
 
-Dva přístupy jak přizpůsobit LLM konkrétnímu úkolu:
+%% =====================================================================
+%% ZRUŠENO: 2.1.2 Historický kontext
+%% Důvod: zajímavé ale pro BP nepotřebné, slabé napojení na zbytek práce.
+%% =====================================================================
+
+\textbf{Narativní flow (revidovaný):}
+\begin{enumerate}
+    \item \textbf{Složitost systémů roste} -- software je čím dál komplexnější
+          \\ → \texttt{sommerville2016} s.~582:
+          \\ \textit{``The root cause of these problems is, as it was in the 1960s, that we are trying to build systems that are larger and more complex than before. We are attempting to build these `mega-systems' using methods and technology that were never designed for this purpose.''}
+
+    \item \textbf{Abstrakce jako nástroj} -- reakce na složitost:
+    \begin{itemize}
+        \item Assembler → C → Java → frameworky
+        \item Každá vrstva skrývá detaily (information hiding)
+              \\ → \texttt{colburn2000} s.~1:
+              \\ \textit{``Abstraction through information hiding is a primary factor in computer science progress and success through an examination of the ubiquitous role of information hiding in programming languages, operating systems, network architecture, and design patterns.''}
+        \item Dijkstra: abstrakce pomáhá být přesný, ne vágní
+              \\ → \texttt{swebok2024} s.~370
+    \end{itemize}
+
+    \item \textbf{Přesto 1968 krize} -- proč?
+    \begin{itemize}
+        \item Složitost rostla rychleji než naše schopnost ji zvládat
+        \item NATO konference: ``software crisis''
+              \\ → \texttt{nato1968} s.~78 (Perlis keynote):
+              \\ \textit{``I believe it is because we recognize that a practical problem of considerable difficulty and importance has arisen: The successful design, production and maintenance of useful software systems.''}
+    \end{itemize}
+
+    \item \textbf{Reakce: vznik SWE} -- disciplína pro řízení složitosti
+          \\ → \texttt{sommerville2016} s.~592:
+          \\ \textit{``In software engineering, we have seen the incredibly rapid development of the discipline to help manage the increasing size and complexity of software systems... the approach that has been the basis of complexity management in software engineering is called reductionism.''}
+
+    \item \textbf{Dnes: AI jako nový problém}
+    \begin{itemize}
+        \item Není to jen další vrstva abstrakce
+        \item Je to ztráta determinismu -- ``black box''
+        \item Proto mechanistic interpretability
+              \\ → \texttt{bereska2024} s.~1:
+              \\ \textit{``Understanding AI systems' inner workings is critical for ensuring value alignment and safety.''}
+    \end{itemize}
+\end{enumerate}
+
+\textbf{Klíčový insight:}
+Abstrakce $\neq$ složitost. Abstrakce je NÁSTROJ pro zvládání složitosti.
+AI přináší kvalitativně nový problém (nedeterminismus), ne jen ``více abstrakce''.
+
+%% =====================================================================
+%% ZRUŠENO: 2.2.3 Role a komunikace
+%% Důvod: obecný SWE přehled, nikde v BP se na to přímo neodkazujeme.
+%% Poznámka: tacit→explicit přesunuto do 2.4.1 kde je relevantní.
+%% =====================================================================
+
+\textbf{1. SWE je fundamentálně týmová disciplína}
+
+\textbf{Brooks's Law -- komunikační overhead:}
+\par\noindent → \texttt{brooks1975} s.~25:
+\par\noindent \textit{``Adding manpower to a late software project makes it later.''}
+\par\noindent → \texttt{mcconnell2004} s.~713:
+\par\noindent \textit{``Merely increasing the number of people increases the complexity and amount of project communication.''}
+\par\noindent Komunikační kanály rostou: $n(n-1)/2$
+
+\rule{\textwidth}{0.4pt}
+
+\textbf{2. Role a zodpovědnosti}
+
+\textbf{Tradiční role:}
+Developer, Tester/QA, Architekt, Project Manager, Product Owner.
+
+\textbf{Role v Scrum:}
+\par\noindent → \texttt{scrumguide2020}:
+Product Owner, Scrum Master, Developers.
+
+\rule{\textwidth}{0.4pt}
+
+\textbf{3. Conway's Law -- organizace $\leftrightarrow$ architektura}
+
+\par\noindent → \texttt{conway1968}:
+\par\noindent \textit{``Organizations which design systems are constrained to produce designs which are copies of the communication structures of these organizations.''}
+
+\rule{\textwidth}{0.4pt}
+
+\textbf{4. Koordinace práce}
+
+\par\noindent → \texttt{malone1994}:
+\par\noindent Coordination = managing dependencies between activities.
+\par\noindent Typy závislostí: shared resources, producer-consumer, simultaneity constraints.
+
+\textbf{Tacit vs explicit knowledge:}
+\par\noindent → \texttt{nonaka1995}:
+\par\noindent \textit{``There are two types of knowledge: explicit knowledge, contained in manuals and procedures, and tacit knowledge, learned only by experience, and communicated only indirectly.''}
+
 \begin{itemize}
-    \item \textbf{Fine-tuning} --- trénování parametrů modelu na specifických datech.
-          Permanentní, drahé (GPU, data), pomalé.
-    \item \textbf{In-context learning (ICL)} --- instrukce a příklady v~kontextovém okně.
-          Ephemeral, levné, okamžité. Omezené velikostí context window.
+    \item \textbf{Tacit knowledge} -- v hlavách lidí, těžko artikulovatelné
+    \item \textbf{Explicit knowledge} -- dokumentace, procesy, kód
+    \item Konverze tacit → explicit = klíčový proces (externalization)
 \end{itemize}
 
-Trend: context windows rostou (4K $\to$ 128K $\to$ 1M+), modely jsou lepší v~ICL.
-Čím větší kontext, tím méně fine-tuningu je potřeba.
-Lester et al. (2021) zavedli \textit{prompt tuning} --- trénování jen embeddingů promptu.
+\rule{\textwidth}{0.4pt}
 
-Naše BP se pohybuje v~prostoru ICL/prompt designu --- navrhujeme instrukce místo
-trénování modelu. Otázka pro budoucí výzkum: pokud modely dosáhnou dostatečné
-schopnosti učit se z~kontextu, bude fine-tuning pro řízení agentů vůbec potřeba?
-
-\textbf{Souvislost s~evaluací:}
-Existující benchmarky (SWE-bench) měří jen pass/fail výsledek --- ``vyřešil agent bug?''
-Nikdo systematicky neměří \textit{proces} (jak agent pracoval) ani \textit{kvalitu}
-výstupů beyond funkční korektnost. Naše práce tento gap adresuje evaluačním systémem
-který měří proces (P1--P2), kvalitu (Q1--Q8) i~efektivitu (E1--E3).
-
-\textbf{Existující nástroje pro prompt evaluation:}
-Existují nástroje pro evaluaci a~iterativní zlepšování promptů ---
-Langfuse, Braintrust, Promptfoo. Tyto nástroje měří kvalitu jednotlivých
-odpovědí LLM (přesnost, latence, náklady) a~umožňují A/B testování promptů.
-Nesplňují ale požadavky na evaluaci coding agentů:
+\textbf{Quality gates pro agenty:}
 \begin{itemize}
-    \item Neměří proces napříč celou session (desítky zpráv, git historie)
-    \item Nehodnotí výstupy verzování (commity, branches, pull requesty)
-    \item Neměří kvalitu kódu (mutation score, lint, složitost)
-    \item Nepokrývají procesní záznamy (kvalita commit messages, issue descriptions)
+    \item Agent přebírá některé role (developer, částečně tester)
+    \item Quality gates zůstávají -- kdo je teď dělá?
+    \item Implicitní znalosti z meetingů $\rightarrow$ explicitní instrukce pro agenta
 \end{itemize}
-Jsou navržené pro konverzační AI (``odpověděl chatbot správně?''),
-ne pro coding agenty (``vyvinul agent software správně a~správným postupem?'').
 
-\textbf{Cline --- hill climbing na instrukcích:}
-Praktický příklad iterativního zlepšování instrukcí popisuje tým Cline
-(2025)\footnote{\url{https://cline.bot/blog/a-practical-guide-to-hill-climbing}}.
-Iterativně zlepšovali system prompt svého coding agenta měřením
-na benchmarku Terminal Bench (89 úloh): baseline $\to$ identifikace
-chybových vzorců $\to$ úprava promptu $\to$ měření dopadu $\to$ opakování.
-Dosáhli zlepšení z~47\,\% na 57\,\%. Tento přístup je totožný s~naším ---
-ale není popsán akademicky a~chybí mu měření procesu (jen pass/fail).
+%% =====================================================================
+%% ZRUŠENO: 2.2.4 Nástroje a artefakty
+%% Důvod: prerekvizitní znalost čtenáře, ne teorie. Git/CI zmíněn kde potřeba.
+%% =====================================================================
+
+\textbf{1. Artefakty podle fází:}
+
+\begin{itemize}
+    \item \textbf{Specification} $\rightarrow$ Requirements, user stories, use cases, behavioral models
+          \par Spektrum formátů: Formální (IEEE 830), Structured (šablony), Semi-structured (GitHub Issues), Neformální (konverzace)
+          \par V open source: issue trackery jako de facto requirements management \cite{scacchi2002}
+          \par V agilních týmech: user stories místo SRS \cite{cao2008}
+    \item \textbf{Design} $\rightarrow$ Architektura, design docs, diagramy, API kontrakty
+    \item \textbf{Implementation} $\rightarrow$ Zdrojový kód, konfigurace
+    \item \textbf{Validation} $\rightarrow$ Testy (unit, integration, e2e), test reports
+    \item \textbf{Evolution} $\rightarrow$ Change requests, release notes, patches
+\end{itemize}
+
+\textbf{Traceability:}
+\par\noindent → \texttt{gotel1994}:
+\par\noindent \textit{``Requirements traceability refers to the ability to describe and follow the life of a requirement, in both a forwards and backwards direction.''}
+\par\noindent Propojení: Requirement $\rightarrow$ Design $\rightarrow$ Code $\rightarrow$ Test.
+
+\rule{\textwidth}{0.4pt}
+
+\textbf{2. Nástroje podle činností:}
+
+\begin{itemize}
+    \item \textbf{Vývoj:} IDE (VS Code, IntelliJ), editory, debuggery
+    \item \textbf{Verzování:} Git -- distribuovaný version control
+          \par → \texttt{chacon2014}: ``everything as code''
+    \item \textbf{Koordinace:} Issue tracking (Jira, GitHub Issues)
+    \item \textbf{Kvalita:} CI/CD, test frameworks, linters
+          \par → \texttt{humble2010}: automatizace buildů, testů, deploymentu
+          \par → \texttt{forsgren2018}: DevOps praktiky a měřitelný dopad
+    \item \textbf{Dokumentace:} Wikis, Markdown, generátory dokumentace
+\end{itemize}
+
+\rule{\textwidth}{0.4pt}
+
+\textbf{3. Komunikační nástroje:}
+
+\par\noindent → \texttt{schmidt1992} -- CSCW:
+\par\noindent \textit{``Articulation work'' -- práce potřebná ke koordinaci spolupráce.}
+\par\noindent Synchronní: Slack, Teams, meetings. Asynchronní: Email, code review, dokumentace.
+
+\rule{\textwidth}{0.4pt}
+
+\textbf{4. Standardy a formáty:}
+UML \cite{fowler2004uml}, OpenAPI/Swagger, Markdown, JSON Schema, Conventional Commits.
+
+\rule{\textwidth}{0.4pt}
+
+\textbf{Zdroje zrušených sekcí:}
+\texttt{nato1968}, \texttt{bereska2024}, \texttt{brooks1975}, \texttt{mcconnell2004},
+\texttt{conway1968}, \texttt{malone1994}, \texttt{nonaka1995}, \texttt{scrumguide2020},
+\texttt{gotel1994}, \texttt{chacon2014}, \texttt{humble2010}, \texttt{forsgren2018},
+\texttt{schmidt1992}, \texttt{fowler2004uml}, \texttt{scacchi2002}, \texttt{cao2008}.
 \end{raw}
