@@ -8,32 +8,51 @@
 \section{Návrhový výzkum (DSR)}
 \label{sec:vyzkumny-pristup}
 
-%% KOSTRA: Proč DSR, co je build-evaluate cyklus, dvě fáze (pilot + variace),
-%%         case study a analytická generalizace (Yin).
+\begin{draft}
+Kapitola~\ref{kap:vymezeni} identifikovala problém: existující
+benchmarky hodnotí AI coding agenty podle toho, zda úkol vyřešili,
+ale neměří jak pracovali ani jakou kvalitu má jejich výstup. Cílem
+této práce je navrhnout sadu metrik která toto pokrývá a~postup jak
+s~ní iterativně vylepšovat instrukce pro agenta.
+
+K~tomu potřebujeme navrhnout nové řešení a~ověřit, že funguje.
+Nepopisujeme existující jev (to by vyžadovalo behaviorální výzkum,
+například dotazníkovou studii mezi vývojáři), ale konstruujeme
+nástroj a~testujeme ho v~praxi. Tento přístup odpovídá návrhovému
+výzkumu (Design Science Research, DSR), který Hevner
+et al.~\cite{hevner2004} definují jako iterativní cyklus návrhu
+a~vyhodnocení: řešení se navrhne, vyzkouší, a~na základě výsledků
+upraví.
+
+V~naší práci vypadá tento cyklus následovně. Navrhneme instrukce
+pro agenta, spustíme ho na vývojovém úkolu, změříme výstup sadou
+metrik a~podle výsledků instrukce upravíme. Postup má dvě fáze:
+pilotní iterace, kde cyklus opakujeme dokud agent nesplní stanovené
+prahy, a~komparativní variace, kde z~fungujících instrukcí
+systematicky odebíráme nebo nahrazujeme jednotlivé části a~měříme
+dopad na chování agenta.
+
+Obě fáze probíhají na jednom projektu (systém upomínek faktur),
+tedy formou případové studie. Yin~\cite{yin2018} pro tento typ
+výzkumu rozlišuje analytickou generalizaci: z~jednoho případu nelze
+zobecňovat na populaci, ale lze ukázat principy a~mechanismy.
+Více běhů na jednom projektu odpovídá tomu, co Yin nazývá embedded
+single-case design: jeden případ s~více vnořenými jednotkami analýzy
+(jednotlivé běhy agenta). Výsledky tedy ukazují, že navržený systém
+zachytí rozdíly v~chování agenta na tomto projektu, ne že funguje
+univerzálně.
+\end{draft}
 
 \begin{raw}
-\textbf{Předchozí obsah (audit trail):}
+\textbf{Audit trail --- předchozí verze 3.1:}
 
 Hevner et al. \cite{hevner2004} rozlišují v~informatickém výzkumu dva přístupy. Behaviorální výzkum popisuje a~vysvětluje existující jevy --- například jak vývojáři pracují s~AI nástroji. Návrhový výzkum (Design Science Research, DSR) naopak navrhuje nové artefakty a~ověřuje, jestli řeší daný problém. Rozdíl je v~tom, co je výstupem: popis světa, nebo nástroj který ho mění.
 
 Tato práce spadá do návrhového výzkumu. Artefaktem je sada instrukcí pro AI coding agenta. Instrukce se navrhnou, agent s~nimi projede vývojový úkol, z~výstupu (kód, testy, git log) se vyhodnotí co fungovalo a~co ne, a~instrukce se podle toho upraví. Hevner tento postup formalizuje jako build-evaluate cyklus --- iterativní smyčku návrhu a~vyhodnocení, která se opakuje dokud artefakt nedosáhne požadované kvality.
 
-\medskip
-\textbf{Dvě fáze výzkumu (byl DRAFT):}
+Dvě fáze: pilotní iterace (build-evaluate cyklus na instrukcích) a~komparativní variace (ablace/substituce na fungující sadě).
 
-Výzkum má dvě fáze, které odpovídají DSR cyklu:
-
-\begin{enumerate}
-    \item \textbf{Pilotní iterace} --- opakovaně navrhujeme a~vyhodnocujeme instrukce. Každá iterace je jeden build-evaluate cyklus: spustíme agenta, analyzujeme výstup, diagnostikujeme problém, upravíme instrukce. Zaznamenáváme co se měnilo a~proč.
-    \item \textbf{Komparativní variace} --- z~fungujících instrukcí systematicky měníme jednotlivé komponenty a~měříme dopad na chování agenta. Změna může být odebrání (ablace --- funguje agent bez této instrukce?) nebo nahrazení alternativou (substituce --- funguje jiná formulace stejného záměru?). Ablace ukáže \textit{jestli} komponenta záleží, substituce ukáže \textit{proč} a~\textit{v~jaké formě}.
-\end{enumerate}
-
-\medskip
-\textbf{Case study a~generalizace:}
-
-Výzkum probíhá formou case study na jednom projektu (systém upomínek faktur). Yin \cite{yin2018} rozlišuje dva typy generalizace: statistickou (ze vzorku na populaci) a~analytickou (z~případu na teorii). Case study neumožňuje říct ``tento scaffolding funguje vždy'' --- k~tomu by byl potřeba velký vzorek projektů. Umožňuje ale identifikovat principy a~mechanismy: \textit{proč} určité instrukce fungují a~jiné ne, a~za jakých podmínek.
-
-Více experimentálních běhů na jednom projektu odpovídá tomu, co Yin nazývá embedded single-case design --- jeden případ (projekt) s~více vnořenými jednotkami analýzy (jednotlivé běhy). DSR poskytuje celkový rámec (jak iterovat artefakt), case study poskytuje kontext (reálný projekt s~deterministickou logikou a~ověřitelnými výstupy).
+Case study na jednom projektu. Yin: embedded single-case design, analytická generalizace.
 \end{raw}
 
 %% ==========================================================================
@@ -49,6 +68,29 @@ Více experimentálních běhů na jednom projektu odpovídá tomu, co Yin nazý
 %%         Teorie metrik (co to je, proč je validní) je v kap02.
 %%         Subsections: procesní, produktové, efektivita.
 %%         LLM-as-judge teorie v kap02, aplikace u P2/Q4/Q8.
+
+\begin{draft}
+Kapitola~\ref{kap:vymezeni} formuluje tři cíle: navrhnout metriky
+které měří proces a~kvalitu (cíl~1), demonstrovat iterativní postup
+(cíl~2) a~popsat pozorované tendence (cíl~3). Tato sekce popisuje
+sadu metrik pro cíl~1. Cíle~2 a~3 využívají tyto metriky
+v~experimentálním designu (sekce~\ref{sec:experimentalni-design}).
+
+Metriky vychází z~taxonomie Fentona a~Biemana~\cite{fenton2014},
+kteří rozlišují tři kategorie: procesní metriky (jak se pracuje),
+produktové metriky (co vzniklo) a~metriky efektivity (za jakou cenu).
+Kapitola~\ref{kap:vymezeni} identifikovala, že existující benchmarky
+pokrývají pouze produktovou kategorii (funkční korektnost). Naše sada
+proto doplňuje zbývající dvě: procesní metriky P1--P2 měří jak agent
+pracoval, metriky efektivity E1--E3 měří spotřebované zdroje.
+Produktové metriky Q1--Q8 rozšiřujeme nad rámec pass/fail o~kvalitu
+testů a~kódu.
+
+Teoretické základy jednotlivých metrik (mutation testing, cyklomatická
+složitost, LLM-as-judge) popisuje
+sekce~\ref{sec:mereni-kvality}. Zde uvádíme konkrétní volbu metrik,
+nástroje měření a~zdůvodnění prahů.
+\end{draft}
 
 \subsection{Procesní metriky (P1--P2)}
 \label{sec:procesni-metriky}
@@ -351,6 +393,8 @@ procedurami místo vyčerpávající dokumentace.
 %% KOSTRA: Run → Measure → Diagnose → Fix cyklus.
 %%         Diagnostický rámec (Mao, Hassan, Lulla, Razavi/Breunig).
 %%         Výstupy každé iterace.
+%%         Sběr dat: git log + GitHub API (P1), testy + statická analýza (Q1-Q7),
+%%         session export (E1-E3), LLM-as-judge (P2, Q4, Q8).
 
 \begin{raw}
 \textbf{Předchozí obsah (byl DRAFT v 3.5.2):}
@@ -511,6 +555,62 @@ E3 & Dokončení + restarts        & auto-continue log & --- \\
 Automatizované metriky (P1, Q1--Q3, Q5--Q7, E1--E3) sbírá skript
 \texttt{analyze-run.sh}; kvalitativní metriky (P2, Q4, Q8) hodnotí
 \texttt{judge.sh} přes LLM-as-judge (sekce~\ref{sec:llm-as-judge}).
+\end{raw}
+
+%% ==========================================================================
+%% Audit trail — starý obsah
+%% ==========================================================================
+
+%% ==========================================================================
+%% 3.5 Omezení a validita
+%% ==========================================================================
+
+\section{Omezení a~validita}
+\label{sec:omezeni-validita}
+
+%% KOSTRA: Threats to validity (Runeson & Höst 2009, Yin 2018).
+%%         Construct, internal, external validity + etika.
+
+\begin{raw}
+\textbf{TODO --- dopsat jako DRAFT. Struktura:}
+
+\textbf{Construct validity} (měříme to co chceme měřit?):
+\begin{itemize}
+    \item Metriky vychází z~existující teorie (Fenton, Papadakis, McCabe),
+          ale konkrétní kombinace a~prahy jsou autorské
+    \item LLM-as-judge: subjektivní složka, validujeme Cohenovým $\kappa$
+    \item Referenční testy odvozeny ze specifikace (ne z~kódu), snižuje
+          test oracle problem \cite{mathews2024}
+\end{itemize}
+
+\textbf{Internal validity} (jsou závěry podložené daty?):
+\begin{itemize}
+    \item Prompt sensitivity \cite{razavi2025}: malá změna formulace může
+          změnit chování agenta, s~N=1 per run nelze odlišit od šumu
+    \item Nedeterminismus LLM: stejné instrukce mohou dát různé výsledky.
+          Částečně mitigováno více běhy v~pilotu.
+    \item Autor navrhuje instrukce i~evaluuje výsledky --- potenciální
+          confirmation bias. Mitigace: automatizované metriky (P1, Q1--Q7),
+          LLM-as-judge z~jiné rodiny (Q8, P2).
+\end{itemize}
+
+\textbf{External validity} (lze zobecnit?):
+\begin{itemize}
+    \item Jeden projekt, jeden model, jeden agent --- analytická
+          generalizace na teorii (Yin), ne statistická na populaci
+    \item Systém upomínek = deterministická logika. Výsledky nemusí
+          platit pro projekty s~UI, ML, nebo nedeterministickými výstupy.
+    \item Metriky a~postup jsou přenositelné (kdokoliv může použít),
+          konkrétní naměřené hodnoty a~instrukce platí pro tuto studii.
+\end{itemize}
+
+\textbf{Etické aspekty:}
+\begin{itemize}
+    \item Výzkum nezahrnuje lidské účastníky
+    \item Veškerá data (git log, metriky, session transcripts) jsou
+          generována experimentální infrastrukturou, ne sbírána od osob
+    \item Zdrojový kód a~experimentální data jsou veřejně dostupná
+\end{itemize}
 \end{raw}
 
 %% ==========================================================================
