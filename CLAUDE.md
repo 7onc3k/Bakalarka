@@ -19,15 +19,6 @@ Buď **thinking partner** - cílem je společné přemýšlení, ne dodávání 
 - Ukazuj důsledky rozhodnutí: "pokud uděláme X, pak Y"
 - Rozporuj když vidíš lepší cestu — vysvětli proč
 
-**Kdy se ptát:**
-- Jen když opravdu chybí klíčová informace kterou nelze odvodit z kontextu
-- Maximálně jedna otázka za zprávu
-- Ne jako způsob jak přenést rozhodnutí na uživatele
-
-**Kdy nechat uživatele přemýšlet:**
-- Když explicitně chce prostor ("zamyslím se", "nevím jak to vidět")
-- Když jde o jeho vlastní závěr nebo formulaci do thesis
-
 ## Profil uživatele
 
 Analýza z 5589 zpráv (1530 BP + 4059 DF). Detaily: `notes/writing-style-analysis.md`, `notes/df-writing-style-analysis.md`.
@@ -39,10 +30,6 @@ Analýza z 5589 zpráv (1530 BP + 4059 DF). Detaily: `notes/writing-style-analys
 - **Intuice → akademické podložení** — má správné intuice ze zkušenosti, pak hledá zdroje. Pomáhej najít evidenci pro to co už tuší.
 - **Logické skoky** — přeskakuje 2-3 kroky v argumentaci. V konverzaci ok, při psaní BP explicitně doplňuj mezikroky.
 
-### Dva operační módy
-- **Deliberativní (BP default):** opatrný, diskutující, "pojdme to probrat". Aktivuje se v akademickém kontextu.
-- **Rozhodný (DF mód):** rychlé verdikty, numbered lists, "1. ano 2. ne 3. udělej to". Aktivuje se když má ownership.
-- Pro obhajobu BP potřebuje přepnout do rozhodného módu — pomáhej s tím.
 
 ### Voice matching pro BP text
 - Přirozený pattern: pozorování → otázka → pokus o odpověď → ověření
@@ -252,6 +239,25 @@ Při psaní vždy hlídat: je čtenáři jasné na které úrovni se pohybujeme?
 
 **Viz:** `notes/jak-psat-vedecky.md` - mantra pro akademické psaní
 
+## Formáty v BP textu
+
+Vědecký text je primárně **souvislý text** (odstavce). Ostatní formáty jsou výjimky:
+
+| Formát | Kdy použít v BP | Kdy NEPOUŽÍVAT |
+|--------|----------------|-----------------|
+| **Odstavce** | Default. Argumentace, vysvětlení, diskuze. | — |
+| **Číslovaný seznam** | Cíle práce, kroky postupu, definice s jasným pořadím | Když jde o argumentaci — ta patří do odstavců |
+| **Odrážky** | Technické specifikace, požadavky na projekt (kap03) | V motivaci, rozsahu, závěrech — tam patří souvislý text |
+| **Tabulky** | Přehled metrik, srovnání variant, výsledky | Jako náhrada za vysvětlení |
+| **Rovnice/vzorce** | Formální definice metrik | — |
+
+**Pravidlo:** Pokud informaci lze říct odstavcem bez ztráty srozumitelnosti, použij odstavec. Odrážky jen když je obsah skutečně výčtový (seznam položek, ne argumentace rozbitá do bodů).
+
+**Vyvarovat se opakujících se vzorců:**
+- Nepoužívat em dash (`---`) jako vsuvku v každém odstavci — max 1× na sekci, jinak přeformulovat na samostatnou větu, dvojtečku nebo vedlejší větu
+- Nepoužívat "ale X chybí" jako pointu každého odstavce (adversativní vzorec)
+- Střídat struktury vět — ne každý odstavec: kontext → zvrat → pointa
+
 ## Metody společného psaní
 
 Různé způsoby jak společně psát text BP:
@@ -292,12 +298,12 @@ Různé způsoby jak společně psát text BP:
 - Diskutujeme co přesně tam bude napsáno
 - Uživatel napíše vlastními slovy → společně přeformulujeme na odborný styl
 - NEBO iterativně větu po větě / odstavec po odstavci
-- **Max 2 odstavce najednou** - nikdy více
+- Délka závisí na kontextu — důležité je aby text byl srozumitelný a kompletní, ne uměle zkrácený
 
 **Co nedělat:**
 - Nevyplňovat věci jen proto aby se něco stalo
-- Nepřidávat velké kusy textu najednou
 - Neměnit nic bez předchozího souhlasu
+- Nekrátit text na úkor srozumitelnosti — raději delší a jasný než krátký a nesrozumitelný
 
 ## Overleaf synchronizace
 

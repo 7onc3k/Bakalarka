@@ -7,27 +7,28 @@
 AI agenti se používají k~vývoji softwaru, ale výsledky ukazují že to není tak
 jednoduché jak se čekalo. Randomizovaná studie METR~\cite{metr2025} na 246
 úlohách ukázala, že s~AI nástroji byli vývojáři o~19\,\% pomalejší. Agent
-často produkuje funkční výstup, ale nedodržuje vývojové praktiky --- slučuje
+často produkuje funkční výstup, nedodržuje přitom vývojové praktiky: slučuje
 nesouvisející změny, přeskakuje testy, ignoruje specifikaci.
 
-Existující benchmarky jako SWE-bench~\cite{swebench2024} měří jen výsledek:
-vyřešil agent úkol, ano nebo ne. Chybí systematický způsob jak hodnotit kvalitu
-práce agenta --- jestli dodržoval proces, jestli je kód udržitelný, jestli jsou
-testy smysluplné.
+Otázka není jen jestli agent úkol vyřešil, ale jak. Existující benchmarky jako
+SWE-bench~\cite{swebench2024} měří pouze výsledek: vyřešil agent úkol, ano
+nebo ne. Kvalitu práce, transparentnost procesu a~možnost řídit chování agenta
+v~průběhu vývoje tyto benchmarky nepostihují. Agent může hlásit úkol jako
+dokončený, přestože implementace pokrývá jen část požadavků, a~bez metrik
+procesu to není jak systematicky odhalit.
 
 Chování agenta lze přizpůsobit trénováním modelu (fine-tuning) nebo instrukcemi
 v~kontextovém okně (in-context learning). Shin et al.~\cite{shin2025prompt}
-ukazují, že ani jeden přístup systematicky nedominuje --- ale explicitní instrukce
-s~kontextem výrazně zlepšují výkon agenta na úlohách s~kódem. S~rostoucí
+ukazují, že ani jeden přístup systematicky nedominuje, explicitní instrukce
+s~kontextem nicméně výrazně zlepšují výkon agenta na úlohách s~kódem. S~rostoucí
 velikostí kontextových oken se instrukce stávají praktičtější alternativou:
 jsou dostupné komukoliv, iterativně upravitelné a~neomezují emergentní
-schopnosti modelu. Ale zatímco pro trénování modelů existují zavedené postupy,
-pro systematické navrhování a~vyhodnocování instrukcí obdobný postup chybí.
+schopnosti modelu. Pro trénování modelů existují zavedené postupy; pro
+systematické navrhování a~vyhodnocování instrukcí obdobný postup dosud nevznikl.
 
-Tato práce zkoumá chování AI agenta při vývoji softwaru řízeném instrukcemi.
-Na případové studii navrhuje evaluační systém který měří proces i~kvalitu práce
-agenta, iterativně vylepšuje instrukční sadu a~popisuje pozorované tendence
-v~chování agenta.
+Tato práce navrhuje evaluační systém který měří nejen výsledek, ale i~proces
+a~kvalitu práce agenta, a~popisuje postup jak s~jeho pomocí iterativně
+vylepšovat instrukce.
 \end{draft}
 
 \begin{raw}
@@ -48,15 +49,13 @@ Studie společnosti METR.ORG ukazuje, že LLM zkušené vývojáře spíše zpom
 \section{Cíle práce}
 
 \begin{draft}
-Cíle práce jsou odvozeny z~problémů identifikovaných v~motivaci:
-
 \begin{enumerate}
     \item Navrhnout sadu metrik která měří proces a~kvalitu práce AI agenta,
           ne jen výsledek.
     \item Na případové studii demonstrovat iterativní postup pro návrh instrukcí
           s~využitím těchto metrik.
-    \item Popsat pozorované tendence v~chování agenta a~identifikovat které
-          složky instrukcí jsou nezbytné.
+    \item Popsat pozorované tendence v~chování agenta a~vliv jednotlivých
+          složek instrukcí na tyto tendence.
 \end{enumerate}
 \end{draft}
 
@@ -95,21 +94,30 @@ Cíle práce jsou odvozeny z~problémů identifikovaných v~motivaci:
 \section{Rozsah práce}
 
 \begin{draft}
-Práce zkoumá vliv struktury instrukcí na chování jednoho AI coding agenta při vývoji z~formální specifikace. Case study je systém upomínek faktur --- projekt s~deterministickou logikou, jasnými pravidly správnosti a objektivně ověřitelnými výstupy. Experiment pokrývá fáze requirements, design a implementation.
+Evaluační systém a~postup pro návrh instrukcí nelze navrhnout čistě
+teoreticky. Je potřeba je ověřit v~praxi: ukázat, že metriky skutečně
+zachytí rozdíly v~chování agenta, když dostane jiné instrukce, a~že
+iterativní postup vede ke zlepšení. K~tomu slouží případová studie, ve
+které opakovaně pouštíme agenta s~různými variantami instrukcí a~pokaždé
+měříme, co se změnilo.
 
-\subsection*{Práce se zaměřuje na:}
-\begin{itemize}
-    \item Vliv struktury a obsahu instrukcí na to, jak agent dodržuje vývojový postup
-    \item Iterativní návrh instrukcí metodou Design Science Research
-    \item Identifikaci toho, co z~instrukcí je potřeba a co ne, prostřednictvím ablace
-\end{itemize}
+Aby bylo možné vliv instrukcí měřit, musí být všechno ostatní stejné:
+model, nástroje, specifikace i~výchozí stav repozitáře. Jedinou proměnnou
+jsou instrukce které agent dostane. Kdyby se měnilo víc věcí najednou,
+nebylo by jasné, co způsobilo změnu v~chování.
 
-\subsection*{Práce se nezaměřuje na:}
-\begin{itemize}
-    \item Porovnávání LLM modelů
-    \item Porovnávání programovacích jazyků a frameworků
-    \item Projekty s~převážně subjektivními výstupy (UI, kreativní tvorba, ML)
-\end{itemize}
+Případová studie probíhá na jednom projektu: systému upomínek faktur. Jde
+o~projekt s~deterministickou logikou, kde stejný vstup vždy dá stejný výstup.
+To je důležité, protože výsledky lze ověřit automatizovanými testy, ne
+subjektivním posouzením. Agent pracuje od specifikace k~implementaci,
+tedy od požadavků přes návrh po funkční kód a~testy.
+
+Práce neporovnává různé modely ani programovací jazyky a~neporovnává agenta
+s~lidským vývojářem. Navržený evaluační systém a~iterativní postup jsou
+koncipovány obecně: kdokoli je může vzít a~použít na svém projektu s~vlastními
+prahy. Konkrétní instrukce a~naměřené hodnoty platí pro tuto případovou studii.
+Zdůvodnění volby projektu a~podrobnosti experimentálního designu popisuje
+kapitola~\ref{kap:metodika}.
 \end{draft}
 
 \begin{raw}
