@@ -1,11 +1,10 @@
 import "dotenv/config";
-import { ChromaClient } from "chromadb";
+import { ensureChroma } from "./chroma.js";
 
 const COLLECTION_NAME = "bp-sources";
 
 async function main() {
-  console.log("Connecting to Chroma...");
-  const client = new ChromaClient({ path: "http://localhost:8000" });
+  const client = await ensureChroma();
 
   try {
     await client.deleteCollection({ name: COLLECTION_NAME });

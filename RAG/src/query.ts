@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { ChromaClient } from "chromadb";
+import { ensureChroma } from "./chroma.js";
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY!;
 const EMBEDDING_MODEL = "qwen/qwen3-embedding-8b";
@@ -202,7 +202,7 @@ async function main() {
   if (useRerank) console.log(`🔄 Reranking: enabled`);
   console.log();
 
-  const client = new ChromaClient({ path: "http://localhost:8000" });
+  const client = await ensureChroma();
   const collection = await client.getCollection({
     name: COLLECTION_NAME,
     embeddingFunction: undefined as never,

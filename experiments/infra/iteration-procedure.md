@@ -31,9 +31,8 @@ Kódy odpovídají thesis kap03 sekce 3.4.
 | P1.3 | Test commit před implementačním | `git log` — pořadí commitů |
 | P1.4 | PRs linkované na issues | `gh pr list` — "Closes #N" |
 | P1.5 | Nemodifikoval existující test assertions | `git diff` na test souborech |
-| P1.6 | Typecheck prochází před PR | CI výstup nebo commit historie |
 
-Score = počet splněných / 6. Exit: 6/6.
+Score = počet splněných / 5. Exit: 5/5.
 
 **P2 — kvalita procesních artefaktů** (LLM-as-judge, GLM-5):
 
@@ -44,8 +43,8 @@ Rubrik: `infra/judge/p2-process-artifacts.md`. Škála 1-3. Exit: 3/3.
 
 | Kód | Metrika | Co měří | Jak | Exit kritérium |
 |-----|---------|---------|-----|----------------|
-| Q1 | Ref test pass rate | Funguje implementace? | 40 behavioral testů ze spec | 40/40 |
-| Q2 | API contract match | Sedí veřejné API? | `tsc` import + typecheck | match |
+| Q1 | API contract match | Sedí veřejné API? | `tsc` import + typecheck | match |
+| Q2 | Ref test pass rate | Funguje implementace? | 40 behavioral testů ze spec | 40/40 |
 | Q3 | Mutation score | Detekují agentovy testy chyby? | Stryker | ≥70% |
 | Q4 | AC coverage | Kolik z 24 AC má test? | LLM-as-judge (GLM-5) | 24/24 |
 | Q5 | Lint warnings | Čistý kód? | `eslint --format json` | 0 |
@@ -101,9 +100,8 @@ Po každém runu:
 | P1.3 | Test-first commity | | |
 | P1.4 | PRs linkované na issues | | |
 | P1.5 | Nemodifikoval testy | | |
-| P1.6 | Typecheck před PR | | |
 
-**P1 score:** /6
+**P1 score:** /5
 
 ## P2 — Kvalita procesních artefaktů (LLM-as-judge)
 
@@ -128,8 +126,8 @@ Po každém runu:
 
 | Kód | Metrika | Hodnota | Exit? |
 |-----|---------|---------|-------|
-| Q1 | Ref test pass rate | /40 | |
-| Q2 | API contract match | ✅/❌ | |
+| Q1 | API contract match | ✅/❌ | |
+| Q2 | Ref test pass rate | /40 | |
 | Q3 | Mutation score | % | |
 | Q4 | AC coverage | /24 | |
 | Q5 | Lint warnings | | |
@@ -261,9 +259,9 @@ Po dokončení:
 Pilotní iterace končí když agent splní všechna kritéria v posledním běhu:
 
 **Deterministická** (přirozený binární práh):
-- [ ] P1 = 6/6 (process compliance)
-- [ ] Q1 = 40/40 (referenční testy)
-- [ ] Q2 = match (API contract)
+- [ ] P1 = 5/5 (process compliance)
+- [ ] Q1 = match (API contract)
+- [ ] Q2 = 40/40 (referenční testy)
 - [ ] Q4 = 24/24 (AC coverage)
 - [ ] Q5 = 0 (lint warnings)
 - [ ] Q6 = 0 (typecheck errors)

@@ -26,13 +26,13 @@ echo ""
 cd "$RUN_DIR"
 
 # ============================================================================
-# P1: Process Compliance Checklist (6 items, binary)
+# P1: Process Compliance Checklist (5 items, binary)
 # ============================================================================
 echo "## P1: Process Compliance Checklist"
 echo ""
 
 P1_PASS=0
-P1_TOTAL=6
+P1_TOTAL=5
 
 # --- P1.1: Issues before code ---
 FIRST_ISSUE_TIME=""
@@ -102,20 +102,6 @@ else
     echo "P1.5 No test modifications: ❌ ($TEST_MODIFICATIONS files modified)"
 fi
 
-# --- P1.6: Typecheck passes ---
-if [[ -f "package.json" ]]; then
-    TSC_OUTPUT=$(npx tsc --noEmit 2>&1 || true)
-    TSC_ERRORS=$(echo "$TSC_OUTPUT" | grep -c "error TS" || true)
-    if [[ "$TSC_ERRORS" -eq 0 ]]; then
-        echo "P1.6 Typecheck passes: ✅"
-        ((P1_PASS++))
-    else
-        echo "P1.6 Typecheck passes: ❌ ($TSC_ERRORS errors)"
-    fi
-else
-    echo "P1.6 Typecheck passes: ? (no package.json)"
-fi
-
 echo ""
 echo "**P1 score: $P1_PASS/$P1_TOTAL**"
 echo ""
@@ -139,9 +125,27 @@ echo "PRs: $PR_TOTAL_COUNT (merged: $PR_MERGED)"
 echo ""
 
 # ============================================================================
-# Q1: Reference Test Pass Rate
+# Q1: API Contract Match
 # ============================================================================
-echo "## Q1: Reference Test Pass Rate"
+echo "## Q1: API Contract Match"
+echo ""
+if [[ -f "src/index.ts" ]]; then
+    HAS_CREATE=$(grep -c 'export.*function.*createInstance\|export.*createInstance' src/index.ts || true)
+    HAS_PROCESS=$(grep -c 'export.*function.*process\|export.*process' src/index.ts || true)
+    if [[ "$HAS_CREATE" -gt 0 && "$HAS_PROCESS" -gt 0 ]]; then
+        echo "**Q1: ✅ Exports createInstance and process**"
+    else
+        echo "**Q1: ❌ Missing exports (createInstance: $HAS_CREATE, process: $HAS_PROCESS)**"
+    fi
+else
+    echo "⚠️  No src/index.ts found"
+fi
+echo ""
+
+# ============================================================================
+# Q2: Reference Test Pass Rate
+# ============================================================================
+echo "## Q2: Reference Test Pass Rate"
 echo ""
 REF_DIR="$EXPERIMENTS_DIR/reference"
 REF_PASSED="?"
@@ -169,30 +173,12 @@ if [[ -d "$REF_DIR/src/__tests__" && -f "src/index.ts" ]]; then
     rm -rf tests/_ref_tests
 
     if [[ "$REF_PASSED" -eq "$REF_TOTAL" && "$REF_TOTAL" -gt 0 ]]; then
-        echo "**Q1: ✅ ${REF_PASSED}/${REF_TOTAL} reference tests pass**"
+        echo "**Q2: ✅ ${REF_PASSED}/${REF_TOTAL} reference tests pass**"
     else
-        echo "**Q1: ❌ ${REF_PASSED}/${REF_TOTAL} reference tests pass**"
+        echo "**Q2: ❌ ${REF_PASSED}/${REF_TOTAL} reference tests pass**"
     fi
 else
     echo "⚠️  Reference tests or src/index.ts not found — skipping"
-fi
-echo ""
-
-# ============================================================================
-# Q2: API Contract Match
-# ============================================================================
-echo "## Q2: API Contract Match"
-echo ""
-if [[ -f "src/index.ts" ]]; then
-    HAS_CREATE=$(grep -c 'export.*function.*createInstance\|export.*createInstance' src/index.ts || true)
-    HAS_PROCESS=$(grep -c 'export.*function.*process\|export.*process' src/index.ts || true)
-    if [[ "$HAS_CREATE" -gt 0 && "$HAS_PROCESS" -gt 0 ]]; then
-        echo "**Q2: ✅ Exports createInstance and process**"
-    else
-        echo "**Q2: ❌ Missing exports (createInstance: $HAS_CREATE, process: $HAS_PROCESS)**"
-    fi
-else
-    echo "⚠️  No src/index.ts found"
 fi
 echo ""
 
@@ -296,7 +282,7 @@ echo ""
 echo "## Q6: Typecheck Errors"
 echo ""
 if [[ -f "package.json" ]]; then
-    # Reuse TSC_OUTPUT from P1.6 if available, otherwise run again
+    # Run tsc for Q6 (typecheck errors)
     if [[ -z "${TSC_OUTPUT:-}" ]]; then
         TSC_OUTPUT=$(npx tsc --noEmit 2>&1 || true)
         TSC_ERRORS=$(echo "$TSC_OUTPUT" | grep -c "error TS" || true)
@@ -414,8 +400,8 @@ echo ""
 echo "### Product Quality (Q1-Q8)"
 echo "| Metric | Value | Exit criterion | Pass? |"
 echo "|--------|-------|----------------|-------|"
-echo "| Q1 Ref tests | ${REF_PASSED:-?}/${REF_TOTAL:-?} | ${REF_EXPECTED}/$(echo $REF_EXPECTED) | $([ "${REF_PASSED:-0}" == "${REF_TOTAL:-1}" ] && echo "✅" || echo "❌") |"
-echo "| Q2 API contract | $([ "${HAS_CREATE:-0}" -gt 0 ] && [ "${HAS_PROCESS:-0}" -gt 0 ] && echo "match" || echo "no match") | match | $([ "${HAS_CREATE:-0}" -gt 0 ] && [ "${HAS_PROCESS:-0}" -gt 0 ] && echo "✅" || echo "❌") |"
+echo "| Q1 API contract | $([ "${HAS_CREATE:-0}" -gt 0 ] && [ "${HAS_PROCESS:-0}" -gt 0 ] && echo "match" || echo "no match") | match | $([ "${HAS_CREATE:-0}" -gt 0 ] && [ "${HAS_PROCESS:-0}" -gt 0 ] && echo "✅" || echo "❌") |"
+echo "| Q2 Ref tests | ${REF_PASSED:-?}/${REF_TOTAL:-?} | ${REF_EXPECTED}/$(echo $REF_EXPECTED) | $([ "${REF_PASSED:-0}" == "${REF_TOTAL:-1}" ] && echo "✅" || echo "❌") |"
 echo "| Q3 Mutation score | ${MUTATION_SCORE:-?}% | ≥70% | $(python3 -c "print('✅' if float('${MUTATION_SCORE:-0}') >= 70 else '❌')" 2>/dev/null || echo "?") |"
 echo "| Q4 AC coverage | judge | 24/24 | run judge.sh |"
 echo "| Q5 Lint warnings | ${LINT_WARNINGS:-?} | 0 | $([ "${LINT_WARNINGS:-1}" == "0" ] && echo "✅" || echo "❌") |"

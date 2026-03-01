@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { ChromaClient } from "chromadb";
+import { ensureChroma } from "./chroma.js";
 import fs from "fs/promises";
 import path from "path";
 import pdfParse from "pdf-parse";
@@ -357,8 +357,7 @@ async function getEmbeddingsInBatches(
 }
 
 async function main() {
-  console.log("Connecting to Chroma...");
-  const client = new ChromaClient({ path: "http://localhost:8000" });
+  const client = await ensureChroma();
 
   // Get or create collection (without default embedding function)
   const collection = await client.getOrCreateCollection({

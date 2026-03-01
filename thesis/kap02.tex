@@ -2,7 +2,7 @@
 \label{kap:teorie}
 
 \begin{raw}
-Tato kapitola vysvětluje teoretická východiska práce. Nejprve je popsáno softwarové inženýrství a~životní cyklus vývoje. Následuje měření kvality software, AI coding agenti a~nakonec scaffolding a~instrukce pro agenty.
+Tato kapitola vysvětluje teoretická východiska práce. Nejprve je popsáno softwarové inženýrství a~životní cyklus vývoje. Následují AI coding agenti jako noví aktéři v~tomto procesu, scaffolding a~instrukce které jejich chování řídí, a~nakonec měření kvality software jako základ pro hodnocení výsledků.
 \end{raw}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -169,73 +169,6 @@ S příchodem AI agentů se přidává nová dimenze: SDD spec-first umožňuje 
 \end{raw}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Měření kvality software}
-\label{sec:mereni-kvality}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{raw}
-\textbf{Úvod sekce:}
-Teorie metrik a měření. Kap03 na tuto sekci odkazuje -- zde je CO a PROČ, v kap03 je JAK to použijeme.
-\end{raw}
-
-% === 2.2.1 ===
-\subsection{Taxonomie metrik}
-\label{sec:taxonomie-metrik}
-
-\begin{raw}
-\textbf{TODO --- doplnit:}
-
-Fenton \& Bieman (2014): Process / Product / Resource (v~naší práci Process / Quality / Efficiency). Proč měřit proces i~produkt, ne jen výsledek. Interní vs externí metriky.
-
-\textbf{Co sem NEPATŘÍ (to je v kap03):}
-Konkrétní volba metrik (P1-P2, Q1-Q8, E1-E3), prahy, exit kritéria.
-\end{raw}
-
-% === 2.2.2 ===
-\subsection{Testování a~mutation testing}
-\label{sec:testovani-mutation}
-
-\begin{raw}
-\textbf{TODO --- doplnit:}
-
-Co je mutation testing, proč je silnější než strukturální coverage. Papadakis et al. (2019) --- přehledová studie, 36\% chyb odhalitelných pouze mutation testingem. Harman et al. (Meta, 2025) --- produkční nasazení, 70\% mutantů neodhalených i~při plném coverage.
-
-\textbf{Test oracle problem:}
-Mathews et al. \cite{mathews2024} ukázali, že nástroje pro automatické generování testů systematicky filtrují failing testy -- až 68,1\% test suites validuje chybné chování místo jeho odhalení. Chen et al. \cite{rethinking2025} potvrdili na 500 úlohách SWE-bench, že agent-generované testy slouží primárně jako observační feedback, ne validační nástroj.
-
-Obrana: TDD ze specifikace (expected values z AC, ne z pozorování kódu).
-\end{raw}
-
-% === 2.2.3 ===
-\subsection{Statická analýza a~složitost kódu}
-\label{sec:staticka-analyza}
-
-\begin{raw}
-\textbf{TODO --- doplnit:}
-
-McCabe (1976) --- cyklomatická složitost, práh 10 jako de facto standard. Linting jako automatizovaná kontrola konvencí. Type checking (strict mode) jako prevence chyb.
-\end{raw}
-
-% === 2.2.4 ===
-\subsection{LLM-as-judge}
-\label{sec:llm-as-judge}
-
-\begin{raw}
-\textbf{TODO --- doplnit teorii. Aplikace (volba GLM-5, škála, rubric) je v kap03.}
-
-Zheng et al. (2023, MT-Bench) --- metoda LLM-as-judge, tři systematické biasy (position, verbosity, self-enhancement).
-
-Panickssery et al. (2024, NeurIPS) --- kauzální vztah self-recognition $\to$ self-preference, mechanismus nižší perplexity.
-
-Verga et al. (2024, PoLL) --- panel diverse models lepší než single judge.
-
-Implikace: cross-family model pro eliminaci self-preference.
-
-\textbf{Co sem NEPATŘÍ (to je v kap03):}
-Volba GLM-5, škála 1--3, konkrétní rubriky, Cohenovo κ validace.
-\end{raw}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{AI coding agenti}
 \label{sec:ai-coding-agenti}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -245,7 +178,7 @@ Volba GLM-5, škála 1--3, konkrétní rubriky, Cohenovo κ validace.
 Definuje základní pojmy (LLM, agent, tool calls) a popisuje jak AI agenti mění softwarové inženýrství.
 \end{raw}
 
-% === 2.3.1 ===
+% === 2.2.1 ===
 \subsection{Základní pojmy}
 \label{sec:zakladni-pojmy}
 
@@ -295,7 +228,7 @@ Definuje základní pojmy (LLM, agent, tool calls) a popisuje jak AI agenti měn
 \end{itemize}
 \end{raw}
 
-% === 2.3.2 ===
+% === 2.2.2 ===
 \subsection{Typy coding agentů}
 \label{sec:typy-coding-agentu}
 
@@ -324,7 +257,7 @@ Definuje základní pojmy (LLM, agent, tool calls) a popisuje jak AI agenti měn
 Devin, Claude Code, Cursor, OpenHands, Agentless \cite{xia2025agentless}.
 \end{raw}
 
-% === 2.3.3 ===
+% === 2.2.3 ===
 \subsection{Jak agenti mění SDLC}
 \label{sec:agenti-meni-sdlc}
 
@@ -361,7 +294,7 @@ SDD formalizuje tento pattern \cite{sdd2026}.
 33k agent PRs. Malé, focused úkoly mají vyšší úspěšnost.
 \end{raw}
 
-% === 2.3.4 ===
+% === 2.2.4 ===
 \subsection{Hodnocení agentů a~benchmarky}
 \label{sec:hodnoceni-agentu}
 
@@ -415,11 +348,11 @@ Praktický příklad iterativního zlepšování instrukcí (47\% → 57\% na Te
 
 \begin{raw}
 \textbf{Úvod sekce:}
-Navazuje na problém z~2.3 -- agenti nemají přístup k tacit knowledge.
+Navazuje na problém z~předchozí sekce -- agenti nemají přístup k tacit knowledge.
 Popisuje přístupy k řešení a~připravuje půdu pro kap03.
 \end{raw}
 
-% === 2.4.1 ===
+% === 2.3.1 ===
 \subsection{Problém kontextu}
 \label{sec:problem-kontextu}
 
@@ -443,7 +376,7 @@ Agent nemá tacit knowledge $\rightarrow$ potřebuje explicitní kontext.
 \end{itemize}
 \end{raw}
 
-% === 2.4.2 ===
+% === 2.3.2 ===
 \subsection{Přístupy k~memory a~kontextu}
 \label{sec:pristupy-memory}
 
@@ -509,7 +442,7 @@ SWE-EVO 21\%, FeatureBench 11\%, ACE-Bench 7.5\%.
 Naše case study (5 issues, celý dunning system) cílí do tohoto rozsahu.
 \end{raw}
 
-% === 2.4.3 ===
+% === 2.3.3 ===
 \subsection{Struktura instrukcí}
 \label{sec:struktura-instrukci}
 
@@ -569,6 +502,86 @@ Specifikace = BriefingScript. AGENTS.md = LoopScript + MentorScript.
 
 \textbf{Human-AI Collaboration:}
 \par\noindent $\rightarrow$ \texttt{humanai2024}: AI zlepšuje efektivitu, human oversight zůstává kritický.
+\end{raw}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Měření kvality software}
+\label{sec:mereni-kvality}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{raw}
+Sekce 2.1--2.3 popsaly obor, agenty a~instrukce. Zbývá otázka: jak výsledky agenta hodnotit? Tato sekce poskytuje teoretický základ pro sadu metrik navrženou v~kapitole~\ref{kap:metodika}. Popisujeme CO a~PROČ měřit; konkrétní volba metrik, nástrojů a~exit kritérií je v~kap03.
+\end{raw}
+
+% === 2.4.1 ===
+\subsection{Klasifikace softwarových metrik}
+\label{sec:taxonomie-metrik}
+
+\begin{raw}
+Fenton \& Bieman~\cite{fenton2014}: tři kategorie měřitelných entit v~SE:
+\begin{itemize}
+    \item \textbf{Proces} --- aktivity během vývoje (review, testování, integrace). Příklady metrik: defect injection rate, schedule variance.
+    \item \textbf{Produkt} --- výstupy vývoje (kód, specifikace, testy). Příklady: LOC, cyklomatická složitost, defect density.
+    \item \textbf{Zdroje} --- lidé, nástroje, výpočetní kapacita. Příklady: team size, cost, tool usage.
+\end{itemize}
+
+Proč měřit proces i~produkt, ne jen výsledek: proces ovlivňuje kvalitu produktu, ale není jím determinován. Agent může dodat fungující kód chaotickým procesem --- nebo dodržet proces a~dodat nefunkční kód.
+
+Interní vs externí atributy: interní měříme přímo z~entity (LOC, složitost), externí vyžadují pozorování v~kontextu (spolehlivost, udržovatelnost).
+
+V~kontextu AI agentů: Yin et al.~\cite{yin2025agents} nezávisle dospěli ke třem dimenzím hodnocení: effectiveness (produkt), efficiency (proces) a~overhead (zdroje).
+
+\textbf{Kap03 na to navazuje:} P (proces), Q (kvalita produktu), E (efektivita) --- naše pracovní kódy pro Fentonovy kategorie.
+\end{raw}
+
+% === 2.4.2 ===
+\subsection{Testování a~mutation testing}
+\label{sec:testovani-mutation}
+
+\begin{raw}
+\textbf{Strukturální coverage vs mutation testing:}
+Strukturální coverage (line, branch) měří kolik kódu testy \textit{projdou}, ale ne zda \textit{detekují} chyby. Mutation testing zavádí drobné změny (mutanty) do kódu a~měří kolik jich testy odhalí. Papadakis et al.~\cite{papadakis2019}: přehledová studie, 36\,\% chyb odhalitelných pouze mutation testingem. Harman et al.~\cite{meta2025}: produkční nasazení (Meta), 70\,\% mutantů neodhalených i~při plném coverage.
+
+\textbf{Test oracle problem:}
+Kdo říká co je správný výsledek? Mathews et al.~\cite{mathews2024}: nástroje pro automatické generování testů systematicky filtrují failing testy --- až 68,1\,\% test suites validuje chybné chování místo jeho odhalení. Chen et al.~\cite{rethinking2025}: na 500 úlohách SWE-bench agent-generované testy slouží jako observační feedback, ne validační nástroj.
+
+Obrana: TDD ze specifikace --- expected values odvozené z~acceptance criteria, ne z~pozorování kódu.
+
+\textbf{Kap03 na to navazuje:} Q2 (referenční testy ze spec), Q3 (mutation score), Q4 (AC coverage).
+\end{raw}
+
+% === 2.4.3 ===
+\subsection{Statická analýza a~složitost kódu}
+\label{sec:staticka-analyza}
+
+\begin{raw}
+\textbf{Cyklomatická složitost:}
+McCabe~\cite{mccabe1976}: počet lineárně nezávislých cest grafem řízení toku. Práh 10 jako de facto standard udržovatelnosti. Vyšší složitost koreluje s~vyšší chybovostí a~nižší testovatelností.
+
+\textbf{Linting:}
+Automatizovaná kontrola kódových konvencí a~potenciálních chyb. Fixní konfigurace zajišťuje konzistentní měření napříč běhy.
+
+\textbf{Typová kontrola:}
+TypeScript strict mode jako statická prevence celé kategorie runtime chyb. Počet explicitních \texttt{any} jako proxy pro obcházení typového systému.
+
+\textbf{Kap03 na to navazuje:} Q1 (API contract via tsc), Q5 (lint), Q6 (typecheck), Q7 (cyklomatická složitost).
+\end{raw}
+
+% === 2.4.4 ===
+\subsection{LLM-as-judge}
+\label{sec:llm-as-judge}
+
+\begin{raw}
+\textbf{Metoda:}
+Zheng et al.~\cite{zheng2023mtbench} (MT-Bench): použití LLM jako automatizovaného hodnotitele. Tři systematické biasy: position bias (pořadí odpovědí), verbosity bias (delší = lepší), self-enhancement bias (preference vlastních výstupů).
+
+\textbf{Self-preference mechanismus:}
+Panickssery et al.~\cite{panickssery2024} (NeurIPS): kauzální vztah self-recognition $\to$ self-preference. Model rozpozná vlastní výstupy (nižší perplexita) a~systematicky je hodnotí lépe.
+
+\textbf{Mitigace:}
+Verga et al.~\cite{verga2024} (PoLL): panel diverzních modelů lepší než single judge. Implikace: judge z~jiné modelové rodiny než agent eliminuje self-preference.
+
+\textbf{Kap03 na to navazuje:} P2, Q4, Q8 (LLM-as-judge hodnocení); volba GLM-5 (cross-family), škála 1--3, rubriky, Cohenovo~$\kappa$ --- vše v~kap03.
 \end{raw}
 
 %% ==========================================================================

@@ -131,7 +131,7 @@ function main(): void {
 // P1: Process Compliance Checklist
 //
 // Meri zda agent dodrzuje spec-driven development proces.
-// 6 binarnich polozek — kazda bud splnena (true) nebo ne (false).
+// 5 binarnich polozek — kazda bud splnena (true) nebo ne (false).
 //
 // Proc tyto polozky: Kazda odpovida jednomu z cilovych chovani
 // definovanych v AGENTS.md a mereny v kap03 BP.
@@ -167,11 +167,6 @@ function measureP1(cwd: string): P1Result {
   // Agent nesmi menit existujici testy (jenom pridavat nove).
   // Merimo: git log pro MODIFIED (ne ADDED) soubory v tests/ a __tests__/.
   items.push(measureP1_5(cwd));
-
-  // --- P1.6: Typecheck passes ---
-  // Kod musi projit TypeScript compilerem bez chyb.
-  // Merimo: `tsc --noEmit` bez "error TS" ve vystupu.
-  items.push(measureP1_6(cwd));
 
   // Celkove skore
   const passed = items.filter((i) => i.pass === true).length;
@@ -362,29 +357,6 @@ function measureP1_5(cwd: string): P1Item {
     label: "No test modifications",
     pass,
     detail: pass ? "" : `${uniqueModified} files modified`,
-  };
-}
-
-function measureP1_6(cwd: string): P1Item {
-  if (!fileExists(path.join(cwd, "package.json"))) {
-    return {
-      id: "P1.6",
-      label: "Typecheck passes",
-      pass: null,
-      detail: "no package.json",
-    };
-  }
-
-  // Spustime TypeScript compiler v check-only rezimu
-  const tscOutput = exec(`npx tsc --noEmit`, { cwd }, "");
-  const tscErrors = countMatches(tscOutput, /error TS/g);
-
-  const pass = tscErrors === 0;
-  return {
-    id: "P1.6",
-    label: "Typecheck passes",
-    pass,
-    detail: pass ? "" : `${tscErrors} errors`,
   };
 }
 
@@ -840,8 +812,7 @@ function measureQ6(cwd: string): Q6Result {
     return { tscErrors: 0, anyCount: 0 };
   }
 
-  // Spustime tsc (muzeme reusovat P1.6 vysledek, ale pro jednoduchost
-  // spustime znovu — tsc je rychly)
+  // Spustime tsc pro Q6 (typecheck errors)
   const tscOutput = exec(`npx tsc --noEmit`, { cwd });
   const tscErrors = countMatches(tscOutput, /error TS/g);
 

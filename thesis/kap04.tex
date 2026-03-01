@@ -1,7 +1,18 @@
 \chapter{Praktická část}
 \label{kap:prakticka-cast}
 
+\begin{draft}
+Tato kapitola popisuje provedení případové studie. Struktura sleduje
+chronologii experimentu: nejprve příprava tří výchozích podkladů
+(specifikace, referenční implementace, instrukce), pak pilotní iterace
+kde se instrukce opakovaně upravují na základě naměřených metrik,
+a~nakonec komparativní variace kde z~fungující sady systematicky
+odebíráme nebo nahrazujeme jednotlivé části.
+\end{draft}
+
 \begin{raw}
+\textbf{Audit trail --- předchozí verze úvodu kap04:}
+
 Tato kapitola popisuje provedení experimentu a jeho výsledky.
 Struktura sleduje chronologii: příprava artefaktů (specifikace,
 referenční implementace, instrukce) $\to$ pilotní iterace $\to$
@@ -13,7 +24,16 @@ komparativní variace $\to$ souhrnné výsledky.
 \label{sec:priprava-experimentu}
 %% ================================================================
 
+\begin{draft}
+Před spuštěním pilotních běhů bylo nutné připravit tři výchozí podklady
+každého experimentálního běhu: specifikaci projektu (co má agent
+implementovat), referenční implementaci (strop kvality pro měření)
+a~baseline instrukce (jak má agent pracovat).
+\end{draft}
+
 \begin{raw}
+\textbf{Audit trail --- předchozí verze úvodu 4.1:}
+
 Před spuštěním pilotních běhů bylo nutné připravit tři artefakty:
 specifikaci projektu (co má agent implementovat), referenční implementaci
 (baseline pro měření kvality) a~výchozí instrukce (jak má agent pracovat).
@@ -23,49 +43,19 @@ specifikaci projektu (co má agent implementovat), referenční implementaci
 \subsection{Konstrukce specifikace}
 \label{sec:konstrukce-specifikace}
 
-\begin{raw}
-Jak vznikla specifikace dunning systému (Issue \#1).
+\begin{draft}
+Specifikace definuje \textit{co} má agent implementovat. Má formu
+strukturované GitHub issue (Issue~\#1, kterou agent dostane jako zadání)
+a~skládá se ze dvou částí: \textbf{Requirements} (co business
+potřebuje) a~\textbf{API Contract} (co musí implementace exportovat).
+Agent nedostává architektonický návrh (behavioral model, state diagram,
+invarianty) --- architekturu navrhuje sám na základě požadavků.
+API kontrakt (exportované funkce a~typy) je jediné technické omezení
+a~slouží jako vstup pro metriku~\textbf{Q1}. Specifikace je záměrně
+stručná: recall modelu klesá s~délkou kontextu~\cite{liu2024lost}
+a~redundantní sekce vedou k~nekonzistencím~\cite{bockeler2025sdd}.
 
-Specifikace definuje \textit{co} má agent implementovat. Její konstrukce
-je součástí provedení experimentu --- metodické zdůvodnění výběru projektu
-viz sekce~\ref{sec:vyber-projektu}.
-
-\textbf{Šablona specifikace.}
-Pro specifikaci byla navržena strukturovaná GitHub issue šablona
-(YAML form). Výchozí verze měla tři vrstvy inspirované IEEE~830:
-
-\begin{enumerate}
-    \item \textbf{Requirements} --- popis problémové domény, acceptance
-          criteria ve formátu Given/When/Then, doménový slovník
-    \item \textbf{Specification} --- vstupy/výstupy, pre/postconditions
-    \item \textbf{Architecture} --- behavioral model (state diagram),
-          type definitions, technická omezení
-\end{enumerate}
-
-Vrstva Specification byla při revizi odstraněna (zjednodušení na 2 vrstvy).
-Důvody:
-
-\begin{itemize}
-    \item \textbf{Redundance} --- vstupy a~výstupy jsou implicitně obsažené
-          v~acceptance criteria (Given = vstup, Then = výstup) a~v~type
-          definitions. Pre/postconditions pokrývají invarianty. IEEE~830
-          sama upozorňuje na riziko nekonzistencí při duplicitě sekcí.
-    \item \textbf{Context rot} --- Anthropic \cite{anthropic2025context}
-          dokumentuje, že recall modelu klesá s~délkou vstupu.
-          Redundantní sekce zvyšují počet tokenů bez přidané informace.
-    \item \textbf{Údržba} --- Bockeler \cite{bockeler2025sdd} kritizuje
-          specifikační nástroje (spec-kit aj.) za to, že generují rozsáhlé
-          dokumenty se vzájemně nekonzistentními sekcemi. Méně sekcí
-          = snazší udržení konzistence.
-\end{itemize}
-
-Výsledná 2-vrstvá šablona: \textbf{Requirements} (co business potřebuje)
-+ \textbf{Architecture} (jak je řešení strukturované).
-
-\textbf{Obsah specifikace.}
-Na základě šablony byla vytvořena specifikace dunning systému
-(Issue~\#1 v~experimentálním repozitáři). Obsahuje:
-
+Specifikace obsahuje:
 \begin{itemize}
     \item \textbf{24 acceptance criteria} ve formátu Given/When/Then
           s~konkrétními hodnotami --- eskalační flow (8 stavových
@@ -78,52 +68,90 @@ Na základě šablony byla vytvořena specifikace dunning systému
     \item \textbf{Doménový slovník} --- 9 pojmů definujících business
           doménu (dunning, grace period, business days, action
           descriptor aj.)
-    \item \textbf{Behavioral model} --- tabulka stavových přechodů
-          a~Mermaid state diagram
     \item \textbf{Out of scope} --- 6 explicitně vyloučených oblastí
           (payment retry, late fees, partial payments, email sending,
           scheduling, persistence)
 \end{itemize}
 
-\textbf{Designová rozhodnutí a~jejich vliv na experiment.}
+Formát acceptance criteria přímo ovlivňuje měřitelnost. Given/When/Then
+struktura umožňuje přímý překlad do testů, takže agent nemusí
+interpretovat nestrukturovaný text a~variabilita mezi běhy se snižuje.
+Referenční testy (metrika \textbf{Q2}) i~mapování AC na agentovy testy
+(metrika \textbf{Q4}) z~tohoto formátu přímo vychází.
 
-\begin{itemize}
-    \item \textbf{Behavior-driven AC} --- Given/When/Then formát
-          umožňuje přímý překlad do testů. Agent nemusí interpretovat
-          nestrukturovaný text, čímž se snižuje variabilita mezi běhy.
-    \item \textbf{Infrastructure-agnostic} --- systém vrací action
-          descriptory místo provádění side effects. Veškerá logika
-          je pure function, testovatelná bez infrastruktury.
-    \item \textbf{Strict API contract} --- pevné TypeScript signatury
-          zajišťují portabilitu referenčních testů (metrika Q1) across
-          runs. Jakákoliv implementace se stejným API je testovatelná
-          stejnou test suite.
-    \item \textbf{Explicitní out of scope} --- zabraňuje scope creep.
-          Bez vymezení agent přidává funkcionalitu nad rámec zadání
-          (pozorováno v~pilotních bězích r1--r3).
-\end{itemize}
+Specifikace definuje systém jako pure function: \texttt{process(state,
+event, now)} vrací nový stav a~action descriptory místo provádění side
+effects. Toto rozhodnutí přímo umožňuje automatizované měření ---
+referenční testy (metrika \textbf{Q2}) i~mutation testing
+(metrika \textbf{Q3}) vyžadují deterministické vstupy a~výstupy bez
+infrastrukturních závislostí. Pevné TypeScript signatury (API kontrakt)
+zajišťují, že testy lze spustit na libovolném agentním běhu nezávisle
+na interní struktuře kódu.
+
+Specifikace obsahuje explicitní sekci out of scope, která vymezuje
+6~oblastí mimo zadání. Bez tohoto vymezení hrozí, že agent přidává
+funkcionalitu nad rámec zadání.
+\end{draft}
+
+\begin{raw}
+\textbf{Audit trail --- předchozí verze 4.1.1:}
+
+Jak vznikla specifikace dunning systému (Issue \#1).
+
+Specifikace definuje \textit{co} má agent implementovat. Její konstrukce
+je součástí provedení experimentu --- metodické zdůvodnění výběru projektu
+viz sekce~\ref{sec:vyber-projektu}.
+
+\textbf{Šablona specifikace.}
+Pro specifikaci byla navržena strukturovaná GitHub issue šablona
+(YAML form). Výchozí verze měla tři vrstvy inspirované IEEE~830:
+[enumerate 3 vrstvy]
+Vrstva Specification byla při revizi odstraněna (zjednodušení na 2 vrstvy).
+Důvody: [itemize redundance, context rot, údržba]
+Výsledná 2-vrstvá šablona: Requirements + Architecture.
+
+\textbf{Obsah specifikace.} [itemize 24 AC, API kontrakt, slovník, behavioral model, out of scope]
+
+\textbf{Designová rozhodnutí a~jejich vliv na experiment.}
+[itemize behavior-driven AC, infrastructure-agnostic, strict API contract, explicitní out of scope]
 \end{raw}
 
 %% ----------------------------------------------------------------
 \subsection{Referenční implementace}
 \label{sec:ref-implementace-postup}
 
+\begin{draft}
+Referenční implementace slouží jako měřicí nástroj: definuje strop
+kvality proti kterému se porovnávají agentovy běhy. Její role
+v~metrikách popisuje sekce~\ref{sec:produktove-metriky}.
+
+Testy byly napsány metodou \textit{spec-first TDD}~(sekce~\ref{sec:testovani-mutation}):
+expected values pochází ze specifikace, ne z~pozorování kódu.
+
+Výsledná implementace obsahuje 45 behavioral testů pokrývajících
+všech 24 acceptance criteria (některá kritéria vyžadují více testových
+případů pro hraniční situace), dosahuje mutation score 91{,}9\,\%.
+Kód kompiluje bez typecheck errors, neobsahuje žádné \texttt{any}
+a~má 3 lint warnings (kosmetické, bez vlivu na funkční korektnost).
+LLM-as-judge (\textbf{Q8}) ohodnotil design quality na 3/3
+ve všech dimenzích. Tyto výsledky validují, že specifikace je
+implementovatelná a~že exit kritéria
+(sekce~\ref{sec:pilotni-iterace}) jsou dosažitelná lidským
+vývojářem.
+\end{draft}
+
 \begin{raw}
+\textbf{Audit trail --- předchozí verze 4.1.2:}
+
 Human-expert baseline pro měření kvality.
 
 Referenční implementace slouží jako měřicí nástroj --- definuje strop
 kvality proti kterému se porovnávají agentovy běhy. Podrobnosti o~jejím
 použití v~měření viz sekce~\ref{sec:referencni-testy} (kap.~3).
+Zde popisujeme \textit{jak} vznikla.
 
-Zde popisujeme \textit{jak} vznikla:
-\begin{itemize}
-    \item Workflow: spec-first TDD (read spec $\to$ write tests $\to$
-          implement $\to$ Stryker)
-    \item 45 behavioral testů (40 z~AC + 5 doplňkových edge cases)
-    \item Mutation score 91{,}9\,\%, 24/24 AC coverage
-    \item 0 typecheck errors, 0 \texttt{any}, 3 lint warnings
-    \item Q8 (LLM-as-judge): 3/3 všechny dimenze
-\end{itemize}
+\textbf{Postup.} Testy byly napsány metodou spec-first TDD~\cite{mathews2024}.
+\textbf{Výsledky:} [itemize 45 testů, mutation score, typecheck, Q8]
 
 Referenční implementace validuje, že specifikace je implementovatelná
 a~že exit kritéria (kap.~3) jsou dosažitelná lidským vývojářem.
@@ -133,7 +161,80 @@ a~že exit kritéria (kap.~3) jsou dosažitelná lidským vývojářem.
 \subsection{Konstrukce baseline instrukcí}
 \label{sec:konstrukce-instrukci}
 
+\begin{draft}
+Baseline verze \texttt{AGENTS.md} byla konstruována čistě z~literatury.
+Cílem bylo vytvořit výchozí bod jehož každá komponenta má opodstatnění
+v~empirických zjištěních.
+
+Konstrukce proběhla ve třech krocích: smazání předchozí ad-hoc verze,
+návrh struktury podle empiricky odvozeného pořadí komponent Mao
+et al.~\cite{mao2025fse} (Role $\to$ Goal $\to$ Specification $\to$
+Environment $\to$ Process $\to$ Package Quality $\to$ Constraints)
+a~mapování tří dimenzí chování (sekce~\ref{sec:sada-metrik}) na
+konkrétní instrukce.
+
+Pořadí sekcí vychází z~analýzy 2\,163 produkčních šablon: Mao
+et al.~\cite{mao2025fse} zjistili, že instrukce Role a~Directive na
+začátku dokumentu korelují s~vyšší efektivitou agenta, zatímco
+Constraints patří na konec. Toto empiricky odvozené pořadí tvoří
+páteř baseline dokumentu.
+
+Sekce Package Quality definuje očekávání na kvalitu kódu: modulární
+struktura (typy, business logika a~veřejné API v~oddělených souborech),
+striktní typový systém bez obcházení (\texttt{any}), JSDoc dokumentace
+na exportech a~jasně definovaný vstupní bod (\texttt{index.ts}
+re-exportuje pouze veřejné API). Tyto požadavky přímo ovlivňují
+metriky \textbf{Q5}--\textbf{Q8}. Lulla et al.~\cite{lulla2026}
+dokládají, že instrukce zaměřené na architekturu a~konvence jsou
+nejúčinnějším obsahem ($-28\,\%$ doby běhu), zatímco podrobné
+step-by-step popisy přínos nepřinášejí.
+
+Procesní sekce obsahuje stručné instrukce pro spec-first
+TDD~\cite{mathews2024}, dekompozici do sub-issues, branch-per-issue
+a~conventional commits. Li et al.~\cite{skillsbench2025} ukazují, že
+procedurální guidance (``jak pracovat'') je efektivnější než popisná
+dokumentace (``jak vypadá codebase''). Z~procesní sekce byly odstraněny
+bash příklady, protože verbose step-by-step instrukce nejsou
+efektivnější než stručné~\cite{lulla2026} a~redundantní obsah zvyšuje
+tokeny bez benefitu~\cite{gloaguen2025agentsmd}.
+
+Sekce Constraints obsahuje explicitní zákazy: nekombinovat issues,
+nemodifikovat referenční testy, nepřepisovat git historii. Mao
+et al.~\cite{mao2025fse} zjistili, že exclusion constraints (46\,\%)
+jsou nejefektivnějším typem omezení.
+
+Výsledný dokument má 53 řádků a~$\sim$350 slov. Kompletní znění viz
+přílohu~\ref{app:baseline-agents-md}. Tabulka~\ref{tab:mapovani-instrukci}
+ukazuje mapování jednotlivých sekcí na metriky.
+
+\begin{table}[H]
+\centering
+\caption{Mapování sekcí baseline \texttt{AGENTS.md} na metriky}
+\label{tab:mapovani-instrukci}
+\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Cíl} & \textbf{Sekce AGENTS.md} & \textbf{Metriky} \\
+\midrule
+Spec-first             & Specification, Process bod 2 & P1 (bod 1) \\
+Strukturovaný workflow & Process body 1--4            & P1 (body 2--4) \\
+TDD                    & Process bod 2, Constraints   & P1 (body 3, 5) \\
+Modulární kód          & Package Quality              & Q5, Q7, Q8 \\
+API kompatibilita      & Specification (API Contract) & Q1 \\
+Funkční korektnost     & Specification (AC)           & Q2, Q4 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Specifikace, referenční implementace a~baseline instrukce tvoří výchozí
+bod experimentu. Následující sekce popisuje průběh
+pilotních iterací cyklem
+Run/Measure/Diagnose/Fix~(sekce~\ref{sec:pilotni-iterace}).
+\end{draft}
+
 \begin{raw}
+\textbf{Audit trail --- předchozí verze 4.1.3:}
+
 Konstrukce výchozí verze AGENTS.md na základě empirických frameworků.
 
 Na rozdíl od přístupu ``napsat instrukce a~iterovat'' byla baseline verze
@@ -141,49 +242,24 @@ konstruována čistě z~literatury, bez vlivu předchozích experimentálních
 běhů. Cílem bylo vytvořit výchozí bod jehož každá komponenta má
 opodstatnění v~empirických zjištěních.
 
-\textbf{Postup konstrukce:}
+\textbf{Postup konstrukce:} [enumerate smazání, FSE order, mapování]
+\textbf{Klíčová rozhodnutí:} [itemize FSE component order, Package Quality,
+zkrácení workflow, procesní instrukce, constraints]
 
-\begin{enumerate}
-    \item Smazání předchozí ad-hoc verze AGENTS.md (iterace r1--r5
-          sloužily k~validaci infrastruktury, ne k~výzkumu)
-    \item Návrh struktury podle FSE 2025 component order \cite{mao2025fse}:
-          Role $\to$ Goal $\to$ Specification $\to$ Environment $\to$
-          Process $\to$ Package Quality $\to$ Constraints
-    %% REFRAME: "cílů artefaktu" → "dimenzí chování" (závisí na kap03)
-    \item Mapování cílů artefaktu (sekce~\ref{sec:cile-artefaktu}) na
-          konkrétní instrukce
-\end{enumerate}
+Výsledný dokument: 53 řádků, $\sim$350 slov.
 
-\textbf{Klíčová rozhodnutí:}
+\textbf{Mapování na dimenze chování:} [tabulka cíl/sekce/metriky]
 
-\begin{itemize}
-    \item \textbf{FSE component order} --- Mao et al. \cite{mao2025fse}:
-          Role/Directive na začátku (p=0.87), Constraints na konci.
-          Empiricky odvozené pořadí z~2\,163 production templates.
-    \item \textbf{Package Quality sekce} --- nový blok vyžadující modulární
-          architekturu, strict TypeScript (žádné \texttt{any}, explicitní
-          return types), JSDoc na exportech, čistý API surface
-          (\texttt{index.ts} re-exportuje pouze public API). Motivace:
-          Lulla et al. \cite{lulla2026}: architektura + konvence =
-          nejefektivnější obsah AGENTS.md ($-28\,\%$ runtime).
-    \item \textbf{Zkrácení workflow} --- odstranění bash příkladů
-          z~procesní sekce. Lulla et al. \cite{lulla2026}: verbose
-          step-by-step instrukce nejsou efektivnější než stručné.
-          Gloaguen et al. \cite{gloaguen2025agentsmd}: redundantní obsah zvyšuje
-          tokeny bez benefitu.
-    \item \textbf{Procesní instrukce} --- spec-first TDD \cite{mathews2024},
-          dekompozice do sub-issues, branch-per-issue, conventional commits.
-          Procedurální charakter (``jak pracovat'') místo popisného
-          (``jak vypadá codebase''). Li et al. \cite{skillsbench2025}:
-          procedurální guidance efektivnější než dokumentace.
-    \item \textbf{Constraints} --- explicitní zákazy (nekombinovat issues,
-          nemodifikovat testy, nepřepisovat historii). FSE 2025
-          \cite{mao2025fse}: exclusion constraints (46\,\%) nejefektivnější
-          typ.
-\end{itemize}
+Tři artefakty tvoří výchozí bod experimentu. Následující sekce popisuje
+iterační cyklus Run/Measure/Diagnose/Fix.
 
-Výsledný dokument: 53 řádků, $\sim$350 slov. Kompletní znění viz
-sekce~\ref{sec:baseline-agents-md}.
+\textbf{Audit trail --- obsah zrušené sekce 4.2.1 (Baseline AGENTS.md):}
+
+Baseline instrukce (konstruované v~sekci~\ref{sec:konstrukce-instrukci})
+jsou výchozím bodem pilotní iterace. Dokument má 7 sekcí (Role, Goal,
+Specification, Environment, Process, Package Quality, Constraints),
+53 řádků a~$\sim$350 slov. Každá sekce odpovídá empiricky zdůvodněné
+komponentě~\cite{mao2025fse}. Kompletní znění viz přílohu~\ref{app:baseline-agents-md}.
 \end{raw}
 
 %% ================================================================
@@ -191,153 +267,111 @@ sekce~\ref{sec:baseline-agents-md}.
 \label{sec:pilotni-vysledky}
 %% ================================================================
 
-\subsection{Baseline AGENTS.md}
-\label{sec:baseline-agents-md}
+\begin{draft}
+Každá iterace sleduje cyklus Run/Measure/Diagnose/Fix
+(sekce~\ref{sec:pilotni-iterace}). U~prvního běhu (baseline) uvádíme
+kompletní tabulku metrik a~podrobnou diagnostiku. U~dalších běhů
+popisujeme pouze změny oproti předchozí iteraci; souhrnný přehled
+všech běhů obsahuje sekce~\ref{sec:souhrnne-vysledky}.
+\end{draft}
 
-\begin{raw}
-Kompletní znění výchozích instrukcí (konstruovaných v~sekci~\ref{sec:konstrukce-instrukci}).
+\subsection{Pilot-r1: baseline}
+\label{sec:pilot-r1}
 
-\begin{lstlisting}[language={},basicstyle=\ttfamily\footnotesize,breaklines=true,
-  literate={—}{{--}}1]
-# AGENTS.md -- Dunning System
+\begin{draft}
+První běh s~baseline instrukcemi
+(příloha~\ref{app:baseline-agents-md}). Agent Minimax přes OpenCode,
+jedna session bez restartů. Tabulka~\ref{tab:pilot-r1} shrnuje
+naměřené metriky.
 
-## Role
-You are a senior TypeScript developer building a production-grade
-npm package. You prioritize clean architecture, spec compliance,
-and test quality.
-
-## Goal
-Implement the dunning system (billing reminder state machine)
-specified in GitHub Issue #1. Deliver a modular, documented,
-publishable TypeScript package.
-
-## Specification
-Read Issue #1 completely before writing any code. It contains:
-- Acceptance Criteria -- every one must be satisfied and tested
-- API Contract -- exact TypeScript signatures to export
-- Domain Glossary -- use these terms in code and documentation
-- Out of Scope -- do not implement
-All design decisions must trace back to the spec.
-
-## Environment
-- Runtime: Node.js, TypeScript (strict mode, ESM)
-- Test runner: Vitest
-- Build: tsc
-- Tools: GitHub CLI (gh), Git
-
-## Process
-Decompose the spec into focused GitHub issues before writing code.
-Work through them sequentially:
-1. Create issues -- one concern per issue, starting with project setup
-2. For each issue: branch from main, write tests first, implement,
-   PR with "Closes #N", merge
-3. Use conventional commits: test: / feat: / docs:
-4. Run tsc --noEmit before every PR
-
-## Package Quality
-Structure the code as a production-grade npm package:
-- Modular architecture -- separate files for types, business logic,
-  utilities, and public API re-exports. No single-file implementations.
-- Strict TypeScript -- no any, explicit return types on public API.
-- Documentation -- JSDoc on all exported functions and types.
-- Clean API surface -- src/index.ts re-exports only the public API.
-
-## Constraints
-- Never combine multiple issues into one branch.
-- Never implement without a failing test first.
-- Never modify a test to match your implementation.
-- Never rewrite git history.
-- Do not add dependencies beyond the dev toolchain.
-\end{lstlisting}
-
-%% REFRAME: "cíle artefaktu" → "dimenze chování" (závisí na kap03)
-\textbf{Mapování na cíle artefaktu} (sekce~\ref{sec:cile-artefaktu}):
-
-\begin{tabular}{@{}lll@{}}
+\begin{table}[ht]
+\centering
+\caption{Pilot-r1: naměřené metriky}
+\label{tab:pilot-r1}
+\small
+\begin{tabular}{@{}llccl@{}}
 \toprule
-\textbf{Cíl} & \textbf{Sekce AGENTS.md} & \textbf{Metriky} \\
+\textbf{Kód} & \textbf{Metrika} & \textbf{Hodnota} & \textbf{Kritérium} & \textbf{Splněno?} \\
 \midrule
-Spec-first          & Specification, Process bod 2 & P1.1 \\
-Strukturovaný workflow & Process body 1--4        & P1.2--P1.4 \\
-TDD                 & Process bod 2, Constraints   & P1.3, P1.5 \\
-Modulární kód       & Package Quality              & Q5, Q7, Q8 \\
-Funkční korektnost  & Specification (AC)           & Q1, Q4 \\
-API kompatibilita   & Specification (API Contract) & Q2 \\
+P1 & Process compliance    & 2/5      & 5/5      & $\times$ \\
+P2 & Kvalita procesních výstupů & 2/3 & $\geq$ 2/3 & \checkmark \\
+Q1 & API contract match    & match    & match    & \checkmark \\
+Q2 & Ref.\ test pass rate  & 34/45    & 45/45    & $\times$ \\
+Q3 & Mutation score        & 84\,\%   & $\geq$ 70\,\% & \checkmark \\
+Q4 & AC coverage           & 23/24    & 24/24    & $\times$ \\
+Q5 & Lint warnings         & 2        & 0        & $\times$ \\
+Q6 & Typecheck errors      & 0        & 0        & \checkmark \\
+Q7 & Složitost kódu        & 2 viol.  & $\leq$ 10/fn & $\times$ \\
+Q8 & Design quality        & 1/3      & $\geq$ 2/3 & $\times$ \\
+\midrule
+E1 & Tokeny (in + out)     & 143k     & ---      & záznam \\
+E2 & Trvání                & 33 min   & ---      & záznam \\
+E3 & Dokončení             & ano, 0 restartů & --- & záznam \\
 \bottomrule
 \end{tabular}
-\end{raw}
+\end{table}
 
-\subsection{Průběh iterací}
+Ze 10 metrik s~exit kritériem splnil agent 4 (P2, Q1, Q3, Q6).
 
-\begin{raw}
-Každá iterace: metriky $\to$ diagnostika $\to$ změna instrukcí.
-
-%% ---- Pilot-r1 (baseline run) ----
-
-\subsubsection{Pilot-r1: baseline run}
-
-První běh s~baseline instrukcemi. Agent: minimax-m2.5 přes OpenCode.
-Jedna session, žádná compaction, žádný auto-continue restart.
-
-\textbf{Metriky:}
-
-\begin{tabular}{@{}llcl@{}}
-\toprule
-\textbf{Kód} & \textbf{Metrika} & \textbf{Hodnota} & \textbf{Pass?} \\
-\midrule
-P1 & Process compliance    & 3/6     & $\times$ \\
-P2 & Artifact quality      & 2/3     & $\times$ \\
-Q1 & Ref test pass rate    & 34/45   & $\times$ \\
-Q2 & API contract          & match   & \checkmark \\
-Q3 & Mutation score         & 84\,\% & \checkmark \\
-Q4 & AC coverage           & 23/24   & $\times$ \\
-Q5 & Lint warnings         & 2       & $\times$ \\
-Q6 & Typecheck errors      & 0       & \checkmark \\
-Q7 & Complexity            & 2 viol. & $\times$ \\
-Q8 & Design quality        & 1/3     & $\times$ \\
-\midrule
-E1 & Tokeny               & 143k    & --- \\
-E2 & Trvání               & 33 min  & --- \\
-E3 & Dokončení            & ano     & --- \\
-\bottomrule
-\end{tabular}
-
-3 metriky pass, 7 fail.
-
-\textbf{Behavioral trace:}
-
-Agent vytvořil 11 GitHub issues, ale pouze 4 branche a~4 PRs ---
-kombinoval více issues do jedné branch. Použil modulární strukturu
+Agent vytvořil 11 GitHub issues a~rozložil implementaci do
+4~pull requestů, každý s~vlastní branch. Zvolil modulární strukturu
 (4 soubory: \texttt{types.ts}, \texttt{businessDays.ts},
-\texttt{dunning.ts}, \texttt{index.ts}), což je přímý vliv sekce
-Package Quality v~instrukcích. Napsal 59 vlastních testů, všechny
-procházejí. Žádné \texttt{test:} commity --- vše jako \texttt{feat:}.
+\texttt{dunning.ts}, \texttt{index.ts}), což odpovídá požadavkům
+sekce Package Quality v~instrukcích. Napsal 59 vlastních testů,
+všechny procházejí.
 
-\textbf{Diagnostika:}
+\textbf{Diagnostika nesplněných metrik.}
+Tři procesní položky z~pěti nebyly splněny: agent sloučil 11~issues
+do 4~branches místo jedné branch per issue (P1 bod~2), nepoužil
+separátní \texttt{test:} commity (P1 bod~3) a~upravil jeden
+referenční test soubor (P1 bod~5). Tyto tři selhání sdílí společný
+vzorec --- agent upřednostnil rychlost dokončení před dodržením
+předepsaného workflow.
 
-\begin{description}
-    \item[P1 = 3/6] Tři selhání:
-    \begin{itemize}
-        \item P1.2 (branch per issue): 4 branche pro 11 issues ---
-              agent kombinoval issues přes explicitní zákaz v~Constraints
-        \item P1.3 (test-first): 0 \texttt{test:} commitů ---
-              agent nepsal testy separátně, vše commitoval jako \texttt{feat:}
-        \item P1.5 (test modifications): 1 soubor modifikován ---
-              agent upravil test po implementaci
-    \end{itemize}
-    \item[P2 = 2/3] Commits 2/3 (chybí \texttt{test:} prefix),
-          PRs 2/3 (PR~\#16 zavírá 7 issues najednou). Issues 3/3.
-    \item[Q1 = 34/45] 11 referenčních testů selhává --- pause/resume
-          logika a~edge cases v~business day výpočtech
-    \item[Q4 = 23/24] Jedno AC nepokryto testovým případem
-    \item[Q5 = 2, Q7 = 2] Lint warnings a~complexity violations ---
-          dvě funkce překračují McCabe threshold 10
-    \item[Q8 = 1/3] Documentation 1/3 (žádný JSDoc na exportech),
-          overall = minimum dimenzí = 1
-\end{description}
+Z~referenčních testů selhalo 11 z~45 (Q2 = 34/45). Selhání se
+koncentrují v~pause/resume logice a~hraničních případech výpočtu
+pracovních dní. Jedno acceptance criterion (AC~21) nemá v~agentově
+test suite odpovídající test (Q4 = 23/24). Dvě funkce překračují
+McCabe práh složitosti~10 (Q7). LLM-as-judge ohodnotil design
+quality na 1/3 (Q8) --- naming, separace zodpovědností, idiomatický
+TypeScript a~složitost dosáhly 3/3, ale dokumentace 1/3 (žádný JSDoc
+na veřejném API), a~celkové skóre odpovídá minimu dimenzí.
 
-\textbf{Změna instrukcí:} TODO --- diagnostika $\to$ literature-grounded fix.
+\textbf{Změna instrukcí pro r2:} bude doplněna po spuštění dalšího běhu.
+\end{draft}
+
+\begin{raw}
+\textbf{Audit trail --- předchozí verze pilot-r1:}
+
+Původní RAW verze s~P1=3/6 (6 položek), P1.2/P1.3/P1.5 submetrikami,
+description list diagnostikou. Přepočteno na P1=2/5 (5 položek)
+po sladění s~kap03.
 \end{raw}
+
+%% ---- Šablona pro další runy ----
+%% \subsection{Pilot-r2}
+%% \label{sec:pilot-r2}
+%%
+%% \begin{draft}
+%% \textbf{Změna instrukcí:} [co se změnilo v AGENTS.md a proč, s citací]
+%%
+%% \begin{table}[ht]
+%% \centering
+%% \caption{Pilot-r2: změny oproti r1}
+%% \label{tab:pilot-r2-delta}
+%% \small
+%% \begin{tabular}{@{}llccl@{}}
+%% \toprule
+%% \textbf{Kód} & \textbf{Metrika} & \textbf{r1} & \textbf{r2} & \textbf{Změna} \\
+%% \midrule
+%% P1 & Process compliance & 2/5 & ?/5 & \\
+%% ... & (jen metriky které se změnily) & & & \\
+%% \bottomrule
+%% \end{tabular}
+%% \end{table}
+%%
+%% [Diagnostika změn — 1-2 odstavce]
+%% \end{draft}
 
 %% ================================================================
 \section{Komparativní variace}
@@ -378,9 +412,41 @@ Pro každou substituci:
 %% ================================================================
 
 \begin{raw}
-Across-run srovnání všech běhů (pilot + variace).
-Tabulka se všemi P/Q/E metrikami per run.
+Souhrnná tabulka všech běhů (pilot + variace) a~graf vývoje
+klíčových metrik. Interpretace v~kapitole~\ref{kap:vyhodnoceni}.
 
+\begin{table}[ht]
+\centering
+\caption{Souhrnné výsledky všech běhů}
+\label{tab:cross-run}
+\small
+\begin{tabular}{@{}l*{4}{c}@{}}
+\toprule
+\textbf{Metrika} & \textbf{r1} & \textbf{r2} & \textbf{r3} & \textbf{...} \\
+\midrule
+P1 (process compliance)   & 2/5      & & & \\
+P2 (procesní výstupy)     & 2/3      & & & \\
+Q1 (API contract)         & match    & & & \\
+Q2 (ref.\ test pass rate) & 34/45    & & & \\
+Q3 (mutation score)       & 84\,\%   & & & \\
+Q4 (AC coverage)          & 23/24    & & & \\
+Q5 (lint warnings)        & 2        & & & \\
+Q6 (typecheck errors)     & 0        & & & \\
+Q7 (složitost)            & 2 viol.  & & & \\
+Q8 (design quality)       & 1/3      & & & \\
+\midrule
+E1 (tokeny)               & 143k     & & & \\
+E2 (trvání)               & 33 min   & & & \\
+E3 (dokončení)            & ano      & & & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%% TODO: graf vývoje metrik (pgfplots nebo obrázek)
+\end{raw}
+
+\begin{raw}
+%% TODO: Přesunout do kap05 (vyhodnocení) — tento blok patří do diskuze, ne do souhrnných výsledků.
 \textbf{Kontext pro diskuzi:}
 \begin{itemize}
     \item Gloaguen et al. \cite{gloaguen2025agentsmd}: generické AGENTS.md

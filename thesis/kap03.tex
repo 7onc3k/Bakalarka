@@ -9,38 +9,58 @@
 \label{sec:vyzkumny-pristup}
 
 \begin{draft}
-Kapitola~\ref{kap:vymezeni} identifikovala problém: existující
-benchmarky hodnotí AI coding agenty podle toho, zda úkol vyřešili,
-ale neměří jak pracovali ani jakou kvalitu má jejich výstup. Cílem
-této práce je navrhnout sadu metrik která toto pokrývá a~postup jak
-s~ní iterativně vylepšovat instrukce pro agenta.
-
-K~tomu potřebujeme navrhnout nové řešení a~ověřit, že funguje.
-Nepopisujeme existující jev (to by vyžadovalo behaviorální výzkum,
-například dotazníkovou studii mezi vývojáři), ale konstruujeme
-nástroj a~testujeme ho v~praxi. Tento přístup odpovídá návrhovému
-výzkumu (Design Science Research, DSR), který Hevner
-et al.~\cite{hevner2004} definují jako iterativní cyklus návrhu
+Kapitola~\ref{kap:vymezeni} definuje tři cíle (navrhnout sadu metrik,
+demonstrovat iterativní postup a~popsat pozorované tendence), jejichž
+naplnění vyžaduje navrhovat řešení, ověřovat ho v~praxi a~na základě
+výsledků iterativně upravovat instrukce. Takový postup,
+kdy se navrhuje řešení a~opakovaně vyhodnocuje, odpovídá návrhovému
+výzkumu (Design Science Research, DSR). Hevner
+et al.~\cite{hevner2004} ho definují jako iterativní cyklus návrhu
 a~vyhodnocení: řešení se navrhne, vyzkouší, a~na základě výsledků
-upraví.
+upraví. Peffers
+et al.~\cite{peffers2008} tento cyklus formalizují do šesti aktivit:
+(1)~identifikace problému, (2)~definice cílů řešení, (3)~návrh,
+(4)~demonstrace, (5)~vyhodnocení a~(6)~komunikace výsledků.
+V~naší práci odpovídá identifikace problému a~cíle
+kapitole~\ref{kap:vymezeni}, návrh a~demonstrace probíhají formou
+případové studie (tato kapitola a~kapitola~\ref{kap:prakticka-cast}),
+vyhodnocení shrnuje kapitola~\ref{kap:vyhodnoceni} a~komunikací je
+samotný text práce.
 
-V~naší práci vypadá tento cyklus následovně. Navrhneme instrukce
-pro agenta, spustíme ho na vývojovém úkolu, změříme výstup sadou
-metrik a~podle výsledků instrukce upravíme. Postup má dvě fáze:
-pilotní iterace, kde cyklus opakujeme dokud agent nesplní stanovené
-prahy, a~komparativní variace, kde z~fungujících instrukcí
+Aktivity návrh, demonstrace a~vyhodnocení se v~DSR opakují dokud
+řešení nedosáhne požadované kvality. V~naší práci operacionalizujeme
+tento cyklus jako čtyři kroky: Run (spustit agenta), Measure (změřit
+výstup), Diagnose (identifikovat příčiny) a~Fix (upravit instrukce).
+Každý průchod těmito kroky odpovídá jednomu průchodu Peffersovými
+aktivitami návrh~$\to$~demonstrace~$\to$~vyhodnocení. Podrobný popis
+kroků uvádí sekce~\ref{sec:pilotni-iterace}. Tento postup má dvě
+fáze:
+pilotní iterace, kde cyklus opakujeme dokud agent nesplní stanovená
+kritéria, a~komparativní variace, kde z~fungujících instrukcí
 systematicky odebíráme nebo nahrazujeme jednotlivé části a~měříme
 dopad na chování agenta.
 
-Obě fáze probíhají na jednom projektu (systém upomínek faktur),
-tedy formou případové studie. Yin~\cite{yin2018} pro tento typ
-výzkumu rozlišuje analytickou generalizaci: z~jednoho případu nelze
-zobecňovat na populaci, ale lze ukázat principy a~mechanismy.
-Více běhů na jednom projektu odpovídá tomu, co Yin nazývá embedded
-single-case design: jeden případ s~více vnořenými jednotkami analýzy
-(jednotlivé běhy agenta). Výsledky tedy ukazují, že navržený systém
-zachytí rozdíly v~chování agenta na tomto projektu, ne že funguje
-univerzálně.
+DSR vyžaduje demonstraci a~vyhodnocení navrženého řešení. Hevner
+et al.~\cite{hevner2004} uvádí několik možných přístupů: řízený
+experiment (kontrola proměnných, statistická analýza), simulace,
+nebo případová studie. Řízený experiment by vyžadoval dostatečný
+počet běhů pro statistickou sílu, což je při ceně jednoho běhu
+(tisíce tokenů, desítky minut) nepraktické. Simulace nepřipadá
+v~úvahu, protože chování agenta nelze modelovat bez skutečného
+spuštění. Zvolili jsme tedy případovou studii na jednom projektu
+(systém upomínek faktur), která umožňuje opakované běhy s~různými
+instrukcemi a~podrobnou analýzu každého běhu.
+
+Z~jednoho projektu nelze tvrdit, že výsledky platí pro všechny typy
+software. Cílem je ukázat, že navržená sada metrik dokáže
+kvantifikovat chování agenta a~že iterativní postup vede
+k~měřitelnému zlepšení. Yin~\cite{yin2018} pro tento typ výzkumu
+používá pojem analytická generalizace: neříkáme ``takhle to funguje
+vždy'', ale ``na tomto případu jsme ukázali princip, který lze ověřit
+na dalších projektech''. Yin tento design nazývá embedded single-case: zkoumáme jeden projekt,
+ale v~rámci něj provádíme více běhů agenta. Každý běh má vlastní
+instrukce, vlastní git historii a~vlastní sadu naměřených metrik,
+takže je můžeme porovnávat mezi sebou.
 \end{draft}
 
 \begin{raw}
@@ -70,239 +90,219 @@ Case study na jednom projektu. Yin: embedded single-case design, analytická gen
 %%         LLM-as-judge teorie v kap02, aplikace u P2/Q4/Q8.
 
 \begin{draft}
-Kapitola~\ref{kap:vymezeni} formuluje tři cíle: navrhnout metriky
-které měří proces a~kvalitu (cíl~1), demonstrovat iterativní postup
-(cíl~2) a~popsat pozorované tendence (cíl~3). Tato sekce popisuje
-sadu metrik pro cíl~1. Cíle~2 a~3 využívají tyto metriky
-v~experimentálním designu (sekce~\ref{sec:experimentalni-design}).
+Každý experimentální běh probíhá tak, že agent dostane prázdné
+GitHub repo, specifikaci v~Issue~\#1 a~instrukce v~\texttt{AGENTS.md},
+a~autonomně implementuje zadaný projekt. Výstup jednoho běhu (kód,
+testy, git historie) měříme sadou 13~metrik. Postup běhu
+a~experimentální design popisuje
+sekce~\ref{sec:experimentalni-design}.
 
-Metriky vychází z~taxonomie Fentona a~Biemana~\cite{fenton2014},
-kteří rozlišují tři kategorie: procesní metriky (jak se pracuje),
-produktové metriky (co vzniklo) a~metriky efektivity (za jakou cenu).
-Kapitola~\ref{kap:vymezeni} identifikovala, že existující benchmarky
-pokrývají pouze produktovou kategorii (funkční korektnost). Naše sada
-proto doplňuje zbývající dvě: procesní metriky P1--P2 měří jak agent
-pracoval, metriky efektivity E1--E3 měří spotřebované zdroje.
-Produktové metriky Q1--Q8 rozšiřujeme nad rámec pass/fail o~kvalitu
-testů a~kódu.
+Sada metrik pokrývá tři otázky: jak agent pracoval, co vyrobil
+a~za jakou cenu. Fenton a~Bieman~\cite{fenton2014} klasifikují
+měřitelné entity v~softwarovém inženýrství do tří kategorií: proces,
+produkt a~zdroje. V~kontextu AI agentů dospívají k~obdobnému
+rozdělení Yin et al.~(2025)~\cite{yin2025agents}, kteří hodnotí agentní
+frameworky ve třech dimenzích: effectiveness (výsledek), efficiency
+(průběh práce) a~overhead (spotřebované zdroje). Naše sada metrik
+sleduje stejnou strukturu a~obsahuje 13~metrik ve třech kategoriích:
 
-Teoretické základy jednotlivých metrik (mutation testing, cyklomatická
-složitost, LLM-as-judge) popisuje
-sekce~\ref{sec:mereni-kvality}. Zde uvádíme konkrétní volbu metrik,
-nástroje měření a~zdůvodnění prahů.
+\begin{description}
+    \item[P~-- proces (P1--P2)] Dodržel agent předepsaný postup?
+          Měříme dodržování workflow pravidel z~instrukcí (P1)
+          a~kvalitu procesních výstupů jako commit messages
+          a~issue descriptions (P2).
+    \item[Q~-- kvalita produktu (Q1--Q8)] Je kód kvalitní?
+          Měříme funkční korektnost (Q1--Q2), kvalitu testů (Q3--Q4)
+          a~udržovatelnost kódu (Q5--Q8).
+    \item[E~-- efektivita (E1--E3)] Za jakou cenu?
+          Zaznamenáváme spotřebu tokenů (E1), čas (E2)
+          a~míru autonomie (E3).
+\end{description}
+
+Výběr konkrétních metrik vychází z~potřeb případové studie
+a~dostupných nástrojů; sada si neklade nárok na úplnost.
+Teoretické základy jednotlivých metrik (proč jsou validní, jaká
+je evidence) popisuje sekce~\ref{sec:mereni-kvality}. Tato sekce
+se zaměřuje na \textit{jak} konkrétně měříme: jaký nástroj,
+s~jakou konfigurací, co je vstup a~co výstup. U~každé metriky
+uvádíme v~krátkosti co měří a~pak podrobně jak.
 \end{draft}
 
 \subsection{Procesní metriky (P1--P2)}
 \label{sec:procesni-metriky}
 
-%% KOSTRA: Jak agent pracuje — spec-first, TDD, strukturovaný postup, transparentnost.
-%%         P1 = binární compliance checklist (6 položek z git/GitHub).
-%%         P2 = kvalita procesních výstupů (LLM-as-judge).
-%%         Exit: P1=6/6, P2=3/3.
+\begin{draft}
+Procesní metriky~\cite{fenton2014} měří \textit{jak} agent pracuje.
+Instrukce v~AGENTS.md definují strukturovaný vývojový postup: agent
+má odvozovat práci ze specifikace, organizovat ji přes issues
+a~branches, psát testy před implementací a~dokumentovat rozhodnutí
+v~commit messages a~PR descriptions.
+
+\textbf{P1 (process compliance)} je binární checklist pěti položek
+pozorovatelných z~git logu a~GitHub API. Skript kontroluje:
+\begin{enumerate}
+    \item existenci issues s~timestampem před prvním kódovým commitem
+          (GitHub API: porovnání \texttt{created\_at} issue vs.\ čas
+          prvního commitu s~kódem),
+    \item branch name obsahující číslo issue (git branch),
+    \item commit s~testem předcházející implementačnímu commitu na téže
+          branch (git log: hledání test souborů v~diffu),
+    \item PR description obsahující odkaz na issue (GitHub API:
+          regex na \texttt{\#N} v~těle PR),
+    \item referenční testy beze změn oproti originálu (git diff
+          referenčních test souborů).
+\end{enumerate}
+Každá položka je splněna (1) nebo nesplněna (0). Checklist je plně
+automatizovaný.
+
+\textbf{P2 (kvalita procesních výstupů)} doplňuje P1 o~kvalitativní
+rozměr. P1 zachytí \textit{zda} agent dodržel postup, ale ne
+\textit{jak kvalitně}: agent může vytvořit issue s~jednou větou
+a~commit message \texttt{fix}. P2 hodnotí popisnost commit messages
+(atomicita, konvenční prefix), issue descriptions (scope, acceptance
+criteria) a~PR descriptions (co a~proč, odkaz na issue). Hodnocení
+provádí LLM-as-judge (sekce~\ref{sec:llm-as-judge-aplikace}).
+\end{draft}
 
 \begin{raw}
-\textbf{Předchozí obsah --- cíle (byl DRAFT v 3.3):}
-
-\textbf{Procesní cíle} --- agent dodržuje strukturovaný vývojový proces:
-\begin{enumerate}
-    \item \textbf{Spec-first} --- agent odvozuje veškerou práci ze specifikace,
-          ne z~trénovacích dat nebo předpokladů
-    \item \textbf{Strukturovaný pracovní postup} --- agent decomponuje, organizuje
-          a~trackuje práci systematicky (issues $\to$ branches $\to$ PRs)
-    \item \textbf{TDD} --- test-first vývojový cyklus s~průběžnými commity
-    \item \textbf{Transparentní proces} --- procesní výstupy dokumentují
-          co a~proč (commit messages, issue descriptions, PR descriptions)
-\end{enumerate}
-
-\medskip
-\textbf{Předchozí obsah --- metriky (byl DRAFT v 3.4.1):}
-
-Procesní metriky \cite{fenton2014} měří \textit{jak} agent
-pracuje. Místo jednotlivých kvantitativních metrik pro každý aspekt
-procesu používáme dvě komplementární měření: binární compliance
-checklist (P1) a~kvalitativní hodnocení procesních výstupů (P2).
-
-\begin{description}
-    \item[P1 --- process compliance.] Binární checklist pozorovatelný
-        z~git logu a~GitHub API. Každá položka je splněna (1) nebo
-        nesplněna (0), score = podíl splněných.
-        \begin{enumerate}
-            \item Vytvořil issues před kódem
-                  (\texttt{gh issue list} timestamps vs. první kódový commit)
-            \item Separátní branch per issue
-                  (\texttt{git branch~-a} vs. issue count)
-            \item Test commit před implementačním commitem
-                  (\texttt{git log} --- pořadí commitů)
-            \item PRs linkované na issues
-                  (\texttt{gh pr list} --- ``Closes \#N'')
-            \item Nemodifikoval existující test assertions
-                  (\texttt{git diff} na test souborech)
-            \item Typecheck prochází před PR
-                  (CI výstup nebo commit historie)
-        \end{enumerate}
-        Všechny položky jsou automaticky extrahovatelné jedním skriptem.
-        Žádná subjektivita --- binární výsledek, reprodukovatelný.
-    \item[P2 --- kvalita procesních výstupů.]
-        Commit messages (popisnost, atomicita, konvenční prefix),
-        issue descriptions (scope, AC, kontext),
-        PR descriptions (co a~proč, odkaz na issue).
-        Hodnocení LLM-as-judge (sekce~\ref{sec:llm-as-judge}).
-\end{description}
-
-\medskip
-\textbf{Exit kritéria:}
-P1 = 6/6 (binární checklist --- splněno nebo ne).
-P2 = 3/3 (good na škále LLM-as-judge).
+\textbf{Audit trail --- předchozí obsah 3.2.1:}
+Procesní cíle (spec-first, strukturovaný postup, TDD, transparentnost)
+a~původní popis metrik P1/P2 včetně exit kritérií (P1=5/5, P2=3/3).
+Exit kritéria přesunuta do tabulky~\ref{tab:metriky-prehled}
+a~sekce~\ref{sec:pilotni-iterace}.
 \end{raw}
 
 \subsection{Produktové metriky (Q1--Q8)}
 \label{sec:produktove-metriky}
 
-%% KOSTRA: Co agent vyrobil.
-%%         Q1-Q2 funkční korektnost, Q3-Q4 kvalita testů, Q5-Q8 kvalita kódu.
-%%         Ref test suite popis přímo u Q1.
-%%         U každé metriky: co měří, jak, exit práh, citační řetězec.
-
-\begin{raw}
-\textbf{Předchozí obsah --- cíle (byl DRAFT v 3.3):}
-
-\textbf{Produktové cíle} --- agent vyprodukuje kvalitní software:
-\begin{enumerate}
-    \item Funkční korektnost --- implementace splňuje acceptance criteria
-    \item Kompatibilní API --- dodržuje definovaný kontrakt
-    \item Kvalitní testy --- testy skutečně detekují chyby
-    \item Kvalitní kód --- čitelný, idiomatický, přiměřeně komplexní
-\end{enumerate}
-
-\medskip
-\textbf{Předchozí obsah --- metriky (byl DRAFT v 3.4.2):}
-
-Produktové metriky (kód Q --- quality) \cite{fenton2014} měří
-\textit{co} agent vyrobil --- funguje to? Jsou testy kvalitní? Je kód
-udržovatelný?
+\begin{draft}
+Produktové metriky~\cite{fenton2014} měří \textit{co} agent vyrobil.
+Pokrývají tři oblasti: funguje implementace správně (Q1--Q2), detekují
+agentovy testy skutečné chyby (Q3--Q4) a~je kód udržovatelný (Q5--Q8).
 
 \subsubsection*{Funkční korektnost (Q1--Q2)}
 
-\begin{description}
-    \item[Q1 --- referenční test pass rate.] 40 behavioral testů
-        odvozených z~acceptance criteria metodou TDD ze specifikace
-        \cite{mathews2024}. Testují chování přes veřejné API --- nezávislé
-        na interní struktuře agentovy implementace. Odpovídá přístupu
-        SWE-bench \cite{swebench2024}. Pass rate = projité testy / 40.
+\textbf{Q1 (API contract match)} ověřuje, zda agentův kód dodržuje
+definované rozhraní. Referenční typy se importují a~zkompilují proti
+agentovu kódu (\texttt{tsc}). Výsledek je binární: typy sedí, nebo ne.
+Q1 je vstupní podmínkou pro Q2: pokud agentův kód neimplementuje
+správné API, referenční testy nelze ani zkompilovat, a~výsledek Q2
+by byl nesmyslný.
 
-        \textit{Referenční test suite:}
-        Postup odpovídá spec-first TDD \cite{mathews2024}: nejprve se
-        napíší behavioral testy přímo z~AC ve formátu Given/When/Then
-        (testy jsou zpočátku červené). Následně se implementuje referenční
-        řešení tak, aby testy postupně zelenaly. Tato sekvence zajišťuje,
-        že expected values pochází ze specifikace, nikoliv z~pozorování
-        kódu (test oracle problem \cite{mathews2024}). Testy testují
-        chování přes veřejné API (black-box \cite{swebok2024}), nikoliv
-        interní implementaci --- lze je spustit na libovolném agentním
-        běhu. Vedlejší přínos: implementace referenčního řešení odhaluje
-        nejednoznačnosti ve specifikaci dříve než experimentální běhy.
-
-    \item[Q2 --- API contract match.] \texttt{tsc} import + type-check
-        referenčních typů proti agentovu kódu. Ověřuje kompatibilitu
-        s~definovaným rozhraním.
-\end{description}
+\textbf{Q2 (referenční test pass rate)} měří kolik z~referenčních
+testů projde na agentově implementaci. Vitest spustí 40~testů proti
+agentovu kódu; výsledek je počet passing testů z~40. Testy ověřují
+chování přes veřejné API (black-box,
+sekce~\ref{sec:testovani-mutation}), takže je lze spustit na
+libovolném běhu nezávisle na interní struktuře. Konstrukce referenční
+test suite popisuje sekce~\ref{sec:ref-implementace-postup}.
 
 \subsubsection*{Kvalita testů (Q3--Q4)}
 
-\begin{description}
-    \item[Q3 --- mutation score (Stryker).] Podíl zabitých mutantů ---
-        měří jestli agentovy testy skutečně detekují chyby, nebo jsou
-        tautologické. Silnější prediktor než strukturální coverage ---
-        36\,\% chyb odhalitelných pouze mutation testingem
-        \cite{papadakis2019}. Harman et al. \cite{meta2025} potvrdili
-        v~produkčním nasazení na Meta, že 70\,\% mutantů zůstává
-        neodhalených i~při plném coverage.
-    \item[Q4 --- AC coverage.] Kolik z~24 acceptance criteria má
-        odpovídající test. Měří úplnost pokrytí požadavků, ne jen
-        korektnost implementace. Mapování test $\to$ AC přes
-        LLM-as-judge (sekce~\ref{sec:llm-as-judge}).
-\end{description}
+\textbf{Q3 (mutation score)} měří, jestli agentovy testy skutečně
+detekují chyby~(sekce~\ref{sec:testovani-mutation}). Stryker
+s~konfigurací \texttt{-{}-mutate 'src/**/*.ts'} a~mutátory pro
+TypeScript (conditional, arithmetic, string, logical operators)
+systematicky zavádí drobné změny do zdrojového kódu. Vstup: agentovy
+testy + zdrojový kód. Výstup: procento zabitých mutantů z~celkového
+počtu.
+
+\textbf{Q4 (AC coverage)} měří, kolik z~24 acceptance criteria má
+odpovídající test v~agentově test suite. Na rozdíl od Q2 (funguje
+implementace?) se Q4 ptá, jestli agent \textit{testoval všechno co měl}.
+Judge dostane seznam 24~AC ze specifikace a~agentovu test suite. Pro
+každé AC určí, zda existuje test který ho pokrývá. Výstup: počet
+pokrytých AC z~24. Hodnocení provádí LLM-as-judge
+(sekce~\ref{sec:llm-as-judge-aplikace}).
 
 \subsubsection*{Kvalita kódu (Q5--Q8)}
 
-\begin{description}
-    \item[Q5 --- lint warnings.] \texttt{eslint --format json}, počet
-        varování a~chyb.
-    \item[Q6 --- typecheck errors.] \texttt{tsc --noEmit}, počet chyb.
-        Strict mode compliance --- počet \texttt{any} v~kódu.
-    \item[Q7 --- složitost kódu.] Cyklomatická složitost per funkce
-        (ESLint \texttt{complexity} rule), maximální délka funkce.
-        SWE-bench používá McCabe jako jednu z~metrik \cite{swebench2024}.
-    \item[Q8 --- kvalita kódu (LLM-as-judge).]
-        Naming conventions, separation of concerns, idiomatický TypeScript,
-        kvalita dokumentace, zbytečná komplexita.
-        Hodnocení LLM-as-judge (sekce~\ref{sec:llm-as-judge}).
-\end{description}
+\textbf{Q5 (lint warnings)} počítá varování a~chyby z~ESLint
+s~fixní konfigurací (pravidla: recommended + strict TypeScript rules).
+Konfigurace je součástí experimentální infrastruktury, ne agentova
+repo --- agent ji nemůže měnit. Výstup: celkový počet warnings + errors.
 
-\medskip
-\textbf{Exit kritéria:}
-Q1 = 40/40 (SWE-bench binary, pass all).
-Q2 = match (deterministické, tsc).
-Q3 $\geq$ 70\,\% (industry baseline, Meta \cite{meta2025}).
-Q4 = 24/24 (všechny AC mají test).
-Q5 = 0 (CI gate standard).
-Q6 = 0 (CI gate standard).
-Q7 $\leq$ 10 per fn (McCabe 1976, de facto standard).
-Q8 = 3/3 (good na škále LLM-as-judge).
+\textbf{Q6 (typecheck errors)} počítá chyby z~\texttt{tsc -{}-noEmit}
+ve strict mode. Doplňuje počet explicitních \texttt{any} ve zdrojových
+souborech (grep v~\texttt{src/**/*.ts}) jako proxy pro obcházení
+typového systému.
+
+\textbf{Q7 (složitost kódu)} měří cyklomatickou složitost per funkce.
+ESLint \texttt{complexity} rule reportuje funkce překračující
+nastavený práh. Výstup: maximální složitost across all functions.
+Práh $\leq$~10 per funkce vychází
+z~McCabe~(sekce~\ref{sec:staticka-analyza}).
+
+\textbf{Q8 (design quality)} hodnotí aspekty které automatizované
+nástroje nezachytí: pojmenování, oddělení zodpovědností, idiomatický
+TypeScript, kvalita dokumentace a~zbytečná komplexita. Hodnocení
+provádí LLM-as-judge (sekce~\ref{sec:llm-as-judge-aplikace}).
+\end{draft}
+
+\begin{raw}
+\textbf{Audit trail --- předchozí obsah 3.2.2:}
+Produktové cíle (funkční korektnost, kompatibilní API, kvalitní testy,
+kvalitní kód) a~původní popis metrik Q1--Q8 včetně exit kritérií.
+Exit kritéria přesunuta do tabulky~\ref{tab:metriky-prehled}
+a~sekce~\ref{sec:pilotni-iterace}.
 \end{raw}
 
 \subsection{Metriky efektivity (E1--E3)}
 \label{sec:metriky-efektivity}
 
-%% KOSTRA: Za jakou cenu agent pracuje.
-%%         E1 tokeny, E2 čas, E3 dokončení.
-%%         Bez exit prahu — deskriptivní srovnání mezi běhy.
+\begin{draft}
+Metriky efektivity měří zdroje spotřebované při vývoji. Nemají exit
+kritérium a~slouží k~porovnání nákladů mezi iteracemi.
+
+\textbf{E1 (tokeny)} počítá vstupní a~výstupní tokeny z~exportu
+agentní session. Sledování E1 motivuje zjištění Gloaguen
+et al.~\cite{gloaguen2025agentsmd}, že context files zvyšují inference
+cost o~více než 20\,\%.
+
+\textbf{E2 (trvání)} měří wall-clock time v~minutách od spuštění
+agenta po poslední commit.
+
+\textbf{E3 (dokončení)} zaznamenává, zda agent dokončil úkol bez
+pádu, a~počet restartů auto-continue pluginu jako proxy pro autonomii.
+
+S~jedním během per variaci jsou tyto hodnoty deskriptivní,
+ne inferenční.
+\end{draft}
 
 \begin{raw}
-\textbf{Předchozí obsah:}
-
-Metriky efektivity měří zdroje spotřebované při vývoji ---
-standardní dimenze v~agent benchmarcích (SWE-bench, AgentBench).
-
-\begin{description}
-    \item[E1 --- tokeny.] Input/output tokeny: \texttt{opencode export}
-          $\to$ JSON parsing.
-    \item[E2 --- trvání.] Wall-clock time v~minutách (session timestamps).
-    \item[E3 --- kompletní dokončení.] Crash / no crash + důvod.
-          Počet restartů auto-continue pluginu jako proxy pro autonomii.
-\end{description}
-
-S~N=1 per run jsou tyto metriky deskriptivní (porovnání napříč běhy),
-ne inferenční (žádné p-hodnoty).
-
-E1--E3 nemají pass/fail práh. Slouží k~porovnání nákladů mezi iteracemi.
-Gloaguen et al. \cite{gloaguen2025agentsmd} zjistili, že context
-files zvyšují inference cost o~více než 20\,\%, což motivuje
-sledování E1 (tokeny) jako kontrolního ukazatele.
+\textbf{Audit trail --- předchozí obsah 3.2.3:}
+Původní popis E1--E3 se zdroji (SWE-bench, AgentBench).
 \end{raw}
 
-%% LLM-as-judge teorie přesunuta do kap02 (sekce Měření kvality software).
-%% V kap03 zůstává jen aplikace — u P2, Q4, Q8 odkaz na kap02.
+\subsection{Aplikace LLM-as-judge}
+\label{sec:llm-as-judge-aplikace}
+
+\begin{draft}
+Tři metriky (P2, Q4, Q8) hodnotí vlastnosti které nelze extrahovat
+automatizovaným nástrojem. Pro jejich hodnocení používáme metodu
+LLM-as-judge (sekce~\ref{sec:llm-as-judge}).
+
+\textbf{Volba modelu.} Jako judge používáme GLM-5 (Zhipu AI).
+Agentní běhy provádí model Minimax, judge je tedy z~jiné modelové
+rodiny, čímž se eliminuje self-preference
+bias~\cite{panickssery2024}.
+
+\textbf{Škála.} Hodnocení probíhá na škále 1--3 per dimenze
+(poor / acceptable / good). Třístupňová škála snižuje šum při malém
+počtu běhů oproti jemnějšímu rozlišení.
+
+\textbf{Rubrika.} Judge dostane zdrojový kód a~git historii agentova
+běhu spolu s~rubrikou obsahující kritéria pro každý stupeň. Prompt
+je fixní across all runs. Rubriky jsou uvedeny v~příloze.
+
+\textbf{Validace.} Autor nezávisle ohodnotí stejné běhy na stejné
+škále. Výsledky porovnáme Cohenovým~$\kappa$ a~percent agreement.
+\end{draft}
 
 \begin{raw}
 \textbf{Audit trail --- LLM-as-judge obsah přesunut do kap02.}
-V~kap03 u~metrik P2, Q4, Q8 stačí: ``hodnocení metodou LLM-as-judge
-(sekce~X.X), model GLM-5, rubric v~příloze.''
-
-\textbf{Co zůstává v kap03 (aplikace):}
-\begin{itemize}
-    \item Model: GLM-5 (Zhipu AI) --- cross-family volba (zdůvodnění v~kap02)
-    \item Škála: 1--3 per dimenze (poor / acceptable / good)
-    \item Rubric: fixní prompt, totožný pro všechny běhy (příloha~X)
-    \item Validace: Cohenovo $\kappa$ autor vs LLM
-\end{itemize}
-
-\textbf{Co je v kap02 (teorie):}
-\begin{itemize}
-    \item LLM-as-judge metoda (Zheng 2023)
-    \item Self-preference bias (Panickssery 2024)
-    \item Cross-family jako řešení (Verga 2024, PoLL)
-\end{itemize}
+Teorie (Zheng 2023, Panickssery 2024, Verga 2024 PoLL) v~kap02.
+Aplikace (GLM-5, škála, rubric, $\kappa$) zde v~kap03.
 \end{raw}
 
 %% ==========================================================================
@@ -318,196 +318,180 @@ V~kap03 u~metrik P2, Q4, Q8 stačí: ``hodnocení metodou LLM-as-judge
 \subsection{Výběr projektu}
 \label{sec:vyber-projektu}
 
-%% KOSTRA: Proč dunning systém. Kritéria výběru (teď dávají smysl
-%%         protože čtenář už ví CO měříme z 3.2).
+\begin{draft}
+Případová studie potřebuje projekt, na kterém lze opakovaně spouštět
+agenta s~různými instrukcemi a~objektivně měřit výsledky. Projekt musí
+mít deterministickou logiku (stejný vstup vždy dá stejný výstup), aby
+bylo možné ověřit korektnost automatizovanými testy a~mutation testingem.
+Zároveň musí být dostatečně malý pro více experimentálních běhů, ale
+obsahovat reálné nuance (hraniční případy, doménová pravidla), aby
+měl agent co řešit.
+
+Zvolili jsme systém upomínek faktur: systém pro automatické odesílání
+připomínek k~nezaplaceným fakturám. Obsahuje stavový automat (nová,
+po splatnosti, upomínaná, eskalovaná), časové výpočty (pracovní dny,
+ochranné lhůty) a~pravidla pro eskalaci. Specifikace definuje 24
+acceptance criteria, API kontrakt (TypeScript typy a~signatury)
+a~doménový glossary. Tato kombinace deterministické logiky
+a~hraničních případů (víkendy, svátky, grace periods) umožňuje
+objektivně testovat jak funkční korektnost (Q1, Q2), tak kvalitu testů
+(Q3, Q4).
+\end{draft}
 
 \begin{raw}
-\textbf{Předchozí obsah (byl DRAFT v 3.2):}
-
-Experiment potřebuje projekt, na kterém lze spustit více běhů s~různým nastavením instrukcí a~objektivně měřit výsledky. Zvolený projekt musí splňovat:
-
-\begin{itemize}
-    \item \textbf{Hard logic} --- jasná business pravidla, ne subjektivní výstupy
-    \item \textbf{Jasné invarianty} --- deterministické chování, ověřitelná správnost
-    \item \textbf{Testovatelné} --- kvalitu výstupu lze měřit objektivně (testy, mutation score)
-    \item \textbf{Přiměřená velikost} --- menší projekt umožňuje více experimentálních běhů
-    \item \textbf{Reálný use case} --- prakticky využitelné, ne umělý příklad
-\end{itemize}
-
-\subsection*{Systém upomínek faktur}
-
-Systém pro automatické odesílání připomínek k~nezaplaceným fakturám. Obsahuje stavový automat pro sledování stavu faktury (nová, po splatnosti, upomínaná, eskalovaná), časové výpočty (pracovní dny, ochranné lhůty), pravidla pro eskalaci a~plánování odesílání upomínek.
+\textbf{Audit trail --- předchozí obsah 3.3.1:}
+Kritéria výběru (hard logic, jasné invarianty, testovatelné,
+přiměřená velikost, reálný use case) a~stručný popis projektu.
 \end{raw}
 
 \subsection{Fixní proměnné}
 \label{sec:fixni-promenne}
 
-%% KOSTRA: Co je stejné napříč běhy. AGENTS.md = jediná proměnná.
+\begin{draft}
+Aby bylo možné měřit vliv instrukcí, musí být všechno ostatní
+konstantní. Jedinou proměnnou mezi běhy je obsah souboru \texttt{AGENTS.md},
+procedurální instrukční sady, která definuje pracovní postup,
+omezení a~quality gates. Na rozdíl od generických context files,
+které typicky popisují adresářovou strukturu a~build
+příkazy~\cite{gloaguen2025agentsmd}, jde o~fokusované instrukce
+s~konkrétními procedurami~\cite{skillsbench2025}.
+
+Fixní proměnné jsou:
+
+\textbf{Prázdné GitHub repo} obsahuje pouze \texttt{AGENTS.md},
+konfiguraci agenta a~auto-continue plugin. Žádný existující kód,
+testy ani \texttt{package.json}. Agent musí inicializovat projekt
+a~zvolit strukturu sám.
+
+\textbf{Specifikace v~GitHub Issue~\#1} obsahuje 24 acceptance
+criteria, API kontrakt (TypeScript typy a~signatury), doménový
+glossary a~out of scope. Jediný vstup který agent dostane kromě
+instrukcí.
+
+\textbf{Auto-continue plugin} je hook který detekuje kdy se agent
+zastaví a~automaticky ho restartuje. Počítadlo restartů a~kontrola
+otevřených issues zajišťují běh bez manuálního zásahu. Metrika E3
+z~toho čerpá.
+
+\textbf{Model Minimax-2.5} byl zvolen jako model schopný autonomně
+dokončit zadaný úkol. Cílem práce je vyhodnotit sadu metrik
+a~iterativní postup, ne srovnávat výkon modelů — volba konkrétního
+modelu je v~tomto ohledu sekundární. Minimax je zároveň z~jiné
+modelové rodiny než judge (GLM-5, Zhipu AI), čímž se eliminuje
+self-preference bias~(sekce~\ref{sec:llm-as-judge}).
+
+\textbf{System prompt agenta} (\texttt{build.md}) nahrazuje výchozí
+system prompt nástroje OpenCode, jehož instrukce o~verzování
+konfliktvaly s~procesními požadavky experimentu. Vlastní system prompt
+obsahuje pouze obecné kódové konvence (styl, bezpečnost, zákaz
+komentářů) a~odkaz na \texttt{AGENTS.md}. Veškeré procesní instrukce
+jsou výhradně v~\texttt{AGENTS.md}, aby procesní chování agenta bylo
+řízeno jedinou proměnnou experimentu.
+\end{draft}
 
 \begin{raw}
-\textbf{Předchozí obsah (byl DRAFT v 3.5.1):}
-
-Všechny běhy sdílejí stejný setup --- jedinou proměnnou je obsah
-\texttt{AGENTS.md}. Na rozdíl od generických context files, které
-typicky obsahují popis adresářové struktury a~build příkazů
-\cite{gloaguen2025agentsmd}, náš \texttt{AGENTS.md} je procedurální
-instrukční sada --- definuje pracovní postup, constraints a~quality gates.
-Toto odpovídá přístupu který Li et al. \cite{skillsbench2025}
-identifikovali jako efektivní: fokusované instrukce s~konkrétními
-procedurami místo vyčerpávající dokumentace.
-
-\begin{description}
-    \item[Prázdné GitHub repo] obsahuje pouze \texttt{AGENTS.md},
-          konfiguraci agenta a~auto-continue plugin. Žádný existující
-          kód, testy ani \texttt{package.json} --- agent si musí
-          zvolit project structure, inicializovat projekt a~nastavit
-          tooling sám. Tím se testuje schopnost agenta pracovat
-          od nuly podle specifikace.
-    \item[Specifikace v~GitHub Issue \#1] --- 24 acceptance criteria,
-          API contract (TypeScript typy a~signatury), doménový glossary
-          a~out of scope. Jediný vstup který agent dostane kromě
-          instrukcí.
-    \item[Auto-continue plugin] --- \texttt{session.idle} hook který
-          detekuje kdy se agent zastaví (tool approval, idle) a~automaticky
-          ho restartuje. Počítadlo restartů a~kontrola otevřených issues
-          zajišťují, že experiment běží bez manuálního zásahu dokud agent
-          neuzavře všechny issues nebo nedosáhne limitu restartů.
-          Metrika E3 (kompletní dokončení) z~toho čerpá.
-    \item[Model: minimax-m2.5-free] přes OpenCode. Volba na základě
-          dostupnosti (free tier, bez rate limitů) a~rychlosti inference.
-          Jiná modelová rodina než judge (GLM-5, Zhipu AI) ---
-          eliminuje self-preference bias při hodnocení
-          (sekce~\ref{sec:llm-as-judge}).
-    \item[System prompt \texttt{build.md}] (\texttt{mode: primary})
-          nahrazuje defaultní system prompt agenta. Obsahuje pouze
-          kódové konvence (TypeScript strict, ESM) --- žádné procesní
-          instrukce, ty jsou výhradně v~\texttt{AGENTS.md}.
-          Oddělení zajišťuje, že procesní chování agenta je řízeno
-          jedinou proměnnou experimentu.
-\end{description}
+\textbf{Audit trail --- předchozí obsah 3.3.2:}
+Popis fixních proměnných včetně detailů o auto-continue pluginu
+(\texttt{session.idle} hook) a~system promptu (\texttt{build.md},
+\texttt{mode: primary}).
 \end{raw}
 
 \subsection{Pilotní iterace}
 \label{sec:pilotni-iterace}
 
-%% KOSTRA: Run → Measure → Diagnose → Fix cyklus.
-%%         Diagnostický rámec (Mao, Hassan, Lulla, Razavi/Breunig).
-%%         Výstupy každé iterace.
-%%         Sběr dat: git log + GitHub API (P1), testy + statická analýza (Q1-Q7),
-%%         session export (E1-E3), LLM-as-judge (P2, Q4, Q8).
+\begin{draft}
+Pilotní fáze aplikuje DSR build-evaluate cyklus na instrukce.
+Každá iterace má čtyři kroky:
 
-\begin{raw}
-\textbf{Předchozí obsah (byl DRAFT v 3.5.2):}
-
-DSR build-evaluate cyklus aplikovaný na instrukce. Pilot končí
-když agent splní exit kritéria.
-
-\textbf{Každá iterace:}
 \begin{enumerate}
-    \item \textbf{Run} --- skript \texttt{new-run.sh} vytvoří prázdné
-          GitHub repo, zkopíruje aktuální \texttt{AGENTS.md}, vytvoří
-          Issue~\#1 se specifikací a~spustí agenta. Session transcript
-          se exportuje po dokončení.
-    \item \textbf{Measure} --- skript \texttt{analyze-run.sh} extrahuje
-          metriky ze tří zdrojů:
-          \begin{itemize}
-              \item \textit{Git log + GitHub API} $\to$ P1 compliance
-                    checklist (6 binárních položek)
-              \item \textit{Testy + statická analýza} $\to$ Q1 (referenční
-                    testy), Q2 (typecheck), Q3 (mutation score),
-                    Q5 (lint), Q6 (typecheck errors), Q7 (složitost)
-              \item \textit{Session metadata} $\to$ E1--E3
-                    (tokeny, trvání, restart count)
-          \end{itemize}
-          Skript \texttt{judge.sh} spouští LLM-as-judge hodnocení
-          pro P2 a~Q8.
-    \item \textbf{Diagnose} --- identifikovat kde a~proč agent nedodržel
-          očekávané chování. Diagnostický rámec:
-          \begin{itemize}
-              \item \textit{Component analysis} \cite{mao2025fse} --- která
-                    z~komponent instrukcí (directive, context, workflow,
-                    constraints) selhala?
-              \item \textit{Script balance} \cite{hassan2025sase} ---
-                    dominuje LoopScript na úkor BriefingScript/MentorScript?
-              \item \textit{Content effectiveness} \cite{lulla2026} ---
-                    přidává řádek hodnotu, nebo jen tokeny?
-              \item \textit{Prompt sensitivity} \cite{razavi2025, breunig2025} ---
-                    ignoruje agent instrukci opakovaně? $\rightarrow$
-                    přestrukturovat, ne opakovat
-          \end{itemize}
-    \item \textbf{Fix} --- upravit \texttt{AGENTS.md} s~odkazem na diagnózu
-          a~literaturu. Každá změna se zaznamená do CHANGELOG s~citací.
-    \item \textbf{Repeat} --- dokud agent konzistentně splní exit kritéria
+    \item \textbf{Run.} Skript vytvoří prázdné GitHub repo, zkopíruje
+          aktuální \texttt{AGENTS.md}, vytvoří Issue~\#1 se specifikací
+          a~spustí agenta. Session transcript se exportuje po dokončení.
+
+    \item \textbf{Measure.} Skript extrahuje metriky ze tří zdrojů:
+          git log a~GitHub API (P1), testy a~statická analýza
+          (Q1--Q3, Q5--Q7) a~session metadata (E1--E3). Kvalitativní
+          metriky (P2, Q4, Q8) hodnotí LLM-as-judge
+          (sekce~\ref{sec:llm-as-judge-aplikace}).
+
+    \item \textbf{Diagnose.} Identifikovat kde a~proč agent nedodržel
+          očekávané chování. Diagnóza postupuje ve čtyřech krocích:
+          (1)~\textit{co selhalo}: component
+          analysis~\cite{mao2025fse} rozloží instrukce na složky
+          a~určí která z~nich nedosáhla očekávaného efektu;
+          (2)~\textit{proč to selhalo}: script
+          balance~\cite{hassan2025sase} posoudí zda v~instrukcích
+          dominuje procedura na úkor kontextu, nebo naopak;
+          (3)~\textit{stojí to za to}: content
+          effectiveness~\cite{lulla2026} vyhodnotí zda daná část
+          instrukcí přidává hodnotu, nebo jen tokeny;
+          (4)~\textit{jak opravit}: prompt
+          sensitivity~\cite{razavi2025, breunig2025} říká, že
+          opakování ignorované instrukce nepomáhá, účinnější je
+          přestrukturování.
+
+    \item \textbf{Fix.} Upravit \texttt{AGENTS.md} s~odkazem na diagnózu.
+          Každá změna se zaznamená s~citací a~zdůvodněním.
 \end{enumerate}
 
-\textbf{Výstup každé iterace:}
-\begin{itemize}
-    \item Aktualizovaný \texttt{AGENTS.md} (diff oproti předchozí verzi)
-    \item CHANGELOG záznam: co se změnilo, proč, jaká evidence vedla ke~změně
-    \item Kompletní P/Q/E metriky per run
-    \item FINDINGS.md --- behavioral trace, diagnóza, návrh fixu
-\end{itemize}
+Cyklus se opakuje dokud agent nesplní exit kritéria. Ta se dělí na
+deterministické (přirozená binární hranice) a~minimální standard
+(kritérium zdůvodněné literaturou). Deterministická kritéria: P1 = 5/5,
+Q1 = match, Q2 = 40/40, Q4 = 24/24, Q5 = 0, Q6 = 0. Minimální
+standard: Q3 $\geq$ 70\,\% (práh zvolený autorem jako pragmatické
+minimum; Harman et al.~\cite{meta2025} zjistili, že při plném
+coverage 70\,\% mutantů nezachytí ani produkční testy, takže nižší
+práh by nebyl smysluplnou hranicí),
+Q7 $\leq$ 10 per funkce~\cite{mccabe1976}, P2 a~Q8 $\geq$ 2/3 na škále
+LLM-as-judge. Metriky efektivity (E1--E3) se zaznamenávají bez kritéria
+pro srovnání mezi běhy. S~ohledem na scope práce (jeden projekt,
+jeden model) je kritériem jeden úspěšný běh bez manuálního zásahu.
 
-Konkrétní skripty a~jejich konfigurace jsou v~příloze~X.
+Každá iterace produkuje: aktualizovaný \texttt{AGENTS.md} (diff
+oproti předchozí verzi), záznam změn se zdůvodněním, kompletní
+P/Q/E metriky a~diagnostickou zprávu. Konkrétní skripty a~jejich
+konfigurace jsou v~příloze.
+\end{draft}
 
-\medskip
-\textbf{Exit kritéria pilotní fáze:}
-
-Pilot končí když agent v~posledním běhu splní všechny prahy
-(tabulka~\ref{tab:metriky-prehled}). S~ohledem na scope práce
-(jeden projekt, jeden model) je kritériem jeden úspěšný run
-bez manuálního zásahu.
-
-Prahy se dělí na deterministické (přirozený binární práh: 0 nebo all)
-a~minimální standard (odůvodněný práh z~literatury):
-
-Deterministické: P1=6/6, Q1=40/40, Q2=match, Q4=24/24, Q5=0, Q6=0.
-
-Minimální standard: P2$\geq$3/3, Q3$\geq$70\,\% \cite{meta2025},
-Q7$\leq$10/fn (McCabe 1976), Q8$\geq$3/3.
-
-Efektivita (E1--E3): záznam bez prahu, across-run srovnání.
+\begin{raw}
+\textbf{Audit trail --- předchozí obsah 3.3.3:}
+Podrobný popis Run/Measure/Diagnose/Fix cyklu, diagnostický rámec
+(Mao component analysis, Hassan script balance, Lulla content
+effectiveness, Razavi/Breunig prompt sensitivity), výstupy iterace
+(AGENTS.md diff, CHANGELOG, FINDINGS.md), exit kritéria.
 \end{raw}
 
 \subsection{Komparativní variace}
 \label{sec:komparativni-variace}
 
-%% KOSTRA: Ablace a substituce na fungující sadě instrukcí.
-%%         Výběr variací závisí na diagnostice pilotních běhů.
+\begin{draft}
+Z~fungující sady instrukcí (výstup pilotní fáze) systematicky měníme
+jednotlivé části a~měříme dopad na chování agenta. Používáme dva typy
+změn: ablace (odebrání části, tedy funguje agent i~bez ní?) a~substituce
+(nahrazení alternativní formulací, tedy která varianta produkuje lepší
+výsledky?).
+
+Konkrétní variace nelze specifikovat předem. Pilotní fáze
+\textit{generuje} hypotézy o~tom, které složky instrukcí jsou pro
+chování agenta podstatné, a~komparativní fáze je testuje. Výběr
+variací bude vycházet z~diagnostiky pilotních běhů pomocí rámců
+popsaných v~sekci~\ref{sec:pilotni-iterace}. Například pokud se
+v~pilotu ukáže, že agent konzistentně ignoruje pravidlo o~test-first
+commitech, komparativní variace může testovat, zda odebrání tohoto
+pravidla změní i~ostatní metriky, nebo zda alternativní formulace
+vede k~lepšímu dodržování.
+
+S~jedním během per variaci nelze statisticky odlišit efekt změny
+od šumu způsobeného nedeterminismem
+LLM~(sekce~\ref{sec:omezeni-validita}). Výsledky komparativní fáze
+proto interpretujeme jako indikativní, ne kauzální.
+\end{draft}
 
 \begin{raw}
-\textbf{Předchozí obsah (byl RAW v 3.5.4):}
-
-Z~fungující sady instrukcí (výstup pilotní fáze) systematicky
-měníme jednotlivé komponenty a~měříme dopad na chování agenta.
-
-\textbf{Možné typy změn:}
-\begin{description}
-    \item[Ablace] --- odebrání komponenty. Měří \textit{nutnost}:
-          funguje agent bez této instrukce?
-    \item[Substituce] --- nahrazení komponenty alternativou. Měří
-          \textit{efekt formulace}: která varianta produkuje lepší výsledky?
-\end{description}
-
-\textbf{Výběr variací.}
-Konkrétní variace nelze specifikovat předem --- v~DSR pilotní fáze
-\textit{generuje} hypotézy, komparativní fáze je testuje.
-Výběr bude vycházet z~diagnostiky pilotních běhů pomocí rámců
-z~sekce~\ref{sec:pilotni-iterace}:
-\begin{itemize}
-    \item Mao et al. \cite{mao2025fse} --- 7 komponent prompt šablony
-    \item Hassan et al. \cite{hassan2025sase} --- balance skriptů
-    \item Lulla et al. \cite{lulla2026} --- architektura efektivní, verbose ne
-    \item Li et al. \cite{skillsbench2025} --- 2--3 fokusované moduly lepší než 4+
-    \item Gloaguen et al. \cite{gloaguen2025agentsmd} --- zbytečné requirements zhoršují
-\end{itemize}
-
-\textbf{Limitations.}
-\begin{itemize}
-    \item Prompt sensitivity \cite{razavi2025}: s~N=1 per variaci nelze
-          odlišit efekt formulace od šumu.
-    \item Single-agent izolace: nezohledňujeme scénáře s~externími příspěvky.
-\end{itemize}
+\textbf{Audit trail --- předchozí obsah 3.3.4:}
+Popis ablace/substituce, výběr variací z literatury (Mao, Hassan,
+Lulla, Li/SkillsBench, Gloaguen), limitations (prompt sensitivity,
+single-agent izolace).
 \end{raw}
 
 %% ==========================================================================
@@ -517,45 +501,46 @@ z~sekce~\ref{sec:pilotni-iterace}:
 \section{Přehledová tabulka}
 \label{sec:prehledova-tabulka}
 
-%% KOSTRA: Souhrnná tabulka — reference pro čtenáře.
-%%         Metrika + nástroj + exit práh na jednom místě.
+\begin{draft}
+Tabulka~\ref{tab:metriky-prehled} shrnuje všechny metriky na jednom
+místě. Sloupec \textit{typ} rozlišuje deterministická exit kritéria
+(přirozená binární hranice), minimální standard (práh zdůvodněný
+literaturou) a~záznamové metriky (bez kritéria, slouží k~porovnání
+mezi běhy). Automatizované metriky (P1, Q1--Q3, Q5--Q7, E1--E3)
+sbírá jeden skript; kvalitativní metriky (P2, Q4, Q8) hodnotí
+LLM-as-judge (sekce~\ref{sec:llm-as-judge-aplikace}).
+\end{draft}
 
-\begin{raw}
 \begin{table}[H]
 \centering
-\caption{Sada metrik: kód, měřená vlastnost, nástroj a~exit práh}
+\caption{Sada metrik: kód, měřená vlastnost, nástroj, exit kritérium a~typ}
 \label{tab:metriky-prehled}
 \small
-\begin{tabular}{@{}llll@{}}
+\begin{tabular}{@{}lllll@{}}
 \toprule
-\textbf{Kód} & \textbf{Metrika} & \textbf{Nástroj} & \textbf{Exit práh} \\
+\textbf{Kód} & \textbf{Metrika} & \textbf{Nástroj} & \textbf{Exit kritérium} & \textbf{Typ} \\
 \midrule
-\multicolumn{4}{@{}l}{\textit{Procesní (P) --- jak agent pracuje}} \\
-P1 & Process compliance (6 položek) & git, GitHub API & 6/6 \\
-P2 & Kvalita procesních výstupů    & LLM-as-judge (GLM-5) & 3/3 \\
+\multicolumn{5}{@{}l}{\textit{Procesní (P) --- jak agent pracuje}} \\[2pt]
+P1 & Process compliance (5 položek) & git, GitHub API & 5/5 & deter. \\
+P2 & Kvalita procesních výstupů    & LLM-as-judge (GLM-5) & $\geq$ 2/3 & min. \\
 \midrule
-\multicolumn{4}{@{}l}{\textit{Produktové (Q) --- co agent vyrobil}} \\
-Q1 & Referenční test pass rate  & Vitest (40 testů)       & 40/40 \\
-Q2 & API contract match         & tsc (import + typecheck) & match \\
-Q3 & Mutation score              & Stryker                 & $\geq$ 70\,\% \\
-Q4 & AC coverage (24 kritérií)   & LLM-as-judge (GLM-5)   & 24/24 \\
-Q5 & Lint warnings               & ESLint                  & 0 \\
-Q6 & Typecheck errors            & tsc \texttt{-{}-noEmit} & 0 \\
-Q7 & Cyklomatická složitost      & ESLint (complexity)     & $\leq$ 10/fn \\
-Q8 & Design quality              & LLM-as-judge (GLM-5)   & 3/3 \\
+\multicolumn{5}{@{}l}{\textit{Produktové (Q) --- co agent vyrobil}} \\[2pt]
+Q1 & API contract match         & tsc (import + typecheck) & match & deter. \\
+Q2 & Referenční test pass rate  & Vitest (40 testů)       & 40/40 & deter. \\
+Q3 & Mutation score              & Stryker                 & $\geq$ 70\,\% & min. \\
+Q4 & AC coverage (24 kritérií)   & LLM-as-judge (GLM-5)   & 24/24 & deter. \\
+Q5 & Lint warnings               & ESLint                  & 0 & deter. \\
+Q6 & Typecheck errors            & tsc \texttt{-{}-noEmit} & 0 & deter. \\
+Q7 & Cyklomatická složitost      & ESLint (complexity)     & $\leq$ 10/fn & min. \\
+Q8 & Design quality              & LLM-as-judge (GLM-5)   & $\geq$ 2/3 & min. \\
 \midrule
-\multicolumn{4}{@{}l}{\textit{Efektivita (E) --- za jakou cenu}} \\
-E1 & Tokeny (input + output)     & OpenCode export & --- \\
-E2 & Trvání (minuty)             & session timestamps & --- \\
-E3 & Dokončení + restarts        & auto-continue log & --- \\
+\multicolumn{5}{@{}l}{\textit{Efektivita (E) --- za jakou cenu}} \\[2pt]
+E1 & Tokeny (input + output)     & OpenCode export & --- & záznam \\
+E2 & Trvání (minuty)             & session timestamps & --- & záznam \\
+E3 & Dokončení + restarts        & auto-continue log & --- & záznam \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-Automatizované metriky (P1, Q1--Q3, Q5--Q7, E1--E3) sbírá skript
-\texttt{analyze-run.sh}; kvalitativní metriky (P2, Q4, Q8) hodnotí
-\texttt{judge.sh} přes LLM-as-judge (sekce~\ref{sec:llm-as-judge}).
-\end{raw}
 
 %% ==========================================================================
 %% Audit trail — starý obsah
@@ -568,49 +553,53 @@ Automatizované metriky (P1, Q1--Q3, Q5--Q7, E1--E3) sbírá skript
 \section{Omezení a~validita}
 \label{sec:omezeni-validita}
 
-%% KOSTRA: Threats to validity (Runeson & Höst 2009, Yin 2018).
-%%         Construct, internal, external validity + etika.
+\begin{draft}
+Každý výzkumný design má omezení. Následující analýza vychází
+z~kategorizace Runeson a~Höst~\cite{runeson2009}.
+
+\textbf{Konstruktová validita} (měříme to co chceme měřit?).
+Jednotlivé metriky vychází z~existující teorie: mutation
+testing~\cite{papadakis2019}, cyklomatická složitost~\cite{mccabe1976},
+taxonomie procesních a~produktových metrik~\cite{fenton2014}. Konkrétní
+kombinace metrik do sady a~volba exit kritérií jsou autorské a~představují
+návrh, ne ověřený standard. Tři metriky (P2, Q4, Q8) obsahují
+subjektivní složku (LLM-as-judge), kterou validujeme shodou
+s~manuálním hodnocením (Cohenovo~$\kappa$). Referenční testy (Q2)
+jsou odvozeny ze specifikace metodou TDD, čímž se snižuje riziko
+test oracle problému~\cite{mathews2024}.
+
+\textbf{Interní validita} (jsou závěry podložené daty?).
+Hlavní hrozba je nedeterminismus LLM: stejné instrukce mohou při
+různých bězích dát různé výsledky. S~jedním během per variaci nelze
+statisticky odlišit efekt změny instrukcí od náhodného
+šumu~\cite{razavi2025}. Částečnou mitigací je více běhů v~pilotní
+fázi. Další hrozbou je confirmation bias: autor navrhuje instrukce
+i~evaluuje výsledky. Tuto hrozbu oslabují automatizované metriky
+(P1, Q1--Q3, Q5--Q7), které nepodléhají subjektivnímu posouzení,
+a~volba judge modelu z~jiné rodiny.
+
+\textbf{Externí validita} (lze zobecnit?). Případová studie na jednom
+projektu, jednom modelu a~jednom agentním nástroji neumožňuje
+statistickou generalizaci. Yin~\cite{yin2018} pro tento typ výzkumu
+rozlišuje analytickou generalizaci: z~jednoho případu lze ukázat
+principy, ne statistické zákonitosti. Systém upomínek má
+deterministickou logiku a~výsledky nemusí platit pro projekty
+s~uživatelským rozhraním, strojovým učením nebo nedeterministickými
+výstupy. Přenositelné jsou metriky a~postup (kdokoliv je může použít
+na svém projektu), konkrétní naměřené hodnoty a~instrukce platí pro
+tuto studii.
+
+Výzkum nezahrnuje lidské účastníky. Veškerá data (git log, metriky,
+session transcripts) jsou generována experimentální infrastrukturou.
+Zdrojový kód a~experimentální data jsou veřejně dostupná.
+\end{draft}
 
 \begin{raw}
-\textbf{TODO --- dopsat jako DRAFT. Struktura:}
-
-\textbf{Construct validity} (měříme to co chceme měřit?):
-\begin{itemize}
-    \item Metriky vychází z~existující teorie (Fenton, Papadakis, McCabe),
-          ale konkrétní kombinace a~prahy jsou autorské
-    \item LLM-as-judge: subjektivní složka, validujeme Cohenovým $\kappa$
-    \item Referenční testy odvozeny ze specifikace (ne z~kódu), snižuje
-          test oracle problem \cite{mathews2024}
-\end{itemize}
-
-\textbf{Internal validity} (jsou závěry podložené daty?):
-\begin{itemize}
-    \item Prompt sensitivity \cite{razavi2025}: malá změna formulace může
-          změnit chování agenta, s~N=1 per run nelze odlišit od šumu
-    \item Nedeterminismus LLM: stejné instrukce mohou dát různé výsledky.
-          Částečně mitigováno více běhy v~pilotu.
-    \item Autor navrhuje instrukce i~evaluuje výsledky --- potenciální
-          confirmation bias. Mitigace: automatizované metriky (P1, Q1--Q7),
-          LLM-as-judge z~jiné rodiny (Q8, P2).
-\end{itemize}
-
-\textbf{External validity} (lze zobecnit?):
-\begin{itemize}
-    \item Jeden projekt, jeden model, jeden agent --- analytická
-          generalizace na teorii (Yin), ne statistická na populaci
-    \item Systém upomínek = deterministická logika. Výsledky nemusí
-          platit pro projekty s~UI, ML, nebo nedeterministickými výstupy.
-    \item Metriky a~postup jsou přenositelné (kdokoliv může použít),
-          konkrétní naměřené hodnoty a~instrukce platí pro tuto studii.
-\end{itemize}
-
-\textbf{Etické aspekty:}
-\begin{itemize}
-    \item Výzkum nezahrnuje lidské účastníky
-    \item Veškerá data (git log, metriky, session transcripts) jsou
-          generována experimentální infrastrukturou, ne sbírána od osob
-    \item Zdrojový kód a~experimentální data jsou veřejně dostupná
-\end{itemize}
+\textbf{Audit trail --- předchozí obsah 3.5:}
+Struktura: construct validity (Fenton, Papadakis, McCabe, LLM-as-judge
+$\kappa$, test oracle), internal validity (prompt sensitivity, LLM
+nedeterminismus, confirmation bias), external validity (analytická
+generalizace, deterministická logika, přenositelnost), etika.
 \end{raw}
 
 %% ==========================================================================

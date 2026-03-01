@@ -59,7 +59,7 @@ export const REFERENCE_DIR = path.join(EXPERIMENTS_DIR, "reference");
 // ============================================================================
 
 // --- P1: Process Compliance ---
-// 6 binarnich polozek checklistu, ktere merici zda agent dodrzuje
+// 5 binarnich polozek checklistu, ktere merici zda agent dodrzuje
 // spec-driven development proces (issues pred kodem, TDD, PR workflow...).
 
 export interface P1Item {
@@ -78,7 +78,7 @@ export interface P1Result {
   items: P1Item[];
   /** Pocet splnenych polozek */
   passed: number;
-  /** Celkovy pocet polozek (vzdy 6) */
+  /** Celkovy pocet polozek (vzdy 5) */
   total: number;
 }
 
