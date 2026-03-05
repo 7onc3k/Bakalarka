@@ -312,20 +312,30 @@ automatizovaným nástrojem. Pro jejich hodnocení používáme metodu
 LLM-as-judge (sekce~\ref{sec:llm-as-judge}).
 
 \textbf{Volba modelu.} Jako judge používáme GLM-5 (Zhipu AI).
-Agentní běhy provádí model Minimax, judge je tedy z~jiné modelové
-rodiny, čímž se eliminuje self-preference
-bias~\cite{panickssery2024}.
+Agentní běhy provádí model Minimax --- judge je tedy z~jiné modelové
+rodiny. Důvod: model má tendenci hodnotit výstupy svého vlastního
+druhu lépe, i~když jsou objektivně slabší
+(self-preference bias~\cite{panickssery2024}). Volba judge
+z~jiné modelové rodiny než agent tento bias
+eliminuje~\cite{verga2024poll}.
 
-\textbf{Škála.} Hodnocení probíhá na škále 1--3 per dimenze
-(poor / acceptable / good). Třístupňová škála snižuje šum při malém
-počtu běhů oproti jemnějšímu rozlišení.
+\textbf{Škála.} Hodnocení probíhá na škále 1--3 per dimenze:
+1~=~nevyhovující, 2~=~přijatelné, 3~=~dobré.
+Jemnější škály (1--5, 1--10) produkují při malém počtu hodnocených
+artefaktů vyšší mezijudge varianci~\cite{zheng2023mtbench};
+třístupňová škála je pro tento rozsah spolehlivější.
 
-\textbf{Rubrika.} Judge dostane zdrojový kód a~git historii agentova
-běhu spolu s~rubrikou obsahující kritéria pro každý stupeň. Prompt
-je fixní across all runs. Rubriky jsou uvedeny v~příloze.
+\textbf{Rubrika.} Judge dostane artefakty agentova běhu (zdrojový
+kód, commit messages, issue a~PR descriptions) spolu s~rubrikou
+obsahující popis každého stupně. Prompt je fixní across all runs,
+aby hodnocení bylo srovnatelné mezi iteracemi. Rubriky jsou
+uvedeny v~příloze.
 
-\textbf{Validace.} Autor nezávisle ohodnotí stejné běhy na stejné
-škále. Výsledky porovnáme Cohenovým~$\kappa$ a~percent agreement.
+\textbf{Validace.} Autor nezávisle ohodnotí stejné artefakty na
+stejné škále a~bez znalosti výsledku judge. Shodu měříme
+Cohenovým~$\kappa$~\cite{runeson2009}: hodnota $\kappa > 0{,}6$
+indikuje dostatečnou shodu pro vědecké
+závěry~\cite{landis1977}.
 \end{draft}
 
 \begin{raw}
@@ -402,12 +412,20 @@ zastaví a~automaticky ho restartuje. Počítadlo restartů a~kontrola
 otevřených issues zajišťují běh bez manuálního zásahu. Metrika E3
 z~toho čerpá.
 
-\textbf{Model Minimax-2.5} byl zvolen jako model schopný autonomně
+\textbf{Model MiniMax-M2.5} byl zvolen jako model schopný autonomně
 dokončit zadaný úkol. Cílem práce je vyhodnotit sadu metrik
 a~iterativní postup, ne srovnávat výkon modelů — volba konkrétního
-modelu je v~tomto ohledu sekundární. Minimax je zároveň z~jiné
+modelu je v~tomto ohledu sekundární. MiniMax-M2.5 je zároveň z~jiné
 modelové rodiny než judge (GLM-5, Zhipu AI), čímž se eliminuje
 self-preference bias~(sekce~\ref{sec:llm-as-judge}).
+
+\textbf{Běhové prostředí (Docker container)} zajišťuje, že agent
+nemá přístup ke globální konfiguraci nástroje, MCP serverům ani
+rozšířením nainstalovaným na hostitelském systému. Izolace zaručuje,
+že chování agenta je determinováno výhradně obsahem \texttt{AGENTS.md}
+a~specifikací — ne vedlejšími vstupy z~prostředí. Sdílený
+autentizační svazek zajišťuje konzistentní přístup k~API napříč
+běhy.
 
 \textbf{System prompt agenta} (\texttt{build.md}) nahrazuje výchozí
 system prompt nástroje OpenCode, jehož instrukce o~verzování
@@ -429,38 +447,10 @@ Popis fixních proměnných včetně detailů o auto-continue pluginu
 \label{sec:iterativni-cyklus}
 
 \begin{draft}
-Obě fáze experimentu sdílejí společný cyklus čtyř kroků:
-
-\begin{enumerate}
-    \item \textbf{Run.} Skript vytvoří prázdné GitHub repo, zkopíruje
-          aktuální \texttt{AGENTS.md}, vytvoří Issue~\#1 se specifikací
-          a~spustí agenta. Session transcript se exportuje po dokončení.
-
-    \item \textbf{Measure.} Skript extrahuje metriky ze tří zdrojů:
-          git log a~GitHub API (P1), testy a~statická analýza
-          (Q1--Q3, Q5--Q7) a~session metadata (E1--E3). Kvalitativní
-          metriky (P2, Q4, Q8) hodnotí LLM-as-judge
-          (sekce~\ref{sec:llm-as-judge-aplikace}).
-
-    \item \textbf{Diagnose.} Identifikovat kde a~proč agent nedodržel
-          očekávané chování. Diagnóza postupuje ve čtyřech krocích:
-          (1)~\textit{co selhalo}: component
-          analysis~\cite{mao2025fse} rozloží instrukce na složky
-          a~určí která z~nich nedosáhla očekávaného efektu;
-          (2)~\textit{proč to selhalo}: script
-          balance~\cite{hassan2025sase} posoudí zda v~instrukcích
-          dominuje procedura na úkor kontextu, nebo naopak;
-          (3)~\textit{stojí to za to}: content
-          effectiveness~\cite{lulla2026} vyhodnotí zda daná část
-          instrukcí přidává hodnotu, nebo jen tokeny;
-          (4)~\textit{jak opravit}: prompt
-          sensitivity~\cite{razavi2025, breunig2025} říká, že
-          opakování ignorované instrukce nepomáhá, účinnější je
-          přestrukturování.
-
-    \item \textbf{Fix.} Upravit \texttt{AGENTS.md} s~odkazem na diagnózu.
-          Každá změna se zaznamená s~citací a~zdůvodněním.
-\end{enumerate}
+Pilotní fáze postupuje opakováním čtyřkrokového cyklu, dokud agent
+nesplní exit kritéria. Každý průchod cyklem je jedna experimentální
+iterace — vstupem je aktuální verze \texttt{AGENTS.md}, výstupem
+upravená verze pro příští běh.
 
 \begin{center}
 \begin{tikzpicture}[
@@ -470,10 +460,10 @@ Obě fáze experimentu sdílejí společný cyklus čtyř kroků:
                 font=\small\sffamily},
     arr/.style={->, thick}
 ]
-    \node[box] (run)      {Run};
-    \node[box, right=of run]     (measure) {Measure};
-    \node[box, right=of measure] (diagnose){Diagnose};
-    \node[box, right=of diagnose](fix)     {Fix};
+    \node[box] (run)      {Spuštění};
+    \node[box, right=of run]     (measure) {Měření};
+    \node[box, right=of measure] (diagnose){Diagnóza};
+    \node[box, right=of diagnose](fix)     {Úprava};
 
     \draw[arr] (run)      -- (measure);
     \draw[arr] (measure)  -- (diagnose);
@@ -483,6 +473,43 @@ Obě fáze experimentu sdílejí společný cyklus čtyř kroků:
         {opakovat dokud exit kritéria};
 \end{tikzpicture}
 \end{center}
+
+\textbf{Spuštění.} Skript \texttt{new-run.ts} připraví izolované prostředí:
+vytvoří prázdné GitHub repo, zkopíruje aktuální \texttt{AGENTS.md},
+vytvoří Issue~\#1 se specifikací a~spustí agenta v~Docker kontejneru.
+Agent dostane výhradně prázdné repo, instrukce a~specifikaci — žádný
+existující kód ani závislosti. Po dokončení se exportuje session
+transcript (\texttt{transcript.json}).
+
+\textbf{Měření.} Skript \texttt{analyze-run.ts} extrahuje
+deterministické metriky automaticky: git log a~GitHub API (P1),
+výstup Vitest a~Stryker (Q2, Q3), statická analýza (Q5--Q7),
+session metadata (E1--E3). Kvalitativní metriky (P6, P7, P8, Q4,
+Q8) hodnotí LLM-as-judge GLM-5 podle fixní rubriky
+(sekce~\ref{sec:llm-as-judge-aplikace}). Výstupem je
+\texttt{FINDINGS.md} s~tabulkou metrik a~faktickým popisem
+chování agenta.
+
+\textbf{Diagnóza.} Z~naměřených hodnot a~behaviorálního popisu se
+identifikuje kde a~proč agent nedodržel očekávané chování. Analýza
+postupuje podle čtyř rámců:
+
+\begin{itemize}
+    \item Mao et al.~\cite{mao2025fse} — která složka instrukcí selhala a~proč
+    \item Hassan et al.~\cite{hassan2025sase} — zda obsah vyvažuje proceduru, kontext a~omezení
+    \item Lulla et al.~\cite{lulla2026} — zda každý řádek přidává hodnotu
+    \item Razavi, Breunig~\cite{razavi2025,breunig2025} — proč agent instrukci opakovaně ignoruje
+\end{itemize}
+
+Výstupem je \texttt{DIAGNOSIS.md} s~identifikovanými příčinami
+a~návrhem změn.
+
+\textbf{Úprava.} Na základě diagnózy se upraví \texttt{AGENTS.md}.
+Každá změna odpovídá jednomu identifikovanému problému, je podložena
+citací a~zaznamenaná v~changelogu — aby bylo zpětně dohledatelné
+proč daná úprava vznikla a~co měla opravit. Přestrukturování
+instrukcí je preferováno před jejich rozšiřováním: více textu
+neznamená lepší výsledky~\cite{lulla2026}.
 \end{draft}
 
 \begin{raw}
@@ -597,24 +624,44 @@ Výstupy kroku: aktualizovaný \texttt{AGENTS.md} + záznam \texttt{changelog/pi
 \label{sec:pilotni-iterace}
 
 \begin{draft}
-Pilotní fáze aplikuje cyklus iterativně, dokud agent nesplní exit
-kritéria. Ta se dělí na deterministické (přirozená binární hranice)
-a~minimální standard (kritérium zdůvodněné literaturou).
-Deterministická kritéria: P1--P5 = každá splněna, Q1 = match, Q2 = 45/45,
-Q4 = 24/24, Q5 = 0, Q6 = 0. Minimální standard: Q3 $\geq$ 70\,\%
-(práh zvolený autorem jako pragmatické minimum; Harman
-et al.~\cite{meta2025} zjistili, že při plném coverage 70\,\%
-mutantů nezachytí ani produkční testy, takže nižší práh by nebyl
-smysluplnou hranicí), Q7 $\leq$ 10 per funkce~\cite{mccabe1976},
-P6, P7, P8 a~Q8 $\geq$ 2/3 na škále LLM-as-judge. Metriky efektivity
-(E1--E3) se zaznamenávají bez kritéria pro srovnání mezi běhy.
-S~ohledem na scope práce (jeden projekt, jeden model) je kritériem
-jeden úspěšný běh bez manuálního zásahu.
+Pilotní fáze běží dokud agent nesplní exit kritéria. Kritéria se
+dělí na dva typy: deterministická mají přirozenou binární hranici
+(splněno / nesplněno), minimální standard je práh zdůvodněný
+literaturou.
 
-Každá iterace produkuje: aktualizovaný \texttt{AGENTS.md} (diff
-oproti předchozí verzi), záznam změn se zdůvodněním, kompletní
-P/Q/E metriky a~diagnostickou zprávu. Konkrétní skripty a~jejich
-konfigurace jsou v~příloze.
+\begin{table}[h]
+\centering
+\small
+\begin{tabularx}{\linewidth}{@{}llX@{}}
+\toprule
+\textbf{Metrika} & \textbf{Kritérium} & \textbf{Zdůvodnění} \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Deterministická}} \\
+P1       & 5/5 položek       & Přirozená binární hranice \\
+Q1       & match             & Přirozená binární hranice \\
+Q2       & 45/45 testů       & Přirozená binární hranice \\
+Q4       & 24/24 AC          & Přirozená binární hranice \\
+Q5       & 0 varování        & Přirozená binární hranice \\
+Q6       & 0 chyb            & Přirozená binární hranice \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Minimální standard}} \\
+Q3       & $\geq$ 70\,\%     & Při plném coverage zachytí produkční testy jen 70\,\% mutantů~\cite{meta2025} \\
+Q7       & $\leq$ 10 per funkce & McCabe~\cite{mccabe1976} \\
+P6, P7, P8 & $\geq$ 2/3 & Acceptable na škále LLM-as-judge \\
+Q8       & 3/3               & Dobrá kvalita kódu na škále LLM-as-judge \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Záznam (bez kritéria)}} \\
+E1--E3   & —                 & Srovnání mezi běhy \\
+\bottomrule
+\end{tabularx}
+\caption{Exit kritéria pilotní fáze}
+\label{tab:exit-kriteria}
+\end{table}
+
+S~ohledem na scope práce (jeden projekt, jeden model) stačí jeden
+úspěšný běh bez manuálního zásahu. Každá iterace produkuje
+aktualizovaný \texttt{AGENTS.md}, záznam změn se zdůvodněním
+a~kompletní P/Q/E metriky.
 \end{draft}
 
 \begin{raw}
@@ -744,7 +791,7 @@ Jednotlivé metriky vychází z~existující teorie: mutation
 testing~\cite{papadakis2019}, cyklomatická složitost~\cite{mccabe1976},
 taxonomie procesních a~produktových metrik~\cite{fenton2014}. Konkrétní
 kombinace metrik do sady a~volba exit kritérií jsou autorské a~představují
-návrh, ne ověřený standard. Tři metriky (P2, Q4, Q8) obsahují
+návrh, ne ověřený standard. Pět metrik (P6, P7, P8, Q4, Q8) obsahují
 subjektivní složku (LLM-as-judge), kterou validujeme shodou
 s~manuálním hodnocením (Cohenovo~$\kappa$). Referenční testy (Q2)
 jsou odvozeny ze specifikace metodou TDD, čímž se snižuje riziko

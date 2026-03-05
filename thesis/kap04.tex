@@ -293,19 +293,25 @@ naměřené metriky.
 \toprule
 \textbf{Kód} & \textbf{Metrika} & \textbf{Hodnota} & \textbf{Kritérium} & \textbf{Splněno?} \\
 \midrule
-P1 & Process compliance    & 2/5      & 5/5      & $\times$ \\
-P2 & Kvalita procesních výstupů & 2/3 & $\geq$ 2/3 & \checkmark \\
-Q1 & API contract match    & match    & match    & \checkmark \\
-Q2 & Ref.\ test pass rate  & 34/45    & 45/45    & $\times$ \\
-Q3 & Mutation score        & 84\,\%   & $\geq$ 70\,\% & \checkmark \\
-Q4 & AC coverage           & 23/24    & 24/24    & $\times$ \\
-Q5 & Lint warnings         & 2        & 0        & $\times$ \\
-Q6 & Typecheck errors      & 0        & 0        & \checkmark \\
-Q7 & Složitost kódu        & 2 viol.  & $\leq$ 10/fn & $\times$ \\
-Q8 & Design quality        & 1/3      & $\geq$ 2/3 & $\times$ \\
+P1 & Issues before code    & \checkmark & splněno  & \checkmark \\
+P2 & Branch per issue      & $\times$   & branches $\geq$ issues & $\times$ \\
+P3 & Test-first commits    & $\times$   & test: před feat: & $\times$ \\
+P4 & PRs linked to issues  & \checkmark & všechny PR & \checkmark \\
+P5 & Ref.\ testy nezměněny & $\times$   & 0 změn   & $\times$ \\
+P6 & Commit msg quality    & 2/3        & $\geq$ 2/3 & \checkmark \\
+P7 & Issue quality         & 2/3        & $\geq$ 2/3 & \checkmark \\
+P8 & PR quality            & 3/3        & $\geq$ 2/3 & \checkmark \\
+Q1 & API contract match    & match      & match    & \checkmark \\
+Q2 & Ref.\ test pass rate  & 34/45      & 45/45    & $\times$ \\
+Q3 & Mutation score        & 84\,\%     & $\geq$ 70\,\% & \checkmark \\
+Q4 & AC coverage           & 23/24      & 24/24    & $\times$ \\
+Q5 & Lint warnings         & 2          & 0        & $\times$ \\
+Q6 & Typecheck errors      & 0          & 0        & \checkmark \\
+Q7 & Složitost kódu        & 2 viol.    & 0 viol.  & $\times$ \\
+Q8 & Design quality        & 1/3        & $\geq$ 2/3 & $\times$ \\
 \midrule
-E1 & Tokeny (in + out)     & 143k     & ---      & záznam \\
-E2 & Trvání                & 33 min   & ---      & záznam \\
+E1 & Tokeny (in + out)     & 143k       & ---      & záznam \\
+E2 & Trvání                & 33 min     & ---      & záznam \\
 E3 & Dokončení             & ano, 0 restartů & --- & záznam \\
 \bottomrule
 \end{tabular}
@@ -337,7 +343,18 @@ quality na 1/3 (Q8) --- naming, separace zodpovědností, idiomatický
 TypeScript a~složitost dosáhly 3/3, ale dokumentace 1/3 (žádný JSDoc
 na veřejném API), a~celkové skóre odpovídá minimu dimenzí.
 
-\textbf{Změna instrukcí pro r2:} bude doplněna po spuštění dalšího běhu.
+\textbf{Změna instrukcí pro r2.}
+Čtyři selhání sdílela společný vzorec: instrukce popisovala princip, ale
+neoperacionalizovala ho jako konkrétní krok. Dle Breunig~\cite{breunig2025}
+a~Razavi~\cite{razavi2025} opakování textuálního pravidla efekt nemá ---
+nutné přestrukturovat jako verifikovatelný checkpoint. Krok~2 v sekci
+Process byl proto rozepsán na čtyři explicitní sub-kroky s~git příkazy
+(\texttt{git checkout -b issue-N}, separátní staging \texttt{tests/}
+vs.\ \texttt{src/}, PR s~\texttt{Closes \#N}). Ochrana referenčních testů
+byla zpřesněna: z~obecného ``never modify a test'' na konkrétní
+``\texttt{tests/\_ref\_tests/} are immutable''. Jako pre-PR quality gate
+byl přidán příkaz \texttt{npx eslint src/ --max-warnings 0}, který
+pokrývá i~complexity violations (Q7).
 \end{draft}
 
 \begin{raw}
@@ -348,30 +365,57 @@ description list diagnostikou. Přepočteno na P1=2/5 (5 položek)
 po sladění s~kap03.
 \end{raw}
 
-%% ---- Šablona pro další runy ----
-%% \subsection{Pilot-r2}
-%% \label{sec:pilot-r2}
-%%
-%% \begin{draft}
-%% \textbf{Změna instrukcí:} [co se změnilo v AGENTS.md a proč, s citací]
-%%
-%% \begin{table}[ht]
-%% \centering
-%% \caption{Pilot-r2: změny oproti r1}
-%% \label{tab:pilot-r2-delta}
-%% \small
-%% \begin{tabular}{@{}llccl@{}}
-%% \toprule
-%% \textbf{Kód} & \textbf{Metrika} & \textbf{r1} & \textbf{r2} & \textbf{Změna} \\
-%% \midrule
-%% P1 & Process compliance & 2/5 & ?/5 & \\
-%% ... & (jen metriky které se změnily) & & & \\
-%% \bottomrule
-%% \end{tabular}
-%% \end{table}
-%%
-%% [Diagnostika změn — 1-2 odstavce]
-%% \end{draft}
+\subsection{Pilot-r2}
+\label{sec:pilot-r2}
+
+\begin{draft}
+Druhý běh ověřoval čtyři cílené změny instrukcí. Tabulka~\ref{tab:pilot-r2-delta}
+ukazuje metriky kde došlo ke změně.
+
+\begin{table}[ht]
+\centering
+\caption{Pilot-r2: metriky s~změnou oproti r1}
+\label{tab:pilot-r2-delta}
+\small
+\begin{tabular}{@{}llccc@{}}
+\toprule
+\textbf{Kód} & \textbf{Metrika} & \textbf{r1} & \textbf{r2} & \textbf{Trend} \\
+\midrule
+P5       & Ref.\ testy nezměněny  & $\times$   & \checkmark  & opraveno \\
+Q2       & Ref.\ test pass rate   & 34/45      & 27/45       & horší \\
+Q5       & Lint warnings          & 2          & 1           & zlepšení \\
+Q7       & Složitost kódu         & 2 viol.    & 0           & opraveno \\
+Q8       & Design quality         & 1/3        & 1/3         & beze změny \\
+\midrule
+E1       & Tokeny (in + out)      & 143k       & 380k        & záznam \\
+E2       & Trvání                 & 33 min     & 37 min      & záznam \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Cílené fixe částečně fungovaly: ochrana referenčních testů (P1 bod~5)
+a~quality gate pro složitost (Q7) byly opraveny. Eslint check snížil
+lint warnings z~2 na~1. Procesní selhání P1 bodu~2 a~3 přetrvala,
+ale s~odlišným charakterem --- r1 měl \texttt{feat:} commity bez
+\texttt{test:} commitů, r2 naopak \texttt{test:} commity bez
+\texttt{feat:} commitů (3× \texttt{test:}, 0× \texttt{feat:}).
+Agent sloučil testy a~implementaci do jednoho commitu s~prefixem
+\texttt{test:}, čímž splnil literál konvence ale nikoli záměr separátního
+checkpointu. LLM-as-judge tento nesoulad zaznamenal (P6 = 2/3):
+``no feat: commits for implementation''.
+
+Dokumentace (Q8 = 1/3) zůstala beze změny navzdory explicitnímu
+požadavku JSDoc v~sekci Package Quality. Toto je případ popsaný
+Breunigem~\cite{breunig2025}: instrukce přítomna přes iterace,
+agent ji ignoruje. Samotný textový požadavek v~Package Quality nestačí
+--- nutný verifikovatelný self-check před PR.
+
+Regrese Q2 (27/45 oproti 34/45 v~r1) není způsobena změnou instrukcí.
+Agent zvolil odlišný přístup k~implementaci state machine logiky ---
+selhání jsou v~pause/resume přechodech a~hraničních případech eskalace,
+tedy jiná sada chyb než v~r1. Instrukce specifikaci popisují, ale
+neřídí konkrétní implementační volby.
+\end{draft}
 
 %% ================================================================
 \section{Komparativní variace}
@@ -424,20 +468,26 @@ klíčových metrik. Interpretace v~kapitole~\ref{kap:vyhodnoceni}.
 \toprule
 \textbf{Metrika} & \textbf{r1} & \textbf{r2} & \textbf{r3} & \textbf{...} \\
 \midrule
-P1 (process compliance)   & 2/5      & & & \\
-P2 (procesní výstupy)     & 2/3      & & & \\
-Q1 (API contract)         & match    & & & \\
-Q2 (ref.\ test pass rate) & 34/45    & & & \\
-Q3 (mutation score)       & 84\,\%   & & & \\
-Q4 (AC coverage)          & 23/24    & & & \\
-Q5 (lint warnings)        & 2        & & & \\
-Q6 (typecheck errors)     & 0        & & & \\
-Q7 (složitost)            & 2 viol.  & & & \\
-Q8 (design quality)       & 1/3      & & & \\
+P1 (issues before code)   & \checkmark & & & \\
+P2 (branch per issue)     & $\times$   & & & \\
+P3 (test-first)           & $\times$   & & & \\
+P4 (PRs linked)           & \checkmark & & & \\
+P5 (ref.\ testy)          & $\times$   & & & \\
+P6 (commit msg quality)   & 2/3        & & & \\
+P7 (issue quality)        & 2/3        & & & \\
+P8 (PR quality)           & 3/3        & & & \\
+Q1 (API contract)         & match      & & & \\
+Q2 (ref.\ test pass rate) & 34/45      & & & \\
+Q3 (mutation score)       & 84\,\%     & & & \\
+Q4 (AC coverage)          & 23/24      & & & \\
+Q5 (lint warnings)        & 2          & & & \\
+Q6 (typecheck errors)     & 0          & & & \\
+Q7 (složitost)            & 2 viol.    & & & \\
+Q8 (design quality)       & 1/3        & & & \\
 \midrule
-E1 (tokeny)               & 143k     & & & \\
-E2 (trvání)               & 33 min   & & & \\
-E3 (dokončení)            & ano      & & & \\
+E1 (tokeny)               & 143k       & & & \\
+E2 (trvání)               & 33 min     & & & \\
+E3 (dokončení)            & ano        & & & \\
 \bottomrule
 \end{tabular}
 \end{table}
