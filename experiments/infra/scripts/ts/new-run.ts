@@ -22,6 +22,7 @@
 import * as path from "node:path";
 import * as fs from "node:fs";
 import { execSync } from "node:child_process";
+import * as os from "node:os";
 import {
   exec,
   execStrict,
@@ -125,14 +126,20 @@ reports/
 `
   );
 
-  // .opencode/config.json — minimalni konfigurace opencode
-  const configSrc = path.join(INFRA_DIR, "config", "config.json");
-  if (fileExists(configSrc)) {
-    fs.copyFileSync(
-      configSrc,
-      path.join(runDir, ".opencode", "config.json")
-    );
-  }
+  // .opencode/config.json — minimalni konfigurace
+  const opencodeConfig = { "$schema": "https://opencode.ai/config.json" };
+  fs.writeFileSync(
+    path.join(runDir, ".opencode", "config.json"),
+    JSON.stringify(opencodeConfig, null, 2)
+  );
+
+  // .local/share/opencode/auth.json — provider auth (jen bailian, bez MCP)
+  // OpenCode čte auth z $HOME/.local/share/opencode/auth.json
+  const bailianApiKey = process.env.BAILIAN_API_KEY || "";
+  const authDir = path.join(runDir, ".local", "share", "opencode");
+  fs.mkdirSync(authDir, { recursive: true });
+  const authJson = { "bailian-coding-plan": { "type": "api", "key": bailianApiKey } };
+  fs.writeFileSync(path.join(authDir, "auth.json"), JSON.stringify(authJson, null, 2));
 
   // .opencode/agents/build.md — system prompt override (nahrazuje defaultni
   // qwen.txt system prompt v opencode). Fixni pres vsechny runy.
@@ -216,23 +223,41 @@ reports/
 
   console.log(`  Created: ${specTitle}`);
 
-  // --- Step 6: Spustime agenta ---
+  // --- Step 6: Spustime agenta v Docker containeru ---
+  // Docker zajistuje izolaci: zadne globalni MCP servery, skills ani konfigurace
+  // ktere by mohly ovlivnit chování agenta a reproducibilitu.
+  const dockerfileDir = path.join(INFRA_DIR);
+  const imageName = "bp-agent:latest";
+  const ghToken = process.env.GH_TOKEN || exec("gh auth token", {}, "");
+  const bailianKey = process.env.BAILIAN_API_KEY || "";
+
+  // Build image pokud neexistuje (nebo FORCE_REBUILD=1)
+  const imageExists = exec(`docker image inspect ${imageName}`, {}, "NOT_FOUND") !== "NOT_FOUND";
+  if (!imageExists || process.env.FORCE_REBUILD === "1") {
+    console.log("\u2192 Building agent Docker image...");
+    execStrict(`docker build -f Dockerfile.agent -t ${imageName} .`, { cwd: dockerfileDir, stdio: "inherit" });
+  }
+
   console.log("");
-  console.log("=== Starting agent ===");
+  console.log("=== Starting agent (Docker) ===");
   console.log("");
 
-  // Agent task: pracuj na Issue #1 podle AGENTS.md.
-  // Pouzivame execSync primo (ne nasi exec wrapper), protoze:
-  // - Chceme videt real-time output
-  // - Agent muze bezet desitky minut
   try {
     execSync(
-      `opencode run -m "${AGENT_MODEL}" "Work on Issue #1 according to AGENTS.md."`,
+      [
+        `docker run --rm --user ${process.getuid()}:${process.getgid()}`,
+        `--name bp-agent-${runName}`,
+        `-v ${runDir}:/workspace`,
+        `-v ${path.join(INFRA_DIR, "opencode-auth")}:/home/ubuntu/.local/share/opencode`,
+        `-v ${path.join(INFRA_DIR, "opencode-auth", "state")}:/home/ubuntu/.local/state`,
+        `-v ${path.join(INFRA_DIR, "opencode-config")}:/home/ubuntu/.config/opencode`,
+        `-e GH_TOKEN=${ghToken}`,
+        `-e HOME=/home/ubuntu`,
+        `${imageName}`,
+        `bash -c "gh auth setup-git && opencode run -m \"${AGENT_MODEL}\" \"Work on Issue #1 according to AGENTS.md.\""`
+      ].join(" "),
       {
-        cwd: runDir,
-        // stdio: inherit — agent output jde primo do terminalu
         stdio: "inherit",
-        // Bez timeoutu — agent muze bezet hodiny
         timeout: 0,
       }
     );

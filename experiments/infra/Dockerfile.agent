@@ -1,0 +1,48 @@
+FROM ubuntu:24.04
+
+# Zakaz interaktivních promptů při apt
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Základní nástroje
+RUN apt-get update && apt-get install -y \
+    curl git ca-certificates unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# GitHub CLI
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+    | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+    | tee /etc/apt/sources.list.d/github-cli.list \
+    && apt-get update && apt-get install -y gh \
+    && rm -rf /var/lib/apt/lists/*
+
+# Node.js 22 (pro npx/tsx v agentově repo)
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+# OpenCode CLI (fixní verze pro reproducibilitu runů)
+ARG OPENCODE_VERSION=1.2.15
+RUN curl -fsSL https://opencode.ai/install | VERSION=${OPENCODE_VERSION} bash
+
+# Git konfigurace (jméno + email pro commity) — system úroveň platí pro všechny uživatele
+RUN git config --system user.name "Agent" && git config --system user.email "agent@experiment"
+
+# Opencode do system PATH aby fungoval pro libovolného uživatele
+RUN cp /root/.opencode/bin/opencode /usr/local/bin/opencode
+
+# Git HTTPS auth přes GH_TOKEN (nastaven při docker run)
+RUN git config --global credential.helper \
+    "!f() { echo username=x-token; echo password=\$GH_TOKEN; }; f"
+
+# User s UID 1000 (odpovídá host uživateli dev)
+# ubuntu user (UID 1000) uz existuje v base image
+RUN mkdir -p /home/ubuntu && chown 1000:1000 /home/ubuntu
+ENV HOME=/home/ubuntu
+ENV PATH="/root/.opencode/bin:${PATH}"
+
+WORKDIR /workspace
+RUN chown ubuntu:ubuntu /workspace
+
+ENTRYPOINT []
+CMD ["bash"]
