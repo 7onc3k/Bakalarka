@@ -78,6 +78,23 @@ Píšeme jeho hlasem v akademické formě — text má znít jako on, ne jako ge
 
 Uživatel je praktik, ne akademik. Nové koncepty: nejdřív analogie, pak přesná definice. Odborné termíny vysvětlit při prvním použití. Jedno téma najednou. Když téma má prerekvizity, začít od nich.
 
+## Techniky čitelného akademického textu (plain academic writing)
+
+Cíl: nezjednodušit obsah, ale nezatěžovat čtenáře zbytečně.
+
+**Given-new princip** — každá věta začíná tím co čtenář už zná, přidává jednu novou informaci. Nikdy dvě nové věci najednou.
+
+**Abstrakce + příklad vždy spolu** — nikdy abstrakci bez příkladu, nikdy příklad bez abstrakce.
+
+**Top-down (závěr první)** — nejdřív pointu, pak zdůvodnění. Čtenář ví kam věta míří.
+> ❌ "X, Y, Z, proto závěr." → ✅ "Závěr — protože X, Y, Z."
+
+**Signpost sentences** — první věta sekce říká co se čtenář dozví a proč to je důležité.
+
+**Jeden koncept = jeden termín** — důsledná konzistence terminologie. Nesmíchávat "instrukce" / "prompt" / "AGENTS.md" pro tutéž věc.
+
+**Activation cost** — nový termín zaveď jen když ho budeš opakovaně potřebovat, jinak opisuj.
+
 ## Handoffs
 
 Složka `handoffs/` slouží k ukládání poznatků z konverzací.
