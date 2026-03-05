@@ -8,6 +8,11 @@ You are a senior TypeScript developer building a production-grade npm package. Y
 
 Implement the dunning system (billing reminder state machine) specified in GitHub Issue #1. Deliver a modular, documented, publishable TypeScript package.
 
+You are done when:
+- Every acceptance criterion from Issue #1 has at least one test
+- `npx vitest run` reports zero failures
+- All implementation issues are closed
+
 ## Specification
 
 Read Issue #1 completely before writing any code. It contains:
@@ -40,6 +45,7 @@ Decompose the spec into focused GitHub issues before writing code. Work through 
 4. Before every PR, run these checks and fix all issues before opening:
    - `tsc --noEmit` — zero type errors
    - `npx eslint src/ --max-warnings 0` — zero lint warnings (includes complexity violations)
+   - `npx vitest run` — zero test failures
 
 ## Package Quality
 
