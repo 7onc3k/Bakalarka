@@ -67,10 +67,16 @@ async function hasTestFiles(ctx: any): Promise<boolean> {
   }
 }
 
-export const AutoContinuePlugin: Plugin = async (ctx) => {
+export const AutoContinuePlugin: Plugin = async (input) => {
+  const { client } = input;
+  // Helper functions use ctx.$ (BunShell) — pass the plugin input directly
+  const ctx = input as any;
   return {
-    event: async ({ event, client }) => {
+    event: async ({ event }) => {
       if (event.type !== "session.idle") return;
+
+      const sessionID = (event as any).properties?.sessionID;
+      if (!sessionID) return;
 
       const openIssues = await countOpenIssues(ctx);
 
@@ -101,13 +107,15 @@ export const AutoContinuePlugin: Plugin = async (ctx) => {
         await appendMetric(ctx, `CONTINUE:${reason}`, openIssues);
 
         await client.session.prompt({
-          sessionId: event.sessionId,
-          messages: [
-            {
-              role: "user",
-              content: `[auto-continue #${restartCount}] Work remains: ${reason}. Continue implementing according to AGENTS.md and Issue #1.`,
-            },
-          ],
+          path: { id: sessionID },
+          body: {
+            parts: [
+              {
+                type: "text",
+                text: `[auto-continue #${restartCount}] Work remains: ${reason}. Continue implementing according to AGENTS.md and Issue #1.`,
+              },
+            ],
+          },
         });
       } else {
         await appendMetric(ctx, "DONE", 0);
