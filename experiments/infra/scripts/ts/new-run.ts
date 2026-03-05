@@ -254,7 +254,7 @@ reports/
         `-e GH_TOKEN=${ghToken}`,
         `-e HOME=/home/ubuntu`,
         `${imageName}`,
-        `bash -c "gh auth setup-git && opencode run -m \"${AGENT_MODEL}\" \"Work on Issue #1 according to AGENTS.md.\""`
+        `bash -c "gh auth setup-git && opencode run -m \"${AGENT_MODEL}\" \"Work on Issue #1 according to AGENTS.md.\" && SESSION_ID=\\$(opencode session list -n 1 --format json | python3 -c \\"import sys,json; print(json.load(sys.stdin)[0]['id'])\\") && opencode export \\$SESSION_ID > /workspace/transcript.json && echo \\$SESSION_ID > /workspace/.session-id.txt"`
       ].join(" "),
       {
         stdio: "inherit",
@@ -270,43 +270,26 @@ reports/
   console.log("");
   console.log("\u2192 Exporting session transcript...");
 
-  // Zjistime ID posledni session
-  const sessionListOutput = exec(
-    `opencode session list -n 1 --format json`,
-    { cwd: runDir }
-  );
+  // Transcript byl exportovan uvnitr Dockeru do /workspace/transcript.json
+  // Session ID ulozeno do .session-id.txt
+  const transcriptPath = path.join(runDir, "transcript.json");
+  const sessionIdFile = path.join(runDir, ".session-id.txt");
 
   let sessionId = "";
-  try {
-    const sessions = JSON.parse(sessionListOutput || "[]") as Array<{
-      id: string;
-    }>;
-    sessionId = sessions[0]?.id ?? "";
-  } catch {
-    /* ignore */
+  if (fileExists(sessionIdFile)) {
+    sessionId = readFile(sessionIdFile)?.trim() ?? "";
   }
 
-  if (!sessionId || sessionId === "null") {
+  if (!fileExists(transcriptPath)) {
     console.log(
-      "  Warning: could not retrieve session ID — export manually:"
+      "  Warning: transcript.json not found — export failed inside Docker."
     );
-    console.log("    opencode session list --format json");
-    console.log(
-      `    opencode export <sessionID> > ${runDir}/transcript.json`
-    );
-
+    console.log("  Session ID file:", fileExists(sessionIdFile) ? sessionId : "not found");
     printDone(runDir, repoName, 0);
     return;
   }
 
-  // Exportujeme hlavni session
-  const transcriptPath = path.join(runDir, "transcript.json");
-  const transcriptContent = exec(
-    `opencode export "${sessionId}"`,
-    { cwd: runDir }
-  );
-  fs.writeFileSync(transcriptPath, transcriptContent, "utf-8");
-  console.log(`  Saved: ${transcriptPath}`);
+  console.log(`  Saved: ${transcriptPath} (session: ${sessionId || "unknown"})`);
 
   // Rekurzivne exportujeme sub-agent sessions
   // (pokud agent pouzil task tool, kazdy sub-task ma vlastni session)
