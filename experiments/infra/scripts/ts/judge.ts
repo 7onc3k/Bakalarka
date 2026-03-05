@@ -88,16 +88,19 @@ function main(): void {
  * @param prompt - Kompletni prompt (rubric + data k hodnoceni)
  * @returns Textova odpoved z GLM-5
  */
-function callJudge(cwd: string, prompt: string): string {
+function callJudge(_cwd: string, prompt: string): string {
   try {
     // Pouzivame execSync primo (ne nasi exec wrapper), protoze:
     // - Prompt muze byt velmi dlouhy (10-30 KB) — shell argument by mohl selhat
     // - Predavame prompt pres stdin pomoci `input` parametru execSync
     // - opencode run podporuje `-` jako posledni argument = cte ze stdin
+    // POZOR: cwd musi byt prazdny adresar bez .opencode/ — jinak opencode
+    // inicializuje cely projekt (nacita soubory, AGENTS.md) pred zpracovanim promptu
+    const tmpDir = "/tmp";
     const rawOutput = execSync(
       `opencode run -m "${JUDGE_MODEL}" --format json -`,
       {
-        cwd,
+        cwd: tmpDir,
         encoding: "utf-8",
         // Predame prompt na stdin
         input: prompt,
@@ -186,6 +189,7 @@ function collectProcessArtifacts(runDir: string): {
 
 function evaluateP6(runDir: string): void {
   console.log("--- P6: Commit message quality ---");
+  if (fileExists(path.join(runDir, "p6-result.json"))) { console.log("P6: skipping (already evaluated)"); return; }
 
   const { commits } = collectProcessArtifacts(runDir);
 
@@ -236,6 +240,7 @@ function evaluateP6(runDir: string): void {
 
 function evaluateP7(runDir: string): void {
   console.log("--- P7: Issue description quality ---");
+  if (fileExists(path.join(runDir, "p7-result.json"))) { console.log("P7: skipping (already evaluated)"); return; }
 
   const { issues } = collectProcessArtifacts(runDir);
 
@@ -285,6 +290,7 @@ function evaluateP7(runDir: string): void {
 
 function evaluateP8(runDir: string): void {
   console.log("--- P8: PR description quality ---");
+  if (fileExists(path.join(runDir, "p8-result.json"))) { console.log("P8: skipping (already evaluated)"); return; }
 
   const { prs } = collectProcessArtifacts(runDir);
 
@@ -336,6 +342,7 @@ function evaluateP8(runDir: string): void {
 
 function evaluateQ4(runDir: string): void {
   console.log("--- Q4: Collecting acceptance criteria and test code ---");
+  if (fileExists(path.join(runDir, "q4-result.json"))) { console.log("Q4: skipping (already evaluated)"); return; }
 
   // Nacteme specifikaci a extrahujeme AC
   const specFile = path.join(INFRA_DIR, "inputs", "issue-1-req-only.json");
@@ -418,6 +425,7 @@ function evaluateQ4(runDir: string): void {
 
 function evaluateQ8(runDir: string): void {
   console.log("--- Q8: Collecting source code ---");
+  if (fileExists(path.join(runDir, "q8-result.json"))) { console.log("Q8: skipping (already evaluated)"); return; }
 
   const srcDir = path.join(runDir, "src");
 

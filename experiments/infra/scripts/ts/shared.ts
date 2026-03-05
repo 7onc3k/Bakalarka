@@ -21,12 +21,12 @@ import * as path from "node:path";
 /** GitHub organizace kde se vytvareji repozitare pro runy */
 export const GITHUB_ORG = "7onc3k";
 
-/** Model pouzivany agentem (minimax, zdarma) */
-export const AGENT_MODEL = "opencode/minimax-m2.5-free";
+/** Model pouzivany agentem (MiniMax M2.5 pres Model Studio) */
+export const AGENT_MODEL = "bailian-coding-plan/MiniMax-M2.5";
 
 /** Model pouzivany jako LLM-as-judge (GLM-5 — jina rodina nez generator,
  *  aby se eliminoval self-preference bias, viz Panickssery 2024) */
-export const JUDGE_MODEL = "zai-coding-plan/glm-5";
+export const JUDGE_MODEL = "bailian-coding-plan/glm-5";
 
 // ============================================================================
 // Cesty v adresarove strukture
@@ -167,6 +167,8 @@ export interface E3Result {
   restartCount: number;
   /** ID session z opencode */
   sessionId: string;
+  /** Pocet compaction eventu (zmeny kontextoveho okna) — detekce pres snapshot zmeny v transcript.json */
+  compactionCount?: number;
 }
 
 // --- Behavioral Trace (deterministicka extrakce faktů pro DIAGNOSIS) ---
@@ -367,8 +369,10 @@ export function fileExists(filePath: string): boolean {
  * Vrati null pokud soubor neexistuje nebo neni validni JSON.
  */
 export function readJSON<T = unknown>(filePath: string): T | null {
-  const content = readFile(filePath);
-  if (!content) return null;
+  const raw = readFile(filePath);
+  if (!raw) return null;
+  // strip markdown code fences (```json ... ```)
+  const content = raw.replace(/^```[a-z]*\n?/, "").replace(/\n?```\s*$/, "").trim();
   try {
     return JSON.parse(content) as T;
   } catch {

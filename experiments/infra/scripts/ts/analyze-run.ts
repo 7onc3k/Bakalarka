@@ -100,6 +100,16 @@ function main(): void {
   const runName = getRunNameFromArgs("analyze-run.ts");
   const runDir = resolveRunDir(runName);
 
+  // Presmerovat console.log do souboru FINDINGS.md i na stdout zaroven
+  const findingsPath = path.join(runDir, "FINDINGS.md");
+  const findingsLines: string[] = [];
+  const origLog = console.log.bind(console);
+  console.log = (...args: unknown[]) => {
+    const line = args.map(String).join(" ");
+    findingsLines.push(line);
+    origLog(...args);
+  };
+
   console.log(`=== Analyze: ${runName} ===`);
   console.log("");
 
@@ -133,7 +143,7 @@ function main(): void {
   const trace = measureBehavioralTrace(cwd);
 
   // Souhrnna tabulka
-  printSummary(runName, p1, p2, p3, p4, p5, q1, q2, q3, q5, q6, q7, e1, e2, e3, trace);
+  printSummary(runName, runDir, p1, p2, p3, p4, p5, q1, q2, q3, q5, q6, q7, e1, e2, e3, trace);
 
   // Automaticky spustit judge.ts po uspesnem analyze-run
   console.log("\n=== Running judge.ts automatically ===");
@@ -157,6 +167,11 @@ function main(): void {
     }
     console.log("Warning: Judge failed or skipped:", errorMsg.slice(0, 200));
   }
+
+  // Zapsat FINDINGS.md
+  console.log = origLog;
+  fs.writeFileSync(findingsPath, findingsLines.join("\n"), "utf-8");
+  origLog(`\nFINDINGS.md saved: ${findingsPath}`);
 }
 
 // ============================================================================
@@ -979,6 +994,11 @@ function measureEfficiency(cwd: string): {
           info?: {
             tokens?: { input?: number; output?: number };
           };
+          parts?: Array<{
+            type?: string;
+            snapshot?: string;
+            [key: string]: unknown;
+          }>;
         }>;
         info?: {
           id?: string;
@@ -1018,10 +1038,34 @@ function measureEfficiency(cwd: string): {
         const crashed =
           (lastTokens.input ?? 1) === 0 &&
           (lastTokens.output ?? 1) === 0;
+
+        // E3: Compaction eventy — detekce pres zmenu snapshot hodnoty
+        // Kdyz se snapshot zmeni mezi step-finish a naslednym step-start,
+        // znamena to ze OpenCode provedl compaction (sumarizaci kontextu).
+        let compactionCount = 0;
+        let prevStepFinishSnapshot: string | undefined;
+        for (const msg of messages) {
+          for (const part of msg.parts ?? []) {
+            if (!part || typeof part !== "object") continue;
+            if (part.type === "step-finish" && part.snapshot) {
+              prevStepFinishSnapshot = part.snapshot;
+            } else if (part.type === "step-start" && part.snapshot) {
+              if (
+                prevStepFinishSnapshot !== undefined &&
+                part.snapshot !== prevStepFinishSnapshot
+              ) {
+                compactionCount++;
+              }
+              prevStepFinishSnapshot = undefined;
+            }
+          }
+        }
+
         e3 = {
           completed: !crashed,
           restartCount: 0,
           sessionId: info.id ?? "?",
+          compactionCount,
         };
 
         console.log(
@@ -1029,7 +1073,7 @@ function measureEfficiency(cwd: string): {
         );
         console.log(`E2 Duration — ${durationMin.toFixed(1)} min`);
         console.log(
-          `E3 Completion — ${crashed ? "CRASHED" : "Completed"}`
+          `E3 Completion — ${crashed ? "CRASHED" : "Completed"}, ${compactionCount} compaction${compactionCount !== 1 ? "s" : ""}`
         );
         console.log(`   Session: ${info.id ?? "?"}`);
       }
@@ -1301,7 +1345,7 @@ function measureBehavioralTrace(cwd: string): BehavioralTrace {
       // Detekujeme Write/Edit prikazy
       if (tool === "write" || tool === "edit") {
         currentEventOrder++;
-        const filePath = part.state?.input?.file_path ?? part.state?.input?.filePath ?? "";
+        const filePath = String(part.state?.input?.file_path ?? part.state?.input?.filePath ?? "");
         const isInSrc = /src\//.test(filePath);
         const isInTest = /tests\/|__tests__|\.test\.ts/.test(filePath);
 
@@ -1371,6 +1415,58 @@ function measureBehavioralTrace(cwd: string): BehavioralTrace {
 }
 
 // ============================================================================
+// Judge Result Loader — cte vysledky z JSON souboru ulozenych judge.ts
+// ============================================================================
+
+/**
+ * Nacte vysledek judge metriky z JSON souboru v runDir.
+ *
+ * Podporovane formaty:
+ * - P6/P7/P8: {"metric":"P6","score":2,"rationale":"..."}
+ * - Q4:       {"covered":[...],"not_covered":[...],"score":"24/24"}
+ * - Q8:       {"naming":{"score":3},...,"overall":1}
+ *
+ * @param runDir - Adresar runu
+ * @param metric - Nazev metriky (napr. "p6", "q4", "q8")
+ * @returns Objekt se score a volitelne rationale, nebo null pokud soubor neexistuje
+ */
+function loadJudgeResult(
+  runDir: string,
+  metric: string
+): { score: number | string; rationale?: string } | null {
+  const filePath = path.join(runDir, `${metric.toLowerCase()}-result.json`);
+  if (!fileExists(filePath)) return null;
+
+  try {
+    const raw = readJSON<Record<string, unknown>>(filePath);
+    if (!raw) return null;
+
+    // Q8 format: {"naming":{"score":N},...,"overall":N}
+    if ("overall" in raw) {
+      return { score: raw.overall as number };
+    }
+
+    // Q4 format: {"score":"24/24","covered":[...],...}
+    if ("covered" in raw && "score" in raw) {
+      return { score: raw.score as string };
+    }
+
+    // P6/P7/P8 format: {"metric":"P6","score":N,"rationale":"..."}
+    if ("score" in raw) {
+      const rationale =
+        typeof raw.rationale === "string"
+          ? raw.rationale.slice(0, 100) + (raw.rationale.length > 100 ? "..." : "")
+          : undefined;
+      return { score: raw.score as number, rationale };
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+// ============================================================================
 // Summary — souhrnna tabulka
 //
 // Format identicky s bash verzi pro snadne porovnani.
@@ -1378,6 +1474,7 @@ function measureBehavioralTrace(cwd: string): BehavioralTrace {
 
 function printSummary(
   runName: string,
+  runDir: string,
   p1: P1Result,
   p2: P2Result,
   p3: P3Result,
@@ -1408,9 +1505,28 @@ function printSummary(
   console.log(`| P3 Test-first commits | ${p3.detail} | test: pred feat: | ${passIcon(p3.pass)} |`);
   console.log(`| P4 PRs linked to issues | ${p4.detail} | vsechny PR linked | ${passIcon(p4.pass)} |`);
   console.log(`| P5 No ref test modifications | ${p5.detail || "ok"} | 0 modifikaci | ${passIcon(p5.pass)} |`);
-  console.log("| P6 Commit message quality | judge | ≥2/3 | run judge.ts |");
-  console.log("| P7 Issue description quality | judge | ≥2/3 | run judge.ts |");
-  console.log("| P8 PR description quality | judge | ≥2/3 | run judge.ts |");
+
+  // P6/P7/P8 — nacti z judge JSON pokud existuje
+  for (const metric of ["p6", "p7", "p8"] as const) {
+    const labels: Record<string, string> = {
+      p6: "Commit message quality",
+      p7: "Issue description quality",
+      p8: "PR description quality",
+    };
+    const judgeResult = loadJudgeResult(runDir, metric);
+    if (judgeResult) {
+      const scoreStr = `${judgeResult.score}/3`;
+      const pass = typeof judgeResult.score === "number" && judgeResult.score >= 2;
+      const rationaleStr = judgeResult.rationale ? ` — ${judgeResult.rationale}` : "";
+      console.log(
+        `| ${metric.toUpperCase()} ${labels[metric]} | ${scoreStr}${rationaleStr} | ≥2/3 | ${passIcon(pass)} |`
+      );
+    } else {
+      console.log(
+        `| ${metric.toUpperCase()} ${labels[metric]} | judge | ≥2/3 | run judge.ts |`
+      );
+    }
+  }
   console.log("");
 
   // Product Quality table
@@ -1438,8 +1554,18 @@ function printSummary(
     `| Q3 Mutation score | ${q3Value} | \u226570% | ${passIcon(q3Pass)} |`
   );
 
-  // Q4 (judge — nemerime zde)
-  console.log("| Q4 AC coverage | judge | 24/24 | run judge.ts |");
+  // Q4 (judge) — nacti z JSON pokud existuje
+  {
+    const q4Result = loadJudgeResult(runDir, "q4");
+    if (q4Result) {
+      const pass = q4Result.score === "24/24";
+      console.log(
+        `| Q4 AC coverage | ${q4Result.score} | 24/24 | ${passIcon(pass)} |`
+      );
+    } else {
+      console.log("| Q4 AC coverage | judge | 24/24 | run judge.ts |");
+    }
+  }
 
   // Q5
   const q5Value = q5.warnings !== null ? String(q5.warnings) : "?";
@@ -1464,10 +1590,18 @@ function printSummary(
     `| Q7 Complexity (>10) | ${q7Value} | 0 violations | ${passIcon(q7Pass)} |`
   );
 
-  // Q8 (judge — nemerime zde)
-  console.log(
-    "| Q8 Code quality | judge | \u22652/3 | run judge.ts |"
-  );
+  // Q8 (judge) — nacti z JSON pokud existuje
+  {
+    const q8Result = loadJudgeResult(runDir, "q8");
+    if (q8Result) {
+      const pass = typeof q8Result.score === "number" && q8Result.score >= 2;
+      console.log(
+        `| Q8 Code quality | ${q8Result.score}/3 | ≥2/3 | ${passIcon(pass)} |`
+      );
+    } else {
+      console.log("| Q8 Code quality | judge | \u22652/3 | run judge.ts |");
+    }
+  }
 
   console.log("");
 
@@ -1476,18 +1610,6 @@ function printSummary(
   console.log("(see above)");
   console.log("");
 
-  // Odkazky na judge
-  console.log("### Not measured here (LLM-as-judge)");
-  console.log(
-    `- P6/P7/P8 (process artifact quality): npx tsx experiments/infra/scripts/ts/judge.ts ${runName}`
-  );
-  console.log(
-    `- Q4 (AC coverage): npx tsx experiments/infra/scripts/ts/judge.ts ${runName}`
-  );
-  console.log(
-    `- Q8 (code quality): npx tsx experiments/infra/scripts/ts/judge.ts ${runName}`
-  );
-  console.log("");
 
   // Behavioral Trace sekce pro FINDINGS.md
   console.log("### Behavioral Trace");
