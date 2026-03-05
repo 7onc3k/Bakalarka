@@ -9,9 +9,26 @@ Run → Measure → Diagnose → Fix → Run → ...
 ```
 
 Každá iterace produkuje:
-- `experiments/runs/pilot-rN/FINDINGS.md` — behavioral trace + metriky
-- `experiments/infra/CHANGELOG.md` — co se změnilo a proč (s citacemi)
-- Aktualizovaný `experiments/infra/AGENTS.md`
+- `experiments/runs/pilot-rN/FINDINGS.md` — behavioral trace + metriky (v repu runu)
+- `experiments/runs/pilot-rN/DIAGNOSIS.md` — FSE/SASE/Lulla/Breunig analýza (v repu runu)
+- `experiments/infra/changelog/pilot-rN-to-rN+1.md` — co se změnilo a proč (s citacemi)
+- Aktualizovaný `experiments/infra/inputs/AGENTS.md`
+
+Run může být v `runs/pilot-rN/` nebo `runs/archive/pilot-rN/` — FINDINGS i DIAGNOSIS vždy v adresáři daného runu.
+
+---
+
+## Workflow: iterativní spolupráce
+
+Diagnose a Fix se provádějí **iterativně ve spolupráci** (ne automaticky):
+
+1. **Diagnostika** — projít 4 nástroje (FSE, SASE, Lulla, Breunig), identifikovat problémy
+2. **Diskuse** — pro každý problém: proč to nefungovalo? jaká změna dává smysl?
+3. **Návrh fixu** — konkrétní text změny + citace do literatury
+4. **Schválení** — uživatel potvrdí nebo upraví návrh
+5. **Aplikace** — teprve pak změnit AGENTS.md a zapsat do `changelog/pilot-rN-to-rN+1.md`
+
+Cíl: uživatel rozumí každé změně, žádné "black box" fixy.
 
 ---
 
@@ -20,31 +37,36 @@ Každá iterace produkuje:
 Tři kategorie metrik (Fenton & Bieman 2014): procesní, produktové, efektivita.
 Kódy odpovídají thesis kap03 sekce 3.4.
 
-### Procesní metriky (P1-P2)
+### Procesní metriky (P1-P8)
 
-**P1 — process compliance** (binární checklist, automatizovatelné z git/GitHub):
+**P1-P5 — process compliance** (binární metriky, automatizovatelné z git/GitHub):
 
-| # | Položka | Jak ověřit |
-|---|---------|-----------|
-| P1.1 | Issues před kódem | `gh issue list` timestamps vs. první kódový commit |
-| P1.2 | Branch per issue | `git branch -a` vs. issue count |
-| P1.3 | Test commit před implementačním | `git log` — pořadí commitů |
-| P1.4 | PRs linkované na issues | `gh pr list` — "Closes #N" |
-| P1.5 | Nemodifikoval existující test assertions | `git diff` na test souborech |
+| Kód | Položka | Jak ověřit |
+|-----|---------|-----------|
+| P1 | Issues před kódem | `gh issue list` timestamps vs. první kódový commit |
+| P2 | Branch per issue | `git branch -a` vs. issue count |
+| P3 | Test commit před implementačním | `git log` — pořadí commitů (tddOrderViolations=0) |
+| P4 | PRs linkované na issues | `gh pr list` — "Closes #N" |
+| P5 | Nemodifikoval ref testy | `git diff` na test souborech |
 
-Score = počet splněných / 5. Exit: 5/5.
+Exit: každá P1-P5 musí být ✅.
 
-**P2 — kvalita procesních artefaktů** (LLM-as-judge, GLM-5):
+**P6-P8 — kvalita procesních artefaktů** (LLM-as-judge, GLM-5):
 
-Commit messages, issue descriptions, PR descriptions.
-Rubrik: `infra/judge/p2-process-artifacts.md`. Škála 1-3. Exit: 3/3.
+| Kód | Dimenze | Rubrik |
+|-----|---------|--------|
+| P6 | Commit message quality | `infra/judge/p6-commit-messages.md` |
+| P7 | Issue description quality | `infra/judge/p7-issue-descriptions.md` |
+| P8 | PR description quality | `infra/judge/p8-pr-descriptions.md` |
+
+Škála 1-3. Exit: každá ≥ 2/3.
 
 ### Produktové metriky (Q1-Q8)
 
 | Kód | Metrika | Co měří | Jak | Exit kritérium |
 |-----|---------|---------|-----|----------------|
 | Q1 | API contract match | Sedí veřejné API? | `tsc` import + typecheck | match |
-| Q2 | Ref test pass rate | Funguje implementace? | 40 behavioral testů ze spec | 40/40 |
+| Q2 | Ref test pass rate | Funguje implementace? | 45 behavioral testů ze spec | 45/45 |
 | Q3 | Mutation score | Detekují agentovy testy chyby? | Stryker | ≥70% |
 | Q4 | AC coverage | Kolik z 24 AC má test? | LLM-as-judge (GLM-5) | 24/24 |
 | Q5 | Lint warnings | Čistý kód? | `eslint --format json` | 0 |
@@ -65,8 +87,8 @@ Q8 rubrik: `infra/judge/q8-code-quality.md`.
 
 E1-E3 nemají pass/fail — slouží k across-run srovnání.
 
-→ Automatizované metriky: `./experiments/infra/scripts/analyze-run.sh pilot-rN`
-→ LLM-as-judge (P2, Q4, Q8): `./experiments/infra/scripts/judge.sh pilot-rN`
+→ Automatizované metriky (P1-P5, Q1-Q7, E1-E3): `npx tsx experiments/infra/scripts/ts/analyze-run.ts pilot-rN`
+→ LLM-as-judge (P6-P8, Q4, Q8): `npx tsx experiments/infra/scripts/ts/judge.ts pilot-rN`
 
 ---
 
@@ -74,8 +96,8 @@ E1-E3 nemají pass/fail — slouží k across-run srovnání.
 
 Po každém runu:
 
-1. Spustit `./experiments/infra/scripts/analyze-run.sh pilot-rN` → P1, Q1-Q7, E1-E3
-2. Spustit `./experiments/infra/scripts/judge.sh pilot-rN` → P2, Q4, Q8
+1. Spustit `npx tsx experiments/infra/scripts/ts/analyze-run.ts pilot-rN` → P1-P5, Q1-Q7, E1-E3
+2. Spustit `npx tsx experiments/infra/scripts/ts/judge.ts pilot-rN` → P6-P8, Q4, Q8
 3. Vyplnit FINDINGS.md (šablona níže)
 
 ### FINDINGS.md šablona
@@ -91,26 +113,23 @@ Po každém runu:
 ## AGENTS.md změny oproti r(N-1)
 - [seznam změn]
 
-## P1 — Process Compliance
+## P1-P5 — Process Compliance
 
-| # | Položka | Splněno? | Detail |
-|---|---------|----------|--------|
-| P1.1 | Issues před kódem | | |
-| P1.2 | Branch per issue | | |
-| P1.3 | Test-first commity | | |
-| P1.4 | PRs linkované na issues | | |
-| P1.5 | Nemodifikoval testy | | |
+| Kód | Položka | Splněno? | Detail |
+|-----|---------|----------|--------|
+| P1 | Issues před kódem | | |
+| P2 | Branch per issue | | |
+| P3 | Test-first commity | | |
+| P4 | PRs linkované na issues | | |
+| P5 | Nemodifikoval ref testy | | |
 
-**P1 score:** /5
+## P6-P8 — Kvalita procesních artefaktů (LLM-as-judge)
 
-## P2 — Kvalita procesních artefaktů (LLM-as-judge)
-
-| Dimenze | Score (1-3) | Reasoning |
-|---------|-------------|-----------|
-| Commit messages | | |
-| Issue descriptions | | |
-| PR descriptions | | |
-| **Overall** | | |
+| Kód | Dimenze | Score (1-3) | Reasoning |
+|-----|---------|-------------|-----------|
+| P6 | Commit messages | | |
+| P7 | Issue descriptions | | |
+| P8 | PR descriptions | | |
 
 ## Q4 — AC Coverage (LLM-as-judge)
 
@@ -146,16 +165,25 @@ Po každém runu:
 ## Srovnání s r(N-1)
 [tabulka co se zlepšilo/zhoršilo]
 
-## Diagnóza (Fáze 2)
-[FSE/SASE/Lulla/Breunig analýza]
+## Diagnóza
+[TODO: viz DIAGNOSIS.md v tomto adresáři]
 
-## Fixy pro r(N+1) (Fáze 3)
-[seznam s literaturou]
+## Fixy pro r(N+1)
+[TODO: viz infra/changelog/pilot-rN-to-rN+1.md]
 ```
 
 ---
 
 ## Fáze 2: Diagnose (literature-based analýza)
+
+Výstup: `runs/pilot-rN/DIAGNOSIS.md` (nebo `runs/archive/pilot-rN/DIAGNOSIS.md`). Diagnóza zůstává v repu runu.
+
+Struktura DIAGNOSIS.md (šablona: `infra/DIAGNOSIS-template.md`):
+1. FSE tabulka — 7 komponent, přítomnost + kvalita
+2. SASE balance — BriefingScript / LoopScript / MentorScript poměr
+3. Lulla audit — efektivní vs. neefektivní obsah
+4. Breunig findings — ignorované instrukce z předchozího runu
+5. Návrh fixů — každý fix: Bylo → Je → Pozorování → Diagnóza → Literatura
 
 Pro každý problém identifikovaný v metrikách:
 
@@ -219,7 +247,7 @@ Každý řádek AGENTS.md projde filtrem:
 
 ## Fáze 3: Fix (literature-grounded změny)
 
-Pro každou změnu zapsat do CHANGELOG.md:
+Pro každou změnu zapsat do `changelog/pilot-rN-to-rN+1.md`:
 
 ```markdown
 ### Změna N: [název]
@@ -243,12 +271,12 @@ Pro každou změnu zapsat do CHANGELOG.md:
 ## Fáze 4: Run
 
 ```bash
-./experiments/infra/scripts/new-run.sh pilot-rN
+cd experiments/infra/scripts && npx tsx ts/new-run.ts pilot-rN
 ```
 
 Po dokončení:
-1. Spustit `./experiments/infra/scripts/analyze-run.sh pilot-rN`
-2. Spustit `./experiments/infra/scripts/judge.sh pilot-rN`
+1. Spustit `npx tsx experiments/infra/scripts/ts/analyze-run.ts pilot-rN`
+2. Spustit `npx tsx experiments/infra/scripts/ts/judge.ts pilot-rN`
 3. Vyplnit FINDINGS.md (šablona z Fáze 1)
 4. Zpět na Fáze 2 (Diagnose)
 
@@ -259,18 +287,24 @@ Po dokončení:
 Pilotní iterace končí když agent splní všechna kritéria v posledním běhu:
 
 **Deterministická** (přirozený binární práh):
-- [ ] P1 = 5/5 (process compliance)
+- [ ] P1 = ✅ (issues before code)
+- [ ] P2 = ✅ (branch per issue)
+- [ ] P3 = ✅ (test-first commits)
+- [ ] P4 = ✅ (PRs linked to issues)
+- [ ] P5 = ✅ (no ref test modifications)
 - [ ] Q1 = match (API contract)
-- [ ] Q2 = 40/40 (referenční testy)
+- [ ] Q2 = 45/45 (referenční testy)
 - [ ] Q4 = 24/24 (AC coverage)
 - [ ] Q5 = 0 (lint warnings)
 - [ ] Q6 = 0 (typecheck errors)
 
 **Minimální standard:**
-- [ ] P2 = 3/3 (kvalita procesních artefaktů)
+- [ ] P6 ≥ 2/3 (commit message quality)
+- [ ] P7 ≥ 2/3 (issue description quality)
+- [ ] P8 ≥ 2/3 (PR description quality)
 - [ ] Q3 ≥ 70% (mutation score)
 - [ ] Q7 ≤ 10 per funkce (cyklomatická složitost)
-- [ ] Q8 = 3/3 (kvalita kódu)
+- [ ] Q8 ≥ 2/3 (kvalita kódu)
 
 **Záznam (bez prahu):**
 - E1, E2, E3 — across-run srovnání

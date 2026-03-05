@@ -2,7 +2,7 @@
  * shared.ts — Sdilene typy, utility a konstanty pro experimentalni infrastrukturu.
  *
  * Tento soubor obsahuje:
- * - Typove definice pro vsechny metriky (P1, Q1-Q7, E1-E3, judge vysledky)
+ * - Typove definice pro vsechny metriky (P1-P8, Q1-Q7, E1-E3, judge vysledky)
  * - Utility pro spousteni shell prikazu a praci se soubory
  * - Resolving adresar runu (runs/<name> nebo runs/archive/<name>)
  *
@@ -58,12 +58,12 @@ export const REFERENCE_DIR = path.join(EXPERIMENTS_DIR, "reference");
 // je format vysledku. Metricky ramec je definovan v kap03 BP.
 // ============================================================================
 
-// --- P1: Process Compliance ---
-// 5 binarnich polozek checklistu, ktere merici zda agent dodrzuje
+// --- P1-P5: Process Compliance (binarni checklist) ---
+// Kazda z 5 binarnich metrik je samostatny vysledek merici zda agent dodrzuje
 // spec-driven development proces (issues pred kodem, TDD, PR workflow...).
 
-export interface P1Item {
-  /** Identifikator polozky (napr. "P1.1") */
+export interface PComplianceResult {
+  /** Identifikator metriky (napr. "P1", "P2", ...) */
   id: string;
   /** Popis co se meri (napr. "Issues before code") */
   label: string;
@@ -73,14 +73,29 @@ export interface P1Item {
   detail: string;
 }
 
-export interface P1Result {
-  /** Jednotlive polozky checklistu */
-  items: P1Item[];
-  /** Pocet splnenych polozek */
-  passed: number;
-  /** Celkovy pocet polozek (vzdy 5) */
-  total: number;
+// P1Result az P5Result jsou aliasy na PComplianceResult pro srozumitelnost kodu.
+export type P1Result = PComplianceResult;
+export type P2Result = PComplianceResult;
+export type P3Result = PComplianceResult;
+export type P4Result = PComplianceResult;
+export type P5Result = PComplianceResult;
+
+// --- P6-P8: Process Artifact Quality (LLM-as-judge, skala 1-3) ---
+// Kazda z dimenzionalniho hodnoceni (commit messages, issues, PRs)
+// je samostatna metrika se skore 1-3.
+
+export interface PJudgeResult {
+  /** Identifikator metriky (napr. "P6", "P7", "P8") */
+  metric: string;
+  /** Skore 1-3 (1=inadequate, 2=acceptable, 3=good) */
+  score: number;
+  /** Zduvodneni od LLM-as-judge */
+  rationale: string;
 }
+
+// Zpetna kompatibilita — P1Item byl puvodni nazev pro polozky checklistu
+// @deprecated Pouzij PComplianceResult
+export type P1Item = PComplianceResult;
 
 // --- Q metriky: Product Quality ---
 
@@ -154,6 +169,33 @@ export interface E3Result {
   sessionId: string;
 }
 
+// --- Behavioral Trace (deterministicka extrakce faktů pro DIAGNOSIS) ---
+// Nejedna se o metriku (zadny prah) — je to vstup pro analyzu "jak se to stalo".
+// Extrakce ze sekvence prikazu v transcript.json.
+
+export interface BehavioralTrace {
+  /** Byly vsechny issues vytvoreny najednou pred prvnim git commitem? */
+  issuesBatchCreated: boolean | null;
+  /** Prislo test-commit (soubory s "test") pred implementation-commitem na stejne vetvi? */
+  firstTestCommitBeforeImpl: boolean | null;
+  /** Celkovy pocet git commit prikazu */
+  commitCount: number;
+  /** Celkovy pocet git checkout -b prikazu */
+  branchCount: number;
+  /** Celkovy pocet gh issue create prikazu */
+  issueCount: number;
+  /** Celkovy pocet gh pr create prikazu */
+  prCount: number;
+  /** Pouzil agent todowrite tool? */
+  todowriteUsed: boolean;
+  /** Commitoval agent vse najednou na konci? (heuristika: <3 commitu na >5 souboru) */
+  blobCommit: boolean | null;
+  /** Pocet vetvi kde agent psal src/ soubory pred tests/ soubory (TDD violations) */
+  tddOrderViolations: number;
+  /** Poznamka pokud transcript.json chybi nebo nelze parsovat */
+  note?: string;
+}
+
 // --- Git Stats (informacni, ne metrika) ---
 
 export interface GitStats {
@@ -179,7 +221,7 @@ export interface JudgeDimension {
 }
 
 export interface JudgeResult {
-  /** Identifikator metriky (P2, Q4, Q8) */
+  /** Identifikator metriky (P6, P7, P8, Q4, Q8) */
   metric: string;
   /** Jednotlive hodnocene dimenze */
   dimensions: JudgeDimension[];
@@ -194,6 +236,10 @@ export interface JudgeResult {
 export interface AnalysisResult {
   runName: string;
   p1: P1Result;
+  p2: P2Result;
+  p3: P3Result;
+  p4: P4Result;
+  p5: P5Result;
   gitStats: GitStats;
   q1: Q1Result;
   q2: Q2Result;

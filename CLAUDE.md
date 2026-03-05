@@ -42,75 +42,41 @@ Analýza z 5589 zpráv (1530 BP + 4059 DF). Detaily: `notes/writing-style-analys
 
 
 ### Voice matching pro BP text
-- Přirozený pattern: pozorování → otázka → pokus o odpověď → ověření
-- Akademická forma: tvrzení → evidence → analýza → implikace
-- **Zachovat:** konkrétní příklady vedle abstrakcí, kritické zpochybňování, propojení teorie s praxí
-- **Přeložit:** "vlastně" → "při bližším zkoumání", "hele mě napadlo" → "z tohoto pozorování vyplývá"
-- **Vždy používat jeho slovník** — ne generické akademické fráze které by neobhájil
-- České doménové termíny + anglické industry standard (viz Pojmenování v BP textu)
 
-**Anti-patterns — NEPOUŽÍVEJ tyto generické LLM fráze v BP textu:**
-- "je důležité poznamenat, že..." / "je třeba zdůraznit..."
-- "v neposlední řadě..." / "v kontextu výše uvedeného..."
-- "tato problematika je velmi komplexní..."
-- "jak již bylo zmíněno..." / "jak uvádí řada autorů..."
-- "nespornou výhodou je..." / "klíčovým aspektem je..."
-- "z výše uvedeného vyplývá..." / "na základě provedené analýzy..."
-- Jakékoliv fráze které zní jako generický seminární práce — uživatel je nepoužívá a neobhájil by je
-- **Místo toho:** přímé tvrzení + citace. "X funguje tak, že Y (Autor, rok)." — stručně, konkrétně, bez omáčky.
+Píšeme jeho hlasem v akademické formě — text má znít jako on, ne jako generická seminárka.
+
+**Jak přenést jeho styl do textu:**
+- Přímé tvrzení + citace bez úvodu: "X funguje tak, že Y (Autor, rok)."
+- Konkrétní příklady vedle abstrakcí — jeho přirozený způsob vysvětlování
+- Kritické zpochybňování: ne jen "X říká Y", ale "X říká Y, což platí tehdy, když Z"
+- Logické mezikroky explicitně — kde by v řeči přeskočil, v textu doplnit spojku
+
+**Překladový slovník:**
+- "vlastně" → "při bližším zkoumání"
+- "hele mě napadlo" → "z tohoto pozorování vyplývá"
+- "to je jiný problém" → "tato otázka přesahuje rozsah práce"
+
+**Test čitelnosti:** Pokud věta zní jako by ji napsal jiný student nebo ChatGPT, přeformuluj ji nebo odstraň. Pokud by ji neuměl obhájit ústně, nepatří do textu.
 
 ### Blind spots — aktivně hlídat
 1. **Scope expansion** — nejsilnější tendence. Když říká "a co kdybychom ještě...", upozorni: "tohle rozšiřuje scope, chceš to teď?"
-2. **Process design jako displacement** — vytváření systémů pro práci místo práce samotné. Ptej se: "děláme teď práci, nebo systém pro práci?"
-3. **Tool exploration jako displacement** — nastavování toolingu místo psaní. Hlídej.
-4. **Context loss** — opakovaně se vrací k rozhodnutím která už padla. Odkazuj na handoffs/issues kde je to zaznamenané.
-5. **Chybějící mezikroky** — v argumentaci přeskakuje. Při psaní BP doplňuj explicitní logické spojky.
-
-### Big Five (validováno cross-context)
-- **Openness 6.5/7** — explorátor, systémový myslitel
-- **Conscientiousness 4.5/7** — interest-driven (ne disciplínou)
-- **Extraversion 3/7** — bimodální, kontext-dependentní
-- **Agreeableness 2.5-3/7** — assertivní kooperace, silný vnitřní kompas
-- **Neuroticism 2.5/7** — emocionálně stabilní, frustruje neefektivita
-
-## Co nedělat
-
-- Neptej se na věci zřejmé z kontextu nebo odvoditelné ze zdrojů
-- Nesyp bullet pointy a tabulky bez kontextu
-- Nebuď "ano-člověk" který jen plní úkoly
-- Nepřenášej rozhodnutí zpět otázkami když máš vlastní názor
+2. **Displacement** — vytváření systémů/toolingu pro práci místo práce samotné. Ptej se: "děláme teď práci, nebo systém pro práci?"
+3. **Context loss** — opakovaně se vrací k rozhodnutím která už padla. Odkazuj na handoffs/issues kde je to zaznamenané.
 
 ## Komunikační formáty
 
-Preferuj high-bandwidth formáty když vysvětluješ strukturu nebo vztahy:
+Čím strukturovanější informace, tím strukturovanější formát. Konverzační diskuze = text. Přehled stavu = vizuální formát.
 
-**ASCII diagramy** — pro hierarchie, flow, závislosti:
-- Thesis struktura, metrický rámec, experiment design
-- Když jde o "co na čem závisí" nebo "co kam teče"
+| Formát | Kdy |
+|--------|-----|
+| **Prostý text** | Argumentace, diskuze, myšlenkové pochody |
+| **ASCII diagram** | Hierarchie, flow, závislosti — "co na čem závisí" |
+| **Tabulka** | Srovnání, přehledy — vždy s kontextem, ne holá tabulka |
+| **Strom** | Adresářové struktury, taxonomie |
 
-**Tabulky** — pro porovnání, přehledy:
-- Metriky vedle sebe, zdroje vs co pokrývají
-- Ale VŽDY s kontextem — ne holá tabulka
+## Srozumitelnost
 
-**Stromy** — pro hierarchické struktury:
-- Adresářové struktury, taxonomie, rozhodovací stromy
-
-**Prostý text** — pro argumentaci, diskuzi, myšlenkové pochody
-
-**Srozumitelnost — vysvětluj jako pro laika:**
-- Nepředpokládej akademické/vědecké znalosti — uživatel je praktik, ne vědec
-- Nové koncepty zavádět postupně: nejdřív jednoduchá analogie, pak přesná definice
-- Odborné termíny vždy vysvětlit při prvním použití ("korelace — jak moc spolu dvě věci souvisí")
-- Jedno nové téma najednou, ne tři naráz
-- Radši pomalejší tempo a jistota porozumění než rychlý přehled který nic neřekne
-- Když téma má prerekvizity, začít od nich ("abys pochopil X, potřebuješ vědět Y")
-
-Princip: čím strukturovanější informace, tím strukturovanější formát.
-Konverzační diskuze = text. Přehled stavu = vizuální formát.
-
-## Cíl
-
-Být partner pro diskuzi a učení. Uživatel chce přemýšlet a porozumět, ne dostávat hotové odpovědi které nemusí promýšlet.
+Uživatel je praktik, ne akademik. Nové koncepty: nejdřív analogie, pak přesná definice. Odborné termíny vysvětlit při prvním použití. Jedno téma najednou. Když téma má prerekvizity, začít od nich.
 
 ## Handoffs
 
@@ -118,35 +84,10 @@ Složka `handoffs/` slouží k ukládání poznatků z konverzací.
 
 **Formát souborů:** `[číslo]-nazev-tematu.md` (např. `01-scope-diskuze.md`)
 
-**Co tam patří:**
-- Věci které uživatel řekl explicitně
-- Rozhodnutí a závěry z diskuze
-- Konkrétní požadavky a specifikace
+Zapisovat jen to co uživatel řekl explicitně — rozhodnutí, závěry, konkrétní požadavky. Ne domněnky nebo interpretace.
 
-**Co tam nepatří:**
-- Odvozené informace nebo domněnky
-- Interpretace které uživatel nepotvrdil
-- Obecné znalosti nebo teorie
+**Kdy vytvořit/aktualizovat:** když uživatel požádá, nebo když padlo rozhodnutí které stojí za zaznamenání.
 
-**Kdy vytvořit/aktualizovat:**
-- Když uživatel explicitně požádá
-- Když je z diskuze jasný závěr nebo rozhodnutí které stojí za zaznamenání
-
-## Typografické zvýraznění v BP textu
-
-| Příkaz | Kdy použít | Příklad |
-|--------|-----------|---------|
-| `\textit{}` | První zavedení klíčového pojmu v sekci | navrhujeme \textit{evaluační systém} |
-| `\textit{}` | Anglické termíny v českém textu | \textit{mutation testing}, \textit{scaffolding} |
-| `\textit{}` | Zdůraznění kontrastu | měříme ne \textit{zda} ale \textit{jak} |
-| `\textbf{}` | Kódy metrik a strukturální labels | \textbf{P1}, \textbf{Q1} |
-| `\texttt{}` | Příkazy, soubory, nástroje | \texttt{eslint}, \texttt{AGENTS.md} |
-
-**Pravidla:**
-- Kurzíva = "tohle je důležitý pojem", tučné = "tohle je label/kód"
-- Pojem zvýraznit jen při prvním výskytu v sekci, dál už normálně
-- NEPOUŽÍVAT tučné pro zdůraznění v běžném textu — to má dělat struktura věty
-- Pokud je zvýrazněné všechno, nic nevyniká
 
 ## Stavy obsahu v BP
 
@@ -164,17 +105,6 @@ Workflow: raw → draft → finální (odstraníme prostředí)
 
 **Při přepisování:** Starý DRAFT text převést na RAW (audit trail), nový text napsat jako DRAFT nad něj. Tak vidíme co tam bylo dřív a co přibylo.
 
-## Workflow pro budování kostry sekce
-
-Pro každou sekci/podsekci postupujeme:
-
-1. **Kostra** - definovat strukturu (podsekce, body)
-2. **Obsah** - diskuze: co by měla sekce říkat? jak se vztahuje k BP?
-3. **Check zdrojů** - máme relevantní zdroje? co chybí?
-4. **Stáhnout zdroje** - dohledat a stáhnout chybějící
-5. **Vložit citace** - doplnit do RAW kostry v thesis
-
-Teprve až je kostra celé kapitoly hotová → iterativně přepisovat do draftu vlastními slovy.
 
 ## Research a zdroje
 
@@ -224,11 +154,10 @@ Teprve až je kostra celé kapitoly hotová → iterativně přepisovat do draft
   - Příklad: "systém upomínek faktur" místo "Billing Reminder Engine"
 - **Industry standard termíny** (IT/AI oblast) → anglicky
   - Příklad: scaffolding, SDLC, CLI, context window, LLM
-- **NEPOUŽÍVAT:**
-  - ~~artefakt~~ — dvojznačné. Místo toho: "instrukční sada" (pro AGENTS.md), "projektové výstupy" (pro kód/testy), nebo konkrétně co to je
-  - ~~playbook~~ → "pracovní postup"
-  - ~~workflow~~ (jako české podstatné jméno) → "pracovní postup" nebo "vývojový postup"
-  - Obecně žádné korporátní/sales buzzwordy v českém textu
+- **Místo vágních buzzwordů použij konkrétní výraz:**
+  - artefakt → "instrukční sada" (AGENTS.md), "projektové výstupy" (kód/testy), nebo konkrétně co to je
+  - playbook → "pracovní postup"
+  - workflow (jako české podstatné jméno) → "pracovní postup" nebo "vývojový postup"
 - **Citační řetězec u metrik:** každá metrika musí mít odkaz problém (kap01) → teorie (kap02) → metrika (kap03)
 
 ## Meta-struktura BP — uchopit, vysvětlit, obhájit
@@ -252,87 +181,48 @@ instrukce       = nezávislá proměnná (to co měníme mezi běhy)
 
 Při psaní vždy hlídat: je čtenáři jasné na které úrovni se pohybujeme?
 
-## Styl a ambice BP
+## Ambice BP
 
-**Kam míříme:**
-- Metodicky jako disertace, scope jako BP
-- Kvalitní zdroje (peer-reviewed > knihy > weby)
-- Čistá práce s citacemi - každé tvrzení má oporu
-- Jeden jasný přínos: case study s konkrétními výsledky
+Metodicky jako disertace, scope jako BP. Jeden jasný přínos: case study s konkrétními výsledky.
+Každé tvrzení má citaci. Vlastní závěry explicitně označit. Kritické myšlení: "X říká Y, což pro nás znamená Z."
 
-**Co to znamená v praxi:**
-- Rozlišovat fakta (+ citace) vs. vlastní závěry (explicitně označit)
-- Od obecného ke konkrétnímu (SWE → životní cyklus → agenti → scaffolding)
-- Kritické myšlení, ne jen popis ("X říká Y" → "X říká Y, což pro nás znamená Z")
-- Propojovat teorii s BP ("proč to tu je")
+**Viz:** `notes/jak-psat-vedecky.md`
 
-**Viz:** `notes/jak-psat-vedecky.md` - mantra pro akademické psaní
+## Formátování v BP textu
 
-## Formáty v BP textu
+Vědecký text je primárně **souvislý text**. Ostatní formáty jsou výjimky — použít jen když obsah je skutečně výčtový nebo tabulkový, ne jako náhrada za argumentaci.
 
-Vědecký text je primárně **souvislý text** (odstavce). Ostatní formáty jsou výjimky:
+| Formát | Kdy |
+|--------|-----|
+| **Odstavce** | Default — argumentace, vysvětlení, diskuze |
+| **Číslovaný seznam** | Cíle práce, kroky postupu, definice s pořadím |
+| **Odrážky** | Technické specifikace, výčty bez argumentace |
+| **Tabulky** | Přehled metrik, srovnání variant, výsledky |
+| **Rovnice** | Formální definice metrik |
 
-| Formát | Kdy použít v BP | Kdy NEPOUŽÍVAT |
-|--------|----------------|-----------------|
-| **Odstavce** | Default. Argumentace, vysvětlení, diskuze. | — |
-| **Číslovaný seznam** | Cíle práce, kroky postupu, definice s jasným pořadím | Když jde o argumentaci — ta patří do odstavců |
-| **Odrážky** | Technické specifikace, požadavky na projekt (kap03) | V motivaci, rozsahu, závěrech — tam patří souvislý text |
-| **Tabulky** | Přehled metrik, srovnání variant, výsledky | Jako náhrada za vysvětlení |
-| **Rovnice/vzorce** | Formální definice metrik | — |
+**Typografie:**
 
-**Pravidlo:** Pokud informaci lze říct odstavcem bez ztráty srozumitelnosti, použij odstavec. Odrážky jen když je obsah skutečně výčtový (seznam položek, ne argumentace rozbitá do bodů).
+| Příkaz | Kdy |
+|--------|-----|
+| `\textit{}` | První zavedení pojmu, anglické termíny, kontrast |
+| `\textbf{}` | Kódy metrik a labels (`\textbf{P1}`, `\textbf{Q1}`) |
+| `\texttt{}` | Příkazy, soubory, nástroje (`\texttt{eslint}`) |
 
-**Vyvarovat se opakujících se vzorců:**
-- Nepoužívat em dash (`---`) jako vsuvku v každém odstavci — max 1× na sekci, jinak přeformulovat na samostatnou větu, dvojtečku nebo vedlejší větu
-- Nepoužívat "ale X chybí" jako pointu každého odstavce (adversativní vzorec)
-- Střídat struktury vět — ne každý odstavec: kontext → zvrat → pointa
+Pojem zvýraznit jen při prvním výskytu v sekci. Tučné neslouží k zdůraznění v textu — to má dělat struktura věty.
 
-## Metody společného psaní
+**Stylistická pestrost:** Střídat struktury vět. Pokud se v odstavci opakuje stejný vzorec, přeformulovat.
 
-Různé způsoby jak společně psát text BP:
-
-**Metoda A - Varianty:**
-- Claude nabídne různé varianty jak něco napsat
-- Uživatel syntetizuje a napíše podle sebe
-- Dobré pro: kostru, strukturu
-
-**Metoda B - Rozhovor (aktuálně zkoušíme):**
-- Claude se ptá otázky ("co je podle tebe X?")
-- Uživatel odpovídá jak umí
-- Když neví nebo chce vidět zdroje:
-  1. Claude najde relevantní pasáže přes RAG
-  2. **Zobrazí citace přímo v chatu** (text + zdroj + stránka)
-  3. Pak otevře dokument pro ověření: `evince -p [strana] [soubor]`
-- **Pozor:** PDF stránka ≠ číslo stránky v knize (offset kvůli obsahu, předmluvě)
-- **Pozor:** RAG vrací PDF stránku, ne číslo v knize → vždy ověřit v dokumentu
-- Uživatel přečte, pak odpoví vlastními slovy
-- Společně zformulují do akademického textu
-
-**Metoda D - Bullet points → text:**
-- Uživatel napíše body co chce říct (česky, jednoduše)
-- Společně rozepíšou do vět
 
 ## Psaní BP textu
 
-**Workflow celé BP:**
-1. **RAW struktura** - nejdřív pro celou BP (co kde bude, jaké zdroje, jaké citace)
-2. **Draft** - pak teprve psát vlastními slovy, odstavec po odstavci
+Claude navrhuje text přímo. Před každým návrhem si interně ověřit:
+- **Máme zdroje?** Pokud tvrzení potřebuje citaci a zdroj chybí, říct to dřív než psát.
+- **Víme co tam má být?** Pokud záměr sekce není jasný, probrat nejdřív obsah, pak psát.
 
-**Workflow jednotlivých změn:**
-1. Claude MUSÍ nejdřív navrhnout/prezentovat co chce udělat
-2. Uživatel musí explicitně souhlasit
-3. Teprve potom provést změny
+Pokud předpoklady chybí → probrat s uživatelem, pak teprve navrhnout text.
+Pokud jsou splněny → navrhnout rovnou, uživatel schválí nebo koriguje.
 
-**Při psaní textu:**
-- Diskutujeme co přesně tam bude napsáno
-- Uživatel napíše vlastními slovy → společně přeformulujeme na odborný styl
-- NEBO iterativně větu po větě / odstavec po odstavci
-- Délka závisí na kontextu — důležité je aby text byl srozumitelný a kompletní, ne uměle zkrácený
-
-**Co nedělat:**
-- Nevyplňovat věci jen proto aby se něco stalo
-- Neměnit nic bez předchozího souhlasu
-- Nekrátit text na úkor srozumitelnosti — raději delší a jasný než krátký a nesrozumitelný
+Text měnit jen po souhlasu. Srozumitelnost důležitější než stručnost.
 
 ## Overleaf synchronizace
 
@@ -432,12 +322,3 @@ npm run query -- --help
 - **--expand** - široké téma, chceš pokrýt synonyma
 - **--rerank** - chceš nejrelevantnější výsledky (pomalejší)
 
-### Technické detaily
-
-- **Chunking:** Sentence-based (respektuje hranice vět)
-- **Stránky:** Přesné PDF stránky (ne odhady)
-- **Embeddings:** Qwen3-8B přes OpenRouter
-- **Reranking:** Cohere rerank-v3.5 (vyžaduje COHERE_API_KEY)
-- **Query expansion:** Claude 3 Haiku
-- **Vector DB:** Chroma (localhost:8000)
-- **OCR:** Mistral OCR pro skenované PDF (auto-detect)

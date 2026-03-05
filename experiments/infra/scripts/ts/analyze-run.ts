@@ -2,11 +2,11 @@
  * analyze-run.ts — Post-run analyza experimentu.
  *
  * Meri deterministicke metriky z metricky ramce BP (kap03):
- * - P1 (process compliance) — 6 binarnich polozek checklistu
+ * - P1-P5 (process compliance) — 5 binarnich metrik checklistu
  * - Q1-Q7 (product quality) — referencni testy, API kontrakt, mutace, lint, typy, slozitost
  * - E1-E3 (efficiency) — tokeny, cas, stabilita
  *
- * Pro P2, Q4, Q8 (LLM-as-judge) pouzij judge.ts.
+ * Pro P6-P8, Q4, Q8 (LLM-as-judge) pouzij judge.ts.
  *
  * Usage:
  *   npx tsx analyze-run.ts <run-name>
@@ -21,10 +21,15 @@
 
 import * as path from "node:path";
 import * as fs from "node:fs";
+import { execSync } from "node:child_process";
 import {
   // Types
-  type P1Item,
+  type PComplianceResult,
   type P1Result,
+  type P2Result,
+  type P3Result,
+  type P4Result,
+  type P5Result,
   type Q1Result,
   type Q2Result,
   type Q3Result,
@@ -35,6 +40,7 @@ import {
   type E2Result,
   type E3Result,
   type GitStats,
+  type BehavioralTrace,
   // Utilities
   exec,
   resolveRunDir,
@@ -101,7 +107,7 @@ function main(): void {
   const cwd = runDir;
 
   // Spustime jednotlive analyzy
-  const p1 = measureP1(cwd);
+  const { p1, p2, p3, p4, p5 } = measureProcessCompliance(cwd);
   const gitStats = measureGitStats(cwd);
   const q1 = measureQ1(cwd);
   const q2 = measureQ2(cwd);
@@ -123,73 +129,79 @@ function main(): void {
   // Efficiency metriky
   const { e1, e2, e3 } = measureEfficiency(cwd);
 
+  // Behavioral trace (deterministicka extrakce faktu pro DIAGNOSIS)
+  const trace = measureBehavioralTrace(cwd);
+
   // Souhrnna tabulka
-  printSummary(runName, p1, q1, q2, q3, q5, q6, q7, e1, e2, e3);
+  printSummary(runName, p1, p2, p3, p4, p5, q1, q2, q3, q5, q6, q7, e1, e2, e3, trace);
+
+  // Automaticky spustit judge.ts po uspesnem analyze-run
+  console.log("\n=== Running judge.ts automatically ===");
+  const judgeScript = path.join(INFRA_DIR, "scripts", "ts", "judge.ts");
+  try {
+    const judgeOutput = execSync(`npx tsx "${judgeScript}" ${runName}`, {
+      cwd: process.cwd(),
+      encoding: "utf-8",
+      stdio: ["pipe", "pipe", "pipe"],
+    });
+    if (judgeOutput) {
+      console.log(judgeOutput);
+    }
+  } catch (err: unknown) {
+    const error = err as { stdout?: string | Buffer; stderr?: string | Buffer; message?: string };
+    let errorMsg = "Unknown error";
+    if (error.stderr) {
+      errorMsg = String(error.stderr);
+    } else if (error.message) {
+      errorMsg = error.message;
+    }
+    console.log("Warning: Judge failed or skipped:", errorMsg.slice(0, 200));
+  }
 }
 
 // ============================================================================
-// P1: Process Compliance Checklist
+// P1-P5: Process Compliance
 //
 // Meri zda agent dodrzuje spec-driven development proces.
-// 5 binarnich polozek — kazda bud splnena (true) nebo ne (false).
+// 5 binarnich metrik — kazda je samostatny vysledek (pass/fail).
 //
-// Proc tyto polozky: Kazda odpovida jednomu z cilovych chovani
+// Proc tyto metriky: Kazda odpovida jednomu z cilovych chovani
 // definovanych v AGENTS.md a mereny v kap03 BP.
 // ============================================================================
 
-function measureP1(cwd: string): P1Result {
-  printHeader("P1: Process Compliance Checklist");
+function measureProcessCompliance(cwd: string): {
+  p1: P1Result;
+  p2: P2Result;
+  p3: P3Result;
+  p4: P4Result;
+  p5: P5Result;
+} {
+  printHeader("P1-P5: Process Compliance");
 
-  const items: P1Item[] = [];
+  const p1 = measureP1(cwd);
+  const p2 = measureP2(cwd);
+  const p3 = measureP3(cwd);
+  const p4 = measureP4(cwd);
+  const p5 = measureP5(cwd);
 
-  // --- P1.1: Issues before code ---
-  // Agent ma nejdriv vytvorit issues (plan), pak az psat kod.
-  // Merimo: porovname timestamp prvniho issue vs. prvniho code commitu.
-  items.push(measureP1_1(cwd));
+  const all = [p1, p2, p3, p4, p5];
 
-  // --- P1.2: Branch per issue ---
-  // Kazdy issue by mel mit vlastni branch (ne jeden branch pro vse).
-  // Merimo: pocet remote branches >= pocet issues (minus #1 ktery je spec).
-  items.push(measureP1_2(cwd));
-
-  // --- P1.3: Test commit before implementation ---
-  // TDD: agent ma psat testy pred implementaci.
-  // Merimo: existuje alespon jeden "test:" commit a alespon jeden "feat:" commit.
-  // (Zjednodusena verze — plne TDD by vyzadovalo porovnani poradi per branch.)
-  items.push(measureP1_3(cwd));
-
-  // --- P1.4: PRs linked to issues ---
-  // Kazdy PR by mel odkazovat na issue (napr. "Closes #3").
-  // Merimo: pocet PR s "Closes #N" v body == celkovy pocet PR.
-  items.push(measureP1_4(cwd));
-
-  // --- P1.5: Did not modify existing tests ---
-  // Agent nesmi menit existujici testy (jenom pridavat nove).
-  // Merimo: git log pro MODIFIED (ne ADDED) soubory v tests/ a __tests__/.
-  items.push(measureP1_5(cwd));
-
-  // Celkove skore
-  const passed = items.filter((i) => i.pass === true).length;
-  const total = items.length;
-
-  // Vypis
-  for (const item of items) {
+  // Vypis vsech metrik
+  for (const item of all) {
     console.log(
       `${item.id} ${item.label}: ${passIcon(item.pass)} (${item.detail})`
     );
   }
   console.log("");
-  console.log(`**P1 score: ${passed}/${total}**`);
-  console.log("");
 
-  return { items, passed, total };
+  return { p1, p2, p3, p4, p5 };
 }
 
-// --- Jednotlive P1 polozky ---
+// --- P1: Issues before code ---
+// Agent ma nejdriv vytvorit issues (plan), pak az psat kod.
+// Merimo: porovname timestamp prvniho issue vs. prvniho code commitu.
 
-function measureP1_1(cwd: string): P1Item {
-  // Zjistime cas prvniho issue (mimo #1, coz je spec vytvoreany skriptem).
-  // Pouzivame `gh issue list` pro pristup k GitHub metadatum.
+function measureP1(cwd: string): P1Result {
   const issuesJson = exec(
     `gh issue list --state all --limit 100 --json number,createdAt`,
     { cwd }
@@ -227,7 +239,7 @@ function measureP1_1(cwd: string): P1Item {
   if (firstIssueTime && firstCodeCommitTime) {
     const pass = firstIssueTime < firstCodeCommitTime;
     return {
-      id: "P1.1",
+      id: "P1",
       label: "Issues before code",
       pass,
       detail: `issue: ${firstIssueTime.slice(0, 19)}, code: ${firstCodeCommitTime.slice(0, 19)}`,
@@ -235,15 +247,18 @@ function measureP1_1(cwd: string): P1Item {
   }
 
   return {
-    id: "P1.1",
+    id: "P1",
     label: "Issues before code",
     pass: null,
     detail: "could not determine timestamps",
   };
 }
 
-function measureP1_2(cwd: string): P1Item {
-  // Pocet issues (bez #1 spec)
+// --- P2: Branch per issue ---
+// Kazdy issue by mel mit vlastni branch (ne jeden branch pro vse).
+// Merimo: pocet remote branches >= pocet issues (minus #1 ktery je spec).
+
+function measureP2(cwd: string): P2Result {
   const issuesJson = exec(
     `gh issue list --state all --limit 100 --json number`,
     { cwd }
@@ -272,35 +287,42 @@ function measureP1_2(cwd: string): P1Item {
   const pass =
     issueTotal > 0 && branchCount > 0 && branchCount >= issueTotal;
   return {
-    id: "P1.2",
+    id: "P2",
     label: "Branch per issue",
     pass,
     detail: `branches: ${branchCount}, issues: ${issueTotal}`,
   };
 }
 
-function measureP1_3(cwd: string): P1Item {
+// --- P3: Test-first commits ---
+// TDD: agent ma psat testy pred implementaci.
+// Merimo: existuje alespon jeden "test:" commit a alespon jeden "feat:" commit.
+// Presnejsi verze: tddOrderViolations=0 v behavioral trace.
+
+function measureP3(cwd: string): P3Result {
   // Spocitame commity s prefixem "test:" a "feat:" v historii.
-  // Konvence: commit message zacina typem (test:, feat:, fix:, ...).
   const allMessages = exec(`git log --all --oneline --format="%s"`, {
     cwd,
   });
   const testCommits = countMatches(allMessages, /^test:/gm);
   const featCommits = countMatches(allMessages, /^feat:/gm);
 
-  // Zjednodusena podminka: existuji oba typy commitu.
-  // Plna verze by overovala poradi (test pred feat) per branch.
+  // Podminka: existuji oba typy commitu (test: i feat:).
+  // Plna verze: tddOrderViolations=0 (meri poradi per branch — viz behavioral trace).
   const pass = testCommits > 0 && featCommits > 0;
   return {
-    id: "P1.3",
+    id: "P3",
     label: "Test-first commits",
     pass,
     detail: `test: ${testCommits}, feat: ${featCommits}`,
   };
 }
 
-function measureP1_4(cwd: string): P1Item {
-  // Pocet PR celkem
+// --- P4: PRs linked to issues ---
+// Kazdy PR by mel odkazovat na issue (napr. "Closes #3").
+// Merimo: pocet PR s "Closes #N" v body == celkovy pocet PR.
+
+function measureP4(cwd: string): P4Result {
   const prJson = exec(`gh pr list --state all --json number`, {
     cwd,
   });
@@ -332,15 +354,18 @@ function measureP1_4(cwd: string): P1Item {
 
   const pass = prTotal > 0 && prLinked === prTotal;
   return {
-    id: "P1.4",
+    id: "P4",
     label: "PRs linked to issues",
     pass,
     detail: `${prLinked}/${prTotal}`,
   };
 }
 
-function measureP1_5(cwd: string): P1Item {
-  // Zjistime zda agent MODIFIKOVAL (ne pridal) testove soubory.
+// --- P5: No ref test modifications ---
+// Agent nesmi menit existujici testy (jenom pridavat nove).
+// Merimo: git log pro MODIFIED (ne ADDED) soubory v tests/ a __tests__/.
+
+function measureP5(cwd: string): P5Result {
   // --diff-filter=M zachyti jen modified files, ne added.
   const modifiedTests = exec(
     `git log --all --diff-filter=M --name-only --format="" -- 'tests/**' 'src/**/*.test.ts' '__tests__/**'`,
@@ -353,8 +378,8 @@ function measureP1_5(cwd: string): P1Item {
 
   const pass = uniqueModified === 0;
   return {
-    id: "P1.5",
-    label: "No test modifications",
+    id: "P5",
+    label: "No ref test modifications",
     pass,
     detail: pass ? "" : `${uniqueModified} files modified`,
   };
@@ -719,6 +744,7 @@ function setupEslint(cwd: string): boolean {
   // Zkopirujeme fixni config do CWD (ESLint resolvuje pluginy z lokace configu)
   const fixedConfigSrc = path.join(
     INFRA_DIR,
+    "config",
     "eslint-fixed.config.mjs"
   );
   const fixedConfigDst = path.join(cwd, "eslint.config.mjs");
@@ -1032,6 +1058,319 @@ function measureEfficiency(cwd: string): {
 }
 
 // ============================================================================
+// Behavioral Trace — deterministicka extrakce faktu ze sekvence prikazu
+//
+// Neni to metrika (zadny prah) — je to vstup pro DIAGNOSIS krok.
+// Rika "jak se to stalo": poradi akci, pocty, heuristiky.
+//
+// Zdroj dat: transcript.json (OpenCode export format).
+// Struktura: { info, messages[] }, kazda message ma { info, parts[] },
+// party s type=="tool" maji tool (nazev) a state.input.command (pro bash).
+// ============================================================================
+
+function measureBehavioralTrace(cwd: string): BehavioralTrace {
+  printHeader("Behavioral Trace");
+
+  const transcriptPath = path.join(cwd, "transcript.json");
+
+  if (!fileExists(transcriptPath)) {
+    const note = "transcript.json not found — trace unavailable";
+    console.log(note);
+    console.log("");
+    return {
+      issuesBatchCreated: null,
+      firstTestCommitBeforeImpl: null,
+      commitCount: 0,
+      branchCount: 0,
+      issueCount: 0,
+      prCount: 0,
+      todowriteUsed: false,
+      blobCommit: null,
+      tddOrderViolations: 0,
+      note,
+    };
+  }
+
+  type TranscriptPart = {
+    type?: string;
+    tool?: string;
+    state?: {
+      input?: {
+        command?: string;
+        [key: string]: unknown;
+      };
+      [key: string]: unknown;
+    };
+    [key: string]: unknown;
+  };
+
+  type TranscriptMessage = {
+    info?: unknown;
+    parts?: TranscriptPart[];
+  };
+
+  type Transcript = {
+    info?: unknown;
+    messages?: TranscriptMessage[];
+  };
+
+  let transcript: Transcript | null = null;
+  try {
+    transcript = readJSON<Transcript>(transcriptPath);
+  } catch {
+    const note = "Could not parse transcript.json";
+    console.log(note);
+    console.log("");
+    return {
+      issuesBatchCreated: null,
+      firstTestCommitBeforeImpl: null,
+      commitCount: 0,
+      branchCount: 0,
+      issueCount: 0,
+      prCount: 0,
+      todowriteUsed: false,
+      blobCommit: null,
+      tddOrderViolations: 0,
+      note,
+    };
+  }
+
+  if (!transcript) {
+    const note = "transcript.json is null";
+    console.log(note);
+    console.log("");
+    return {
+      issuesBatchCreated: null,
+      firstTestCommitBeforeImpl: null,
+      commitCount: 0,
+      branchCount: 0,
+      issueCount: 0,
+      prCount: 0,
+      todowriteUsed: false,
+      blobCommit: null,
+      tddOrderViolations: 0,
+      note,
+    };
+  }
+
+  const messages = transcript.messages ?? [];
+
+  // Projdeme vsechny party a extrahujeme relevatni prikazy v poradi vyskytu
+  type EventKind = "issue" | "commit" | "branch" | "pr";
+  const events: Array<{ kind: EventKind; cmd: string }> = [];
+  let todowriteUsed = false;
+  let commitCount = 0;
+  let branchCount = 0;
+  let issueCount = 0;
+  let prCount = 0;
+
+  for (const msg of messages) {
+    for (const part of msg.parts ?? []) {
+      if (part.type !== "tool") continue;
+      const tool = part.tool ?? "";
+      const cmd = part.state?.input?.command ?? "";
+
+      if (tool === "todowrite") {
+        todowriteUsed = true;
+        continue;
+      }
+
+      if (tool !== "bash" || !cmd) continue;
+
+      if (cmd.includes("git commit") && !cmd.includes("--amend")) {
+        commitCount++;
+        events.push({ kind: "commit", cmd });
+      }
+      if (cmd.includes("git checkout -b")) {
+        branchCount++;
+        events.push({ kind: "branch", cmd });
+      }
+      if (cmd.includes("gh issue create")) {
+        issueCount++;
+        events.push({ kind: "issue", cmd });
+      }
+      if (cmd.includes("gh pr create")) {
+        prCount++;
+        events.push({ kind: "pr", cmd });
+      }
+    }
+  }
+
+  // --- issuesBatchCreated ---
+  // Vsechny issues vytvoreny pred prvnim git commitem?
+  let issuesBatchCreated: boolean | null = null;
+  if (issueCount > 0 && commitCount > 0) {
+    const firstCommitIdx = events.findIndex((e) => e.kind === "commit");
+    const lastIssueBeforeFirstCommit = events
+      .slice(0, firstCommitIdx)
+      .filter((e) => e.kind === "issue").length;
+    issuesBatchCreated = lastIssueBeforeFirstCommit === issueCount;
+  }
+
+  // --- firstTestCommitBeforeImpl ---
+  // Byl alespon jeden commit s test soubory pred commitem s implementacnimi soubory?
+  // Heuristika: hledame v poradi commitu — je "test" commit (grep git show) pred "feat/impl" commitem?
+  // Zjednodusena verze: hledame commit message obsahujici "test:" pred "feat:" nebo "impl:".
+  let firstTestCommitBeforeImpl: boolean | null = null;
+  const commitEvents = events.filter((e) => e.kind === "commit");
+  if (commitEvents.length >= 2) {
+    let firstTestIdx = -1;
+    let firstImplIdx = -1;
+    for (let i = 0; i < commitEvents.length; i++) {
+      const msg = commitEvents[i].cmd.toLowerCase();
+      if (firstTestIdx === -1 && (msg.includes("test:") || msg.includes("tests:"))) {
+        firstTestIdx = i;
+      }
+      if (
+        firstImplIdx === -1 &&
+        (msg.includes("feat:") ||
+          msg.includes("fix:") ||
+          msg.includes("impl:") ||
+          msg.includes("chore:"))
+      ) {
+        firstImplIdx = i;
+      }
+    }
+    if (firstTestIdx !== -1 && firstImplIdx !== -1) {
+      firstTestCommitBeforeImpl = firstTestIdx < firstImplIdx;
+    } else if (firstTestIdx !== -1 && firstImplIdx === -1) {
+      // Pouze test commity — interpretujeme jako splneno
+      firstTestCommitBeforeImpl = true;
+    } else {
+      firstTestCommitBeforeImpl = false;
+    }
+  }
+
+  // --- blobCommit ---
+  // Heuristika: <3 commitu celkem a agent ma >5 souboru souctu v src/tests?
+  // Jednoduchy check: pokud commitCount < 3, oznacime jako blob (podezreni).
+  // Presnejsi by bylo pocitat soubory per commit (git show --stat), ale to je drahe.
+  let blobCommit: boolean | null = null;
+  if (commitCount > 0) {
+    // Spocitame celkovy pocet souboru ve vsech commitech
+    const totalFilesChanged = exec(
+      `git log --all --name-only --format="" | grep -v '^$' | sort -u | wc -l`,
+      { cwd }
+    );
+    const fileCount = parseInt(totalFilesChanged, 10) || 0;
+    blobCommit = commitCount < 3 && fileCount > 5;
+  }
+
+  // --- tddOrderViolations ---
+  // Pocet vetvi kde agent psal src/ soubory pred tests/ soubory.
+  // Algoritmus:
+  // 1. Extrahuj vsechny "git checkout -b" prikazy (branches) a jejich sekvenci
+  // 2. Pro kazdou branch najdi prvni Write/Edit akci na src/ a tests/
+  // 3. Pokud prvni Write/Edit na src/ prislo pred prvnim Write/Edit na tests/, je to violation
+  // 4. Ignoruj branch "main" a merge commity
+  let tddOrderViolations = 0;
+
+  type BranchInfo = {
+    branchName: string;
+    firstSrcEventOrder: number;  // poradí events kdy se naposledy menit branch (nižší = dřívěji)
+    firstTestEventOrder: number; // poradí events kdy se naposledy menit branch (nižší = dřívěji)
+  };
+
+  const branchMap = new Map<string, BranchInfo>();
+  let currentBranchName = "main";
+  let currentEventOrder = 0;
+
+  // Projdeme messages a sledujeme soubory per branch
+  for (const msg of messages) {
+    for (const part of msg.parts ?? []) {
+      if (part.type !== "tool") continue;
+      const tool = part.tool ?? "";
+      const cmd = part.state?.input?.command ?? "";
+
+      // Detekujeme zmenu branche
+      if (tool === "bash" && cmd.includes("git checkout -b")) {
+        // Extrakt branch jmena: `git checkout -b feature/xyz`
+        const match = cmd.match(/git checkout -b\s+(\S+)/);
+        currentBranchName = match ? match[1] : `branch-${currentEventOrder}`;
+        if (!branchMap.has(currentBranchName)) {
+          branchMap.set(currentBranchName, {
+            branchName: currentBranchName,
+            firstSrcEventOrder: Infinity,
+            firstTestEventOrder: Infinity,
+          });
+        }
+        currentEventOrder++;
+        continue;
+      }
+
+      // Detekujeme Write/Edit prikazy
+      if (tool === "write" || tool === "edit") {
+        currentEventOrder++;
+        const filePath = part.state?.input?.file_path ?? part.state?.input?.filePath ?? "";
+        const isInSrc = /src\//.test(filePath);
+        const isInTest = /tests\/|__tests__|\.test\.ts/.test(filePath);
+
+        // Inicializuj branch pokud ji nema
+        if (!branchMap.has(currentBranchName)) {
+          branchMap.set(currentBranchName, {
+            branchName: currentBranchName,
+            firstSrcEventOrder: Infinity,
+            firstTestEventOrder: Infinity,
+          });
+        }
+
+        const branch = branchMap.get(currentBranchName)!;
+        if (isInSrc && branch.firstSrcEventOrder === Infinity) {
+          branch.firstSrcEventOrder = currentEventOrder;
+        }
+        if (isInTest && branch.firstTestEventOrder === Infinity) {
+          branch.firstTestEventOrder = currentEventOrder;
+        }
+      }
+    }
+  }
+
+  // Pocitaj violations: vetvi kde src/ prislo pred tests/
+  for (const branch of branchMap.values()) {
+    // Ignoruj main a merge branche
+    if (branch.branchName === "main" || branch.branchName.includes("merge")) {
+      continue;
+    }
+    // Je to violation pokud:
+    // - src soubor existuje a tests neexistuje
+    // - nebo src soubor je prvni a tests je druhy
+    if (branch.firstSrcEventOrder !== Infinity) {
+      if (branch.firstTestEventOrder === Infinity) {
+        // Jsou pouze src soubory, zadne tests — je to violation
+        tddOrderViolations++;
+      } else if (branch.firstSrcEventOrder < branch.firstTestEventOrder) {
+        // src prislo driv — je to violation
+        tddOrderViolations++;
+      }
+    }
+  }
+
+  // Vypis
+  console.log(`issuesBatchCreated:       ${issuesBatchCreated ?? "null"}`);
+  console.log(`firstTestCommitBeforeImpl:${firstTestCommitBeforeImpl ?? "null"}`);
+  console.log(`commitCount:              ${commitCount}`);
+  console.log(`branchCount:              ${branchCount}`);
+  console.log(`issueCount:               ${issueCount}`);
+  console.log(`prCount:                  ${prCount}`);
+  console.log(`todowriteUsed:            ${todowriteUsed}`);
+  console.log(`blobCommit:               ${blobCommit ?? "null"}`);
+  console.log(`tddOrderViolations:       ${tddOrderViolations}`);
+  console.log("");
+
+  return {
+    issuesBatchCreated,
+    firstTestCommitBeforeImpl,
+    commitCount,
+    branchCount,
+    issueCount,
+    prCount,
+    todowriteUsed,
+    blobCommit,
+    tddOrderViolations,
+  };
+}
+
+// ============================================================================
 // Summary — souhrnna tabulka
 //
 // Format identicky s bash verzi pro snadne porovnani.
@@ -1040,6 +1379,10 @@ function measureEfficiency(cwd: string): {
 function printSummary(
   runName: string,
   p1: P1Result,
+  p2: P2Result,
+  p3: P3Result,
+  p4: P4Result,
+  p5: P5Result,
   q1: Q1Result,
   q2: Q2Result,
   q3: Q3Result,
@@ -1048,17 +1391,26 @@ function printSummary(
   q7: Q7Result,
   _e1: E1Result,
   _e2: E2Result,
-  _e3: E3Result
+  _e3: E3Result,
+  trace: BehavioralTrace
 ): void {
   console.log("==========================================");
   console.log(`=== Summary: ${runName} ===`);
   console.log("==========================================");
   console.log("");
 
-  // Process
-  console.log("### Process (P1)");
-  console.log(`P1 score: ${p1.passed}/${p1.total}`);
-  console.log("P2 (judge): run judge.ts separately");
+  // Process — P1-P5 individualne, P6-P8 pres judge.ts
+  console.log("### Process (P1-P8)");
+  console.log("| Metrika | Hodnota | Exit kritérium | Pass? |");
+  console.log("|---------|---------|----------------|-------|");
+  console.log(`| P1 Issues before code | ${p1.detail} | issues pred kodem | ${passIcon(p1.pass)} |`);
+  console.log(`| P2 Branch per issue | ${p2.detail} | branches>=issues | ${passIcon(p2.pass)} |`);
+  console.log(`| P3 Test-first commits | ${p3.detail} | test: pred feat: | ${passIcon(p3.pass)} |`);
+  console.log(`| P4 PRs linked to issues | ${p4.detail} | vsechny PR linked | ${passIcon(p4.pass)} |`);
+  console.log(`| P5 No ref test modifications | ${p5.detail || "ok"} | 0 modifikaci | ${passIcon(p5.pass)} |`);
+  console.log("| P6 Commit message quality | judge | ≥2/3 | run judge.ts |");
+  console.log("| P7 Issue description quality | judge | ≥2/3 | run judge.ts |");
+  console.log("| P8 PR description quality | judge | ≥2/3 | run judge.ts |");
   console.log("");
 
   // Product Quality table
@@ -1125,9 +1477,9 @@ function printSummary(
   console.log("");
 
   // Odkazky na judge
-  console.log("### Not measured here");
+  console.log("### Not measured here (LLM-as-judge)");
   console.log(
-    `- P2 (process artifacts): npx tsx experiments/infra/scripts/ts/judge.ts ${runName}`
+    `- P6/P7/P8 (process artifact quality): npx tsx experiments/infra/scripts/ts/judge.ts ${runName}`
   );
   console.log(
     `- Q4 (AC coverage): npx tsx experiments/infra/scripts/ts/judge.ts ${runName}`
@@ -1135,6 +1487,25 @@ function printSummary(
   console.log(
     `- Q8 (code quality): npx tsx experiments/infra/scripts/ts/judge.ts ${runName}`
   );
+  console.log("");
+
+  // Behavioral Trace sekce pro FINDINGS.md
+  console.log("### Behavioral Trace");
+  console.log("| Fact | Value |");
+  console.log("|------|-------|");
+  console.log(`| issuesBatchCreated | ${trace.issuesBatchCreated ?? "null"} |`);
+  console.log(`| firstTestCommitBeforeImpl | ${trace.firstTestCommitBeforeImpl ?? "null"} |`);
+  console.log(`| commitCount | ${trace.commitCount} |`);
+  console.log(`| branchCount | ${trace.branchCount} |`);
+  console.log(`| issueCount | ${trace.issueCount} |`);
+  console.log(`| prCount | ${trace.prCount} |`);
+  console.log(`| todowriteUsed | ${trace.todowriteUsed} |`);
+  console.log(`| blobCommit | ${trace.blobCommit ?? "null"} |`);
+  console.log(`| tddOrderViolations | ${trace.tddOrderViolations} |`);
+  if (trace.note) {
+    console.log("");
+    console.log(`_Note: ${trace.note}_`);
+  }
 }
 
 // ============================================================================

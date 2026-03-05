@@ -105,3 +105,14 @@ Tento seznam slouží jako podklad pro rešeršní část bakalářské práce. 
 *   **NATO SCIENCE COMMITTEE.** *Software Engineering: Report on a conference sponsored by the NATO Science Committee*. Garmisch, Germany, 1968.
     *   *Historický kontext vzniku disciplíny.*
 *   **KAUR, Rupinder a SENGUPTA, Jyotsna.** *Software Process Models and Analysis on Failure of Software Development Projects*. In: arXiv preprint arXiv:1306.1068. 2013.
+
+## APO — Automatic Prompt Optimization (nové zdroje 2026-03-03)
+
+*   **AGARWAL, Aman et al.** *PromptWizard: Task-Aware Prompt Optimization Framework*. Microsoft Research, 2024. arXiv:2405.18369.
+    *   Iterativní cyklus Score→Critique→Synthesize pro optimalizaci promptů. Closest APO analog k Run/Measure/Diagnose/Fix. Relevantní pro Future Work (automatizace).
+
+*   **Prompt Alchemy: Automatic Prompt Refinement for Enhancing Code Generation**. 2025. arXiv:2503.11085.
+    *   Iterativní refinement promptů pro code generation, evaluace přes execution. Ukazuje že systematický iterativní přístup je měřitelně lepší než ad-hoc.
+
+*   **ZHU et al.** *The Necessity of a Unified Framework for LLM-Based Agent Evaluation*. 2026. arXiv:2602.03238.
+    *   Benchmarky jsou konfundovány system prompty — nelze izolovat vliv modelu od instrukcí. Přímá podpora pro motivaci BP: instrukce jsou nezávislá proměnná.

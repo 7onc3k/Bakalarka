@@ -2,7 +2,9 @@
  * judge.ts — LLM-as-judge evaluace pomoci GLM-5.
  *
  * Hodnosti metriky ktere vyzaduji lidsky/LLM usudek:
- * - P2 (process artifact quality) — jsou commit msgs, issues, PRs popisne?
+ * - P6 (commit message quality) — jsou commit messages popisne a atomicke?
+ * - P7 (issue description quality) — jsou issue descriptions popisne?
+ * - P8 (PR description quality) — jsou PR descriptions popisne?
  * - Q4 (AC coverage) — kolik z 24 acceptance criteria ma test?
  * - Q8 (code quality) — naming, SoC, idiomaticky TS, docs, slozitost
  *
@@ -16,7 +18,7 @@
  *   npx tsx judge.ts pilot-r1
  *
  * Vysledky se ukladaji jako JSON soubory v adresari runu:
- *   p2-result.json, q4-result.json, q8-result.json
+ *   p6-result.json, p7-result.json, p8-result.json, q4-result.json, q8-result.json
  */
 
 import * as path from "node:path";
@@ -58,7 +60,9 @@ function main(): void {
   console.log("");
 
   // Spustime hodnoceni pro kazdu metriku
-  evaluateP2(runDir);
+  evaluateP6(runDir);
+  evaluateP7(runDir);
+  evaluateP8(runDir);
   evaluateQ4(runDir);
   evaluateQ8(runDir);
 
@@ -118,19 +122,16 @@ function callJudge(cwd: string, prompt: string): string {
 }
 
 // ============================================================================
-// P2: Process Artifact Quality
+// Pomocna funkce: sber procesních artefaktu
 //
-// Hodnosti kvalitu procesních artefaktu — jsou commit messages, issues
-// a PR descriptions popisne a uzitecne?
-//
-// Vstup: git log, gh issue list, gh pr list
-// Rubric: experiments/infra/judge/p2-process-artifacts.md
-// Skala: 1-3 (inadequate / acceptable / good)
+// Vraci commits, issues a PRs z runu pro hodnoceni P6/P7/P8.
 // ============================================================================
 
-function evaluateP2(runDir: string): void {
-  console.log("--- P2: Collecting process artifacts ---");
-
+function collectProcessArtifacts(runDir: string): {
+  commits: string;
+  issues: string;
+  prs: string;
+} {
   // Sebrame commit messages (bez merge commitu)
   const commits = exec(
     `git log --format="%h %s" --no-merges`,
@@ -169,38 +170,153 @@ function evaluateP2(runDir: string): void {
     "No PRs found (gh not configured)"
   );
 
-  // Sestavime vstup pro judge: vsechny procesni artefakty dohromady
-  const p2Input = `## Commit Messages
-${commits}
+  return { commits, issues, prs };
+}
 
-## Issue Descriptions
-${issues}
+// ============================================================================
+// P6: Commit Message Quality
+//
+// Hodnosti popisnost commit messages — jsou atomicke, maji konvencni prefix,
+// je z nich jasne co a proc bylo zmeneno?
+//
+// Vstup: git log (commit messages)
+// Rubric: experiments/infra/judge/p6-commit-messages.md
+// Skala: 1-3 (inadequate / acceptable / good)
+// ============================================================================
 
-## PR Descriptions
-${prs}`;
+function evaluateP6(runDir: string): void {
+  console.log("--- P6: Commit message quality ---");
 
-  // Nacteme rubric (hodnotici kriteria) z infra/judge/
-  const p2Rubric = readFile(
-    path.join(JUDGE_DIR, "p2-process-artifacts.md")
+  const { commits } = collectProcessArtifacts(runDir);
+
+  const p6Rubric = readFile(
+    path.join(JUDGE_DIR, "p6-commit-messages.md")
   );
 
-  if (!p2Rubric) {
-    console.error(
-      "Error: p2-process-artifacts.md rubric not found in judge/"
-    );
+  if (!p6Rubric) {
+    // Fallback: zkusime stary soubor p2-process-artifacts.md s instrukcemi pro commit messages
+    const p2Rubric = readFile(path.join(JUDGE_DIR, "p2-process-artifacts.md"));
+    if (!p2Rubric) {
+      console.error("Error: p6-commit-messages.md (nor p2-process-artifacts.md fallback) not found in judge/");
+      return;
+    }
+    console.log("Warning: Using p2-process-artifacts.md as fallback rubric for P6");
+    const prompt = `${p2Rubric}\n\nEvaluate ONLY commit message quality (P6). Focus on:\n- Conventional prefix (feat:, test:, fix:, etc.)\n- Atomicity (one logical change per commit)\n- Descriptiveness (what and why)\n\nOutput JSON: { "metric": "P6", "score": 1-3, "rationale": "..." }\n\n---\n\n## Commit Messages\n${commits}`;
+    const result = callJudge(runDir, prompt);
+    const outputPath = path.join(runDir, "p6-result.json");
+    writeFile(outputPath, result);
+    console.log(`P6 result saved to ${outputPath}`);
+    console.log(result);
+    console.log("");
     return;
   }
 
-  // Prompt = rubric + oddelovac + data
-  const prompt = `${p2Rubric}\n\n---\n\n${p2Input}`;
+  const prompt = `${p6Rubric}\n\n---\n\n## Commit Messages\n${commits}`;
 
-  console.log("Calling GLM-5 for P2...");
+  console.log("Calling GLM-5 for P6...");
   const result = callJudge(runDir, prompt);
 
-  // Ulozime vysledek jako JSON
-  const outputPath = path.join(runDir, "p2-result.json");
+  const outputPath = path.join(runDir, "p6-result.json");
   writeFile(outputPath, result);
-  console.log(`P2 result saved to ${outputPath}`);
+  console.log(`P6 result saved to ${outputPath}`);
+  console.log(result);
+  console.log("");
+}
+
+// ============================================================================
+// P7: Issue Description Quality
+//
+// Hodnosti popisnost issue descriptions — maji jasny scope, acceptance criteria,
+// je z nich zrejme co ma byt implementovano?
+//
+// Vstup: gh issue list (issues, bez Issue #1 spec)
+// Rubric: experiments/infra/judge/p7-issue-descriptions.md
+// Skala: 1-3 (inadequate / acceptable / good)
+// ============================================================================
+
+function evaluateP7(runDir: string): void {
+  console.log("--- P7: Issue description quality ---");
+
+  const { issues } = collectProcessArtifacts(runDir);
+
+  const p7Rubric = readFile(
+    path.join(JUDGE_DIR, "p7-issue-descriptions.md")
+  );
+
+  if (!p7Rubric) {
+    const p2Rubric = readFile(path.join(JUDGE_DIR, "p2-process-artifacts.md"));
+    if (!p2Rubric) {
+      console.error("Error: p7-issue-descriptions.md (nor p2-process-artifacts.md fallback) not found in judge/");
+      return;
+    }
+    console.log("Warning: Using p2-process-artifacts.md as fallback rubric for P7");
+    const prompt = `${p2Rubric}\n\nEvaluate ONLY issue description quality (P7). Focus on:\n- Clarity of scope and acceptance criteria\n- Sufficient detail for implementation\n- Structured format\n\nOutput JSON: { "metric": "P7", "score": 1-3, "rationale": "..." }\n\n---\n\n## Issue Descriptions\n${issues}`;
+    const result = callJudge(runDir, prompt);
+    const outputPath = path.join(runDir, "p7-result.json");
+    writeFile(outputPath, result);
+    console.log(`P7 result saved to ${outputPath}`);
+    console.log(result);
+    console.log("");
+    return;
+  }
+
+  const prompt = `${p7Rubric}\n\n---\n\n## Issue Descriptions\n${issues}`;
+
+  console.log("Calling GLM-5 for P7...");
+  const result = callJudge(runDir, prompt);
+
+  const outputPath = path.join(runDir, "p7-result.json");
+  writeFile(outputPath, result);
+  console.log(`P7 result saved to ${outputPath}`);
+  console.log(result);
+  console.log("");
+}
+
+// ============================================================================
+// P8: PR Description Quality
+//
+// Hodnosti popisnost PR descriptions — obsahuji odkaz na issue, popis co a proc,
+// jsou dostatecne informativni pro code review?
+//
+// Vstup: gh pr list (PR descriptions)
+// Rubric: experiments/infra/judge/p8-pr-descriptions.md
+// Skala: 1-3 (inadequate / acceptable / good)
+// ============================================================================
+
+function evaluateP8(runDir: string): void {
+  console.log("--- P8: PR description quality ---");
+
+  const { prs } = collectProcessArtifacts(runDir);
+
+  const p8Rubric = readFile(
+    path.join(JUDGE_DIR, "p8-pr-descriptions.md")
+  );
+
+  if (!p8Rubric) {
+    const p2Rubric = readFile(path.join(JUDGE_DIR, "p2-process-artifacts.md"));
+    if (!p2Rubric) {
+      console.error("Error: p8-pr-descriptions.md (nor p2-process-artifacts.md fallback) not found in judge/");
+      return;
+    }
+    console.log("Warning: Using p2-process-artifacts.md as fallback rubric for P8");
+    const prompt = `${p2Rubric}\n\nEvaluate ONLY PR description quality (P8). Focus on:\n- Link to issue (Closes #N)\n- Description of what and why\n- Sufficient detail for code review\n\nOutput JSON: { "metric": "P8", "score": 1-3, "rationale": "..." }\n\n---\n\n## PR Descriptions\n${prs}`;
+    const result = callJudge(runDir, prompt);
+    const outputPath = path.join(runDir, "p8-result.json");
+    writeFile(outputPath, result);
+    console.log(`P8 result saved to ${outputPath}`);
+    console.log(result);
+    console.log("");
+    return;
+  }
+
+  const prompt = `${p8Rubric}\n\n---\n\n## PR Descriptions\n${prs}`;
+
+  console.log("Calling GLM-5 for P8...");
+  const result = callJudge(runDir, prompt);
+
+  const outputPath = path.join(runDir, "p8-result.json");
+  writeFile(outputPath, result);
+  console.log(`P8 result saved to ${outputPath}`);
   console.log(result);
   console.log("");
 }
@@ -222,7 +338,7 @@ function evaluateQ4(runDir: string): void {
   console.log("--- Q4: Collecting acceptance criteria and test code ---");
 
   // Nacteme specifikaci a extrahujeme AC
-  const specFile = path.join(INFRA_DIR, "issue-1-req-only.json");
+  const specFile = path.join(INFRA_DIR, "inputs", "issue-1-req-only.json");
 
   if (!fileExists(specFile)) {
     console.log(`Warning: ${specFile} not found, skipping Q4`);

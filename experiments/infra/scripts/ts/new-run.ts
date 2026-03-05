@@ -49,16 +49,16 @@ function main(): void {
       "Usage: npx tsx new-run.ts <run-name> [--agents path/to/AGENTS.md]"
     );
     console.error(
-      "Example: npx tsx new-run.ts pilot-r6 --agents experiments/infra/AGENTS.md"
+      "Example: npx tsx new-run.ts pilot-r6 --agents experiments/infra/inputs/AGENTS.md"
     );
     process.exit(1);
   }
 
   // Volitelny flag --agents pro pouziti jineho AGENTS.md
-  // Default: experiments/infra/AGENTS.md (hlavni verze iterovana v experimentu)
+  // Default: experiments/infra/inputs/AGENTS.md (hlavni verze iterovana v experimentu)
   const agentsMdPath = flags.agents
     ? path.resolve(flags.agents)
-    : path.join(INFRA_DIR, "AGENTS.md");
+    : path.join(INFRA_DIR, "inputs", "AGENTS.md");
 
   if (!fileExists(agentsMdPath)) {
     console.error(`Error: AGENTS.md not found: ${agentsMdPath}`);
@@ -126,7 +126,7 @@ reports/
   );
 
   // .opencode/config.json — minimalni konfigurace opencode
-  const configSrc = path.join(INFRA_DIR, "config.json");
+  const configSrc = path.join(INFRA_DIR, "config", "config.json");
   if (fileExists(configSrc)) {
     fs.copyFileSync(
       configSrc,
@@ -136,7 +136,7 @@ reports/
 
   // .opencode/agents/build.md — system prompt override (nahrazuje defaultni
   // qwen.txt system prompt v opencode). Fixni pres vsechny runy.
-  const buildMdSrc = path.join(INFRA_DIR, "build.md");
+  const buildMdSrc = path.join(INFRA_DIR, "inputs", "build.md");
   if (fileExists(buildMdSrc)) {
     fs.copyFileSync(
       buildMdSrc,
@@ -146,7 +146,7 @@ reports/
 
   // .opencode/plugins/auto-continue.ts — plugin ktery automaticky restartuje
   // agenta pri vypadku (meri se jako E3 restarts)
-  const pluginSrc = path.join(INFRA_DIR, "auto-continue.ts");
+  const pluginSrc = path.join(INFRA_DIR, "scripts", "auto-continue.ts");
   if (fileExists(pluginSrc)) {
     fs.copyFileSync(
       pluginSrc,
@@ -183,11 +183,11 @@ reports/
 
   // Nacteme titul z JSON a body z markdown souboru
   const specJson = readJSON<{ title: string }>(
-    path.join(INFRA_DIR, "issue-1-req-only.json")
+    path.join(INFRA_DIR, "inputs", "issue-1-req-only.json")
   );
   const specTitle = specJson?.title ?? "Billing Reminder System";
 
-  const specBodyPath = path.join(INFRA_DIR, "issue-1-spec.md");
+  const specBodyPath = path.join(INFRA_DIR, "inputs", "issue-1-spec.md");
   const specBody = readFile(specBodyPath);
 
   if (specBody) {

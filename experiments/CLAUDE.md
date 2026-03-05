@@ -6,13 +6,13 @@ Pilotní fáze experimentu iteruje na AGENTS.md dokud agent nedosáhne cílovéh
 
 ## Cyklus
 
-Observe → Diagnose → Fix → Run
+Run → Measure → Diagnose → Fix → Run
 
-Každá iterace:
+Každá iterace (Diagnose a Fix iterativně ve spolupráci — viz procedure):
 1. **Observe** — behavioral trace z runu (FINDINGS.md šablona)
 2. **Diagnose** — analýza proti FSE 2025 (7 komponent), SASE (script balance), Lulla 2026 (content effectiveness), Breunig (fighting-the-weights)
-3. **Fix** — literature-grounded změna v AGENTS.md (zapsat do CHANGELOG.md s citací)
-4. **Run** — `./infra/scripts/new-run.sh pilot-rN`
+3. **Fix** — literature-grounded změna v AGENTS.md (zapsat do `changelog/pilot-rN-to-rN+1.md` s citací)
+4. **Run** — `npx tsx infra/scripts/ts/new-run.ts pilot-rN`
 
 ## Analytické nástroje
 
@@ -35,9 +35,10 @@ Agent splní 80%+ cílových chování:
 
 ## Soubory
 
-- `infra/AGENTS.md` — iterovaný vstup (jediná proměnná)
-- `infra/CHANGELOG.md` — diff per iterace s literaturou
+- `infra/inputs/AGENTS.md` — iterovaný vstup (jediná proměnná)
+- `infra/changelog/pilot-rN-to-rN+1.md` — změny per iterace s literaturou
 - `infra/iteration-procedure.md` — kompletní analytický postup
-- `infra/build.md` — system prompt override (fixní)
-- `runs/pilot-rN/FINDINGS.md` — výstupy per run
-- `infra/scripts/new-run.sh` — spouštěč runů
+- `infra/inputs/build.md` — system prompt override (fixní)
+- `runs/pilot-rN/FINDINGS.md` — behavioral trace + metriky (v repu runu)
+- `runs/pilot-rN/DIAGNOSIS.md` — FSE/SASE/Lulla/Breunig analýza (v repu runu)
+- `infra/scripts/ts/new-run.ts` — spouštěč runů

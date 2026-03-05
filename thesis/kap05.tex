@@ -76,5 +76,32 @@ Future work.
     \item Systematické porovnání formátů specifikace
     \item Multi-agent vs. single-agent scaffolding
     \item Longitudinální studie (více issues, evoluce projektu)
+    \item \textbf{Automatizace iteračního postupu.} Fáze Diagnose a~Fix jsou
+          v~této práci prováděny manuálně. Frameworky jako PromptWizard
+          \cite{agarwal2024promptwizard} (Score→Critique→Synthesize) nebo
+          Prompt Alchemy~\cite{promptalchemy2025} ukazují, že tento cyklus
+          lze automatizovat --- model sám analyzuje kde instrukce selhaly
+          a~navrhuje úpravy. Kombinace automatizovaného APO s~metrikami P/Q/E
+          by umožnila rychlejší iteraci bez manuální diagnózy.
 \end{itemize}
+\end{raw}
+
+\begin{raw}
+\textbf{Feature work / námět k diskuzi --- exit kritéria jako součást instrukcí:}
+
+Otázka: co by se stalo kdybychom agentovi předali exit kritéria přímo v AGENTS.md?
+(``Musíš dosáhnout P1=5/5, Q3$\geq$70\,\%, Q5=0 --- ověř si to před PR.'')
+
+Argument PRO: pokud máme dostatečný počet metrik pokrývající různé dimenze (proces, kvalita, efektivita),
+optimalizace na metriky = dobrá práce. Goodhartův zákon platí pro jednorozměrné metriky ---
+agent který optimalizuje jen coverage může zanedbat kvalitu. Ale s 13 metrikami napříč P/Q/E
+je těžší gaminovat všechny najednou bez skutečné kvality.
+
+Argument PROTI: agent může najít zkratky (napr. trivální testy pro Q3, verbose kód pro Q7).
+Také: explicitní metriky v instrukcích mění povahu experimentu --- měříme pak schopnost agenta
+sledovat metriky, ne schopnost dodržovat vývojové praktiky.
+
+Kompromis k prozkoumání: přidat do AGENTS.md jen deterministické quality gates jako self-check
+(``Run tsc --noEmit before PR, run eslint src/ --- zero warnings required'') bez číselných prahů.
+Agent ví co zkontrolovat, ale neví jaký je náš práh → nelze triválně optimalizovat.
 \end{raw}
