@@ -355,6 +355,19 @@ byla zpřesněna: z~obecného ``never modify a test'' na konkrétní
 ``\texttt{tests/\_ref\_tests/} are immutable''. Jako pre-PR quality gate
 byl přidán příkaz \texttt{npx eslint src/ --max-warnings 0}, který
 pokrývá i~complexity violations (Q7).
+
+Obrázek~\ref{fig:agents-diff-r1-r2} ukazuje reprezentativní výřez diffu
+mezi verzemi \texttt{AGENTS.md} pro běhy r1 a~r2. Vizualizace je zde
+užitečnější než slovní výčet: je na ní přímo vidět posun od obecné
+instrukce k~operacionalizovanému pracovnímu postupu a~zpřesnění
+guardrailů kolem testů.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\linewidth]{img/generated/agents-diff-r1-r2.png}
+\caption{Vizuální diff změn \texttt{AGENTS.md} mezi pilot-r1 a~pilot-r2}
+\label{fig:agents-diff-r1-r2}
+\end{figure}
 \end{draft}
 
 \begin{raw}
@@ -410,11 +423,23 @@ Breunigem~\cite{breunig2025}: instrukce přítomna přes iterace,
 agent ji ignoruje. Samotný textový požadavek v~Package Quality nestačí
 --- nutný verifikovatelný self-check před PR.
 
-Regrese Q2 (27/45 oproti 34/45 v~r1) není způsobena změnou instrukcí.
-Agent zvolil odlišný přístup k~implementaci state machine logiky ---
-selhání jsou v~pause/resume přechodech a~hraničních případech eskalace,
-tedy jiná sada chyb než v~r1. Instrukce specifikaci popisují, ale
-neřídí konkrétní implementační volby.
+Regrese Q2 (27/45 oproti 34/45 v~r1) a~Q3 (68\,\% oproti 84\,\%) není
+způsobena změnou instrukcí. Agent napsal více vlastních testů než v~r1
+(70 vs.\ 59), ale mutation score kleslo --- více testů neznamená lepší
+testy. Hypotéza: instrukce \textit{test-first} vedla agenta k~tomu,
+že napsal testy ze specifikace najednou, bez iterativního cyklu
+červená-zelená-refaktoruj. Testy tak pokrývají spec, nikoli chování
+kódu, a~jsou proto méně účinné na zachycení mutací. Jde o~důsledek
+\textit{batch} interpretace TDD instrukcí --- agent píše testy před
+kódem, ale neiterouje na~nich. Tato hypotéza je analytická;
+session transcript nebyl pro r2 systematicky analyzován.
+
+Nárůst E1 (380k vs.\ 143k tokenů) je artefaktem OpenCode runtime, nikoli
+instrukčního efektu. Počet zpráv klesl (96 vs.\ 180), ale průměrný
+vstupní kontext na~zprávu vzrostl 7,7×. Pravděpodobná příčina:
+\texttt{package-lock.json} byl součástí modified files a~OpenCode ho
+zahrnoval do kontextu každého kroku. E1 proto v~tomto srovnání není
+spolehlivým signálem efektivity instrukcí.
 \end{draft}
 
 %% ================================================================
