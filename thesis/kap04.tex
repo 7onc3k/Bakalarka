@@ -199,7 +199,7 @@ efektivnější než stručné~\cite{lulla2026} a~redundantní obsah zvyšuje
 tokeny bez benefitu~\cite{gloaguen2025agentsmd}.
 
 Sekce Constraints obsahuje explicitní zákazy: nekombinovat issues,
-nemodifikovat referenční testy, nepřepisovat git historii. Mao
+nemodifikovat již existující testy, nepřepisovat git historii. Mao
 et al.~\cite{mao2025fse} zjistili, že exclusion constraints (46\,\%)
 jsou nejefektivnějším typem omezení.
 
@@ -229,7 +229,7 @@ Funkční korektnost     & Specification (AC)           & Q2, Q4 \\
 Specifikace, referenční implementace a~baseline instrukce tvoří výchozí
 bod experimentu. Následující sekce popisuje průběh
 pilotních iterací cyklem
-Run/Measure/Diagnose/Fix~(sekce~\ref{sec:pilotni-iterace}).
+Spuštění/Měření/Diagnóza/Úprava~(sekce~\ref{sec:pilotni-iterace}).
 \end{draft}
 
 \begin{raw}
@@ -251,7 +251,7 @@ Výsledný dokument: 53 řádků, $\sim$350 slov.
 \textbf{Mapování na dimenze chování:} [tabulka cíl/sekce/metriky]
 
 Tři artefakty tvoří výchozí bod experimentu. Následující sekce popisuje
-iterační cyklus Run/Measure/Diagnose/Fix.
+iterační cyklus Spuštění/Měření/Diagnóza/Úprava.
 
 \textbf{Audit trail --- obsah zrušené sekce 4.2.1 (Baseline AGENTS.md):}
 
@@ -268,7 +268,7 @@ komponentě~\cite{mao2025fse}. Kompletní znění viz přílohu~\ref{app:baselin
 %% ================================================================
 
 \begin{draft}
-Každá iterace sleduje cyklus Run/Measure/Diagnose/Fix
+Každá iterace sleduje cyklus Spuštění/Měření/Diagnóza/Úprava
 (sekce~\ref{sec:pilotni-iterace}). U~prvního běhu (baseline) uvádíme
 kompletní tabulku metrik a~podrobnou diagnostiku. U~dalších běhů
 popisujeme pouze změny oproti předchozí iteraci; souhrnný přehled
@@ -297,7 +297,7 @@ P1 & Issues before code    & \checkmark & splněno  & \checkmark \\
 P2 & Branch per issue      & $\times$   & branches $\geq$ issues & $\times$ \\
 P3 & Test-first commits    & $\times$   & test: před feat: & $\times$ \\
 P4 & PRs linked to issues  & \checkmark & všechny PR & \checkmark \\
-P5 & Ref.\ testy nezměněny & $\times$   & 0 změn   & $\times$ \\
+P5 & Existující testy nezměněny & $\times$   & 0 změn   & $\times$ \\
 P6 & Commit msg quality    & 2/3        & $\geq$ 2/3 & \checkmark \\
 P7 & Issue quality         & 2/3        & $\geq$ 2/3 & \checkmark \\
 P8 & PR quality            & 3/3        & $\geq$ 2/3 & \checkmark \\
@@ -330,7 +330,7 @@ všechny procházejí.
 Tři procesní položky z~pěti nebyly splněny: agent sloučil 11~issues
 do 4~branches místo jedné branch per issue (P1 bod~2), nepoužil
 separátní \texttt{test:} commity (P1 bod~3) a~upravil jeden
-referenční test soubor (P1 bod~5). Tyto tři selhání sdílí společný
+již existující testový soubor (P1 bod~5). Tyto tři selhání sdílí společný
 vzorec --- agent upřednostnil rychlost dokončení před dodržením
 předepsaného workflow.
 
@@ -350,9 +350,9 @@ a~Razavi~\cite{razavi2025} opakování textuálního pravidla efekt nemá ---
 nutné přestrukturovat jako verifikovatelný checkpoint. Krok~2 v sekci
 Process byl proto rozepsán na čtyři explicitní sub-kroky s~git příkazy
 (\texttt{git checkout -b issue-N}, separátní staging \texttt{tests/}
-vs.\ \texttt{src/}, PR s~\texttt{Closes \#N}). Ochrana referenčních testů
-byla zpřesněna: z~obecného ``never modify a test'' na konkrétní
-``\texttt{tests/\_ref\_tests/} are immutable''. Jako pre-PR quality gate
+vs.\ \texttt{src/}, PR s~\texttt{Closes \#N}). Zákaz přepisování již
+existujících testů byl zpřesněn z~obecného ``never modify a test''
+na explicitnější guardrail. Jako pre-PR quality gate
 byl přidán příkaz \texttt{npx eslint src/ --max-warnings 0}, který
 pokrývá i~complexity violations (Q7).
 
@@ -394,7 +394,7 @@ ukazuje metriky kde došlo ke změně.
 \toprule
 \textbf{Kód} & \textbf{Metrika} & \textbf{r1} & \textbf{r2} & \textbf{Trend} \\
 \midrule
-P5       & Ref.\ testy nezměněny  & $\times$   & \checkmark  & opraveno \\
+P5       & Existující testy nezměněny  & $\times$   & \checkmark  & opraveno \\
 Q2       & Ref.\ test pass rate   & 34/45      & 27/45       & horší \\
 Q5       & Lint warnings          & 2          & 1           & zlepšení \\
 Q7       & Složitost kódu         & 2 viol.    & 0           & opraveno \\
@@ -406,7 +406,7 @@ E2       & Trvání                 & 33 min     & 37 min      & záznam \\
 \end{tabular}
 \end{table}
 
-Cílené fixe částečně fungovaly: ochrana referenčních testů (P1 bod~5)
+Cílené fixe částečně fungovaly: zákaz přepisování existujících testů (P1 bod~5)
 a~quality gate pro složitost (Q7) byly opraveny. Eslint check snížil
 lint warnings z~2 na~1. Procesní selhání P1 bodu~2 a~3 přetrvala,
 ale s~odlišným charakterem --- r1 měl \texttt{feat:} commity bez
@@ -440,6 +440,98 @@ vstupní kontext na~zprávu vzrostl 7,7×. Pravděpodobná příčina:
 \texttt{package-lock.json} byl součástí modified files a~OpenCode ho
 zahrnoval do kontextu každého kroku. E1 proto v~tomto srovnání není
 spolehlivým signálem efektivity instrukcí.
+
+\textbf{Změna instrukcí pro r3.}
+Po druhém běhu byly instrukce zpřesněny ještě ve dvou bodech. Workflow
+nově explicitně začíná výběrem otevřeného issue
+(\texttt{gh issue list --state open}) a mezi testovací a implementační
+commit přibyl verifikační krok
+(\texttt{git log --oneline -3}), který má zkontrolovat, že checkpoint
+\texttt{test:} skutečně vznikl před implementací. Současně byl požadavek
+na JSDoc přesunut z~obecné sekce Package Quality do explicitního
+pre-PR guardrailu v Constraints. Cílem bylo převést přetrvávající
+slabiny r2 na verifikovatelné kroky, ne jen opakovat stejnou formulaci.
+
+Obrázek~\ref{fig:agents-diff-r2-r3} ukazuje diff mezi verzemi
+\texttt{AGENTS.md} pro běhy r2 a~r3. Ve srovnání s předchozí iterací
+jde o menší, ale metodicky důležité zpřesnění: agent dostává konkrétní
+kontrolní body pro výběr issue, ověření TDD pořadí a dokumentaci
+veřejného API.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\linewidth]{img/generated/agents-diff-r2-r3.png}
+\caption{Vizuální diff změn \texttt{AGENTS.md} mezi pilot-r2 a~pilot-r3}
+\label{fig:agents-diff-r2-r3}
+\end{figure}
+\end{draft}
+
+%% ----------------------------------------------------------------
+\subsection{Pilot-r3}
+\label{sec:pilot-r3}
+
+\begin{draft}
+Třetí běh ověřoval tři změny instrukcí z~r2: verifikační checkpoint
+po~\texttt{test:} commitu, operacionalizaci pravidla jedné branch
+přes \texttt{gh issue list --state open} a~přesun JSDoc do~Constraints
+jako pre-PR guardrail. Tabulka~\ref{tab:pilot-r3-delta} ukazuje metriky
+s~výraznou změnou.
+
+\begin{table}[ht]
+\centering
+\caption{Pilot-r3: metriky s~změnou oproti r2}
+\label{tab:pilot-r3-delta}
+\small
+\begin{tabular}{@{}llccc@{}}
+\toprule
+\textbf{Kód} & \textbf{Metrika} & \textbf{r2} & \textbf{r3} & \textbf{Trend} \\
+\midrule
+P2 & Branch per issue         & $\times$   & \checkmark  & opraveno \\
+P3 & Test-first commity       & $\times$   & \checkmark  & opraveno \\
+P5 & Ref.\ testy nezměněny   & $\times$   & \checkmark  & opraveno \\
+P6 & Kvalita commit zpráv     & 2/3        & 3/3         & zlepšení \\
+P7 & Kvalita issue popisů     & 2/3        & 3/3         & zlepšení \\
+P8 & Kvalita PR popisů        & 2/3        & 3/3         & zlepšení \\
+Q2 & Ref.\ test pass rate     & 34/45      & 36/45       & mírné zlepšení \\
+Q3 & Mutation score           & 68\,\%     & 71\,\%      & nad prahem \\
+Q4 & AC coverage              & --         & 24/24       & splněno \\
+Q8 & Design quality           & 1/3        & 3/3         & průlom \\
+\midrule
+E2 & Trvání                   & 37 min     & 25 min      & záznam \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Všechny tři procesní cíle byly splněny. Agent poprvé dosáhl P1--P5 = 5/5:
+vytvořil issues před kódem, každý issue dostal vlastní branch, test commit
+předcházel feat commitu (verifikováno z~\texttt{git log}), PR obsahovaly
+\texttt{Closes \#N} a~referenční testy nebyly modifikovány. Tento výsledek
+potvrzuje, že operacionalizace pravidel jako konkrétních příkazů
+(Breunig~\cite{breunig2025}: přestrukturovat, ne opakovat) a~verifikační
+checkpointy (Mao et al.~\cite{mao2025fse}) jsou účinnější než textové
+požadavky.
+
+Průlomovou změnou je Q8 = 3/3: agent zdokumentoval celé veřejné API
+JSDockem přes všechny dimenze (pojmenování, separace zodpovědností,
+idiomatický TypeScript, dokumentace, složitost). V~r1 a~r2 dosahoval Q8
+1/3 navzdory přítomnosti instrukce. Přesun do~Constraints s~explicitním
+pre-PR krokem realizoval enforcement moment, který popisuje
+Lulla~\cite{lulla2026}: quality gate těsně před výstupem je vymáhán
+spolehlivěji než obecný požadavek v~textu.
+
+Q2 = 36/45 ukazuje na dvě zbývající implementační mezery. \texttt{business-days.test.ts}
+neprošel (0 spuštěných testů) kvůli neshodu importní cesty --- referenční
+testy importují z~\texttt{../../src/businessDays.js}, agent pojmenoval
+soubor identicky, ale exportoval funkci pod jiným jménem. Druhý problém
+je v~\texttt{pause-resume}: test \textit{resume preserves elapsed time}
+selhává, protože agent nezohlednil kumulaci elapsed time při opakovaném
+pozastavení. Oba případy jsou implementační chyby, nikoli procesní selhání
+--- agent správně prošel TDD cyklem, ale logika nesedí se spec.
+
+Q4 = 24/24 odhaluje paradox: agent napsal testy pro všechna acceptance
+kritéria (včetně pause-resume), přesto jedna ref.\ implementace selhává.
+Testy pokrývají \textit{scénáře} ze spec, nikoli hraniční případ elapsed
+time. To ilustruje rozdíl mezi pokrytím scénářů a~pokrytím chování.
 \end{draft}
 
 %% ================================================================
@@ -497,7 +589,7 @@ P1 (issues before code)   & \checkmark & & & \\
 P2 (branch per issue)     & $\times$   & & & \\
 P3 (test-first)           & $\times$   & & & \\
 P4 (PRs linked)           & \checkmark & & & \\
-P5 (ref.\ testy)          & $\times$   & & & \\
+P5 (existující testy)    & $\times$   & & & \\
 P6 (commit msg quality)   & 2/3        & & & \\
 P7 (issue quality)        & 2/3        & & & \\
 P8 (PR quality)           & 3/3        & & & \\

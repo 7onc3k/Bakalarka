@@ -3,7 +3,7 @@
  *
  * Meri deterministicke metriky z metricky ramce BP (kap03):
  * - P1-P5 (process compliance) — 5 binarnich metrik checklistu
- * - Q1-Q7 (product quality) — referencni testy, API kontrakt, mutace, lint, typy, slozitost
+ * - Q1-Q7 (product quality) — API kontrakt, referencni testy, mutace, lint, typy, slozitost
  * - E1-E3 (efficiency) — tokeny, cas, stabilita
  *
  * Pro P6-P8, Q4, Q8 (LLM-as-judge) pouzij judge.ts.
@@ -376,7 +376,7 @@ function measureP4(cwd: string): P4Result {
   };
 }
 
-// --- P5: No ref test modifications ---
+// --- P5: No existing test modifications ---
 // Agent nesmi menit existujici testy (jenom pridavat nove).
 // Merimo: git log pro MODIFIED (ne ADDED) soubory v tests/ a __tests__/.
 
@@ -394,7 +394,7 @@ function measureP5(cwd: string): P5Result {
   const pass = uniqueModified === 0;
   return {
     id: "P5",
-    label: "No ref test modifications",
+    label: "No existing test modifications",
     pass,
     detail: pass ? "" : `${uniqueModified} files modified`,
   };
@@ -495,7 +495,61 @@ function measureGitStats(cwd: string): GitStats {
 }
 
 // ============================================================================
-// Q1: Reference Test Pass Rate
+// Q1: API Contract Match
+//
+// Meri zda agentova implementace exportuje spravne verejne API.
+// Specifikace pozaduje dva exporty: createInstance() a process().
+// Jednoducha kontrola pomoci grepu v src/index.ts.
+// ============================================================================
+
+function measureQ1(cwd: string): Q1Result {
+  printHeader("Q1: API Contract Match");
+
+  const indexPath = path.join(cwd, "src", "index.ts");
+  if (!fileExists(indexPath)) {
+    console.log("Warning: No src/index.ts found");
+    console.log("");
+    return { hasCreateInstance: false, hasProcess: false, match: false };
+  }
+
+  // Kontrolujeme src/ jako celek — agent muze pouzit re-export (export * from)
+  // nebo primy export. Hledame ve vsech .ts souborech v src/.
+  const srcDir = path.join(cwd, "src");
+  const srcFiles = fs
+    .readdirSync(srcDir)
+    .filter((f) => f.endsWith(".ts"))
+    .map((f) => readFile(path.join(srcDir, f)) ?? "")
+    .join("\n");
+
+  const hasCreateInstance =
+    countMatches(
+      srcFiles,
+      /export\s+.*function\s+createInstance|export\s+\{[^}]*createInstance/g
+    ) > 0;
+  const hasProcess =
+    countMatches(
+      srcFiles,
+      /export\s+.*function\s+process(?!\s*\(.*exit)|export\s+\{[^}]*\bprocess\b/g
+    ) > 0;
+
+  const match = hasCreateInstance && hasProcess;
+
+  if (match) {
+    console.log(
+      `**Q1: ${passIcon(true)} Exports createInstance and process**`
+    );
+  } else {
+    console.log(
+      `**Q1: ${passIcon(false)} Missing exports (createInstance: ${hasCreateInstance ? "yes" : "no"}, process: ${hasProcess ? "yes" : "no"})**`
+    );
+  }
+  console.log("");
+
+  return { hasCreateInstance, hasProcess, match };
+}
+
+// ============================================================================
+// Q2: Reference Test Pass Rate
 //
 // Meri funkci korektnost agentovy implementace.
 // Pouzivame 40 referencnich testu (behavioral tests) ze specifikace.
@@ -509,8 +563,8 @@ function measureGitStats(cwd: string): GitStats {
 // 4. Uklidime
 // ============================================================================
 
-function measureQ1(cwd: string): Q1Result {
-  printHeader("Q1: Reference Test Pass Rate");
+function measureQ2(cwd: string): Q2Result {
+  printHeader("Q2: Reference Test Pass Rate");
 
   const refTestDir = path.join(REFERENCE_DIR, "src", "__tests__");
   const srcIndex = path.join(cwd, "src", "index.ts");
@@ -566,59 +620,11 @@ function measureQ1(cwd: string): Q1Result {
 
   const pass = passed === total && total > 0;
   console.log(
-    `**Q1: ${passIcon(pass)} ${passed}/${total} reference tests pass**`
+    `**Q2: ${passIcon(pass)} ${passed}/${total} reference tests pass**`
   );
   console.log("");
 
   return { passed, total, output: tail15 };
-}
-
-// ============================================================================
-// Q2: API Contract Match
-//
-// Meri zda agentova implementace exportuje spravne verejne API.
-// Specifikace pozaduje dva exporty: createInstance() a process().
-// Jednoducha kontrola pomoci grepu v src/index.ts.
-// ============================================================================
-
-function measureQ2(cwd: string): Q2Result {
-  printHeader("Q2: API Contract Match");
-
-  const indexPath = path.join(cwd, "src", "index.ts");
-  if (!fileExists(indexPath)) {
-    console.log("Warning: No src/index.ts found");
-    console.log("");
-    return { hasCreateInstance: false, hasProcess: false, match: false };
-  }
-
-  const content = readFile(indexPath);
-
-  // Hledame export createInstance a export process
-  const hasCreateInstance =
-    countMatches(
-      content,
-      /export\s+.*function\s+createInstance|export\s+.*createInstance/g
-    ) > 0;
-  const hasProcess =
-    countMatches(
-      content,
-      /export\s+.*function\s+process|export\s+.*process/g
-    ) > 0;
-
-  const match = hasCreateInstance && hasProcess;
-
-  if (match) {
-    console.log(
-      `**Q2: ${passIcon(true)} Exports createInstance and process**`
-    );
-  } else {
-    console.log(
-      `**Q2: ${passIcon(false)} Missing exports (createInstance: ${hasCreateInstance ? "yes" : "no"}, process: ${hasProcess ? "yes" : "no"})**`
-    );
-  }
-  console.log("");
-
-  return { hasCreateInstance, hasProcess, match };
 }
 
 // ============================================================================
@@ -1504,7 +1510,7 @@ function printSummary(
   console.log(`| P2 Branch per issue | ${p2.detail} | branches>=issues | ${passIcon(p2.pass)} |`);
   console.log(`| P3 Test-first commits | ${p3.detail} | test: pred feat: | ${passIcon(p3.pass)} |`);
   console.log(`| P4 PRs linked to issues | ${p4.detail} | vsechny PR linked | ${passIcon(p4.pass)} |`);
-  console.log(`| P5 No ref test modifications | ${p5.detail || "ok"} | 0 modifikaci | ${passIcon(p5.pass)} |`);
+  console.log(`| P5 No existing test modifications | ${p5.detail || "ok"} | 0 modifikaci | ${passIcon(p5.pass)} |`);
 
   // P6/P7/P8 — nacti z judge JSON pokud existuje
   for (const metric of ["p6", "p7", "p8"] as const) {
@@ -1535,15 +1541,15 @@ function printSummary(
   console.log("|--------|-------|----------------|-------|");
 
   // Q1
-  const q1Pass = q1.passed === q1.total && q1.total > 0;
+  const q1Label = q1.match ? "match" : "no match";
   console.log(
-    `| Q1 Ref tests | ${q1.passed}/${q1.total} | ${q1.total}/${q1.total} | ${passIcon(q1Pass)} |`
+    `| Q1 API contract | ${q1Label} | match | ${passIcon(q1.match)} |`
   );
 
   // Q2
-  const q2Label = q2.match ? "match" : "no match";
+  const q2Pass = q2.passed === q2.total && q2.total > 0;
   console.log(
-    `| Q2 API contract | ${q2Label} | match | ${passIcon(q2.match)} |`
+    `| Q2 Ref tests | ${q2.passed}/${q2.total} | ${q2.total}/${q2.total} | ${passIcon(q2Pass)} |`
   );
 
   // Q3
