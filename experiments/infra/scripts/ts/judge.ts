@@ -96,19 +96,25 @@ function callJudge(_cwd: string, prompt: string): string {
     // - opencode run podporuje `-` jako posledni argument = cte ze stdin
     // POZOR: cwd musi byt prazdny adresar bez .opencode/ — jinak opencode
     // inicializuje cely projekt (nacita soubory, AGENTS.md) pred zpracovanim promptu
-    const tmpDir = "/tmp";
-    const rawOutput = execSync(
-      `opencode run -m "${JUDGE_MODEL}" --format json -`,
-      {
-        cwd: tmpDir,
-        encoding: "utf-8",
-        // Predame prompt na stdin
-        input: prompt,
-        stdio: ["pipe", "pipe", "pipe"],
-        // LLM volani muze trvat minuty (velke prompty az 10 min)
-        timeout: 10 * 60 * 1000,
-      }
-    );
+    // Unikatni prazdny adresar pro kazde volani — zabraní nacitani stareho
+    // .opencode/ kontextu z /tmp ktery zpusoboval zamrznuti
+    const tmpDir = fs.mkdtempSync("/tmp/judge-");
+    let rawOutput: string;
+    try {
+      rawOutput = execSync(
+        `opencode run -m "${JUDGE_MODEL}" --format json -`,
+        {
+          cwd: tmpDir,
+          encoding: "utf-8",
+          input: prompt,
+          stdio: ["pipe", "pipe", "pipe"],
+          timeout: 90 * 1000, // 90s max — dost i pro velke prompty
+        }
+      );
+    } finally {
+      // Cleanup temp dir
+      try { fs.rmSync(tmpDir, { recursive: true }); } catch { /* ignore */ }
+    }
 
     // Parsujeme NDJSON vystup — extrahujeme textove casti
     return parseOpenCodeOutput(String(rawOutput ?? "").trim());

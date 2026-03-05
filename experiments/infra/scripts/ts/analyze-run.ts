@@ -145,28 +145,9 @@ function main(): void {
   // Souhrnna tabulka
   printSummary(runName, runDir, p1, p2, p3, p4, p5, q1, q2, q3, q5, q6, q7, e1, e2, e3, trace);
 
-  // Automaticky spustit judge.ts po uspesnem analyze-run
-  console.log("\n=== Running judge.ts automatically ===");
-  const judgeScript = path.join(INFRA_DIR, "scripts", "ts", "judge.ts");
-  try {
-    const judgeOutput = execSync(`npx tsx "${judgeScript}" ${runName}`, {
-      cwd: process.cwd(),
-      encoding: "utf-8",
-      stdio: ["pipe", "pipe", "pipe"],
-    });
-    if (judgeOutput) {
-      console.log(judgeOutput);
-    }
-  } catch (err: unknown) {
-    const error = err as { stdout?: string | Buffer; stderr?: string | Buffer; message?: string };
-    let errorMsg = "Unknown error";
-    if (error.stderr) {
-      errorMsg = String(error.stderr);
-    } else if (error.message) {
-      errorMsg = error.message;
-    }
-    console.log("Warning: Judge failed or skipped:", errorMsg.slice(0, 200));
-  }
+  // Judge se spousti samostatne: npx tsx judge.ts <run-name>
+  // Nespoustit synchronne — GLM-5 muze zamrznout a zablokovat cely proces.
+  console.log("\nRun judge separately: npx tsx judge.ts " + runName);
 
   // Zapsat FINDINGS.md
   console.log = origLog;
