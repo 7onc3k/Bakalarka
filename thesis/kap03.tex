@@ -624,39 +624,13 @@ Výstupy kroku: aktualizovaný \texttt{AGENTS.md} + záznam \texttt{changelog/pi
 \label{sec:pilotni-iterace}
 
 \begin{draft}
-Pilotní fáze běží dokud agent nesplní exit kritéria. Kritéria se
-dělí na dva typy: deterministická mají přirozenou binární hranici
-(splněno / nesplněno), minimální standard je práh zdůvodněný
-literaturou.
-
-\begin{table}[h]
-\centering
-\small
-\begin{tabularx}{\linewidth}{@{}llX@{}}
-\toprule
-\textbf{Metrika} & \textbf{Kritérium} & \textbf{Zdůvodnění} \\
-\midrule
-\multicolumn{3}{@{}l}{\textit{Deterministická}} \\
-P1       & 5/5 položek       & Přirozená binární hranice \\
-Q1       & match             & Přirozená binární hranice \\
-Q2       & 45/45 testů       & Přirozená binární hranice \\
-Q4       & 24/24 AC          & Přirozená binární hranice \\
-Q5       & 0 varování        & Přirozená binární hranice \\
-Q6       & 0 chyb            & Přirozená binární hranice \\
-\midrule
-\multicolumn{3}{@{}l}{\textit{Minimální standard}} \\
-Q3       & $\geq$ 70\,\%     & Při plném coverage zachytí produkční testy jen 70\,\% mutantů~\cite{meta2025} \\
-Q7       & $\leq$ 10 per funkce & McCabe~\cite{mccabe1976} \\
-P6, P7, P8 & $\geq$ 2/3 & Acceptable na škále LLM-as-judge \\
-Q8       & 3/3               & Dobrá kvalita kódu na škále LLM-as-judge \\
-\midrule
-\multicolumn{3}{@{}l}{\textit{Záznam (bez kritéria)}} \\
-E1--E3   & —                 & Srovnání mezi běhy \\
-\bottomrule
-\end{tabularx}
-\caption{Exit kritéria pilotní fáze}
-\label{tab:exit-kriteria}
-\end{table}
+Pilotní fáze běží dokud agent nesplní exit kritéria ze sloupce
+\textit{Exit kritérium} v~tabulce~\ref{tab:metriky-prehled}.
+Kritéria mají dva typy: deterministická (P1--P6, Q1--Q2, Q4--Q6)
+mají přirozenou binární hranici --- buď splněno nebo ne; minimální
+standard (Q3, Q7--Q8, P6--P8) je práh zdůvodněný literaturou.
+E1--E3 jsou záznamové metriky bez kritéria, slouží k~porovnání
+efektivity mezi běhy.
 
 S~ohledem na scope práce (jeden projekt, jeden model) stačí jeden
 úspěšný běh bez manuálního zásahu. Každá iterace produkuje
