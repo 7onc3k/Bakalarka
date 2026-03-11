@@ -47,7 +47,7 @@ Kódy odpovídají thesis kap03 sekce 3.4.
 | P2 | Branch per issue | `git branch -a` vs. issue count |
 | P3 | Test commit před implementačním | `git log` — pořadí commitů (tddOrderViolations=0) |
 | P4 | PRs linkované na issues | `gh pr list` — "Closes #N" |
-| P5 | Nemodifikoval ref testy | `git diff` na test souborech |
+| P5 | Nemodifikoval existující testy | `git diff` na test souborech |
 
 Exit: každá P1-P5 musí být ✅.
 
@@ -121,7 +121,7 @@ Po každém runu:
 | P2 | Branch per issue | | |
 | P3 | Test-first commity | | |
 | P4 | PRs linkované na issues | | |
-| P5 | Nemodifikoval ref testy | | |
+| P5 | Nemodifikoval existující testy | | |
 
 ## P6-P8 — Kvalita procesních artefaktů (LLM-as-judge)
 
@@ -291,7 +291,7 @@ Pilotní iterace končí když agent splní všechna kritéria v posledním běh
 - [ ] P2 = ✅ (branch per issue)
 - [ ] P3 = ✅ (test-first commits)
 - [ ] P4 = ✅ (PRs linked to issues)
-- [ ] P5 = ✅ (no ref test modifications)
+- [ ] P5 = ✅ (no existing test modifications)
 - [ ] Q1 = match (API contract)
 - [ ] Q2 = 45/45 (referenční testy)
 - [ ] Q4 = 24/24 (AC coverage)

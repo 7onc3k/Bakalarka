@@ -10,7 +10,7 @@
 | P2 branch/issue           | ?   | ❌        | ❌        | ?   | ?   | ?     |
 | P3 test-first             | ?   | ❌        | ❌        | ?   | ?   | ?     |
 | P4 PRs linked             | ?   | ✅        | ✅        | ?   | ?   | ?     |
-| P5 ref testy              | ?   | ❌        | ✅        | ?   | ?   | ?     |
+| P5 existujici testy       | ?   | ❌        | ✅        | ?   | ?   | ?     |
 | P6 commit msg (judge)     | ?   | ?        | 2/3      | ?   | ?   | ?     |
 | P7 issue quality (judge)  | ?   | 3/3      | 2/3      | ?   | ?   | ?     |
 | P8 PR quality (judge)     | ?   | 2/3      | 3/3      | ?   | ?   | ?     |
@@ -25,5 +25,4 @@
 | E1 tokeny                 | ?   | 143k     | 380k     | ?   | ?   | ?     |
 | E2 trvani                 | ?   | 32.7 min | 37.2 min | ?   | ?   | ?     |
 | E3 dokonceni              | ?   | ano      | ano      | ?   | ?   | ?     |
-
 

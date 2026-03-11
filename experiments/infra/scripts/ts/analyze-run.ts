@@ -932,11 +932,39 @@ function runAgentTests(cwd: string): void {
     return;
   }
 
-  const testOutput = exec(`npm test`, { cwd });
-  // Vypiseme poslednich 10 radku
-  const lines = testOutput.split("\n");
-  const tail10 = lines.slice(-10).join("\n");
-  console.log(tail10);
+  try {
+    const testOutput = execSync(`npm test`, {
+      cwd,
+      encoding: "utf-8",
+      stdio: ["pipe", "pipe", "pipe"],
+      timeout: 120_000,
+    });
+    const lines = String(testOutput ?? "").split("\n");
+    console.log(lines.slice(-10).join("\n"));
+  } catch (err: unknown) {
+    const e = err as {
+      stdout?: string | Buffer;
+      signal?: string;
+      killed?: boolean;
+      message?: string;
+    };
+    const partial = e.stdout ? String(e.stdout) : "";
+    const lines = partial.split("\n").filter(Boolean);
+
+    if (lines.length > 0) {
+      console.log(lines.slice(-10).join("\n"));
+    }
+
+    if (e.signal === "SIGTERM" || e.killed) {
+      console.log("npm test timed out after 120s — skipped");
+    } else {
+      console.log("npm test failed — informational only");
+      if (e.message) {
+        console.log(e.message);
+      }
+    }
+  }
+
   console.log("");
 }
 

@@ -22,7 +22,6 @@
 import * as path from "node:path";
 import * as fs from "node:fs";
 import { execSync } from "node:child_process";
-import * as os from "node:os";
 import {
   exec,
   execStrict,
@@ -242,11 +241,19 @@ reports/
   console.log("=== Starting agent (Docker) ===");
   console.log("");
 
+  const containerName = `bp-agent-${runName}`;
+  const containerNameFile = path.join(runDir, ".container-name.txt");
+  fs.writeFileSync(containerNameFile, `${containerName}\n`, "utf-8");
+
+  // Smazeme pripadny stary container stejneho jmena, aby se novy run nezasekl
+  // na kolizi jmena. Novy container po behu uz nema automaticky mizet.
+  exec(`docker rm -f ${containerName}`, {}, "");
+
   try {
     execSync(
       [
-        `docker run --rm --user ${process.getuid()}:${process.getgid()}`,
-        `--name bp-agent-${runName}`,
+        `docker run --user ${process.getuid()}:${process.getgid()}`,
+        `--name ${containerName}`,
         `-v ${runDir}:/workspace`,
         `-v ${path.join(INFRA_DIR, "opencode-auth")}:/home/ubuntu/.local/share/opencode`,
         `-v ${path.join(INFRA_DIR, "opencode-auth", "state")}:/home/ubuntu/.local/state`,
@@ -254,7 +261,7 @@ reports/
         `-e GH_TOKEN=${ghToken}`,
         `-e HOME=/home/ubuntu`,
         `${imageName}`,
-        `bash -c "gh auth setup-git && opencode run -m \"${AGENT_MODEL}\" \"Work on Issue #1 according to AGENTS.md.\" && SESSION_ID=\\$(opencode session list -n 1 --format json | python3 -c \\"import sys,json; print(json.load(sys.stdin)[0]['id'])\\") && opencode export \\$SESSION_ID > /workspace/transcript.json && echo \\$SESSION_ID > /workspace/.session-id.txt"`
+        `bash -lc 'gh auth setup-git; RUN_EXIT=0; opencode run -m "${AGENT_MODEL}" "Work on Issue #1 according to AGENTS.md." || RUN_EXIT=$?; SESSION_ID=$(opencode session list -n 1 --format json | python3 -c "import sys,json; data=json.load(sys.stdin); print(data[0][\"id\"] if data else \"\")" 2>/dev/null || true); if [ -n "$SESSION_ID" ]; then echo "$SESSION_ID" > /workspace/.session-id.txt; opencode export "$SESSION_ID" > /workspace/transcript.json || true; fi; echo "$RUN_EXIT" > /workspace/.agent-exit-code.txt; exit "$RUN_EXIT"'`
       ].join(" "),
       {
         stdio: "inherit",
@@ -274,10 +281,16 @@ reports/
   // Session ID ulozeno do .session-id.txt
   const transcriptPath = path.join(runDir, "transcript.json");
   const sessionIdFile = path.join(runDir, ".session-id.txt");
+  const exitCodeFile = path.join(runDir, ".agent-exit-code.txt");
 
   let sessionId = "";
   if (fileExists(sessionIdFile)) {
     sessionId = readFile(sessionIdFile)?.trim() ?? "";
+  }
+
+  let agentExitCode = "";
+  if (fileExists(exitCodeFile)) {
+    agentExitCode = readFile(exitCodeFile)?.trim() ?? "";
   }
 
   if (!fileExists(transcriptPath)) {
@@ -285,11 +298,19 @@ reports/
       "  Warning: transcript.json not found — export failed inside Docker."
     );
     console.log("  Session ID file:", fileExists(sessionIdFile) ? sessionId : "not found");
+    console.log(`  Container: ${containerName} (preserved)`);
+    if (agentExitCode) {
+      console.log(`  Agent exit code: ${agentExitCode}`);
+    }
     printDone(runDir, repoName, 0);
     return;
   }
 
   console.log(`  Saved: ${transcriptPath} (session: ${sessionId || "unknown"})`);
+  console.log(`  Container: ${containerName} (preserved)`);
+  if (agentExitCode) {
+    console.log(`  Agent exit code: ${agentExitCode}`);
+  }
 
   // Rekurzivne exportujeme sub-agent sessions
   // (pokud agent pouzil task tool, kazdy sub-task ma vlastni session)
@@ -396,6 +417,7 @@ function printDone(
     `    Repo:         https://github.com/${GITHUB_ORG}/${repoName}`
   );
   console.log(`    Dir:          ${runDir}`);
+  console.log(`    Container:    ${readFile(path.join(runDir, ".container-name.txt")).trim() || "unknown"}`);
   console.log(`    Transcript:   ${runDir}/transcript.json`);
   if (subCount > 0) {
     console.log(

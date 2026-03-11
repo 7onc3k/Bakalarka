@@ -67,7 +67,7 @@ function parseFindingsP1to5(content: string): {
     else if (/^P2 Branch per issue/.test(line)) result.p2 = matchP(line);
     else if (/^P3 Test-first commits/.test(line)) result.p3 = matchP(line);
     else if (/^P4 PRs linked/.test(line)) result.p4 = matchP(line);
-    else if (/^P5 No ref test/.test(line)) result.p5 = matchP(line);
+    else if (/^P5 No existing test/.test(line)) result.p5 = matchP(line);
   }
 
   return result;
@@ -97,13 +97,13 @@ function parseFindingsQ(content: string): {
   };
 
   for (const line of content.split("\n")) {
-    // Q1: **Q1: ❌ 27/45 reference tests pass** nebo **Q1: ✅ ...**
-    const q1m = line.match(/\*\*Q1:.*?(\d+\/\d+) reference tests pass\*\*/);
-    if (q1m) result.q1 = q1m[1];
+    // Q1: **Q1: ✅ Exports ...**
+    if (/\*\*Q1: ✅/.test(line)) result.q1 = "match";
+    else if (/\*\*Q1: ❌/.test(line)) result.q1 = "no match";
 
-    // Q2: **Q2: ✅ Exports ...**
-    if (/\*\*Q2: ✅/.test(line)) result.q2 = "match";
-    else if (/\*\*Q2: ❌/.test(line)) result.q2 = "no match";
+    // Q2: **Q2: ❌ 27/45 reference tests pass** nebo **Q2: ✅ ...**
+    const q2m = line.match(/\*\*Q2:.*?(\d+\/\d+) reference tests pass\*\*/);
+    if (q2m) result.q2 = q2m[1];
 
     // Q3: **Q3: Mutation score: 84.02%**
     const q3m = line.match(/\*\*Q3: Mutation score:\s*([\d.]+)%\*\*/);
@@ -321,14 +321,14 @@ function buildTable(runs: RunData[]): string {
   lines.push(row("P2 branch/issue", runs.map((r) => r.p2)));
   lines.push(row("P3 test-first", runs.map((r) => r.p3)));
   lines.push(row("P4 PRs linked", runs.map((r) => r.p4)));
-  lines.push(row("P5 ref testy", runs.map((r) => r.p5)));
+  lines.push(row("P5 existujici testy", runs.map((r) => r.p5)));
   // P6-P8 judge
   lines.push(row("P6 commit msg (judge)", runs.map((r) => r.p6)));
   lines.push(row("P7 issue quality (judge)", runs.map((r) => r.p7)));
   lines.push(row("P8 PR quality (judge)", runs.map((r) => r.p8)));
   // Q metriky
-  lines.push(row("Q1 API contract", runs.map((r) => r.q2)));
-  lines.push(row("Q2 ref tests", runs.map((r) => r.q1)));
+  lines.push(row("Q1 API contract", runs.map((r) => r.q1)));
+  lines.push(row("Q2 ref tests", runs.map((r) => r.q2)));
   lines.push(row("Q3 mutation score", runs.map((r) => r.q3)));
   lines.push(row("Q4 AC coverage (judge)", runs.map((r) => r.q4)));
   lines.push(row("Q5 lint warnings", runs.map((r) => r.q5)));

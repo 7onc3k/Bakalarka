@@ -100,21 +100,21 @@ export type P1Item = PComplianceResult;
 // --- Q metriky: Product Quality ---
 
 export interface Q1Result {
-  /** Pocet projitych referencnich testu */
-  passed: number;
-  /** Celkovy pocet referencnich testu */
-  total: number;
-  /** Textovy vystup z vitest (posledních 15 radku) */
-  output: string;
-}
-
-export interface Q2Result {
   /** Zda src/index.ts exportuje createInstance */
   hasCreateInstance: boolean;
   /** Zda src/index.ts exportuje process */
   hasProcess: boolean;
   /** Celkove: obe funkce exportovany = match */
   match: boolean;
+}
+
+export interface Q2Result {
+  /** Pocet projitych referencnich testu */
+  passed: number;
+  /** Celkovy pocet referencnich testu */
+  total: number;
+  /** Textovy vystup z vitest (posledních 15 radku) */
+  output: string;
 }
 
 export interface Q3Result {
