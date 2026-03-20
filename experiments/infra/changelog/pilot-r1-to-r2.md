@@ -50,7 +50,7 @@ Integrováno do Fix 1 — sub-kroky 2b a 2c vyžadují separátní commit pro te
 
 ---
 
-### Fix 3: Rozlišit ref testy vs vlastní testy v Constraints (P5)
+### Fix 3: Zjednodušit constraint o modifikaci testů (P5)
 
 **Bylo:**
 ```
@@ -59,17 +59,16 @@ Never modify a test to match your implementation. Tests encode the spec — fix 
 
 **Je:**
 ```
-Never modify a test to match your implementation.
-- `tests/_ref_tests/` are immutable — they encode the acceptance criteria from the spec. Never touch them.
-- If one of your own tests (outside `_ref_tests/`) has a bug, you may fix the test, but explain why in the commit message.
-Fix the code in `src/`, not the tests.
+Never modify a test to match your implementation. If a test fails after implementation, fix the code — not the test. Tests encode the spec.
 ```
 
-**Pozorování (r1):** P5 ❌ — 1 test soubor modifikován. Z behavioral trace není jasné zda šlo o ref test nebo vlastní — ale instrukce nerozlišovala tyto dva případy, takže agent neměl vodítko.
+**Pozorování (r1):** P5 ❌ — 1 test soubor modifikován. Agent upravil svůj vlastní test, aby odpovídal implementaci (místo opravy kódu).
 
-**Diagnóza:** FSE 2025 — Constraints musí být jednoznačné. "Never modify a test" je vágní pravidlo: platí pro immutable spec testy (ref), ale vlastní testy agenta opravit lze pokud je chyba v testu. Bez rozlišení agent buď modifikuje vše nebo nic. SASE MentorScript: recovery instrukce musí říkat konkrétně co dělat místo toho.
+**Diagnóza:** Constraint byl formulován příliš obecně. Agent nevěděl, že pokud test selže po implementaci, má opravit kód, ne test. Zjednodušeno na přímou instrukci s jasným směrem kauzality: test selže → oprav kód, ne test.
 
-**Literatura:** FSE 2025 Mao et al. (Constraints komponenta), Hassan et al. 2025 SASE (MentorScript recovery)
+**KOREKCE (2026-03-18):** Původní diagnóza (před retroaktivní opravou) chybně předpokládala, že agent modifikoval referenční testy v `tests/_ref_tests/`. Agent tento adresář nevidí — soubory se kopírují až při post-hoc měření (analyze-run.ts). P5 měří modifikaci agentových vlastních testů. Původní fix proto přidával rozlišení `_ref_tests/` vs vlastní testy, což bylo zbytečné a matoucí. Retroaktivně opraveno na jednoduché pravidlo.
+
+**Literatura:** FSE 2025 Mao et al. (Constraints komponenta)
 
 ---
 

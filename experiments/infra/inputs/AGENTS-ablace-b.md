@@ -39,17 +39,7 @@ Decompose the spec into focused GitHub issues before writing code. Work through 
 3. Use conventional commits: `test:` for tests, `feat:` for implementation, `docs:` for documentation
 4. Before every PR, run these checks and fix all issues before opening:
    - `tsc --noEmit` — zero type errors
-   - `npx eslint src/ --max-warnings 0` — zero lint warnings. Your ESLint config must include `"complexity": ["warn", 10]`.
-   - Verify API contract compliance: every field in the API Contract types (e.g. `pausedElapsed`, `pausedFrom`) must be read and used in your implementation logic — not just written. If a field is defined but never read, fix it before opening the PR.
-
-## Package Quality
-
-Structure the code as a production-grade npm package:
-
-- **Modular architecture** — separate files for types, business logic, utilities, and public API re-exports. No single-file implementations.
-- **Strict TypeScript** — no `any`, explicit return types on public API, `readonly` where applicable.
-- **Documentation** — JSDoc on all exported functions and types. Inline comments for non-obvious domain logic (e.g., business day calculations, escalation thresholds). This is enforced in Constraints.
-- **Clean API surface** — `src/index.ts` re-exports only the public API. Internal modules are not exposed.
+   - `npx eslint src/ --max-warnings 0` — zero lint warnings (includes complexity violations)
 
 ## Constraints
 

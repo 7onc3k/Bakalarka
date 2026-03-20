@@ -2,10 +2,14 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {3.1}{\ignorespaces Sada metrik: kód, měřená vlastnost, nástroj, exit kritérium a~typ}}{21}{table.caption.12}%
+\contentsline {table}{\numberline {3.1}{\ignorespaces Sada metrik: kód, měřená vlastnost, nástroj, exit kritérium a~typ}}{46}{table.caption.18}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {4.1}{\ignorespaces Mapování sekcí baseline \texttt {AGENTS.md} na metriky}}{25}{table.caption.13}%
-\contentsline {table}{\numberline {4.2}{\ignorespaces Pilot-r1: naměřené metriky}}{26}{table.caption.14}%
+\contentsline {table}{\numberline {4.1}{\ignorespaces Mapování sekcí baseline \texttt {AGENTS.md} na metriky}}{53}{table.caption.19}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces Pilot-r1: naměřené metriky}}{54}{table.caption.20}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces Pilot-r2: metriky s~změnou oproti r1}}{57}{table.caption.25}%
+\contentsline {table}{\numberline {4.4}{\ignorespaces Pilot-r3: metriky s~změnou oproti r2}}{59}{table.caption.29}%
+\contentsline {table}{\numberline {4.5}{\ignorespaces Pilot-r4: metriky s~změnou oproti r3}}{60}{table.caption.33}%
+\contentsline {table}{\numberline {4.6}{\ignorespaces Souhrnné výsledky všech běhů}}{62}{table.caption.36}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

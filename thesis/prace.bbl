@@ -35,18 +35,23 @@
       \verb https://openreview.net/forum?id=41xrZ3uGuI
       \endverb
     \endentry
-    \entry{anthropic2025context}{online}{}
+    \entry{agarwal2024promptwizard}{article}{}
+      \true{moreauthor}
+      \true{morelabelname}
       \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=f431db65cea024a5f19eab835afefee2}{%
-           family={{Anthropic}},
-           familyi={A\bibinitperiod}}}%
+        {{un=0,uniquepart=base,hash=305b02adc011dc77f83283c17097c5f5}{%
+           family={Agarwal},
+           familyi={A\bibinitperiod},
+           given={Aman},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
       }
-      \strng{namehash}{f431db65cea024a5f19eab835afefee2}
-      \strng{fullhash}{f431db65cea024a5f19eab835afefee2}
-      \strng{bibnamehash}{f431db65cea024a5f19eab835afefee2}
-      \strng{authorbibnamehash}{f431db65cea024a5f19eab835afefee2}
-      \strng{authornamehash}{f431db65cea024a5f19eab835afefee2}
-      \strng{authorfullhash}{f431db65cea024a5f19eab835afefee2}
+      \strng{namehash}{dd82c830b2347b55b0bd79ddf5f25a2d}
+      \strng{fullhash}{dd82c830b2347b55b0bd79ddf5f25a2d}
+      \strng{bibnamehash}{dd82c830b2347b55b0bd79ddf5f25a2d}
+      \strng{authorbibnamehash}{dd82c830b2347b55b0bd79ddf5f25a2d}
+      \strng{authornamehash}{dd82c830b2347b55b0bd79ddf5f25a2d}
+      \strng{authorfullhash}{dd82c830b2347b55b0bd79ddf5f25a2d}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
       \field{extradatescope}{labelyear}
@@ -54,15 +59,9 @@
       \true{uniqueprimaryauthor}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{note}{Introduces ``context rot'' -- model recall degrades with token count. Recommends minimal high-signal token sets}
-      \field{title}{Effective Context Engineering for {AI} Agents}
-      \field{year}{2025}
-      \verb{urlraw}
-      \verb https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
-      \endverb
-      \verb{url}
-      \verb https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
-      \endverb
+      \field{note}{Microsoft Research. arXiv:2405.18369. Iterativní Score→Critique→Synthesize cyklus pro optimalizaci promptů.}
+      \field{title}{PromptWizard: Task-Aware Prompt Optimization Framework}
+      \field{year}{2024}
     \endentry
     \entry{bockeler2025sdd}{online}{}
       \name{author}{1}{}{%
@@ -681,6 +680,46 @@
       \verb https://arxiv.org/abs/2310.06770
       \endverb
     \endentry
+    \entry{landis1977}{article}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=59695a217d43474f928c324ecc5986c9}{%
+           family={Landis},
+           familyi={L\bibinitperiod},
+           given={J.\bibnamedelimi Richard},
+           giveni={J\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9ed357a47b9bcbaeb653b5fe83f93b72}{%
+           family={Koch},
+           familyi={K\bibinitperiod},
+           given={Gary\bibnamedelima G.},
+           giveni={G\bibinitperiod\bibinitdelim G\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{ec0317971db8d434d9068056e7d1604f}
+      \strng{fullhash}{ec0317971db8d434d9068056e7d1604f}
+      \strng{bibnamehash}{ec0317971db8d434d9068056e7d1604f}
+      \strng{authorbibnamehash}{ec0317971db8d434d9068056e7d1604f}
+      \strng{authornamehash}{ec0317971db8d434d9068056e7d1604f}
+      \strng{authorfullhash}{ec0317971db8d434d9068056e7d1604f}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Biometrics}
+      \field{note}{Klasická reference pro interpretaci Cohena $\kappa$: $>$0.6 = substantial agreement}
+      \field{number}{1}
+      \field{title}{The Measurement of Observer Agreement for Categorical Data}
+      \field{volume}{33}
+      \field{year}{1977}
+      \field{pages}{159\bibrangedash 174}
+      \range{pages}{16}
+      \verb{doi}
+      \verb 10.2307/2529310
+      \endverb
+    \endentry
     \entry{skillsbench2025}{article}{}
       \true{moreauthor}
       \true{morelabelname}
@@ -697,12 +736,12 @@
            given={Wenbo},
            giveni={W\bibinitperiod},
            givenun=1}}%
-        {{un=0,uniquepart=base,hash=6c04edb0c8a3867dae5a38f549b25f54}{%
+        {{un=1,uniquepart=given,hash=6c04edb0c8a3867dae5a38f549b25f54}{%
            family={Liu},
            familyi={L\bibinitperiod},
            given={Yimin},
            giveni={Y\bibinitperiod},
-           givenun=0}}%
+           givenun=1}}%
         {{un=1,uniquepart=given,hash=34b1bc3d5db80cf03ebbc827ad61334f}{%
            family={Zheng},
            familyi={Z\bibinitperiod},
@@ -751,6 +790,70 @@
       \verb{url}
       \verb https://arxiv.org/abs/2602.12670
       \endverb
+    \endentry
+    \entry{liu2024lost}{article}{}
+      \name{author}{7}{}{%
+        {{un=1,uniquepart=given,hash=ad8b44fb7f6f1b83fe7fb3b875afaf99}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Nelson\bibnamedelima F.},
+           giveni={N\bibinitperiod\bibinitdelim F\bibinitperiod},
+           givenun=1}}%
+        {{un=0,uniquepart=base,hash=68434cdeb7a3c089fd99baba0e0a4a3b}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Kevin},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8d557c63d5d40248206f4499cd9ac310}{%
+           family={Hewitt},
+           familyi={H\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=520a181595c460d39601a3c162fb3425}{%
+           family={Paranjape},
+           familyi={P\bibinitperiod},
+           given={Ashwin},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d3b447496dd686b400d272e9788b45a9}{%
+           family={Bevilacqua},
+           familyi={B\bibinitperiod},
+           given={Michele},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e1c32989a78998fe3c03c981d0da2dc7}{%
+           family={Petroni},
+           familyi={P\bibinitperiod},
+           given={Fabio},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=86c032bbc45c3b616f0a1170befc0e82}{%
+           family={Liang},
+           familyi={L\bibinitperiod},
+           given={Percy},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{aafa2d245e70b7be840882cd4df991be}
+      \strng{fullhash}{e4450a4375cd8e49440f9bc559fef906}
+      \strng{bibnamehash}{e4450a4375cd8e49440f9bc559fef906}
+      \strng{authorbibnamehash}{e4450a4375cd8e49440f9bc559fef906}
+      \strng{authornamehash}{aafa2d245e70b7be840882cd4df991be}
+      \strng{authorfullhash}{e4450a4375cd8e49440f9bc559fef906}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Transactions of the Association for Computational Linguistics}
+      \field{note}{U-shaped performance curve; info in middle performs worse than no-context baseline}
+      \field{title}{Lost in the Middle: How Language Models Use Long Contexts}
+      \field{volume}{12}
+      \field{year}{2024}
     \endentry
     \entry{lulla2026}{article}{}
       \name{author}{4}{}{%
@@ -1145,6 +1248,16 @@
       \verb https://arxiv.org/abs/2602.00180
       \endverb
     \endentry
+    \entry{promptalchemy2025}{article}{}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{note}{arXiv:2503.11085. Iterativní refinement promptů pro code generation, evaluace přes execution.}
+      \field{title}{Prompt Alchemy: Automatic Prompt Refinement for Enhancing Code Generation}
+      \field{year}{2025}
+    \endentry
     \entry{razavi2025}{article}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=7468d8e52daa574be6324e35dc3a8bb7}{%
@@ -1384,6 +1497,57 @@
       \field{isbn}{978-1-292-09613-1}
       \field{title}{Software Engineering}
       \field{year}{2016}
+    \endentry
+    \entry{verga2024poll}{article}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=0a5ab031ca4d9ecd4e2939eb839f1137}{%
+           family={Verga},
+           familyi={V\bibinitperiod},
+           given={Pat},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4e062d5aab7ae0ae6ac0f9fe40b106cd}{%
+           family={Hofstätter},
+           familyi={H\bibinitperiod},
+           given={Sebastian},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=73291503692ca44df1071d1d8a59a3a1}{%
+           family={Cer},
+           familyi={C\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=dd549e066aa8013fdd8fda1835236922}{%
+           family={Thorne},
+           familyi={T\bibinitperiod},
+           given={James},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{ff480ec8e116c5f0a8f703ebf1be913a}
+      \strng{fullhash}{2a7dd043ddcfb6d71a0ccd4d1ff82a67}
+      \strng{bibnamehash}{2a7dd043ddcfb6d71a0ccd4d1ff82a67}
+      \strng{authorbibnamehash}{2a7dd043ddcfb6d71a0ccd4d1ff82a67}
+      \strng{authornamehash}{ff480ec8e116c5f0a8f703ebf1be913a}
+      \strng{authorfullhash}{2a7dd043ddcfb6d71a0ccd4d1ff82a67}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:2404.18796}
+      \field{note}{Panel of LLM evaluators (PoLL) outperforms single GPT-4 judge; disjoint model families reduce intra-model bias; 7x cheaper}
+      \field{title}{Replacing Judges with Juries: Evaluating {LLM} Generations with a Panel of Diverse Models}
+      \field{year}{2024}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2404.18796
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2404.18796
+      \endverb
     \endentry
     \entry{sweevo2025}{article}{}
       \true{moreauthor}
@@ -1627,6 +1791,31 @@
       \verb{url}
       \verb https://arxiv.org/abs/2306.05685
       \endverb
+    \endentry
+    \entry{zhu2026agenteval}{article}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=90964a28d6562a49c77e6d0f414d689e}{%
+           family={Zhu},
+           familyi={Z\bibinitperiod}}}%
+      }
+      \strng{namehash}{d63d11079163f593ac72ebd09f531d15}
+      \strng{fullhash}{d63d11079163f593ac72ebd09f531d15}
+      \strng{bibnamehash}{d63d11079163f593ac72ebd09f531d15}
+      \strng{authorbibnamehash}{d63d11079163f593ac72ebd09f531d15}
+      \strng{authornamehash}{d63d11079163f593ac72ebd09f531d15}
+      \strng{authorfullhash}{d63d11079163f593ac72ebd09f531d15}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{arXiv:2602.03238. Benchmarky jsou konfundovány system prompty --- instrukce jsou nezávislá proměnná.}
+      \field{title}{The Necessity of a Unified Framework for {LLM}-Based Agent Evaluation}
+      \field{year}{2026}
     \endentry
   \enddatalist
   \datalist[entry]{apa/global//global/global}
@@ -1646,18 +1835,23 @@
       \verb https://openreview.net/forum?id=41xrZ3uGuI
       \endverb
     \endentry
-    \entry{anthropic2025context}{online}{}
+    \entry{agarwal2024promptwizard}{article}{}
+      \true{moreauthor}
+      \true{morelabelname}
       \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=f431db65cea024a5f19eab835afefee2}{%
-           family={{Anthropic}},
-           familyi={A\bibinitperiod}}}%
+        {{un=0,uniquepart=base,hash=305b02adc011dc77f83283c17097c5f5}{%
+           family={Agarwal},
+           familyi={A\bibinitperiod},
+           given={Aman},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
       }
-      \strng{namehash}{f431db65cea024a5f19eab835afefee2}
-      \strng{fullhash}{f431db65cea024a5f19eab835afefee2}
-      \strng{bibnamehash}{f431db65cea024a5f19eab835afefee2}
-      \strng{authorbibnamehash}{f431db65cea024a5f19eab835afefee2}
-      \strng{authornamehash}{f431db65cea024a5f19eab835afefee2}
-      \strng{authorfullhash}{f431db65cea024a5f19eab835afefee2}
+      \strng{namehash}{dd82c830b2347b55b0bd79ddf5f25a2d}
+      \strng{fullhash}{dd82c830b2347b55b0bd79ddf5f25a2d}
+      \strng{bibnamehash}{dd82c830b2347b55b0bd79ddf5f25a2d}
+      \strng{authorbibnamehash}{dd82c830b2347b55b0bd79ddf5f25a2d}
+      \strng{authornamehash}{dd82c830b2347b55b0bd79ddf5f25a2d}
+      \strng{authorfullhash}{dd82c830b2347b55b0bd79ddf5f25a2d}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
       \field{extradatescope}{labelyear}
@@ -1665,15 +1859,9 @@
       \true{uniqueprimaryauthor}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{note}{Introduces ``context rot'' -- model recall degrades with token count. Recommends minimal high-signal token sets}
-      \field{title}{Effective Context Engineering for {AI} Agents}
-      \field{year}{2025}
-      \verb{urlraw}
-      \verb https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
-      \endverb
-      \verb{url}
-      \verb https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
-      \endverb
+      \field{note}{Microsoft Research. arXiv:2405.18369. Iterativní Score→Critique→Synthesize cyklus pro optimalizaci promptů.}
+      \field{title}{PromptWizard: Task-Aware Prompt Optimization Framework}
+      \field{year}{2024}
     \endentry
     \entry{bockeler2025sdd}{online}{}
       \name{author}{1}{}{%
@@ -2292,6 +2480,46 @@
       \verb https://arxiv.org/abs/2310.06770
       \endverb
     \endentry
+    \entry{landis1977}{article}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=59695a217d43474f928c324ecc5986c9}{%
+           family={Landis},
+           familyi={L\bibinitperiod},
+           given={J.\bibnamedelimi Richard},
+           giveni={J\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9ed357a47b9bcbaeb653b5fe83f93b72}{%
+           family={Koch},
+           familyi={K\bibinitperiod},
+           given={Gary\bibnamedelima G.},
+           giveni={G\bibinitperiod\bibinitdelim G\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{ec0317971db8d434d9068056e7d1604f}
+      \strng{fullhash}{ec0317971db8d434d9068056e7d1604f}
+      \strng{bibnamehash}{ec0317971db8d434d9068056e7d1604f}
+      \strng{authorbibnamehash}{ec0317971db8d434d9068056e7d1604f}
+      \strng{authornamehash}{ec0317971db8d434d9068056e7d1604f}
+      \strng{authorfullhash}{ec0317971db8d434d9068056e7d1604f}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Biometrics}
+      \field{note}{Klasická reference pro interpretaci Cohena $\kappa$: $>$0.6 = substantial agreement}
+      \field{number}{1}
+      \field{title}{The Measurement of Observer Agreement for Categorical Data}
+      \field{volume}{33}
+      \field{year}{1977}
+      \field{pages}{159\bibrangedash 174}
+      \range{pages}{16}
+      \verb{doi}
+      \verb 10.2307/2529310
+      \endverb
+    \endentry
     \entry{skillsbench2025}{article}{}
       \true{moreauthor}
       \true{morelabelname}
@@ -2308,12 +2536,12 @@
            given={Wenbo},
            giveni={W\bibinitperiod},
            givenun=1}}%
-        {{un=0,uniquepart=base,hash=6c04edb0c8a3867dae5a38f549b25f54}{%
+        {{un=1,uniquepart=given,hash=6c04edb0c8a3867dae5a38f549b25f54}{%
            family={Liu},
            familyi={L\bibinitperiod},
            given={Yimin},
            giveni={Y\bibinitperiod},
-           givenun=0}}%
+           givenun=1}}%
         {{un=1,uniquepart=given,hash=34b1bc3d5db80cf03ebbc827ad61334f}{%
            family={Zheng},
            familyi={Z\bibinitperiod},
@@ -2362,6 +2590,70 @@
       \verb{url}
       \verb https://arxiv.org/abs/2602.12670
       \endverb
+    \endentry
+    \entry{liu2024lost}{article}{}
+      \name{author}{7}{}{%
+        {{un=1,uniquepart=given,hash=ad8b44fb7f6f1b83fe7fb3b875afaf99}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Nelson\bibnamedelima F.},
+           giveni={N\bibinitperiod\bibinitdelim F\bibinitperiod},
+           givenun=1}}%
+        {{un=0,uniquepart=base,hash=68434cdeb7a3c089fd99baba0e0a4a3b}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Kevin},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8d557c63d5d40248206f4499cd9ac310}{%
+           family={Hewitt},
+           familyi={H\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=520a181595c460d39601a3c162fb3425}{%
+           family={Paranjape},
+           familyi={P\bibinitperiod},
+           given={Ashwin},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d3b447496dd686b400d272e9788b45a9}{%
+           family={Bevilacqua},
+           familyi={B\bibinitperiod},
+           given={Michele},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e1c32989a78998fe3c03c981d0da2dc7}{%
+           family={Petroni},
+           familyi={P\bibinitperiod},
+           given={Fabio},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=86c032bbc45c3b616f0a1170befc0e82}{%
+           family={Liang},
+           familyi={L\bibinitperiod},
+           given={Percy},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{aafa2d245e70b7be840882cd4df991be}
+      \strng{fullhash}{e4450a4375cd8e49440f9bc559fef906}
+      \strng{bibnamehash}{e4450a4375cd8e49440f9bc559fef906}
+      \strng{authorbibnamehash}{e4450a4375cd8e49440f9bc559fef906}
+      \strng{authornamehash}{aafa2d245e70b7be840882cd4df991be}
+      \strng{authorfullhash}{e4450a4375cd8e49440f9bc559fef906}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Transactions of the Association for Computational Linguistics}
+      \field{note}{U-shaped performance curve; info in middle performs worse than no-context baseline}
+      \field{title}{Lost in the Middle: How Language Models Use Long Contexts}
+      \field{volume}{12}
+      \field{year}{2024}
     \endentry
     \entry{lulla2026}{article}{}
       \name{author}{4}{}{%
@@ -2756,6 +3048,16 @@
       \verb https://arxiv.org/abs/2602.00180
       \endverb
     \endentry
+    \entry{promptalchemy2025}{article}{}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{note}{arXiv:2503.11085. Iterativní refinement promptů pro code generation, evaluace přes execution.}
+      \field{title}{Prompt Alchemy: Automatic Prompt Refinement for Enhancing Code Generation}
+      \field{year}{2025}
+    \endentry
     \entry{razavi2025}{article}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=7468d8e52daa574be6324e35dc3a8bb7}{%
@@ -2995,6 +3297,57 @@
       \field{isbn}{978-1-292-09613-1}
       \field{title}{Software Engineering}
       \field{year}{2016}
+    \endentry
+    \entry{verga2024poll}{article}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=0a5ab031ca4d9ecd4e2939eb839f1137}{%
+           family={Verga},
+           familyi={V\bibinitperiod},
+           given={Pat},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4e062d5aab7ae0ae6ac0f9fe40b106cd}{%
+           family={Hofstätter},
+           familyi={H\bibinitperiod},
+           given={Sebastian},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=73291503692ca44df1071d1d8a59a3a1}{%
+           family={Cer},
+           familyi={C\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=dd549e066aa8013fdd8fda1835236922}{%
+           family={Thorne},
+           familyi={T\bibinitperiod},
+           given={James},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{ff480ec8e116c5f0a8f703ebf1be913a}
+      \strng{fullhash}{2a7dd043ddcfb6d71a0ccd4d1ff82a67}
+      \strng{bibnamehash}{2a7dd043ddcfb6d71a0ccd4d1ff82a67}
+      \strng{authorbibnamehash}{2a7dd043ddcfb6d71a0ccd4d1ff82a67}
+      \strng{authornamehash}{ff480ec8e116c5f0a8f703ebf1be913a}
+      \strng{authorfullhash}{2a7dd043ddcfb6d71a0ccd4d1ff82a67}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:2404.18796}
+      \field{note}{Panel of LLM evaluators (PoLL) outperforms single GPT-4 judge; disjoint model families reduce intra-model bias; 7x cheaper}
+      \field{title}{Replacing Judges with Juries: Evaluating {LLM} Generations with a Panel of Diverse Models}
+      \field{year}{2024}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2404.18796
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2404.18796
+      \endverb
     \endentry
     \entry{sweevo2025}{article}{}
       \true{moreauthor}
@@ -3238,6 +3591,31 @@
       \verb{url}
       \verb https://arxiv.org/abs/2306.05685
       \endverb
+    \endentry
+    \entry{zhu2026agenteval}{article}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=90964a28d6562a49c77e6d0f414d689e}{%
+           family={Zhu},
+           familyi={Z\bibinitperiod}}}%
+      }
+      \strng{namehash}{d63d11079163f593ac72ebd09f531d15}
+      \strng{fullhash}{d63d11079163f593ac72ebd09f531d15}
+      \strng{bibnamehash}{d63d11079163f593ac72ebd09f531d15}
+      \strng{authorbibnamehash}{d63d11079163f593ac72ebd09f531d15}
+      \strng{authornamehash}{d63d11079163f593ac72ebd09f531d15}
+      \strng{authorfullhash}{d63d11079163f593ac72ebd09f531d15}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{arXiv:2602.03238. Benchmarky jsou konfundovány system prompty --- instrukce jsou nezávislá proměnná.}
+      \field{title}{The Necessity of a Unified Framework for {LLM}-Based Agent Evaluation}
+      \field{year}{2026}
     \endentry
   \enddatalist
   \missing{verga2024}

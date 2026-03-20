@@ -33,24 +33,18 @@ Zasazení výsledků do kontextu existujícího výzkumu.
 \section{Limity a hrozby validity}
 
 \begin{raw}
-Přiznání omezení studie.
-
+\textbf{TODO: Při psaní kap05 validovat překryv s~kap03 sekce 3.5.}
+Kap03 obsahuje detailní limitace (konstruktová, interní, externí validita,
+etika). Kap05 by měla DISKUTOVAT limity ve světle výsledků, ne je opakovat.
+Kap03 = jaké hrozby validity existují (metodické). Kap05 = jak se projevily
+v~praxi (empirické). Příklady pro kap05:
 \begin{itemize}
-    \item Prompt sensitivity \cite{razavi2025} --- malá změna formulace může změnit výsledky
-    \item Jeden model, jeden projekt --- analytická generalizace, ne statistická
-    \item Single run per podmínka --- omezená reprodukovatelnost
-    \item Case study generalizuje na teorii, ne na populaci \cite{yin2018}
-    \item Evaluační systém (metriky P1--P2, Q1--Q8, E1--E3) navržen a ověřen
-          na jedné case study --- funguje (feasibility), ale není statisticky
-          validován napříč projekty. DSR evaluace formou case study je legitimní
-          (Hevner 2004, Activity ``demonstrate''), ale výsledky nelze zobecňovat
-          jako ``nejlepší metriky pro hodnocení agentů''. Lze tvrdit: systém
-          zachytil rozdíly mezi iteracemi instrukcí. Nelze tvrdit: systém je
-          optimální nebo úplný.
-    \item Metriky jsou kompozicí existujících zavedených metrik (mutation score,
-          cyklomatická složitost, lint warnings), ne nově vynalezené --- to
-          posiluje konstruktovou validitu, ale konkrétní prahy (exit kritéria)
-          jsou zvoleny autorsky a mohou být pro jiné projekty nevhodné.
+    \item Prompt sensitivity: r4 regrese jako přímá evidence
+    \item Single run variance: r3 vs r4 při téměř stejných instrukcích
+    \item Researcher diagnostic error: záměna ref/agent testů
+    \item ESLint config disconnect: agent nevidí naše měřicí config
+    \item Evaluační systém feasibility: metriky zachytily trendy (cíl~1)
+    \item Cohen's $\kappa$: neprovedeno, kvalitativní metriky = indikátory
 \end{itemize}
 \end{raw}
 
@@ -76,7 +70,26 @@ Future work.
     \item Systematické porovnání formátů specifikace
     \item Multi-agent vs. single-agent scaffolding
     \item Longitudinální studie (více issues, evoluce projektu)
-    \item \textbf{Automatizace iteračního postupu.} Fáze Diagnose a~Fix jsou
+    \item \textbf{Proč agent nedodržuje multi-step workflow.} Pilotní data
+          ukazují, že agent dodržuje verifikační příkazy (jednokrokové akce)
+          deterministicky, ale multi-step workflow (issue~$\to$ branch~$\to$
+          test~$\to$ PR) nedeterministicky --- r3 dodržel kompletně, r5 zcela
+          ignoroval při téměř identických instrukcích. Možné vysvětlení:
+          (a)~jednoduché příkazy nevyžadují plánování, agent je kopíruje
+          do terminálu; workflow vyžaduje udržet plán přes desítky kroků.
+          (b)~Tréninková data modelu obsahují oba vzorce --- strukturovaný
+          i~nestrukturovaný vývoj --- a~model mezi nimi volí stochasticky.
+          (c)~Pozice instrukce v~kontextovém okně: s~rostoucí délkou konverzace
+          klesá vliv dřívějších instrukcí. Granulární ablace workflow struktury
+          (které kroky jsou kritické?) a~opakované běhy se stejnými instrukcemi
+          by tento fenomén pomohly lépe pochopit.
+    \item \textbf{Kontinuita práce mezi agenty.} Procesní metriky (P1--P8)
+          měří transparentnost artefaktů --- issues, commit zprávy, PR popisy.
+          Otevřená otázka: stačí tato transparentnost k~tomu, aby jiný agent
+          (nebo člověk) navázal na rozpracovaný projekt? Testování handoff
+          scénářů by ověřilo, zda procesní scaffolding vytváří nejen
+          pozorovatelný, ale i~přenositelný pracovní kontext.
+    \item \textbf{Automatizace iteračního postupu.} Fáze Diagnóza a~Úprava jsou
           v~této práci prováděny manuálně. Frameworky jako PromptWizard
           \cite{agarwal2024promptwizard} (Score→Critique→Synthesize) nebo
           Prompt Alchemy~\cite{promptalchemy2025} ukazují, že tento cyklus
@@ -85,6 +98,60 @@ Future work.
           by umožnila rychlejší iteraci bez manuální diagnózy.
 \end{itemize}
 \end{raw}
+
+\begin{draft}
+\textbf{Pracovní závěr z pilot-r4 --- exit kritéria sama o sobě nestačí.}
+
+Pilot-r4 zpřesnil, jak tento problém skutečně vypadá. Původní hypotéza byla,
+že explicitní success criteria v~\texttt{AGENTS.md} mohla agenta přesměrovat
+z~procesu na výsledek. Po obnovení session transcriptu se ale ukázalo něco
+specifičtějšího: agent si prokazatelně načetl produktovou specifikaci z~Issue~\#1,
+ale neaktivoval \texttt{AGENTS.md} jako operativní workflow. Prakticky to znamená,
+že jeho skutečná pracovní smyčka nebyla ``issues $\rightarrow$ branch $\rightarrow$
+test commit $\rightarrow$ implementation commit $\rightarrow$ PR'', ale pouze
+``todo $\rightarrow$ write/edit $\rightarrow$ checks $\rightarrow$ done''.
+
+Tento rozdíl je důležitý metodologicky. Nevidíme přímý důkaz, že by agent
+explicitně použil success criterion ``all implementation issues are closed''
+jako triviální zkratku typu ``žádné issues neexistují, tedy jsou zavřené''.
+Taková úvaha v~transcriptu není. Vidíme ale přímý důkaz jiného mechanismu:
+procesní instrukce nebyly převzaty jako řídicí smyčka běhu. Agent tedy neselhal
+až při vykonávání workflow; workflow se vůbec nestalo jeho pracovní reprezentací
+úkolu.
+
+Pro návrh instrukcí z~toho plyne praktičtější závěr než původní úvaha
+o samotných exit kritériích. Nestačí přidat ``jak poznáš, že jsi hotový''.
+Je potřeba vynutit i~ověřitelný \textit{ingestion checkpoint} na začátku běhu:
+agent musí explicitně potvrdit, že přečetl \texttt{AGENTS.md}, rozumí
+procesním pravidlům a~před prvním zápisem kódu je aktivoval. Jinak hrozí,
+že i~dobře formulované procesní instrukce zůstanou pouze pasivním kontextem,
+zatímco skutečné řízení běhu převezme lokální implementační smyčka odvozená
+ze specifikace.
+
+Z~tohoto závěru přímo vychází návrh další iterace instrukcí. V~souladu
+s~iteračním postupem zde není navržen balík nových guardrailů, ale jedna
+minimální změna pro jeden problém. Globální blok ``You are done when'' je
+odstraněn ze sekce Goal a~nahrazen jediným preflight checkpointem na začátku
+Process, v~němž má agent explicitně potvrdit, že přečetl \texttt{AGENTS.md},
+Issue~\#1 a~aktivuje workflow před prvním zápisem kódu. Cílem tedy není
+rozšířit instrukci, ale přesunout důležitý signal z~globálního completion cue
+do pozorovatelného workflow kroku.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{img/generated/agents-diff-r4-r5.png}
+\caption{Navržený diff změn \texttt{AGENTS.md} mezi pilot-r4 a~pilot-r5}
+\label{fig:agents-diff-r4-r5}
+\end{figure}
+
+Tento návrh je metodicky odlišný od změny r3~$\rightarrow$~r4. Nezkouší
+``přitlačit'' prompt dalšími pravidly, ale testuje užší hypotézu: že problém
+r4 vznikl kombinací příliš salienčního completion cue a~chybějícího
+ingestion checkpointu. Pokud se v~dalším běhu procesní metriky obnoví, bude
+to evidence, že problém r4 nebyl v~samotné existenci success criteria, ale
+v~jejich umístění a~v~tom, že workflow nevstoupilo do první pracovní
+reprezentace úkolu.
+\end{draft}
 
 \begin{raw}
 \textbf{Feature work / námět k diskuzi --- exit kritéria jako součást instrukcí:}

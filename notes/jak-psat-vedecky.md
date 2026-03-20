@@ -105,13 +105,15 @@ Propojení       → Jak to souvisí s BP
 
 ## Akademický jazyk
 
-| Nepoužívej | Použij |
-|------------|--------|
-| hodně | značné množství |
-| teď | v současnosti |
-| takže | tudíž, proto |
-| asi | pravděpodobně |
-| já si myslím | lze konstatovat |
+Vědecký = přesný, ne složitý. Jednoduchá věta s konkrétním obsahem
+je vždy lepší než formální věta s abstraktním obsahem.
+
+| Špatně (formální ale vágní) | Dobře (přesné) |
+|-----------------------------|----------------|
+| značné množství problémů | 11 z 45 testů selhalo |
+| v současné době | (smazat — nic nepřidává) |
+| lze konstatovat že | (říct rovnou co konstatujeme) |
+| nepřeváděla na konkrétní kroky | neříkala jakým příkazem to udělat |
 
 **Vyhni se:** hovorové výrazy, vágní tvrzení bez citace, absolutní tvrzení (vždy/nikdy).
 

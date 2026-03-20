@@ -36,7 +36,7 @@ vylepšovat instrukce.
 
 Velké jazykové modely (LLM) dnes umí generovat kód, ale to neznamená, že umí vyvíjet software. Randomizovaná studie METR \cite{metr2025} na 16 zkušených vývojářích a~246 úlohách ukázala, že s~AI nástroji byli vývojáři o~19\,\% pomalejší --- přestože sami odhadovali zrychlení o~24\,\%. Když projekt roste, bývá těžší jej rozšiřovat --- jak pro člověka, tak pro LLM. Vývojáři přicházejí o~kontext a hlubokou znalost kódové základny, zatímco agenti jsou limitováni omezeným context window. Otázka tedy není, co modely umí, ale jak je zasadit do vývojového procesu tak, aby produkovaly kvalitní výstup.
 
-Ukazuje se, že odpověď leží spíš v~instrukcích než v~samotných modelech. Breunig \cite{breunig2025} zjistil, že změna promptu mění chování agenta výrazněji než výměna modelu. Lulla et al. \cite{lulla2026} dokládají, že přidání architektonických konvencí do instrukčního souboru zkrátí dobu běhu o~28\,\% a sníží spotřebu tokenů o~20\,\%. Scaffolding --- struktura instrukcí a procesních pravidel, která agenta provází vývojem --- má na výsledek zásadní vliv. Ale nikdo systematicky nezkoumal, \emph{které} složky tohoto scaffoldingu jsou pro dodržování softwarově-inženýrských praktik nezbytné a které jsou zbytečné.
+Ukazuje se, že odpověď leží spíš v~instrukcích než v~samotných modelech. Breunig \cite{breunig2025} zjistil, že změna promptu mění chování agenta výrazněji než výměna modelu. Lulla et al. \cite{lulla2026} dokládají, že přítomnost instrukčního souboru (AGENTS.md) je spojena se zkrácením mediánové doby běhu o~28,6\,\% a~snížením výstupních tokenů o~16,6\,\%. Scaffolding --- struktura instrukcí a procesních pravidel, která agenta provází vývojem --- má na výsledek zásadní vliv. Ale nikdo systematicky nezkoumal, \emph{které} složky tohoto scaffoldingu jsou pro dodržování softwarově-inženýrských praktik nezbytné a které jsou zbytečné.
 
 Tato práce zkoumá právě to: jak musí být strukturovány instrukce pro AI coding agenta, aby dodržoval specifikací řízený vývoj, test-driven development a granulární správu verzí --- a co z~těch instrukcí je skutečně kritické.
 
@@ -60,6 +60,18 @@ Studie společnosti METR.ORG ukazuje, že LLM zkušené vývojáře spíše zpom
 \end{draft}
 
 \begin{raw}
+\textbf{TODO --- přeformulovat cíle práce (poznámky 2026-03-16):}
+
+Nová formulace cílů:
+\begin{enumerate}
+    \item \textbf{Literatura nemá procesní metriky pro agenty} --- existující benchmarky (SWE-bench aj.) měří jen výsledek. Navrhnout sadu metrik která pokrývá i~proces a~kvalitu. Zmínit toto explicitně jako research gap i~v kap02 (sec.\ hodnocení agentů).
+    \item \textbf{Navrhnout instrukce aby agent docílil požadovaných výstupů} --- iterativní/pilotní fáze k~dosažení požadovaných cílů (exit kritéria).
+    \item \textbf{Pomocí komparace (substituce a~ablace) zefektivnit výkon a~efektivitu agenta} --- komparativní fáze.
+\end{enumerate}
+
+Research question potřebuje přesná kritéria a~kvantifikaci --- ne vágní ``zlepšit'', ale měřitelné výstupy.
+
+\medskip
 \textbf{Předchozí verze cílů (audit trail v3):}
 
 \begin{enumerate}

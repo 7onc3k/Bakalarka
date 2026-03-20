@@ -166,6 +166,43 @@ reports/
   console.log(`\u2192 Copying AGENTS.md from ${agentsMdPath}...`);
   fs.copyFileSync(agentsMdPath, path.join(runDir, "AGENTS.md"));
 
+  // --- Step 3b: Snapshot fixních proměnných ---
+  // Kontrolní mechanismus: uložíme kopii VŠECH fixních vstupů do run adresáře.
+  // Umožňuje zpětně ověřit co přesně agent dostal.
+  const snapshotDir = path.join(runDir, ".experiment-snapshot");
+  fs.mkdirSync(snapshotDir, { recursive: true });
+
+  // OpenCode config (sdílený mount — bez snapshotu bychom ztratili evidenci)
+  const opencodeConfigSrc = path.join(INFRA_DIR, "opencode-config", "opencode.json");
+  if (fileExists(opencodeConfigSrc)) {
+    fs.copyFileSync(opencodeConfigSrc, path.join(snapshotDir, "opencode-config.json"));
+  }
+
+  // Docker image hash
+  const imageHash = exec(`docker image inspect ${imageName} --format '{{.Id}}'`, {}, "unknown");
+  const imageCreated = exec(`docker image inspect ${imageName} --format '{{.Created}}'`, {}, "unknown");
+
+  // Manifest: vše na jednom místě
+  const manifest = {
+    runName,
+    timestamp: new Date().toISOString(),
+    agentsMd: agentsMdPath,
+    model: AGENT_MODEL,
+    dockerImage: { name: imageName, hash: imageHash.trim(), created: imageCreated.trim() },
+    env: {
+      XDG_STATE_HOME: "/tmp/state",
+      HOME: "/home/ubuntu",
+    },
+    opencodeVersion: "1.2.15",
+    nodeVersion: exec("node --version", {}, "unknown").trim(),
+  };
+  fs.writeFileSync(
+    path.join(snapshotDir, "manifest.json"),
+    JSON.stringify(manifest, null, 2)
+  );
+
+  console.log(`\u2192 Experiment snapshot saved to ${snapshotDir}/`);
+
   // --- Step 4: Git init + push ---
   console.log("\u2192 Pushing to GitHub...");
   execStrict(`git init -b main`, { cwd: runDir });
@@ -256,12 +293,12 @@ reports/
         `--name ${containerName}`,
         `-v ${runDir}:/workspace`,
         `-v ${path.join(INFRA_DIR, "opencode-auth")}:/home/ubuntu/.local/share/opencode`,
-        `-v ${path.join(INFRA_DIR, "opencode-auth", "state")}:/home/ubuntu/.local/state`,
         `-v ${path.join(INFRA_DIR, "opencode-config")}:/home/ubuntu/.config/opencode`,
         `-e GH_TOKEN=${ghToken}`,
         `-e HOME=/home/ubuntu`,
+        `-e XDG_STATE_HOME=/tmp/state`,
         `${imageName}`,
-        `bash -lc 'gh auth setup-git; RUN_EXIT=0; opencode run -m "${AGENT_MODEL}" "Work on Issue #1 according to AGENTS.md." || RUN_EXIT=$?; SESSION_ID=$(opencode session list -n 1 --format json | python3 -c "import sys,json; data=json.load(sys.stdin); print(data[0][\"id\"] if data else \"\")" 2>/dev/null || true); if [ -n "$SESSION_ID" ]; then echo "$SESSION_ID" > /workspace/.session-id.txt; opencode export "$SESSION_ID" > /workspace/transcript.json || true; fi; echo "$RUN_EXIT" > /workspace/.agent-exit-code.txt; exit "$RUN_EXIT"'`
+        `bash -lc 'gh auth setup-git; RUN_EXIT=0; opencode run -m "${AGENT_MODEL}" "Work on Issue #1 according to AGENTS.md." || RUN_EXIT=$?; echo "$RUN_EXIT" > /workspace/.agent-exit-code.txt; cd /workspace && SID=$(python3 -c "import sqlite3; c=sqlite3.connect(\"$HOME/.local/share/opencode/opencode.db\"); print(c.execute(\"SELECT id FROM session ORDER BY time_created DESC LIMIT 1\").fetchone()[0])" 2>/dev/null); if [ -n "$SID" ]; then echo "$SID" > /workspace/.session-id.txt; timeout 60 opencode export "$SID" > /workspace/transcript.json 2>/dev/null || true; fi; cp -f $HOME/.local/share/opencode/opencode.db /workspace/.opencode/opencode.db 2>/dev/null || true; exit "$RUN_EXIT"'`
       ].join(" "),
       {
         stdio: "inherit",

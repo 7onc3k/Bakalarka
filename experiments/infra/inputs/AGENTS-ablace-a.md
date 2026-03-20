@@ -33,14 +33,9 @@ Decompose the spec into focused GitHub issues before writing code. Work through 
 2. For each issue, follow this exact sequence:
    a. Pick one open issue: `gh issue list --state open`, then `git checkout main && git pull && git checkout -b issue-N`
    b. Write tests: `git add tests/ && git commit -m "test: <description>"`
-   c. Verify: run `git log --oneline -3` and confirm the test: commit exists before proceeding
-   d. Implement: `git add src/ && git commit -m "feat: <description>"`
-   e. Open PR: `gh pr create --title "..." --body "Closes #N"`, merge, delete branch
+   c. Implement: `git add src/ && git commit -m "feat: <description>"`
+   d. Open PR: `gh pr create --title "..." --body "Closes #N"`, merge, delete branch
 3. Use conventional commits: `test:` for tests, `feat:` for implementation, `docs:` for documentation
-4. Before every PR, run these checks and fix all issues before opening:
-   - `tsc --noEmit` — zero type errors
-   - `npx eslint src/ --max-warnings 0` — zero lint warnings. Your ESLint config must include `"complexity": ["warn", 10]`.
-   - Verify API contract compliance: every field in the API Contract types (e.g. `pausedElapsed`, `pausedFrom`) must be read and used in your implementation logic — not just written. If a field is defined but never read, fix it before opening the PR.
 
 ## Package Quality
 

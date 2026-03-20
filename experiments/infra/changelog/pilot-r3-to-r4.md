@@ -1,13 +1,13 @@
 # Changelog: pilot-r3 → pilot-r4
 
-**Datum:** 2026-03-05
-**Zdůvodnění:** DIAGNOSIS.md pilot-r3
+**Datum:** 2026-03-17
+**Zdůvodnění:** DIAGNOSIS.md pilot-r3 (revidovaná)
 
 ---
 
-### Fix 1: Pre-PR vitest check — zero test failures
+### Fix 1: Pre-PR vitest check
 
-**Bylo:**
+**Bylo (Process bod 4):**
 ```
 4. Before every PR, run these checks and fix all issues before opening:
    - `tsc --noEmit` — zero type errors
@@ -22,49 +22,38 @@
    - `npx vitest run` — zero test failures
 ```
 
-**Pozorování (r3):** Q2 = 36/45 — agent otevřel PR kde 9 ref testů selhávalo
-(business-days import bug + pause-resume logika). Pre-PR checklist neobsahoval
-vitest check, takže agent mergoval bez ověření funkčnosti.
+**Pozorování (r3):** Agent odevzdával kód bez spuštění vlastních testů jako
+posledního kroku. Přidání vitest do pre-PR checklistu zajišťuje, že agent
+ověří funkčnost svého kódu před odevzdáním.
 
-**Diagnóza:** Lulla 2026: quality gate těsně před výstupem (PR) je vymáhán
-spolehlivěji než obecný požadavek. Mao et al. 2025 FSE (Workflow komponenta):
-verifikační checkpoint mechanicky nutí agenta ověřit stav. Bez vitest v checklistu
-agent nemá signál že testy selhávají.
+**Poznámka:** Tento check spouští agentovy vlastní testy, ne referenční testy
+(ty se spouští post-hoc skriptem analyze-run.ts a agent je nevidí).
 
-**Literatura:** Lulla 2026, Mao et al. 2025 FSE (Workflow)
+**Literatura:** Lulla 2026 (quality gate těsně před výstupem)
 
 ---
 
-### Fix 2: Success criteria v Goal — explicitní definice "done"
+### Fix 2: Dodržení API kontraktu — každé pole musí být použito
 
-**Bylo:**
+**Přidáno do Constraints:**
 ```
-## Goal
-
-Implement the dunning system (billing reminder state machine) specified in
-GitHub Issue #1. Deliver a modular, documented, publishable TypeScript package.
-```
-
-**Je:**
-```
-## Goal
-
-Implement the dunning system (billing reminder state machine) specified in
-GitHub Issue #1. Deliver a modular, documented, publishable TypeScript package.
-
-You are done when:
-- Every acceptance criterion from Issue #1 has at least one test
-- `npx vitest run` reports zero failures
-- All implementation issues are closed
+- Every field in the API Contract types must be used in your implementation.
+  If the spec defines a field (e.g., `pausedElapsed`), your code must read
+  and write it — do not invent an alternative approach.
 ```
 
-**Pozorování (r3, první pokus):** Agent zastavil po 4/9 issues bez jasného
-signálu proč. Auto-continue plugin pak nerestartoval (bug). Bez explicitní
-definice "done" agent sám rozhodne kdy je hotový — a může rozhodnout příliš brzo.
+**Pozorování (r3):** Q2 = 41/42. Jediné selhání: agent implementoval
+pause/resume elapsed time vlastním přístupem (posunutí stateEnteredAt zpět)
+místo použití pole `pausedElapsed` definovaného v API kontraktu. Agentův
+přístup fungoval pro jednorázové pozastavení, ale selhal při opakovaném
+pause/resume. Spec přitom definuje `pausedElapsed?: number` v typu
+DunningState — agent měl toto pole použít.
 
-**Diagnóza:** Hassan 2025 SASE (BriefingScript): success criteria jsou součástí
-BriefingScript — agent potřebuje vědět co je cílový stav. Breunig 2025:
-vágní cíl ("deliver a package") je interpretován minimalisticky. Explicitní
-verifikovatelná kritéria dávají agentovi konkrétní exit podmínky.
+**Diagnóza:** Problém není v procesním workflow (P1-P5 = 5/5) ale v tom,
+že agent ignoroval pole z API kontraktu a nahradil ho vlastním řešením.
+Breunig 2025: obecné pravidlo "trace back to spec" nestačí — je třeba
+explicitně říct že každé pole v kontraktu musí být použito.
 
-**Literatura:** Hassan 2025 SASE (BriefingScript), Breunig 2025
+**KOREKCE (2026-03-18):** Diagnóza byla příliš silná. Spec definuje pole `pausedElapsed` v typu `DunningState`, ale neříká explicitně jak ho použít v tick výpočtu. Agent implementoval alternativní přístup (posunutí `stateEnteredAt`), který fungoval pro jednorázové pozastavení. Jde spíše o nejednoznačnost specifikace než o ignorování kontraktu. R4 potvrdil, že pravidlo o kontraktu nepomohlo.
+
+**Literatura:** Breunig 2025

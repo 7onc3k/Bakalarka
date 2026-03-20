@@ -9,8 +9,8 @@ Run → Measure → Diagnose → Fix → Run → ...
 ```
 
 Každá iterace produkuje:
-- `experiments/runs/pilot-rN/FINDINGS.md` — behavioral trace + metriky (v repu runu)
-- `experiments/runs/pilot-rN/DIAGNOSIS.md` — FSE/SASE/Lulla/Breunig analýza (v repu runu)
+- `experiments/runs/pilot-rN/FINDINGS.md` — behavioral trace + metriky (šablona: `experiments/infra/FINDINGS-template.md`)
+- `experiments/runs/pilot-rN/DIAGNOSIS.md` — FSE/SASE/Lulla/Breunig analýza (šablona: `experiments/infra/DIAGNOSIS-template.md`)
 - `experiments/infra/changelog/pilot-rN-to-rN+1.md` — co se změnilo a proč (s citacemi)
 - Aktualizovaný `experiments/infra/inputs/AGENTS.md`
 
@@ -66,9 +66,9 @@ Exit: každá P1-P5 musí být ✅.
 | Kód | Metrika | Co měří | Jak | Exit kritérium |
 |-----|---------|---------|-----|----------------|
 | Q1 | API contract match | Sedí veřejné API? | `tsc` import + typecheck | match |
-| Q2 | Ref test pass rate | Funguje implementace? | 45 behavioral testů ze spec | 45/45 |
+| Q2 | Ref test pass rate | Funguje implementace? | 42 behavioral testů ze spec | 42/42 |
 | Q3 | Mutation score | Detekují agentovy testy chyby? | Stryker | ≥70% |
-| Q4 | AC coverage | Kolik z 24 AC má test? | LLM-as-judge (GLM-5) | 24/24 |
+| Q4 | AC coverage | Kolik z 25 AC má test? | LLM-as-judge (GLM-5) | 25/25 |
 | Q5 | Lint warnings | Čistý kód? | `eslint --format json` | 0 |
 | Q6 | Typecheck errors | Kompiluje strict? | `tsc --noEmit` | 0 |
 | Q7 | Složitost kódu | Není zbytečně složitý? | Cyklomatická složitost (ESLint) | ≤10/fn |
@@ -98,9 +98,11 @@ Po každém runu:
 
 1. Spustit `npx tsx experiments/infra/scripts/ts/analyze-run.ts pilot-rN` → P1-P5, Q1-Q7, E1-E3
 2. Spustit `npx tsx experiments/infra/scripts/ts/judge.ts pilot-rN` → P6-P8, Q4, Q8
-3. Vyplnit FINDINGS.md (šablona níže)
+3. Vyplnit FINDINGS.md (šablona: `experiments/infra/FINDINGS-template.md`)
 
 ### FINDINGS.md šablona
+
+Viz samostatný soubor: `experiments/infra/FINDINGS-template.md`.
 
 ```markdown
 # Pilot-rN Findings
@@ -138,8 +140,9 @@ Po každém runu:
 | AC1 | | |
 | ... | | |
 | AC24 | | |
+| AC25 | | |
 
-**Q4 score:** /24
+**Q4 score:** /25
 
 ## Produktové metriky (Q1-Q8)
 
@@ -148,7 +151,7 @@ Po každém runu:
 | Q1 | API contract match | ✅/❌ | |
 | Q2 | Ref test pass rate | /40 | |
 | Q3 | Mutation score | % | |
-| Q4 | AC coverage | /24 | |
+| Q4 | AC coverage | /25 | |
 | Q5 | Lint warnings | | |
 | Q6 | Typecheck errors | | |
 | Q7 | Max complexity | | |
@@ -219,13 +222,15 @@ Cílový poměr: přibližně vyrovnaný. LoopScript dominance = agent neumí re
 
 ### 2.3 Lulla 2026 content check
 
+> **POZOR:** Následující kategorizace NENÍ empiricky podložena z Lulla 2026. Lulla měřil pouze přítomnost vs nepřítomnost celého souboru. Kategorizace pochází z autorovy interpretace Chatlatanagulchai taxonomie a spekulací v Lulla sekci 5.
+
 Efektivní obsah (snižuje runtime):
 - [ ] Architecture / project structure
 - [ ] Coding conventions
 - [ ] Project description
 
 Neefektivní obsah (zvyšuje tokeny bez benefitu):
-- [ ] Verbose step-by-step procedures (AGENTbench: +14-22% tokenů)
+- [ ] Verbose step-by-step procedures (zdroj čísla +14-22% NENÍ Lulla — ověřit původ)
 - [ ] Directory trees (agent umí `ls`)
 - [ ] Redundance s README/docs
 
@@ -293,8 +298,8 @@ Pilotní iterace končí když agent splní všechna kritéria v posledním běh
 - [ ] P4 = ✅ (PRs linked to issues)
 - [ ] P5 = ✅ (no existing test modifications)
 - [ ] Q1 = match (API contract)
-- [ ] Q2 = 45/45 (referenční testy)
-- [ ] Q4 = 24/24 (AC coverage)
+- [ ] Q2 = 42/42 (referenční testy)
+- [ ] Q4 = 25/25 (AC coverage)
 - [ ] Q5 = 0 (lint warnings)
 - [ ] Q6 = 0 (typecheck errors)
 

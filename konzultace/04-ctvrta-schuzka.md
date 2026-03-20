@@ -8,6 +8,9 @@
 
 - je potreba mit RQ nebude stacit cile ?
 
+- omezeni a validita, 
+
+- citace vs reference na teorii
 
 # metodika
 

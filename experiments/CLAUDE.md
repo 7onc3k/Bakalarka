@@ -18,7 +18,7 @@ Každá iterace (Diagnose a Fix iterativně ve spolupráci — viz procedure):
 
 - **FSE 2025 component order:** Role → Directive → Context → Workflow → Output → Constraints
 - **SASE script balance:** BriefingScript (co+proč) / LoopScript (jak) / MentorScript (co ne + recovery)
-- **Lulla 2026:** architektura + konvence efektivní; verbose workflow neefektivní
+- **Lulla 2026:** přítomnost AGENTS.md = -28.6% mediánový runtime; efekt jednotlivých typů obsahu neizolován
 - **AGENTbench meta-princip:** "Kdyby řádek chyběl, udělal by agent neočividnou chybu?"
 - **Breunig:** pokud agent ignoruje instrukci přes iterace → přestrukturovat, ne opakovat
 
