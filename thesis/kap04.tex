@@ -193,9 +193,10 @@ Workflow, Output, Constraints, Examples); naše baseline sekce
 Quality, Constraints) jsou adaptací tohoto rámce na doménu
 případové studie.
 
-Mao et al. zjistili, že instrukce Role a~Directive na začátku
-dokumentu korelují s~vyšší efektivitou agenta, zatímco Constraints
-patří na konec. Toto pořadí tvoří páteř baseline dokumentu.
+Mao et al. zjistili, že v~produkčních šablonách se Role
+a~Directive nejčastěji objevují na začátku dokumentu, zatímco
+Constraints na konci. Toto pozorované pořadí tvoří páteř
+baseline dokumentu.
 
 Sekce Package Quality definuje očekávání na kvalitu kódu: modulární
 struktura (typy, business logika a~veřejné API v~oddělených souborech),
@@ -375,8 +376,9 @@ dělat (např.\ ``jedna branch per issue''), ale neukazovala \textit{jak}
 to provést. Breunig~\cite{breunig2025} ukazuje, že když agent pravidlo
 ignoruje, nepomůže ho zopakovat --- je třeba ho přepsat tak, aby se
 stal součástí pracovního postupu. Razavi a~Fard~\cite{razavi2025}
-doplňují, že úprava v~místě kde agent chybuje je účinnější než
-přidávání nových pravidel. Každé selhání proto dostalo vlastní opravu:
+dokládají, že drobné změny formulace promptu mohou dramaticky změnit
+chování modelu, což motivuje cílené přestrukturování místo přidávání
+dalších pravidel. Každé selhání proto dostalo vlastní opravu:
 
 \begin{itemize}
     \item P2 (agent kombinoval branches): do~pracovního postupu přidán
@@ -529,10 +531,9 @@ E2 & Trvání                   & 37 min     & 25 min      & záznam \\
 Všechny tři změny zabraly. Agent poprvé splnil celý procesní checklist
 P1--P5~=~5/5: vytvořil issues před kódem, každý issue dostal vlastní
 branch, test commit předcházel kódu, pull requesty obsahovaly
-\texttt{Closes \#N} a~žádný test nebyl dodatečně upraven. Přepsání
-obecných pravidel na konkrétní příkazy~\cite{breunig2025} a~kontrolní
-kroky přímo v~pracovním postupu~\cite{mao2025fse} funguje lépe než
-textové požadavky. Q8~=~3/3 to potvrzuje: když musel agent ověřit JSDoc
+\texttt{Closes \#N} a~žádný test nebyl dodatečně upraven. Přepsání obecných pravidel na konkrétní příkazy~\cite{breunig2025}
+a~jejich zasazení do pracovního postupu jako kontrolní kroky funguje
+lépe než textové požadavky. Q8~=~3/3 to potvrzuje: když musel agent ověřit JSDoc
 před odevzdáním kódu, dokumentaci napsal.
 
 Q2~=~41/42: zbývá jedna chyba v~implementaci. Specifikace definuje
