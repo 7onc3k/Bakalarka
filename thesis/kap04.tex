@@ -7,7 +7,7 @@ chronologii experimentu: nejprve příprava tří výchozích podkladů
 (specifikace, referenční implementace, instrukce), pak pilotní iterace
 kde se instrukce opakovaně upravují na základě naměřených metrik,
 a~nakonec komparativní variace kde z~fungující sady systematicky
-odebíráme nebo nahrazujeme jednotlivé části.
+odebíráme jednotlivé části a~měříme dopad.
 \end{draft}
 
 \begin{raw}
@@ -210,9 +210,8 @@ TDD~\cite{mathews2024}, dekompozici do sub-issues, branch-per-issue
 a~conventional commits. Li et al.~\cite{skillsbench2025} ukazují, že
 procedurální guidance (``jak pracovat'') je efektivnější než popisná
 dokumentace (``jak vypadá codebase''). Z~procesní sekce byly odstraněny
-bash příklady, protože verbose step-by-step instrukce nejsou
-efektivnější než stručné~\cite{lulla2026} a~redundantní obsah zvyšuje
-tokeny bez benefitu~\cite{gloaguen2025agentsmd}.
+bash příklady, protože redundantní obsah zvyšuje inference cost
+bez benefitu~\cite{gloaguen2025agentsmd}.
 
 Sekce Constraints obsahuje explicitní zákazy: nekombinovat issues,
 nemodifikovat již existující testy, nepřepisovat git historii. Mao
@@ -260,7 +259,7 @@ Spuštění/\allowbreak Měření/\allowbreak Diagnóza/\allowbreak Úprava (sek
 \begin{raw}
 \textbf{TODO (2026-03-16) --- zmínit metodiku přidání architektury:}
 
-V~sekci o~konstrukci baseline instrukcí zmínit jak a~proč byla přidána architektonická sekce (Package Quality). Propojit s~Lulla et al.~\cite{lulla2026}: architektura + konvence = nejúčinnější obsah instrukcí. Popsat rozhodovací proces: proč právě tyto architektonické požadavky (modulární struktura, striktní typy, JSDoc), jak to mapuje na metriky Q5--Q8.
+V~sekci o~konstrukci baseline instrukcí zmínit jak a~proč byla přidána sekce Package Quality. \textbf{Pozn.:} Lulla et al.~\cite{lulla2026} měří pouze přítomnost vs nepřítomnost AGENTS.md, neizolují efekt jednotlivých typů obsahu. Nelze citovat jako důkaz že ``architektura + konvence = nejúčinnější''. Popsat rozhodovací proces: proč právě tyto požadavky (modulární struktura, striktní typy, JSDoc), jak to mapuje na metriky Q5--Q8.
 
 \medskip
 \textbf{Audit trail --- předchozí verze 4.1.3:}
@@ -474,9 +473,10 @@ Z~r2 přetrvaly tři slabiny. Každá dostala vlastní opravu:
           ``dokumentuj veřejné API'', ale agent to přehlížel. Zopakovat
           totéž by nepomohlo~\cite{breunig2025}. Požadavek byl proto
           přesunut do kontrolního kroku před pull requestem --- agent
-          musí ověřit JSDoc dřív než odevzdá kód. Kontrola těsně před
-          odevzdáním funguje spolehlivěji než obecný
-          požadavek~\cite{lulla2026}
+          musí ověřit JSDoc dřív než odevzdá kód. Přesun požadavku
+          do kontrolního kroku odpovídá vzorci z~r1$\to$r2: obecné
+          pravidlo~$\to$ konkrétní příkaz v~místě
+          akce~\cite{breunig2025}
 \end{itemize}
 
 Výřez \texttt{git diff} mezi verzemi \texttt{AGENTS.md} pro běhy r2 a~r3
@@ -531,7 +531,7 @@ branch, test commit předcházel kódu, pull requesty obsahovaly
 obecných pravidel na konkrétní příkazy~\cite{breunig2025} a~kontrolní
 kroky přímo v~pracovním postupu~\cite{mao2025fse} funguje lépe než
 textové požadavky. Q8~=~3/3 to potvrzuje: když musel agent ověřit JSDoc
-před odevzdáním kódu, dokumentaci napsal~\cite{lulla2026}.
+před odevzdáním kódu, dokumentaci napsal.
 
 Q2~=~41/42: zbývá jedna chyba v~implementaci. Specifikace definuje
 chování pause/resume jednoznačně: acceptance criteria vyžadují
@@ -552,7 +552,7 @@ Diagnostika r3 odhalila dva problémy, každý s~vlastní opravou:
           a~lintu, ale ne spuštění agentových vlastních testů. Přidán
           příkaz \texttt{npx vitest run} jako kontrolní krok --- agent
           musí ověřit, že jeho vlastní testy prošly dřív než otevře
-          pull request~\cite{lulla2026}. Tato změna necílí na Q2
+          pull request. Tato změna necílí na Q2
           (referenční testy, které agent nevidí), ale na základní
           ověření konzistence agentova kódu s~jeho vlastními testy
     \item Agent nedodržel API kontrakt: spec definuje pole

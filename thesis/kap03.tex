@@ -10,9 +10,10 @@
 
 \begin{draft}
 Kapitola~\ref{kap:vymezeni} definuje tři cíle (navrhnout sadu metrik,
-demonstrovat iterativní postup a~popsat pozorované tendence), jejichž
-naplnění vyžaduje navrhovat řešení, ověřovat ho v~praxi a~na základě
-výsledků iterativně upravovat instrukce. Takový postup,
+iterativním postupem navrhnout instrukce a~ablacemi identifikovat
+které složky přispívají), jejichž naplnění vyžaduje navrhovat řešení,
+ověřovat ho v~praxi a~na základě výsledků iterativně upravovat
+instrukce. Takový postup,
 kdy se navrhuje řešení a~opakovaně vyhodnocuje, odpovídá návrhovému
 výzkumu (Design Science Research, DSR). Hevner
 et al.~\cite{hevner2004} ho definují jako iterativní cyklus návrhu
@@ -612,7 +613,7 @@ Breunig/Razavi~\cite{razavi2025,breunig2025} & Proč ignoruje opakovaně? & reco
 FSE 2025 (Mao et al.) --- projít AGENTS.md proti 7 komponentám v~doporučeném pořadí:
 Role → Directive → Context → Workflow → Output → Constraints → Examples.
 Finding 2: Directive musí být imperativní, ne otázky.
-Finding 4: Constraints = exclusion type nejefektivnější (46\,\% exclusion v~korpusu) --- \textit{Never X} $>$ \textit{Avoid X}.
+Finding 4: Constraints = exclusion type nejčastější (46\,\% výskytů v~korpusu) --- \textit{Never X} $>$ \textit{Avoid X}.
 Finding 9: Instrukce AFTER context, ne before --- information decay při opačném pořadí.
 Constraints seskupit do jedné sekce, ne rozházet po dokumentu.
 
@@ -706,14 +707,19 @@ proto interpretujeme jako indikativní, ne kauzální.
 \end{draft}
 
 \begin{raw}
-\textbf{TODO (2026-03-16) --- komparativní variace: abstraktně vs konkrétně:}
+\textbf{Review poznámka (2026-03-21) --- konzistence s~novým cílem~3:}
 
-V~metodice (tady) může být komparace popsaná abstraktně --- \textit{co} děláme (ablace, substituce) a~\textit{proč} (testujeme hypotézy z~pilotu). Ale musí být jasné CO a~PROČ konkretizujeme:
-\begin{itemize}
-    \item Metodika: typy variací (ablace = odebrání, substituce = náhrada), jak měříme dopad (stejné P/Q/E metriky), jak interpretujeme (indikativní, ne kauzální)
-    \item Konkrétní variace: patří do kap04 (praktická část), protože vycházejí z~diagnózy pilotních běhů
-    \item Cíl komparace: zefektivnit výkon a~efektivitu agenta (cíl~3 z~kap01)
-\end{itemize}
+Cíl~3 v~kap01 nyní zní: ``Ablacemi identifikovat, které složky instrukční sady přispívají k~měřenému chování agenta a~které jsou redundantní.'' DRAFT výše zmiňuje i~substituce, ale v~kap04 substituce jako samostatná fáze neprobíhá (pilotní iterace ji demonstrovaly implicitně: r1~obecná pravidla~$\to$ r3~konkrétní příkazy). Zvážit: (a)~smazat zmínku o~substituci z~tohoto DRAFT, (b)~ponechat jako obecný popis metody ale v~kap04 explicitně uvést že se provedla jen ablace, (c)~přeformulovat cíl~3 aby zahrnoval i~substituci. Momentálně kap04 volí (b).
+
+\medskip
+\textbf{Review poznámka (2026-03-21) --- ``jeden běh per variaci'':}
+
+DRAFT říká ``s~jedním během per variaci'' ale v~kap04 provádíme dva běhy per variaci. Opravit na ``se dvěma běhy per variaci nelze statisticky\ldots'' --- nebo ponechat a~popsat jako metodické rozhodnutí (dva běhy = mitigace nedeterminismu, ale stále ne statistická síla).
+
+\medskip
+\textbf{Předchozí TODO (2026-03-16):}
+
+Komparace v~metodice abstraktně, konkretizace v~kap04.
 
 \medskip
 \textbf{Audit trail --- předchozí obsah 3.3.4:}
