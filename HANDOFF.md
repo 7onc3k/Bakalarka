@@ -1,31 +1,30 @@
 # Handoff — nekonzistence a TODO
 
-## Citační chyby (mechanické opravy)
+## Citační chyby — DONE
 
-- [ ] **kap04:479** — `\cite{lulla2026}` u "kontrola před odevzdáním funguje spolehlivěji" → Lulla to neříká, má být `\cite{breunig2025}` nebo vlastní zjištění z pilotu
-- [ ] **kap04:214** — `\cite{lulla2026}` u "verbose step-by-step nejsou efektivnější" → Lulla měří přítomnost vs nepřítomnost souboru, ne verbose vs stručné. Spíš `\cite{gloaguen2025agentsmd}` nebo bez citace
-- [ ] **kap04 RAW:263** — stará misatribuce "architektura + konvence = nejúčinnější obsah instrukcí" připsaná Lullovi → opravit nebo smazat
-- [ ] **kap03 RAW:615** — "nejefektivnější" → "nejčastější" (Mao 46% = prevalence v korpusu, ne efektivita)
+- [x] kap04:479 — Lulla → Breunig (kontrola v místě akce)
+- [x] kap04:214 — Lulla odstraněn (ponechán Gloaguen)
+- [x] kap04:534 — Lulla odstraněn (vlastní pozorování z pilotu)
+- [x] kap04:555 — Lulla odstraněn (vlastní rozhodnutí)
+- [x] kap04 RAW:263 — přidána explicitní poznámka o limitaci Lully
+- [x] kap03 RAW:615 — "nejefektivnější" → "nejčastější"
 
-## Konzistence s novými cíli (kap01 DRAFT v5)
+## Konzistence s novými cíli — DONE
 
-Nové cíle:
-1. Navrhnout sadu metrik (proces + kvalita)
-2. Iterativním postupem navrhnout instrukce → exit kritéria (pilot)
-3. Ablacemi identifikovat které složky přispívají a které jsou redundantní (komparace)
+- [x] kap03:12 — aktualizováno na nové cíle
+- [x] kap03 3.3.4 — přidány RAW review poznámky (substituce, počet běhů)
+- [x] kap04 úvod — "odebíráme nebo nahrazujeme" → "odebíráme"
 
-- [ ] **kap03:12** — sekce 3.1 odkazuje na staré cíle ("demonstrovat iterativní postup a popsat pozorované tendence") → aktualizovat na nové
-- [ ] **kap03 sekce 3.3.4** — komparativní variace popis → ověřit že sedí s cílem 3 (ablace)
-- [ ] **kap04 úvod** — ověřit že intro kap04 odráží nové cíle
+## K review (RAW poznámky pro uživatele)
 
-## Souhrnná tabulka (kap04)
+- [ ] **kap03 3.3.4** — zmínka o substituci v DRAFT: smazat, ponechat, nebo přeformulovat cíl?
+- [ ] **kap03 3.3.4** — "jeden běh per variaci" vs skutečné dva běhy
+- [ ] **kap04 RAW:263** — rozhodnout jak popsat důvod přidání Package Quality bez Lully
 
-- [ ] **Q3 pro r5 = "---"** — chybí vysvětlení proč (poznámka pod tabulkou)
+## Judge — DONE
 
-## Judge — chybějící data
-
-- [ ] **Q4** chybí pro A-1, A-2, B-2 (judge API timeout) — spustit znovu
-- [ ] **Q8** chybí pro B-1 (judge API timeout) — spustit znovu
+- [x] **Q4** doplněno pro A-1, A-2, B-2 (fix: timeout 90s → 180s)
+- [x] **Q8** doplněno pro B-1 (fix: timeout 90s → 180s)
 
 ## Infra — OpenCode hang problém
 
