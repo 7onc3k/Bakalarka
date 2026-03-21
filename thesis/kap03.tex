@@ -300,7 +300,7 @@ agenta po poslední commit.
 \textbf{E3 (dokončení)} zaznamenává, zda agent dokončil úkol bez
 pádu, a~počet restartů auto-continue pluginu jako proxy pro autonomii.
 
-S~jedním během per variaci jsou tyto hodnoty deskriptivní,
+Se dvěma běhy per variaci jsou tyto hodnoty deskriptivní,
 ne inferenční.
 \end{draft}
 
@@ -546,6 +546,15 @@ neznamená lepší výsledky~\cite{lulla2026}.
 \end{draft}
 
 \begin{raw}
+\textbf{Review poznámka (2026-03-21) --- Hassan SASE jako diagnostický rámec:}
+Hassan et al.~\cite{hassan2025sase} je vision paper, ne empirická studie.
+BriefingScript/LoopScript/MentorScript taxonomie je konceptuální nástroj,
+ne empiricky validovaný poměr. V~textu používáme jako analytický rámec
+pro klasifikaci obsahu instrukcí, ne jako evidence ``co funguje''.
+Ujistit se že v~kap02 i~kap03 je toto jasné --- nepřipisovat Hassanovi
+empirické výsledky.
+
+\medskip
 Rozepsat každý ze čtyř kroků podrobněji --- co přesně se děje, jaké nástroje, jaké výstupy.
 
 \textbf{Spuštění --- operacionalizace:}
@@ -660,9 +669,9 @@ Výstupy kroku: aktualizovaný \texttt{AGENTS.md} + záznam \texttt{changelog/pi
 \begin{draft}
 Pilotní fáze běží dokud agent nesplní exit kritéria ze sloupce
 \textit{Exit kritérium} v~tabulce~\ref{tab:metriky-prehled}.
-Kritéria mají dva typy: deterministická (P1--P6, Q1--Q2, Q4--Q6)
+Kritéria mají dva typy: deterministická (P1--P5, Q1--Q2, Q4--Q6)
 mají přirozenou binární hranici --- buď splněno nebo ne; minimální
-standard (Q3, Q7--Q8, P6--P8) je práh zdůvodněný literaturou.
+standard (P6--P8, Q3, Q7--Q8) je práh zdůvodněný literaturou.
 E1--E3 jsou záznamové metriky bez kritéria, slouží k~porovnání
 efektivity mezi běhy.
 
@@ -700,7 +709,7 @@ commitech, komparativní variace může testovat, zda odebrání tohoto
 pravidla změní i~ostatní metriky, nebo zda alternativní formulace
 vede k~lepšímu dodržování.
 
-S~jedním během per variaci nelze statisticky odlišit efekt změny
+Se dvěma běhy per variaci nelze statisticky odlišit efekt změny
 od šumu způsobeného nedeterminismem
 LLM~(sekce~\ref{sec:omezeni-validita}). Výsledky komparativní fáze
 proto interpretujeme jako indikativní, ne kauzální.
@@ -848,10 +857,10 @@ systémového promptu. Výstupní tokeny (\texttt{output}) a~doba běhu
 
 \textbf{Interní validita} (jsou závěry podložené daty?).
 Hlavní hrozba je nedeterminismus LLM: stejné instrukce mohou při
-různých bězích dát různé výsledky. S~jedním během per variaci nelze
+různých bězích dát různé výsledky. Se dvěma běhy per variaci nelze
 statisticky odlišit efekt změny instrukcí od náhodného
-šumu~\cite{razavi2025}. Částečnou mitigací je více běhů v~pilotní
-fázi. Další hrozbou je confirmation bias: autor navrhuje instrukce
+šumu~\cite{razavi2025}. Dva běhy per variaci jsou mitigací
+nedeterminismu, ale neposkytují statistickou sílu. Další hrozbou je confirmation bias: autor navrhuje instrukce
 i~evaluuje výsledky. Tuto hrozbu oslabují automatizované metriky
 (P1, Q1--Q3, Q5--Q7), které nepodléhají subjektivnímu posouzení,
 a~volba judge modelu z~jiné rodiny. Třetí hrozbou je vývoj
@@ -878,6 +887,14 @@ zpětně přímo ověřit, že agent instrukce obdržel. Nepřímým
 důkazem je, že agent v~reasoning části transcriptu cituje
 specifický obsah instrukcí bez předchozího explicitního čtení
 souboru.
+Při ablačních bězích se ukázalo, že OpenCode se v~některých
+případech tiše ukončí uprostřed práce agenta --- bez chybové
+hlášky a~bez compaction kontextu. Běhy s~vyšší spotřebou
+kontextového okna (ablace~A: $\sim$44 spuštění testů oproti
+$\sim$20 u~ablace~B) byly postiženy častěji. Postižené běhy
+byly opakovány; výsledky opakovaných běhů jsou zahrnuty
+v~analýze. Příčina nebyla identifikována (možný bug
+v~OpenCode při dosažení limitu kontextu).
 
 \textbf{Externí validita} (lze zobecnit?). Případová studie na jednom
 projektu, jednom modelu a~jednom agentním nástroji neumožňuje

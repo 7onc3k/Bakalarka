@@ -183,17 +183,19 @@ Cílem bylo vytvořit výchozí bod jehož každá komponenta má opodstatnění
 v~empirických zjištěních.
 
 Konstrukce proběhla ve třech krocích: smazání předchozí ad-hoc verze,
-návrh struktury podle empiricky odvozeného pořadí komponent Mao
-et al.~\cite{mao2025fse} (Role $\to$ Goal $\to$ Specification $\to$
-Environment $\to$ Process $\to$ Package Quality $\to$ Constraints)
-a~mapování tří dimenzí chování (sekce~\ref{sec:sada-metrik}) na
-konkrétní instrukce.
+návrh struktury podle pořadí komponent, které Mao
+et al.~\cite{mao2025fse} zjistili v~analýze 2\,163 produkčních
+šablon, a~mapování tří dimenzí chování
+(sekce~\ref{sec:sada-metrik}) na konkrétní instrukce. Mao
+identifikují sedm typů komponent (Role, Directive, Context,
+Workflow, Output, Constraints, Examples); naše baseline sekce
+(Role, Goal, Specification, Environment, Process, Package
+Quality, Constraints) jsou adaptací tohoto rámce na doménu
+případové studie.
 
-Pořadí sekcí vychází z~analýzy 2\,163 produkčních šablon: Mao
-et al.~\cite{mao2025fse} zjistili, že instrukce Role a~Directive na
-začátku dokumentu korelují s~vyšší efektivitou agenta, zatímco
-Constraints patří na konec. Toto empiricky odvozené pořadí tvoří
-páteř baseline dokumentu.
+Mao et al. zjistili, že instrukce Role a~Directive na začátku
+dokumentu korelují s~vyšší efektivitou agenta, zatímco Constraints
+patří na konec. Toto pořadí tvoří páteř baseline dokumentu.
 
 Sekce Package Quality definuje očekávání na kvalitu kódu: modulární
 struktura (typy, business logika a~veřejné API v~oddělených souborech),

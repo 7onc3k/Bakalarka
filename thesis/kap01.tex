@@ -46,6 +46,34 @@ Tato práce zkoumá právě to: jak musí být strukturovány instrukce pro AI c
 Studie společnosti METR.ORG ukazuje, že LLM zkušené vývojáře spíše zpomaluje. S rychlým vývojem schopností modelů se situace pravděpodobně mění. Ale to neznamená, že je LLM samo o sobě dostatečné k vypracování dlouhotrvajících úkolů. Není to problém pouze LLM, když projekt roste, bývá těžší jej rozšiřovat jak pro člověka, tak i pro LLM. AI programování tenhle problém ještě více prohlubuje. Vývojáři přicházejí o kontext a hlubokou znalost kódové základny (codebase), zatímco velké jazykové modely (LLM) jsou limitovány omezenou pamětí (context window). Jak nastavit harness/scaffolding tak, aby v tom mohli fungovat agenti a lidé to stále měli pod kontrolou?
 \end{raw}
 
+\begin{raw}
+\textbf{Review poznámky (2026-03-21):}
+
+\textbf{(a) Motivace nemotivuje cíl~3 (ablace):}
+Motivace vysvětluje proč potřebujeme metriky (cíl~1) a~iterativní postup (cíl~2),
+ale neříká proč potřebujeme zjišťovat které složky instrukcí jsou nezbytné.
+Chybí věta typu: ``Zůstává otevřená otázka, které složky instrukcí jsou
+pro dodržování praktik skutečně nezbytné a~které jsou redundantní.''
+Starší verze motivace (audit trail, řádek~39) to obsahuje (``nikdo
+systematicky nezkoumal, \emph{které} složky''), ale aktuální DRAFT ne.
+
+\textbf{(b) Řádek~27 --- silný claim bez citace:}
+``pro systematické navrhování a~vyhodnocování instrukcí obdobný postup
+dosud nevznikl'' --- buď citovat systematic review ukazující gap,
+nebo zeslabit na ``je méně formalizován'' s~odkazem na kap02.
+
+\textbf{(c) Řádek~56 --- ``exit kritéria'' bez vysvětlení:}
+Čtenář narazí na pojem poprvé v~cíli~2, ale definice je až v~kap03.
+Buď přidat závorku ``(měřitelné prahy pro úspěšnost běhu, viz
+sekce~\ref{sec:pilotni-iterace})'', nebo přeformulovat na
+``stanovených požadavků''.
+
+\textbf{(d) Terminologie ``evaluační systém'' vs ``sada metrik'':}
+Řádek~29 říká ``evaluační systém'', cíl~1 říká ``sada metrik''.
+Jsou to totéž? Pokud evaluační systém = sada metrik + postup + exit
+kritéria, definovat explicitně. Pokud totéž, sjednotit.
+\end{raw}
+
 \section{Cíle práce}
 
 \begin{draft}
