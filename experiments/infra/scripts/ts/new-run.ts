@@ -179,6 +179,7 @@ reports/
   }
 
   // Docker image hash
+  const imageName = "bp-agent:latest";
   const imageHash = exec(`docker image inspect ${imageName} --format '{{.Id}}'`, {}, "unknown");
   const imageCreated = exec(`docker image inspect ${imageName} --format '{{.Created}}'`, {}, "unknown");
 
@@ -263,7 +264,6 @@ reports/
   // Docker zajistuje izolaci: zadne globalni MCP servery, skills ani konfigurace
   // ktere by mohly ovlivnit chování agenta a reproducibilitu.
   const dockerfileDir = path.join(INFRA_DIR);
-  const imageName = "bp-agent:latest";
   const ghToken = process.env.GH_TOKEN || exec("gh auth token", {}, "");
   const bailianKey = process.env.BAILIAN_API_KEY || "";
 
@@ -298,7 +298,7 @@ reports/
         `-e HOME=/home/ubuntu`,
         `-e XDG_STATE_HOME=/tmp/state`,
         `${imageName}`,
-        `bash -lc 'gh auth setup-git; RUN_EXIT=0; opencode run -m "${AGENT_MODEL}" "Work on Issue #1 according to AGENTS.md." || RUN_EXIT=$?; echo "$RUN_EXIT" > /workspace/.agent-exit-code.txt; cd /workspace && SID=$(python3 -c "import sqlite3; c=sqlite3.connect(\"$HOME/.local/share/opencode/opencode.db\"); print(c.execute(\"SELECT id FROM session ORDER BY time_created DESC LIMIT 1\").fetchone()[0])" 2>/dev/null); if [ -n "$SID" ]; then echo "$SID" > /workspace/.session-id.txt; timeout 60 opencode export "$SID" > /workspace/transcript.json 2>/dev/null || true; fi; cp -f $HOME/.local/share/opencode/opencode.db /workspace/.opencode/opencode.db 2>/dev/null || true; exit "$RUN_EXIT"'`
+        `bash -lc 'gh auth setup-git; RUN_EXIT=0; opencode run --print-logs --log-level DEBUG -m "${AGENT_MODEL}" "Work on Issue #1 according to AGENTS.md." 2>/workspace/.opencode/opencode.log || RUN_EXIT=$?; echo "$RUN_EXIT" > /workspace/.agent-exit-code.txt; cd /workspace && SID=$(python3 -c "import sqlite3; c=sqlite3.connect(\"$HOME/.local/share/opencode/opencode.db\"); print(c.execute(\"SELECT id FROM session ORDER BY time_created DESC LIMIT 1\").fetchone()[0])" 2>/dev/null); if [ -n "$SID" ]; then echo "$SID" > /workspace/.session-id.txt; timeout 60 opencode export "$SID" > /workspace/transcript.json 2>/dev/null || true; fi; cp -f $HOME/.local/share/opencode/opencode.db /workspace/.opencode/opencode.db 2>/dev/null || true; exit "$RUN_EXIT"'`
       ].join(" "),
       {
         stdio: "inherit",

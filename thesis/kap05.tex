@@ -8,7 +8,7 @@ Kostra kapitoly --- zde bude interpretace výsledků z kap04.
 \section{Interpretace výsledků}
 
 \begin{raw}
-Co výsledky znamenají --- propojení s výzkumnými otázkami.
+Co výsledky znamenají --- propojení s cíli práce.
 
 \begin{itemize}
     \item Které složky scaffoldingu jsou nezbytné a které redundantní?
@@ -96,62 +96,15 @@ Future work.
           lze automatizovat --- model sám analyzuje kde instrukce selhaly
           a~navrhuje úpravy. Kombinace automatizovaného APO s~metrikami P/Q/E
           by umožnila rychlejší iteraci bez manuální diagnózy.
+    \item \textbf{Ingestion checkpoint.} Pilotní data ukazují, že agent
+          instrukce přečte (v~transcriptu cituje jejich obsah), ale neaktivuje
+          je jako řídicí smyčku běhu --- místo workflow z~\texttt{AGENTS.md}
+          použije vlastní implementační smyčku odvozenou ze specifikace.
+          Ověřitelný checkpoint na začátku běhu (agent musí explicitně
+          potvrdit přečtení a~aktivaci workflow před prvním zápisem kódu)
+          by mohl tento problém adresovat.
 \end{itemize}
 \end{raw}
-
-\begin{draft}
-\textbf{Pracovní závěr z pilot-r4 --- exit kritéria sama o sobě nestačí.}
-
-Pilot-r4 zpřesnil, jak tento problém skutečně vypadá. Původní hypotéza byla,
-že explicitní success criteria v~\texttt{AGENTS.md} mohla agenta přesměrovat
-z~procesu na výsledek. Po obnovení session transcriptu se ale ukázalo něco
-specifičtějšího: agent si prokazatelně načetl produktovou specifikaci z~Issue~\#1,
-ale neaktivoval \texttt{AGENTS.md} jako operativní workflow. Prakticky to znamená,
-že jeho skutečná pracovní smyčka nebyla ``issues $\rightarrow$ branch $\rightarrow$
-test commit $\rightarrow$ implementation commit $\rightarrow$ PR'', ale pouze
-``todo $\rightarrow$ write/edit $\rightarrow$ checks $\rightarrow$ done''.
-
-Tento rozdíl je důležitý metodologicky. Nevidíme přímý důkaz, že by agent
-explicitně použil success criterion ``all implementation issues are closed''
-jako triviální zkratku typu ``žádné issues neexistují, tedy jsou zavřené''.
-Taková úvaha v~transcriptu není. Vidíme ale přímý důkaz jiného mechanismu:
-procesní instrukce nebyly převzaty jako řídicí smyčka běhu. Agent tedy neselhal
-až při vykonávání workflow; workflow se vůbec nestalo jeho pracovní reprezentací
-úkolu.
-
-Pro návrh instrukcí z~toho plyne praktičtější závěr než původní úvaha
-o samotných exit kritériích. Nestačí přidat ``jak poznáš, že jsi hotový''.
-Je potřeba vynutit i~ověřitelný \textit{ingestion checkpoint} na začátku běhu:
-agent musí explicitně potvrdit, že přečetl \texttt{AGENTS.md}, rozumí
-procesním pravidlům a~před prvním zápisem kódu je aktivoval. Jinak hrozí,
-že i~dobře formulované procesní instrukce zůstanou pouze pasivním kontextem,
-zatímco skutečné řízení běhu převezme lokální implementační smyčka odvozená
-ze specifikace.
-
-Z~tohoto závěru přímo vychází návrh další iterace instrukcí. V~souladu
-s~iteračním postupem zde není navržen balík nových guardrailů, ale jedna
-minimální změna pro jeden problém. Globální blok ``You are done when'' je
-odstraněn ze sekce Goal a~nahrazen jediným preflight checkpointem na začátku
-Process, v~němž má agent explicitně potvrdit, že přečetl \texttt{AGENTS.md},
-Issue~\#1 a~aktivuje workflow před prvním zápisem kódu. Cílem tedy není
-rozšířit instrukci, ale přesunout důležitý signal z~globálního completion cue
-do pozorovatelného workflow kroku.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\linewidth]{img/generated/agents-diff-r4-r5.png}
-\caption{Navržený diff změn \texttt{AGENTS.md} mezi pilot-r4 a~pilot-r5}
-\label{fig:agents-diff-r4-r5}
-\end{figure}
-
-Tento návrh je metodicky odlišný od změny r3~$\rightarrow$~r4. Nezkouší
-``přitlačit'' prompt dalšími pravidly, ale testuje užší hypotézu: že problém
-r4 vznikl kombinací příliš salienčního completion cue a~chybějícího
-ingestion checkpointu. Pokud se v~dalším běhu procesní metriky obnoví, bude
-to evidence, že problém r4 nebyl v~samotné existenci success criteria, ale
-v~jejich umístění a~v~tom, že workflow nevstoupilo do první pracovní
-reprezentace úkolu.
-\end{draft}
 
 \begin{raw}
 \textbf{Feature work / námět k diskuzi --- exit kritéria jako součást instrukcí:}
