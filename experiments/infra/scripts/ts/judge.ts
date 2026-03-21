@@ -108,7 +108,7 @@ function callJudge(_cwd: string, prompt: string): string {
           encoding: "utf-8",
           input: prompt,
           stdio: ["pipe", "pipe", "pipe"],
-          timeout: 90 * 1000, // 90s max — dost i pro velke prompty
+          timeout: 180 * 1000, // 180s max — Q4/Q8 prompty mohou byt velke
         }
       );
     } finally {

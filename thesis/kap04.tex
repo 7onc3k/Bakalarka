@@ -1088,13 +1088,18 @@ P2 branch per issue     & $\times$   & $\times$   & \checkmark & $\times$   & $\
 P3 test-first           & $\times$   & $\times$   & \checkmark & \checkmark & $\times$       & \checkmark & $\times$   & \checkmark & \checkmark \\
 P4 PRs linked           & \checkmark & \checkmark & \checkmark & \checkmark & $\times$       & \checkmark & $\times$   & $\times$   & \checkmark \\
 P5 testy nezměněny      & $\times$   & \checkmark & \checkmark & $\times$   & \checkmark     & $\times$   & \checkmark & $\times$   & $\times$ \\
+P6 commit msg quality   & 2/3        & 2/3        & 3/3        & 3/3        & 2/3            & 2/3        & 2/3        & 3/3        & 3/3 \\
+P7 issue quality        & 2/3        & 2/3        & 3/3        & 3/3        & 3/3$^\ddagger$ & 2/3        & 3/3        & 3/3        & 3/3 \\
+P8 PR quality           & 3/3        & 3/3        & 3/3        & 1/3        & 1/3            & 3/3        & 1/3        & 2/3        & 2/3 \\
 \midrule
 Q1 API contract         & match      & match      & match      & match      & match          & match      & match      & match      & match \\
 Q2 ref.\ testy          & 39/42      & 32/42      & 41/42      & 39/42      & 38/42          & 35/42      & 37/42      & 37/42      & 11/42 \\
 Q3 mutation score       & 84\,\%     & 68\,\%     & 71\,\%     & 66\,\%     & ---            & 62\,\%     & ---$^*$    & 67\,\%     & 72\,\% \\
+Q4 AC coverage          & 25/25      & 25/25      & 25/25      & 23/25      & 23/25          & 24/24      & 24/24      & 24/24      & 22/24 \\
 Q5 lint warnings        & 2          & 1          & 1          & 1          & 0              & 4          & 3          & 2          & 2 \\
 Q6 typecheck errors     & 0          & 0          & 0          & 0          & 0              & 0          & 0          & 0          & 0 \\
 Q7 složitost            & 2          & 0          & 1          & 1          & 0              & 4          & 1          & 1          & 2 \\
+Q8 design quality       & 1/3        & 1/3        & 3/3        & 2/3        & 2/3            & 2/3        & 2/3        & 2/3        & 2/3 \\
 \midrule
 E2 trvání (min)         & 33         & 37         & 25         & 26         & 13             & 39         & 24         & 28         & 21 \\
 E3 dokončení            & ano        & ano        & ano        & ano        & ano            & ano        & ano        & ano        & ano \\
@@ -1102,16 +1107,22 @@ E3 dokončení            & ano        & ano        & ano        & ano        & 
 \end{tabular}
 \end{table}
 
-\begin{raw}
+\begin{draft}
 $^\dagger$ P1 v~r5 nelze určit --- agent nevytvořil issues.
+
+$^\ddagger$ P7 v~r5: judge hodnotil specifikační issue \#1 (vytvořenou
+infrastrukturou), ne agentovu --- viz sekce~\ref{sec:omezeni-validita}.
 
 $^*$ Stryker v~A-2 nedokončil analýzu (timeout).
 
-\textbf{TODO:} Doplnit P6--P8, Q4, Q8 (LLM-as-judge) po spuštění judge.ts.
-Doplnit E1 (tokeny) z~transcriptů kde jsou dostupné.
-Doplnit Q4 (AC coverage agentových testů).
+Q4 používá v~rubrice 24~AC místo skutečných~25 (známý nedostatek,
+viz sekce~\ref{sec:omezeni-validita}); pilotní běhy mají Q4
+přepočteno na 25.
+\end{draft}
 
+\begin{raw}
 %% TODO: graf vývoje metrik (pgfplots nebo obrázek)
+%% TODO: E1 (tokeny) z transcriptů kde jsou dostupné
 \end{raw}
 
 \begin{raw}
