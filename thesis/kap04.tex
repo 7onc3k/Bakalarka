@@ -1063,6 +1063,38 @@ Původní RAW placeholder. Data z~běhů ablace-b-1 (28~min, 7~PR,
 bez problémů.
 \end{raw}
 
+\subsection{Závěr komparativní fáze}
+\label{sec:zaver-ablaci}
+
+\begin{draft}
+Dvě ablace testovaly dvě složky instrukční sady r3: verifikační
+kroky v~Process (ablace~A) a~sekci Package Quality (ablace~B).
+Výsledky ukazují odlišný charakter obou složek.
+
+Verifikační kroky (\texttt{tsc}, \texttt{eslint},
+\texttt{git log}) nejsou redundantní. Bez nich se zhoršila kvalita
+kódu (Q5: 1~$\to$~3--4, Q7: 1~$\to$~1--4), klesla funkční korektnost
+(Q2: 41~$\to$~35--37) i~mutation score (Q3: 71\,\%~$\to$~62\,\%).
+Agent bez kontrolních bodů spotřeboval přibližně dvakrát více
+testovacích cyklů a~v~jednom běhu mu vyčerpání kontextového okna
+zabránilo dokončit úkol. Verifikační kroky plní dvojí funkci:
+zajišťují kontrolu kvality a~fungují jako checkpointy které
+strukturují práci agenta.
+
+Sekce Package Quality je pro automatizované metriky kvality kódu
+(Q5--Q7) převážně redundantní --- model produkoval srovnatelný kód
+i~bez explicitních konvencí. Design quality (Q8) však kleslo z~3/3
+na~2/3 ve všech ablačních bězích: judge identifikoval chybějící
+modularitu a~neúplnou dokumentaci. Základní kódové konvence jsou
+u~tohoto modelu řízeny znalostmi z~tréninku; strukturální rozhodnutí
+(modularita, dokumentace) instrukce ovlivňují.
+
+Procesní metriky (P1--P5) vykazovaly v~obou ablacích variabilitu
+srovnatelnou s~pilotními iteracemi (r3 vs.\ r4/r5). Tato variabilita
+není důsledkem ablace, ale nedeterminismu modelu: instrukce
+pro workflow zůstaly v~obou ablacích beze změny.
+\end{draft}
+
 %% ================================================================
 \section{Souhrnné výsledky}
 \label{sec:souhrnne-vysledky}
@@ -1123,25 +1155,37 @@ viz sekce~\ref{sec:omezeni-validita}); pilotní běhy mají Q4
 přepočteno na 25.
 \end{draft}
 
+\begin{draft}
+Tabulka ukazuje dva vzorce. Za prvé, pilotní iterace potvrzují
+že instrukce lze iterativně zlepšovat: r1 (baseline) splnila 4/10
+deterministických metrik, r3 (po dvou cyklech úprav) splnila 9/10.
+Za druhé, ablace ukazují že ne všechny složky instrukcí přispívají
+stejně: odebrání verifikačních kroků (ablace~A) zhoršilo 4~metriky
+(Q2, Q3, Q5, Q7), zatímco odebrání sekce Package Quality (ablace~B)
+ponechalo automatizované metriky kvality na srovnatelné úrovni.
+
+Napříč všemi devíti běhy zůstaly tři metriky stabilní: Q1 (API
+contract match), Q6 (typecheck errors~=~0) a~E3 (agent vždy
+dokončil). Nejvyšší variabilitu vykazovaly procesní metriky P2--P5,
+které kolísaly i~mezi běhy se stejnými instrukcemi (r3 vs.\ r4/r5).
+Interpretaci těchto výsledků ve vztahu k~cílům práce
+a~existující literatuře uvádí kapitola~\ref{kap:vyhodnoceni}.
+\end{draft}
+
 \begin{raw}
 %% TODO: graf vývoje metrik (pgfplots nebo obrázek)
 %% TODO: E1 (tokeny) z transcriptů kde jsou dostupné
-\end{raw}
 
-\begin{raw}
-%% TODO: Přesunout do kap05 (vyhodnocení) — tento blok patří do diskuze, ne do souhrnných výsledků.
-\textbf{Kontext pro diskuzi:}
+\textbf{Kontext pro diskuzi (přesunout do kap05):}
 \begin{itemize}
     \item Gloaguen et al. \cite{gloaguen2025agentsmd}: generické AGENTS.md
-          mají marginální efekt (+4\,\% human-written). Pokud náš
-          procedurální scaffolding vykazuje výrazně lepší výsledky,
-          je to evidence pro hypotézu že \textit{typ} instrukcí
+          mají marginální efekt (+4\,\% human-written). Náš
+          procedurální scaffolding vykazuje lepší výsledky ---
+          evidence pro hypotézu že \textit{typ} instrukcí
           (procedurální vs. popisné) je klíčovým faktorem.
     \item Li et al. \cite{skillsbench2025}: curated Skills +16,2pp,
           self-generated $-1{,}3$pp. Naše instrukce jsou human-curated
           a~iterativně vylepšované --- odpovídá kategorii ``curated''.
-    \item Obě studie potvrzují: agenti instrukce následují, ale
-          efekt na výkon závisí na kvalitě a~zaměření instrukcí.
-          Porovnat E1 (tokeny) s~Gloaguenovým nálezem +20\,\% cost.
+    \item Porovnat E1 (tokeny) s~Gloaguenovým nálezem +20\,\% cost.
 \end{itemize}
 \end{raw}
