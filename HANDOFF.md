@@ -20,6 +20,11 @@
 ### kap04
 - [ ] **RAW:263** — rozhodnout jak popsat důvod přidání Package Quality bez Lully
 
+## Bibliografia
+
+- [ ] **Fenton & Bieman 2014** — kniha, ne paper. Ověřit že je v literatura.bib. Pokud ne, přidat. MEMORY.md: "Nemáme Fentona ve zdrojích"
+- [ ] **SkillsBench 16.2pp vs 12.66pp** — abstract říká 16.2pp, Figure 2 říká 12.66pp (rozpor v paperu samotném). Zvážit použití čísla z hlavního textu paperu.
+
 ## Infra
 
 - [ ] OpenCode hang — zdokumentováno v kap03 sekce 3.5, debug logování přidáno
@@ -41,3 +46,7 @@
 - [x] kap04 ablace A+B — DRAFT s tabulkami a interpretací
 - [x] kap04 souhrnná tabulka — kompletní P1-P8, Q1-Q8, E2-E3
 - [x] Ablační běhy spuštěny, analyzovány, judge dokončen
+- [x] Literature verification: Shin (kap01), Mao efektivita→frekvence (kap04), Mao u kontrolních kroků (kap04), Razavi přeformulován (kap04), Verga eliminuje→snižuje (kap03), Lulla více textu→Gloaguen+SkillsBench (kap03)
+- [x] kap04 závěr ablací (sekce 4.3.3) — verifikace nejsou redundantní, PQ převážně redundantní
+- [x] kap04 souhrnná interpretace pod tabulkou — pilot 4/10→9/10, ablace A zhoršuje 4 metriky
+- [x] judge.ts timeout 90s→180s (Q4 prompty potřebují víc času)
