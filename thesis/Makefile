@@ -1,4 +1,4 @@
-.PHONY: all prace-full prace-draft prace-clean view view-prace-full view-prace-draft view-prace-clean clean
+.PHONY: all prace-full prace-draft prace-clean view view-prace-full view-prace-draft view-prace-clean clean watch watch-draft watch-clean
 
 LATEX = pdflatex -interaction=nonstopmode
 
@@ -30,8 +30,10 @@ prace-clean:
 all: prace-full
 
 # Prohlížení
-view: prace-full
-	@evince prace-full.pdf &
+view:
+	@evince prace-full.pdf 2>/dev/null &
+
+open: view
 
 view-prace-full: prace-full
 	@evince prace-full.pdf &
@@ -41,6 +43,41 @@ view-prace-draft: prace-draft
 
 view-prace-clean: prace-clean
 	@evince prace-clean.pdf &
+
+# Auto-rebuild při změně .tex/.bib souborů (Ctrl+C pro zastavení)
+# Čeká 5s klidu po poslední změně, pak buildne. Evince reloaduje automaticky.
+DEBOUNCE = 5
+TEX_FILES = $(wildcard *.tex *.bib generated/*.tex)
+
+watch: prace-full
+	@evince prace-full.pdf 2>/dev/null &
+	@echo "Watching .tex/.bib files ($(DEBOUNCE)s debounce)... Ctrl+C to stop"
+	@while true; do \
+		inotifywait -q -e modify $(TEX_FILES); \
+		while inotifywait -q -t $(DEBOUNCE) -e modify $(TEX_FILES) 2>/dev/null; do :; done; \
+		echo "--- Rebuilding prace-full ---"; \
+		$(MAKE) -s prace-full || true; \
+	done
+
+watch-draft: prace-draft
+	@evince prace-draft.pdf 2>/dev/null &
+	@echo "Watching .tex/.bib files ($(DEBOUNCE)s debounce)... Ctrl+C to stop"
+	@while true; do \
+		inotifywait -q -e modify $(TEX_FILES); \
+		while inotifywait -q -t $(DEBOUNCE) -e modify $(TEX_FILES) 2>/dev/null; do :; done; \
+		echo "--- Rebuilding prace-draft ---"; \
+		$(MAKE) -s prace-draft || true; \
+	done
+
+watch-clean: prace-clean
+	@evince prace-clean.pdf 2>/dev/null &
+	@echo "Watching .tex/.bib files ($(DEBOUNCE)s debounce)... Ctrl+C to stop"
+	@while true; do \
+		inotifywait -q -e modify $(TEX_FILES); \
+		while inotifywait -q -t $(DEBOUNCE) -e modify $(TEX_FILES) 2>/dev/null; do :; done; \
+		echo "--- Rebuilding prace-clean ---"; \
+		$(MAKE) -s prace-clean || true; \
+	done
 
 clean:
 	rm -f prace-full.pdf prace-draft.pdf prace-clean.pdf

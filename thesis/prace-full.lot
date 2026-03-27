@@ -1,0 +1,21 @@
+\acswitchoff 
+\babel@toc {czech}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {3.1}{\ignorespaces Sada metrik: kód, měřená vlastnost, nástroj, exit kritérium a~typ}}{48}{table.caption.3}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {4.1}{\ignorespaces Mapování sekcí baseline \texttt {AGENTS.md} na metriky}}{56}{table.caption.6}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces Pilot-r1: naměřené metriky}}{57}{table.caption.7}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces Pilot-r2: metriky s~změnou oproti r1}}{59}{table.caption.9}%
+\contentsline {table}{\numberline {4.4}{\ignorespaces Pilot-r3: metriky s~změnou oproti r2}}{61}{table.caption.11}%
+\contentsline {table}{\numberline {4.5}{\ignorespaces Pilot-r4: metriky s~změnou oproti r3}}{64}{table.caption.14}%
+\contentsline {table}{\numberline {4.6}{\ignorespaces Pilot-r5: metriky s~změnou oproti r3}}{66}{table.caption.16}%
+\contentsline {table}{\numberline {4.7}{\ignorespaces Ablace~A: srovnání s~r3 (bez verifikačních kroků)}}{72}{table.caption.20}%
+\contentsline {table}{\numberline {4.8}{\ignorespaces Ablace~B: srovnání s~r3 (bez sekce Package Quality)}}{73}{table.caption.21}%
+\contentsline {table}{\numberline {4.9}{\ignorespaces Souhrnné výsledky všech běhů (pilot + ablace)}}{76}{table.caption.22}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }

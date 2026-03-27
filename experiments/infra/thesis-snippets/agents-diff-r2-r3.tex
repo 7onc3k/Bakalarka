@@ -1,0 +1,22 @@
+\begin{lstlisting}[language={},basicstyle=\ttfamily\small,breaklines=true,
+    frame=single,captionpos=b,
+    caption={Ukazka dalsiho zpresneni \texttt{AGENTS.md} (pilot-r2 $\rightarrow$ pilot-r3)}]
+@@ Process
+
+ 2. For each issue, follow this exact sequence:
+-   a. `git checkout main && git pull && git checkout -b issue-N` (one branch per issue, no exceptions)
++   a. Pick one open issue: `gh issue list --state open`, then `git checkout main && git pull && git checkout -b issue-N`
+    b. Write tests: `git add tests/ && git commit -m "test: <description>"`
+-   c. Implement: `git add src/ && git commit -m "feat: <description>"`
+-   d. Open PR: `gh pr create --title "..." --body "Closes #N"`, merge, delete branch
++   c. Verify: run `git log --oneline -3` and confirm the test: commit exists before proceeding
++   d. Implement: `git add src/ && git commit -m "feat: <description>"`
++   e. Open PR: `gh pr create --title "..." --body "Closes #N"`, merge, delete branch
+
+@@ Package Quality / Constraints
+
+- **Documentation** --- JSDoc on all exported functions and types. Inline comments for non-obvious domain logic (e.g., business day calculations, escalation thresholds).
++- **Documentation** --- JSDoc on all exported functions and types. Inline comments for non-obvious domain logic (e.g., business day calculations, escalation thresholds). This is enforced in Constraints.
+
++- Before every PR, verify JSDoc on every exported function in `src/index.ts`. If any export lacks JSDoc, add it before opening the PR.
+\end{lstlisting}

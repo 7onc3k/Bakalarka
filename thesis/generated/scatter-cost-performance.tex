@@ -1,0 +1,99 @@
+% Scatter plot: E1 cost vs deterministic performance
+% Usage: \input{generated/scatter-cost-performance.tex}
+%
+% Deterministic criteria (10 total):
+%   P1-P5 = checkmark, Q1 = match, Q2 >= 41, Q5 <= 1, Q6 = 0, Q7 <= 1
+%
+% Data source: Tab. cross-run (kap04), costs from E1 estimates
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.85\textwidth,
+    height=0.55\textwidth,
+    xlabel={Odhadovaná cena běhu (USD)},
+    ylabel={Splněných deterministických kritérií (z~10)},
+    xmin=0.05, xmax=0.75,
+    ymin=2.5, ymax=10.8,
+    ytick={3,4,5,6,7,8,9,10},
+    grid=major,
+    grid style={gray!30},
+    legend style={
+        at={(0.02,0.98)},
+        anchor=north west,
+        font=\small,
+        draw=gray!50,
+    },
+    every axis label/.style={font=\small},
+    tick label style={font=\footnotesize},
+    clip=false,
+]
+
+% Pilot runs (circle markers, blue)
+\addplot[
+    only marks,
+    mark=*,
+    mark size=3pt,
+    color=blue!70!black,
+    fill=blue!40,
+] coordinates {
+    (0.38, 4)   % r1
+    (0.22, 7)   % r2
+    (0.17, 10)  % r3
+    (0.64, 7)   % r4
+    (0.36, 5)   % r5
+};
+\addlegendentry{Pilotní iterace}
+
+% Ablation runs (triangle markers, red/orange)
+\addplot[
+    only marks,
+    mark=triangle*,
+    mark size=3.5pt,
+    color=red!70!black,
+    fill=red!40,
+] coordinates {
+    (0.17, 6)   % A-1
+    (0.27, 5)   % A-2
+    (0.22, 6)   % B-1
+    (0.13, 5)   % B-2
+};
+\addlegendentry{Ablace}
+
+% Labels for pilot runs
+\node[above right, font=\footnotesize, blue!70!black]
+    at (axis cs:0.38, 4) {r1};
+\node[above left, font=\footnotesize, blue!70!black]
+    at (axis cs:0.22, 7) {r2};
+\node[above right, font=\footnotesize, blue!70!black]
+    at (axis cs:0.17, 10) {r3};
+\node[above right, font=\footnotesize, blue!70!black]
+    at (axis cs:0.64, 7) {r4};
+\node[below left, font=\footnotesize, blue!70!black]
+    at (axis cs:0.36, 5) {r5};
+
+% Labels for ablation runs
+\node[below right, font=\footnotesize, red!70!black]
+    at (axis cs:0.17, 6) {A-1};
+\node[above right, font=\footnotesize, red!70!black]
+    at (axis cs:0.27, 5) {A-2};
+\node[below left, font=\footnotesize, red!70!black]
+    at (axis cs:0.22, 6) {B-1};
+\node[below right, font=\footnotesize, red!70!black]
+    at (axis cs:0.13, 5) {B-2};
+
+% Reference line at r3 performance level
+\draw[dashed, gray!60, thin]
+    (axis cs:0.05, 10) -- (axis cs:0.75, 10);
+
+\end{axis}
+\end{tikzpicture}
+\caption[Cena běhu vs.\ počet splněných deterministických kritérií]{%
+    Vztah mezi odhadovanou cenou běhu (E1) a~počtem splněných
+    deterministických kritérií (P1--P5, Q1, Q2${\geq}$41, Q5${\leq}$1,
+    Q6${=}$0, Q7${\leq}$1). Běh~r3 dosáhl maxima 10/10 při nejnižší
+    ceně z~pilotních iterací. Ablační běhy (trojúhelníky) se pohybují
+    v~rozmezí 5--6 splněných kritérií.}
+\label{fig:scatter-cost-perf}
+\end{figure}

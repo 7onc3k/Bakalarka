@@ -1,0 +1,17 @@
+{
+  "name": "thesis-validator",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "validate": "tsx src/validate.ts",
+    "strip": "tsx src/strip-latex.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.2.83"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}

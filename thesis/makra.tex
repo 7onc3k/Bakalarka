@@ -3,16 +3,16 @@
 %%% This file contains definitions of various useful macros and environments      %%%
 %%% Assign additional macros here so that they do not interfere with other files. %%%
 
+% pdfx načte xcolor se zastaralou volbou hyperref --- varování je neškodné
+\usepackage{silence}
+\WarningFilter{xcolor}{Package option `hyperref'}
+
 \usepackage[a-2u]{pdfx}     % výsledné PDF bude ve standardu PDF/A-2u
                             % resulting PDF will be in the PDF / A-2u standard
 
 \usepackage{ifpdf}
 \usepackage{ifxetex}
 \usepackage{ifluatex}
-
-%%% Nastavení pro použití samostatné bibliografické databáze.
-%%% Settings for using a separate bibliographic database.
-\input{biblatex-setup}
 
 %% Přepneme na českou sazbu, fonty Latin Modern a kódování češtiny
 \ifthenelse{\boolean{xetex}\OR\boolean{luatex}}
@@ -36,6 +36,10 @@
 \makeatother
 \fi
 
+%%% Nastavení pro použití samostatné bibliografické databáze (až po inputenc/csquotes u pdf\TeX).
+%%% Settings for using a separate bibliographic database.
+\input{biblatex-setup}
+
 %%% Další užitečné balíčky (jsou součástí běžných distribucí LaTeXu)
 \usepackage{amsmath}        % rozšíření pro sazbu matematiky / extension for math typesetting
 \usepackage{amsfonts}       % matematické fonty / mathematical fonts
@@ -43,6 +47,8 @@
 \usepackage{amsthm}         % sazba vět, definic apod. / typesetting of sentences, definitions, etc.
 \usepackage{bm}             % tučné symboly (příkaz \bm) / bold symbols (\bm command)
 \usepackage{graphicx}       % vkládání obrázků / graphics inserting
+% nopatch=item: enumitem mění \@item — microtype by jinak hlásilo „Unable to apply patch item“
+\usepackage[nopatch=item]{microtype} % jemnější zalamování a kerning (pdflatex)
 \usepackage{listings}       % vylepšené prostředí pro strojové písmo / improved environment for source codes typesetting
 \usepackage{fancyhdr}       % prostředí pohodlnější nastavení hlavy a paty stránek / environment for more comfortable adjustment of the head and foot of the pages
 \usepackage{icomma}         % inteligetní čárka v matematickém módu / intelligent comma in math mode
@@ -53,11 +59,15 @@
 \makeatletter
 \@ifpackageloaded{xcolor}{
    \@ifpackagewith{xcolor}{usenames}{}{\PassOptionsToPackage{usenames}{xcolor}}
-  }{\usepackage[usenames]{xcolor}} % barevná sazba / color typesetting
+  }{\usepackage[usenames,table]{xcolor}} % barevná sazba / color typesetting
 \makeatother
+\usepackage{colortbl}       % \cellcolor v tabulkách / cell background colors
 \usepackage{tikz}           % diagramy / diagrams
-\usetikzlibrary{positioning}
+\usetikzlibrary{positioning,calc}
+\usepackage{pgfplots}       % grafy s daty / data plots
+\pgfplotsset{compat=1.18}
 \usepackage{multicol}       % práce s více sloupci na stránce / work with multiple columns on a page
+\usepackage{pdflscape}      % otočení stránky na šířku (landscape) / landscape pages
 \usepackage{caption}
 \usepackage{enumitem}
 \setlist[itemize]{noitemsep, topsep=0pt, partopsep=0pt}
@@ -91,10 +101,14 @@
 % setting of line spacing
 \renewcommand{\baselinestretch}{1.20}
 
-% nastaveni pro nadpisy - tucne a bezpatkove
+% nastaveni pro nadpisy - tucne a bezpatkove (titlesec místo zastaralého sectsty)
 % settings for headings - bold and sans serif
-\usepackage{sectsty}    
-\allsectionsfont{\sffamily}
+\usepackage{titlesec}
+\titleformat{\section}{\sffamily\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\sffamily\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\sffamily\normalsize\bfseries}{\thesubsubsection}{1em}{}
+\titleformat{\paragraph}{\sffamily\normalsize\bfseries}{\theparagraph}{1em}{}
+\titleformat{\subparagraph}{\sffamily\normalsize\bfseries}{\thesubparagraph}{1em}{}
 
 % nastavení hlavy a paty stránek
 % page head and foot settings
@@ -194,6 +208,68 @@
 \usepackage{comment}
 \definecolor{rawcolor}{RGB}{120, 80, 120}      % tlumená fialová
 \definecolor{draftcolor}{RGB}{80, 100, 120}    % tlumená modro-šedá
+
+%%% Systém odkazování metrik (acro + custom příkazy)
+%%% Dvě dimenze: CO měříme (P/Q/E) a JAK měříme (deter./kvalit./záznam.)
+\usepackage{acro}
+\usepackage{etoolbox}
+
+\acsetup{
+  first-style = short-long,   % P1 (issues before code)
+  make-links  = true           % klikatelné → seznam zkratek
+}
+% Workaround: acro 3.8 ignoruje subsequent-style=short-long.
+% Předefinujeme \ac aby vždy ukazoval plný tvar (= \acf).
+\ExplSyntaxOn
+\RenewDocumentCommand \ac {sO{}m} {
+  \IfBooleanTF {#1}
+    { \acf*[#2]{#3} }
+    { \acf[#2]{#3} }
+}
+\ExplSyntaxOff
+% \ac{P1}  → vždy "P1 (issues before code)" s hyperlinkem
+% \acs{P1} → jen "P1" s hyperlinkem (pro opakování v těsné blízkosti)
+
+% --- Procesní metriky (P) ---
+\DeclareAcronym{P1}{short=P1, long=issues before code, tag=process}
+\DeclareAcronym{P2}{short=P2, long=branch per issue, tag=process}
+\DeclareAcronym{P3}{short=P3, long=test-first commits, tag=process}
+\DeclareAcronym{P4}{short=P4, long=PRs linked to issues, tag=process}
+\DeclareAcronym{P5}{short=P5, long=no existing test modifications, tag=process}
+\DeclareAcronym{P6}{short=P6, long=commit message quality, tag=process}
+\DeclareAcronym{P7}{short=P7, long=issue description quality, tag=process}
+\DeclareAcronym{P8}{short=P8, long=PR description quality, tag=process}
+
+% --- Produktové metriky (Q) ---
+\DeclareAcronym{Q1}{short=Q1, long=API contract match, tag=quality}
+\DeclareAcronym{Q2}{short=Q2, long=referenční test pass rate, tag=quality}
+\DeclareAcronym{Q3}{short=Q3, long=mutation score, tag=quality}
+\DeclareAcronym{Q4}{short=Q4, long=AC coverage, tag=quality}
+\DeclareAcronym{Q5}{short=Q5, long=lint warnings, tag=quality}
+\DeclareAcronym{Q6}{short=Q6, long=typecheck errors, tag=quality}
+\DeclareAcronym{Q7}{short=Q7, long=složitost kódu, tag=quality}
+\DeclareAcronym{Q8}{short=Q8, long=design quality, tag=quality}
+
+% --- Metriky efektivity (E) ---
+\DeclareAcronym{E1}{short=E1, long=vstup/výstup/cache tokeny, tag=efficiency}
+\DeclareAcronym{E2}{short=E2, long=trvání, tag=efficiency}
+\DeclareAcronym{E3}{short=E3, long=kompakce kontextu, tag=efficiency}
+
+% --- Skupiny: CO měříme ---
+% Použití: \mgrp{P}, \mgrp{Q}, \mgrp{E}
+\newcommand{\mgrp}[1]{%
+  \ifstrequal{#1}{P}{\hyperref[tab:metriky-prehled]{procesní metriky (P1--P8)}}{}%
+  \ifstrequal{#1}{Q}{\hyperref[tab:metriky-prehled]{produktové metriky (Q1--Q8)}}{}%
+  \ifstrequal{#1}{E}{\hyperref[tab:metriky-prehled]{metriky efektivity (E1--E3)}}{}%
+}
+
+% --- Skupiny: JAK měříme ---
+% Použití: \mmet{det}, \mmet{qual}, \mmet{zaz}
+\newcommand{\mmet}[1]{%
+  \ifstrequal{#1}{det}{\hyperref[tab:metriky-prehled]{deterministické metriky}}{}%
+  \ifstrequal{#1}{qual}{\hyperref[tab:metriky-prehled]{kvalitativní metriky}}{}%
+  \ifstrequal{#1}{zaz}{\hyperref[tab:metriky-prehled]{záznamové metriky}}{}%
+}
 
 \ifdefined\hideraw
   \excludecomment{raw}

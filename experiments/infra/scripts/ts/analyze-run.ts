@@ -48,13 +48,17 @@ import {
   fileExists,
   readJSON,
   countMatches,
-  formatNumber,
   printHeader,
   passIcon,
   getRunNameFromArgs,
   REFERENCE_DIR,
   INFRA_DIR,
 } from "./shared.js";
+import {
+  efficiencyFromTranscript,
+  type LooseTranscript,
+} from "./efficiency-from-transcript.js";
+import { formatE1Block } from "./e1-report.js";
 
 // ============================================================================
 // Exportovane pomocne funkce (extrahovane z measureQ1 pro testovatelnost)
@@ -972,9 +976,9 @@ function runAgentTests(cwd: string): void {
 // E1-E3: Efficiency
 //
 // Meri "za jakou cenu" agent dosahl vysledku:
-// - E1: Tokeny (input/output) — kolok kontextu agent spotreboval
+// - E1: vstup/výstup/Σ cache (tis.) — viz efficiency-from-transcript.ts + e1-report.ts
 // - E2: Cas behu v minutach
-// - E3: Zda agent dokoncil bez crashe + pocet restartu
+// - E3: pocet compaction + dokonceni + restarty z metrics.csv
 //
 // Data pochazi z transcript.json (OpenCode export format).
 // ============================================================================
@@ -991,12 +995,18 @@ function measureEfficiency(cwd: string): {
 
   // Default hodnoty
   let e1: E1Result = {
-    inputTokens: 0,
-    outputTokens: 0,
-    totalTokens: 0,
+    estimatedCostUsd: 0,
+    sumInputTokens: 0,
+    peakInputTokens: 0,
+    peakPromptTokens: 0,
+    sumOutputTokens: 0,
+    sumCacheReadTokens: 0,
+    sumCacheWriteTokens: 0,
+    peakTotalTokens: 0,
   };
   let e2: E2Result = { durationMinutes: 0 };
   let e3: E3Result = {
+    compactionCount: 0,
     completed: false,
     restartCount: 0,
     sessionId: "?",
@@ -1004,93 +1014,22 @@ function measureEfficiency(cwd: string): {
 
   if (fileExists(transcriptPath)) {
     try {
-      const transcript = readJSON<{
-        messages?: Array<{
-          info?: {
-            tokens?: { input?: number; output?: number };
-          };
-          parts?: Array<{
-            type?: string;
-            snapshot?: string;
-            [key: string]: unknown;
-          }>;
-        }>;
-        info?: {
-          id?: string;
-          time?: { created?: number; updated?: number };
-        };
-      }>(transcriptPath);
+      const transcript = readJSON<LooseTranscript>(transcriptPath);
+      const eff = efficiencyFromTranscript(transcript);
 
-      if (transcript) {
-        const messages = transcript.messages ?? [];
-        const info = transcript.info ?? {};
+      if (eff) {
+        e1 = eff.e1;
+        e2 = eff.e2;
+        e3 = eff.e3;
+        const compact = e3.compactionCount;
+        const durationMin = e2.durationMinutes;
 
-        // E1: Spocitame celkove tokeny pres vsechny zpravy
-        let totalIn = 0;
-        let totalOut = 0;
-        for (const msg of messages) {
-          const tokens = msg.info?.tokens ?? {};
-          totalIn += tokens.input ?? 0;
-          totalOut += tokens.output ?? 0;
-        }
-        e1 = {
-          inputTokens: totalIn,
-          outputTokens: totalOut,
-          totalTokens: totalIn + totalOut,
-        };
-
-        // E2: Delka behu (rozdil created - updated v milisekundach)
-        const timeInfo = info.time ?? {};
-        const created = timeInfo.created ?? 0;
-        const updated = timeInfo.updated ?? 0;
-        const durationMin =
-          created && updated ? (updated - created) / 60000 : 0;
-        e2 = { durationMinutes: Math.round(durationMin * 10) / 10 };
-
-        // E3: Detekce crashe — pokud posledni zprava ma 0 tokenu, agent crashnul
-        const lastMsg = messages[messages.length - 1];
-        const lastTokens = lastMsg?.info?.tokens ?? {};
-        const crashed =
-          (lastTokens.input ?? 1) === 0 &&
-          (lastTokens.output ?? 1) === 0;
-
-        // E3: Compaction eventy — detekce pres zmenu snapshot hodnoty
-        // Kdyz se snapshot zmeni mezi step-finish a naslednym step-start,
-        // znamena to ze OpenCode provedl compaction (sumarizaci kontextu).
-        let compactionCount = 0;
-        let prevStepFinishSnapshot: string | undefined;
-        for (const msg of messages) {
-          for (const part of msg.parts ?? []) {
-            if (!part || typeof part !== "object") continue;
-            if (part.type === "step-finish" && part.snapshot) {
-              prevStepFinishSnapshot = part.snapshot;
-            } else if (part.type === "step-start" && part.snapshot) {
-              if (
-                prevStepFinishSnapshot !== undefined &&
-                part.snapshot !== prevStepFinishSnapshot
-              ) {
-                compactionCount++;
-              }
-              prevStepFinishSnapshot = undefined;
-            }
-          }
-        }
-
-        e3 = {
-          completed: !crashed,
-          restartCount: 0,
-          sessionId: info.id ?? "?",
-          compactionCount,
-        };
-
-        console.log(
-          `E1 Tokens — input: ${formatNumber(totalIn)}, output: ${formatNumber(totalOut)}, total: ${formatNumber(totalIn + totalOut)}`
-        );
+        console.log(formatE1Block(e1));
         console.log(`E2 Duration — ${durationMin.toFixed(1)} min`);
         console.log(
-          `E3 Completion — ${crashed ? "CRASHED" : "Completed"}, ${compactionCount} compaction${compactionCount !== 1 ? "s" : ""}`
+          `E3 Compactions — ${compact} (heuristika snapshot); completion — ${e3.completed ? "OK" : "CRASHED"}`
         );
-        console.log(`   Session: ${info.id ?? "?"}`);
+        console.log(`   Session: ${e3.sessionId}`);
       }
     } catch {
       console.log("Could not parse transcript.json");
@@ -1104,12 +1043,19 @@ function measureEfficiency(cwd: string): {
     console.log("No transcript.json or metrics.csv found");
   }
 
-  // Pocet restartu z auto-continue pluginu
+  // Pocet restartu z auto-continue pluginu (sloupec restart_count v CSV)
   if (fileExists(metricsPath)) {
     const metricsContent = readFile(metricsPath);
-    const lineCount = metricsContent.split("\n").filter(Boolean).length;
-    e3.restartCount = lineCount;
-    console.log(`   Restarts (auto-continue): ${lineCount}`);
+    let maxRestart = 0;
+    for (const line of metricsContent.split("\n")) {
+      const trimmed = line.trim();
+      if (!trimmed || /restart_count/i.test(trimmed)) continue;
+      const parts = trimmed.split(",");
+      const rc = parseInt(parts[1]?.trim() ?? "", 10);
+      if (!Number.isNaN(rc)) maxRestart = Math.max(maxRestart, rc);
+    }
+    e3.restartCount = maxRestart;
+    console.log(`   Restarts (auto-continue): ${maxRestart}`);
   }
   console.log("");
 

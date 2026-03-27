@@ -147,12 +147,43 @@ export interface Q7Result {
 // Meri "za jakou cenu" agent dosahl vysledku (tokeny, cas, stabilita).
 
 export interface E1Result {
-  /** Celkovy pocet vstupnich tokenu (context) */
-  inputTokens: number;
-  /** Celkovy pocet vystupnich tokenu (generovanych) */
-  outputTokens: number;
-  /** Soucet input + output */
-  totalTokens: number;
+  /**
+   * Volitelný odhad USD (stepCost × sazby); mimo hlavní výpis E1.
+   */
+  estimatedCostUsd: number;
+  /** Σ vstupních tokenů na zúčtovaných krocích (součet; mezi běhy matoucí). */
+  sumInputTokens: number;
+  /** max. pole `input` na jednom kroku (úzké; bez cache — diagnostika). */
+  peakInputTokens: number;
+  /**
+   * max. na kroku: `input` + `cache.read` + `cache.write` (hlavní E1 vstup).
+   */
+  peakPromptTokens: number;
+  /** Σ výstupních tokenů (+ reasoning) na zúčtovaných krocích */
+  sumOutputTokens: number;
+  sumCacheReadTokens: number;
+  sumCacheWriteTokens: number;
+  /**
+   * max(tokens.total) z OpenCode exportu (per zpráva). Diagnostika; ne E1.
+   */
+  peakTotalTokens: number;
+}
+
+/**
+ * Tabulkové E1 (tis.): špička promptu na krok, Σ výstup, Σ cache (read+write přes kroky).
+ * Součet vstupů přes turny by opakovaně počítal kontext — mezi běhy nesrovnatelné.
+ */
+export function e1InputOutputThousands(e1: E1Result): {
+  inputTis: number;
+  outputTis: number;
+  cacheTis: number;
+} {
+  const sumCache = e1.sumCacheReadTokens + e1.sumCacheWriteTokens;
+  return {
+    inputTis: Math.round(e1.peakPromptTokens / 1000),
+    outputTis: Math.round(e1.sumOutputTokens / 1000),
+    cacheTis: Math.round(sumCache / 1000),
+  };
 }
 
 export interface E2Result {
@@ -161,14 +192,14 @@ export interface E2Result {
 }
 
 export interface E3Result {
-  /** Zda agent dokoncil bez crashe */
+  /** Hlavni hodnota E3: pocet compaction udalosti (heuristika pres snapshot v transcript.json) */
+  compactionCount: number;
+  /** Zda beh vypada jako uspesne dokonceny (ne prazdny export) */
   completed: boolean;
-  /** Pocet restartu z auto-continue pluginu */
+  /** Pocet restartu z auto-continue pluginu (metrics.csv) */
   restartCount: number;
   /** ID session z opencode */
   sessionId: string;
-  /** Pocet compaction eventu (zmeny kontextoveho okna) — detekce pres snapshot zmeny v transcript.json */
-  compactionCount?: number;
 }
 
 // --- Behavioral Trace (deterministicka extrakce faktů pro DIAGNOSIS) ---

@@ -1,0 +1,22 @@
+\acswitchoff 
+\babel@toc {czech}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Baseline \texttt {AGENTS.md} (pilot-r1) --- kompletní znění instrukcí použitých jako výchozí bod pilotních iterací.}}{55}{figure.caption.5}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Vizuální diff změn \texttt {AGENTS.md} mezi pilot-r1 a~pilot-r2}}{59}{figure.caption.8}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Vizuální diff změn \texttt {AGENTS.md} mezi pilot-r2 a~pilot-r3}}{61}{figure.caption.10}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Verze \texttt {AGENTS.md} po pilot-r3 --- kompletní znění po iteracích r1$\to $r2$\to $r3.}}{62}{figure.caption.12}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Vizuální diff změn \texttt {AGENTS.md} mezi pilot-r3 a~pilot-r4}}{63}{figure.caption.13}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Vizuální diff změn \texttt {AGENTS.md} mezi pilot-r3 a~pilot-r5}}{65}{figure.caption.15}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Souhrnná evoluce \texttt {AGENTS.md}: pilot-r1~$\to $~pilot-r3. Zelené řádky = přidáno, červené = odebráno.}}{68}{figure.caption.17}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Změny AGENTS.md pro ablaci~A}}{70}{figure.caption.18}%
+\contentsline {figure}{\numberline {4.9}{\ignorespaces Změny AGENTS.md pro ablaci~B: odebrána celá sekce Package Quality (konvence, strict TypeScript, JSDoc, čisté API).}}{70}{figure.caption.19}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Míra splnění jednotlivých metrik napříč devíti běhy. Procesní metriky \acs {P2} a~\acs {P5} byly splněny nejméně často (3/9), zatímco \acs {Q1} a~\acs {Q6} zůstaly stabilní ve všech bězích. Přerušovaná čára odděluje procesní a~produktové metriky.}}{80}{figure.caption.23}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Cena běhu vs.\ počet splněných deterministických kritérií}}{81}{figure.caption.24}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }

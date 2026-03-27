@@ -1,2 +1,46 @@
 \chapter*{Závěr}
 \addcontentsline{toc}{chapter}{Závěr}
+
+\begin{draft}
+Tato práce se zabývala návrhem sady metrik a~iterativního postupu
+pro systematické navrhování a~vyhodnocování instrukcí pro AI coding
+agenty. Oba výstupy byly ověřeny na případové studii systému
+upomínek faktur, která zahrnovala pět pilotních iterací a~čtyři
+ablační běhy.
+
+Prvním cílem bylo navrhnout sadu metrik, která měří proces a~kvalitu
+práce agenta, ne jen výsledek. Výsledná sada 19~metrik (procesní
+\mgrp{P}, \mgrp{Q}, \mgrp{E}) pokrývá tři dimenze
+odvozené z~taxonomie Fentona a~Biemana. Metriky zachytily jak
+zlepšení při iterativních úpravách instrukcí, tak regrese způsobené
+nedeterminismem modelu i~cílené dopady ablací. Kombinace
+deterministických a~kvalitativních metrik (LLM-as-judge) přináší
+komplementární pohled --- automatizované metriky nezachytí slabiny
+designu, kvalitativní samy o~sobě nezměří procesní compliance.
+
+Druhým cílem bylo iterativním postupem navrhnout instrukce, které
+dovedou agenta k~dodržování stanovených exit kritérií. Cyklus
+Spuštění/Měření/Diagnóza/Úprava zlepšil procesní compliance ze~4/10
+na~9/10 splněných deterministických kritérií ve dvou iteracích.
+Analýza průběhu odhalila opakující se vzorec: obecné pravidlo, které
+agent ignoroval, bylo nahrazeno konkrétním příkazem a~následně
+doplněno verifikačním krokem. Každá iterace trvala 25--40~minut,
+postup je tedy proveditelný pro praktika bez specializovaného
+vybavení.
+
+Třetím cílem bylo ablacemi identifikovat, které složky instrukční
+sady přispívají k~měřenému chování agenta. Verifikační kroky se
+ukázaly jako neredundantní --- jejich odebrání zhoršilo čtyři metriky
+a~vedlo k~výrazně vyššímu počtu testovacích cyklů. Sekce Package
+Quality byla pro automatizované metriky převážně redundantní, ale
+ovlivnila designovou kvalitu hodnocenou LLM-as-judge. Dominantním
+faktorem variability procesní compliance byl nedeterminismus modelu,
+ne obsah instrukcí.
+
+Hlavním přínosem práce jsou přenositelné výstupy: sada metrik
+a~iterativní postup, které může kdokoli aplikovat na vlastním projektu
+s~vlastními prahy. Konkrétní instrukce a~naměřené hodnoty platí pro
+tuto případovou studii. Práce je omezena na jeden model a~jeden
+projekt --- závěry mají povahu analytické generalizace na teorii,
+nikoliv statistické generalizace na populaci.
+\end{draft}

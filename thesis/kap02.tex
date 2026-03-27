@@ -238,7 +238,7 @@ Zheng et al.~\cite{zheng2023mtbench} (MT-Bench): použití LLM jako automatizova
 Panickssery et al.~\cite{panickssery2024} (NeurIPS): kauzální vztah self-recognition $\to$ self-preference. Model rozpozná vlastní výstupy (nižší perplexita) a~systematicky je hodnotí lépe.
 
 \textbf{Mitigace:}
-Verga et al.~\cite{verga2024} (PoLL): panel diverzních modelů lepší než single judge. Implikace: judge z~jiné modelové rodiny než agent eliminuje self-preference.
+Verga et al.~\cite{verga2024poll} (PoLL): panel diverzních modelů lepší než single judge. Implikace: judge z~jiné modelové rodiny než agent eliminuje self-preference.
 
 \textbf{Kap03 na to navazuje:} Kapitola~3 z~této teorie přebírá praktickou aplikaci
 LLM-as-judge: volbu modelu z~odlišné modelové rodiny, třístupňovou
@@ -451,11 +451,11 @@ Tier 3: pre/postconditions, error handling, behavioral model.
 \textbf{Předchozí obsah (přejmenováno z ``Praktické techniky''):}
 
 \textbf{1. Agent Harness:}
-\par\noindent Anthropic -- ``Effective harnesses for long-running agents'':
+\par\noindent Anthropic --- ``Effective harnesses for long-running agents'':\allowbreak{}
 init.sh, progress tracking, git commits jako checkpointy.
 
 \textbf{2. Meta-prompt soubory:}
-\par\noindent $\rightarrow$ \texttt{hassan2025sase} -- AGENT.md pattern:
+\par\noindent $\rightarrow$ \texttt{hassan2025sase} -- AGENT.md pattern:\\
 CLAUDE.md, .clinerules, AGENT.md. ``Employee handbook'' pro AI.
 
 \textbf{3. Living Documents:}
@@ -503,6 +503,33 @@ Specifikace = BriefingScript. AGENTS.md = LoopScript + MentorScript.
 
 \textbf{Human-AI Collaboration:}
 \par\noindent $\rightarrow$ \texttt{humanai2024}: AI zlepšuje efektivitu, human oversight zůstává kritický.
+
+\medskip
+\textbf{RAW TODO (2026-03-24): Mechanismy účinku instrukcí a~emergentní chování.}
+
+Při psaní kap02 doplnit sekci o~tom, jak instrukce působí na chování
+agenta. Pilotní data (kap04) a~diskuze (kap05) naznačují dva
+mechanismy: (1)~\textit{vynucení} --- konkrétní verifikační kroky
+přímo kontrolují výstup, (2)~\textit{aktivace} --- obecné konvence
+(nápovědy, enabling constraints) připomínají modelu latentní znalosti
+z~tréninku. Klíčový poznatek: nejslabší instrukce (hint/nápověda)
+a~nejsilnější (verifikační krok) fungují, ale prostřední (pravidlo)
+ne --- to připomíná fenomén chain-of-thought (Wei et al.\ 2022).
+
+Relevantní literatura:
+\begin{itemize}
+    \item Enabling constraints (Juarrero 2023, Cynefin/Snowden 2007) ---
+          omezení která umožňují emergentní chování
+    \item Expertise reversal effect (Kalyuga et al.\ 2003) ---
+          instrukce pro nováčka škodí expertovi
+    \item Instruction specificity (Kim et al.\ 2025 DETAIL,
+          Zi et al.\ 2025) --- specificita zlepšuje výsledky ale
+          přílišný detail omezuje reasoning
+    \item Chain-of-thought (Wei et al.\ 2022) --- minimální hint
+          aktivuje latentní schopnost
+    \item In-context learning (Min et al.\ 2022) --- demonstrace
+          fungují jako strukturální nápovědy, ne jako příkazy
+\end{itemize}
 \end{raw}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -582,6 +609,14 @@ Existuje: praktický hill climbing (Cline blog, +10pp bez akademického popisu),
 Chybí: systematický postup s diagnostikou příčin a citacemi z literatury.
 
 → Odtud plyne, proč v kap03 děláme Diagnózu manuálně (FSE/SASE/Lulla/Breunig), a ne automaticky.
+
+\textbf{TODO (2026-03-25) --- pojmenovat náš přístup vůči APO v DRAFT textu:}
+Naše metodika = human-in-the-loop iterativní optimalizace instrukcí.
+APO (Zhou et al. 2022, \cite{agarwal2024promptwizard}) = automatická smyčka (score→critique→generate).
+Klíčové rozdíly proč APO nestačí pro náš kontext viz bod 2 výše.
+Zvážit: zmínit že průmysl (MiniMax M2.7, DSPy) dělá plnou automatizaci ---
+náš přístup je manuální předstupeň který explicitně dokumentuje kauzalitu.
+Citace: Zhou et al. ICLR 2023 (APE, arXiv 2211.01910) --- stáhnout a přidat do sources.
 
 \rule{\textwidth}{0.4pt}
 
@@ -783,9 +818,9 @@ UML \cite{fowler2004uml}, OpenAPI/Swagger, Markdown, JSON Schema, Conventional C
 
 \rule{\textwidth}{0.4pt}
 
-\textbf{Zdroje zrušených sekcí:}
-\texttt{nato1968}, \texttt{bereska2024}, \texttt{brooks1975}, \texttt{mcconnell2004},
-\texttt{conway1968}, \texttt{malone1994}, \texttt{nonaka1995}, \texttt{scrumguide2020},
-\texttt{gotel1994}, \texttt{chacon2014}, \texttt{humble2010}, \texttt{forsgren2018},
+\textbf{Zdroje zrušených sekcí:}\allowbreak\\
+\texttt{nato1968}, \texttt{bereska2024}, \texttt{brooks1975}, \texttt{mcconnell2004},\\
+\texttt{conway1968}, \texttt{malone1994}, \texttt{nonaka1995}, \texttt{scrumguide2020},\\
+\texttt{gotel1994}, \texttt{chacon2014}, \texttt{humble2010}, \texttt{forsgren2018},\\
 \texttt{schmidt1992}, \texttt{fowler2004uml}, \texttt{scacchi2002}, \texttt{cao2008}.
 \end{raw}

@@ -103,6 +103,78 @@ Propojení       → Jak to souvisí s BP
 2. Klíčový závěr (co si odnést)
 3. Přechod k další sekci
 
+## Prezentace dat (tabulky, grafy)
+
+**Tři vrstvy** — vždy v tomto pořadí:
+
+| Vrstva | Co říká | Jazyk | Příklad |
+|--------|---------|-------|---------|
+| **Pozorování** | Co data ukazují (fakt) | "tabulka ukazuje", "kleslo", "zůstalo stabilní" | "Q5 kleslo ve všech ablačních bězích (tabulka X)." |
+| **Interpretace** | Proč se to stalo (výklad) | "naznačuje", "pravděpodobně", "může souviset", "je konzistentní s" | "To naznačuje, že bez explicitního příkazu agent nekontroluje kvalitu." |
+| **Závěr** | Co z toho plyne pro výzkumnou otázku | "tedy", "z toho plyne", "potvrzuje" | "Verifikační kroky tedy nejsou redundantní." |
+
+**Pravidla:**
+- **Nenaruj tabulku** — čtenář vidí čísla, neopisuj "Q5 z 1 na 3-4, Q7 z 1 na 1-4". Místo toho: závěr + odkaz na tabulku + jen překvapivé číslo s vysvětlením proč.
+- **Interpretace ≠ fakt** — "jsou řízeny tréninkem" je interpretace, ne pozorování. Vždy hedging: "data naznačují, že..."
+- **Závěr bez pozorování = claim bez evidence** — nejdřív řekni co vidíš, pak co to znamená.
+- **Jedno číslo stačí** — když chceš podpořit argument, vyber jedno nejsilnější číslo, ne všechna.
+
+## Mikro-patterny podle typu sekce
+
+Každá sekce v BP má jiný účel → jiný vnitřní vzorec. Vyber podle toho, co zrovna píšeš.
+
+### Teorie / Rešerše: Syntéza
+
+Do středu dej **téma**, ne autora. Nepopisuj kdo co řekl — ukaž jak se přístupy doplňují.
+
+```
+Téma/koncept       → O čem se mluví
+Porovnání přístupů → A doporučuje X pro..., B upozorňuje že X nezachytí...
+Tvoje syntéza      → Z obou plyne... V této práci proto...
+```
+
+### Metodika: Obhajoba postupu
+
+Neříkej jen CO jsi udělal — obhaj PROČ. Oponent chce vědět, že to není z prstu.
+
+```
+Volba metody       → Zvolili jsme X
+Zdůvodnění (proč)  → Protože řeší Y, na rozdíl od Z které...
+Provedení (jak)    → Konkrétně: parametry, podmínky, nástroje
+Uznání limitů      → Limitem je, že X nezachytí...
+```
+
+### Výsledky: Čistá data
+
+Tady **vypínáš interpretaci**. Jen ukazuješ co data říkají, aby je oponent viděl nezávisle.
+
+```
+Identifikace trendu → Co se stalo (fakt)
+Odkaz na důkaz      → Jak ukazuje tabulka/graf X
+Vypíchnutí detailu  → Zajímavé je, že... (anomálie, neočekávané)
+```
+
+### Diskuse: Pozorování → Interpretace → Implikace
+
+Bereš surová data z Výsledků a dáváš jim **význam**. Tři vrstvy vždy v tomto pořadí:
+
+```
+Pozorování         → Jak bylo uvedeno, X kleslo o Y %
+Interpretace       → Pravděpodobným důvodem je... (hedging!)
+Konfrontace        → To se shoduje/neshoduje s [Autor], který...
+Implikace          → Z toho plyne, že pro design metrik je nutné...
+```
+
+### Kdy co použít (cheat sheet)
+
+| Píšu...                | Pattern            | Klíčová otázka               |
+|------------------------|--------------------|-------------------------------|
+| Teoretický přehled     | Syntéza            | Jak se přístupy doplňují?     |
+| Metodické rozhodnutí   | Obhajoba postupu   | Proč zrovna toto?             |
+| Tabulku výsledků       | Čistá data          | Co data objektivně ukazují?   |
+| Rozbor výsledků        | Pozor→Inter→Impli   | Co to znamená a co z toho plyne? |
+| Jakýkoli odstavec      | TEEL (viz výše)    | Tvrzení→Důkaz→Vysvětlení→Propojení |
+
 ## Akademický jazyk
 
 Vědecký = přesný, ne složitý. Jednoduchá věta s konkrétním obsahem

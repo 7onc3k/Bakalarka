@@ -1,11 +1,17 @@
 %% Toto platí v případě použití samostatné bibliografické databáze
+\begingroup
+\sloppy
 \printbibliography[title={\bibname},heading={bibintoc}]
+\endgroup
 
 %% ============================================================================
 %% RAW ZDROJE K ZPRACOVÁNÍ DO BIBTEX
 %% ============================================================================
 
 \begin{raw}
+\begingroup
+\sloppy
+\setlength{\emergencystretch}{3em}
 \textbf{Zdroje k zpracování do BibTeX} (původně z notes/sources.md)
 
 \textbf{1. PRIMÁRNÍ ZDROJE (Frameworky a Metodiky)}
@@ -109,9 +115,10 @@ LXT. AI Agent Evaluation: Comprehensive Framework for Measuring Agent Performanc
 \url{https://www.lxt.ai/blog/ai-agent-evaluation/}
 -- Moderní framework pro evaluaci AI agentů: Task completion, Accuracy, Safety/trust (policy compliance, transparency), Tool usage.
 
-Weights \& Biases. AI Agent Evaluation: Metrics, Strategies, and Best Practices. 2024.
-\url{https://wandb.ai/onlineinference/genai-research/reports/AI-agent-evaluation-Metrics-strategies-and-best-practices--VmlldzoxMjM0NjQzMQ}
--- Praktický průvodce metrikami pro AI agenty.
+{\raggedright
+Weights \& Biases. AI Agent Evaluation: Metrics, Strategies, and Best Practices. 2024.\par
+\url{https://wandb.ai/onlineinference/genai-research/reports/AI-agent-evaluation-Metrics-strategies-and-best-practices--VmlldzoxMjM0NjQzMQ}\par
+-- Praktický průvodce metrikami pro AI agenty.\par}
 
 SOMMERVILLE, Ian. Software Engineering. 10th ed. Pearson, 2016. Chapter 24: Quality Management (s. 705--728).
 -- Rozlišení control metrics (procesní) vs. predictor metrics (produktové). Vztah proces-produkt u SW. Relevantní pro oporu dimenzí Functional Quality a Compliance v kap03.
@@ -185,4 +192,5 @@ Garmisch, Germany, 1968.
 
 KAUR, Rupinder a SENGUPTA, Jyotsna. Software Process Models and Analysis on Failure of Software Development Projects.
 In: arXiv preprint arXiv:1306.1068. 2013.
+\endgroup
 \end{raw}

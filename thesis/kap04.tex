@@ -27,7 +27,8 @@ komparativní variace $\to$ souhrnné výsledky.
 \begin{draft}
 Před spuštěním pilotních běhů bylo nutné připravit tři výchozí podklady
 každého experimentálního běhu: specifikaci projektu (co má agent
-implementovat), referenční implementaci (měřicí nástroj pro Q2)
+implementovat), referenční implementaci (měřicí nástroj pro
+Q2~-- referenční test pass rate)
 a~baseline instrukce (jak má agent pracovat).
 \end{draft}
 
@@ -55,7 +56,7 @@ architektonický návrh nedostává. Issue se skládá ze dvou částí:
 explicitně formulované invarianty nejsou součástí zadání; návrh interní
 architektury je ponechán agentovi. API kontrakt, tedy exportované
 funkce a~typy, představuje jediné technické omezení implementace
-a~současně slouží jako vstup pro metriku~\textbf{Q1}.
+a~současně slouží jako vstup pro metriku~\ac{Q1}.
 
 Podoba specifikace vychází ze tří principů důležitých pro tuto
 evaluační úlohu: jednoznačnosti požadavků, jejich testovatelnosti
@@ -89,8 +90,8 @@ Formát acceptance criteria přímo ovlivňuje měřitelnost. Struktura
 Given/When/Then odděluje výchozí stav, podnět a~očekávaný výsledek,
 což usnadňuje převod jednotlivých požadavků do testovacích scénářů.
 V~této práci z~ní proto přímo vycházejí referenční testy
-(metrika~\textbf{Q2}) i~mapování acceptance criteria na agentem
-vytvořené testy (metrika~\textbf{Q4}). Zvolený formát tak neslouží
+(metrika~\ac{Q2}) i~mapování acceptance criteria na agentem
+vytvořené testy (metrika~\ac{Q4}). Zvolený formát tak neslouží
 jen k~zápisu business požadavků, ale i~k~jejich konzistentnímu
 vyhodnocení v~rámci experimentu.
 
@@ -98,7 +99,7 @@ Specifikace definuje systém jako pure function: \texttt{process(state,
 event, now)} vrací nový stav a~action descriptory místo provádění side
 effects. Toto rozhodnutí bylo přijato proto, aby bylo možné nad jedním
 deterministickým rozhraním konzistentně vyhodnocovat referenční testy
-(metrika \textbf{Q2}) i~mutation testing (metrika \textbf{Q3}).
+(metrika \acs{Q2}) i~mutation testing (metrika \acs{Q3}).
 Pevné TypeScript signatury současně zajišťují, že stejné testovací
 prostředí lze použít napříč jednotlivými běhy nezávisle na interní
 struktuře agentem vytvořeného řešení.
@@ -129,7 +130,9 @@ Výsledná 2-vrstvá šablona: Requirements + Architecture.
 \textbf{Obsah specifikace.} [itemize 25 AC, API kontrakt, slovník, behavioral model, out of scope]
 
 \textbf{Designová rozhodnutí a~jejich vliv na experiment.}
-[itemize behavior-driven AC, infrastructure-agnostic, strict API contract, explicitní out of scope]
+\par\noindent
+[itemize behavior-driven AC,\allowbreak{} infrastructure-agnostic,\allowbreak{}
+strict API contract,\allowbreak{} explicitní out of scope]
 \end{raw}
 
 %% ----------------------------------------------------------------
@@ -149,7 +152,7 @@ všech 25 acceptance criteria (některá kritéria vyžadují více testových
 případů pro hraniční situace), dosahuje mutation score 91{,}9\,\%.
 Kód kompiluje bez typecheck errors, neobsahuje žádné \texttt{any}
 a~má 3 lint warnings (kosmetické, bez vlivu na funkční korektnost).
-LLM-as-judge (\textbf{Q8}) ohodnotil design quality na 3/3
+LLM-as-judge (\ac{Q8}) ohodnotil design quality na 3/3
 ve všech dimenzích. Tyto výsledky validují, že specifikace je
 implementovatelná a~že exit kritéria
 (sekce~\ref{sec:pilotni-iterace}) jsou dosažitelná lidským
@@ -203,7 +206,7 @@ struktura (typy, business logika a~veřejné API v~oddělených souborech),
 striktní typový systém bez obcházení (\texttt{any}), JSDoc dokumentace
 na exportech a~jasně definovaný vstupní bod (\texttt{index.ts}
 re-exportuje pouze veřejné API). Tyto požadavky přímo ovlivňují
-metriky \textbf{Q5}--\textbf{Q8}. Lulla et al.~\cite{lulla2026}
+metriky kvality kódu (\acs{Q5}--\acs{Q8}). Lulla et al.~\cite{lulla2026}
 zjistili, že přítomnost instrukčního souboru je spojena s~nižší
 mediánovou dobou běhu ($-28{,}6\,\%$), ačkoli účinnost jednotlivých
 typů obsahu dosud nebyla izolována.
@@ -230,7 +233,7 @@ znění.
 \centering
 \includegraphics[width=\textwidth]{img/generated/app03-baseline-single.png}
 \caption{Baseline \texttt{AGENTS.md} (pilot-r1) --- kompletní znění
-instrukční sady použité jako výchozí bod pilotních iterací.}
+instrukcí použitých jako výchozí bod pilotních iterací.}
 \label{fig:baseline-agents}
 \end{figure}
 
@@ -311,6 +314,7 @@ všech běhů obsahuje sekce~\ref{sec:souhrnne-vysledky}.
 \label{sec:pilot-r1}
 
 \begin{draft}
+%% REVIEW-LAYERS: závěr bez pozorování — první věta tvrdí závěr ("nedodržuje pracovní postup") dříve než tabulka s daty; přehodit pořadí: nejdříve odkaz na tabulku, pak shrnutí
 Baseline ukázal, že agent zvládne napsat fungující kód, ale nedodržuje
 předepsaný pracovní postup. První běh s~baseline instrukcemi
 (příloha~\ref{app:baseline-agents-md}), agent Minimax přes OpenCode,
@@ -343,14 +347,14 @@ Q6 & Typecheck errors      & 0          & 0        & \checkmark \\
 Q7 & Složitost kódu        & 2 viol.    & 0 viol.  & $\times$ \\
 Q8 & Design quality        & 1/3        & $\geq$ 2/3 & $\times$ \\
 \midrule
-E1 & Tokeny (in + out)     & 143k       & ---      & záznam \\
-E2 & Trvání                & 33 min     & ---      & záznam \\
-E3 & Dokončení             & ano, 0 restartů & --- & záznam \\
+E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 115 / 60 / 11528 & ---      & záznam \\
+E2 & Trvání                & 32{,}7 min & ---      & záznam \\
+E3 & Kompakce kontextu     & 0          & ---      & záznam \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Ze 10 deterministických metrik splnil agent 4 (P1, P4, Q1, Q6).
+Ze 10 deterministických metrik splnil agent 4 (\acs{P1}, \acs{P4}, \acs{Q1}, \acs{Q6}).
 
 \paragraph{Chování agenta.}
 Agent vytvořil 11 GitHub issues a~rozložil implementaci do
@@ -362,12 +366,12 @@ všechny procházejí.
 
 \paragraph{Diagnostika.}
 Tři procesní metriky z~pěti nebyly splněny: agent sloučil 11~issues
-do 4~branches (P2), nepoužil oddělené commity pro testy a~kód (P3)
-a~upravil vlastní test aby seděl na implementaci (P5). Ve všech třech
+do 4~branches (\acs{P2}), nepoužil oddělené commity pro testy a~kód (\acs{P3})
+a~upravil vlastní test aby seděl na implementaci (\acs{P5}). Ve všech třech
 případech agent vybral rychlejší cestu místo té předepsané.
 
-Z~referenčních testů selhaly 3 z~42 (Q2), převážně v~pause/resume
-logice a~výpočtu pracovních dní. Q8~=~1/3 kvůli chybějící JSDoc
+Z~referenčních testů selhaly 3 z~42 (\acs{Q2}), převážně v~pause/resume
+logice a~výpočtu pracovních dní. \acs{Q8}~=~1/3 kvůli chybějící JSDoc
 dokumentaci na veřejném API; ostatní dimenze dosáhly 3/3.
 
 \paragraph{Změna instrukcí pro r2.}
@@ -381,15 +385,15 @@ chování modelu, což motivuje cílené přestrukturování místo přidáván�
 dalších pravidel. Každé selhání proto dostalo vlastní opravu:
 
 \begin{itemize}
-    \item P2 (agent kombinoval branches): do~pracovního postupu přidán
+    \item \acs{P2} (agent kombinoval branches): do~pracovního postupu přidán
           příkaz \texttt{git checkout -b issue-N} na začátku každého cyklu
           --- agent tak dostane konkrétní krok místo obecného pravidla
-    \item P3 (agent nepsal testy zvlášť): testy a~kód se nově odevzdávají
+    \item \acs{P3} (agent nepsal testy zvlášť): testy a~kód se nově odevzdávají
           odděleně --- nejdřív \texttt{git add tests/}, pak
           \texttt{git add src/}
-    \item P5 (agent upravoval vlastní testy): doplněno vysvětlení ---
+    \item \acs{P5} (agent upravoval vlastní testy): doplněno vysvětlení ---
           pokud test po implementaci selhává, opravit kód, ne test
-    \item Q7 (příliš složité funkce): přidána kontrola
+    \item \acs{Q7} (příliš složité funkce): přidána kontrola
           \texttt{npx eslint src/\allowbreak{} --max-warnings 0} před
           každým pull requestem --- agent tak vidí složitost dřív než
           odevzdá kód
@@ -418,8 +422,8 @@ po sladění s~kap03.
 \label{sec:pilot-r2}
 
 \begin{draft}
-Dvě opravy zabraly (P5, Q7), ale dvě klíčové slabiny přetrvaly (P2, P3)
-a~kvalita kódu se zhoršila (Q2, Q3). Druhý běh ověřoval čtyři změny
+Dvě opravy zabraly (\acs{P5}, \acs{Q7}), ale dvě klíčové slabiny přetrvaly (\acs{P2}, \acs{P3})
+a~kvalita kódu se zhoršila (\acs{Q2}, \acs{Q3}). Druhý běh ověřoval čtyři změny
 instrukcí. Tabulka~\ref{tab:pilot-r2-delta} ukazuje metriky kde došlo
 ke změně.
 
@@ -439,41 +443,50 @@ Q5       & Lint warnings          & 2          & 1           & zlepšení \\
 Q7       & Složitost kódu         & 2 viol.    & 0           & opraveno \\
 Q8       & Design quality         & 1/3        & 1/3         & beze změny \\
 \midrule
-E1       & Tokeny (in + out)      & 143k       & 380k        & záznam \\
-E2       & Trvání                 & 33 min     & 37 min      & záznam \\
+E1       & Vstup / výstup / $\Sigma$ cache (tis.) & 115 / 60 / 11528 & 76 / 41 / 3196 & záznam \\
+E2       & Trvání                 & 32{,}7 min & 37{,}2 min & záznam \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \paragraph{Diagnostika.}
-P5 a~Q7 opraveny, lint warnings sníženy na~1. P2 a~P3 přetrvala, ale
+%% REVIEW: text naruje tabulku — zvážit přepis na interpretaci
+\acs{P5} a~\acs{Q7} opraveny, lint warnings sníženy na~1. \acs{P2} a~\acs{P3} přetrvala, ale
 jinak než v~r1: v~r1 agent psal kód bez testů, v~r2 naopak sloučil
 testy a~kód do jednoho commitu s~prefixem \texttt{test:}. Formálně
 konvenci splnil (commit má správný prefix), ale záměr --- mít oddělený
-commit pro test a~pro kód --- nesplnil. Q8~=~1/3 zůstala beze změny,
+commit pro test a~pro kód --- nesplnil. \acs{Q8}~=~1/3 zůstala beze změny,
 přestože instrukce požadovala JSDoc dokumentaci. Samotný textový
 požadavek nestačí; agent potřebuje kontrolní krok, který ho donutí
 dokumentaci ověřit~\cite{breunig2025}.
 
-Q2 a~Q3 se zhoršily (32/42 resp.\ 68\,\%). Agent napsal víc testů než
+%% REVIEW: text naruje tabulku — zvážit přepis na interpretaci
+\acs{Q2} a~\acs{Q3} se zhoršily (32/42 resp.\ 68\,\%). Agent napsal víc testů než
 v~r1 (70 vs.\ 59), ale horší kvality --- pravděpodobně proto, že psal
 všechny testy najednou ze specifikace místo postupného test-fix cyklu.
-Nárůst tokenů E1 (380k) způsobil soubor \texttt{package-lock.json}
-v~kontextu, ne změna instrukcí.
+Při součtu tokenů přes všechny turny by srovnání zkreslovalo opakované
+počítání kontextu. \acs{E1} uvádíme jako vstupní a~výstupní mezisoučty
+(viz kap.~\ref{sec:metriky-efektivity}), oba v~tisících.
+Mezi r1 a~r2 \textbf{klesá} \textbf{max.\ vstup na kroku} (včetně
+\texttt{cache.read} v~exportu, viz kap.~\ref{sec:metriky-efektivity})
+z~115 na 76 tis.\ tokenů; součet výstupu klesá z~60 na 41 tis.\ --- změna
+instrukcí tedy v~\acs{E1} souvisí se špičkou promptové strany v~jednom requestu
+i s~objemem generování (pole \texttt{tokens.total} v~exportu mezi běhy
+nepoužíváme jako jednotnou bázi).
 
 \paragraph{Změna instrukcí pro r3.}
 Z~r2 přetrvaly tři slabiny. Každá dostala vlastní opravu:
 
 \begin{itemize}
-    \item P2 (agent stále kombinoval branches): pracovní postup nově
+    \item \acs{P2} (agent stále kombinoval branches): pracovní postup nově
           začíná příkazem \texttt{gh issue list --state open} --- agent
           tak vidí další issue a~ví odkud začít, místo aby si vymýšlel
           vlastní pořadí
-    \item P3 (agent stále nepsal testy zvlášť): mezi commit s~testy
+    \item \acs{P3} (agent stále nepsal testy zvlášť): mezi commit s~testy
           a~commit s~kódem přibyl kontrolní příkaz
           \texttt{git log --oneline -3} --- agent tak musí ověřit, že
           test commit skutečně existuje dřív než začne implementovat
-    \item Q8 (agent ignoroval požadavek na JSDoc): instrukce říkala
+    \item \acs{Q8} (agent ignoroval požadavek na JSDoc): instrukce říkala
           ``dokumentuj veřejné API'', ale agent to přehlížel. Zopakovat
           totéž by nepomohlo~\cite{breunig2025}. Požadavek byl proto
           přesunut do kontrolního kroku před pull requestem --- agent
@@ -499,7 +512,8 @@ ukazuje rozsah těchto změn.
 \label{sec:pilot-r3}
 
 \begin{draft}
-Průlomový běh: poprvé P1--P5~=~5/5 a~Q8~=~3/3.
+%% REVIEW-LAYERS: závěr bez pozorování — lead sentence je závěr ("průlomový běh"), pozorování z tabulky přichází po; buď přeformulovat jako neutrální signpost, nebo až za tabulkou
+Průlomový běh: poprvé \acs{P1}--\acs{P5}~=~5/5 a~\acs{Q8}~=~3/3.
 Třetí běh ověřoval tři změny instrukcí z~r2: kontrolní příkaz po commitu
 s~testy, výběr issue přes \texttt{gh issue list} a~přesun požadavku
 na JSDoc do kontrolního kroku před pull requestem.
@@ -522,21 +536,33 @@ Q2 & Ref.\ test pass rate     & 32/42      & 41/42       & zlepšení \\
 Q3 & Mutation score           & 68\,\%     & 71\,\%      & nad prahem \\
 Q8 & Design quality           & 1/3        & 3/3         & průlom \\
 \midrule
-E2 & Trvání                   & 37 min     & 25 min      & záznam \\
+E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 76 / 41 / 3196 & 62 / 30 / 4770 & záznam \\
+E2 & Trvání                   & 37{,}2 min & 24{,}8 min & záznam \\
+E3 & Kompakce kontextu        & 0          & 1           & záznam \\
 \bottomrule
 \end{tabular}
 \end{table}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{img/generated/r3-agents-full.png}
+\caption{Verze \texttt{AGENTS.md} po pilot-r3 --- kompletní znění po iteracích
+r1$\to$r2$\to$r3.}
+\label{fig:r3-agents-full}
+\end{figure}
+
 \paragraph{Diagnostika.}
 Všechny tři změny zabraly. Agent poprvé splnil celý procesní checklist
-P1--P5~=~5/5: vytvořil issues před kódem, každý issue dostal vlastní
+\acs{P1}--\acs{P5}~=~5/5: vytvořil issues před kódem, každý issue dostal vlastní
 branch, test commit předcházel kódu, pull requesty obsahovaly
-\texttt{Closes \#N} a~žádný test nebyl dodatečně upraven. Přepsání obecných pravidel na konkrétní příkazy~\cite{breunig2025}
+\texttt{Closes \#N} a~žádný test nebyl dodatečně upraven.
+%% REVIEW-LAYERS: interpretace jako fakt — "funguje lépe než textové požadavky" je interpretace bez hedgingu; chybí "naznačuje" nebo "data jsou konzistentní s hypotézou, že"; Q8=3/3 je pozorování, závěr z něj by měl být hedgovaný
+Přepsání obecných pravidel na konkrétní příkazy~\cite{breunig2025}
 a~jejich zasazení do pracovního postupu jako kontrolní kroky funguje
-lépe než textové požadavky. Q8~=~3/3 to potvrzuje: když musel agent ověřit JSDoc
+lépe než textové požadavky. \acs{Q8}~=~3/3 to potvrzuje: když musel agent ověřit JSDoc
 před odevzdáním kódu, dokumentaci napsal.
 
-Q2~=~41/42: zbývá jedna chyba v~implementaci. Specifikace definuje
+\acs{Q2}~=~41/42: zbývá jedna chyba v~implementaci. Specifikace definuje
 chování pause/resume jednoznačně: acceptance criteria vyžadují
 ``elapsed time are preserved'' při pauzování a~``timeout resumes
 from where it left off'' při obnovení. API kontrakt navíc poskytuje
@@ -553,15 +579,15 @@ Diagnostika r3 odhalila dva problémy, každý s~vlastní opravou:
 \begin{itemize}
     \item Procesní hygiena: pre-PR checklist obsahoval kontrolu typů
           a~lintu, ale ne spuštění agentových vlastních testů. Přidán
-          příkaz \texttt{npx vitest run} jako kontrolní krok --- agent
+          příkaz \texttt{npx vitest run} jako kontrolní krok ---\allowbreak{} agent
           musí ověřit, že jeho vlastní testy prošly dřív než otevře
-          pull request. Tato změna necílí na Q2
-          (referenční testy, které agent nevidí), ale na základní
-          ověření konzistence agentova kódu s~jeho vlastními testy
-    \item Agent nedodržel API kontrakt: spec definuje pole
-          \texttt{pausedElapsed} v~typu \texttt{DunningState}, ale
+          pull\allowbreak{} request. Tato změna necílí na \acs{Q2}\allowbreak{}
+          (referenční testy, které agent nevidí), ale na základní\allowbreak{}
+          ověření konzistence agentova kódu s~jeho vlastními\allowbreak{} testy
+    \item Agent nedodržel API kontrakt:\allowbreak{} spec definuje pole
+          \texttt{pausedElapsed}\allowbreak{} v~typu \texttt{DunningState}, ale
           agent ho nepoužil a~vymyslel vlastní řešení. Do~Constraints
-          přidáno pravidlo: každé pole v~API kontraktu musí být
+          přidáno pravidlo: každé pole v~API kontraktu musí\allowbreak{} být
           v~implementaci použito~\cite{breunig2025}
 \end{itemize}
 
@@ -604,27 +630,32 @@ Q2 & Ref.\ test pass rate    & 41/42      & 39/42       & horší \\
 Q3 & Mutation score           & 71\,\%    & 66\,\%      & pod prahem \\
 Q8 & Design quality          & 3/3        & 2/3         & horší \\
 \midrule
-E2 & Trvání                  & 25 min     & 26 min      & stabilní \\
+E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & 81 / 36 / 5996 & záznam \\
+E2 & Trvání                  & 24{,}8 min & 25{,}9 min & stabilní \\
+E3 & Kompakce kontextu       & 1          & 0           & záznam \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \paragraph{Diagnostika.}
 R4 je regrese oproti r3. Agent vytvořil 7~issues ale zpracoval jen 5 ---
-dva issues zůstaly bez branch (P2~=~4/6). Upravil dva vlastní testové
-soubory po implementaci (P5). PR popisy obsahovaly jen ``Closes~\#N''
-bez popisu změn (P8~=~1/3).
+dva issues zůstaly bez branch (\acs{P2}~=~4/6). Upravil dva vlastní testové
+soubory po implementaci (\acs{P5}). PR popisy obsahovaly jen ``Closes~\#N''
+bez popisu změn (\acs{P8}~=~1/3).
 
-Q2 se zhoršilo z~41/42 na 39/42: k~přetrvávajícímu elapsed time bugu
+%% REVIEW: text naruje tabulku — zvážit přepis na interpretaci
+\acs{Q2} se zhoršilo z~41/42 na 39/42: k~přetrvávajícímu elapsed time bugu
 přibyly dvě nové chyby (výpočet víkendů v~eskalaci a~boundary
 DUE\_SOON přechodu). Pravidlo o~dodržení API kontraktu nepomohlo ---
 agent pole \texttt{pausedElapsed} opět nepoužil. Agentův vlastní test
 navíc obsahoval timezone bug a~přesto agent mergoval kód, přestože
 pre-PR checklist zahrnoval \texttt{npx vitest run}.
 
-R4 ukazuje dvě věci: (1)~deklarativní pravidla v~Constraints
-(``každé pole musí být použito'') nepřinesla zlepšení, ačkoli
-v~předchozích iteracích procedurální verifikace v~Process
+R4 ukazuje dvě věci: (1)~deklarativní pravidla v~Constraints ---
+pravidla která říkají \textit{co má platit}, např.\ ``každé pole musí
+být použito'' --- nepřinesla zlepšení, ačkoli v~předchozích iteracích
+procedurální verifikace v~Process --- konkrétní příkazy které říkají
+\textit{co udělat}, např.\ ``spusť \texttt{tsc --noEmit}'' ---
 fungovala; (2)~nedeterminismus modelu způsobuje, že stejné instrukce
 v~dalším běhu přinesou nové chyby. Obě změny r3$\to$r4 byly
 deklarativní, zatímco úspěšné opravy r1$\to$r2$\to$r3 byly
@@ -635,33 +666,33 @@ acceptance criteria jednoznačně vyžadují zachování elapsed time
 při pause/resume a~API kontrakt poskytuje pole
 \texttt{pausedElapsed} pro tento účel. Agent pole v~kontraktu
 vidí a~správně ho zapisuje při pauzování, ale při obnovení ho
-nepoužije a~zvolí alternativní přístup. Q5~=~1 je způsobena
+nepoužije a~zvolí alternativní přístup. \acs{Q5}~=~1 je způsobena
 složitostí funkce \texttt{processTick} (cyklomatická složitost~15,
 práh~10), kterou agent nerozložil. Obě selhání jsou kandidáty
-na procesní verifikaci --- stejný vzorec, který opravil P2, P3
-a~Q8 v~předchozích iteracích.
+na procesní verifikaci --- stejný vzorec, který opravil \acs{P2}, \acs{P3}
+a~\acs{Q8} v~předchozích iteracích.
 
 \paragraph{Změna instrukcí pro r5.}
-V~DSR je návrat k~předchozí verzi artefaktu po neúspěšné iteraci
-standardní postup --- build-evaluate cyklus nepředpokládá monotónní
+Návrat k~předchozí verzi instrukcí po neúspěšné iteraci je
+standardní postup --- iterativní cyklus nepředpokládá monotónní
 zlepšování~\cite{peffers2008}. R5 proto vychází z~r3 (ne z~r4)
 a~cílí na dvě zbývající selhání procedurální verifikací. Obě změny
-používají stejný vzorec, který opravil P2, P3 a~Q8 v~předchozích
+používají stejný vzorec, který opravil \acs{P2}, \acs{P3} a~\acs{Q8} v~předchozích
 iteracích: místo deklarativního pravidla přidáváme verifikační akci
 do pre-PR checklistu.
 
 \begin{itemize}
-    \item Q2 (agent nepoužil \texttt{pausedElapsed}): do~pre-PR
+    \item \acs{Q2} (agent nepoužil \texttt{pausedElapsed}): do~pre-PR
           checklistu přidán krok ``verify that every field in the API
           Contract types is read and written in your implementation ---
           if a~field exists in the type but is unused, fix it before
           opening the PR.'' Na rozdíl od r4, kde pravidlo bylo
           v~Constraints (deklarativní), je verifikace v~Process
           (procedurální)~\cite{breunig2025}
-    \item Q5/Q7 (složitost \texttt{processTick}): agent v~r3 spustil
+    \item \acs{Q5}/\acs{Q7} (složitost \texttt{processTick}): agent v~r3 spustil
           eslint s~vlastním configem, který neobsahoval pravidlo
           \texttt{complexity} --- dostal nula warningů a~kód považoval
-          za hotový. Experiment měří Q5/Q7 s~fixním configem kde
+          za hotový. Experiment měří \acs{Q5}/\acs{Q7} s~fixním configem kde
           complexity pravidlo je. Do~instrukcí přidán explicitní
           požadavek: ``your ESLint config must include
           \texttt{complexity: [warn, 10]}''
@@ -684,6 +715,8 @@ verifikaci a~explicitní complexity pravidlo.
 \label{sec:pilot-r5}
 
 \begin{draft}
+\begingroup
+\sloppy
 Regrese horší než r4 --- agent kompletně ignoroval workflow.
 Agent přečetl \texttt{AGENTS.md} (v~transcriptu potvrzeno), ale místo
 \texttt{gh issue create} použil interní plánovací nástroj
@@ -706,7 +739,9 @@ Q2 & Ref.\ test pass rate    & 41/42      & 38/42       & horší \\
 Q5 & Lint warnings           & 1          & 0           & opraveno \\
 Q7 & Složitost kódu          & 1 viol.    & 0           & opraveno \\
 \midrule
-E2 & Trvání                  & 25 min     & 13 min      & záznam \\
+E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & 65 / 23 / 3028 & záznam \\
+E2 & Trvání                  & 24{,}8 min & 13{,}2 min & záznam \\
+E3 & Kompakce kontextu       & 1          & 0           & záznam \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -714,12 +749,13 @@ E2 & Trvání                  & 25 min     & 13 min      & záznam \\
 \paragraph{Diagnostika.}
 Instrukce r5 se lišily od r3 pouze ve dvou řádcích pre-PR checklistu
 (API contract verifikace a~ESLint complexity config). Obě cílené opravy
-zabraly: Q5~=~0 a~Q7~=~0. Agent konfiguroval ESLint s~pravidlem
+%% REVIEW: text naruje tabulku — zvážit přepis na interpretaci
+zabraly: \acs{Q5}~=~0 a~\acs{Q7}~=~0. Agent konfiguroval ESLint s~pravidlem
 \texttt{complexity} a~rozložil funkci \texttt{processTick}. Opravu
-Q5/Q7 tak způsobila jediná konkrétní instrukce: ``your ESLint config
+\acs{Q5}/\acs{Q7} tak způsobila jediná konkrétní instrukce: ``your ESLint config
 must include \texttt{complexity: [warn, 10]}''. V~r3 agent toto
 pravidlo ve svém ESLint configu neměl --- spustil eslint, dostal
-nula warningů a~kód považoval za hotový. Experiment přitom měří Q5/Q7
+nula warningů a~kód považoval za hotový. Experiment přitom měří \acs{Q5}/\acs{Q7}
 s~fixním configem kde pravidlo je. Agent nemůže opravit problém,
 o~kterém neví --- explicitní požadavek na konkrétní config tento
 disconnect odstranil.
@@ -736,26 +772,33 @@ výstupem (``spusť eslint'') ano, vícekrokový workflow (``vytvoř
 issue, pak branch, pak test, pak implementuj, pak PR'') ne.
 
 Srovnání r3, r4 a~r5 ukazuje, že tento vzorec není náhodný.
-R3 agent dodržel celý workflow (P1--P5~=~5/5). R4 dodržel částečně
+R3 agent dodržel celý workflow (\acs{P1}--\acs{P5}~=~5/5). R4 dodržel částečně
 ($\sim$3/5) --- vytvořil issues ale ne pro všechny branch. R5 workflow
 ignoroval zcela ($\sim$1/5). Instrukce se přitom mezi r3 a~r5 liší
-minimálně (2~řádky v~pre-PR checklistu). Nedeterminismus modelu
+minimálně (2~řádky v~pre-PR checklistu).
+%% REVIEW-LAYERS: interpretace jako fakt — "Nedeterminismus modelu je dominantní faktor" je závěr/interpretace prezentovaná jako fakt; chybí hedging ("data naznačují", "pravděpodobně"); navíc chybí explicitní vrstva interpretace PROČ malá změna způsobila tak velký dopad
+Nedeterminismus modelu
 je dominantní faktor pro dodržování vícekrokových sekvencí.
+\endgroup
 
 \paragraph{Závěr pilotních iterací.}
 Pět iterací (r1--r5) přineslo čtyři pozorování:
 
+\begingroup
+\setlength{\emergencystretch}{0.5em}
 \begin{enumerate}
     \item \textbf{Verifikační kroky fungují spolehlivě.}
           Jednokrokové příkazy s~okamžitým výstupem (\texttt{tsc},
           \texttt{eslint}, \texttt{git log --oneline -3}) agent dodržoval
           ve všech bězích kde byly přítomny (r3--r5). Cílená oprava
-          Q5/Q7 v~r5 (explicitní ESLint complexity config) zabrala
+          \acs{Q5}/\acs{Q7} v~r5 (explicitní ESLint complexity config) zabrala
           i~přes kolaps workflow.
-    \item \textbf{Multi-step workflow je nedeterministický.}
-          Vícekroková sekvence (issue~$\to$ branch~$\to$ test~$\to$
-          implement~$\to$ PR) se pohybovala od 5/5 (r3) přes $\sim$3/5
-          (r4) po $\sim$1/5 (r5) při téměř identických instrukcích.
+    \item \textbf{Multi-step workflow je nedeterministický.}\par\noindent
+          Vícekroková sekvence (issue~$\to$\allowbreak{}
+          branch~$\to$\allowbreak{} test~$\to$\allowbreak{}
+          implement~$\to$\allowbreak{} PR) se pohybovala od 5/5 (r3)\allowbreak{}
+          přes $\sim$3/5 (r4)\allowbreak{} po $\sim$1/5 (r5)\allowbreak{}
+          při téměř identických instrukcích.
     \item \textbf{Deklarativní pravidla nepomáhají, procedurální ano.}
           R4 přidalo deklarativní pravidlo v~Constraints (``každé pole
           musí být použito'') --- nepomohlo. R5 přidalo procedurální
@@ -767,10 +810,11 @@ Pět iterací (r1--r5) přineslo čtyři pozorování:
           přesto, že specifikace jednoznačně vyžaduje zachování elapsed
           time a~kontrakt pole poskytuje. Agent pole správně zapisoval
           při pauzování, ale při obnovení zvolil vlastní přístup
-          (Q2~=~41/42). Deklarativní pravidlo (r4) ani procedurální
-          check (r5) toto selhání neopravily --- na rozdíl od Q5/Q7,
+          (\acs{Q2}~=~41/42). Deklarativní pravidlo (r4) ani procedurální
+          check (r5) toto selhání neopravily --- na rozdíl od \acs{Q5}/\acs{Q7},
           kde procedurální check zabral.
 \end{enumerate}
+\endgroup
 
 Pilotní baseline pro komparativní variace zůstává r3 --- jediný běh
 kde agent workflow dodržel. Komparativní variace testují, které
@@ -801,67 +845,76 @@ zlepšil procesní i~produktové metriky. Zbývá otázka, které složky
 výsledných instrukcí jsou pro chování agenta nezbytné a~které lze
 odebrat bez dopadu.
 
-Existující studie měří efekt instrukčního souboru jako celku:
-Lulla et al.~\cite{lulla2026} zjistili, že přítomnost souboru
-\texttt{AGENTS.md} je spojena s~$28{,}6\,\%$ nižším mediánovým
-runtimem, Gloaguen et al.~\cite{gloaguen2025agentsmd} zjistili
-marginální zlepšení úspěšnosti ($+4\,\%$). Které složky souboru
-k~tomuto efektu přispívají, dosud nebylo izolováno --- oba autoři
-to označují za otevřenou otázku. Naše ablace tuto mezeru částečně
-vyplňují na úrovni případové studie.
+Existující studie měří efekt souboru \texttt{AGENTS.md} jako celku:
+Lulla et al.~\cite{lulla2026} zjistili, že jeho přítomnost je spojena
+s~$28{,}6\,\%$ nižším mediánovým runtimem, Gloaguen
+et al.~\cite{gloaguen2025agentsmd} zjistili marginální zlepšení
+úspěšnosti ($+4\,\%$). Které složky souboru k~tomuto efektu
+přispívají, dosud nebylo izolováno --- oba autoři to označují
+za otevřenou otázku. Naše ablace tuto mezeru částečně vyplňují
+na úrovni případové studie.
+\end{draft}
 
-Výběr složek k~odebrání vychází z~pilotních dat. Pilotní iterace
-odhalily dva typy chování agenta: \textit{nedeterministické} ---
-workflow (issue~$\to$ branch~$\to$ PR) agent v~r3 dodržel, v~r5
-ignoroval --- a~\textit{deterministické} --- verifikační příkazy
-agent spouštěl spolehlivě ve~všech bězích a~kvalitní kód produkoval
-napříč všemi iteracemi. Pro nedeterministické chování máme data
-z~přirozené variace mezi běhy (r3 vs.\ r5). Pro deterministické
-chování nevíme, zda je řízeno instrukcemi, nebo znalostmi modelu
-z~tréninku --- a~to ablace testují.
+\subsection{Výběr složek pro ablaci}
+\label{sec:vyber-ablaci}
 
-Instrukční sada r3 obsahuje sedm sekcí (Role, Goal, Specification,
-Environment, Process, Package Quality, Constraints). Odebrání
-kontextových sekcí (Role, Goal, Specification, Environment) by vedlo
-k~triviálně předvídatelnému výsledku --- agent by nevěděl co
-implementovat. Constraints se z~velké části překrývají s~Process
-(sekce~\ref{sec:pilot-r4}). Zbývají dvě složky s~deterministickým
-chováním: verifikační příkazy v~Process a~sekce Package Quality.
+\begin{draft}
+Soubor \texttt{AGENTS.md} obsahuje sedm sekcí (Role, Goal,
+Specification, Environment, Process, Package Quality, Constraints).
+Pro účely výběru ablací je rozlišujeme na sekce definující
+\textit{co} implementovat (Role, Goal, Specification, Environment)
+a~sekce definující \textit{jak} pracovat a~jakou kvalitu produkovat
+(Process, Package Quality, Constraints). Odebrání kontextových sekcí
+by testovalo jinou otázku --- zda agent dokáže kontext projektu
+získat z~jiných zdrojů (issues, README, kód) --- a~nesouvisí
+s~naší výzkumnou otázkou o~vlivu instrukcí na proces a~kvalitu
+(viz Závěr).
 
-Ablace odebírají celé funkční celky, ne jednotlivé řádky --- pilotní
-variace P1--P5 od~5/5 po~1/5 při minimálních změnách instrukcí
-ukazuje, že efekt odebrání jednoho řádku by se v~takovém šumu
-ztratil. Každá ablace se provádí ve dvou bězích, aby bylo možné
-odlišit efekt od nedeterminismu.
+Constraints obsahují zákazy které agent v~pilotu dodržoval. Zároveň
+je pracovní postup v~Process implicitně vynucuje --- test-first
+workflow znamená, že agent píše testy před kódem a~pak na ně nesahá
+(\acs{P5}). Ablace Constraints je námětem pro další výzkum
+(sekce~\ref{sec:dalsi-vyzkum}).
+
+Zbývají verifikační kroky v~Process a~sekce Package Quality.
+U~obou agent v~pilotu vykazoval stabilní chování, ale nevíme zda
+je řízeno instrukcemi, nebo znalostmi modelu z~tréninku ---
+a~to je otázka pro ablaci.
 
 \paragraph{Ablace~A: bez verifikačních kroků.}
-\textit{Nejistota:} Agent verifikační příkazy (\texttt{tsc --noEmit},
+\begin{sloppypar}
+Agent verifikační příkazy (\texttt{tsc --noEmit},\allowbreak{}
 \texttt{npx eslint}, \texttt{git log --oneline~-3}) spouštěl
 spolehlivě ve~všech pilotních bězích, včetně r5, kde ignoroval zbytek
 workflow. Zlepšují ale reálně výstup, nebo by je agent spustil
 i~bez explicitní instrukce?
 
-\textit{Co odebíráme:} Z~Process kroku~4 odebereme \texttt{tsc --noEmit},
+\textit{Co odebíráme:} Z~Process kroku~4 odebereme \texttt{tsc --noEmit},\allowbreak{}
 \texttt{npx eslint} a~z~kroku~2c odebereme \texttt{git log --oneline -3}.
-Workflow struktura (issue~$\to$ branch~$\to$ test~$\to$ implement~$\to$
+Workflow struktura (issue~$\to$\allowbreak{} branch~$\to$\allowbreak{}
+test~$\to$\allowbreak{} implement~$\to$\allowbreak{}
 PR) zůstane (obrázek~\ref{fig:diff-r3-ablace-a}).
+\end{sloppypar}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{img/generated/agents-diff-r3-ablace-a.png}
-\caption{Změny AGENTS.md pro ablaci~A: odebrány verifikační kroky
-(\texttt{git log}, \texttt{tsc}, \texttt{eslint}) z~Process.}
+\caption[Změny AGENTS.md pro ablaci~A]{Změny AGENTS.md pro ablaci~A: odebrány verifikační kroky
+(\texttt{git log}, \texttt{tsc}, \texttt{eslint}) z~Process.\protect\footnotemark}
 \label{fig:diff-r3-ablace-a}
 \end{figure}
+\footnotetext{Zelené řádky v~diffu neobsahují nový text --- vznikly
+přečíslováním kroků po odebrání kroku~c~(Verify).}
 
-\textit{Očekávání:} Pokud agent přesto spustí typecheck a~lint~$\to$
-verifikační kroky v~instrukcích jsou redundantní. Pokud ne~$\to$
-explicitní příkazy jsou klíčový mechanismus a~jejich přítomnost
-v~instrukčním souboru přispívá k~efektu, který Lulla et al.\ měřili
-na úrovni celého souboru.
+\textit{Očekávání:} Verifikační kroky přímo ovlivňují metriky
+\ac{Q5} a~\ac{Q6}. Pokud agent přesto
+spustí typecheck a~lint~$\to$ verifikační kroky v~instrukcích jsou
+redundantní. Pokud ne~$\to$ explicitní příkazy jsou klíčový
+mechanismus a~jejich přítomnost v~instrukčním souboru přispívá
+k~efektu, který Lulla et al.\ měřili na úrovni celého souboru.
 
 \paragraph{Ablace~B: bez sekce Package Quality.}
-\textit{Nejistota:} Agent konzistentně produkoval modulární kód
+Agent konzistentně produkoval modulární kód
 (4~soubory, strict TypeScript, clean API) napříč všemi pilotními
 běhy, včetně r5, kde ignoroval celý workflow. Je kvalita kódu řízena
 sekcí Package Quality, nebo jde o~znalosti z~tréninku modelu?
@@ -879,18 +932,11 @@ API). Process a~Constraints zůstanou beze změny
 \label{fig:diff-r3-ablace-b}
 \end{figure}
 
-\textit{Očekávání:} Pokud Q5, Q7 a~Q8 zůstanou na úrovni r3~$\to$
+\textit{Očekávání:} Pokud \acs{Q5}, \acs{Q7} a~\acs{Q8} zůstanou na úrovni r3~$\to$
 konvenční instrukce jsou redundantní s~tréninkem modelu. Pokud se
 zhorší~$\to$ explicitní konvence v~instrukcích jsou potřeba a~přispívají
 k~celkovému efektu instrukčního souboru.
 
-\medskip
-
-Substituci jako samostatnou fázi neprovádíme. Pilotní iterace již
-substituční efekt demonstrovaly: r1 používala obecná pravidla, r3
-konkrétní příkazy a~kontrolní kroky (sekce~\ref{sec:souhrnne-vysledky}).
-Baseline pro srovnání je pilot-r3 --- jediný běh kde agent dodržel
-celý workflow (r4 a~r5 regresovaly).
 \end{draft}
 
 \begin{raw}
@@ -899,20 +945,30 @@ celý workflow (r4 a~r5 regresovaly).
 V1: Ablace A = bez Constraints (Mao: exclusion constraints 46\,\%),
 Ablace B = bez Package Quality. V2: 7~rozporů v~literatuře,
 Ablace A = bez verifikačních kroků, Ablace B = bez PQ.
-V3: Nejistoty z~pilotních dat + literatura. V4 (aktuální):
+V3: Nejistoty z~pilotních dat + literatura. V4:
 Oprava citací (Lulla/Gloaguen měří celý soubor, ne složky).
 Framing: nikdo neizoloval efekt jednotlivých složek, naše ablace
 tuto mezeru vyplňují. Výběr složek z~pilotních dat.
+V5 (aktuální): Rozpor-based framing nahrazen. Nový argument:
+pilotní fáze generuje otázky (instrukce vs.\ model?), ablace
+na ně odpovídají. Výběr složek: (1)~nejistota přínosu,
+(2)~přímý vztah k~měřeným dimenzím (proces + kvalita).
+Kontextové sekce vyloučeny --- definují CO, ne JAK.
+Constraints vyloučeny --- hypotéza redundance s~workflow
+(test-first postup implicitně vynucuje zákazy z~Constraints).
+V6: Constraints přeformulovány --- nejsou neúčinné (baseline
+zákazy agent dodržoval), ale pravděpodobně redundantní s~Process.
+Přidáno do future work. Insight: spec-first + test-first workflow
+zužuje scope na to jak uspět --- agent musí napsat testy před
+kódem, čímž automaticky dodržuje P5 bez explicitního zákazu.
 \end{raw}
 
 \subsection{Ablace~A: bez verifikačních kroků}
 \label{sec:ablace-a}
 
 \begin{draft}
-Ablace~A odebírá verifikační kroky (\texttt{tsc --noEmit},
-\texttt{npx eslint}, \texttt{git log --oneline -3}) z~Process a~ponechává
-zbytek instrukcí beze změny. Dva běhy (A-1, A-2) porovnáváme
-s~baselinovou iterací r3 kde tyto kroky byly přítomny.
+Tabulka~\ref{tab:ablace-a} shrnuje výsledky dvou běhů (A-1, A-2)
+ve srovnání s~r3.
 
 \begin{table}[H]
 \centering
@@ -940,37 +996,41 @@ Q6 & Typecheck errors          & 0          & 0          & 0 \\
 Q7 & Complexity violations     & 1          & 4          & 1 \\
 Q8 & Design quality            & 3/3        & 2/3        & 2/3 \\
 \midrule
+E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & 72 / 32 / 4558 & 92 / 36 / 8210 \\
 E2 & Trvání                    & 25 min     & 39 min     & 24 min \\
+E3 & Kompakce kontextu         & 1          & 0          & 0 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-$^\dagger$ Stryker v~A-2 nedokončil analýzu (timeout).
+$^\S$ Sloupec r3: \acs{E1} z~pilotního \texttt{transcript.json} (62 / 30 / 4770 tis.). U~A-1 a A-2 chybí export v~lokálním snapshotu --- \acs{E1} a \acs{E3} pro tyto běhy nešly dopočítat.
+
+$^\dagger$ \acs{Q3} v~A-2 nelze měřit: agentovy vlastní testy selhávají
+(test očekává stav \texttt{REMINDER\_1}, kód vrací \texttt{GRACE}),
+Stryker vyžaduje funkční test suite. Bez verifikačních kroků agent
+commitl kód s~nefunkčními testy.
 
 \paragraph{Interpretace.}
-Odebrání verifikačních kroků má měřitelný dopad na kvalitu kódu.
-Q5~(lint) se zhoršilo z~1 na~3--4 a~Q7~(složitost) z~1 na~1--4:
-bez explicitního příkazu \texttt{npx eslint} agent neprovedl kontrolu
-kvality před odevzdáním kódu. Q2~(referenční testy) kleslo z~41/42
-na 35--37/42 a~Q3 z~71\,\% na~62\,\%: agent bez kontrolních bodů
-dělá více implementačních chyb a~píše méně kvalitní testy.
+\acs{E1} u~ablace nelze z~GitHub repozitáře dopočítat (\texttt{transcript.json}
+v~něm není; stejně v~lokálním \texttt{experiments/runs/ablace-*}).
+Po doplnění exportu do lokálního snapshotu stejným postupem jako u~pilotů
+by se sloupce A-1 / A-2 vyplnily.
+Tabulka~\ref{tab:ablace-a} ukazuje pokles napříč metrikami kvality
+kódu (\acs{Q5}, \acs{Q7}) i~funkční korektnosti (\acs{Q2}, \acs{Q3}). Bez explicitního
+příkazu \texttt{npx eslint} agent neprovedl kontrolu kvality před
+odevzdáním kódu, což naznačuje, že verifikační kroky nejsou
+redundantní --- agent je bez instrukce nespouští sám.
 
 Procesní metriky vykazují vzorec známý z~pilotních iterací: A-1
-dodržel workflow kompletně (P1--P4~=~4/4), A-2 nikoliv (P2--P4
-nesplněny). Instrukce se mezi běhy nelišily --- variabilita je
-důsledkem nedeterminismu modelu, ne ablace.
+dodržel workflow kompletně, A-2 nikoliv. Instrukce se mezi běhy
+nelišily --- variabilita je důsledkem nedeterminismu modelu,
+ne ablace.
 
 Agent bez verifikačních kroků spotřeboval přibližně dvakrát více
 testovacích cyklů (44~spuštění \texttt{vitest} oproti $\sim$20
-u~ablace~B), což vedlo k~vyššímu trvání v~A-1 (39~min) a~vyššímu
-riziku vyčerpání kontextového okna. Jeden pokus ablace~A musel
-být opakován, protože OpenCode se tiše ukončil uprostřed práce
-agenta bez chybové hlášky --- pravděpodobně v~důsledku vyčerpání
-kontextového okna způsobeného opakovaným cyklickým debugováním.
-
-Verifikační kroky v~instrukcích tedy nejsou redundantní. Plní dvě
-funkce: zajišťují kontrolu kvality (Q5, Q7) a~fungují jako
-checkpointy které zabraňují cyklickému debugování.
+u~ablace~B). To naznačuje, že verifikační kroky plní kromě kontroly
+kvality i~druhou funkci: fungují jako checkpointy které strukturují
+práci agenta a~zabraňují cyklickému debugování.
 \end{draft}
 
 \begin{raw}
@@ -985,10 +1045,8 @@ opakován. Třetí pokusy úspěšné.
 \label{sec:ablace-b}
 
 \begin{draft}
-Ablace~B odebírá celou sekci Package Quality (modulární struktura,
-strict TypeScript, JSDoc dokumentace, čisté veřejné API) a~ponechává
-Process i~Constraints beze změny. Dva běhy (B-1, B-2) porovnáváme
-s~r3.
+Tabulka~\ref{tab:ablace-b} shrnuje výsledky dvou běhů (B-1, B-2)
+ve srovnání s~r3.
 
 \begin{table}[H]
 \centering
@@ -1016,44 +1074,43 @@ Q6 & Typecheck errors          & 0          & 0          & 0 \\
 Q7 & Complexity violations     & 1          & 1          & 2 \\
 Q8 & Design quality            & 3/3        & ---$^*$    & 2/3 \\
 \midrule
+E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & 78 / 40 / 6273 & 55 / 23 / 3604 \\
 E2 & Trvání                    & 25 min     & 28 min     & 21 min \\
+E3 & Kompakce kontextu         & 1          & 0          & 0 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-$^*$ Q8 v~B-1: judge nedokončil hodnocení (API timeout).
+$^*$ \acs{Q8} v~B-1: judge nedokončil hodnocení (API timeout).
 
 \paragraph{Interpretace.}
-Metriky kvality kódu (Q5, Q6, Q7) zůstaly na podobné úrovni jako
-v~r3: lint warnings 2 (r3:~1), typecheck errors 0 a~složitost 1--2
-(r3:~1). Agent produkoval modulární kód, striktní TypeScript
-a~v~B-1 i~JSDoc dokumentaci --- přestože instrukce tyto požadavky
-neobsahovaly. Q8 (design quality) kleslo z~3/3 na~2/3 v~B-2:
-judge identifikoval chybějící modularitu (veškerý kód v~jednom
-souboru) a~neúplnou dokumentaci. To naznačuje, že zatímco základní
-konvence kvality kódu jsou u~tohoto modelu z~velké části řízeny
-znalostmi z~tréninku, strukturální rozhodnutí (modularita,
-dokumentace) instrukce ovlivňují.
+Stejně jako u~tabulky~\ref{tab:ablace-a} chybí u~ablace export \texttt{transcript.json}
+v~lokálním snapshotu --- řádek \acs{E1} proto uvádí jen hodnoty pro
+baseline r3 (62 / 30 / 4770 tis.); u~ablačních běhů \acs{E1} dopočítat nejde.
 
-Funkční korektnost (Q2) vykazuje extrémní variabilitu: B-1 dosáhl
+Automatizované metriky kvality kódu (\acs{Q5}, \acs{Q6}, \acs{Q7}) zůstaly na podobné
+úrovni jako v~r3 (tabulka~\ref{tab:ablace-b}). Agent produkoval
+modulární kód, striktní TypeScript a~v~B-1 i~JSDoc dokumentaci ---
+přestože instrukce tyto požadavky neobsahovaly. Jediný pokles
+zaznamenalo \ac{Q8}: judge identifikoval chybějící
+modularitu (veškerý kód v~jednom souboru) a~neúplnou dokumentaci.
+Data naznačují, že základní kódové konvence jsou u~tohoto modelu
+řízeny převážně znalostmi z~tréninku; strukturální rozhodnutí
+(modularita, dokumentace) instrukce pravděpodobně ovlivňují.
+
+Funkční korektnost (\acs{Q2}) vykazuje extrémní variabilitu: B-1 dosáhl
 37/42 (srovnatelné s~r3), zatímco B-2 pouze 11/42. Mutation score
-zůstal stabilní (67--72\,\%). Propad Q2 v~B-2 není důsledkem ablace
+zůstal stabilní (67--72\,\%). Propad \acs{Q2} v~B-2 není důsledkem ablace
 Package Quality --- ta neobsahuje žádné instrukce o~implementační
 logice. Jde o~projev nedeterminismu modelu: agent v~B-2 implementoval
 business day výpočty chybně, což způsobilo kaskádové selhání
 eskalačních přechodů. Stejný typ chyby se objevoval i~v~pilotních
 iteracích (r1, r4).
 
-P5 (testy nezměněny) se zhoršilo v~obou bězích --- agent modifikoval
-vlastní testy po implementaci. V~r3 tento problém nevznikl díky
-kontrolnímu kroku \texttt{git log --oneline -3}, který ablace~B
-ponechává (na rozdíl od ablace~A, kde byl odebrán). P5 selhání
-v~ablaci~B je tedy důsledkem nedeterminismu, ne ablace.
-
-Sekce Package Quality je pro metriky kvality kódu (Q5--Q7) převážně
-redundantní --- model produkuje srovnatelný kód i~bez ní. Stabilita
-funkční korektnosti (Q2) ale klesá, což může souviset s~chybějícím
-kontextem o~očekávané architektuře.
+\acs{P5} (testy nezměněny) selhalo v~obou bězích --- agent modifikoval
+vlastní testy po implementaci. Stejný problém se objevoval
+i~v~pilotních iteracích (r1, r4) se stejnými instrukcemi,
+jde tedy o~projev nedeterminismu modelu, ne ablace.
 \end{draft}
 
 \begin{raw}
@@ -1067,29 +1124,27 @@ bez problémů.
 \label{sec:zaver-ablaci}
 
 \begin{draft}
-Dvě ablace testovaly dvě složky instrukční sady r3: verifikační
+Dvě ablace testovaly dvě složky instrukcí z~r3: verifikační
 kroky v~Process (ablace~A) a~sekci Package Quality (ablace~B).
 Výsledky ukazují odlišný charakter obou složek.
 
-Verifikační kroky (\texttt{tsc}, \texttt{eslint},
-\texttt{git log}) nejsou redundantní. Bez nich se zhoršila kvalita
-kódu (Q5: 1~$\to$~3--4, Q7: 1~$\to$~1--4), klesla funkční korektnost
-(Q2: 41~$\to$~35--37) i~mutation score (Q3: 71\,\%~$\to$~62\,\%).
-Agent bez kontrolních bodů spotřeboval přibližně dvakrát více
-testovacích cyklů a~v~jednom běhu mu vyčerpání kontextového okna
-zabránilo dokončit úkol. Verifikační kroky plní dvojí funkci:
-zajišťují kontrolu kvality a~fungují jako checkpointy které
-strukturují práci agenta.
+Bez verifikačních kroků (\texttt{tsc}, \texttt{eslint})
+klesly metriky kvality kódu i~funkční korektnosti
+(tabulka~\ref{tab:ablace-a}). Agent bez kontrolních bodů navíc
+spotřeboval přibližně dvakrát více testovacích cyklů. Data
+naznačují, že verifikační kroky plní dvojí funkci: zajišťují
+kontrolu kvality a~fungují jako checkpointy které strukturují
+práci agenta.
 
-Sekce Package Quality je pro automatizované metriky kvality kódu
-(Q5--Q7) převážně redundantní --- model produkoval srovnatelný kód
-i~bez explicitních konvencí. Design quality (Q8) však kleslo z~3/3
-na~2/3 ve všech ablačních bězích: judge identifikoval chybějící
-modularitu a~neúplnou dokumentaci. Základní kódové konvence jsou
-u~tohoto modelu řízeny znalostmi z~tréninku; strukturální rozhodnutí
-(modularita, dokumentace) instrukce ovlivňují.
+Bez sekce Package Quality zůstaly automatizované metriky kvality
+(\acs{Q5}--\acs{Q7}) na srovnatelné úrovni (tabulka~\ref{tab:ablace-b}),
+avšak \ac{Q8} kleslo ve všech ablačních bězích ---
+judge identifikoval chybějící modularitu a~neúplnou dokumentaci.
+Data jsou konzistentní s~hypotézou, že základní kódové konvence
+jsou u~tohoto modelu řízeny znalostmi z~tréninku, zatímco
+strukturální rozhodnutí instrukce ovlivňují.
 
-Procesní metriky (P1--P5) vykazovaly v~obou ablacích variabilitu
+Procesní metriky (\acs{P1}--\acs{P5}) vykazovaly v~obou ablacích variabilitu
 srovnatelnou s~pilotními iteracemi (r3 vs.\ r4/r5). Tato variabilita
 není důsledkem ablace, ale nedeterminismu modelu: instrukce
 pro workflow zůstaly v~obou ablacích beze změny.
@@ -1106,76 +1161,94 @@ běhů: pět pilotních iterací a~čtyři ablační běhy. Pilotní sloupce
 ukazují evoluci instrukcí, ablační sloupce ukazují dopad odebrání
 jednotlivých složek. Baseline pro srovnání je r3 --- jediný pilotní
 běh kde agent splnil celý procesní checklist.
+Sloupec E1 uvádí vstup (max.\ na kroku včetně \texttt{cache} v~exportu),
+výstup a~součet \texttt{cache} přes kroky, vše v~tisících; stejný přehled
+generuje skript \texttt{summary.ts} do \texttt{experiments/runs/SUMMARY.md}.
 \end{draft}
 
+% Barvy pro heatmap (jemné, tisk-safe)
+\definecolor{cGood}{HTML}{D1FAE5}    % světle zelená — splněno / exit
+\definecolor{cMid}{HTML}{FEF3C7}     % světle žlutá  — částečně
+\definecolor{cBad}{HTML}{FEE2E2}     % světle červená — nesplněno
+\definecolor{cNeutral}{HTML}{F3F4F6} % šedá — N/A nebo konstantní
+
+\newcommand{\cmark}{\cellcolor{cGood}\checkmark}
+\newcommand{\xmark}{\cellcolor{cBad}$\times$}
+\newcommand{\cgood}[1]{\cellcolor{cGood}#1}
+\newcommand{\cmid}[1]{\cellcolor{cMid}#1}
+\newcommand{\cbad}[1]{\cellcolor{cBad}#1}
+\newcommand{\cna}[1]{\cellcolor{cNeutral}#1}
+
+\begin{landscape}
 \begin{table}[H]
 \centering
 \caption{Souhrnné výsledky všech běhů (pilot + ablace)}
 \label{tab:cross-run}
 \footnotesize
-\begin{tabular}{@{}l*{5}{c}|*{2}{c}*{2}{c}@{}}
+\begin{tabularx}{\linewidth}{@{}X*{5}{c}|*{2}{c}*{2}{c}@{}}
 \toprule
  & \multicolumn{5}{c|}{\textit{Pilotní iterace}} & \multicolumn{2}{c}{\textit{Ablace~A}} & \multicolumn{2}{c}{\textit{Ablace~B}} \\
 \textbf{Metrika} & \textbf{r1} & \textbf{r2} & \textbf{r3} & \textbf{r4} & \textbf{r5} & \textbf{A-1} & \textbf{A-2} & \textbf{B-1} & \textbf{B-2} \\
 \midrule
-P1 issues before code   & \checkmark & \checkmark & \checkmark & \checkmark & ?$^\dagger$    & \checkmark & \checkmark & \checkmark & \checkmark \\
-P2 branch per issue     & $\times$   & $\times$   & \checkmark & $\times$   & $\times$       & \checkmark & $\times$   & \checkmark & $\times$ \\
-P3 test-first           & $\times$   & $\times$   & \checkmark & \checkmark & $\times$       & \checkmark & $\times$   & \checkmark & \checkmark \\
-P4 PRs linked           & \checkmark & \checkmark & \checkmark & \checkmark & $\times$       & \checkmark & $\times$   & $\times$   & \checkmark \\
-P5 testy nezměněny      & $\times$   & \checkmark & \checkmark & $\times$   & \checkmark     & $\times$   & \checkmark & $\times$   & $\times$ \\
-P6 commit msg quality   & 2/3        & 2/3        & 3/3        & 3/3        & 2/3            & 2/3        & 2/3        & 3/3        & 3/3 \\
-P7 issue quality        & 2/3        & 2/3        & 3/3        & 3/3        & 3/3$^\ddagger$ & 2/3        & 3/3        & 3/3        & 3/3 \\
-P8 PR quality           & 3/3        & 3/3        & 3/3        & 1/3        & 1/3            & 3/3        & 1/3        & 2/3        & 2/3 \\
+P1 issues before code   & \cmark & \cmark & \cmark & \cmark & \cmid{?$^\dagger$}    & \cmark & \cmark & \cmark & \cmark \\
+P2 branch per issue     & \xmark & \xmark & \cmark & \xmark & \xmark       & \cmark & \xmark & \cmark & \xmark \\
+P3 test-first           & \xmark & \xmark & \cmark & \cmark & \xmark       & \cmark & \xmark & \cmark & \cmark \\
+P4 PRs linked           & \cmark & \cmark & \cmark & \cmark & \xmark       & \cmark & \xmark & \xmark & \cmark \\
+P5 testy nezměněny      & \xmark & \cmark & \cmark & \xmark & \cmark       & \xmark & \cmark & \xmark & \xmark \\
+P6 commit msg           & \cmid{2/3}  & \cmid{2/3}  & \cgood{3/3}  & \cgood{3/3}  & \cmid{2/3}    & \cmid{2/3}  & \cmid{2/3}  & \cgood{3/3}  & \cgood{3/3} \\
+P7 issue quality        & \cmid{2/3}  & \cmid{2/3}  & \cgood{3/3}  & \cgood{3/3}  & \cgood{3/3}$^\ddagger$ & \cmid{2/3}  & \cgood{3/3}  & \cgood{3/3}  & \cgood{3/3} \\
+P8 PR quality           & \cgood{3/3}  & \cgood{3/3}  & \cgood{3/3}  & \cbad{1/3}  & \cbad{1/3}  & \cgood{3/3}  & \cbad{1/3}  & \cmid{2/3}  & \cmid{2/3} \\
 \midrule
-Q1 API contract         & match      & match      & match      & match      & match          & match      & match      & match      & match \\
-Q2 ref.\ testy          & 39/42      & 32/42      & 41/42      & 39/42      & 38/42          & 35/42      & 37/42      & 37/42      & 11/42 \\
-Q3 mutation score       & 84\,\%     & 68\,\%     & 71\,\%     & 66\,\%     & ---            & 62\,\%     & ---$^*$    & 67\,\%     & 72\,\% \\
-Q4 AC coverage          & 25/25      & 25/25      & 25/25      & 23/25      & 23/25          & 24/24      & 24/24      & 24/24      & 22/24 \\
-Q5 lint warnings        & 2          & 1          & 1          & 1          & 0              & 4          & 3          & 2          & 2 \\
-Q6 typecheck errors     & 0          & 0          & 0          & 0          & 0              & 0          & 0          & 0          & 0 \\
-Q7 složitost            & 2          & 0          & 1          & 1          & 0              & 4          & 1          & 1          & 2 \\
-Q8 design quality       & 1/3        & 1/3        & 3/3        & 2/3        & 2/3            & 2/3        & 2/3        & 2/3        & 2/3 \\
+Q1 API contract         & \cna{match} & \cna{match} & \cna{match} & \cna{match} & \cna{match} & \cna{match} & \cna{match} & \cna{match} & \cna{match} \\
+Q2 ref.\ testy          & \cmid{39}  & \cbad{32} & \cgood{41} & \cmid{39} & \cmid{38}  & \cbad{35} & \cmid{37} & \cmid{37} & \cbad{11} \\
+Q3 mutation score       & \cgood{84\,\%} & \cbad{68\,\%} & \cmid{71\,\%} & \cbad{66\,\%} & \cna{---} & \cbad{62\,\%} & \cna{---$^*$} & \cbad{67\,\%} & \cmid{72\,\%} \\
+Q4 AC coverage          & \cgood{25}  & \cgood{25}  & \cgood{25}  & \cmid{23}  & \cmid{23}  & \cgood{24}  & \cgood{24} & \cgood{24} & \cmid{22} \\
+Q5 lint warnings        & \cbad{2}    & \cmid{1}      & \cmid{1}      & \cmid{1}      & \cgood{0}      & \cbad{4}    & \cbad{3}   & \cbad{2}   & \cbad{2} \\
+Q6 typecheck errors     & \cna{0}     & \cna{0}     & \cna{0}     & \cna{0}     & \cna{0}     & \cna{0}     & \cna{0}    & \cna{0}    & \cna{0} \\
+Q7 složitost            & \cbad{2}    & \cgood{0}      & \cmid{1}      & \cmid{1}      & \cgood{0}      & \cbad{4}    & \cmid{1}     & \cmid{1}     & \cbad{2} \\
+Q8 design quality       & \cbad{1/3}  & \cbad{1/3}  & \cgood{3/3}   & \cmid{2/3}    & \cmid{2/3}    & \cmid{2/3}    & \cmid{2/3}   & \cmid{2/3}   & \cmid{2/3} \\
 \midrule
-E2 trvání (min)         & 33         & 37         & 25         & 26         & 13             & 39         & 24         & 28         & 21 \\
-E3 dokončení            & ano        & ano        & ano        & ano        & ano            & ano        & ano        & ano        & ano \\
+E1 in/out/cache (tis.)  & 115/60/11k & 76/41/3k & 62/30/5k & 81/36/6k & 65/23/3k & 72/32/5k & 92/36/8k & 78/40/6k & 55/23/4k \\
+E2 trvání (min)         & 32{,}7     & 37{,}2     & 24{,}8     & 25{,}9     & 13{,}2     & 39         & 24        & 28        & 21 \\
+E3 kompakce             & 0          & 0          & 1          & 0          & 0          & 0          & 0         & 0         & 0 \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
+
+\smallskip
+\raggedright
+$^\dagger$~P1 v~r5 nelze určit --- agent nevytvořil issues.\\
+$^\ddagger$~P7 v~r5: judge hodnotil specifikační issue, ne agentovu.\\
+$^*$~Stryker v~A-2 nedokončil analýzu (timeout).\\
+Q4 v~ablacích používá 24~AC (viz sekce~\ref{sec:omezeni-validita}); pilotní běhy přepočteny na~25.
 \end{table}
-
-\begin{draft}
-$^\dagger$ P1 v~r5 nelze určit --- agent nevytvořil issues.
-
-$^\ddagger$ P7 v~r5: judge hodnotil specifikační issue \#1 (vytvořenou
-infrastrukturou), ne agentovu --- viz sekce~\ref{sec:omezeni-validita}.
-
-$^*$ Stryker v~A-2 nedokončil analýzu (timeout).
-
-Q4 používá v~rubrice 24~AC místo skutečných~25 (známý nedostatek,
-viz sekce~\ref{sec:omezeni-validita}); pilotní běhy mají Q4
-přepočteno na 25.
-\end{draft}
+\end{landscape}
 
 \begin{draft}
 Tabulka ukazuje dva vzorce. Za prvé, pilotní iterace potvrzují
 že instrukce lze iterativně zlepšovat: r1 (baseline) splnila 4/10
 deterministických metrik, r3 (po dvou cyklech úprav) splnila 9/10.
 Za druhé, ablace ukazují že ne všechny složky instrukcí přispívají
+%% REVIEW: text naruje tabulku — zvážit přepis na interpretaci
 stejně: odebrání verifikačních kroků (ablace~A) zhoršilo 4~metriky
-(Q2, Q3, Q5, Q7), zatímco odebrání sekce Package Quality (ablace~B)
+(\acs{Q2}, \acs{Q3}, \acs{Q5}, \acs{Q7}), zatímco odebrání sekce Package Quality (ablace~B)
 ponechalo automatizované metriky kvality na srovnatelné úrovni.
 
-Napříč všemi devíti běhy zůstaly tři metriky stabilní: Q1 (API
-contract match), Q6 (typecheck errors~=~0) a~E3 (agent vždy
-dokončil). Nejvyšší variabilitu vykazovaly procesní metriky P2--P5,
+Napříč všemi devíti běhy zůstaly tři metriky stabilní: \ac{Q1},
+\ac{Q6}~=~0 a~nízký počet kompaktací
+kontextu (\ac{E3}: 0--1 u~pilotů, u~ablace neznámé). Nejvyšší variabilitu vykazovaly procesní metriky \acs{P2}--\acs{P5},
 které kolísaly i~mezi běhy se stejnými instrukcemi (r3 vs.\ r4/r5).
 Interpretaci těchto výsledků ve vztahu k~cílům práce
 a~existující literatuře uvádí kapitola~\ref{kap:vyhodnoceni}.
+
+%% TODO: zvážit zmínku o konzistentním selhání konkrétního ref testu napříč běhy
+%% (pause-resume: selhalo v r1, r3, r4, r5 — 4/5 pilotních běhů).
+%% Toto je pozorovatelné z FINDINGS.md bez čtení transcriptů.
+%% Jde o faktické pozorování výsledků (sem, kap04), ne interpretaci (kap05).
+%% Otázka: stojí za zmínku jako ukázka co metriky odhalí i na dílčí úrovni?
 \end{draft}
 
-\begin{raw}
-%% TODO: graf vývoje metrik (pgfplots nebo obrázek)
-%% TODO: E1 (tokeny) z transcriptů kde jsou dostupné
 
+\begin{raw}
 \textbf{Kontext pro diskuzi (přesunout do kap05):}
 \begin{itemize}
     \item Gloaguen et al. \cite{gloaguen2025agentsmd}: generické AGENTS.md
@@ -1186,6 +1259,6 @@ a~existující literatuře uvádí kapitola~\ref{kap:vyhodnoceni}.
     \item Li et al. \cite{skillsbench2025}: curated Skills +16,2pp,
           self-generated $-1{,}3$pp. Naše instrukce jsou human-curated
           a~iterativně vylepšované --- odpovídá kategorii ``curated''.
-    \item Porovnat E1 (tokeny) s~Gloaguenovým nálezem +20\,\% cost.
+    \item Porovnat E1 (vstup/výstup tokenů) s~Gloaguenovým nálezem +20\,\% cost.
 \end{itemize}
 \end{raw}

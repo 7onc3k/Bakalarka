@@ -13,6 +13,9 @@
   %,block=ragged
 ]{biblatex}
 
+% Soubor czech-apa.lbx nemusí být v minimální TeX distribuci; bez mapování hlásí biblatex chybu.
+\DeclareLanguageMapping{czech}{english}
+
 \let\cite\parencite
 % \renewcommand*{\multinamedelim}{, \addspace}             % ISO-690
 % \renewcommand*{\finalnamedelim}{\addspace a \addspace}   % ISO-690

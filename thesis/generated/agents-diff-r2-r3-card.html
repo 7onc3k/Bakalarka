@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  overflow: hidden;
+}
+body {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  color: #1f2937;
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+}
+.frame {
+  padding: 12px;
+}
+.card {
+  border: 1px solid #d8dee6;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #ffffff;
+}
+.header {
+  background: #f6f8fb;
+  border-bottom: 1px solid #d8dee6;
+  padding: 10px 16px;
+  font: 600 22px/1.25 'IBM Plex Sans', system-ui, sans-serif;
+  color: #1f2937;
+}
+.content {
+  padding: 10px 16px 14px;
+}
+pre {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-family: 'IBM Plex Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  font-size: 22px;
+  line-height: 1.45;
+  color: #1f2937;
+}
+.line {
+  display: block;
+  padding: 0 6px;
+  border-radius: 4px;
+}
+.add {
+  background: #e8f5e9;
+}
+.del {
+  background: #fdecec;
+}
+
+</style>
+</head>
+<body>
+  <div class="frame">
+    <div class="card">
+      <div class="header">AGENTS.md: pilot-r2 -&gt; pilot-r3</div>
+      <div class="content"><pre><span class="line">1. Create issues — one concern per issue, starting with project setup</span><span class="line">2. For each issue, follow this exact sequence:</span><span class="line del">   a. `git checkout main &amp;&amp; git pull &amp;&amp; git checkout -b issue-N` (one branch per issue, no exceptions)</span><span class="line add">   a. Pick one open issue: `gh issue list --state open`, then `git checkout main &amp;&amp; git pull &amp;&amp; git checkout -b issue-N`</span><span class="line">   b. Write tests: `git add tests/ &amp;&amp; git commit -m &quot;test: &lt;description&gt;&quot;`</span><span class="line del">   c. Implement: `git add src/ &amp;&amp; git commit -m &quot;feat: &lt;description&gt;&quot;`</span><span class="line del">   d. Open PR: `gh pr create --title &quot;...&quot; --body &quot;Closes #N&quot;`, merge, delete branch</span><span class="line add">   c. Verify: run `git log --oneline -3` and confirm the test: commit exists before proceeding</span><span class="line add">   d. Implement: `git add src/ &amp;&amp; git commit -m &quot;feat: &lt;description&gt;&quot;`</span><span class="line add">   e. Open PR: `gh pr create --title &quot;...&quot; --body &quot;Closes #N&quot;`, merge, delete branch</span><span class="line">3. Use conventional commits: `test:` for tests, `feat:` for implementation, `docs:` for documentation</span><span class="line">4. Before every PR, run these checks and fix all issues before opening:</span><span class="line">- **Modular architecture** — separate files for types, business logic, utilities, and public API re-exports. No single-file implementations.</span><span class="line">- **Strict TypeScript** — no `any`, explicit return types on public API, `readonly` where applicable.</span><span class="line del">- **Documentation** — JSDoc on all exported functions and types. Inline comments for non-obvious domain logic (e.g., business day calculations, escalation thresholds).</span><span class="line add">- **Documentation** — JSDoc on all exported functions and types. Inline comments for non-obvious domain logic (e.g., business day calculations, escalation thresholds). This is enforced in Constraints.</span><span class="line">- **Clean API surface** — `src/index.ts` re-exports only the public API. Internal modules are not exposed.</span><span class="line"> </span><span class="line">- Never implement without a failing test first.</span><span class="line">- Never modify a test to match your implementation. If a test fails after implementation, fix the code — not the test. Tests encode the spec.</span><span class="line add">- Before every PR, verify JSDoc on every exported function in `src/index.ts`. If any export lacks JSDoc, add it before opening the PR.</span><span class="line">- Never rewrite git history (no amend, squash, rebase, force-push).</span><span class="line">- Do not add dependencies beyond the dev toolchain (vitest, typescript).</span></pre></div>
+    </div>
+  </div>
+</body>
+</html>

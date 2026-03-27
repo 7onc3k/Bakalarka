@@ -1,0 +1,17 @@
+\babel@toc {czech}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Baseline \texttt {AGENTS.md} (pilot-r1) --- kompletní znění instrukční sady použité jako výchozí bod pilotních iterací.}}{30}{figure.caption.19}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Vizuální diff změn \texttt {AGENTS.md} mezi pilot-r1 a~pilot-r2}}{33}{figure.caption.25}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Vizuální diff změn \texttt {AGENTS.md} mezi pilot-r2 a~pilot-r3}}{34}{figure.caption.29}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Vizuální diff změn \texttt {AGENTS.md} mezi pilot-r3 a~pilot-r4}}{36}{figure.caption.33}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Vizuální diff změn \texttt {AGENTS.md} mezi pilot-r3 a~pilot-r5}}{38}{figure.caption.37}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Souhrnná evoluce \texttt {AGENTS.md}: pilot-r1~$\to $~pilot-r3. Zelené řádky = přidáno, červené = odebráno.}}{40}{figure.caption.41}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Změny AGENTS.md pro ablaci~A: odebrány verifikační kroky (\texttt {git log}, \texttt {tsc}, \texttt {eslint}) z~Process.}}{42}{figure.caption.43}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Změny AGENTS.md pro ablaci~B: odebrána celá sekce Package Quality (konvence, strict TypeScript, JSDoc, čisté API).}}{42}{figure.caption.45}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }

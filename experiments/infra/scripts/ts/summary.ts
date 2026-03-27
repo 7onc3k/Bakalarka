@@ -10,7 +10,17 @@
 
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { RUNS_DIR, readFile } from "./shared.js";
+import {
+  RUNS_DIR,
+  readFile,
+  readJSON,
+  fileExists,
+  e1InputOutputThousands,
+} from "./shared.js";
+import {
+  efficiencyFromTranscript,
+  type LooseTranscript,
+} from "./efficiency-from-transcript.js";
 
 // ============================================================================
 // Typy
@@ -38,9 +48,10 @@ interface RunData {
   q7: string; // "2 viol" | "0"
   q8: string; // "1/3 overall"
   // E metriky
-  e1: string; // "143k"
+  /** E1 = vstup / výstup / Σ cache v tisících, např. "115 / 60 / 11528" */
+  e1: string;
   e2: string; // "33 min"
-  e3: string; // "ano" | "ne"
+  e3: string; // počet compactions (nebo "?" ze starého exportu)
 }
 
 // ============================================================================
@@ -122,21 +133,49 @@ function parseFindingsQ(content: string): {
     if (q7m)
       result.q7 = q7m[1] === "0" ? "0" : `${q7m[1]} viol`;
 
-    // E1: E1 Tokens — input: 83,036, output: 60,240, total: 143,276
-    const e1m = line.match(/E1 Tokens.*total:\s*([\d,]+)/);
-    if (e1m) {
-      const total = parseInt(e1m[1].replace(/,/g, ""), 10);
-      result.e1 = total >= 1000 ? `${Math.round(total / 1000)}k` : String(total);
+    // E1: řádek začíná „E1“, obsahuje „a / b“ nebo „a / b / c“ za pomlčkou
+    if (/^E1\b/.test(line.trim())) {
+      const e1Triple = line.match(
+        /[—–:-]\s*(\d+)\s*\/\s*(\d+)\s*\/\s*(\d+)/
+      );
+      if (e1Triple) result.e1 = `${e1Triple[1]} / ${e1Triple[2]} / ${e1Triple[3]}`;
+      else {
+        const e1Pair = line.match(/[—–:-]\s*(\d+)\s*\/\s*(\d+)/);
+        if (e1Pair) result.e1 = `${e1Pair[1]} / ${e1Pair[2]}`;
+      }
+    }
+    // starší: součet tokenů (tis.) jedním číslem
+    if (result.e1 === "?") {
+      const e1Tis =
+        line.match(/E1 součet tokenů \(tis\.\)\s*[—–:-]\s*([\d,]+)/) ??
+        line.match(/E1 Tokeny \(Σ, tis\.\)\s*[—–:-]\s*([\d,]+)/);
+      if (e1Tis) result.e1 = e1Tis[1].replace(/,/g, "");
+    }
+    // ještě starší — max tokens.total (jen orientační)
+    if (result.e1 === "?") {
+      const e1Tokens = line.match(/max tokens\.total\):\s*([\d,]+)/);
+      const e1Old = line.match(/E1 Tokens.*total:\s*([\d,]+)/);
+      const e1m = e1Tokens ?? e1Old;
+      if (e1m) {
+        const total = parseInt(e1m[1].replace(/,/g, ""), 10);
+        result.e1 =
+          total >= 1000 ? `${Math.round(total / 1000)}` : String(total);
+      }
     }
 
     // E2: E2 Duration — 37.2 min
     const e2m = line.match(/E2 Duration.*?([\d.]+)\s*min/);
     if (e2m) result.e2 = `${e2m[1]} min`;
 
-    // E3: E3 Completion — Completed
-    if (/E3 Completion.*Completed/.test(line)) result.e3 = "ano";
-    else if (/E3 Completion.*/.test(line) && /E3 Completion/.test(line))
-      result.e3 = "ne";
+    // E3: E3 Compactions — 2 (nový) | starý: „…Completed, 1 compaction(s)“
+    const e3CompactNew = line.match(/E3 Compactions[^\d]*(\d+)/);
+    if (e3CompactNew) result.e3 = e3CompactNew[1];
+    else if (/E3/.test(line)) {
+      const m = line.match(/(\d+)\s+compactions?/i);
+      if (m) result.e3 = m[1];
+      else if (/E3 Completion.*Completed/.test(line)) result.e3 = "0";
+      else if (/E3 Completion.*CRASHED/.test(line)) result.e3 = "?";
+    }
   }
 
   return result;
@@ -230,6 +269,27 @@ function loadRun(runDir: string, runName: string): RunData {
   const p15 = parseFindingsP1to5(findings);
   const qe = parseFindingsQ(findings);
 
+  let e1 = qe.e1;
+  let e2 = qe.e2;
+  let e3 = qe.e3;
+  const transcriptPath = path.join(runDir, "transcript.json");
+  if (fileExists(transcriptPath)) {
+    try {
+      const transcript = readJSON<LooseTranscript>(transcriptPath);
+      const eff = efficiencyFromTranscript(transcript);
+      if (eff) {
+        const { inputTis, outputTis, cacheTis } = e1InputOutputThousands(
+          eff.e1
+        );
+        e1 = `${inputTis} / ${outputTis} / ${cacheTis}`;
+        e3 = String(eff.e3.compactionCount);
+        e2 = `${eff.e2.durationMinutes} min`;
+      }
+    } catch {
+      /* FINDINGS fallback */
+    }
+  }
+
   const p6 = parsePJudge(path.join(runDir, "p6-result.json"));
   const p7 = parsePJudge(path.join(runDir, "p7-result.json"));
   const p8 = parsePJudge(path.join(runDir, "p8-result.json"));
@@ -250,9 +310,9 @@ function loadRun(runDir: string, runName: string): RunData {
     q6: qe.q6,
     q7: qe.q7,
     q8,
-    e1: qe.e1,
-    e2: qe.e2,
-    e3: qe.e3,
+    e1,
+    e2,
+    e3,
   };
 }
 
@@ -336,9 +396,14 @@ function buildTable(runs: RunData[]): string {
   lines.push(row("Q7 slozitost", runs.map((r) => r.q7)));
   lines.push(row("Q8 design quality (judge)", runs.map((r) => r.q8)));
   // E metriky
-  lines.push(row("E1 tokeny", runs.map((r) => r.e1)));
+  lines.push(
+    row(
+      "E1 vstup (max. krok, vč. cache) / výstup (Σ) / Σ cache (tis.)",
+      runs.map((r) => r.e1)
+    )
+  );
   lines.push(row("E2 trvani", runs.map((r) => r.e2)));
-  lines.push(row("E3 dokonceni", runs.map((r) => r.e3)));
+  lines.push(row("E3 compactions", runs.map((r) => r.e3)));
 
   return lines.join("\n");
 }

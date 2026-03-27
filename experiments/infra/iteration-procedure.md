@@ -81,9 +81,9 @@ Q8 rubrik: `infra/judge/q8-code-quality.md`.
 
 | Kód | Metrika | Jak | Exit |
 |-----|---------|-----|------|
-| E1 | Tokeny (input/output) | `opencode export` → JSON | záznam |
+| E1 | Tokeny | `max(tokens.total)` v exportu (ne součet přes turny) | záznam |
 | E2 | Trvání (minuty) | Session timestamps | záznam |
-| E3 | Kompletní dokončení | Crash/no crash + restart count (auto-continue log) | záznam |
+| E3 | Kompakce kontextu (+ dokončení, restarty) | heuristika snapshot v JSON + `metrics.csv` | záznam |
 
 E1-E3 nemají pass/fail — slouží k across-run srovnání.
 
@@ -161,9 +161,9 @@ Viz samostatný soubor: `experiments/infra/FINDINGS-template.md`.
 
 | Kód | Metrika | Hodnota |
 |-----|---------|---------|
-| E1 | Tokeny | input: output: |
+| E1 | Tokeny (max total) | z `analyze-run` |
 | E2 | Trvání | min |
-| E3 | Dokončení | Ano/Ne, restartů: |
+| E3 | Kompakce | počet (+ dokončení / restarty) |
 
 ## Srovnání s r(N-1)
 [tabulka co se zlepšilo/zhoršilo]

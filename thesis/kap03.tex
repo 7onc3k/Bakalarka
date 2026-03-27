@@ -2,82 +2,63 @@
 \label{kap:metodika}
 
 %% ==========================================================================
-%% 3.1 Návrhový výzkum (DSR)
+%% 3.1 Výzkumný přístup
 %% ==========================================================================
 
-\section{Návrhový výzkum (DSR)}
+\section{Výzkumný přístup}
 \label{sec:vyzkumny-pristup}
 
 \begin{draft}
-Kapitola~\ref{kap:vymezeni} definuje tři cíle (navrhnout sadu metrik,
-iterativním postupem navrhnout instrukce a~ablacemi identifikovat
-které složky přispívají), jejichž naplnění vyžaduje navrhovat řešení,
-ověřovat ho v~praxi a~na základě výsledků iterativně upravovat
-instrukce. Takový postup,
-kdy se navrhuje řešení a~opakovaně vyhodnocuje, odpovídá návrhovému
-výzkumu (Design Science Research, DSR). Hevner
-et al.~\cite{hevner2004} ho definují jako iterativní cyklus návrhu
-a~vyhodnocení: řešení se navrhne, vyzkouší, a~na základě výsledků
-upraví. Peffers
-et al.~\cite{peffers2008} tento cyklus formalizují do šesti aktivit:
-(1)~identifikace problému, (2)~definice cílů řešení, (3)~návrh,
-(4)~demonstrace, (5)~vyhodnocení a~(6)~komunikace výsledků.
-V~naší práci odpovídá identifikace problému a~cíle
-kapitole~\ref{kap:vymezeni}, návrh a~demonstrace probíhají formou
-případové studie (tato kapitola a~kapitola~\ref{kap:prakticka-cast}),
-vyhodnocení shrnuje kapitola~\ref{kap:vyhodnoceni} a~komunikací je
-samotný text práce.
+Navrhujeme sadu metrik a~iterativní postup pro hodnocení AI coding
+agentů. Ověřujeme je na případové studii systému upomínek faktur:
+opakovaně pouštíme agenta s~různými variantami instrukcí a~pokaždé
+měříme, co se změnilo. Tento přístup --- navrhovat řešení, ověřovat
+ho v~praxi a~na základě výsledků upravovat --- odpovídá iterativnímu
+cyklu návrhu a~vyhodnocení~\cite{hevner2004, peffers2008}.
 
-Aktivity návrh, demonstrace a~vyhodnocení se v~DSR opakují dokud
-řešení nedosáhne požadované kvality. V~naší práci operacionalizujeme
-tento cyklus jako čtyři kroky: Spuštění (spustit agenta), Měření
-(změřit výstup), Diagnóza (identifikovat příčiny) a~Úprava (upravit
-instrukce).
-Každý průchod těmito kroky odpovídá jednomu průchodu Peffersovými
-aktivitami návrh~$\to$~demonstrace~$\to$~vyhodnocení. Podrobný popis
-kroků uvádí sekce~\ref{sec:pilotni-iterace}. Tento postup má dvě
-fáze:
-pilotní iterace, kde cyklus opakujeme dokud agent nesplní stanovená
-kritéria, a~komparativní variace, kde z~fungujících instrukcí
-systematicky odebíráme nebo nahrazujeme jednotlivé části a~měříme
-dopad na chování agenta.
+V~naší práci tento cyklus realizujeme čtyřmi kroky: Spuštění (spustit
+agenta), Měření (změřit výstup), Diagnóza (identifikovat příčiny)
+a~Úprava (upravit instrukce). Podrobný popis kroků uvádí
+sekce~\ref{sec:pilotni-iterace}. Postup má dvě fáze: pilotní
+iterace, kde cyklus opakujeme dokud agent nesplní stanovená exit
+kritéria (sekce~\ref{sec:pilotni-iterace}), a~komparativní variace,
+kde z~fungujících instrukcí systematicky odebíráme jednotlivé části
+a~měříme dopad na chování agenta
+(sekce~\ref{sec:komparativni-variace}).
 
-DSR vyžaduje demonstraci a~vyhodnocení navrženého řešení. Hevner
-et al.~\cite{hevner2004} uvádí několik možných přístupů: řízený
-experiment (kontrola proměnných, statistická analýza), simulace,
-nebo případová studie. Řízený experiment by vyžadoval dostatečný
-počet běhů pro statistickou sílu, což je při ceně jednoho běhu
-(tisíce tokenů, desítky minut) nepraktické. Simulace nepřipadá
-v~úvahu, protože chování agenta nelze modelovat bez skutečného
-spuštění. Zvolili jsme tedy případovou studii na jednom projektu
-(systém upomínek faktur), která umožňuje opakované běhy s~různými
-instrukcemi a~podrobnou analýzu každého běhu.
-
-Z~jednoho projektu nelze tvrdit, že výsledky platí pro všechny typy
-software. Cílem je ukázat, že navržená sada metrik dokáže
-kvantifikovat chování agenta a~že iterativní postup vede
-k~měřitelnému zlepšení. Yin~\cite{yin2018} pro tento typ výzkumu
-používá pojem analytická generalizace: neříkáme ``takhle to funguje
-vždy'', ale ``na tomto případu jsme ukázali princip, který lze ověřit
-na dalších projektech''. Yin tento design nazývá embedded single-case: zkoumáme jeden projekt,
-ale v~rámci něj provádíme více běhů agenta. Každý běh má vlastní
-instrukce, vlastní git historii a~vlastní sadu naměřených metrik,
-takže je můžeme porovnávat mezi sebou.
+Pro ověření jsme zvolili případovou studii na jednom projektu.
+Řízený experiment by vyžadoval
+dostatečný počet běhů pro statistickou sílu, což je při ceně jednoho
+běhu (tisíce tokenů, desítky minut) nepraktické. Případová studie
+umožňuje opakované běhy s~různými instrukcemi a~podrobnou analýzu
+každého běhu. Z~jednoho projektu nelze statisticky generalizovat;
+Yin~\cite{yin2018} pro tento typ výzkumu používá pojem analytická
+generalizace --- na jednom případu ukazujeme princip, který lze
+ověřit na dalších projektech. Yin tento design nazývá embedded
+single-case: zkoumáme jeden projekt, ale v~rámci něj provádíme více
+běhů agenta, z~nichž každý má vlastní instrukce, git historii
+a~sadu naměřených metrik.
 \end{draft}
 
 \begin{raw}
-\textbf{TODO (2026-03-16):} DSR není potřeba vysvětlovat tak podrobně --- čtenář (FIS VŠE) to zná. Zkrátit sekci 3.1: stačí říct že používáme DSR, odkázat na Hevner/Peffers, a~rovnou popsat náš cyklus (Spuštění/Měření/Diagnóza/Úprava). Nemusíme vysvětlovat co DSR je.
+\textbf{Audit trail --- předchozí verze 3.1 (DRAFT v3, DSR jako rámec):}
+
+Sekce se jmenovala ``Návrhový výzkum (DSR)''. Text stavěl na Hevner
+et al.~\cite{hevner2004} (iterativní cyklus návrhu a~vyhodnocení)
+a~Peffers et al.~\cite{peffers2008} (6 aktivit: problém, cíle,
+návrh, demonstrace, vyhodnocení, komunikace). DSR terminologie
+(``artefakt'') přidávala komplexitu bez přidané hodnoty pro čtenáře
+--- přejmenováno na ``Výzkumný přístup'', Hevner/Peffers zachováni
+jako citace.
 
 \medskip
-\textbf{Audit trail --- předchozí verze 3.1:}
+\textbf{Audit trail --- předchozí verze 3.1 (DRAFT v1):}
 
-Hevner et al. \cite{hevner2004} rozlišují v~informatickém výzkumu dva přístupy. Behaviorální výzkum popisuje a~vysvětluje existující jevy --- například jak vývojáři pracují s~AI nástroji. Návrhový výzkum (Design Science Research, DSR) naopak navrhuje nové artefakty a~ověřuje, jestli řeší daný problém. Rozdíl je v~tom, co je výstupem: popis světa, nebo nástroj který ho mění.
+Hevner et al. rozlišují behaviorální a~návrhový výzkum. DSR navrhuje
+nové artefakty a~ověřuje jestli řeší daný problém.
 
-Tato práce spadá do návrhového výzkumu. Artefaktem je sada instrukcí pro AI coding agenta. Instrukce se navrhnou, agent s~nimi projede vývojový úkol, z~výstupu (kód, testy, git log) se vyhodnotí co fungovalo a~co ne, a~instrukce se podle toho upraví. Hevner tento postup formalizuje jako build-evaluate cyklus --- iterativní smyčku návrhu a~vyhodnocení, která se opakuje dokud artefakt nedosáhne požadované kvality.
-
-Dvě fáze: pilotní iterace (build-evaluate cyklus na instrukcích) a~komparativní variace (ablace/substituce na fungující sadě).
-
-Case study na jednom projektu. Yin: embedded single-case design, analytická generalizace.
+\medskip
+\textbf{RAW TODO (2026-03-24):} Původní plán počítal i~se substitucí jako samostatnou fází, ale pilotní iterace substituční efekt demonstrovaly implicitně (r1~obecná pravidla~$\to$ r3~konkrétní příkazy). Komparativní fáze proto obsahuje jen ablace. Při revizi sjednotit terminologii --- v~kap03.tex 3.3.5 i~kap04 úvod.
 \end{raw}
 
 %% ==========================================================================
@@ -113,15 +94,17 @@ sleduje stejnou strukturu a~obsahuje 19~metrik ve třech kategoriích:
 
 \begin{description}
     \item[P~-- proces (P1--P8)] Dodržel agent předepsaný postup?
-          Měříme dodržování workflow pravidel z~instrukcí (P1--P5)
+          Měříme dodržování workflow pravidel z~instrukcí (\acs{P1}--\acs{P5})
           a~kvalitu procesních výstupů jako commit messages, issue
-          a~PR descriptions (P6--P8).
+          a~PR descriptions (\acs{P6}--\acs{P8}).
     \item[Q~-- kvalita produktu (Q1--Q8)] Je kód kvalitní?
-          Měříme funkční korektnost (Q1--Q2), kvalitu testů (Q3--Q4)
-          a~udržovatelnost kódu (Q5--Q8).
+          Měříme funkční korektnost (\acs{Q1}--\acs{Q2}), kvalitu testů (\acs{Q3}--\acs{Q4})
+          a~udržovatelnost kódu (\acs{Q5}--\acs{Q8}).
     \item[E~-- efektivita (E1--E3)] Za jakou cenu?
-          Zaznamenáváme spotřebu tokenů (E1), čas (E2)
-          a~míru autonomie (E3).
+          Zaznamenáváme tokeny z~exportu (\acs{E1}: špička promptu na krok,
+          součet výstupů a~součet \texttt{cache.read}+\texttt{cache.write}
+          přes kroky --- vše v~tisících vedle sebe), čas (\acs{E2}) a~stabilitu
+          session (\acs{E3}).
 \end{description}
 
 Výběr konkrétních metrik vychází z~potřeb případové studie
@@ -145,29 +128,29 @@ v~commit messages a~PR descriptions.
 
 \subsubsection*{P1--P5: compliance (binární)}
 
-\textbf{P1 (issues before code)} ověřuje, zda agent vytvořil issues
+\ac{P1} ověřuje, zda agent vytvořil issues
 s~timestampem před prvním kódovým commitem. Měříme porovnáním
 \texttt{created\_at} nejstaršího agentova issue (GitHub API)
 s~časem prvního commitu obsahujícího soubory v~\texttt{src/}
 nebo \texttt{tests/}.
 
-\textbf{P2 (branch per issue)} ověřuje, zda agent vytvořil pro každé
+\ac{P2} ověřuje, zda agent vytvořil pro každé
 issue vlastní větev. Měříme počet remote branches (bez \texttt{main})
 vůči počtu issues: podmínka \textit{branches $\geq$ issues} je splněna
 tehdy, nenastalo-li slučování více issues do jedné větve.
 
-\textbf{P3 (test-first commits)} ověřuje, zda agent psal testy před
+\ac{P3} ověřuje, zda agent psal testy před
 implementací. Primární indikátor: existuje alespoň jeden commit s~prefixem
 \texttt{test:} a~zároveň alespoň jeden \texttt{feat:}. Přesnější
 měření poskytuje behavioral trace (sekce~\ref{sec:iterativni-cyklus}):
 počet větví, kde první zápis do \texttt{src/} předcházel prvnímu
 zápisu do \texttt{tests/} (\texttt{tddOrderViolations}).
 
-\textbf{P4 (PRs linked to issues)} ověřuje, zda každý PR obsahuje
+\ac{P4} ověřuje, zda každý PR obsahuje
 odkaz na issue. GitHub API vrací tělo PR; podmínka: všechna PR těla
 obsahují regex \texttt{Closes \#N}.
 
-\textbf{P5 (no existing test modifications)} ověřuje, že agent
+\ac{P5} ověřuje, že agent
 nepřepisoval již existující testové soubory. Metrika zachycuje
 \texttt{modified} změny (\texttt{-{}-diff-filter=M}) na testovacích
 souborech, tedy situaci kdy agent dříve vytvořený test později upraví
@@ -176,16 +159,16 @@ nezapočítávají.
 
 \subsubsection*{P6--P8: kvalita procesních artefaktů (LLM-as-judge)}
 
-\textbf{P6 (commit message quality)} hodnotí popisnost commit messages:
+\ac{P6} hodnotí popisnost commit messages:
 atomicitu, konvenční prefix a~srozumitelnost co a~proč bylo změněno.
 Hodnocení provádí LLM-as-judge na škále 1--3
 (sekce~\ref{sec:llm-as-judge-aplikace}).
 
-\textbf{P7 (issue description quality)} hodnotí popisnost issue descriptions:
+\ac{P7} hodnotí popisnost issue descriptions:
 jasnost scope, přítomnost acceptance criteria, dostatečnost pro
 implementaci. Hodnocení provádí LLM-as-judge na škále 1--3.
 
-\textbf{P8 (PR description quality)} hodnotí popisnost PR descriptions:
+\ac{P8} hodnotí popisnost PR descriptions:
 přítomnost odkazu na issue, popis co a~proč, dostatečnost pro
 code review. Hodnocení provádí LLM-as-judge na škále 1--3.
 \end{draft}
@@ -214,14 +197,14 @@ agentovy testy skutečné chyby (Q3--Q4) a~je kód udržovatelný (Q5--Q8).
 
 \subsubsection*{Funkční korektnost (Q1--Q2)}
 
-\textbf{Q1 (API contract match)} ověřuje, zda agentův kód dodržuje
+\ac{Q1} ověřuje, zda agentův kód dodržuje
 definované rozhraní. Referenční typy se importují a~zkompilují proti
 agentovu kódu (\texttt{tsc}). Výsledek je binární: typy sedí, nebo ne.
-Q1 je vstupní podmínkou pro Q2: pokud agentův kód neimplementuje
-správné API, referenční testy nelze ani zkompilovat, a~výsledek Q2
+\acs{Q1} je vstupní podmínkou pro \acs{Q2}: pokud agentův kód neimplementuje
+správné API, referenční testy nelze ani zkompilovat, a~výsledek \acs{Q2}
 by byl nesmyslný.
 
-\textbf{Q2 (referenční test pass rate)} měří kolik z~referenčních
+\ac{Q2} měří kolik z~referenčních
 testů projde na agentově implementaci. Vitest spustí 42~testů proti
 agentovu kódu; výsledek je počet passing testů z~42. Testy ověřují
 chování přes veřejné API (black-box,
@@ -231,7 +214,7 @@ test suite popisuje sekce~\ref{sec:ref-implementace-postup}.
 
 \subsubsection*{Kvalita testů (Q3--Q4)}
 
-\textbf{Q3 (mutation score)} měří, jestli agentovy testy skutečně
+\ac{Q3} měří, jestli agentovy testy skutečně
 detekují chyby~(sekce~\ref{sec:testovani-mutation}). Stryker
 s~konfigurací \texttt{-{}-mutate 'src/**/*.ts'} a~mutátory pro
 TypeScript (conditional, arithmetic, string, logical operators)
@@ -239,9 +222,9 @@ systematicky zavádí drobné změny do zdrojového kódu. Vstup: agentovy
 testy + zdrojový kód. Výstup: procento zabitých mutantů z~celkového
 počtu.
 
-\textbf{Q4 (AC coverage)} měří, kolik z~25 acceptance criteria má
-odpovídající test v~agentově test suite. Na rozdíl od Q2 (funguje
-implementace?) se Q4 ptá, jestli agent \textit{testoval všechno co měl}.
+\ac{Q4} měří, kolik z~25 acceptance criteria má
+odpovídající test v~agentově test suite. Na rozdíl od \acs{Q2} (funguje
+implementace?) se \acs{Q4} ptá, jestli agent \textit{testoval všechno co měl}.
 Judge dostane seznam 25~AC ze specifikace a~agentovu test suite. Pro
 každé AC určí, zda existuje test který ho pokrývá. Výstup: počet
 pokrytých AC z~25. Hodnocení provádí LLM-as-judge
@@ -249,27 +232,27 @@ pokrytých AC z~25. Hodnocení provádí LLM-as-judge
 
 \subsubsection*{Kvalita kódu (Q5--Q8)}
 
-\textbf{Q5 (lint warnings)} počítá varování a~chyby z~ESLint
+\ac{Q5} počítá varování a~chyby z~ESLint
 s~fixní konfigurací (pravidla: recommended + strict TypeScript rules).
 Konfigurace je součástí experimentální infrastruktury, ne agentova
 repo --- agent ji nemůže měnit. Výstup: celkový počet warnings + errors.
 
-\textbf{Q6 (typecheck errors)} počítá chyby z~\texttt{tsc -{}-noEmit}
+\ac{Q6} počítá chyby z~\texttt{tsc -{}-noEmit}
 ve strict mode. Doplňuje počet explicitních \texttt{any} ve zdrojových
 souborech (grep v~\texttt{src/**/*.ts}) jako proxy pro obcházení
 typového systému.
 
-\textbf{Q7 (složitost kódu)} měří cyklomatickou složitost per funkce.
+\ac{Q7} měří cyklomatickou složitost per funkce.
 ESLint \texttt{complexity} rule reportuje funkce překračující
 nastavený práh. Výstup: maximální složitost across all functions.
 Práh $\leq$~10 per funkce vychází
 z~McCabe~(sekce~\ref{sec:staticka-analyza}).
 
-\textbf{Q8 (design quality)} hodnotí aspekty které automatizované
+\ac{Q8} hodnotí aspekty které automatizované
 nástroje nezachytí: pojmenování, oddělení zodpovědností, idiomatický
 TypeScript, kvalita dokumentace a~zbytečná komplexita. Hodnocení
 provádí LLM-as-judge (sekce~\ref{sec:llm-as-judge-aplikace}).
-Celkové skóre Q8 je \textit{minimum} pěti dimenzí, nikoliv průměr.
+Celkové skóre \acs{Q8} je \textit{minimum} pěti dimenzí, nikoliv průměr.
 Volba minima je záměrná: jeden slabý rozměr má stáhnout celkový výsledek
 dolů, aby slabiny nebyly maskované silnými dimenzemi.
 \end{draft}
@@ -285,20 +268,55 @@ a~sekce~\ref{sec:pilotni-iterace}.
 \subsection{Metriky efektivity (E1--E3)}
 \label{sec:metriky-efektivity}
 
+\begin{raw}
+\textbf{TODO (2026-03-26):} Tento odstavec je příliš technický pro
+metodiku --- detailní výpočet tokenů z~transcript.json (jak počítat
+cache, proč ne sumInputTokens) patří do kap04 nebo přílohy. Zde by
+mělo být jen CO měříme (tokeny, čas, kompakce) a~PROČ (porovnání
+nákladů). Odkaz na konkrétní hodnotu pilot-r1 (ř.~291) nepatří do
+metodiky vůbec.
+\end{raw}
+
 \begin{draft}
 Metriky efektivity měří zdroje spotřebované při vývoji. Nemají exit
 kritérium a~slouží k~porovnání nákladů mezi iteracemi.
 
-\textbf{E1 (tokeny)} počítá vstupní a~výstupní tokeny z~exportu
-agentní session. Sledování E1 motivuje zjištění Gloaguen
+\ac{E1} z~exportu
+\texttt{transcript.json} počítáme tak, aby šlo běhy srovnat:
+\textbf{výstup} = součet \texttt{output}+\texttt{reasoning} přes všechny
+asistentní kroky (celkově vygenerovaný text a~reasoning);
+\textbf{vstup} = \textbf{maximum} na jednom asistentním kroku ze součtu
+\texttt{input}+\texttt{cache.read}+\texttt{cache.write};
+\textbf{$\Sigma$\,cache} = součet \texttt{cache.read}+\texttt{cache.write} přes
+všechny zúčtované kroky (kumulativní účetnictví v~exportu --- může být
+velké číslo, slouží k~porovnání mezi běhy, ne jako jedna špička).
+Důvod pro rozdělení: poskytovatel v~exportu často \textbf{odděluje} část
+promptu do \texttt{cache.read}; samotné pole \texttt{input} pak
+podstatně \textbf{podhodnocuje} objem kontextu v~jednom requestu.
+\textbf{Součet vstupů přes všechny kroky neuvádíme} --- opakovaně by
+započítával stejný kontext v~každém turnu a~mezi běhy by vytvářel
+nerealistické skoky (např.\ při delší session).
+V~tabulkách jsou tři složky v~tisících tokenů, zaokrouhlené na celé
+číslo (např.\ \textbf{115\,/\,60\,/\,11\,528} u~pilot-r1: max.\ vstup
+vč.~cache $\approx$115\,000 na jednom kroku, součet výstupů
+$\approx$60\,000, součet cache $\approx$11{,}5\,mil.\ tokenů).
+\textbf{Diagnostické} ponecháváme \texttt{sumInputTokens} (součet pole
+\texttt{input}) a~\texttt{peakInputTokens} (max.\ jen \texttt{input}) ve
+skriptech; do hlavičky E1 tabulek nepatří.
+Pole \texttt{tokens.total} v~exportu \textbf{do E1 nepočítáme} (míchá
+promptové a~generované tokeny; pro šířku promptu používáme
+\texttt{input}+\texttt{cache}).
+Sledování objemu tokenů motivuje zjištění Gloaguen
 et al.~\cite{gloaguen2025agentsmd}, že context files zvyšují inference
 cost o~více než 20\,\%.
 
-\textbf{E2 (trvání)} měří wall-clock time v~minutách od spuštění
+\ac{E2} měří wall-clock time v~minutách od spuštění
 agenta po poslední commit.
 
-\textbf{E3 (dokončení)} zaznamenává, zda agent dokončil úkol bez
-pádu, a~počet restartů auto-continue pluginu jako proxy pro autonomii.
+\ac{E3} počítá události, kdy se podle změny
+\texttt{snapshot} mezi kroky v~transcriptu OpenCode provedl zápis
+kompakce kontextu (heuristika). Doplňkově sledujeme úspěšné dokončení
+beze ztráty session a~počet restartů z~auto-continue (\texttt{metrics.csv}).
 
 Se dvěma běhy per variaci jsou tyto hodnoty deskriptivní,
 ne inferenční.
@@ -313,7 +331,7 @@ Původní popis E1--E3 se zdroji (SWE-bench, AgentBench).
 \label{sec:llm-as-judge-aplikace}
 
 \begin{draft}
-Pět metrik (P6, P7, P8, Q4, Q8) hodnotí vlastnosti které nelze extrahovat
+Pět metrik (\acs{P6}, \acs{P7}, \acs{P8}, \acs{Q4}, \acs{Q8}) hodnotí vlastnosti které nelze extrahovat
 automatizovaným nástrojem. Pro jejich hodnocení používáme metodu
 LLM-as-judge (sekce~\ref{sec:llm-as-judge}).
 
@@ -422,7 +440,7 @@ přiměřená velikost, reálný use case) a~stručný popis projektu.
 \begin{draft}
 Aby bylo možné měřit vliv instrukcí, musí být všechno ostatní
 konstantní. Jedinou proměnnou mezi běhy je obsah souboru \texttt{AGENTS.md},
-procedurální instrukční sady, která definuje pracovní postup,
+procedurálních instrukcí, které definují pracovní postup,
 omezení a~quality gates. Na rozdíl od generických context files,
 které typicky popisují adresářovou strukturu a~build
 příkazy~\cite{gloaguen2025agentsmd}, jde o~fokusované instrukce
@@ -515,10 +533,10 @@ existující kód ani závislosti. Po dokončení se exportuje session
 transcript (\texttt{transcript.json}).
 
 \textbf{Měření.} Skript \texttt{analyze-run.ts} extrahuje
-deterministické metriky automaticky: git log a~GitHub API (P1),
-výstup Vitest a~Stryker (Q2, Q3), statická analýza (Q5--Q7),
-session metadata (E1--E3). Kvalitativní metriky (P6, P7, P8, Q4,
-Q8) hodnotí LLM-as-judge GLM-5 podle fixní rubriky
+deterministické metriky automaticky: git log a~GitHub API (\acs{P1}),
+výstup Vitest a~Stryker (\acs{Q2}, \acs{Q3}), statická analýza (\acs{Q5}--\acs{Q7}),
+session metadata (\acs{E1}--\acs{E3}). Kvalitativní metriky (\acs{P6}, \acs{P7}, \acs{P8}, \acs{Q4},
+\acs{Q8}) hodnotí LLM-as-judge GLM-5 podle fixní rubriky
 (sekce~\ref{sec:llm-as-judge-aplikace}). Výstupem je
 \texttt{FINDINGS.md} s~tabulkou metrik a~faktickým popisem
 chování agenta.
@@ -546,6 +564,15 @@ obsah zvyšuje inference cost bez přínosu k~úspěšnosti~\cite{gloaguen2025ag
 a~fokusované instrukce překonávají vyčerpávající
 dokumentaci~\cite{skillsbench2025}.
 \end{draft}
+
+\begin{raw}
+\textbf{TODO (2026-03-25) --- doplnit do Diagnózy větu o AI asistenci:}
+Diagnostická analýza probíhala za asistence nástroje Claude (Anthropic);
+výzkumník formuloval hypotézy o~příčinách selhání, AI asistent poskytoval
+analytickou podporu a~návrhy změn na základě literatury.
+Finální rozhodnutí o~každé úpravě instrukcí bylo vždy na výzkumníkovi.
+Konzultovat s~vedoucím --- kam přesně v~Diagnóze tuto větu zařadit.
+\end{raw}
 
 \begin{raw}
 \textbf{Review poznámka (2026-03-21) --- Hassan SASE jako diagnostický rámec:}
@@ -584,18 +611,19 @@ Skript \texttt{analyze-run.ts} extrahuje metriky z~pěti zdrojů:
     \item Stryker JSON report → Q3 (mutation score)
     \item ESLint JSON report → Q5 (warnings), Q7 (complexity rule)
     \item \texttt{tsc -{}-noEmit} stderr → Q6
-    \item \texttt{transcript.json} → E1 (tokeny), E2 (trvání), E3 (restarts)
+    \item \texttt{transcript.json} → E1 (vstup / výstup / $\Sigma$ cache v~tisících), E2 (trvání), E3 (kompakce kontextu)
 \end{itemize}
 
 Skript \texttt{judge.ts} spouští LLM-as-judge (GLM-5) pro P6, P7, P8, Q4, Q8.
-Workflow: pošle artefakty + rubriku; výstup = JSON se score a rationale.
-P6: commit messages hodnocené samostatně 1--3 (atomicita, konvenční prefix, popisnost).
-P7: issue descriptions hodnocené samostatně 1--3 (scope, AC, detail pro implementaci).
-P8: PR descriptions hodnocené samostatně 1--3 (odkaz na issue, co a~proč, dostatečnost pro review).
-Q4: judge dostane seznam 25 AC ze specifikace + agentovu test suite; partial coverage počítá jako pokryté.
-Q8: pět dimenzí (naming, SoC, idiomatic TS, documentation, complexity); overall = MINIMUM pěti dimenzí --- jeden slabý score stáhne celkový.
+Workflow:\allowbreak{} pošle artefakty + rubriku; výstup = JSON se score a rationale.
+P6:\allowbreak{} commit messages hodnocené samostatně 1--3 (atomicita, konvenční prefix, popisnost).
+P7:\allowbreak{} issue descriptions hodnocené samostatně 1--3 (scope, AC, detail pro implementaci).
+P8:\allowbreak{} PR descriptions hodnocené samostatně 1--3 (odkaz na issue, co a~proč, dostatečnost pro review).
+Q4:\allowbreak{} judge dostane seznam 25 AC ze specifikace + agentovu test suite; partial coverage počítá jako pokryté.
+Q8:\allowbreak{} pět dimenzí (naming, SoC, idiomatic TS, documentation, complexity); overall = MINIMUM pěti dimenzí --- jeden slabý score stáhne celkový.
 
-Výstupy kroku: \texttt{FINDINGS.md} (tabulka P/Q/E metrik + behavioral summary), \texttt{p2-result.json}, \texttt{q4-result.json}, \texttt{q8-result.json}.
+Výstupy kroku: \texttt{FINDINGS.md} (tabulka P/Q/E metrik + behavioral summary).
+Soubory \texttt{p2-result.json}, \texttt{q4-result.json}, \texttt{q8-result.json}.
 
 Behavioral summary (3--5 vět) popisuje co agent skutečně udělal: kolik issues vytvořil, zda TDD dodržel, zda commitoval průběžně nebo blob na konci --- faktická pozorování z~git logu a~GitHub API, ne hodnocení.
 
@@ -610,16 +638,21 @@ Výstup FINDINGS.md identifikuje \textit{co} nesplnil. DIAGNOSIS.md vysvětluje 
 
 Přehled rámců jako tabulka --- zvážit pro finální text:
 
+{\footnotesize
+\setlength{\tabcolsep}{2.5pt}%
+\resizebox{\linewidth}{!}{%
 \begin{tabular}{@{}llll@{}}
 \toprule
 \textbf{Rámec} & \textbf{Otázka} & \textbf{Co analyzuje} & \textbf{Výstup} \\
 \midrule
-FSE/Mao~\cite{mao2025fse}        & Co chybí/přebývá?        & 7 komponent AGENTS.md          & komponentní analýza \\
-SASE/Hassan~\cite{hassan2025sase} & Je balance typů obsahu ok? & Brief/Loop/Mentor poměr        & poměr + co dominuje \\
-Lulla~\cite{lulla2026}           & Přidává každý řádek hodnotu? & efektivita obsahu             & kandidáti na odstranění \\
+FSE/Mao~\cite{mao2025fse} & Co chybí/přebývá? & 7 komponent AGENTS.md & komponentní analýza \\
+SASE/Hassan~\cite{hassan2025sase} & Je balance typů obsahu ok? & Brief/Loop/Mentor poměr & poměr + co dominuje \\
+Lulla~\cite{lulla2026} & Přidává každý řádek hodnotu? & efektivita obsahu & kandidáti na odstranění \\
 Breunig/Razavi~\cite{razavi2025,breunig2025} & Proč ignoruje opakovaně? & recovery strategie & 4-krokový postup \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}%
+}
 
 FSE 2025 (Mao et al.) --- projít AGENTS.md proti 7 komponentám v~doporučeném pořadí:
 Role → Directive → Context → Workflow → Output → Constraints → Examples.
@@ -671,10 +704,10 @@ Výstupy kroku: aktualizovaný \texttt{AGENTS.md} + záznam \texttt{changelog/pi
 \begin{draft}
 Pilotní fáze běží dokud agent nesplní exit kritéria ze sloupce
 \textit{Exit kritérium} v~tabulce~\ref{tab:metriky-prehled}.
-Kritéria mají dva typy: deterministická (P1--P5, Q1--Q2, Q4--Q6)
+Kritéria mají dva typy: \mmet{det} (\acs{P1}--\acs{P5}, \acs{Q1}--\acs{Q2}, \acs{Q4}--\acs{Q6})
 mají přirozenou binární hranici --- buď splněno nebo ne; minimální
-standard (P6--P8, Q3, Q7--Q8) je práh zdůvodněný literaturou.
-E1--E3 jsou záznamové metriky bez kritéria, slouží k~porovnání
+standard (\acs{P6}--\acs{P8}, \acs{Q3}, \acs{Q7}--\acs{Q8}) je práh zdůvodněný literaturou.
+\acs{E1}--\acs{E3} jsou \mmet{zaz} bez kritéria, slouží k~porovnání
 efektivity mezi běhy.
 
 S~ohledem na scope práce (jeden projekt, jeden model) stačí jeden
@@ -695,60 +728,35 @@ effectiveness, Razavi/Breunig prompt sensitivity), výstupy iterace
 \label{sec:komparativni-variace}
 
 \begin{draft}
-Z~fungující sady instrukcí (výstup pilotní fáze) systematicky měníme
-jednotlivé části a~měříme dopad na chování agenta. Používáme dva typy
-změn: ablace (odebrání části, tedy funguje agent i~bez ní?) a~substituce
-(nahrazení alternativní formulací, tedy která varianta produkuje lepší
-výsledky?).
+Z~fungující sady instrukcí (výstup pilotní fáze) systematicky odebíráme
+jednotlivé složky a~měříme dopad na chování agenta. Tento postup ---
+ablace --- odpovídá na otázku: potřebuje agent danou část instrukcí,
+nebo je redundantní?
 
 Konkrétní variace nelze specifikovat předem. Pilotní fáze
 \textit{generuje} hypotézy o~tom, které složky instrukcí jsou pro
 chování agenta podstatné, a~komparativní fáze je testuje. Výběr
-variací bude vycházet z~diagnostiky pilotních běhů pomocí rámců
-popsaných v~sekci~\ref{sec:pilotni-iterace}. Například pokud se
-v~pilotu ukáže, že agent konzistentně ignoruje pravidlo o~test-first
-commitech, komparativní variace může testovat, zda odebrání tohoto
-pravidla změní i~ostatní metriky, nebo zda alternativní formulace
-vede k~lepšímu dodržování.
+variací vychází z~diagnostiky pilotních běhů
+(sekce~\ref{sec:pilotni-iterace}): pokud se v~pilotu ukáže, že agent
+konzistentně nedodržuje určité pravidlo, ablace může testovat, zda
+jeho odebrání změní i~ostatní metriky. Podobně pokud určitá sekce
+instrukcí koreluje s~vysokou kvalitou výstupu, ablace ověří, zda je
+tento vztah kauzální.
 
-Se dvěma běhy per variaci nelze statisticky odlišit efekt změny
-od šumu způsobeného nedeterminismem
-LLM~(sekce~\ref{sec:omezeni-validita}). Výsledky komparativní fáze
-proto interpretujeme jako indikativní, ne kauzální.
+Každá ablace se provádí ve dvou nezávislých bězích se stejným
+nastavením, aby bylo možné odlišit systematický efekt změny od
+přirozené variability nedeterministického modelu. I~se dvěma běhy
+nelze dosáhnout statistické průkaznosti~(sekce~\ref{sec:omezeni-validita});
+výsledky komparativní fáze proto interpretujeme jako indikativní,
+nikoliv kauzální.
 \end{draft}
 
 \begin{raw}
-\textbf{Review poznámka (2026-03-21) --- konzistence s~novým cílem~3:}
-
-Cíl~3 v~kap01 nyní zní: ``Ablacemi identifikovat, které složky instrukční sady přispívají k~měřenému chování agenta a~které jsou redundantní.'' DRAFT výše zmiňuje i~substituce, ale v~kap04 substituce jako samostatná fáze neprobíhá (pilotní iterace ji demonstrovaly implicitně: r1~obecná pravidla~$\to$ r3~konkrétní příkazy). Zvážit: (a)~smazat zmínku o~substituci z~tohoto DRAFT, (b)~ponechat jako obecný popis metody ale v~kap04 explicitně uvést že se provedla jen ablace, (c)~přeformulovat cíl~3 aby zahrnoval i~substituci. Momentálně kap04 volí (b).
-
-\medskip
-\textbf{Review poznámka (2026-03-21) --- ``jeden běh per variaci'':}
-
-DRAFT říká ``s~jedním během per variaci'' ale v~kap04 provádíme dva běhy per variaci. Opravit na ``se dvěma běhy per variaci nelze statisticky\ldots'' --- nebo ponechat a~popsat jako metodické rozhodnutí (dva běhy = mitigace nedeterminismu, ale stále ne statistická síla).
-
-\medskip
-\textbf{Předchozí TODO (2026-03-16):}
-
-Komparace v~metodice abstraktně, konkretizace v~kap04.
-
-\medskip
-\textbf{Audit trail --- předchozí obsah 3.3.4:}
-Popis ablace/substituce, výběr variací z literatury (Mao, Hassan,
-Lulla, Li/SkillsBench, Gloaguen), limitations (prompt sensitivity,
-single-agent izolace).
-\end{raw}
-
-\begin{raw}
-\textbf{Nápad k rozpracování --- komparace ``co šlo dobře'':}
-
-Standardní ablace testuje co chybí (odeber část $\Rightarrow$ zhorší se?).
-Ale lze testovat i opačně: co fungovalo příliš dobře / bylo over-specified?
-Hypotéza: části instrukcí které agent dodržel na 100\% jsou kandidáti na zjednodušení (compaction) nebo vynechání.
-Pokud po vynechání chování zůstane stejné $\Rightarrow$ instrukce byla redundantní (AGENTbench meta-princip).
-Pokud se zhorší $\Rightarrow$ instrukce byla nutná, ale možná přepsatelná stručněji.
-Tato variace doplňuje ablaci o pohled z druhé strany: ne jen ``co přidat'', ale ``co odebrat bez ztráty''.
-Odkaz na Lulla 2026: efektivní obsah = architektura + konvence, verbose workflow neefektivní.
+\textbf{Audit trail --- předchozí obsah 3.3.5:}
+DRAFT v1 zmiňoval ablace i~substituce. Substituce v~kap04 jako
+samostatná fáze neprobíhaly (pilotní iterace je demonstrovaly
+implicitně: r1~obecná pravidla~$\to$ r3~konkrétní příkazy).
+DRAFT v2 zúžen jen na ablace v~souladu s~cílem~3 a~kap04.
 \end{raw}
 
 %% ==========================================================================
@@ -763,8 +771,8 @@ Tabulka~\ref{tab:metriky-prehled} shrnuje všechny metriky na jednom
 místě. Sloupec \textit{typ} rozlišuje deterministická exit kritéria
 (přirozená binární hranice), minimální standard (práh zdůvodněný
 literaturou) a~záznamové metriky (bez kritéria, slouží k~porovnání
-mezi běhy). Automatizované metriky (P1--P5, Q1--Q3, Q5--Q7, E1--E3)
-sbírá jeden skript; kvalitativní metriky (P6--P8, Q4, Q8) hodnotí
+mezi běhy). \mmet{det} (\acs{P1}--\acs{P5}, \acs{Q1}--\acs{Q3}, \acs{Q5}--\acs{Q7}, \acs{E1}--\acs{E3})
+sbírá jeden skript; \mmet{qual} (\acs{P6}--\acs{P8}, \acs{Q4}, \acs{Q8}) hodnotí
 LLM-as-judge (sekce~\ref{sec:llm-as-judge-aplikace}).
 \end{draft}
 
@@ -772,7 +780,8 @@ LLM-as-judge (sekce~\ref{sec:llm-as-judge-aplikace}).
 \centering
 \caption{Sada metrik: kód, měřená vlastnost, nástroj, exit kritérium a~typ}
 \label{tab:metriky-prehled}
-\small
+\footnotesize
+\setlength{\tabcolsep}{3pt}
 \begin{tabular}{@{}lllll@{}}
 \toprule
 \textbf{Kód} & \textbf{Metrika} & \textbf{Nástroj} & \textbf{Exit kritérium} & \textbf{Typ} \\
@@ -798,9 +807,9 @@ Q7 & Cyklomatická složitost      & ESLint (complexity)     & $\leq$ 10/fn & mi
 Q8 & Design quality              & LLM-as-judge (GLM-5)   & $\geq$ 2/3 & min. \\
 \midrule
 \multicolumn{5}{@{}l}{\textit{Efektivita (E) --- za jakou cenu}} \\[2pt]
-E1 & Tokeny (input + output)     & OpenCode export & --- & záznam \\
+E1 & Vstup / výstup / $\Sigma$ cache (tis.) z exportu & OpenCode export & --- & záznam \\
 E2 & Trvání (minuty)             & session timestamps & --- & záznam \\
-E3 & Dokončení + restarts        & auto-continue log & --- & záznam \\
+E3 & Kompakce + dokončení + restarty & transcript + auto-continue & --- & záznam \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -825,78 +834,43 @@ Jednotlivé metriky vychází z~existující teorie: mutation
 testing~\cite{papadakis2019}, cyklomatická složitost~\cite{mccabe1976},
 taxonomie procesních a~produktových metrik~\cite{fenton2014}. Konkrétní
 kombinace metrik do sady a~volba exit kritérií jsou autorské a~představují
-návrh, ne ověřený standard. Pět metrik (P6, P7, P8, Q4, Q8) obsahují
+návrh, ne ověřený standard. Pět metrik (\acs{P6}, \acs{P7}, \acs{P8}, \acs{Q4}, \acs{Q8}) obsahují
 subjektivní složku (LLM-as-judge). Tyto metriky proto slouží jako
 podpůrné kvalitativní indikátory, zatímco hlavní opora vyhodnocení
 stojí na deterministických metrikách a~auditovatelných artefaktech.
 Spolehlivost LLM-as-judge nebyla validována proti lidskému hodnocení
 (např.\ Cohenovým~$\kappa$) z~důvodu časových omezení; výsledky
 kvalitativních metrik proto nelze interpretovat jako objektivní měření.
-Při validaci měřicí infrastruktury byly identifikovány tři známé
-nedostatky: (1)~metrika Q4 používá v~rubrice 24~AC místo skutečných~25
-(chybí AC pro konfiguraci svátků), (2)~metrika P7 nefiltruje
-specifikační issue vytvořenou infrastrukturou a~v~bězích bez
-agentových issues hodnotí nesprávný artefakt, (3)~detekce
-\texttt{any} v~Q6 zachytává anglické slovo v~komentářích (false
-positive). Tyto nedostatky jsou konzistentní napříč všemi běhy
-a~neovlivňují srovnání mezi iteracemi.
-Referenční testy (Q2) jsou odvozeny ze specifikace metodou TDD, čímž
-se snižuje riziko test oracle problému~\cite{mathews2024}. Při pilotních
-bězích se ukázalo, že část referenčních testů závisela na interním
-pojmenování funkcí, které specifikace nepředepisuje. Tyto testy byly
-opraveny na behavioral testy přes veřejné API a~výsledky Q2 přeměřeny.
+\phantomsection\label{sec:referencni-testy}%
 Experiment rozlišuje dva druhy testů: referenční testy (měřené metrikou
-Q2, spouštěné po běhu skriptem, agentovi neviditelné) a~agentovy vlastní
+\acs{Q2}, spouštěné po běhu skriptem, agentovi neviditelné) a~agentovy vlastní
 testy (psané agentem během běhu, viditelné a~spustitelné agentem).
 Metrika P5 se vztahuje výhradně k~agentovým vlastním testům.
-
-Metrika E1 (tokeny) není přímo porovnatelná mezi běhy r1--r3
-a~r4+. Konfigurace modelu se během pilotních iterací změnila:
-přidání parametru \texttt{limit.context} způsobilo, že nástroj
-OpenCode začal do pole \texttt{input} zahrnovat i~cachované tokeny
-systémového promptu. Výstupní tokeny (\texttt{output}) a~doba běhu
-(E2) zůstávají porovnatelné.
+Referenční testy jsou odvozeny ze specifikace metodou
+TDD~\cite{mathews2024}, čímž se snižuje riziko test oracle problému.
+Při validaci měřicí infrastruktury byly identifikovány známé
+nedostatky (\acs{Q4}, \acs{P7}, \acs{Q6}) a~změny prostředí mezi běhy (Docker izolace,
+\acs{E1} neporovnatelnost, temperature); tyto poznatky jsou konzistentní
+napříč běhy a~jsou diskutovány
+v~sekci~\ref{sec:limity-vysledky}.
+Správnost skriptu \texttt{analyze-run.ts} pro metriky \acs{P1}--\acs{P5} byla
+ověřena manuálním srovnáním výstupů s~raw daty z~git logu a~GitHub
+API pro běhy r4 a~r5; žádná diskrepance nebyla identifikována.
 
 \textbf{Interní validita} (jsou závěry podložené daty?).
 Hlavní hrozba je nedeterminismus LLM: stejné instrukce mohou při
-různých bězích dát různé výsledky. Se dvěma běhy per variaci nelze
-statisticky odlišit efekt změny instrukcí od náhodného
-šumu~\cite{razavi2025}. Dva běhy per variaci jsou mitigací
-nedeterminismu, ale neposkytují statistickou sílu. Další hrozbou je confirmation bias: autor navrhuje instrukce
+různých bězích dát různé výsledky~\cite{razavi2025}. Dva běhy per
+variaci jsou mitigací, ale neposkytují statistickou sílu.
+Další hrozbou je confirmation bias: autor navrhuje instrukce
 i~evaluuje výsledky. Tuto hrozbu oslabují automatizované metriky
-(P1, Q1--Q3, Q5--Q7), které nepodléhají subjektivnímu posouzení,
-a~volba judge modelu z~jiné rodiny. Třetí hrozbou je vývoj
-výzkumníkova porozumění během experimentu: v~jedné iteraci byla
-záměna referenčních testů (neviditelných agentovi, metrika Q2)
-s~agentovými vlastními testy diagnostikována jako chyba agenta,
-což vedlo k~instrukční změně založené na falešném předpokladu
-a~následné regresi. Chyba byla odhalena při revizi, referenční testy
-opraveny na behavioral testy přes veřejné API a~metrika Q2 přeměřena.
-Mitigací je auditovatelný řetězec rozhodnutí (changelog per iterace,
-korekční poznámky v~\texttt{FINDINGS.md}) a~oddělení měřicí
-infrastruktury od agentova prostředí.
-Běhy r1--r2 proběhly bez kontejnerové izolace (přímý přístup
-k~hostitelskému systému), od r3 běží agent v~Docker kontejneru
-bez globálních MCP serverů a~konfigurací. Od r4 byla navíc
-změněna konfigurace modelu (přidání parametrů
-\texttt{limit.context} a~\texttt{limit.output}), což ovlivňuje
-řízení kontextového okna a~maximální délku odpovědi. Obě změny
-prostředí mohly teoreticky ovlivnit chování agenta, ale hlavní
-proměnné (model, instrukce, specifikace) zůstaly konzistentní.
-OpenCode neukládá systémový prompt (včetně obsahu
-\texttt{AGENTS.md}) do exportovaného transcriptu --- nelze
-zpětně přímo ověřit, že agent instrukce obdržel. Nepřímým
-důkazem je, že agent v~reasoning části transcriptu cituje
-specifický obsah instrukcí bez předchozího explicitního čtení
-souboru.
-Při ablačních bězích se ukázalo, že OpenCode se v~některých
-případech tiše ukončí uprostřed práce agenta --- bez chybové
-hlášky a~bez compaction kontextu. Běhy s~vyšší spotřebou
-kontextového okna (ablace~A: $\sim$44 spuštění testů oproti
-$\sim$20 u~ablace~B) byly postiženy častěji. Postižené běhy
-byly opakovány; výsledky opakovaných běhů jsou zahrnuty
-v~analýze. Příčina nebyla identifikována (možný bug
-v~OpenCode při dosažení limitu kontextu).
+(\acs{P1}, \acs{Q1}--\acs{Q3}, \acs{Q5}--\acs{Q7}), které nepodléhají subjektivnímu posouzení,
+a~volba judge modelu z~jiné rodiny. Mitigací je také auditovatelný
+řetězec rozhodnutí (changelog per iterace, korekční poznámky
+v~\texttt{FINDINGS.md}) a~oddělení měřicí infrastruktury od
+agentova prostředí. Jak se tyto hrozby projevily v~praxi ---
+včetně diagnostické chyby výzkumníka, změn prostředí mezi běhy,
+nenastavené temperature modelu a~tichých ukončení nástroje ---
+diskutuje sekce~\ref{sec:limity-vysledky}.
 
 \textbf{Externí validita} (lze zobecnit?). Případová studie na jednom
 projektu, jednom modelu a~jednom agentním nástroji neumožňuje
@@ -913,6 +887,17 @@ Výzkum nezahrnuje lidské účastníky. Veškerá data (git log, metriky,
 session transcripts) jsou generována experimentální infrastrukturou.
 Zdrojový kód a~experimentální data jsou veřejně dostupná.
 \end{draft}
+
+\begin{raw}
+\textbf{TODO (2026-03-25) --- doplnit do 3.5 odstavec o využití AI:}
+Při přípravě práce byl průběžně využíván nástroj Claude (Anthropic)
+jako AI asistent --- pro úpravu a~rozšíření textových částí, vyhledávání
+literatury a~diagnostickou analýzu v~kroku Diagnóza.
+Výzkumný design, volba metrik, experimentální rozhodnutí a~interpretace
+výsledků jsou autorovy vlastní; generovaný obsah byl vždy autorem
+posouzen a~upraven. Podrobný popis využití AI je uveden v~příloze~\ref{app:ai-disclosure}.
+Konzultovat s~vedoucím --- zda patří do 3.5 nebo jako samostatná podsekce.
+\end{raw}
 
 \begin{raw}
 \textbf{Audit trail --- předchozí obsah 3.5:}

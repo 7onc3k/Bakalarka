@@ -73,22 +73,52 @@ sekce~\ref{sec:pilotni-iterace})'', nebo přeformulovat na
 Řádek~29 říká ``evaluační systém'', cíl~1 říká ``sada metrik''.
 Jsou to totéž? Pokud evaluační systém = sada metrik + postup + exit
 kritéria, definovat explicitně. Pokud totéž, sjednotit.
+
+\medskip
+\textbf{TODO (2026-03-26) --- po přeformulaci cílů (DRAFT v6, PoC framing):}
+\begin{itemize}
+    \item \textbf{Motivace nemotivuje cíl~3:} přidat větu o~tom, že
+          zůstává otevřená otázka které složky instrukcí jsou nezbytné
+          (viz bod~(a) výše).
+    \item \textbf{Rozsah:} přidat větu o~feasibility demonstration ---
+          práce ukazuje že přístup funguje na jednom případu, ne že
+          platí obecně. Sladit s~PoC framingem cílů.
+    \item \textbf{Rozsah ř.~152:} ``evaluační systém'' sjednotit s~cíli
+          --- cíl~1 říká ``sadu metrik'', cíl~2 říká ``iterativní
+          postup''. Buď definovat ``evaluační systém = metriky + postup''
+          nebo nahradit konkrétními pojmy.
+    \item \textbf{Cíl~2:} ``exit kritéria'' zmizela z~cíle (teď říká
+          ``měřitelné zlepšení''), takže bod~(c) výše je vyřešen.
+\end{itemize}
 \end{raw}
 
 \section{Cíle práce}
 
 \begin{draft}
 \begin{enumerate}
-    \item Navrhnout sadu metrik která měří proces a~kvalitu práce AI agenta,
-          ne jen výsledek.
-    \item Iterativním postupem navrhnout instrukce které dovedou agenta
-          k~dodržování stanovených exit kritérií.
-    \item Ablacemi identifikovat, které složky instrukční sady přispívají
-          k~měřenému chování agenta a~které jsou redundantní.
+    \item Na základě analýzy existujících standardů kvality softwaru
+          a~současných benchmarků pro AI agenty navrhnout sadu metrik
+          pokrývající proces, kvalitu kódu a~efektivitu --- dimenze,
+          které stávající benchmarky neměří.
+    \item Na případové studii demonstrovat iterativní postup návrhu
+          instrukcí řízený těmito metrikami a~ukázat, že vede
+          k~měřitelnému zlepšení dodržování vývojových praktik.
+    \item Z~instrukcí vytvořených v~cíli~2 prozkoumat ablacemi, které
+          složky přispívají k~měřenému chování agenta a~které jsou
+          redundantní.
 \end{enumerate}
 \end{draft}
 
 \begin{raw}
+\textbf{Audit trail --- předchozí verze cílů (DRAFT v5):}
+
+\begin{enumerate}
+    \item Navrhnout sadu metrik která měří proces a~kvalitu práce AI agenta, ne jen výsledek.
+    \item Iterativním postupem navrhnout instrukce které dovedou agenta k~dodržování stanovených exit kritérií.
+    \item Ablacemi identifikovat, které složky instrukcí přispívají k~měřenému chování agenta a~které jsou redundantní.
+\end{enumerate}
+
+\medskip
 \textbf{Audit trail --- předchozí verze cílů (DRAFT v4):}
 
 \begin{enumerate}
@@ -99,13 +129,13 @@ kritéria, definovat explicitně. Pokud totéž, sjednotit.
 
 \medskip
 \textbf{Poznámky ze schůzky s~vedoucím (2026-03-16):}
-Cíle práce = 3 fáze: (1)~research gap --- procesní metriky, (2)~pilotní fáze --- docílit exit kritérií, (3)~komparativní fáze --- ablace/substituce. Research question potřebuje přesná kritéria a~kvantifikaci.
+Cíle práce = 3 fáze: (1)~research gap --- procesní metriky, (2)~pilotní fáze --- docílit exit kritérií, (3)~komparativní fáze --- ablace/substituce. Research question potřebuje přesná kritéria a~kvantifikaci. \textbf{Pozn.:} substituce se nakonec realizovala implicitně v~pilotní fázi (r1$\to$r3), komparativní fáze obsahuje jen ablace.
 
 \medskip
 \textbf{Předchozí verze cílů (audit trail v3):}
 
 \begin{enumerate}
-    \item Navrhnout instrukční sadu která dovede AI coding agenta k~dodržování
+    \item Navrhnout instrukce které dovedou AI coding agenta k~dodržování
           strukturovaného vývojového postupu na případové studii
           (systém upomínek faktur).
     \item Navrhnout sadu metrik která měří proces a~kvalitu práce agenta,

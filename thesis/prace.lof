@@ -1,13 +1,20 @@
+\acswitchoff 
 \babel@toc {czech}{}\relax 
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Vizuální diff změn \texttt {AGENTS.md} mezi pilot-r1 a~pilot-r2}}{56}{figure.caption.24}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Vizuální diff změn \texttt {AGENTS.md} mezi pilot-r2 a~pilot-r3}}{58}{figure.caption.28}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Vizuální diff změn \texttt {AGENTS.md} mezi pilot-r3 a~pilot-r4}}{60}{figure.caption.32}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Baseline \texttt {AGENTS.md} (pilot-r1) --- kompletní znění instrukcí použitých jako výchozí bod pilotních iterací.}}{56}{figure.caption.5}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Vizuální diff změn \texttt {AGENTS.md} mezi pilot-r1 a~pilot-r2}}{60}{figure.caption.8}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Vizuální diff změn \texttt {AGENTS.md} mezi pilot-r2 a~pilot-r3}}{62}{figure.caption.10}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Verze \texttt {AGENTS.md} po pilot-r3 --- kompletní znění po iteracích r1$\to $r2$\to $r3.}}{63}{figure.caption.12}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Vizuální diff změn \texttt {AGENTS.md} mezi pilot-r3 a~pilot-r4}}{64}{figure.caption.13}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Vizuální diff změn \texttt {AGENTS.md} mezi pilot-r3 a~pilot-r5}}{66}{figure.caption.15}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Souhrnná evoluce \texttt {AGENTS.md}: pilot-r1~$\to $~pilot-r3. Zelené řádky = přidáno, červené = odebráno.}}{69}{figure.caption.17}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Změny AGENTS.md pro ablaci~A}}{71}{figure.caption.18}%
+\contentsline {figure}{\numberline {4.9}{\ignorespaces Změny AGENTS.md pro ablaci~B: odebrána celá sekce Package Quality (konvence, strict TypeScript, JSDoc, čisté API).}}{71}{figure.caption.19}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Navržený diff změn \texttt {AGENTS.md} mezi pilot-r4 a~pilot-r5}}{67}{figure.caption.37}%
+\addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

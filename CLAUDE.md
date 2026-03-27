@@ -35,9 +35,14 @@ agent píše kód  = chování (to měříme)
 instrukce       = nezávislá proměnná (to co měníme mezi běhy)
 ```
 
-**Tři cíle:** (1) Navrhnout sadu metrik (proces + kvalita, ne jen výsledek). (2) Demonstrovat iterativní postup návrhu instrukcí na případové studii. (3) Popsat tendence chování agenta a vliv složek instrukcí.
+**Tři cíle (PoC framing, DRAFT v6):**
+1. Na základě analýzy existujících standardů a benchmarků navrhnout sadu metrik pokrývající proces, kvalitu kódu a efektivitu — dimenze které stávající benchmarky neměří.
+2. Na případové studii demonstrovat iterativní postup návrhu instrukcí řízený těmito metrikami a ukázat měřitelné zlepšení.
+3. Z instrukcí vytvořených v cíli 2 prozkoumat ablacemi, které složky přispívají a které jsou redundantní.
 
-Přenositelné = metriky + postup. Instrukční sada (AGENTS.md) = vedlejší produkt. Při psaní vždy hlídat: je čtenáři jasné na které úrovni se pohybujeme?
+Přenositelné = metriky + postup. AGENTS.md = vedlejší produkt. Při psaní hlídat: je čtenáři jasné na které úrovni se pohybujeme?
+
+**Styl thesis:** ML papers styl — "we propose X, evaluate on Y, results show Z." Nepoužívat DSR terminologii (artefakt, build-evaluate cyklus) v textu — jen jednou v kap03 u popisu přístupu. Evaluační kritéria rozpuštěna do cílů (žádný samostatný blok).
 
 ## Profil uživatele
 
@@ -70,10 +75,40 @@ Kompletní reference: `notes/jak-psat-vedecky.md`. Claude navrhuje text přímo.
 |--------|---------|
 | Jaký formát? | Souvislý text (default), tabulka (srovnání), odrážky (výčty) |
 | Česky nebo anglicky? | Doménové → česky, industry standard → anglicky |
-| Jak zvýraznit? | `\textit{}` nový pojem, `\textbf{}` kód metriky, `\texttt{}` příkazy — jen 1. výskyt |
+| Jak zvýraznit? | `\textit{}` nový pojem, `\texttt{}` příkazy — jen 1. výskyt |
 | Jak citovat? | Primární pro klíčové koncepty, sekundární ok pro přehledy |
 | Jak začít sekci? | Signpost: co se čtenář dozví a proč |
 | Jak strukturovat odstavec? | Topic sentence → elaborace → evidence → propojení s BP |
+
+### Odkazování metrik (acro systém)
+
+19 metrik (P1-P8, Q1-Q8, E1-E3) se odkazují výhradně přes `acro` příkazy definované v `makra.tex`. **Nikdy nepoužívat** bare `P1`, `\textbf{Q3}` apod. v textu.
+
+| Příkaz | Výstup | Kdy použít |
+|--------|--------|------------|
+| `\ac{P1}` | P1 (issues before code) + hyperlink | Default — čtenář vždy vidí co metrika měří |
+| `\acs{P1}` | P1 + hyperlink | Opakování v těsné blízkosti (stejný odstavec) |
+| `\mgrp{P}` | procesní metriky (P1--P8) + hyperlink | Odkaz na celou skupinu CO měříme |
+| `\mgrp{Q}` | produktové metriky (Q1--Q8) + hyperlink | |
+| `\mgrp{E}` | metriky efektivity (E1--E3) + hyperlink | |
+| `\mmet{det}` | deterministické metriky + hyperlink | Odkaz na skupinu JAK měříme |
+| `\mmet{qual}` | kvalitativní metriky + hyperlink | |
+| `\mmet{zaz}` | záznamové metriky + hyperlink | |
+
+**Kontextové vzorce (jak metriky v textu vypadají):**
+- `\ac{Q5} zůstaly...` → "Q5 (lint warnings) zůstaly..." — **nikdy** nepřidávat ruční závorku za `\ac{}`
+- `\acs{P2} (agent kombinoval branches)` → kód + **kontextový popis** co se stalo — OK, to není duplicita
+- `\acs{Q2}~=~41/42` → kód + naměřená hodnota — OK
+- `kvalita kódu (\acs{Q5}--\acs{Q8})` → range s pojmenováním skupiny — OK, `\ac{}` u ranges nefunguje
+
+**Anti-pattern:** `\acs{Q5} (lint warnings)` — ruční závorka opakuje to co `\ac{Q5}` dá automaticky. Vždy nahradit za `\ac{Q5}`.
+
+**Pravidla:**
+- V tabulkových buňkách (data) nechat bare kódy — jsou to hodnoty, ne reference
+- V raw blocích (audit trail) nechat bare kódy
+- V sekčních nadpisech nechat ranges (`P1--P8`)
+- Terminologie: "deterministické" (ne "automatizované", ne "binární" jako název skupiny)
+- Dva řezy: **obsahový** (P/Q/E = co) a **metodický** (det/qual/zaz = jak) — nezaměňovat
 
 ### Pojmenování
 
