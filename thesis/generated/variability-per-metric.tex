@@ -1,89 +1,89 @@
 % Horizontal bar chart: success rate per metric across 9 runs
 % Usage: \input{generated/variability-per-metric.tex}
-% Ordered by metric code (P1-P8, Q1-Q8, E1-E3)
+% Only metrics with exit criteria (P1-P8, Q1-Q8). E1-E3 excluded (no threshold).
 
-\definecolor{cProc}{HTML}{6B9BD2}
-\definecolor{cQual}{HTML}{7BC47F}
-\definecolor{cConst}{HTML}{BBBBBB}
+\definecolor{cProc}{HTML}{4472C4}
+\definecolor{cQual}{HTML}{548235}
 
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}
 \begin{axis}[
     xbar,
-    width=0.82\textwidth,
+    width=0.78\textwidth,
     height=0.58\textwidth,
     xlabel={Splněno v~kolika z~9 běhů},
-    xmin=0, xmax=10,
+    xmin=0, xmax=9.8,
     xtick={0,1,2,3,4,5,6,7,8,9},
+    ymin=0.3, ymax=16.7,
     ytick={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16},
-    yticklabels={Q6, Q1, Q8, Q4, Q7, Q2, Q5, Q3, P7, P6, P1, P8, P4, P3, P5, P2},
-    ymin=0, ymax=17,
-    yticklabel style={font=\footnotesize},
+    yticklabels={
+        \textcolor{cQual}{Q8},
+        \textcolor{cQual}{Q7},
+        \textcolor{cQual}{Q6},
+        \textcolor{cQual}{Q5},
+        \textcolor{cQual}{Q4},
+        \textcolor{cQual}{Q3},
+        \textcolor{cQual}{Q2},
+        \textcolor{cQual}{Q1},
+        \textcolor{cProc}{P8},
+        \textcolor{cProc}{P7},
+        \textcolor{cProc}{P6},
+        \textcolor{cProc}{P5},
+        \textcolor{cProc}{P4},
+        \textcolor{cProc}{P3},
+        \textcolor{cProc}{P2},
+        \textcolor{cProc}{P1}
+    },
+    yticklabel style={font=\small\bfseries},
     xticklabel style={font=\footnotesize},
     xlabel style={font=\small},
-    bar width=9pt,
+    bar width=11pt,
     nodes near coords,
-    nodes near coords style={font=\scriptsize, anchor=west},
+    nodes near coords style={font=\scriptsize, anchor=west, xshift=1pt},
     xmajorgrids=true,
     ymajorgrids=false,
-    grid style={gray!20},
+    grid style={gray!15},
     clip=false,
-    % Horizontal separator between P and Q groups
-    extra y ticks={8.5},
-    extra y tick labels={},
-    extra y tick style={grid=major, grid style={black!40, dashed}},
 ]
 
-% P metrics (blue) — P1 through P8, bottom to top = P2,P5,P3,P4,P8,P1,P6,P7
-\addplot[draw=none, fill=cProc, fill opacity=0.85] coordinates {
-    (9,1)   % Q6
-};
-\addplot[draw=none, fill=cConst, fill opacity=0.85] coordinates {
-    (9,2)   % Q1
-};
-\addplot[draw=none, fill=cQual, fill opacity=0.85] coordinates {
-    (7,3)   % Q8
-    (7,4)   % Q4
-    (6,5)   % Q7
-    (6,6)   % Q2
-    (4,7)   % Q5
-    (4,8)   % Q3
-};
-\addplot[draw=none, fill=cProc, fill opacity=0.85] coordinates {
-    (9,9)   % P7
-    (9,10)  % P6
-    (8,11)  % P1
-    (6,12)  % P8
-    (6,13)  % P4
-    (5,14)  % P3
-    (3,15)  % P5
-    (3,16)  % P2
+% Q metrics (quality) — Q8..Q1 (positions 1-8)
+\addplot[fill=cQual, draw=cQual!70!black, fill opacity=0.8] coordinates {
+    (7,1)   % Q8 >=2/3: 7/9
+    (6,2)   % Q7 <=1: 6/9
+    (9,3)   % Q6 =0: 9/9
+    (4,4)   % Q5 <=1: 4/9
+    (7,5)   % Q4 >=24: 7/9
+    (4,6)   % Q3 >=70%: 4/7 (2 N/A)
+    (6,7)   % Q2 >=37: 6/9
+    (9,8)   % Q1 match: 9/9
 };
 
-% Fix: Q6 and Q1 should be gray (always met)
-% Redraw Q6 and Q1 in gray on top
-\addplot[draw=none, fill=cConst, fill opacity=0.95] coordinates {
-    (9,1)   % Q6
-    (9,2)   % Q1
+% P metrics (process) — P8..P1 (positions 9-16)
+\addplot[fill=cProc, draw=cProc!70!black, fill opacity=0.8] coordinates {
+    (6,9)   % P8 >=2/3: 6/9
+    (9,10)  % P7 >=2/3: 9/9
+    (9,11)  % P6 >=2/3: 9/9
+    (3,12)  % P5: 3/9
+    (6,13)  % P4: 6/9
+    (5,14)  % P3: 5/9
+    (3,15)  % P2: 3/9
+    (8,16)  % P1: 8/9
 };
 
-% Manual legend
-\node[anchor=north west, font=\footnotesize] at (rel axis cs:0.62,0.98) {
-    \tikz{\fill[cProc, fill opacity=0.85] (0,0) rectangle (0.3,0.2);} Procesní (P)
-};
-\node[anchor=north west, font=\footnotesize] at (rel axis cs:0.62,0.91) {
-    \tikz{\fill[cQual, fill opacity=0.85] (0,0) rectangle (0.3,0.2);} Kvalita (Q)
-};
-\node[anchor=north west, font=\footnotesize] at (rel axis cs:0.62,0.84) {
-    \tikz{\fill[cConst, fill opacity=0.85] (0,0) rectangle (0.3,0.2);} Vždy splněno
+% Legend
+\node[anchor=south east, font=\footnotesize,
+      fill=white, draw=gray!40, inner sep=4pt] at (rel axis cs:0.98,0.02) {
+    \tikz{\fill[cProc, fill opacity=0.8] (0,0) rectangle (0.25,0.18);}\,Proces (P)~~%
+    \tikz{\fill[cQual, fill opacity=0.8] (0,0) rectangle (0.25,0.18);}\,Kvalita (Q)%
 };
 
 \end{axis}
 \end{tikzpicture}
-\caption{Míra splnění jednotlivých metrik napříč devíti běhy.
-Procesní metriky \acs{P2} a~\acs{P5} byly splněny nejméně často
-(3/9), zatímco \acs{Q1} a~\acs{Q6} zůstaly stabilní ve všech
-bězích. Přerušovaná čára odděluje procesní a~produktové metriky.}
+\caption{Míra splnění exit kritérií jednotlivých metrik napříč
+devíti běhy. \acs{P2} a~\acs{P5} byly splněny nejméně často (3/9),
+\acs{Q1}, \acs{Q6}, \acs{P6} a~\acs{P7} ve všech bězích.
+\acs{Q3} počítáno ze~7 běhů (2~bez dat). Metriky efektivity
+(E1--E3) nemají exit kritérium a~nejsou zahrnuty.}
 \label{fig:variability-per-metric}
 \end{figure}

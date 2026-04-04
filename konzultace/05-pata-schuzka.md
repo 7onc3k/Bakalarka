@@ -32,6 +32,8 @@ statisticka analyza u tehle prace nedava smysl protoze je to case study, jeden m
 
 vysledky k iteraci vs vysledky k diskuzi ?
 
+popis vs interpretace, 
+
 # zasadni zmeny
 
 odstranil jsem uplne DSR protoze ostatni LM research papers taky nemaji popsano jakoze DSR
@@ -43,4 +45,8 @@ odstranil jsem uplne DSR protoze ostatni LM research papers taky nemaji popsano 
 # mimo tema
 
 zivot je jak hra kde designujeme vlastni researche a hypotezy a testujeme je pak, merime ze predikce prichazi predtim nez ji udelame, ale prichazi kdyz to jako nejde predikovat co se deje pak 
+
+# poznamky
+
+ja nevim jestli mi rozumite
 

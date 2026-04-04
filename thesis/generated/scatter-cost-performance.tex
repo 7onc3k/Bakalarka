@@ -6,7 +6,7 @@
 %
 % Data source: Tab. cross-run (kap04), costs from E1 estimates
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{tikzpicture}
 \begin{axis}[
@@ -20,8 +20,8 @@
     grid=major,
     grid style={gray!30},
     legend style={
-        at={(0.02,0.98)},
-        anchor=north west,
+        at={(0.98,0.98)},
+        anchor=north east,
         font=\small,
         draw=gray!50,
     },
@@ -66,7 +66,7 @@
     at (axis cs:0.38, 4) {r1};
 \node[above left, font=\footnotesize, blue!70!black]
     at (axis cs:0.22, 7) {r2};
-\node[above right, font=\footnotesize, blue!70!black]
+\node[below right, font=\footnotesize, blue!70!black]
     at (axis cs:0.17, 10) {r3};
 \node[above right, font=\footnotesize, blue!70!black]
     at (axis cs:0.64, 7) {r4};
@@ -74,13 +74,13 @@
     at (axis cs:0.36, 5) {r5};
 
 % Labels for ablation runs
-\node[below right, font=\footnotesize, red!70!black]
+\node[above left, font=\footnotesize, red!70!black]
     at (axis cs:0.17, 6) {A-1};
 \node[above right, font=\footnotesize, red!70!black]
     at (axis cs:0.27, 5) {A-2};
-\node[below left, font=\footnotesize, red!70!black]
+\node[above right, font=\footnotesize, red!70!black]
     at (axis cs:0.22, 6) {B-1};
-\node[below right, font=\footnotesize, red!70!black]
+\node[below left, font=\footnotesize, red!70!black]
     at (axis cs:0.13, 5) {B-2};
 
 % Reference line at r3 performance level

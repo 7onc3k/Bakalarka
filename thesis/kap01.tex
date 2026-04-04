@@ -35,11 +35,11 @@ vylepšovat instrukce.
 \begin{raw}
 \textbf{Předchozí verze motivace (audit trail):}
 
-Velké jazykové modely (LLM) dnes umí generovat kód, ale to neznamená, že umí vyvíjet software. Randomizovaná studie METR \cite{metr2025} na 16 zkušených vývojářích a~246 úlohách ukázala, že s~AI nástroji byli vývojáři o~19\,\% pomalejší --- přestože sami odhadovali zrychlení o~24\,\%. Když projekt roste, bývá těžší jej rozšiřovat --- jak pro člověka, tak pro LLM. Vývojáři přicházejí o~kontext a hlubokou znalost kódové základny, zatímco agenti jsou limitováni omezeným context window. Otázka tedy není, co modely umí, ale jak je zasadit do vývojového procesu tak, aby produkovaly kvalitní výstup.
+Velké jazykové modely (LLM) dnes umí generovat kód, ale to neznamená, že umí vyvíjet software. Randomizovaná studie METR \cite{metr2025} na 16 zkušených vývojářích a~246 úlohách ukázala, že s~AI nástroji byli vývojáři o~19\,\% pomalejší, přestože sami odhadovali zrychlení o~24\,\%. Když projekt roste, bývá těžší jej rozšiřovat, jak pro člověka, tak pro LLM. Vývojáři přicházejí o~kontext a hlubokou znalost kódové základny, zatímco agenti jsou limitováni omezeným context window. Otázka tedy není, co modely umí, ale jak je zasadit do vývojového procesu tak, aby produkovaly kvalitní výstup.
 
-Ukazuje se, že odpověď leží spíš v~instrukcích než v~samotných modelech. Breunig \cite{breunig2025} zjistil, že změna promptu mění chování agenta výrazněji než výměna modelu. Lulla et al. \cite{lulla2026} dokládají, že přítomnost instrukčního souboru (AGENTS.md) je spojena se zkrácením mediánové doby běhu o~28,6\,\% a~snížením výstupních tokenů o~16,6\,\%. Scaffolding --- struktura instrukcí a procesních pravidel, která agenta provází vývojem --- má na výsledek zásadní vliv. Ale nikdo systematicky nezkoumal, \emph{které} složky tohoto scaffoldingu jsou pro dodržování softwarově-inženýrských praktik nezbytné a které jsou zbytečné.
+Ukazuje se, že odpověď leží spíš v~instrukcích než v~samotných modelech. Breunig \cite{breunig2025} zjistil, že změna promptu mění chování agenta výrazněji než výměna modelu. Lulla et al. \cite{lulla2026} dokládají, že přítomnost instrukčního souboru (AGENTS.md) je spojena se zkrácením mediánové doby běhu o~28,6\,\% a~snížením výstupních tokenů o~16,6\,\%. Scaffolding, tedy struktura instrukcí a procesních pravidel, která agenta provází vývojem, má na výsledek zásadní vliv. Ale nikdo systematicky nezkoumal, \emph{které} složky tohoto scaffoldingu jsou pro dodržování softwarově-inženýrských praktik nezbytné a které jsou zbytečné.
 
-Tato práce zkoumá právě to: jak musí být strukturovány instrukce pro AI coding agenta, aby dodržoval specifikací řízený vývoj, test-driven development a granulární správu verzí --- a co z~těch instrukcí je skutečně kritické.
+Tato práce zkoumá právě to: jak musí být strukturovány instrukce pro AI coding agenta, aby dodržoval specifikací řízený vývoj, test-driven development a granulární správu verzí; a co z~těch instrukcí je skutečně kritické.
 
 \medskip
 \textbf{Původní poznámky:}
@@ -58,12 +58,12 @@ pro dodržování praktik skutečně nezbytné a~které jsou redundantní.''
 Starší verze motivace (audit trail, řádek~39) to obsahuje (``nikdo
 systematicky nezkoumal, \emph{které} složky''), ale aktuální DRAFT ne.
 
-\textbf{(b) Řádek~27 --- silný claim bez citace:}
+\textbf{(b) Řádek~27, silný claim bez citace:}
 ``pro systematické navrhování a~vyhodnocování instrukcí obdobný postup
-dosud nevznikl'' --- buď citovat systematic review ukazující gap,
+dosud nevznikl''; buď citovat systematic review ukazující gap,
 nebo zeslabit na ``je méně formalizován'' s~odkazem na kap02.
 
-\textbf{(c) Řádek~56 --- ``exit kritéria'' bez vysvětlení:}
+\textbf{(c) Řádek~56, ``exit kritéria'' bez vysvětlení:}
 Čtenář narazí na pojem poprvé v~cíli~2, ale definice je až v~kap03.
 Buď přidat závorku ``(měřitelné prahy pro úspěšnost běhu, viz
 sekce~\ref{sec:pilotni-iterace})'', nebo přeformulovat na
@@ -75,17 +75,17 @@ Jsou to totéž? Pokud evaluační systém = sada metrik + postup + exit
 kritéria, definovat explicitně. Pokud totéž, sjednotit.
 
 \medskip
-\textbf{TODO (2026-03-26) --- po přeformulaci cílů (DRAFT v6, PoC framing):}
+\textbf{TODO (2026-03-26): po přeformulaci cílů (DRAFT v6, PoC framing):}
 \begin{itemize}
     \item \textbf{Motivace nemotivuje cíl~3:} přidat větu o~tom, že
           zůstává otevřená otázka které složky instrukcí jsou nezbytné
           (viz bod~(a) výše).
-    \item \textbf{Rozsah:} přidat větu o~feasibility demonstration ---
+    \item \textbf{Rozsah:} přidat větu o~feasibility demonstration;
           práce ukazuje že přístup funguje na jednom případu, ne že
           platí obecně. Sladit s~PoC framingem cílů.
     \item \textbf{Rozsah ř.~152:} ``evaluační systém'' sjednotit s~cíli
-          --- cíl~1 říká ``sadu metrik'', cíl~2 říká ``iterativní
-          postup''. Buď definovat ``evaluační systém = metriky + postup''
+          (cíl~1 říká ``sadu metrik'', cíl~2 říká ``iterativní
+          postup''). Buď definovat ``evaluační systém = metriky + postup''
           nebo nahradit konkrétními pojmy.
     \item \textbf{Cíl~2:} ``exit kritéria'' zmizela z~cíle (teď říká
           ``měřitelné zlepšení''), takže bod~(c) výše je vyřešen.
@@ -98,7 +98,7 @@ kritéria, definovat explicitně. Pokud totéž, sjednotit.
 \begin{enumerate}
     \item Na základě analýzy existujících standardů kvality softwaru
           a~současných benchmarků pro AI agenty navrhnout sadu metrik
-          pokrývající proces, kvalitu kódu a~efektivitu --- dimenze,
+          pokrývající proces, kvalitu kódu a~efektivitu, tedy dimenze,
           které stávající benchmarky neměří.
     \item Na případové studii demonstrovat iterativní postup návrhu
           instrukcí řízený těmito metrikami a~ukázat, že vede
@@ -110,7 +110,7 @@ kritéria, definovat explicitně. Pokud totéž, sjednotit.
 \end{draft}
 
 \begin{raw}
-\textbf{Audit trail --- předchozí verze cílů (DRAFT v5):}
+\textbf{Audit trail: předchozí verze cílů (DRAFT v5):}
 
 \begin{enumerate}
     \item Navrhnout sadu metrik která měří proces a~kvalitu práce AI agenta, ne jen výsledek.
@@ -119,7 +119,7 @@ kritéria, definovat explicitně. Pokud totéž, sjednotit.
 \end{enumerate}
 
 \medskip
-\textbf{Audit trail --- předchozí verze cílů (DRAFT v4):}
+\textbf{Audit trail: předchozí verze cílů (DRAFT v4):}
 
 \begin{enumerate}
     \item Navrhnout sadu metrik která měří proces a~kvalitu práce AI agenta, ne jen výsledek.
@@ -129,7 +129,7 @@ kritéria, definovat explicitně. Pokud totéž, sjednotit.
 
 \medskip
 \textbf{Poznámky ze schůzky s~vedoucím (2026-03-16):}
-Cíle práce = 3 fáze: (1)~research gap --- procesní metriky, (2)~pilotní fáze --- docílit exit kritérií, (3)~komparativní fáze --- ablace/substituce. Research question potřebuje přesná kritéria a~kvantifikaci. \textbf{Pozn.:} substituce se nakonec realizovala implicitně v~pilotní fázi (r1$\to$r3), komparativní fáze obsahuje jen ablace.
+Cíle práce = 3 fáze: (1)~research gap: procesní metriky, (2)~pilotní fáze: docílit exit kritérií, (3)~komparativní fáze: ablace/substituce. Research question potřebuje přesná kritéria a~kvantifikaci. \textbf{Pozn.:} substituce se nakonec realizovala implicitně v~pilotní fázi (r1$\to$r3), komparativní fáze obsahuje jen ablace.
 
 \medskip
 \textbf{Předchozí verze cílů (audit trail v3):}

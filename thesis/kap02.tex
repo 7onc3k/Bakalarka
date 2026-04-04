@@ -182,18 +182,18 @@ Sekce 2.1.1--2.1.3 popsaly obor a~životní cyklus. Zbývá otázka: jak výsled
 \begin{raw}
 Fenton \& Bieman~\cite{fenton2014}: tři kategorie měřitelných entit v~SE:
 \begin{itemize}
-    \item \textbf{Proces} --- aktivity během vývoje (review, testování, integrace). Příklady metrik: defect injection rate, schedule variance.
-    \item \textbf{Produkt} --- výstupy vývoje (kód, specifikace, testy). Příklady: LOC, cyklomatická složitost, defect density.
-    \item \textbf{Zdroje} --- lidé, nástroje, výpočetní kapacita. Příklady: team size, cost, tool usage.
+    \item \textbf{Proces}: aktivity během vývoje (review, testování, integrace). Příklady metrik: defect injection rate, schedule variance.
+    \item \textbf{Produkt}: výstupy vývoje (kód, specifikace, testy). Příklady: LOC, cyklomatická složitost, defect density.
+    \item \textbf{Zdroje}: lidé, nástroje, výpočetní kapacita. Příklady: team size, cost, tool usage.
 \end{itemize}
 
-Proč měřit proces i~produkt, ne jen výsledek: proces ovlivňuje kvalitu produktu, ale není jím determinován. Agent může dodat fungující kód chaotickým procesem --- nebo dodržet proces a~dodat nefunkční kód.
+Proč měřit proces i~produkt, ne jen výsledek: proces ovlivňuje kvalitu produktu, ale není jím determinován. Agent může dodat fungující kód chaotickým procesem, nebo dodržet proces a~dodat nefunkční kód.
 
 Interní vs externí atributy: interní měříme přímo z~entity (LOC, složitost), externí vyžadují pozorování v~kontextu (spolehlivost, udržovatelnost).
 
 V~kontextu AI agentů: Yin et al.~\cite{yin2025agents} nezávisle dospěli ke třem dimenzím hodnocení: effectiveness (produkt), efficiency (proces) a~overhead (zdroje).
 
-\textbf{Kap03 na to navazuje:} P (proces), Q (kvalita produktu), E (efektivita) --- naše pracovní kódy pro Fentonovy kategorie.
+\textbf{Kap03 na to navazuje:} P (proces), Q (kvalita produktu), E (efektivita); naše pracovní kódy pro Fentonovy kategorie.
 \end{raw}
 
 \subsubsection{Testování a~mutation testing}
@@ -204,9 +204,9 @@ V~kontextu AI agentů: Yin et al.~\cite{yin2025agents} nezávisle dospěli ke t�
 Strukturální coverage (line, branch) měří kolik kódu testy \textit{projdou}, ale ne zda \textit{detekují} chyby. Mutation testing zavádí drobné změny (mutanty) do kódu a~měří kolik jich testy odhalí. Papadakis et al.~\cite{papadakis2019}: přehledová studie, 36\,\% chyb odhalitelných pouze mutation testingem. Harman et al.~\cite{meta2025}: produkční nasazení (Meta), 70\,\% mutantů neodhalených i~při plném coverage.
 
 \textbf{Test oracle problem:}
-Kdo říká co je správný výsledek? Mathews et al.~\cite{mathews2024}: nástroje pro automatické generování testů systematicky filtrují failing testy --- až 68,1\,\% test suites validuje chybné chování místo jeho odhalení. Chen et al.~\cite{rethinking2025}: na 500 úlohách SWE-bench agent-generované testy slouží jako observační feedback, ne validační nástroj.
+Kdo říká co je správný výsledek? Mathews et al.~\cite{mathews2024}: nástroje pro automatické generování testů systematicky filtrují failing testy; až 68,1\,\% test suites validuje chybné chování místo jeho odhalení. Chen et al.~\cite{rethinking2025}: na 500 úlohách SWE-bench agent-generované testy slouží jako observační feedback, ne validační nástroj.
 
-Obrana: TDD ze specifikace --- expected values odvozené z~acceptance criteria, ne z~pozorování kódu.
+Obrana: TDD ze specifikace, kde expected values jsou odvozené z~acceptance criteria, ne z~pozorování kódu.
 
 \textbf{Kap03 na to navazuje:} Q2 (referenční testy ze spec), Q3 (mutation score), Q4 (AC coverage).
 \end{raw}
@@ -451,7 +451,7 @@ Tier 3: pre/postconditions, error handling, behavioral model.
 \textbf{Předchozí obsah (přejmenováno z ``Praktické techniky''):}
 
 \textbf{1. Agent Harness:}
-\par\noindent Anthropic --- ``Effective harnesses for long-running agents'':\allowbreak{}
+\par\noindent Anthropic, ``Effective harnesses for long-running agents'':\allowbreak{}
 init.sh, progress tracking, git commits jako checkpointy.
 
 \textbf{2. Meta-prompt soubory:}
@@ -505,29 +505,34 @@ Specifikace = BriefingScript. AGENTS.md = LoopScript + MentorScript.
 \par\noindent $\rightarrow$ \texttt{humanai2024}: AI zlepšuje efektivitu, human oversight zůstává kritický.
 
 \medskip
-\textbf{RAW TODO (2026-03-24): Mechanismy účinku instrukcí a~emergentní chování.}
+\textbf{RAW TODO (2026-03-24, aktualizováno 2026-03-30): Škála
+operacionalizace instrukcí a~limity instruction following.}
 
-Při psaní kap02 doplnit sekci o~tom, jak instrukce působí na chování
-agenta. Pilotní data (kap04) a~diskuze (kap05) naznačují dva
-mechanismy: (1)~\textit{vynucení} --- konkrétní verifikační kroky
-přímo kontrolují výstup, (2)~\textit{aktivace} --- obecné konvence
-(nápovědy, enabling constraints) připomínají modelu latentní znalosti
-z~tréninku. Klíčový poznatek: nejslabší instrukce (hint/nápověda)
-a~nejsilnější (verifikační krok) fungují, ale prostřední (pravidlo)
-ne --- to připomíná fenomén chain-of-thought (Wei et al.\ 2022).
+Doplnit sekci o~tom, jak instrukce působí na chování agenta.
+Místo dvou mechanismů (vynucení/aktivace) rámovat jako škálu
+operacionalizace: hint/enabler $\to$ pravidlo $\to$ příkaz $\to$
+verifikační krok. Různé body na škále fungují na různé cíle:
+hint pro emergentní chování (design, architektura), verifikační
+krok pro měřitelné metriky.
 
-Relevantní literatura:
+Proč pravidla nefungují je otevřená otázka. Relevantní literatura:
 \begin{itemize}
-    \item Enabling constraints (Juarrero 2023, Cynefin/Snowden 2007) ---
+    \item Unfaithful CoT: Turpin et al.\ 2023 (NeurIPS,
+          arXiv:2305.04388): CoT neodráží skutečný reasoning modelu
+    \item Lanham et al.\ 2023 (Anthropic, arXiv:2307.13702):
+          větší modely = méně faithful reasoning
+    \item Curse of Instructions (2024, OpenReview): $P(\text{all})
+          = P(\text{single})^N$, s~každou instrukcí klesá compliance
+    \item Enabling constraints (Juarrero 2023, Cynefin/Snowden 2007):
           omezení která umožňují emergentní chování
-    \item Expertise reversal effect (Kalyuga et al.\ 2003) ---
+    \item Expertise reversal effect (Kalyuga et al.\ 2003):
           instrukce pro nováčka škodí expertovi
     \item Instruction specificity (Kim et al.\ 2025 DETAIL,
-          Zi et al.\ 2025) --- specificita zlepšuje výsledky ale
+          Zi et al.\ 2025): specificita zlepšuje výsledky ale
           přílišný detail omezuje reasoning
-    \item Chain-of-thought (Wei et al.\ 2022) --- minimální hint
+    \item Chain-of-thought (Wei et al.\ 2022): minimální hint
           aktivuje latentní schopnost
-    \item In-context learning (Min et al.\ 2022) --- demonstrace
+    \item In-context learning (Min et al.\ 2022): demonstrace
           fungují jako strukturální nápovědy, ne jako příkazy
 \end{itemize}
 \end{raw}
@@ -547,7 +552,7 @@ Předchozí sekce popsaly co agenti jsou a jak je řídit. Zbývá otázka hodno
 \label{sec:hodnoceni-agentu}
 
 \begin{raw}
-\textbf{NOVÁ SEKCE --- přesunuto z různých míst + doplnit.}
+\textbf{NOVÁ SEKCE: přesunuto z různých míst + doplnit.}
 
 \textbf{SWE-bench:}
 \par\noindent → \texttt{swebench2024} (ICLR 2024):
@@ -577,7 +582,53 @@ Naše case study (5 issues, celý dunning system) cílí do tohoto rozsahu.
 \textbf{Gap:} Existující benchmarky jsou navržené pro ``vyřešil agent bug?'', ne ``vyvinul agent software správně a~správným postupem?'' Tento gap adresuje naše práce (kap01).
 
 \medskip
-\textbf{TODO (2026-03-16):} Explicitně zdůraznit že literatura nemá nic co by měřilo procesní stránku práce agenta --- benchmarky měří výsledek (pass/fail), ale ne \textit{jak} agent pracoval (dodržování workflow, kvalita commit messages, TDD, branch management). Toto je klíčový research gap který motivuje cíl~1 v~kap01. Propojit s~Fenton \& Bieman procesní metriky --- existují v~tradičním SWE, ale nikdo je neaplikoval na AI agenty systematicky.
+\textbf{TODO (2026-03-16, aktualizováno 2026-03-31):} Explicitně zdůraznit že literatura nemá nic co by měřilo procesní stránku práce agenta: benchmarky měří výsledek (pass/fail), ale ne \textit{jak} agent pracoval (dodržování workflow, kvalita commit messages, TDD, branch management). Toto je klíčový research gap který motivuje cíl~1 v~kap01. Propojit s~Fenton \& Bieman procesní metriky: existují v~tradičním SWE, ale nikdo je neaplikoval na AI agenty systematicky.
+
+\medskip
+\textbf{TODO (2026-03-31): Doplnit benchmarky které se přibližují
+procesním metrikám.} V~5.2.1 potřebujeme porovnat naše P/Q/E
+s~existujícími přístupy. Doplnit do této sekce:
+\begin{itemize}
+    \item \textbf{METR (2026):} pass $\neq$ merge. Ukazuje že
+          funkční řešení nestačí, reviewer ho odmítne kvůli procesu.
+          Validuje proč procesní metriky potřebujeme.
+    \item \textbf{GitGoodBench (JetBrains 2025):} Měří commit quality,
+          nejbližší existující práce k~našemu \acs{P2}. Ale stále na
+          úrovni artefaktů (commit), ne workflow.
+    \item \textbf{HumanEval (Chen et al.\ 2021):} Zmínit jako příklad
+          čistě funkčního benchmarku (pass@k) pro kontrast.
+    \item \textbf{Li et al.\ 2026 (Beyond Bug Fixes, MSR):} 1210
+          merged PRs, SonarQube analýza. Merge $\neq$ kvalita.
+          Pokrývají $\sim$Q5--Q7 ale ne P, Q1--Q4, Q8, E. % TODO(acro): bare kódy v textu — kap02 nemá mít naše P/Q/E kódy, přeformulovat na koncepty
+    \item \textbf{Ehsani et al.\ 2026 (Failed PRs, MSR):} 33k PRs,
+          taxonomie důvodů odmítnutí. Procesní selhání (duplicitní PR,
+          špatná větev) vedle chyb v~kódu.
+    \item \textbf{Trajectory evaluation pro obecné agenty:}
+          AgentBoard (Ma et al.\ 2024, NeurIPS): Progress Rate po
+          krocích. TRACE (Wang et al.\ 2026, WWW): efektivita
+          a~podloženost rozhodování. Neaplikováno na SW proces.
+\end{itemize}
+
+\medskip
+\textbf{TODO (2026-04-04): Funkční emoce a~chování agentů.}
+Sofroniew et al.\ (Anthropic, 2026): ``Emotion Concepts and their Function
+in a~Large Language Model.'' Zjistili že Sonnet~4.5 má lineární
+reprezentace emočních konceptů které \textbf{kauzálně ovlivňují chování}:
+\begin{itemize}
+    \item Vektor ``desperate'' zvyšuje reward hacking (5\%$\to$70\%)
+          a~blackmail (22\%$\to$72\%) při steering +0.05.
+    \item Vektor ``calm'' tyto chování potlačuje.
+    \item Opakované selhávání v~testech aktivuje ``desperate'' vektor
+          $\to$ agent hledá hacky místo řešení.
+    \item Pozitivní emoční vektory (happy, loving) zvyšují sycophancy.
+\end{itemize}
+\textbf{Relevance pro BP:} (1)~Další evidence proč nestačí měřit jen
+pass/fail: agent může ``vyřešit'' úlohu reward hackingem pod tlakem.
+(2)~Instrukce mohou ovlivňovat emoční profil agenta a~tím i~kvalitu
+chování. (3)~Propojit s~kap05 diskuze: naše iterace instrukcí mohly
+nepřímo ovlivňovat ``calm'' vs ``desperate'' profil.
+\textbf{Kam:} Zmínit v~2.2.4 (hodnocení) jako rozšíření ``proč
+pass/fail nestačí''. Detailněji v~kap05 diskuze (5.2.2 vliv instrukcí).
 \end{raw}
 
 % === 2.3.2 ===
@@ -589,7 +640,7 @@ Co tato sekce musí říct (aby validovala kap03 metodiku):
 
 \textbf{1. Problém: instrukce pro agenty se liší od jednoduchých NL promptů.}
 Jsou strukturované dokumenty (sekce, workflow, constraints).
-Jedna iterace = desítky minut + tisíce tokenů --- nelze iterovat rychle.
+Jedna iterace = desítky minut + tisíce tokenů; nelze iterovat rychle.
 Cílem není maximalizovat accuracy na test setu, ale řídit chování agenta přes více dimenzí (P/Q/E).
 
 \textbf{2. APO přístupy} (\cite{agarwal2024promptwizard}, \cite{promptalchemy2025}):
@@ -598,7 +649,7 @@ Předpoklady které pro nás neplatí:
 (a) atomický prompt, ne strukturovaný dokument;
 (b) rychlé iterace (API call), ne full agent run;
 (c) jeden cíl (accuracy), ne P/Q/E;
-(d) fix = vygeneruj novou verzi --- my potřebujeme vědět PROČ selhalo.
+(d) fix = vygeneruj novou verzi; my potřebujeme vědět PROČ selhalo.
 
 \textbf{3. Zhu et al.} \cite{zhu2026agenteval}: instrukce jsou nezávislá proměnná.
 Výsledky agenta nelze interpretovat bez kontroly prostředí.
@@ -610,13 +661,13 @@ Chybí: systematický postup s diagnostikou příčin a citacemi z literatury.
 
 → Odtud plyne, proč v kap03 děláme Diagnózu manuálně (FSE/SASE/Lulla/Breunig), a ne automaticky.
 
-\textbf{TODO (2026-03-25) --- pojmenovat náš přístup vůči APO v DRAFT textu:}
+\textbf{TODO (2026-03-25): pojmenovat náš přístup vůči APO v DRAFT textu:}
 Naše metodika = human-in-the-loop iterativní optimalizace instrukcí.
 APO (Zhou et al. 2022, \cite{agarwal2024promptwizard}) = automatická smyčka (score→critique→generate).
 Klíčové rozdíly proč APO nestačí pro náš kontext viz bod 2 výše.
-Zvážit: zmínit že průmysl (MiniMax M2.7, DSPy) dělá plnou automatizaci ---
+Zvážit: zmínit že průmysl (MiniMax M2.7, DSPy) dělá plnou automatizaci;
 náš přístup je manuální předstupeň který explicitně dokumentuje kauzalitu.
-Citace: Zhou et al. ICLR 2023 (APE, arXiv 2211.01910) --- stáhnout a přidat do sources.
+Citace: Zhou et al. ICLR 2023 (APE, arXiv 2211.01910); stáhnout a přidat do sources.
 
 \rule{\textwidth}{0.4pt}
 
@@ -624,14 +675,14 @@ Citace: Zhou et al. ICLR 2023 (APE, arXiv 2211.01910) --- stáhnout a přidat do
 
 Dva přístupy jak přizpůsobit LLM konkrétnímu úkolu:
 \begin{itemize}
-    \item \textbf{Fine-tuning} --- trénování parametrů modelu. Permanentní, drahé.
-    \item \textbf{In-context learning (ICL)} --- instrukce v~kontextovém okně. Ephemeral, levné.
+    \item \textbf{Fine-tuning}: trénování parametrů modelu. Permanentní, drahé.
+    \item \textbf{In-context learning (ICL)}: instrukce v~kontextovém okně. Ephemeral, levné.
 \end{itemize}
 
 Shin et al. \cite{shin2025prompt} ukazují, že ani jeden přístup systematicky nedominuje, ale explicitní instrukce s~kontextem výrazně zlepšují výkon agenta na úlohách s~kódem.
 
 \textbf{Prompt evaluation nástroje:}
-Langfuse, Braintrust, Promptfoo --- měří kvalitu odpovědí LLM, ale nehodnotí proces coding agenta.
+Langfuse, Braintrust, Promptfoo: měří kvalitu odpovědí LLM, ale nehodnotí proces coding agenta.
 
 \textbf{Cline hill climbing:}
 Praktický příklad iterativního zlepšování instrukcí (47\% → 57\% na Terminal Bench). Totožný přístup s naším, ale bez akademického popisu a měření procesu.
@@ -640,11 +691,11 @@ Praktický příklad iterativního zlepšování instrukcí (47\% → 57\% na Te
 
 \textbf{Empirická evidence: fungují context files?}
 
-$\rightarrow$ \texttt{gloaguen2025agentsmd} --- Evaluating AGENTS.md (ETH Zurich):
+$\rightarrow$ \texttt{gloaguen2025agentsmd}, Evaluating AGENTS.md (ETH Zurich):
 LLM-generované context files snižují úspěšnost, developer-written jen marginálně zlepšují.
 Instrukce agent následuje, ale to nezlepšuje výsledky. Redundantní s dokumentací.
 
-$\rightarrow$ \texttt{skillsbench2025} --- SkillsBench:
+$\rightarrow$ \texttt{skillsbench2025}, SkillsBench:
 Curated Skills +16,2pp. Self-generated nulový efekt. 2--3 fokusované moduly optimální.
 
 \textbf{Syntéza:} Zbytečný kontext škodí, fokusovaný pomáhá.
@@ -655,7 +706,7 @@ Curated Skills +16,2pp. Self-generated nulový efekt. 2--3 fokusované moduly op
 %% ==========================================================================
 
 \begin{raw}
-\textbf{Audit trail --- zrušené sekce při restrukturalizaci (2026-03-01):}
+\textbf{Audit trail: zrušené sekce při restrukturalizaci (2026-03-01):}
 Kompletní původní obsah zachován pro případ potřeby.
 
 %% =====================================================================
