@@ -1,46 +1,66 @@
 \chapter*{Závěr}
 \addcontentsline{toc}{chapter}{Závěr}
 
-\begin{draft}
-Tato práce se zabývala návrhem sady metrik a~iterativního postupu
-pro systematické navrhování a~vyhodnocování instrukcí pro AI coding
-agenty. Oba výstupy byly ověřeny na případové studii systému
-upomínek faktur, která zahrnovala pět pilotních iterací a~čtyři
-ablační běhy.
+Tato práce navrhla sadu metrik a~iterativní postup pro systematické
+navrhování a~vyhodnocování instrukcí pro AI coding agenty a~ablacemi
+prozkoumala vliv jednotlivých složek instrukcí. Všechny tři cíle
+byly ověřeny na případové studii systému upomínek faktur, která
+zahrnovala pět pilotních iterací a~čtyři ablační běhy.
 
-Prvním cílem bylo navrhnout sadu metrik, která měří proces a~kvalitu
-práce agenta, ne jen výsledek. Výsledná sada 19~metrik (procesní
-\mgrp{P}, \mgrp{Q}, \mgrp{E}) pokrývá tři dimenze
-odvozené z~taxonomie Fentona a~Biemana. Metriky zachytily jak
-zlepšení při iterativních úpravách instrukcí, tak regrese způsobené
-nedeterminismem modelu i~cílené dopady ablací. Kombinace
-deterministických a~kvalitativních metrik (LLM-as-judge) přináší
-komplementární pohled: automatizované metriky nezachytí slabiny
-designu; kvalitativní samy o~sobě nezměří procesní compliance.
+Prvním cílem bylo navrhnout sadu metrik pokrývající proces
+a~kvalitu práce agenta, ne jen výsledek. Výsledná sada 19~metrik
+pokrývá tři dimenze odvozené z~taxonomie Fentona a~Biemana.
+Procesní metriky odhalily problémy, které výsledkové metriky samy
+o~sobě nezachytily: běh s~téměř plným skóre funkčních testů
+vykazoval nestabilní procesní compliance. Kombinace deterministických
+a~kvalitativních metrik přinesla komplementární pohled, protože
+každý typ zachycuje jinou dimenzi chování agenta.
 
 Druhým cílem bylo iterativním postupem navrhnout instrukce, které
 dovedou agenta k~dodržování stanovených exit kritérií. Cyklus
-Spuštění/Měření/Diagnóza/Úprava zlepšil procesní compliance ze~4/10
-na~9/10 splněných deterministických kritérií ve dvou iteracích.
-Analýza průběhu odhalila opakující se vzorec: obecné pravidlo, které
-agent ignoroval, bylo nahrazeno konkrétním příkazem a~následně
-doplněno verifikačním krokem. Každá iterace trvala 25--40~minut,
-postup je tedy proveditelný pro praktika bez specializovaného
-vybavení.
+měření, diagnózy a~úpravy vedl k~měřitelnému zlepšení, ale ne
+monotónnímu: jedna iterace způsobila regresi, po které bylo nutné
+vrátit se k~předchozí verzi instrukcí. Opakujícím se vzorcem
+úspěšných úprav bylo nahrazení obecného pravidla konkrétním
+příkazem s~verifikačním krokem. Účinnost tohoto postupu závisela
+na dostupnosti deterministických nástrojů s~jednoznačným výstupem;
+u~požadavků bez takového nástroje je dosažitelná míra
+operacionalizace nižší.
 
-Třetím cílem bylo ablacemi identifikovat, které složky instrukční
+Třetím cílem bylo ablacemi prozkoumat, které složky instrukční
 sady přispívají k~měřenému chování agenta. Verifikační kroky se
-ukázaly jako neredundantní; jejich odebrání zhoršilo čtyři metriky
-a~vedlo k~výrazně vyššímu počtu testovacích cyklů. Sekce Package
-Quality byla pro automatizované metriky převážně redundantní, ale
-ovlivnila designovou kvalitu hodnocenou LLM-as-judge. Dominantním
-faktorem variability procesní compliance byl nedeterminismus modelu,
-ne obsah instrukcí.
+ukázaly jako neredundantní: jejich odebrání zhoršilo funkční
+korektnost i~čistotu kódu. Konvence kvality kódu automatizované
+metriky neovlivnily, ale designová kvalita hodnocená LLM-as-judge
+klesla. Výsledky zároveň ukázaly, že procesní compliance je výrazně
+citlivá na nedeterminismus modelu; stejná sada instrukcí proto může
+vést k~odlišnému dodržení vícekrokového workflow.
 
-Hlavním přínosem práce jsou přenositelné výstupy: sada metrik
-a~iterativní postup, které může kdokoli aplikovat na vlastním projektu
-s~vlastními prahy. Konkrétní instrukce a~naměřené hodnoty platí pro
-tuto případovou studii. Práce je omezena na jeden model a~jeden
-projekt; závěry mají povahu analytické generalizace na teorii,
-nikoliv statistické generalizace na populaci.
-\end{draft}
+Hlavním přínosem práce je iterativní postup a~sada metrik, které
+může praktik aplikovat na vlastním projektu s~vlastními prahy.
+Konkrétní instrukce a~naměřené hodnoty platí pro tuto případovou
+studii; přenositelný je postup, ne výsledná čísla. Práce je omezena
+na jeden model a~jeden projekt; závěry mají povahu analytické
+generalizace na teorii, nikoliv statistické generalizace na populaci.
+
+Pro praktika z~toho plyne jednoduché doporučení: nestačí sledovat,
+zda agent úkol vyřešil, ale i~jak k~řešení došel a~jak kvalitní kód
+zanechal. Pro akademického čtenáře práce ukazuje, že instrukce lze
+studovat ne jen jako promptový artefakt, ale jako samostatně měřenou
+nezávislou proměnnou, jejíž účinek je třeba hodnotit přes proces,
+produkt i~náklady.
+
+\begin{raw}
+\textbf{Audit trail (DRAFT v1, 2026-03-26):}
+5~odstavců: 3 cíle + přínos + omezení. Čísla 4/10→9/10, ``ve dvou
+iteracích'' (nepřesné), ``principy přenositelné'' (vágní).
+
+\medskip
+\textbf{Audit trail (DRAFT v2, 2026-04-05):}
+Opraveno: r4 regrese explicitně zmíněna (ne monotónní zlepšení);
+přidána pointa o~procesních metrikách (r3 Q2=41/42 ale P1 kolísá);
+nuance o~verifikačních krocích (závislost na deterministických
+nástrojích); přenositelnost upřesněna (postup ano, čísla ne);
+``ve dvou iteracích'' odstraněno (nepřesné); konkrétní metriky
+u~ablačních výsledků.
+\end{raw}

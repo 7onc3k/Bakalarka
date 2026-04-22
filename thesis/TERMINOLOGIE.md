@@ -20,14 +20,14 @@ Kanonické pojmy pro konzistentní psani a pripravu na obhajobu.
 |-------|----------|----------|
 | Sada metrik | P1-P8, Q1-Q8, E1-E3 (19 celkem) | Fenton & Bieman: Process/Product/Resource; P/Q/E kody jsou nase adaptace |
 | Procesni metriky (P1-P8) | Jak agent pracuje | P1-P5 binarni compliance, P6-P8 LLM-as-judge |
-| Produktove metriky (Q1-Q8) | Co agent vyrobil | Q1-Q4 funkcni korektnost, Q5-Q8 kvalita kodu |
-| Metriky efektivity (E1-E3) | E1 = max `tokens.total` v exportu; E2 = cas; E3 = kompakce kontextu (+ vedlejsi dokonceni/restarty) | Resource v Fentonove taxonomii |
-| Exit kriteria | Meritelne prahy uspesnosti pro kazdou metriku | Patri do pilotni iterace (3.3.3), ne k metrikam |
+| Produktove metriky (Q1-Q8) | Co agent vyrobil | Q1-Q2 funkcni korektnost, Q3-Q4 kvalita testu, Q5-Q8 kvalita kodu |
+| Metriky efektivity (E1-E3) | E1 = max prompt na kroku + soucet vystupu + soucet cache; E2 = cas; E3 = stabilita session (kompakce + dokonceni) | Resource v Fentonove taxonomii |
+| Exit kriteria | Meritelne prahy uspesnosti pro kazdou metriku | Patri do pilotni faze (3.3.3), ne k metrikam |
 | ~~evaluacni system~~ | NEPOUZIVAME | Prilis vague, konflikt se "sadou metrik" |
 
 **Pravidlo pro kody metrik:** Pri prvnim vyskytu skupiny v kazde kapitole pridat zavorku s kratkym vysvetlenim. Priklady:
 - "procesni metriky P2--P5 (branch per issue, test-first, PRs linkovane, testy nezmeneny)"
-- "funkcni korektnost (Q1--Q4)"
+- "funkcni korektnost a kvalita testu (Q1--Q4)"
 - "kvalita kodu (Q5--Q8)"
 Pri dalsich vyskytech ve stejne kapitole staci jen kod.
 

@@ -1,266 +1,515 @@
 \chapter{Teoretická východiska}
 \label{kap:teorie}
 
+Tato kapitola poskytuje teoretický základ pro metrický rámec
+a~experimentální postup práce. První sekce se věnuje kvalitě
+software z~pohledu softwarového inženýrství: proč je její
+zajištění obtížné, jaké dimenze má, jakými praktikami se
+zajišťuje a~jak se měří. Druhá sekce zavádí AI coding agenty:
+co jsou, jak se řídí instrukcemi a~jak se jejich výstupy hodnotí.
+
 \begin{raw}
-Tato kapitola vysvětluje teoretická východiska práce. Nejprve je popsáno softwarové inženýrství, životní cyklus vývoje a~měření kvality software. Následují AI coding agenti jako noví aktéři v~tomto procesu a~scaffolding s~instrukcemi které jejich chování řídí. Nakonec je zařazena evaluace agentů a~instrukcí.
+\textbf{Audit trail (signpost kapitoly):}
+Původní signpost odkazoval na čtyři celky; po restrukturalizaci
+(2026-04-08) kapitola má dvě hlavní sekce (2.1 kvalita, 2.2 agenti).
 \end{raw}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Softwarové inženýrství a~životní cyklus}
+\section{Kvalita software a~její měření}
 \label{sec:swe-zivotni-cyklus}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{raw}
-\textbf{Úvod sekce:}
-Sloučení starých 2.1 + 2.2. Základ pro zbytek kapitoly: co je SWE, proč je SW složitý, jak se vyvíjí.
-\end{raw}
+Softwarové inženýrství je disciplína, která přistupuje k~vývoji
+software systematicky: od specifikace přes implementaci po
+údržbu~\cite{swebok2024}. Na rozdíl od programování, které se
+soustředí na algoritmy a~implementaci, softwarové inženýrství řeší
+mimo jiné i~to, jak zajistit kvalitu výsledku~\cite{sommerville2016}.
+To zahrnuje řízení požadavků, návrh architektury, správu konfigurací,
+zajištění kvality i~řízení projektu. V~tomto kontextu se kvalita
+neposuzuje jen podle vlastností výsledného software produktu, ale
+i~podle procesů a~praktik, jimiž tento produkt vzniká, a~podle
+způsobů jejich měření. Tato sekce proto nejprve vymezuje produktovou
+kvalitu software, poté shrnuje praktiky, kterými se v~praxi
+zajišťuje, a~nakonec popisuje přístupy k~jejímu měření.
 
 % === 2.1.1 ===
-\subsection{Definice a~komplexita software}
+\subsection{Kvalita software}
 \label{sec:definice-komplexita}
+\label{sec:dimenze-kvality}
+
+SWEBOK shrnuje kvalitu software jako míru, do jaké software splňuje
+stanovené požadavky a~odpovídá potřebám stakeholderů, pro které byl
+vytvořen. V~kontextu softwarového inženýrství však tyto potřeby
+nejsou jednotné: různé charakteristiky kvality jsou důležité pro
+různé stakeholdery~\cite{swebok2024}. Pro
+koncové uživatele a~zadavatele je podstatné především, zda software
+poskytuje požadovanou funkcionalitu spolehlivě a~bezpečně; pro
+vývojáře a~maintainers je klíčové, zda je systém srozumitelný,
+modifikovatelný a~dlouhodobě udržitelný~\cite{sommerville2016}.
+Kvalitu proto nelze posuzovat podle jediného hlediska: software může
+splňovat funkční požadavky, a~přesto být obtížně čitelný, náchylný
+k~chybám při úpravách nebo špatně strukturovaný. Právě proto vznikly
+modely kvality, které rozkládají kvalitu software do více dílčích
+charakteristik a~umožňují je posuzovat odděleně.
+
+Mezi první vlivné modely, které kvalitu software rozložily na
+konkrétní charakteristiky, patří McCallův model z~roku
+1977~\cite{mccall1977}. Ten organizuje kvalitu do tří perspektiv:
+provoz produktu (\textit{Product Operation}), který zahrnuje
+vlastnosti důležité při používání software; revize produktu
+(\textit{Product Revision}), zaměřenou na vlastnosti důležité při
+jeho úpravách; a~přechod produktu mezi prostředími
+(\textit{Product Transition}), který pokrývá přenositelnost
+a~znovupoužitelnost. McCallův model je důležitý tím, že chápe
+kvalitu software jako soubor dílčích charakteristik, které lze
+posuzovat odděleně~\cite{mccall1977}. Na tento princip navazují
+i~současné standardizované modely kvality.
+
+Standard ISO/IEC~25010 definuje model produktové kvality, který
+rozkládá kvalitu software do charakteristik a~podcharakteristik, jako
+jsou funkční vhodnost, výkonnostní efektivita, kompatibilita,
+bezpečnost nebo udržovatelnost~\cite{iso25010}. Tento model
+neposkytuje konkrétní metriky, ale rámec, podle jakých hledisek lze
+software hodnotit. Pro tuto práci je důležitý tím, že odděluje
+otázku, zda software plní požadovanou funkci, od otázky, zda je jeho
+kód srozumitelný, modifikovatelný a~vhodný pro další rozvoj.
+Z~tohoto rámce proto dále vybíráme dvě charakteristiky, které přímo
+odpovídají sledovaným aspektům výstupu AI agenta: funkční vhodnost
+a~udržovatelnost.
+
+\textit{Funkční vhodnost} vyjadřuje, do jaké míry software poskytuje
+funkce, které naplňují stanovené potřeby při použití za
+specifikovaných podmínek. \textit{Udržovatelnost} vyjadřuje, s~jakou
+účinností a~efektivitou lze software upravovat za účelem opravy,
+zlepšení nebo přizpůsobení změnám v~prostředí či požadavcích~\cite{iso25010}.
+V~kontextu této práce to znamená, že první charakteristika se vztahuje
+k~tomu, zda agent vytváří správné řešení, zatímco druhá k~tomu, zda
+vytváří kód, který lze dále bezpečně chápat, upravovat a~rozvíjet.
+Rozdíl mezi nimi spočívá i~v~tom, jak se v~praxi projevují:
+funkční vhodnost se ukazuje především v~chování software při běhu,
+zatímco udržovatelnost ve vlastnostech kódu při jeho dalším rozvoji.
+Tento rozdíl je důležitý pro následující sekce, protože naznačuje, že
+správnost řešení a~jeho dlouhodobou udržovatelnost nelze posuzovat
+stejným typem evidence.
+
+Modely kvality tedy vymezují, jaké vlastnosti od software očekáváme.
+Samy však ještě nevysvětlují, proč je dosažení těchto vlastností
+v~praxi obtížné; tento problém otevírá složitost software.
+Brooks~\cite{brooks1987} rozlišuje \textit{esenciální složitost},
+která je vlastní řešenému problému a~nelze ji odstranit lepšími
+nástroji, a~\textit{akcidentální složitost}, kterou do systému
+vnáší zvolené technologie a~implementační rozhodnutí
+(konfigurace frameworku, řešení verzí závislostí, nastavení build
+systému). Podobnou dynamiku dlouhodobého růstu složitosti popisuje
+i~Lehman~\cite{lehman1980}: používaný software musí být průběžně
+přizpůsobován měnícím se požadavkům a~prostředí a~bez aktivní
+redukce jeho složitost v~čase roste. I~software, který v~daném
+okamžiku splňuje sledované požadavky na kvalitu, bude bez průběžné
+údržby postupně degradovat.
+
+Modely kvality definují, \textit{co} měřit; složitost vysvětluje,
+proč je dosažení kvality obtížné. Následující sekce popisuje,
+jakými praktikami se jednotlivé dimenze kvality v~softwarovém
+inženýrství zajišťují.
 
 \begin{raw}
-\textbf{Předchozí obsah z 2.1.1 (Definice):}
-
-Softwarové inženýrství je disciplína, která se zabývá celým životním cyklem software -- od specifikace až po údržbu \cite[s.~xxxvii]{swebok2024}.
-
-Na rozdíl od programování, které se soustředí na implementaci a technické aspekty jako algoritmy a datové struktury, softwarové inženýrství přistupuje k vývoji software holisticky -- zahrnuje nejen technickou stránku, ale i organizační aspekty jako řízení projektů a rozpočty \cite[s.~21]{sommerville2016}.
-
-\textbf{Základní koncepty SWE:}
-
-K řešení těchto otázek SWE využívá tři klíčové koncepty:
-
-\textbf{1. Abstrakce}
-\par\noindent → \texttt{colburn2000}:
-\par\noindent Skrývání detailů, práce na vyšší úrovni bez znalosti implementace.
-\par\noindent → \texttt{swebok2024} s.~370 (Dijkstra):
-\par\noindent \textit{``The purpose of abstracting is not to be vague, but to create a new semantic level in which one can be absolutely precise.''}
-
-\textbf{2. Modularita (information hiding)}
-\par\noindent → \texttt{parnas1972}:
-\par\noindent Rozdělení systému na nezávislé části s jasným rozhraním. Každý modul skrývá rozhodnutí která se mohou změnit.
-
-\textbf{3. Architektura}
-\par\noindent → \texttt{perry1992}:
-\par\noindent \textit{``Software architecture is a set of architectural elements that have a particular form.''}
-\par\noindent → \texttt{garlan1993}:
-\par\noindent High-level struktura systému -- komponenty, konektory, konfigurace.
+\textbf{Audit trail (2.1.1, bridge cleanup 2026-04-22):}
+Doplněny tři chybějící logické mosty v~finálním textu: od více
+stakeholderů k~modelům kvality, od vybraných charakteristik k~jejich
+odlišnému typu evidence a~od modelů kvality ke složitosti jako důvodu,
+proč je dosažení kvality obtížné.
 
 \medskip
-\textbf{Předchozí obsah z 2.1.3 (Komplexita):}
+\textbf{Audit trail (2.1.1, DRAFT v9 --- sloučení):}
+Sloučeny sekce 2.1.1 (Složitost) a~2.1.2 (Dimenze kvality) do
+jedné sekce ``Kvalita software''. Nový tok: definice kvality
+(IEEE) $\to$ modely (McCall, ISO 25010) $\to$ dvě klíčové dimenze
+$\to$ složitost jako výzva (Brooks, Lehman) $\to$ bridge na praktiky.
+Složitost již není rámována jako příčina kvality, ale jako jeden
+z~aspektů, které dosažení kvality komplikují.
 
-\textbf{Brooks -- No Silver Bullet:}
-\begin{itemize}
-    \item \textbf{Essential complexity} -- inherentní složitost problému
-          \\ → \texttt{brooks1987} s.~6:
-          \\ \textit{``The complexity of software is an essential property, not an accidental one.''}
-    \begin{itemize}
-        \item Business logika, requirements, doménová znalost
-        \item Nelze odstranit -- je to podstata toho co řešíme
-    \end{itemize}
+\medskip
+\textbf{Předchozí stav (2 oddělené sekce):}
+2.1.1 Složitost software (DRAFT v8): Brooks esenciální/akcidentální,
+Lehman zákony, příklady z~case study, důsledky.
+2.1.2 Dimenze kvality (DRAFT v1): McCall, ISO 25010, funkční
+vhodnost vs udržovatelnost.
 
-    \item \textbf{Accidental complexity} -- složitost kterou si přidáváme
-    \begin{itemize}
-        \item Nástroje, technologie, jazyky, frameworky
-        \item Lze redukovat lepšími nástroji a abstrakcemi
-    \end{itemize}
+\medskip
+\textbf{Audit trail (2.1.1, DRAFT v8):}
+Přepis sekce. SWE definice přesunuta do signpost sekce 2.1.
+Sommerville fáze a~Boehm spektrum odstraněny (přesun do 2.1.3
+nebo signpost). Složitost rozepsána: příklady esenciální/akcidentální
+(systém upomínek), Lehman dva konkrétní zákony (kontinuální změna,
+rostoucí složitost), důsledky (interakce, chyby se propagují).
 
-    \item \textbf{Vlastnosti software} -- proč je jiný než fyzické systémy:
-          \\ → \texttt{brooks1987} s.~6:
-          \\ \textit{``Software entities are more complex for their size than perhaps any other human construct, because no two parts are alike.''}
-    \begin{itemize}
-        \item Neviditelný, snadno měnitelný, nemá fyzická omezení
-        \item \textbf{Nelineární růst komplexity:}
-              \\ → \texttt{brooks1987} s.~6:
-              \\ \textit{``A scaling-up of a software entity is not merely a repetition of the same elements in larger size, it is necessarily an increase in the number of different elements.''}
-    \end{itemize}
+\medskip
+\textbf{Audit trail (2.1.2, DRAFT v1):}
+McCall 1977 citován přes Miguel et al. 2014 (survey).
+ISO/IEC 25010 citován přímo (standard). Dvě klíčové dimenze
+(funkční vhodnost, udržovatelnost) vybrány jako relevantní;
+ostatní zmíněny ale ne rozvedeny.
 
-    \item \textbf{Evoluce a růst komplexity v čase} (Lehman's Laws):
-          \\ → \texttt{lehman1980} s.~9:
-    \begin{itemize}
-        \item Software musí být neustále adaptován (zákon I)
-        \item Komplexita roste s časem pokud se aktivně neredukuje (zákon II)
-    \end{itemize}
-\end{itemize}
+\medskip
+\textbf{Předchozí verze 2.1.1:}
+DRAFT v7: SWE definice + Brooks/Lehman stručně + Sommerville/Boehm
+proces + 3~paragraphs (procesní, funkční, strukturální).
+DRAFT v6--v1: viz předchozí audit traily.
 
-\textbf{Propojení:}
-Abstrakce řeší accidental complexity -- ale essential zůstává. To motivuje potřebu metrik (sekce~\ref{sec:mereni-kvality}) a~strukturovaných postupů.
+\medskip
+\textbf{Předchozí RAW 2.1.2:}
+TODO: Napsat o~ISO 25010, modelech kvality.
 \end{raw}
 
 % === 2.1.2 ===
-\subsection{Fáze životního cyklu}
+\subsection{Praktiky zajišťování kvality}
 \label{sec:faze-zivotniho-cyklu}
+\label{sec:modely-metodiky}
+\label{sec:praktiky-kvality}
+
+Předchozí sekce vymezila, jaké vlastnosti charakterizují kvalitní
+software. Samotné vymezení těchto charakteristik však ještě neříká,
+jak jich při vývoji dosáhnout. Praktiky zajišťování kvality přitom
+v~softwarovém inženýrství tvoří širší spektrum činností od práce
+s~požadavky a~specifikací přes organizaci změn a~jejich ověřování až
+po průběžnou péči o~strukturu kódu. Tato sekce se z~tohoto širšího
+rámce soustředí na tři skupiny praktik, které se přímo promítají do
+hodnocení agentních běhů a~výsledného kódu: organizaci práce se
+změnami, testování a~postupy podporující udržovatelnost kódu.
+
+\paragraph{Procesní praktiky.}
+Procesní praktiky určují, jak změny vznikají, kontrolují se
+a~začleňují do projektu. Jejich význam spočívá v~tom, že zvyšují
+sledovatelnost, přezkoumatelnost a~spolehlivost vývoje.
+
+Základem těchto praktik je správa verzí, protože umožňuje sledovat
+historii změn a~bezpečně se vracet k~předchozím stavům kódu. Pro
+kvalitu vývoje však není rozhodující jen samotný nástroj, ale způsob,
+jakým se používá. Práce v~oddělených větvích
+(\textit{branches}) izoluje rozpracované změny od stabilního kódu;
+Shihab et al.~\cite{shihab2012} empiricky ukázali, že nesoulad mezi
+strukturou větví a~organizační strukturou je spojen s~vyšší mírou
+defektů po vydání. Granulární commity, kde každá změna odpovídá
+jednomu logickému kroku, usnadňují zpětnou analýzu chyb
+a~code review~\cite{humble2010}. Průběžná integrace (\textit{continuous
+integration}) tyto praktiky doplňuje automatickým ověřováním, že
+sloučení změn nenarušilo funkčnost~\cite{humble2010}.
+
+Další procesní praktikou je code review, tedy kontrola kódu jiným
+vývojářem před jeho začleněním. Historicky probíhala formou
+strukturovaných inspekcí, dnes převládá méně
+formální podoba integrovaná do pull requestů, označovaná jako
+\textit{modern code review}. Jde o~průběžné posuzování menších změn
+jako běžné součásti integrace, nikoli o~samostatnou formální
+inspekci celé implementace. Bacchelli
+a~Bird~\cite{bacchelli2013} empiricky zjistili, že moderní code
+review přispívá nejen k~odhalování defektů, ale především ke
+zlepšování kvality kódu, sdílení znalostí a~nalézání alternativních
+řešení. McIntosh et al.~\cite{mcintosh2016} dále prokázali, že
+kód, který neprošel review, vykazuje měřitelně vyšší míru defektů
+po vydání.
+
+Vedle správy verzí a~code review je pro kvalitu vývoje důležitá také
+\textit{traceability}, tedy schopnost dohledat vazby mezi požadavkem
+a~artefakty, které s~ním souvisejí~\cite{gotel1994}. Nejde jen
+o~uchování historie kódu, ale o~propojení zadání změny, její
+implementace, review a~ověření. V~praxi to znamená vazby mezi issue,
+commity a~větvemi, pull requestem a~testy. Díky nim lze zpětně
+pochopit, proč byla změna provedena, co přesně měnila a~jak bylo
+ověřeno, že odpovídá zadání.
+
+\paragraph{Testování.}
+Testování ověřuje, zda software skutečně plní požadavky, které na něj
+klademe. Jeho význam spočívá v~tom, že poskytuje systematickou
+kontrolu chování výsledného řešení a~zachycuje chyby dříve, než se
+projeví v~provozu.
+
+Testování se provádí na různých úrovních:
+\textit{unit testy} ověřují jednotlivé funkce nebo moduly izolovaně,
+\textit{integrační testy} ověřují spolupráci komponent
+a~\textit{akceptační testy} ověřují splnění požadavků z~pohledu
+zadavatele. Každá úroveň zachycuje jiný typ chyb.
+
+Z~hlediska pořadí lze testování organizovat různými způsoby.
+Nejběžnější je \textit{test-after} přístup, kdy vývojář napíše
+implementaci a~následně k~ní vytvoří testy. Přístup
+\textit{test-driven development} (TDD) pořadí obrací: nejprve se
+napíše test definující očekávané chování, teprve pak implementace,
+která test splní~\cite{beck2000}. Tím se test stává specifikací
+požadavku, nikoli zpětnou kontrolou již napsaného kódu. Meta-analýza
+27~studií Rafiqua a~Mišiće~\cite{rafique2013} ukazuje, že TDD má
+pozitivní efekt na kvalitu kódu měřenou hustotou defektů. Efekt je
+výraznější v~průmyslových projektech než v~akademických experimentech,
+což naznačuje, že přínos roste se složitostí řešeného problému.
+
+\paragraph{Praktiky podporující udržovatelnost.}
+Praktiky podporující udržovatelnost mají zajistit, aby kód zůstal
+srozumitelný a~bezpečně modifikovatelný i~při dalších změnách.
+Jejich význam spočívá v~tom, že omezují růst složitosti a~snižují
+riziko, že každá další úprava bude dražší a~náchylnější k~chybám.
+
+V~praxi se udržovatelnost opírá o~vlastnosti jako čitelnost,
+srozumitelné pojmenování, oddělení zodpovědností, omezení složitosti
+nebo dodržování konvencí jazyka~\cite{mcconnell2004}. Proto ji
+podporují průběžný refaktoring, důsledná práce s~rozhraními
+a~odpovědnostmi modulů i~automatizované kontroly kódu. SWEBOK
+zároveň zdůrazňuje, že její úroveň neposilují jen vlastnosti
+samotného kódu, ale i~systematické vývojové procesy, techniky
+a~nástroje~\cite{swebok2024}. Některé z~těchto vlastností lze
+ověřovat deterministicky, jiné však vyžadují i~expertní posouzení;
+právě k~těmto způsobům hodnocení se vrací následující sekce.
 
 \begin{raw}
-\textbf{Předchozí obsah z 2.2.1:}
+\textbf{Audit trail (2.1.1, DRAFT v7):}
+Rozšíření paragraphs o~šíři přístupů (teorie mapuje landscape,
+výběr v~kap03):
+\begin{itemize}
+    \item Procesní: přidána CI, zmínka o~historických inspekcích vs.
+          moderní code review
+    \item Funkční: přidány test-after, TDD, BDD jako tři přístupy;
+          odstavec o~zdroji očekávaných hodnot (spec vs.\ pozorování)
+    \item Strukturální: přidáno spektrum od deterministických nástrojů
+          (statická analýza, typová kontrola, McCabe) po expertní
+          posouzení; McCabe vrácen sem z~2.1.2
+    \item Brooks esenciální/akcidentální terminologie vrácena (stručně)
+\end{itemize}
 
-\textbf{Sommerville -- 4 základní aktivity:}
-\par\noindent → \texttt{sommerville2016} s.~24:
-\par\noindent \textit{``A software process is a sequence of activities that leads to the production of a software product. Four fundamental activities are common to all software processes:''}
-
-\begin{enumerate}
-    \item \textbf{Software specification} -- zákazníci a inženýři definují co se má vytvořit
-    \item \textbf{Software development} -- software se navrhuje a implementuje
-    \item \textbf{Software validation} -- ověřuje se že software dělá co zákazník požaduje
-    \item \textbf{Software evolution} -- software se mění podle měnících se požadavků
-\end{enumerate}
-
-\par\noindent → \texttt{sommerville2016} s.~55:
-\par\noindent \textit{``The the four basic process activities of specification, development, validation, and evolution are organized differently in different development processes.''}
-
-\textbf{Klíčový bod:}
-Tyto 4 aktivity jsou abstrakce -- každá metodika je organizuje jinak (viz 2.1.3).
+\medskip
+\textbf{Audit trail (předchozí verze):}
+DRAFT v6: tři aspekty kvality, bridging věty, ``mimo jiné''.
+DRAFT v5: paragraphs odvozené z~metrik (ne z~aspektů).
+DRAFT v4 a~starší: viz předchozí audit traily.
 \end{raw}
 
 % === 2.1.3 ===
-\subsection{Modely a~metodiky}
-\label{sec:modely-metodiky}
-
-\begin{raw}
-\textbf{Předchozí obsah z 2.2.2:}
-
-\textbf{Klasifikace metodik (Boehm \& Turner 2003):}
-\par\noindent → \texttt{boehm2003balancing}:
-\par\noindent Metodiky nejsou binární volba, ale \textbf{spektrum} mezi plan-driven a agile.
-\par\noindent 5 dimenzí pro klasifikaci: Size, Criticality, Dynamism, Personnel, Culture.
-
-\par\noindent → \texttt{boehm2002agile}:
-\par\noindent \textit{``Both agile and plan-driven approaches have their home grounds where each clearly works best.''}
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{Plan-driven metodiky:}
-
-\textbf{1. Waterfall (sekvenční):}
-\par\noindent → \texttt{royce1970} -- primární zdroj
-\par\noindent → \texttt{boehm1988} s.~3:
-\par\noindent \textit{``The waterfall model's basic scheme has encountered some fundamental difficulties.''}
-
-\textbf{2. Spiral Model (risk-driven):}
-\par\noindent → \texttt{boehm1988} -- kombinuje iterativní vývoj s analýzou rizik
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{Agile metodiky:}
-
-\par\noindent → \texttt{agilemanifesto2001} -- 4 hodnoty, 12 principů
-
-\textbf{3. Extreme Programming (XP):}
-\par\noindent → \texttt{beck2000} -- pair programming, TDD, continuous integration
-
-\textbf{4. Scrum:}
-\par\noindent → \texttt{scrumguide2020}: sprinty, role (PO, SM, Developers)
-
-\rule{\textwidth}{0.4pt}
-
-\textbf{5. Spec-Driven Development (SDD):}
-\par\noindent $\rightarrow$ \texttt{sdd2026} -- Emerging metodika pro éru AI coding agentů:
-\par\noindent Specifikace je source of truth, kód je odvozený.
-
-\textbf{Tři úrovně rigidity:}
-\begin{enumerate}
-    \item \textbf{Spec-first} -- specifikace před kódem
-    \item \textbf{Spec-anchored} -- specifikace žije vedle kódu, testy vynucují sync
-    \item \textbf{Spec-as-source} -- specifikace JE kód
-\end{enumerate}
-
-\textbf{Klíčový bod:}
-S příchodem AI agentů se přidává nová dimenze: SDD spec-first umožňuje sekvenční fáze v rámci malých incrementů, ale iterativní mezi incrementy.
-\end{raw}
-
-% === 2.1.4 ===
 \subsection{Měření kvality software}
 \label{sec:mereni-kvality}
-
-\begin{raw}
-Sekce 2.1.1--2.1.3 popsaly obor a~životní cyklus. Zbývá otázka: jak výsledky hodnotit? Tato sekce poskytuje teoretický základ pro sadu metrik navrženou v~kapitole~\ref{kap:metodika}. Popisujeme CO a~PROČ měřit; konkrétní volba metrik, nástrojů a~exit kritérií je v~kap03.
-\end{raw}
-
-\subsubsection{Klasifikace softwarových metrik}
 \label{sec:taxonomie-metrik}
-
-\begin{raw}
-Fenton \& Bieman~\cite{fenton2014}: tři kategorie měřitelných entit v~SE:
-\begin{itemize}
-    \item \textbf{Proces}: aktivity během vývoje (review, testování, integrace). Příklady metrik: defect injection rate, schedule variance.
-    \item \textbf{Produkt}: výstupy vývoje (kód, specifikace, testy). Příklady: LOC, cyklomatická složitost, defect density.
-    \item \textbf{Zdroje}: lidé, nástroje, výpočetní kapacita. Příklady: team size, cost, tool usage.
-\end{itemize}
-
-Proč měřit proces i~produkt, ne jen výsledek: proces ovlivňuje kvalitu produktu, ale není jím determinován. Agent může dodat fungující kód chaotickým procesem, nebo dodržet proces a~dodat nefunkční kód.
-
-Interní vs externí atributy: interní měříme přímo z~entity (LOC, složitost), externí vyžadují pozorování v~kontextu (spolehlivost, udržovatelnost).
-
-V~kontextu AI agentů: Yin et al.~\cite{yin2025agents} nezávisle dospěli ke třem dimenzím hodnocení: effectiveness (produkt), efficiency (proces) a~overhead (zdroje).
-
-\textbf{Kap03 na to navazuje:} P (proces), Q (kvalita produktu), E (efektivita); naše pracovní kódy pro Fentonovy kategorie.
-\end{raw}
-
-\subsubsection{Testování a~mutation testing}
 \label{sec:testovani-mutation}
-
-\begin{raw}
-\textbf{Strukturální coverage vs mutation testing:}
-Strukturální coverage (line, branch) měří kolik kódu testy \textit{projdou}, ale ne zda \textit{detekují} chyby. Mutation testing zavádí drobné změny (mutanty) do kódu a~měří kolik jich testy odhalí. Papadakis et al.~\cite{papadakis2019}: přehledová studie, 36\,\% chyb odhalitelných pouze mutation testingem. Harman et al.~\cite{meta2025}: produkční nasazení (Meta), 70\,\% mutantů neodhalených i~při plném coverage.
-
-\textbf{Test oracle problem:}
-Kdo říká co je správný výsledek? Mathews et al.~\cite{mathews2024}: nástroje pro automatické generování testů systematicky filtrují failing testy; až 68,1\,\% test suites validuje chybné chování místo jeho odhalení. Chen et al.~\cite{rethinking2025}: na 500 úlohách SWE-bench agent-generované testy slouží jako observační feedback, ne validační nástroj.
-
-Obrana: TDD ze specifikace, kde expected values jsou odvozené z~acceptance criteria, ne z~pozorování kódu.
-
-\textbf{Kap03 na to navazuje:} Q2 (referenční testy ze spec), Q3 (mutation score), Q4 (AC coverage).
-\end{raw}
-
-\subsubsection{Statická analýza a~složitost kódu}
 \label{sec:staticka-analyza}
 
+Předchozí sekce identifikovala praktiky, kterými se kvalita software
+zajišťuje. Samotná existence praktik však neznamená, že se dodržují,
+ani že jejich výstupy jsou kvalitní. Kvalitu je proto třeba měřit.
+
+Fenton a~Bieman~\cite{fenton2014} rozlišují tři kategorie měřitelných
+entit v~softwarovém inženýrství: \textit{proces} (aktivity během
+vývoje), \textit{produkt} (výstupy vývoje, zejména kód)
+a~\textit{zdroje} (lidé, nástroje, výpočetní kapacita). Toto členění
+je důležité, protože kvalita produktu a~kvalita procesu spolu souvisí,
+ale nejsou totéž: funkčně správný kód může vzniknout chaotickým
+procesem a~naopak dodržení procesu nezaručuje funkční výsledek. Měření
+pouze jedné kategorie proto poskytuje neúplný obraz. Nejde přitom
+o~alternativu k~modelu ISO/IEC~25010 z~předchozí sekce, ale o~jiný
+řez problémem: ISO/IEC~25010 vymezuje, \textit{které} charakteristiky
+kvality produktu sledovat, zatímco Fenton a~Bieman rozlišují,
+\textit{na jaké entitě} kvalitu měříme.
+
+\paragraph{Produktové měření.}
+Na úrovni produktu v~návaznosti na ISO/IEC~25010~\cite{iso25010}
+sledujeme především funkční vhodnost a~udržovatelnost. Funkční
+vhodnost se ověřuje testováním, tedy porovnáním chování implementace
+s~očekávaným chováním odvozeným ze specifikace. Ani u~testování však
+nestačí jediný ukazatel. Strukturální coverage (line, branch) ukazuje,
+jak velkou část kódu testy vykonaly, ale sama o~sobě neříká, zda by
+testy zachytily skutečnou chybu~\cite{papadakis2019}. \textit{Mutation
+testing} proto coverage doplňuje o~druhý pohled: do programu
+systematicky zavádí drobné změny (\textit{mutanty}) a~sleduje, kolik
+z~nich testy odhalí. Papadakis et al.~\cite{papadakis2019} jej proto
+chápou jako měření síly testovací sady, nikoli jen průchodnosti kódu.
+
+Udržovatelnost se naproti tomu neprojevuje primárně v~jednom běhu
+programu, ale ve vlastnostech samotného kódu: zda je srozumitelný,
+lokalizovatelný při změně a~bezpečně modifikovatelný. Právě proto se
+její část hodnotí statickou analýzou, tedy zkoumáním zdrojového kódu
+bez spuštění programu. Statická analýza neposkytuje úplné hodnocení
+udržovatelnosti, ale nabízí proxy metriky pro její vybrané vnitřní
+atributy. \textit{Cyklomatická složitost}~\cite{mccabe1976} vyjadřuje
+počet lineárně nezávislých cest grafem řízení toku; vyšší hodnoty
+souvisejí s~vyšší chybovostí a~nižší testovatelností a~v~praxi se
+často používá práh~10 na funkci~\cite{mcconnell2004}. \textit{Linting}
+kontroluje porušení jazykových a~projektových konvencí a~\textit{typová
+kontrola} zachycuje nekonzistence v~rozhraních a~práci s~datovými typy
+ještě před během programu. Tyto nástroje jsou užitečné jako časné
+signály strukturálních problémů, ale pokrývají jen část
+udržovatelnosti; vhodnost dekompozice, pojmenování nebo přiměřenost
+návrhových rozhodnutí přesahují možnosti deterministických nástrojů.
+
+\paragraph{Procesní měření.}
+Kvalita software se však neprojevuje jen na hotovém produktu, ale
+i~v~postupu, kterým vznikl. Procesní metriky proto sledují, zda lze
+propojit požadavek, implementaci a~ověření~\cite{gotel1994}, jak jsou
+změny členěny a~dokumentovány ve verzovacím systému a~zda před
+integrací proběhly kontrolní kroky a~automatizované
+ověření~\cite{humble2010}. Tento typ evidence neodpovídá na otázku,
+zda je řešení správné, ale zda vzniklo způsobem, který je
+sledovatelný, přezkoumatelný a~opakovatelný.
+
+\paragraph{Měření zdrojů.}
+Třetí kategorií jsou metriky zdrojů, tedy nákladů spojených se
+vznikem výsledku. V~tradičním softwarovém inženýrství sem patří
+zejména čas, lidské úsilí, použití nástrojů a~výpočetních
+prostředků~\cite{fenton2014}. Dvě řešení mohou mít srovnatelnou
+produktovou kvalitu, a~přesto se výrazně lišit v~ceně, za kterou byla
+vytvořena; i~proto představují zdrojové metriky samostatnou rovinu
+hodnocení.
+
+Pro tuto práci z~tohoto rozlišení plyne jednoduchý závěr: když kód
+vytváří autonomní agent, zůstávají relevantní všechny tři roviny.
+Testy a~statická analýza stále měří produkt, ale pro posouzení
+agentovy práce je třeba sledovat i~procesní artefakty a~spotřebované
+zdroje. Následující sekce proto přechází od měření kvality software
+obecně ke specifikům AI coding agentů a~jejich hodnocení.
+
 \begin{raw}
-\textbf{Cyklomatická složitost:}
-McCabe~\cite{mccabe1976}: počet lineárně nezávislých cest grafem řízení toku. Práh 10 jako de facto standard udržovatelnosti. Vyšší složitost koreluje s~vyšší chybovostí a~nižší testovatelností.
+\textbf{Audit trail (2.1.3, finální přepis v2 2026-04-21):}
+Sekce znovu přepsána po revizi argumentu. Předchozí verze byla příliš
+blízko katalogu nástrojů a~míchala dvě roviny: ISO charakteristiky
+kvality a~Fentonovu klasifikaci měřených entit. Nový tok je:
+praktiky~$\to$ proč nestačí bez měření~$\to$ ISO říká co na produktu
+sledovat, Fenton na čem měřit~$\to$ produktové měření~$\to$ procesní
+měření~$\to$ zdrojové měření~$\to$ bridge na agenty. Záměrně
+ponecháno stručné; benchmarky, LLM-as-judge a~test oracle problem
+zůstávají až v~sekci~\ref{sec:hodnoceni-ai-agentu}.
 
-\textbf{Linting:}
-Automatizovaná kontrola kódových konvencí a~potenciálních chyb. Fixní konfigurace zajišťuje konzistentní měření napříč běhy.
+\medskip
+\textbf{Audit trail (2.1.3, finální přepis v1 2026-04-21):}
+Sekce přepsána z~DRAFT do finálního textu. Nový tok:
+praktiky~$\to$ proč nestačí bez měření~$\to$ Fentonova trojice
+(proces, produkt, zdroje)~$\to$ produktové měření
+(testování, mutation testing, statická analýza jako proxy)~$\to$
+meze statické analýzy~$\to$ procesní a~zdrojové měření~$\to$ bridge
+na hodnocení agentů. LLM-as-judge a~test oracle problem ponechány
+v~sekci~\ref{sec:hodnoceni-ai-agentu}, aby tato sekce zůstala na
+úrovni obecného měření kvality software.
 
-\textbf{Typová kontrola:}
-TypeScript strict mode jako statická prevence celé kategorie runtime chyb. Počet explicitních \texttt{any} jako proxy pro obcházení typového systému.
+\textbf{Audit trail (2.1.2, DRAFT v1, dříve 2.1.3):}
+Přepsáno z~RAW do DRAFT. Sloučeny 4~subsubsections do paragraphs.
+Struktura: Fenton taxonomie (úvod) $\to$ testování $\to$ statická
+analýza $\to$ udržovatelnost + LLM-as-judge.
 
-\textbf{Kap03 na to navazuje:} Q1 (API contract via tsc), Q5 (lint), Q6 (typecheck), Q7 (cyklomatická složitost).
-\end{raw}
+\textbf{Faktické opravy:}
+\begin{itemize}
+    \item Papadakis 36\,\%: odstraněno konkrétní číslo, přeformulováno
+          kvalitativně (mutation testing zachycuje co coverage přehlédne).
+    \item Harman/Meta 70\,\%: odstraněno (číslo neověřitelné ze zdroje).
+    \item McCabe práh 10: citace opravena z~\texttt{mccabe1976} na
+          \texttt{mcconnell2004} (McCabe definoval metriku, práh je
+          z~pozdější praxe).
+    \item Panickssery: odstraněna zmínka o~perplexitě (není v~paperu),
+          přeformulováno na ``korelace self-recognition a~self-preference''.
+\end{itemize}
 
-\subsubsection{LLM-as-judge}
-\label{sec:llm-as-judge}
+\textbf{Strukturální změny:}
+\begin{itemize}
+    \item Interní/externí atributy odstraněny (nikde v~kap03--05
+          nepoužito).
+    \item Dopředné odkazy ``kap03 na to navazuje'' odstraněny.
+    \item Přidán paragraph Udržovatelnost (zakotvení pro Q8 design
+          quality, dříve chybělo).
+    \item Yin et al. ponechán implicitně --- explicitní zmínka patří
+          do kap03 kde se P/Q/E zavádí.
+\end{itemize}
 
-\begin{raw}
-\textbf{Metoda:}
-Zheng et al.~\cite{zheng2023mtbench} (MT-Bench): použití LLM jako automatizovaného hodnotitele. Tři systematické biasy: position bias (pořadí odpovědí), verbosity bias (delší = lepší), self-enhancement bias (preference vlastních výstupů).
+\medskip
+\textbf{Předchozí RAW obsah (audit trail):}
+4~subsubsections: Klasifikace (Fenton, interní/externí, Yin),
+Testování (Papadakis 36\,\%, Meta 70\,\%, Mathews, Chen, TDD),
+Statická analýza (McCabe práh 10 $\to$ mccabe1976, linting, tsc),
+LLM-as-judge (Zheng 3~biasy, Panickssery perplexita, Verga PoLL).
 
-\textbf{Self-preference mechanismus:}
-Panickssery et al.~\cite{panickssery2024} (NeurIPS): kauzální vztah self-recognition $\to$ self-preference. Model rozpozná vlastní výstupy (nižší perplexita) a~systematicky je hodnotí lépe.
-
-\textbf{Mitigace:}
-Verga et al.~\cite{verga2024poll} (PoLL): panel diverzních modelů lepší než single judge. Implikace: judge z~jiné modelové rodiny než agent eliminuje self-preference.
-
-\textbf{Kap03 na to navazuje:} Kapitola~3 z~této teorie přebírá praktickou aplikaci
-LLM-as-judge: volbu modelu z~odlišné modelové rodiny, třístupňovou
-škálu a~fixní rubriky. V~literatuře se dále řeší i~validace shody
-s~lidským hodnocením, ta však není hlavním předmětem této práce.
+\medskip
+\textbf{Poznámka (restrukturalizace 2026-04-08):}
+Paragraph ``Udržovatelnost a~kvalitativní hodnocení'' (LLM-as-judge)
+přesunut do sekce~\ref{sec:hodnoceni-ai-agentu} (2.2.3), kde lépe
+zapadá do kontextu hodnocení AI agentů. Test oracle problem
+(Mathews et al., Chen et al.) přesunut tamtéž.
 \end{raw}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{AI coding agenti a~scaffolding}
+\section{AI coding agenti}
 \label{sec:ai-coding-agenti}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+Předchozí sekce popsala, jak se kvalita software zajišťuje a~měří
+v~tradičním vývoji. AI coding agenti tento kontext mění: kód již
+nepíše pouze člověk, ale autonomní systém řízený instrukcemi.
+Požadavky na kvalitu zůstávají stejné, mění se však to, kdo je
+plní a~jak lze výsledek hodnotit. Tato sekce zavádí základní pojmy
+(sekce~\ref{sec:zakladni-pojmy}), popisuje jak se chování agentů
+řídí instrukcemi (sekce~\ref{sec:scaffolding-instrukce}) a~jak se
+jejich výstupy hodnotí (sekce~\ref{sec:hodnoceni-ai-agentu}).
+% TODO(craft): Dopsat i proč je tato sekce pro BP nutná: instrukce jsou naše nezávislá proměnná, ne jen další zajímavé téma.
+
 \begin{raw}
-\textbf{Úvod sekce:}
-Definuje základní pojmy (LLM, agent, tool calls) a popisuje jak AI agenti mění softwarové inženýrství. Navazuje na problém tacit knowledge a popisuje přístupy k scaffoldingu a instrukci agentů.
+\textbf{Audit trail (signpost 2.2):}
+Původní TODO: ``Pojmy a~typy $\to$ jak mění vývoj.''
+Přepsáno na signpost odkazující na tři subsekce.
 \end{raw}
 
 % === 2.2.1 ===
-\subsection{Základní pojmy}
+\subsection{Základní pojmy a~typy}
 \label{sec:zakladni-pojmy}
+\label{sec:typy-coding-agentu}
+
+\textit{Velký jazykový model} (\textit{large language model}, LLM)
+je neuronová síť založená na architektuře
+Transformer~\cite{vaswani2017}, trénovaná na rozsáhlých textových
+korpusech. Model predikuje pravděpodobnost následujícího tokenu
+na základě předchozího kontextu, což mu umožňuje generovat
+koherentní text, včetně zdrojového kódu.
+% TODO(craft): Ohlídat scope: ponechat jen pojmy které opravdu nesou metodiku/diskusi; jinak sekce sklouzává k topicu místo argumentu.
+
+Samotný LLM je však pasivní: odpovídá na dotazy, ale nemůže
+samostatně číst soubory, spouštět příkazy ani měnit stav projektu.
+\textit{LLM-based agent} rozšiřuje model o~schopnost interagovat
+s~prostředím~\cite{liu2024llmagents}. Liu et al. identifikují čtyři
+klíčové komponenty agenta: \textit{plánování} (dekompozice úkolu na
+kroky), \textit{paměť} (krátkodobý kontext a~dlouhodobé znalosti),
+\textit{percepce} (vnímání prostředí, například čtení souborů
+a~výstupů příkazů) a~\textit{akce} (provádění změn pomocí nástrojů).
+Interakce s~prostředím probíhá v~cyklu
+Thought~$\to$~Action~$\to$~Observation, který formalizovali Yao
+et al.~\cite{yao2022react} v~rámci ReAct. Agent v~každém kroku
+zformuluje záměr, provede akci (například zavolá nástroj) a~na
+základě pozorovaného výsledku rozhodne o~dalším kroku.
+
+Schopnost volat nástroje (\textit{tool use}, \textit{function
+calling}) je technickým předpokladem agentního chování. Schick
+et al.~\cite{schick2023toolformer} ukázali, že LLM se dokáže naučit,
+kdy a~jaký nástroj použít. V~kontextu coding agentů to znamená, že
+agent může číst a~zapisovat soubory, spouštět testy, používat
+verzovací systém nebo volat API.
+
+Guo et al.~\cite{guo2025benchmarks} rozlišují tři paradigmata
+s~rostoucí autonomií:
+\begin{enumerate}
+    \item \textit{Prompt-based}: člověk formuluje dotaz, model odpovídá
+          (např.\ ChatGPT, GitHub Copilot pro doplňování kódu).
+    \item \textit{Fine-tune-based}: model je adaptován na doménu
+          softwarového inženýrství (např.\ CodeLlama, StarCoder).
+    \item \textit{Agent-based}: model autonomně plánuje a~vykonává
+          vícekrokové úkoly v~reálném prostředí (např.\ Devin, Claude
+          Code, OpenHands).
+\end{enumerate}
+Předmětem dalšího výkladu je třetí paradigma: autonomní coding agenti,
+kteří na základě specifikace a~instrukcí samostatně implementují
+softwarový projekt. Zásadní rozdíl oproti předchozím paradigmatům
+spočívá v~tom, že agent provádí celý vývojový proces, nikoli jen
+jednotlivé kroky. To znamená, že na jeho výstupy lze aplikovat
+stejné požadavky na kvalitu procesu i~produktu, jaké popisuje
+sekce~\ref{sec:swe-zivotni-cyklus}.
 
 \begin{raw}
+\textbf{Audit trail (2.2.1, DRAFT v1):}
+Přepsáno z~RAW poznámek do souvislého textu. Zachovány klíčové
+zdroje: Vaswani (Transformer), Liu (agent components), Yao (ReAct),
+Schick (Toolformer), Guo (3 paradigmata). Prompt engineering
+a~context engineering rozlišení přesunuto do 2.2.2 kde lépe
+kontextuálně zapadá.
+
+\medskip
+\textbf{Předchozí RAW obsah:}
 \textbf{1. Large Language Model (LLM):}
 
 \par\noindent → \texttt{vaswani2017} -- Transformer architektura:
@@ -306,11 +555,8 @@ Definuje základní pojmy (LLM, agent, tool calls) a popisuje jak AI agenti měn
 \end{itemize}
 \end{raw}
 
-% === 2.2.2 ===
-\subsection{Typy coding agentů}
-\label{sec:typy-coding-agentu}
-
 \begin{raw}
+\textbf{Obsah z původní 2.2.2 (Typy coding agentů):}
 \textbf{Evoluce podle autonomie:}
 
 \par\noindent → \texttt{guo2025benchmarks}:
@@ -335,11 +581,89 @@ Definuje základní pojmy (LLM, agent, tool calls) a popisuje jak AI agenti měn
 Devin, Claude Code, Cursor, OpenHands, Agentless \cite{xia2025agentless}.
 \end{raw}
 
-% === 2.2.3 ===
-\subsection{Jak agenti mění SDLC}
+% === 2.2.2 ===
+\subsection{Scaffolding a~instrukce}
 \label{sec:agenti-meni-sdlc}
+\label{sec:scaffolding}
+\label{sec:problem-kontextu}
+\label{sec:pristupy-memory}
+\label{sec:scaffolding-instrukce}
+
+Autonomní agent nemá \textit{tacit knowledge}, tedy implicitní znalosti, které
+lidský vývojář získává zkušeností: jaké konvence tým dodržuje, proč
+je kód strukturovaný určitým způsobem nebo jaké chyby se v~projektu
+opakují. Nonaka a~Takeuchi~\cite{nonaka1995} popisují převod tacit
+knowledge na explicitní jako klíčový proces v~organizacích. Pro
+agenty je tento převod nutný v~plném rozsahu: veškerý kontext, který
+agent potřebuje, musí být zapsán explicitně. Hassan
+et al.~\cite{hassan2025sase} tuto dualitu formalizují v~rámci SASE
+(\textit{Software Engineering for Agents}): zatímco lidský vývojář
+(SE4H) čerpá z~meetingů, code review a~zkušenosti, agent (SE4A)
+pracuje výhradně s~tím, co dostane jako vstup.
+
+\textit{Scaffolding} označuje strukturované artefakty v~prostředí
+agenta, které jeho chování řídí. V~praxi jde nejčastěji
+o~instrukční soubory umístěné v~repozitáři
+(např.\ \texttt{AGENTS.md}, \texttt{CLAUDE.md}), které definují
+roli agenta, pracovní postup, konvence a~omezení. Na rozdíl od
+jednorázových promptů jsou tyto soubory verzované a~iterativně
+upravované, což z~nich činí ``living documents,'' jejichž vývoj
+lze zpětně sledovat.
+
+Mao et al.~\cite{mao2025fse} analyzovali 2\,163 produkčních
+prompt šablon a~identifikovali sedm typů komponent: Role,
+Directive, Context, Workflow, Output, Constraints a~Examples.
+Zjistili, že Role a~Directive se nejčastěji objevují na začátku
+dokumentu a~že Workflow (procedurální kroky) je nejúčinnější
+komponentou pro složité úkoly. Toto zjištění potvrzují Li
+et al.~\cite{skillsbench2025}, kteří ukazují, že procedurální
+instrukce (``jak pracovat'') jsou efektivnější než popisná
+dokumentace (``jak vypadá codebase'').
+
+Empirická evidence o~účinnosti instrukčních souborů je smíšená.
+Lulla et al.~\cite{lulla2026} zjistili, že přítomnost souboru
+\texttt{AGENTS.md} je spojena s~nižší mediánovou dobou běhu agenta
+($-28{,}6\,\%$), ačkoli účinnost jednotlivých typů obsahu dosud
+nebyla izolována. Gloaguen et al.~\cite{gloaguen2025agentsmd}
+naopak ukázali, že LLM-generované instrukční soubory úspěšnost
+agenta snižují a~že i~soubory napsané vývojáři přinášejí jen
+marginální zlepšení. Li et al.~\cite{skillsbench2025} v~benchmarku
+SkillsBench zjistili, že kurátorované moduly zlepšují výsledky
+o~16,2~procentních bodů, zatímco automaticky generované nemají
+žádný efekt. Syntéza těchto zjištění naznačuje, že samotná
+přítomnost instrukcí nestačí; rozhodující je jejich obsah, struktura
+a~relevance pro konkrétní úlohu.
+
+Chování agenta je navíc citlivé na formulaci instrukcí. Breunig
+et al.~\cite{breunig2025} ukazují, že přestrukturování instrukce
+je účinnější než její opakování: když agent pravidlo ignoruje,
+nepomůže ho zopakovat; je třeba ho přeformulovat tak, aby se stal
+součástí pracovního postupu. Razavi a~Fard~\cite{razavi2025}
+dokládají, že drobné změny formulace promptu mohou dramaticky
+změnit chování modelu, což motivuje cílené úpravy místo přidávání
+dalších pravidel.
+% TODO(craft): Na konci vyložit explicitní problém/otázku pro naši práci: nejde jen o to že instrukce "nějak fungují", ale jak je systematicky navrhovat a hodnotit.
 
 \begin{raw}
+\textbf{Audit trail (2.2.2, DRAFT v1):}
+Přepsáno z~RAW poznámek (sloučeno z~původní 2.2.2 + 2.3.x).
+Klíčové zdroje: Nonaka (tacit/explicit), Hassan SASE (SE4H/SE4A),
+Mao FSE (7 komponent), SkillsBench (curated skills), Lulla
+(AGENTS.md přítomnost), Gloaguen (LLM-generated škodí), Breunig
+(přestrukturování), Razavi (prompt sensitivity).
+
+Vynecháno z~RAW (přílišný detail pro teorii):
+\begin{itemize}
+    \item Memory systémy (A-MEM, kontextové moduly) -- detail patří
+          do přehledu, ne do BP teorie
+    \item Context engineering survey -- příliš široké, specifika v~kap04
+    \item Specifikace jako vstup (formáty, tiers) -- patří do kap04
+    \item SASE scripty (Briefing/Loop/Mentor) -- detail, stačí princip
+    \item Operacionalizace škála -- empirický poznatek z~kap04/05, ne teorie
+\end{itemize}
+
+\medskip
+\textbf{Předchozí RAW obsah:}
 \textbf{Které fáze agenti ovlivňují:}
 
 \par\noindent → \texttt{jin2024} -- 6 klíčových oblastí:
@@ -372,12 +696,15 @@ SDD formalizuje tento pattern \cite{sdd2026}.
 33k agent PRs. Malé, focused úkoly mají vyšší úspěšnost.
 \end{raw}
 
-% === 2.2.4 ===
-\subsection{Problém kontextu}
-\label{sec:problem-kontextu}
+\begin{raw}
+\textbf{TODO: Přepsat signpost sekce (sloučeno ze 2.3).}
+Problém kontextu $\to$ struktura instrukcí $\to$ specificita
+a~mechanismy účinku. Jádro kap02: instrukce jsou nezávislá
+proměnná celé práce.
+\end{raw}
 
 \begin{raw}
-\textbf{Předchozí obsah:}
+\textbf{Předchozí obsah (z~2.3.1 Problém kontextu):}
 
 Agent nemá tacit knowledge $\rightarrow$ potřebuje explicitní kontext.
 
@@ -396,12 +723,8 @@ Agent nemá tacit knowledge $\rightarrow$ potřebuje explicitní kontext.
 \end{itemize}
 \end{raw}
 
-% === 2.2.5 ===
-\subsection{Přístupy k~memory a~kontextu}
-\label{sec:pristupy-memory}
-
 \begin{raw}
-\textbf{Předchozí obsah:}
+\textbf{Předchozí obsah (z~2.3.2 Přístupy ke kontextu):}
 
 \textbf{1. Memory systémy pro agenty:}
 \par\noindent $\rightarrow$ \texttt{memorymechanism2024}, \texttt{amem2025}
@@ -443,12 +766,8 @@ Tier 2: vstupní specifikace, doménový slovník, edge cases.
 Tier 3: pre/postconditions, error handling, behavioral model.
 \end{raw}
 
-% === 2.2.6 ===
-\subsection{Struktura instrukcí}
-\label{sec:scaffolding-instrukce}
-
 \begin{raw}
-\textbf{Předchozí obsah (přejmenováno z ``Praktické techniky''):}
+\textbf{Předchozí obsah (z~2.3.3 Struktura instrukcí, přejmenováno z ``Praktické techniky''):}
 
 \textbf{1. Agent Harness:}
 \par\noindent Anthropic, ``Effective harnesses for long-running agents'':\allowbreak{}
@@ -537,21 +856,103 @@ Proč pravidla nefungují je otevřená otázka. Relevantní literatura:
 \end{itemize}
 \end{raw}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Evaluace agentů a~instrukcí}
+% === 2.2.3 ===
+\subsection{Hodnocení AI agentů}
+\label{sec:hodnoceni-ai-agentu}
 \label{sec:evaluace-agentu-instrukci}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{raw}
-\textbf{Úvod sekce:}
-Předchozí sekce popsaly co agenti jsou a jak je řídit. Zbývá otázka hodnocení: jak měřit výkon agenta a~jak vyhodnocovat kvalitu instrukcí samotných?
-\end{raw}
-
-% === 2.3.1 ===
-\subsection{Hodnocení agentů a~benchmarky}
 \label{sec:hodnoceni-agentu}
+\label{sec:evaluace-instrukci}
+\label{sec:llm-as-judge}
+
+De facto standardem pro hodnocení coding agentů je
+SWE-bench~\cite{swebench2024}: benchmark obsahující 2\,294 úloh
+z~reálných GitHub repozitářů, kde agent dostane popis problému
+(GitHub issue) a~má vytvořit patch, který projde testy. Hodnocení
+je binární: patch projde nebo neprojde. Obdobně
+HumanEval~\cite{chen2021humaneval} měří schopnost modelu generovat
+funkčně správný kód na izolovaných programovacích úlohách.
+
+Tyto benchmarky měří \textit{funkční korektnost}: zda výsledek dělá
+to, co má. Neměří však, jak agent pracoval (dodržoval proces?),
+jakou strukturální kvalitu má výsledný kód (je udržovatelný?) ani za
+jakou cenu výsledku dosáhl (kolik tokenů spotřeboval?). Tři nedávné
+studie tuto mezeru empiricky dokládají. METR~\cite{metr2026}
+nechal čtyři správce repozitářů z~SWE-bench posoudit patche, které
+prošly automatickými testy; přibližně polovina z~nich by nebyla
+přijata do hlavní větve, protože nesplňovala standardy kvality kódu
+nebo procesu. Li et al.~\cite{li2026beyondbugfixes} analyzovali
+1\,210 přijatých pull requestů od coding agentů pomocí SonarQube
+a~zjistili, že přijetí neznamená kvalitu: přijaté PR vykazovaly
+měřitelné problémy s~udržovatelností. Ehsani
+et al.~\cite{ehsani2026failedprs} na vzorku 33\,000 agentních PR
+identifikovali, že vedle funkčních chyb se vyskytují i~procesní
+selhání (duplicitní PR, špatně zvolená větev, chybějící popis),
+která stávající benchmarky vůbec nezachycují.
+
+Existují benchmarky, které hodnocení rozšiřují nad rámec pass/fail.
+SWE-bench Pro~\cite{swebenchpro2025} přidává strukturované
+požadavky, ACE-Bench~\cite{acebench2025} testuje end-to-end vývoj
+a~FeatureBench~\cite{featurebench2026} hodnotí implementaci celých
+funkcí. Žádný z~nich však systematicky neměří kvalitu procesu (jak
+agent organizoval práci), kvalitu kódu nad rámec funkční korektnosti
+(udržovatelnost, čistota) a~efektivitu (spotřeba zdrojů) současně.
+Tato mezera naznačuje potřebu metrického rámce, který by tyto
+dimenze pokrýval současně.
+% TODO(craft): Dopsat selekci pro kap03: z benchmark gapu přímo odvodit proč budeme operacionalizovat proces, produkt a efektivitu.
+
+\paragraph{LLM-as-judge.}
+Některé dimenze kvality, jako srozumitelnost commit zpráv, kvalita
+dokumentace nebo vhodnost návrhových vzorů, nelze spolehlivě hodnotit
+deterministickými nástroji. Jedním z~přístupů je využití LLM jako
+hodnotitele (\textit{LLM-as-judge}). Zheng et al.~\cite{zheng2023mtbench}
+ukázali, že LLM dokáže hodnotit kvalitu výstupů na úrovni
+srovnatelné s~lidskými hodnotiteli, ale identifikovali tři
+systematické biasy: \textit{position bias} (preferuje odpověď
+na určité pozici), \textit{verbosity bias} (preferuje delší
+odpovědi) a~\textit{self-enhancement bias} (preferuje vlastní
+výstupy). Panickssery et al.~\cite{panickssery2024} prokázali
+korelaci mezi schopností modelu rozpoznat vlastní výstupy a~mírou,
+do jaké je preferuje, což naznačuje kauzální vztah mezi
+self-recognition a~self-preference. Verga et al.~\cite{verga2024poll}
+navrhli mitigaci formou panelu diverzních modelů (PoLL), který
+dosahuje lepší shody s~lidským hodnocením než jednotlivý model.
+Praktickou implikací je volba hodnotícího modelu z~odlišné modelové
+rodiny, než ve které pracuje hodnocený agent.
+
+\paragraph{Test oracle problem.}
+S~testováním souvisí \textit{test oracle problem}: kdo definuje
+správný výsledek? Mathews et al.~\cite{mathews2024} zjistili, že
+nástroje pro automatické generování testů systematicky filtrují
+selhávající testy; až 68,1\,\% výsledných testovacích sad validuje
+chybné chování místo jeho odhalení. Chen et al.~\cite{rethinking2025}
+na 500~úlohách benchmarku SWE-bench Verified potvrdili, že
+agent-generované testy slouží primárně jako observační zpětná vazba,
+nikoli jako validační nástroj. Obranou proti tomuto problému je
+odvozování očekávaných hodnot ze specifikace, nikoli z~pozorování
+kódu.
+% TODO(craft): Ohlídat hranici teorie vs metodiky: zde vysvětlit proč tento problém existuje, konkrétní volbu referenčních testů nechat až do kap03.
 
 \begin{raw}
+\textbf{Audit trail (2.2.3, DRAFT v1):}
+Přepsáno z~RAW poznámek (sloučeno z~původní 2.4.x + přesunutý
+LLM-as-judge z~2.1.4 + test oracle problem). Struktura:
+benchmarky (SWE-bench, HumanEval) $\to$ co neměří (METR, Li,
+Ehsani) $\to$ gap $\to$ LLM-as-judge (Zheng, Panickssery, Verga)
+$\to$ test oracle (Mathews, Chen).
+
+Vynecháno z~RAW (přílišný detail nebo patří jinam):
+\begin{itemize}
+    \item APO přístupy (PromptWizard, PromptAlchemy) -- patří do kap05 diskuze
+    \item Fine-tuning vs ICL -- obecné ML, ne specifické pro naši práci
+    \item Prompt evaluation nástroje (Langfuse, Braintrust) -- praktické, ne teoretické
+    \item Cline hill climbing -- praktický příklad, ne teorie
+    \item Sofroniew et al. funkční emoce -- zajímavé ale tangenciální
+    \item Trajectory evaluation (AgentBoard, TRACE) -- zmíněny v~5.2
+    \item Detailní Zhu et al. agenteval -- patří do kap03
+\end{itemize}
+
+\medskip
+\textbf{Předchozí RAW obsah:}
 \textbf{NOVÁ SEKCE: přesunuto z různých míst + doplnit.}
 
 \textbf{SWE-bench:}
@@ -631,9 +1032,48 @@ nepřímo ovlivňovat ``calm'' vs ``desperate'' profil.
 pass/fail nestačí''. Detailněji v~kap05 diskuze (5.2.2 vliv instrukcí).
 \end{raw}
 
-% === 2.3.2 ===
-\subsection{Evaluace instrukcí}
-\label{sec:evaluace-instrukci}
+\begin{raw}
+\textbf{Přesunuto z~2.1.2 (restrukturalizace 2026-04-08):
+LLM-as-judge a~test oracle problem.}
+
+\paragraph{Udržovatelnost a~kvalitativní hodnocení.}
+Metriky jako cyklomatická složitost nebo počet lint varování
+kvantifikují konkrétní vlastnosti kódu, ale nezachycují dimenze
+jako čitelnost, pojmenování, oddělení zodpovědností nebo idiomatické
+použití jazyka. Tyto vlastnosti souhrnně označované jako
+\textit{udržovatelnost} (\textit{maintainability}) ovlivňují
+schopnost kód dále rozvíjet a~opravovat~\cite{sommerville2016}.
+Jejich hodnocení vyžaduje posouzení, které přesahuje možnosti
+deterministických nástrojů.
+
+Jedním z~přístupů je využití velkého jazykového modelu jako
+hodnotitele (\textit{LLM-as-judge}). Zheng et al.~\cite{zheng2023mtbench}
+ukázali, že LLM dokáže hodnotit kvalitu výstupů na úrovni
+srovnatelné s~lidskými hodnotiteli, ale identifikovali tři
+systematické biasy: \textit{position bias} (preferuje odpověď
+na určité pozici), \textit{verbosity bias} (preferuje delší
+odpovědi) a~\textit{self-enhancement bias} (preferuje vlastní
+výstupy). Panickssery et al.~\cite{panickssery2024} na NeurIPS~2024
+prokázali korelaci mezi schopností modelu rozpoznat vlastní výstupy
+a~mírou, do jaké je preferuje, což naznačuje kauzální vztah mezi
+self-recognition a~self-preference. Verga et al.~\cite{verga2024poll}
+navrhli mitigaci formou panelu diverzních modelů (PoLL), který
+dosahuje lepší shody s~lidským hodnocením než jednotlivý model.
+Praktickou implikací je volba hodnotícího modelu z~odlišné modelové
+rodiny, než ve které pracuje hodnocený agent.
+
+\paragraph{Test oracle problem.}
+S~testováním souvisí \textit{test oracle problem}: kdo definuje
+správný výsledek? Mathews et al.~\cite{mathews2024} zjistili, že
+nástroje pro automatické generování testů systematicky filtrují
+selhávající testy; až 68,1\,\% výsledných testovacích sad validuje
+chybné chování místo jeho odhalení. Chen et al.~\cite{rethinking2025}
+na 500~úlohách benchmarku SWE-bench Verified potvrdili, že
+agent-generované testy slouží primárně jako observační zpětná vazba,
+nikoli jako validační nástroj. Obranou proti tomuto problému je
+odvozování očekávaných hodnot ze specifikace, nikoli z~pozorování
+kódu.
+\end{raw}
 
 \begin{raw}
 Co tato sekce musí říct (aby validovala kap03 metodiku):

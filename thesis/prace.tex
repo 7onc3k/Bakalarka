@@ -68,21 +68,25 @@ Formalizovaný postup pro návrh a~vyhodnocování instrukcí dosud chybí.
 %
 Práce si klade tři cíle: (1)~navrhnout sadu metrik měřících proces, kvalitu
 a~efektivitu práce agenta; (2)~demonstrovat iterativní postup návrhu instrukcí
-řízený těmito metrikami; (3)~ablacemi identifikovat, které složky instrukční
-sady jsou nezbytné.
+řízený těmito metrikami; (3)~ablacemi prozkoumat, které složky instrukční
+sady přispívají k~měřenému chování agenta a~které jsou redundantní.
 %
 Sadu metrik a~postup ověřujeme na případové studii systému upomínek
 faktur. Agent (model Minimax prostřednictvím nástroje OpenCode) prošel pěti
 pilotními iteracemi a~čtyřmi ablačními běhy. Chování bylo měřeno 19~metrikami
 ve třech kategoriích: procesní (P), produktové~(Q) a~efektivita~(E).
 %
-Metriky zachytily zlepšení ze~4/10 na~9/10 splněných kritérií během tří
-iterací. Analýza odhalila vzorec vývoje instrukcí: obecné pravidlo $\to$
-konkrétní příkaz $\to$ verifikační krok. Ablace ukázaly, že verifikační
-kroky nejsou redundantní; jejich odebrání zhoršilo čtyři metriky.
-Sekce kódových konvencí byla pro automatizované metriky převážně redundantní.
-Nedeterminismus modelu se ukázal jako dominantní faktor variability procesní
-compliance.
+Metriky zachytily, že iterativní úpravy instrukcí zlepšily dodržování
+pracovního postupu, ale ne monotónně. Nejlepší pilotní běh dosáhl
+plného splnění procesních metrik P1--P5 a~zvýšil počet projitých
+referenčních testů z~39/42 na~41/42. Analýza odhalila vzorec vývoje
+instrukcí: obecné pravidlo $\to$ konkrétní příkaz $\to$ verifikační krok.
+Ablace ukázaly, že verifikační kroky nejsou redundantní; jejich odebrání
+zhoršilo funkční korektnost i~automatizované metriky kvality kódu.
+Sekce kódových konvencí byla pro automatizované metriky převážně
+redundantní, ale ovlivňovala designovou kvalitu hodnocenou
+LLM-as-judge. Výsledky současně ukázaly, že procesní compliance je
+výrazně citlivá na nedeterminismus modelu.
 %
 Přenositelným přínosem jsou sada metrik a~iterativní postup; konkrétní
 naměřené hodnoty jsou vázány na podmínky případové studie.
@@ -96,8 +100,9 @@ still lacking.
 %
 This thesis pursues three goals: (1)~design a~metric suite measuring agent
 process, quality, and efficiency; (2)~demonstrate an iterative instruction
-design process driven by these metrics; (3)~use ablation to identify which
-instruction components are necessary.
+design process driven by these metrics; (3)~use ablation to explore which
+instruction components contribute to the observed behavior and which are
+redundant.
 %
 The metric suite and process are evaluated on a~single case study of
 a~dunning system. The agent (Minimax model via the OpenCode tool)
@@ -105,13 +110,17 @@ underwent five pilot iterations and four ablation runs. Behavior was measured
 using 19~metrics in three categories: process~(P), product~(Q), and
 efficiency~(E).
 %
-The metrics captured improvement from 4/10 to 9/10 satisfied criteria over
-three iterations. Analysis revealed an instruction evolution pattern: general
-rule $\to$ specific command $\to$ verification step. Ablation showed that
-verification steps are not redundant: removing them degraded four metrics.
-The code convention section proved largely redundant for automated metrics.
-Model non-determinism emerged as the dominant factor in process compliance
-variability.
+The metrics showed that iterative instruction changes improved workflow
+adherence, but not monotonically. The best pilot run achieved full
+compliance on process metrics P1--P5 and increased reference-test
+performance from 39/42 to 41/42. Analysis revealed an instruction
+evolution pattern: general rule $\to$ specific command $\to$ verification
+step. Ablation showed that verification steps are not redundant:
+removing them degraded both functional correctness and automated code-quality
+metrics. The code-convention section proved largely redundant for automated
+metrics, but it still affected design quality as assessed by an
+LLM-as-judge. The results also showed that process compliance is highly
+sensitive to model non-determinism.
 %
 The transferable contributions are the metric suite and the iterative process;
 the specific measured values are bound to the case study conditions.

@@ -1,33 +1,50 @@
 \chapter*{Úvod}
 \addcontentsline{toc}{chapter}{Úvod}
 
-\begin{draft}
-AI agenti se stávají součástí softwarového vývoje: dokáží implementovat
-funkcionalitu, psát testy, spravovat verzovací historii a~komunikovat
-prostřednictvím issues a~pull requestů. Kvalita jejich výstupu však
-závisí na instrukcích, které dostanou, konkrétně na obsahu souboru
-\texttt{AGENTS.md} definujícího pracovní postup, omezení a~kontext projektu. Jak tyto instrukce
-systematicky navrhovat a~jak měřit, zda agent dodržuje požadované
-praktiky, zůstává otevřenou otázkou.
+AI coding agenti dokáží autonomně implementovat funkcionalitu, psát
+testy, spravovat verzovací historii a~komunikovat prostřednictvím
+issues a~pull requestů. S~rostoucí autonomií těchto nástrojů roste
+i~potřeba systematicky hodnotit kvalitu jejich práce. Současné benchmarky hodnotí izolované aspekty práce agenta,
+především funkční korektnost. Holistický pohled, který by
+zachytil proces, kvalitu kódu a~efektivitu společně, však chybí.
+Přitom i~funkčně správné řešení může být v~praxi odmítnuto
+kvůli nedostatkům v~procesu nebo udržovatelnosti. Praktik, který vidí
+jen pass/fail výsledek, tak může přecenit řešení, které by ve skutečném
+vývoji neprošlo code review nebo by se obtížně rozvíjelo.
 
-Tato práce navrhuje sadu 19~metrik ve třech kategoriích: procesní
-(\mgrp{P}), produktové (\mgrp{Q}) a~\mgrp{E}.
-Tyto metriky měří nejen výsledek, ale i~proces a~kvalitu práce agenta.
-Na případové studii systému upomínek faktur demonstruje iterativní
-postup návrhu instrukcí s~využitím těchto metrik a~komparativními
-variacemi (ablacemi) identifikuje, které složky instrukcí
-přispívají k~měřenému chování agenta. Sadu metrik a~postup ověřujeme na případové studii jednoho
-projektu~\cite{yin2018}.
+Kvalitu práce agenta výrazně ovlivňují instrukce, které dostane.
+V~praxi se etablují instrukční soubory jako \texttt{AGENTS.md}
+nebo \texttt{CLAUDE.md}, které definují pracovní postup, konvence
+a~omezení projektu. Tyto soubory se stávají standardním rozhraním
+mezi člověkem a~agentem nejen v~softwarovém vývoji, ale
+i~v~univerzálních agentních nástrojích. Jak instrukce systematicky
+navrhovat a~jak měřit, zda agent dodržuje požadované praktiky,
+zůstává otevřenou otázkou.
 
-Práce je členěna do pěti kapitol. Kapitola~\ref{kap:vymezeni} vymezuje
-problém, formuluje tři cíle práce a~ohraničuje její rozsah.
-Kapitola~\ref{kap:teorie} shrnuje teoretická východiska: softwarové
-inženýrství a~životní cyklus vývoje, AI coding agenty, scaffolding
-a~instrukce a~měření kvality softwaru.
-Kapitola~\ref{kap:metodika} popisuje metodiku: výzkumný přístup,
-sadu metrik, experimentální design a~omezení validity.
-Kapitola~\ref{kap:prakticka-cast} zachycuje průběh případové studie:
-pilotní fázi pěti iterací a~komparativní variace.
-Kapitola~\ref{kap:vyhodnoceni} interpretuje výsledky ve vztahu
-k~cílům práce, porovnává je s~existujícím výzkumem a~diskutuje limity.
-\end{draft}
+Tato práce navrhuje sadu metrik pokrývající proces, kvalitu kódu
+a~efektivitu práce agenta. Na případové studii necháváme agenta
+opakovaně implementovat systém upomínek faktur ze specifikace,
+výsledky měříme navrženými metrikami a~na jejich základě
+upravujeme instrukce mezi iteracemi. Ablacemi dále zkoumáme,
+které složky instrukcí přispívají k~měřenému chování
+a~které jsou redundantní.
+
+Práce nejprve vymezuje problém a~cíle, poté shrnuje teoretická
+východiska z~oblasti softwarového inženýrství, AI agentů
+a~měření kvality. Na jejich základě navrhuje metodiku, kterou
+ověřuje na případové studii. Kapitola Vyhodnocení a~diskuse interpretuje
+výsledky ve vztahu k~cílům a~porovnává je s~existujícím výzkumem.
+
+\begin{raw}
+\textbf{Audit trail (úvod, předchozí verze v2):}
+4 odstavce: kontext + gap (benchmarky jen pass/fail), instrukce jako
+problém, co práce dělá, průvodce po kapitolách. Zdroje tvrzení:
+benchmarky jen pass/fail potvrzeno z kap02 sekce 2.3.1 (SWE-bench,
+SWE-EVO, FeatureBench, ACE-Bench). ``Pass $\neq$ merge'' z METR 2026,
+citováno v kap02. Cíle odpovídají kap01 řádky 97--109.
+
+\textbf{Audit trail (úvod, předchozí verze v1):}
+3 odstavce: kontext (agenti + instrukce), co práce dělá (metriky + ablace),
+průvodce po kapitolách (výčet kap 1--5). Průvodce nahrazen stručným
+popisem logiky návaznosti.
+\end{raw}

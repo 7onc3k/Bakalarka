@@ -3,34 +3,64 @@
 
 \section{Motivace}
 
-\begin{draft}
-AI agenti se používají k~vývoji softwaru, ale výsledky ukazují že to není tak
-jednoduché jak se čekalo. Randomizovaná studie METR~\cite{metr2025} na 246
-úlohách ukázala, že s~AI nástroji byli vývojáři o~19\,\% pomalejší. Agent
-často produkuje funkční výstup, nedodržuje přitom vývojové praktiky: slučuje
-nesouvisející změny, přeskakuje testy, ignoruje specifikaci.
+AI agenti se používají k~vývoji softwaru, ale výsledky ukazují, že to
+není tak jednoduché, jak se čekalo. Randomizovaná studie
+METR~\cite{metr2025} na 246~úlohách ukázala, že s~AI nástroji byli
+vývojáři o~19\,\% pomalejší.
 
-Otázka není jen jestli agent úkol vyřešil, ale jak. Existující benchmarky jako
-SWE-bench~\cite{swebench2024} měří pouze výsledek: vyřešil agent úkol, ano
-nebo ne. Kvalitu práce, transparentnost procesu a~možnost řídit chování agenta
-v~průběhu vývoje tyto benchmarky nepostihují. Agent může hlásit úkol jako
-dokončený, přestože implementace pokrývá jen část požadavků, a~bez metrik
-procesu to není jak systematicky odhalit.
+Agent často produkuje funkční výstup, ale nedodržuje vývojové praktiky.
+Ehsani et al.~\cite{ehsani2026failedprs} analyzovali 33~tisíc agentních
+pull requestů a~zjistili, že procesní nedostatky jsou jedním z~hlavních
+důvodů odmítnutí. Klíčovým nástrojem jak chování agenta řídit jsou
+instrukce: Shin et al.~\cite{shin2025prompt} ukazují, že iterativní
+zpřesňování instrukcí výrazně zlepšuje výsledky na úlohách s~kódem.
 
-Chování agenta lze přizpůsobit trénováním modelu (fine-tuning) nebo instrukcemi
-v~kontextovém okně (in-context learning). Shin et al.~\cite{shin2025prompt}
-ukazují, že automatizované prompty systematicky nepřekonávají
-fine-tuned modely, ale iterativní zpřesňování instrukcí výrazně
-zlepšuje výsledky na úlohách s~kódem. S~rostoucí
-velikostí kontextových oken se instrukce stávají praktičtější alternativou:
-jsou dostupné komukoliv, iterativně upravitelné a~neomezují emergentní
-schopnosti modelu. Pro trénování modelů existují zavedené postupy; pro
-systematické navrhování a~vyhodnocování instrukcí obdobný postup dosud nevznikl.
+Současné benchmarky jako SWE-bench~\cite{swebench2024} hodnotí izolované
+aspekty práce agenta, především funkční korektnost. Studie
+METR~\cite{metr2026}\footnote{Jiná studie téže organizace než~\cite{metr2025};
+zde analýza SWE-bench pull requestů, ne randomizovaný experiment.} ukázala,
+že polovina řešení která projdou testy by nebyla přijata při code review.
+Li et al.~\cite{li2026beyondbugfixes}
+analyzovali 1\,210 sloučených pull requestů a~zjistili kvalitativní
+nedostatky i~v~přijatém kódu. Holistický pohled, který by zachytil proces,
+kvalitu kódu a~efektivitu společně, však chybí.
 
-Tato práce navrhuje evaluační systém který měří nejen výsledek, ale i~proces
-a~kvalitu práce agenta, a~popisuje postup jak s~jeho pomocí iterativně
-vylepšovat instrukce.
-\end{draft}
+Jak instrukce systematicky navrhovat a~jak měřit, zda agent dodržuje
+požadované praktiky, je méně prozkoumané. Lulla
+et al.~\cite{lulla2026} zjistili, že přítomnost instrukčního souboru
+je spojena se zkrácením doby běhu o~28,6\,\%, ale Gloaguen
+et al.~\cite{gloaguen2025agentsmd} upozorňují, že generické instrukce
+přinášejí marginální zlepšení při vyšších nákladech. Které složky
+instrukcí k~měřenému chování skutečně přispívají a~které jen zabírají
+kontextové okno, dosud nebylo izolováno.
+
+Chování agenta lze přizpůsobit trénováním modelu nebo instrukcemi
+v~kontextovém okně. S~rostoucí velikostí kontextových oken
+a~zkracujícími se cykly mezi generacemi modelů se instrukce stávají
+praktičtější alternativou: jsou dostupné komukoliv, iterativně
+upravitelné a~přenositelné mezi modely. Fine-tuning naproti tomu
+vyžaduje trénovací data, výpočetní kapacitu a~investici vázanou
+na konkrétní verzi modelu. Shin et al.~\cite{shin2025prompt}
+ukazují, že iterativní zpřesňování instrukcí dosahuje srovnatelných
+výsledků s~fine-tuned modely na úlohách s~kódem.
+
+\begin{raw}
+\textbf{Audit trail (motivace, předchozí verze DRAFT v4):}
+3 odstavce: (1)~METR + Ehsani + Shin v~jednom, (2)~benchmarky jen
+SWE-bench, (3)~gap instrukcí bez citací.
+Změny v~v5: odst.~1 rozdělen na kontext (METR) a~problém (Ehsani +
+Shin); benchmarky doplněny o~METR pass$\neq$merge a~Li
+merge$\neq$kvalita; gap instrukcí doplněn o~Lulla a~Gloaguen
+(protichůdné výsledky).
+
+\medskip
+\textbf{Audit trail (motivace, předchozí verze DRAFT v3):}
+4 odstavce: (1)~METR + agent chybuje, (2)~benchmarky měří jen výsledek,
+(3)~ICL vs fine-tuning, Shin, chybí postup, (4)~co práce dělá.
+Změny v~v4: přesunuto ICL/fine-tuning do rozsahu (1.3); instrukce
+jako klíčový nástroj sloučeny do odst.~1; odst.~4 smazán (duplicitní
+s~cíli a~úvodem); přidána motivace pro ablace (odst.~3).
+\end{raw}
 
 \begin{raw}
 \textbf{Předchozí verze motivace (audit trail):}
@@ -92,14 +122,14 @@ kritéria, definovat explicitně. Pokud totéž, sjednotit.
 \end{itemize}
 \end{raw}
 
+\Needspace{10\baselineskip}
 \section{Cíle práce}
 
-\begin{draft}
 \begin{enumerate}
     \item Na základě analýzy existujících standardů kvality softwaru
           a~současných benchmarků pro AI agenty navrhnout sadu metrik
-          pokrývající proces, kvalitu kódu a~efektivitu, tedy dimenze,
-          které stávající benchmarky neměří.
+          pokrývající proces, kvalitu kódu a~efektivitu, a~tím zachytit
+          dimenze, které stávající benchmarky neměří.
     \item Na případové studii demonstrovat iterativní postup návrhu
           instrukcí řízený těmito metrikami a~ukázat, že vede
           k~měřitelnému zlepšení dodržování vývojových praktik.
@@ -107,7 +137,6 @@ kritéria, definovat explicitně. Pokud totéž, sjednotit.
           složky přispívají k~měřenému chování agenta a~které jsou
           redundantní.
 \end{enumerate}
-\end{draft}
 
 \begin{raw}
 \textbf{Audit trail: předchozí verze cílů (DRAFT v5):}
@@ -165,32 +194,44 @@ Cíle práce = 3 fáze: (1)~research gap: procesní metriky, (2)~pilotní fáze:
 
 \section{Rozsah práce}
 
-\begin{draft}
-Evaluační systém a~postup pro návrh instrukcí nelze navrhnout čistě
-teoreticky. Je potřeba je ověřit v~praxi: ukázat, že metriky skutečně
-zachytí rozdíly v~chování agenta, když dostane jiné instrukce, a~že
-iterativní postup vede ke zlepšení. K~tomu slouží případová studie, ve
-které opakovaně pouštíme agenta s~různými variantami instrukcí a~pokaždé
-měříme, co se změnilo.
+Cíle ověřujeme na případové studii systému upomínek faktur.
+Existující studie hodnotí agenty na velkém počtu krátkých
+úloh; naše práce volí opačný přístup: jeden projekt do hloubky,
+s~opakovanými běhy a~podrobnou analýzou každého z~nich.
 
-Aby bylo možné vliv instrukcí měřit, musí být všechno ostatní stejné:
-model, nástroje, specifikace i~výchozí stav repozitáře. Jedinou proměnnou
-jsou instrukce které agent dostane. Kdyby se měnilo víc věcí najednou,
-nebylo by jasné, co způsobilo změnu v~chování.
+Práce se nezabývá trénováním modelů, protože cílem je zkoumat
+vliv instrukcí, ne schopnosti konkrétního modelu. Nesrovnává různé
+modely ani programovací jazyky, protože experimentální design se snaží
+držet ostatní podmínky co nejstabilnější a~měnit především instrukce.
+Neporovnává agenta s~lidským vývojářem, protože
+měří zlepšení mezi iteracemi, ne absolutní výkon. Navržená sada
+metrik a~iterativní postup jsou koncipovány jako přenositelný rámec;
+konkrétní instrukce a~naměřené hodnoty platí pro tuto případovou studii
+a~slouží jako feasibility demonstrace, nikoli jako obecně platný
+výsledek pro všechny modely a~projekty.
+Zdůvodnění volby projektu a~podrobnosti experimentálního designu
+popisuje kapitola~\ref{kap:metodika}.
 
-Případová studie probíhá na jednom projektu: systému upomínek faktur. Jde
-o~projekt s~deterministickou logikou, kde stejný vstup vždy dá stejný výstup.
-To je důležité, protože výsledky lze ověřit automatizovanými testy, ne
-subjektivním posouzením. Agent pracuje od specifikace k~implementaci,
-tedy od požadavků přes návrh po funkční kód a~testy.
+\begin{raw}
+\textbf{Audit trail (rozsah, předchozí verze DRAFT v3):}
+3 odstavce bez kontextu originálu. Změny v~v4: vráceno blíže
+k~originálu (v1). Ponechány: proč případová studie, dunning systém
+stručně, co neděláme, přenositelnost. Odstraněno oproti v1:
+``evaluační systém'' $\to$ ``sada metrik a~iterativní postup'';
+kontrolované podmínky zkráceny (detaily v~kap03). ICL/fine-tuning
+přesunuto do motivace (odst.~5).
 
-Práce neporovnává různé modely ani programovací jazyky a~neporovnává agenta
-s~lidským vývojářem. Navržený evaluační systém a~iterativní postup jsou
-koncipovány obecně: kdokoli je může vzít a~použít na svém projektu s~vlastními
-prahy. Konkrétní instrukce a~naměřené hodnoty platí pro tuto případovou studii.
-Zdůvodnění volby projektu a~podrobnosti experimentálního designu popisuje
-kapitola~\ref{kap:metodika}.
-\end{draft}
+\medskip
+\textbf{Audit trail (rozsah, předchozí verze DRAFT v2):}
+3 odstavce: (1)~instrukce ne fine-tuning (stručně), (2)~jedna případová
+studie, feasibility, (3)~co neděláme.
+
+\medskip
+\textbf{Audit trail (rozsah, předchozí verze DRAFT v1):}
+4 odstavce: (1)~proč případová studie (nelze teoreticky), (2)~kontrolované
+podmínky (vše stejné, jen instrukce), (3)~dunning systém (deterministický,
+testovatelný), (4)~co neděláme + přenositelnost.
+\end{raw}
 
 \begin{raw}
 \textbf{Poznámky k propojení:}

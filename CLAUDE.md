@@ -126,40 +126,64 @@ Manuální režim (ne automatický acro) — `\ac{}` je přepsán na `\acf{}`, p
 **Dva řezy:** obsahový (P/Q/E = co) a metodický (det/qual/zaz = jak) — nezaměňovat.
 Terminologie: "deterministické" (ne "automatizované", ne "binární").
 
-### Psaní o metrikách (konvence pro text)
+### Na začátku konverzace
 
-Cíl: čtenář se setkává s 19 metrikami poprvé — konzistence formátu snižuje kognitivní zátěž.
-Pravidla jsou vodítka, ne striktní šablona — přizpůsobit kontextu a přirozenému toku textu.
+Při práci na thesis **vždy nejdřív sám načti do hlavního kontextu** (ne přes subagenta):
 
-**Typy tvrzení:**
+1. **Kapitoly:** nejdřív `thesis/prace.tex` jako chapter map, pak `thesis/uvod.tex`, `thesis/kap01.tex` až `thesis/kap05.tex` a `thesis/zaver.tex`
+2. **Referenční soubory:**
+   - `notes/jak-psat-vedecky.md` — pravidla vědeckého psaní, patterny, checklist
+   - `notes/doporuceni-fis.md` — kritéria obhajitelnosti od komise
+   - `thesis/TERMINOLOGIE.md` — kanonické pojmy pro konzistenci
+   - `thesis/makra.tex` — acro definice metrik (P/Q/E)
 
-| Typ | Vzorec | Příklad |
-|-----|--------|---------|
-| Hodnota | `\acs{X}~=~číslo` | `\acs{Q2}~=~41/42` |
-| Trend | `\acs{X} směr z~A na~B` | `\acs{Q5} klesly z~12 na~0` |
-| Klíčový verdikt | `\acs{X}~=~číslo (práh: Y), splněna` | max 2-3× per sekce |
-| Běžný verdikt | `\acs{X} splněna` | čtenář zná práh z tabulky 3.4 |
-| Srovnání | `\acs{X}~=~val₁, ale \acs{Y}~=~val₂` | max 2-3 metriky na větu |
+Bez znalosti celé práce a referenčních souborů v kontextu nelze zajistit konzistenci, ověřovat fakta ani rozhodovat co kam patří.
 
-*Proč klíčový vs běžný verdikt:* Chandler & Sweller (1992) split-attention — integrovat práh u důležitých nálezů. Gupta & Gupta (2015) — nereplikovat celou tabulku v textu.
+### Research before writing (chain of thought)
 
-**Struktura odstavce o metrice (F → P → I):**
+Negeneruj text z hlavy. Každé tvrzení, struktura, délka, styl musí být odvozené z research. Před psaním čehokoli si nejdřív řekni:
+1. **Co potřebuji vědět?** — jaká fakta, data, kontext jsou nutné pro to co píšu
+2. **Kde to zjistím?** — zdroje v pořadí priority:
+   - **Samotná thesis** (ostatní kapitoly) — klíčový zdroj pro konzistenci napříč prací
+   - **Web** — aktuální best practices, standardy, stav oboru
+   - **Repo** (kód, data, git log) — ověření faktů o experimentu
+   - **RAG, thesis/sources/** — indexované zdroje
+   - **Vzorové BP** (`vzoroveBP/`) — referenční bod, ne autorita
+3. **Udělej research** — skutečně se podívej, neber z paměti
+4. **Ověř fakta** — tvrzení v textu musí odpovídat aktuálnímu stavu (ne předpokladům z začátku práce)
+5. **Teprve pak piš** — s oporou v tom co jsi zjistil
+
+Tohle platí pro všechno: text thesis, kostru sekce, formulaci claimu, volbu struktury.
+
+### Před psaním (enabler)
+
+Před každým odstavcem si odpověz:
+1. **Jaký claim dělám?** Jedna věta. Pokud ji neumíš říct, odstavec nemá pointu.
+2. **Jaká evidence?** Jedno klíčové číslo nebo pozorování. Zbytek → tabulka.
+3. **Co čtenář ještě neví?** Kontext PŘED claim, ne po něm. Pokud to ví z dřívější kapitoly, neříkat znovu — odkázat.
+
+**Kvantitativní věta** — 4C framework (Lang & Altman): obě strany srovnání explicitní, směr + velikost, kontext co metriku produkuje, žádná redundance s tabulkou.
+
+**Self-check:** Přečti každou závorku s daty izolovaně. Dává smysl bez okolního textu? Pokud ne, rozepsat do vlastní věty.
+
+*Proč enabler, ne constraints:* Kim (2025) — specifické constraints pomáhají u procedurálních tasků, ale u open-ended psaní (argumentace, syntéza) over-specification může škodit. Gloaguen (2026) — každá instrukce která nemění chování je šum. Mao (2025) — workflow/procedurální kroky jsou klíčové pro složité úlohy, ne výčet zákazů.
+
+**Notace metrik v textu** (kompaktní reference):
+
+| Vzorec | Příklad |
+|--------|---------|
+| `\acs{X}~=~číslo` | `\acs{Q2}~=~41/42` |
+| `\acs{X} směr z~A na~B` | `\acs{Q5} klesly z~12 na~0` |
+| `\acs{X}~=~číslo (práh: Y), splněna` | u klíčových nálezů (2-3× per sekce) |
+| `\acs{X} splněna` | čtenář zná práh z tab. 3.4 |
+
+**Struktura odstavce (F → P → I):**
 - **Fakt:** kód + hodnota (jedna věta)
 - **Pozorování:** co se stalo (bez kódu, plyne z kontextu)
 - **Implikace:** co z toho plyne (bez kódu)
+- Ne každá zmínka potřebuje všechny tři: výčet = jen F; průběh = F+P; klíčový nález = F+P+I
 
-Ne každá zmínka potřebuje všechny tři: výčet výsledků = jen F; průběh běhu = F+P; klíčový nález/diskuze = F+P+I.
-
-**Hustota:**
-- Max 2-3 metriky s hodnotou na větu. *Proč:* Cowan (2001) — pracovní paměť ~4 chunky; Meister et al. (2021) — špičky informační hustoty zhoršují zpracování.
-- Skupinové tvrzení → `\mgrp{}`, ne výčet kódů
-- Kompletní data → tabulka; text popisuje trend/highlight, ne každý řádek. *Proč:* USC/Gupta (2015) — "neprovázejte čtenáře každým řádkem tabulky"
-- Směr metriky neutrálně (vzrostla/klesly + čísla), hodnocení patří do implikace
-
-**Jazykové signály:**
-- Fakt: `= hodnota`, `dosáhla`, `činila`, `splněna/porušena`
-- Pozorování: `Agent vytvořil...`, `Příčinou bylo...`, `Rozdíl vznikl tím, že...`
-- Implikace: `To naznačuje...`, `Z toho plyne...`, `Tento výsledek potvrzuje/odporuje...`
+**Hustota:** Max 2-3 metriky s hodnotou na větu. Skupinové tvrzení → `\mgrp{}`. Kompletní data → tabulka; text popisuje trend/highlight.
 
 ### Obrázky a floaty
 
@@ -199,17 +223,31 @@ Workflow: raw → draft → finální. DRAFT blok vždy PŘED RAW. Při přepiso
 2. **Displacement** — systémy pro práci místo práce → "děláme práci, nebo systém pro práci?"
 3. **Context loss** — návrat k rozhodnutím která padla → zkontroluj MEMORY.md a issues, neříkej "asi jsme rozhodli"
 
-### Failure modes psaní
+### Doporučení FIS (kontrolovat průběžně)
 
-- Jeden pojem = jeden termín napříč celou prací
+Při psaní nebo revizi jakékoli sekce ověř proti `notes/doporuceni-fis.md`. Klíčové body:
+- Cíle se vztahují k odbornému problému, ne k textu práce (ne "popsat", "seznámit")
+- Východiska obsahují jen poznatky s vlivem na výsledky (ne učebnicové základy)
+- Metodika je konkrétní a replikovatelná (ne "analýza, syntéza")
+- Jasně odděleno: co je ze zdrojů, co vlastní výsledek, co spekulace
+- Zbytečně nerekapitulovat základní poznatky ze základních kurzů
+
+### Research a srovnání
+
+Při revizi sekce nebo hledání best practices:
+1. **Web search** (primární) — aktivně dohledej aktuální best practices z kvalitních zdrojů
+2. **Lokální zdroje** — RAG (`cd RAG && npm run query`), `thesis/sources/`, `notes/`
+3. **Vzorové BP** (`vzoroveBP/`) — jak to řeší ostatní, kriticky zhodnotit (co dobře, co špatně)
+
+Pokud na webu najdeš zdroj s trvalou hodnotou (ne jednorázový), stáhni a zaindexuj do RAG.
+
+### Guardraily psaní
+
+Mechanické — exclusion constraints fungují na formát (Mao 2025: ~100% compliance):
 - Em dash (`---`/`—`) NEPOUŽÍVAT vůbec, nikdy, v žádném thesis textu
-- Neřešit "co to není" — říct co děláme
-- Neopakovat problém z kap01 v dalších kapitolách
-- Dvě sekce za sebou nesmí začínat stejným vzorcem
-- Ne "ale X chybí" jako pointa každého odstavce
-- Ne absolutní tvrzení ("nikdo nehodnotí") — raději "tyto benchmarky nepostihují"
-- Ne příliš silné claimy pro case study — raději "popsat vliv" než "identifikovat nezbytné"
-- Zkratky a kódy metrik (P1, Q2...) vysvětlit při prvním výskytu v každé kapitole
+- Jeden pojem = jeden termín napříč celou prací
+- Case study → feasibility claims, ne generalizace ("popsat vliv", ne "identifikovat nezbytné")
+- Hedging: "tyto benchmarky nepostihují", ne "nikdo nehodnotí"
 
 ### Ověřování faktů
 
@@ -230,5 +268,8 @@ Workflow: raw → draft → finální. DRAFT blok vždy PŘED RAW. Při přepiso
 | RAG | Hledáš co máme o tématu ve zdrojích | `cd RAG && npm run query -- "topic" --help` |
 | Overleaf | Sync s vedoucím (pull jeho změny, push naše) | `./scripts/overleaf status` |
 | Zdroje | Potřebuješ vědět jaké PDF zdroje máme | `ls thesis/sources/` |
+| Doporučení FIS | **Kritéria obhajitelnosti** od komise, kontrolovat průběžně | `notes/doporuceni-fis.md` (zdroj: `matro/`) |
+| Vzorové práce | Referenční struktura, styl, délka sekcí | `vzoroveBP/` (BP + posudky), `docs/zaverecna_prace.pdf` (diplomka vedoucího), `docs/vzorove-prace/` (DSR, case study guidelines) |
+| Jak psát | Pravidla vědeckého psaní, patterny, checklist | `notes/jak-psat-vedecky.md`, `docs/jak-poprve-uchopit-psani-vedecke-prace.md` |
 | Experiment | Práce na experimentální infra / AGENTS.md iterace | viz `experiments/CLAUDE.md` |
 | Build | Thesis se buildí automaticky — **nebuildovat ručně** | `make watch` (běží na pozadí) |
