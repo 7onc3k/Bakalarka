@@ -66,6 +66,46 @@
 %  Zdroje pro BP - AI agenti v SWE
 %  ===========================================================================
 
+@techreport{iso25010,
+  author = {{ISO/IEC}},
+  title = {Systems and software engineering -- Systems and software Quality Requirements and Evaluation ({SQuaRE}) -- Product quality model},
+  number = {ISO/IEC 25010:2023},
+  year = {2023},
+  institution = {International Organization for Standardization},
+  address = {Geneva},
+  url = {https://www.iso.org/standard/78176.html}
+}
+
+@techreport{iso25030,
+  author = {{ISO/IEC}},
+  title = {Systems and software engineering -- Systems and software quality requirements and evaluation ({SQuaRE}) -- Quality requirements framework},
+  number = {ISO/IEC 25030:2019},
+  year = {2019},
+  institution = {International Organization for Standardization},
+  address = {Geneva},
+  url = {https://www.iso.org/standard/72116.html}
+}
+
+@techreport{iso25022,
+  author = {{ISO/IEC}},
+  title = {Systems and software engineering -- Systems and software quality requirements and evaluation ({SQuaRE}) -- Measurement of quality in use},
+  number = {ISO/IEC 25022:2016},
+  year = {2016},
+  institution = {International Organization for Standardization},
+  address = {Geneva},
+  url = {https://www.iso.org/standard/35746.html}
+}
+
+@techreport{iso25023,
+  author = {{ISO/IEC}},
+  title = {Systems and software engineering -- Systems and software quality requirements and evaluation ({SQuaRE}) -- Measurement of system and software product quality},
+  number = {ISO/IEC 25023:2016},
+  year = {2016},
+  institution = {International Organization for Standardization},
+  address = {Geneva},
+  url = {https://www.iso.org/standard/35747.html}
+}
+
 @BOOK{swebok2024,
   title = {Guide to the Software Engineering Body of Knowledge},
   publisher = {IEEE Computer Society},
@@ -233,6 +273,51 @@
   publisher = {Addison-Wesley},
   year = {2000},
   isbn = {978-0201616415}
+}
+
+@inproceedings{shihab2012,
+  author = {Shihab, Emad and Bird, Christian and Zimmermann, Thomas},
+  title = {The Effect of Branching Strategies on Software Quality},
+  booktitle = {Proceedings of the ACM-IEEE International Symposium on Empirical Software Engineering and Measurement},
+  series = {ESEM '12},
+  pages = {301--310},
+  year = {2012},
+  publisher = {ACM},
+  doi = {10.1145/2372251.2372305}
+}
+
+@inproceedings{bacchelli2013,
+  author = {Bacchelli, Alberto and Bird, Christian},
+  title = {Expectations, Outcomes, and Challenges of Modern Code Review},
+  booktitle = {Proceedings of the 35th International Conference on Software Engineering},
+  series = {ICSE '13},
+  pages = {712--721},
+  year = {2013},
+  publisher = {IEEE Press},
+  doi = {10.1109/ICSE.2013.6606617}
+}
+
+@article{mcintosh2016,
+  author = {McIntosh, Shane and Kamei, Yasutaka and Adams, Bram and Hassan, Ahmed E.},
+  title = {An Empirical Study of the Impact of Modern Code Review Practices on Software Quality},
+  journal = {Empirical Software Engineering},
+  volume = {21},
+  number = {5},
+  pages = {2146--2189},
+  year = {2016},
+  publisher = {Springer},
+  doi = {10.1007/s10664-015-9381-9}
+}
+
+@article{rafique2013,
+  author = {Rafique, Yahya and Mi\v{s}i\'{c}, Vojislav B.},
+  title = {The Effects of Test-Driven Development on External Quality and Productivity: A Meta-Analysis},
+  journal = {IEEE Transactions on Software Engineering},
+  volume = {39},
+  number = {6},
+  pages = {835--856},
+  year = {2013},
+  doi = {10.1109/TSE.2012.28}
 }
 
 @article{conway1968,
@@ -1211,6 +1296,17 @@
   doi = {10.1109/TSE.1976.233837}
 }
 
+@techreport{mccall1977,
+  author = {McCall, Jim A. and Richards, Paul K. and Walters, Gene F.},
+  title = {Factors in Software Quality. Volume I: Concepts and Definitions of Software Quality},
+  institution = {General Electric Company, Information Systems Programs},
+  year = {1977},
+  number = {RADC-TR-77-369, Volume I},
+  address = {Rome Air Development Center, Griffiss Air Force Base, New York},
+  note = {Final technical report},
+  url = {https://cgi.csc.liv.ac.uk/~comp208/2013/GetTRDoc.pdf}
+}
+
 @inproceedings{runeson2009,
   author = {Runeson, Per and Höst, Martin},
   title = {Guidelines for Conducting and Reporting Case Study Research in Software Engineering},
@@ -1430,4 +1526,137 @@
   year = {2026},
   url = {https://arxiv.org/abs/2602.21230},
   note = {Hierarchical Trajectory Utility Function: process efficiency + cognitive quality. Counters high-score illusion of Pass@1.}
+}
+
+@article{miguel2014,
+  author = {Miguel, Jos{\'e} P. and Mauricio, David and Rodr{\'i}guez, Glen},
+  title = {A Review of Software Quality Models for the Evaluation of Software Products},
+  journal = {International Journal of Software Engineering \& Applications (IJSEA)},
+  year = {2014},
+  volume = {5},
+  number = {6},
+  pages = {31--53},
+  doi = {10.5121/ijsea.2014.5603}
+}
+
+@article{chen2021humaneval,
+  author = {Chen, Mark and Tworek, Jerry and Jun, Heewoo and Yuan, Qiming and Pinto, Henrique Pond{\'e} de Oliveira and Kaplan, Jared and Edwards, Harrison and Burda, Yura and Joseph, Nicholas and Brockman, Greg and Ray, Alex and Puri, Raul and Krueger, Gretchen and Petrov, Michael and Khlaaf, Heidy and Sastry, Girish and Mishkin, Pamela and Chan, Brooke and Gray, Scott and Ryder, Nick and Pavlov, Mikhail and Power, Alethea and Kaiser, Lukasz and Bavarian, Mohammad and Winter, Clemens and Tillet, Philippe and Such, Felipe Petroski and Cummings, Dave and Plappert, Matthias and Chantzis, Fotios and Barnes, Elizabeth and Herbert-Voss, Ariel and Guss, William Hebgen and Nichol, Alex and Paino, Alex and Tezak, Nikolas and Tang, Jie and Babuschkin, Igor and Balaji, Suchir and Jain, Shantanu and Saunders, William and Hesse, Christopher and Carr, Andrew N. and Leike, Jan and Achiam, Joshua and Misra, Vedant and Morikawa, Evan and Radford, Alec and Knight, Matthew and Brundage, Miles and Murati, Mira and Mayer, Katie and Welinder, Peter and McGrew, Bob and Amodei, Dario and McCandlish, Sam and Sutskever, Ilya and Zaremba, Wojciech},
+  title = {Evaluating Large Language Models Trained on Code},
+  journal = {arXiv preprint arXiv:2107.03374},
+  year = {2021},
+  url = {https://arxiv.org/abs/2107.03374},
+  note = {Introduces HumanEval benchmark (164 hand-written Python problems) and Codex model. pass@k metric for functional correctness.}
+}
+
+@article{paulk1993cmm,
+  author = {Paulk, Mark C. and Curtis, Bill and Chrissis, Mary Beth and Weber, Charles V.},
+  title = {Capability Maturity Model, {V}ersion 1.1},
+  journal = {IEEE Software},
+  volume = {10},
+  number = {4},
+  pages = {18--27},
+  year = {1993},
+  doi = {10.1109/52.219617},
+  note = {Definition of five maturity levels for software process; foundational reference for CMM/CMMI tradition of organizational process assessment.}
+}
+
+@techreport{iso33020,
+  author = {{ISO/IEC}},
+  title = {{ISO/IEC 33020:2019 Information technology --- Process assessment --- Process measurement framework for assessment of process capability}},
+  institution = {International Organization for Standardization},
+  year = {2019},
+  address = {Geneva, Switzerland},
+  url = {https://www.iso.org/standard/74273.html},
+  note = {Process capability rating scheme in the ISO/IEC 330xx family; successor to ISO/IEC 15504 (SPICE).}
+}
+
+@article{jin2024llmagents,
+  author = {Jin, Haolin and Huang, Linghan and Cai, Haipeng and Yan, Jun and Li, Bo and Chen, Huaming},
+  title = {From {LLM}s to {LLM}-based Agents for Software Engineering: A Survey of Current, Challenges and Future},
+  journal = {arXiv preprint arXiv:2408.02479},
+  year = {2024},
+  url = {https://arxiv.org/abs/2408.02479},
+  note = {Six SE areas covered: requirement engineering, code generation, autonomous decision-making, software design, test generation, software maintenance.}
+}
+
+@incollection{basili1994gqm,
+  author = {Basili, Victor R. and Caldiera, Gianluigi and Rombach, H. Dieter},
+  title = {The Goal Question Metric Approach},
+  booktitle = {Encyclopedia of Software Engineering},
+  editor = {Marciniak, John J.},
+  publisher = {John Wiley \& Sons},
+  year = {1994},
+  pages = {528--532},
+  note = {Canonical statement of GQM: metrics derive top-down from measurement goals through operational questions, not ad hoc. Foundational reference for goal-directed measurement in software engineering.}
+}
+
+@inproceedings{komyers2008debugging,
+  author = {Ko, Andrew J. and Myers, Brad A.},
+  title = {Debugging Reinvented: Asking and Answering Why and Why Not Questions about Program Behavior},
+  booktitle = {Proceedings of the 30th International Conference on Software Engineering},
+  series = {ICSE '08},
+  pages = {301--310},
+  year = {2008},
+  publisher = {ACM},
+  doi = {10.1145/1368088.1368130},
+  note = {Empirical study of debugging as systematic question-answering activity; evidence that developer initial guesses about fault cause are wrong ~90\% of the time. Supports debugging/diagnosis as observable, measurable SE practice.}
+}
+
+@inproceedings{nuseibeh2000reroadmap,
+  author = {Nuseibeh, Bashar and Easterbrook, Steve},
+  title = {Requirements Engineering: A Roadmap},
+  booktitle = {Proceedings of the Conference on the Future of Software Engineering},
+  series = {ICSE '00},
+  pages = {35--46},
+  year = {2000},
+  publisher = {ACM},
+  doi = {10.1145/336512.336523},
+  note = {Canonical research overview of RE field: elicitation, modelling, analysis, validation, management. Primary reference for specification adherence framed as established SE practice with its own literature, stronger than textbook citation.}
+}
+
+@inproceedings{sadowski2018codereview,
+  author = {Sadowski, Caitlin and S{\"o}derberg, Emma and Church, Luke and Sipko, Michal and Bacchelli, Alberto},
+  title = {Modern Code Review: A Case Study at {G}oogle},
+  booktitle = {Proceedings of the 40th International Conference on Software Engineering: Software Engineering in Practice},
+  series = {ICSE-SEIP '18},
+  pages = {181--190},
+  year = {2018},
+  publisher = {ACM},
+  doi = {10.1145/3183519.3183525},
+  note = {Large-scale industrial study of code review at Google (12 interviews, 44-respondent survey, 9M reviewed changes). Complements Bacchelli \& Bird 2013 (Microsoft) as evidence that modern code review is a cross-industry practice.}
+}
+
+@article{beller2019testing,
+  author = {Beller, Moritz and Gousios, Georgios and Panichella, Annibale and Proksch, Sebastian and Amann, Sven and Zaidman, Andy},
+  title = {Developer Testing in the {IDE}: Patterns, Beliefs, and Behavior},
+  journal = {IEEE Transactions on Software Engineering},
+  volume = {45},
+  number = {3},
+  pages = {261--284},
+  year = {2019},
+  publisher = {IEEE},
+  doi = {10.1109/TSE.2017.2776152},
+  note = {Large-scale field study (2{,}443 engineers, 2.5 years, four IDEs) of how developers actually test. Findings: half do not test, TDD rarely practiced, test effort much lower than self-reported. Supports test-related practices as observable behavior distinct from stated ideals.}
+}
+
+@book{boehm1981cocomo,
+  author = {Boehm, Barry W.},
+  title = {Software Engineering Economics},
+  publisher = {Prentice-Hall},
+  year = {1981},
+  isbn = {978-0138221225},
+  note = {Seminal work on software cost estimation; introduced the COCOMO (Constructive Cost Model) based on project size (SLOC) and effort multipliers.}
+}
+
+@article{forsgren2021space,
+  author = {Forsgren, Nicole and Storey, Margaret-Anne and Maddila, Chandra and Zimmermann, Thomas and Houck, Brian and Butler, Jenna},
+  title = {The {SPACE} of Developer Productivity: There's More to It than You Think},
+  journal = {Communications of the ACM},
+  volume = {64},
+  number = {11},
+  pages = {46--53},
+  year = {2021},
+  publisher = {ACM},
+  doi = {10.1145/3453120},
+  note = {Proposes the SPACE framework (Satisfaction, Performance, Activity, Communication, Efficiency) for individual developer productivity. Explicit warning against reducing productivity to a single metric (SLOC, commit counts). Conceptual precedent for multi-dimensional measurement used in this thesis.}
 }
