@@ -7,7 +7,7 @@ const OUTPUT_DIR = join(import.meta.dirname, "..", "output");
 const PROMPT_PATH = join(import.meta.dirname, "system-prompt.md");
 
 const MODEL = process.argv.includes("--opus")
-  ? "claude-opus-4-6"
+  ? "claude-opus-4-7"
   : process.argv.includes("--sonnet")
     ? "claude-sonnet-4-6"
     : "claude-haiku-4-5-20251001";
@@ -16,14 +16,24 @@ function loadSystemPrompt(): string {
   return readFileSync(PROMPT_PATH, "utf-8");
 }
 
+function normalizeReviewMeta(review: string): string {
+  if (!review.trim()) return review;
+
+  if (/^- Model:/m.test(review)) {
+    return review.replace(/^- Model:.*$/m, `- Model: ${MODEL}`);
+  }
+
+  return review;
+}
+
 async function main() {
   console.log(`Loading thesis files...`);
-  const sections = loadAndStripThesis();
-  const fullText = buildFullText(sections);
+  const reviewInput = loadAndStripThesis();
+  const fullText = buildFullText(reviewInput);
   const systemPrompt = loadSystemPrompt();
 
   console.log(
-    `Stripped ${sections.length} files, ${fullText.length} chars (~${Math.round(fullText.length / 4)} tokens)`
+    `Stripped ${reviewInput.sections.length} main-text files + ${reviewInput.bibliography.foundEntries}/${reviewInput.bibliography.citedKeys} bibliography entries, ${fullText.length} chars (~${Math.round(fullText.length / 4)} tokens)`
   );
   console.log(`System prompt: ${systemPrompt.length} chars`);
   console.log(`Using model: ${MODEL}`);
@@ -39,7 +49,14 @@ async function main() {
   let resultText = "";
 
   const q = query({
-    prompt: `Zvaliduj tuto bakalářskou práci. Projdi celý text níže a vytvoř kompletní recenzi podle instrukcí v system promptu.\n\n${fullText}`,
+    prompt: `Meta pro review:
+- Review model: ${MODEL}
+- Poznámka ke vstupu: dodaný export obsahuje hlavní text práce, citovanou bibliografii a jen textově zjednodušenou podobu LaTeXu.
+- Pokud je sekce v exportu přítomná jako nadpis, nesmí být označena jako chybějící; lze kritizovat jen její slabost nebo neúplnost.
+
+Zvaliduj tuto bakalářskou práci. Projdi celý text níže a vytvoř kompletní recenzi podle instrukcí v system promptu.
+
+${fullText}`,
     options: {
       model: MODEL,
       systemPrompt: systemPrompt,
@@ -63,6 +80,7 @@ async function main() {
     if (message.type === "result") {
       if (message.subtype === "success") {
         resultText = message.result || resultText;
+        resultText = normalizeReviewMeta(resultText);
         console.log(
           `\n\n--- Done. Cost: $${message.total_cost_usd.toFixed(4)}, turns: ${message.num_turns}, duration: ${(message.duration_ms / 1000).toFixed(1)}s ---`
         );
@@ -80,6 +98,7 @@ async function main() {
       ? "sonnet"
       : "haiku";
   const outputPath = join(OUTPUT_DIR, `review-${date}-${modelShort}.md`);
+  resultText = normalizeReviewMeta(resultText);
   writeFileSync(outputPath, resultText);
   console.log(`Review saved to: ${outputPath}`);
 }

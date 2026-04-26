@@ -11,4 +11,18 @@ externi - argument, nevim je to PoC
 konstruktova - argument vice metrik, zavedne nastroj
 zaverova - 
 
-# 
+---
+
+bude lepsi kdyz se zamerime na pouze na podstattne veci nebo to vezmeme ze sirky v te toerii
+
+# nazev zavadejici co s tim ?
+
+# poznamky
+
+prezentace
+
+od komaprace do ablace
+
+po vysledky topdown
+
+piklady o tom kdy agent fungoval a kdy nefungoval vice do detailu at jde videt to chovani toho co se tam stalo 
