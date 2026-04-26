@@ -70,6 +70,7 @@
 \usepackage{pdflscape}      % otočení stránky na šířku (landscape) / landscape pages
 \usepackage{caption}
 \usepackage{enumitem}
+\usepackage{needspace}
 \setlist[itemize]{noitemsep, topsep=0pt, partopsep=0pt}
 \setlist[enumerate]{noitemsep, topsep=0pt, partopsep=0pt}
 \setlist[description]{noitemsep, topsep=0pt, partopsep=0pt}
@@ -175,6 +176,10 @@
 \lefthyphenmin=2
 \righthyphenmin=2
 
+% Povolí LaTeXu roztáhnout mezery při nouzi, místo přetečení řádku.
+% Standardní řešení pro jazyky s~dlouhými slovy (čeština, němčina).
+\emergencystretch=3em
+
 % Zapne černé "slimáky" na koncích řádků, které přetekly, abychom si jich lépe všimli.
 % Turns on the black "snails" at the ends of the lines that overflowed to get us noticed them better.
 \overfullrule=1mm
@@ -253,7 +258,7 @@
 % --- Metriky efektivity (E) ---
 \DeclareAcronym{E1}{short=E1, long=vstup/výstup/cache tokeny, tag=efficiency}
 \DeclareAcronym{E2}{short=E2, long=trvání, tag=efficiency}
-\DeclareAcronym{E3}{short=E3, long=kompakce kontextu, tag=efficiency}
+\DeclareAcronym{E3}{short=E3, long=stabilita session, tag=efficiency}
 
 % --- Skupiny: CO měříme ---
 % Použití: \mgrp{P}, \mgrp{Q}, \mgrp{E}

@@ -1,4 +1,6 @@
-.PHONY: all prace-full prace-draft prace-clean view view-prace-full view-prace-draft view-prace-clean clean watch watch-draft watch-clean
+.PHONY: all full draft clean-pdf prace-full prace-draft prace-clean \
+	view view-full view-draft view-clean view-prace-full view-prace-draft view-prace-clean \
+	clean watch watch-full watch-draft watch-clean
 
 LATEX = pdflatex -interaction=nonstopmode
 BUILDDIR = .build
@@ -35,12 +37,21 @@ prace-clean:
 
 # Zpětná kompatibilita
 all: prace-full
+full: prace-full
+draft: prace-draft
+clean-pdf: prace-clean
 
 # Prohlížení
 VIEWER = env -u GTK_PATH -u GTK_EXE_PREFIX -u GTK_IM_MODULE_FILE -u GIO_MODULE_DIR -u LOCPATH -u GSETTINGS_SCHEMA_DIR evince
 
 view:
 	@$(VIEWER) prace-full.pdf 2>/dev/null &
+
+view-full: view-prace-full
+
+view-draft: view-prace-draft
+
+view-clean: view-prace-clean
 
 open: view
 
@@ -54,39 +65,19 @@ view-prace-clean: prace-clean
 	@$(VIEWER) prace-clean.pdf &
 
 # Auto-rebuild při změně .tex/.bib souborů (Ctrl+C pro zastavení)
-# Čeká 5s klidu po poslední změně, pak buildne. Evince reloaduje automaticky.
-DEBOUNCE = 5
-TEX_FILES = $(wildcard *.tex *.bib generated/*.tex)
+# `watch` = full, ostatní varianty mají explicitní aliasy.
 
 watch: prace-full
-	@$(VIEWER) prace-full.pdf 2>/dev/null &
-	@echo "Watching .tex/.bib files ($(DEBOUNCE)s debounce)... Ctrl+C to stop"
-	@while true; do \
-		inotifywait -q -e modify $(TEX_FILES); \
-		while inotifywait -q -t $(DEBOUNCE) -e modify $(TEX_FILES) 2>/dev/null; do :; done; \
-		echo "--- Rebuilding prace-full ---"; \
-		$(MAKE) -s prace-full || true; \
-	done
+	@./watch.sh prace-full
+
+watch-full: prace-full
+	@./watch.sh prace-full
 
 watch-draft: prace-draft
-	@$(VIEWER) prace-draft.pdf 2>/dev/null &
-	@echo "Watching .tex/.bib files ($(DEBOUNCE)s debounce)... Ctrl+C to stop"
-	@while true; do \
-		inotifywait -q -e modify $(TEX_FILES); \
-		while inotifywait -q -t $(DEBOUNCE) -e modify $(TEX_FILES) 2>/dev/null; do :; done; \
-		echo "--- Rebuilding prace-draft ---"; \
-		$(MAKE) -s prace-draft || true; \
-	done
+	@./watch.sh prace-draft
 
 watch-clean: prace-clean
-	@$(VIEWER) prace-clean.pdf 2>/dev/null &
-	@echo "Watching .tex/.bib files ($(DEBOUNCE)s debounce)... Ctrl+C to stop"
-	@while true; do \
-		inotifywait -q -e modify $(TEX_FILES); \
-		while inotifywait -q -t $(DEBOUNCE) -e modify $(TEX_FILES) 2>/dev/null; do :; done; \
-		echo "--- Rebuilding prace-clean ---"; \
-		$(MAKE) -s prace-clean || true; \
-	done
+	@./watch.sh prace-clean
 
 reload:
 	@pkill -f 'evince.*prace' 2>/dev/null; sleep 0.3
