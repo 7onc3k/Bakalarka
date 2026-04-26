@@ -11,8 +11,8 @@ Kanonické pojmy pro konzistentní psani a pripravu na obhajobu.
 | Experimentalni beh | Jedno spusteni agenta s konkretni verzi instrukci | "run" v infrastrukture |
 | Iterace | Jeden cyklus Spusteni/Mereni/Diagnoza/Uprava | |
 | Pilotni faze | Cela serie iteraci r1-r5 | NE "pilotni iterace" pro fazi |
-| Komparativni variace | Faze kde odebirame/menime slozky instrukci | Umbrella term pro ablace + substituci |
-| Ablace | Konkretni technika: odebrani slozky a mereni dopadu | Podtyp komparativni variace |
+| Ablace | Faze kde z fungujici sady systematicky odebirame slozky instrukci a merime dopad | Druha faze pripadove studie (po pilotu); cil 3 |
+| ~~Komparativni variace~~ | NEPOUZIVAME | Pouzivali jsme jako umbrella, ale realne delame jen ablace; sjednoceno na "ablace" |
 
 ## Metriky
 
@@ -21,7 +21,7 @@ Kanonické pojmy pro konzistentní psani a pripravu na obhajobu.
 | Sada metrik | P1-P8, Q1-Q8, E1-E3 (19 celkem) | Fenton & Bieman: Process/Product/Resource; P/Q/E kody jsou nase adaptace |
 | Procesni metriky (P1-P8) | Jak agent pracuje | P1-P5 binarni compliance, P6-P8 LLM-as-judge |
 | Produktove metriky (Q1-Q8) | Co agent vyrobil | Q1-Q2 funkcni korektnost, Q3-Q4 kvalita testu, Q5-Q8 kvalita kodu |
-| Metriky efektivity (E1-E3) | E1 = max prompt na kroku + soucet vystupu + soucet cache; E2 = cas; E3 = stabilita session (kompakce + dokonceni) | Resource v Fentonove taxonomii |
+| Metriky efektivity (E1-E3) | E1 = max prompt na kroku + soucet vystupu + soucet cache; E2 = cas; E3 = stabilita session (dokonceni bez ztraty kontextu) | Resource v Fentonove taxonomii |
 | Exit kriteria | Meritelne prahy uspesnosti pro kazdou metriku | Patri do pilotni faze (3.3.3), ne k metrikam |
 | ~~evaluacni system~~ | NEPOUZIVAME | Prilis vague, konflikt se "sadou metrik" |
 
@@ -37,8 +37,8 @@ Pri dalsich vyskytech ve stejne kapitole staci jen kod.
 |-------|----------|----------|
 | Instrukce | Obecny pojem pro obsah | Kanonicky termin; pri 1. vyskytu per kap: "instrukce v souboru `AGENTS.md`" |
 | Soubor `AGENTS.md` | Konkretni soubor | V textu vzdy `\texttt{}`; pouzit kdyz mluvime o souboru, ne o obsahu |
+| Instrukcni soubor | Obecne oznaceni fyzickeho souboru s instrukcemi (napr. `AGENTS.md`, `CLAUDE.md`) | Pouzit jen kdyz mluvime o souboru jako artefaktu; default termin pro obsah zustava "instrukce" |
 | ~~instrukcni sada~~ | NEPOUZIVAME | Plete se s "sada metrik" |
-| ~~instrukcni soubor~~ | NEPOUZIVAME | Zbytecne synonymum |
 | ~~checkpointy~~ | NEPOUZIVAME | Anglicismus, zamenitelny s CS terminem |
 | ~~kontrolni krok~~ | NEPOUZIVAME | Zamena s "verifikacni krok" |
 
@@ -69,6 +69,18 @@ Souvisejici literatura:
 - proceduralni = prikazy a verifikacni kroky (co udelat/zkontrolovat)
 | Pracovni postup | Cesky pro "workflow" | Anglicky jen pri prvni definici jako `\textit{workflow}` |
 
+## Testovani
+
+| Pojem | Definice | Poznamka |
+|-------|----------|----------|
+| Black-box testovani | Testovani pres verejne rozhrani, bez znalosti vnitrni struktury implementace | Klasicka dichotomie black-box vs white-box (Ammann & Offutt 2016); zavedeno v kap02 sec:testovani-mutation |
+| White-box testovani | Testovani vychazejici ze znalosti kodu (cesty, vetve) | Protiklad black-box; zminujeme jen pro kontext |
+| Behavior-driven test | Test odvozeny ze specifikace chovani (typicky AC nebo Given/When/Then), pracujici black-box pres rozhrani | Pouzivano v kap04 (42 behavioral testu); definovano v kap02 sec:testovani-mutation |
+| Acceptance criteria (AC) | Popisy ocekavaneho chovani v zadani, typicky ve formatu Given/When/Then | 25 AC v case study; zdroj ocekavani pro behavioral testy a metriku Q4 |
+| Spec-first TDD | TDD varianta kde expected values v testech pochazi ze specifikace, ne z pozorovani kodu | Obrana proti test oracle problemu (Mathews 2024); diskutovano v kap02 sec:procesni-kvalita |
+| Mutation testing | Sileni testovaci sady pomoci zavadeni drobnych zmen (mutantu) do kodu a sledovani kolik test odhali | Papadakis 2019; metrika Q3 |
+| Coverage (line/branch) | Podil kodu vykonaneho testy | Sama o sobe nekoreluje silne s detekci chyb (Inozemtseva & Holmes 2014) |
+
 ## Projekt
 
 | Pojem | Definice | Poznamka |
@@ -90,7 +102,7 @@ DSR (pristup)          --> CO delame (navrhujeme metriky + postup, evaluujeme)
 | Termin | Proc ne | Misto toho |
 |--------|---------|------------|
 | evaluacni system | Nedefinovany, vague | sada metrik |
-| instrukcni soubor | Zbytecne synonymum | instrukce |
+| instrukcni soubor jako synonymum obsahu instrukci | Mate soubor a obsah | instrukce |
 | instrukcni sada | Plete se s "sada metrik" | instrukce |
 | checkpointy | Anglicismus, zamenitelny | verifikacni kroky |
 | workflow (v textu) | Anglicismus | pracovni postup |

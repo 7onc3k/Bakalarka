@@ -3,12 +3,15 @@
 
 Tato práce navrhla sadu metrik a~iterativní postup pro systematické
 navrhování a~vyhodnocování instrukcí pro AI coding agenty a~ablacemi
-prozkoumala vliv jednotlivých složek instrukcí. Všechny tři cíle
-byly ověřeny na případové studii systému upomínek faktur, která
-zahrnovala pět pilotních iterací a~čtyři ablační běhy.
+prozkoumala vliv jednotlivých složek instrukcí. Pro všechny tři cíle
+případová studie systému upomínek faktur demonstrovala proveditelnost
+navrženého postupu a~přinesla indikativní poznatky. Studie zahrnovala
+pět pilotních iterací a~dvě ablace, každou ověřenou dvěma nezávislými
+běhy.
 
-Prvním cílem bylo navrhnout sadu metrik pokrývající proces
-a~kvalitu práce agenta, ne jen výsledek. Výsledná sada 19~metrik
+Prvním cílem bylo navrhnout sadu metrik pokrývající proces,
+kvalitu kódu a~efektivitu, a~tím rozšířit hodnocení nad rámec
+pass/fail výsledku. Výsledná sada 19~metrik
 pokrývá tři dimenze odvozené z~taxonomie Fentona a~Biemana.
 Procesní metriky odhalily problémy, které výsledkové metriky samy
 o~sobě nezachytily: běh s~téměř plným skóre funkčních testů
@@ -16,32 +19,79 @@ vykazoval nestabilní procesní compliance. Kombinace deterministických
 a~kvalitativních metrik přinesla komplementární pohled, protože
 každý typ zachycuje jinou dimenzi chování agenta.
 
-Druhým cílem bylo iterativním postupem navrhnout instrukce, které
-dovedou agenta k~dodržování stanovených exit kritérií. Cyklus
+Druhým cílem bylo iterativním postupem navrhnout instrukce
+a~vyhodnotit měřitelné změny v~chování agenta podle navržených metrik. Cyklus
 měření, diagnózy a~úpravy vedl k~měřitelnému zlepšení, ale ne
 monotónnímu: jedna iterace způsobila regresi, po které bylo nutné
 vrátit se k~předchozí verzi instrukcí. Opakujícím se vzorcem
 úspěšných úprav bylo nahrazení obecného pravidla konkrétním
 příkazem s~verifikačním krokem. Účinnost tohoto postupu závisela
-na dostupnosti deterministických nástrojů s~jednoznačným výstupem;
-u~požadavků bez takového nástroje je dosažitelná míra
-operacionalizace nižší.
+na dostupnosti deterministických nástrojů s~jednoznačným výstupem.
+U~požadavků bez takového nástroje zůstává instrukce
+na úrovni pravidla nebo příkazu bez vnější zpětné vazby.
 
 Třetím cílem bylo ablacemi prozkoumat, které složky instrukční
-sady přispívají k~měřenému chování agenta. Verifikační kroky se
-ukázaly jako neredundantní: jejich odebrání zhoršilo funkční
-korektnost i~čistotu kódu. Konvence kvality kódu automatizované
+sady přispívají k~měřenému chování agenta a~které jsou redundantní.
+Ablace potvrdila závislost
+klíčových metrik na verifikačních krocích, kterou pilotní fáze už
+naznačila: jejich odebrání zhoršilo funkční korektnost i~čistotu kódu. Konvence kvality kódu automatizované
 metriky neovlivnily, ale designová kvalita hodnocená LLM-as-judge
 klesla. Výsledky zároveň ukázaly, že procesní compliance je výrazně
-citlivá na nedeterminismus modelu; stejná sada instrukcí proto může
+citlivá na nedeterminismus modelu. Stejná sada instrukcí proto může
 vést k~odlišnému dodržení vícekrokového workflow.
 
+% TODO(zaver-prinos): rozšířit tento odstavec o explicitní 3-bodový claim
+% přínosu (kalibrovaně, viz research níže):
+%   (1) Sada 19 metrik P/Q/E adaptující Fenton & Bieman taxonomii pro AI
+%       coding agenty -- konkrétní výběr metrik a kombinace
+%       deterministických/judge/záznamových je autorská.
+%   (2) Iterativní postup s 5-rámcovou diagnostikou (Mao FSE, Hassan SASE,
+%       Razavi/Breunig, Lulla, filter Li) -- syntéza dosud samostatně
+%       používaných rámců do jednoho toolkitu pro coding agenty.
+%   (3) Empirické zjištění o spektru operacionalizace (compliance ordering
+%       pravidlo < příkaz < verifikační krok) + pairing heuristika.
+%
+% RESEARCH (2026-04-26) o spektru operacionalizace: taxonomie sama NENÍ nová.
+% Existující literatura:
+%   - Declarative vs imperative prompting: Wu (Three Ways to Program with
+%     LLMs); Liu et al. PDL arXiv:2410.19135 2024; Prompt Decorators
+%     arXiv:2510.19850 2025. Pokrývá pravidlo (declarative) vs příkaz
+%     (imperative) přímo.
+%   - Self-Refine / Self-Verification: Madaan 2023 (Self-Refine);
+%     Weng 2022 (Self-Verification reasoners); Miao SelfCheck
+%     arXiv:2308.00436. Odpovídá verifikačnímu kroku, ale framed
+%     pro reasoning, ne jako instruction-design tier.
+%   - Mao et al. FSE 2025: 7 component types (Constraints/Directive/
+%     Workflow). Naše tiers ≈ jejich komponenty, ale jiná osa
+%     (compliance/operationalizace vs component type).
+%   - Builder.io / Copilot industry: Rules vs Commands vs Skills.
+%     Pokrývá tiers 1-2, ne verifikační.
+%   - Breunig 2025 "operationalization": SYSTEMS-LEVEL meaning
+%     (versioning, observability, testability), NEKONFLATOVAT.
+% Kalibrace claim: přínos = (i) compliance-ordering pro coding agenty,
+% (ii) pairing heuristika; samotné rozlišení deklarativní/imperativní/
+% self-verification čerpá z výše uvedených zdrojů. Taxonomii samotnou
+% NEOZNAČOVAT za novum.
 Hlavním přínosem práce je iterativní postup a~sada metrik, které
 může praktik aplikovat na vlastním projektu s~vlastními prahy.
 Konkrétní instrukce a~naměřené hodnoty platí pro tuto případovou
-studii; přenositelný je postup, ne výsledná čísla. Práce je omezena
-na jeden model a~jeden projekt; závěry mají povahu analytické
+studii. Přenositelný je postup, ne výsledná čísla. Práce je omezena
+na jeden model a~jeden projekt. Závěry mají povahu analytické
 generalizace na teorii, nikoliv statistické generalizace na populaci.
+
+% TODO(zaver-scope): Zvážit explicitní delimitaci "co tato práce není" před
+% odstavcem s doporučeními. Feasibility framing (ř. 46--48) je tu dobře, ale
+% chybí pojmenování, čím práce NENÍ -- není benchmark agentů, není přenositelná
+% instrukční sada, není srovnání modelů ani prompt-engineering návod. Bez toho
+% může oponent v posudku argumentovat, že rozsah je roztříštěný (metriky +
+% postup + ablace + AGENTS.md), protože hlavní výstup splývá s vedlejšími
+% produkty. Jedna věta navíc tohle riziko zavře.
+%
+% TODO(zaver-meta): Závěr zmiňuje instrukce jako "samostatně měřenou nezávislou
+% proměnnou" (ř. 53--54), ale neodkazuje zpět na meta-strukturu (testbed /
+% subjekt / IV) z metodiky. Pokud bude tato struktura explicitně pojmenovaná
+% v úvodu (viz TODO uvod-meta), závěr by ji měl uzavřít -- aby komise viděla,
+% že práce o této meta-úrovni vědomě uvažuje a nedrolí ji.
 
 Pro praktika z~toho plyne jednoduché doporučení: nestačí sledovat,
 zda agent úkol vyřešil, ale i~jak k~řešení došel a~jak kvalitní kód
@@ -49,18 +99,3 @@ zanechal. Pro akademického čtenáře práce ukazuje, že instrukce lze
 studovat ne jen jako promptový artefakt, ale jako samostatně měřenou
 nezávislou proměnnou, jejíž účinek je třeba hodnotit přes proces,
 produkt i~náklady.
-
-\begin{raw}
-\textbf{Audit trail (DRAFT v1, 2026-03-26):}
-5~odstavců: 3 cíle + přínos + omezení. Čísla 4/10→9/10, ``ve dvou
-iteracích'' (nepřesné), ``principy přenositelné'' (vágní).
-
-\medskip
-\textbf{Audit trail (DRAFT v2, 2026-04-05):}
-Opraveno: r4 regrese explicitně zmíněna (ne monotónní zlepšení);
-přidána pointa o~procesních metrikách (r3 Q2=41/42 ale P1 kolísá);
-nuance o~verifikačních krocích (závislost na deterministických
-nástrojích); přenositelnost upřesněna (postup ano, čísla ne);
-``ve dvou iteracích'' odstraněno (nepřesné); konkrétní metriky
-u~ablačních výsledků.
-\end{raw}

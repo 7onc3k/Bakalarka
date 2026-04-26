@@ -72,8 +72,9 @@ a~efektivitu práce agenta; (2)~demonstrovat iterativní postup návrhu instrukc
 sady přispívají k~měřenému chování agenta a~které jsou redundantní.
 %
 Sadu metrik a~postup ověřujeme na případové studii systému upomínek
-faktur. Agent (model Minimax prostřednictvím nástroje OpenCode) prošel pěti
-pilotními iteracemi a~čtyřmi ablačními běhy. Chování bylo měřeno 19~metrikami
+faktur. Agent (model MiniMax-M2.5 prostřednictvím nástroje OpenCode) prošel pěti
+pilotními iteracemi a~dvěma ablacemi, každou ve dvou nezávislých bězích.
+Chování bylo měřeno 19~metrikami
 ve třech kategoriích: procesní (P), produktové~(Q) a~efektivita~(E).
 %
 Metriky zachytily, že iterativní úpravy instrukcí zlepšily dodržování
@@ -105,8 +106,9 @@ instruction components contribute to the observed behavior and which are
 redundant.
 %
 The metric suite and process are evaluated on a~single case study of
-a~dunning system. The agent (Minimax model via the OpenCode tool)
-underwent five pilot iterations and four ablation runs. Behavior was measured
+a~dunning system. The agent (MiniMax-M2.5 model via the OpenCode tool)
+underwent five pilot iterations and two ablations, each evaluated in two
+independent runs. Behavior was measured
 using 19~metrics in three categories: process~(P), product~(Q), and
 efficiency~(E).
 %
@@ -185,9 +187,6 @@ the specific measured values are bound to the case study conditions.
 \part*{\Prilohy\thispagestyle{empty}}
 \appendix
 \include{app01}
-\include{app02}
-\include{app03}
-\include{app04}
 % \include{...}
 
 \end{document}
