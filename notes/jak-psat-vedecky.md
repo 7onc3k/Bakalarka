@@ -12,6 +12,7 @@ Dokud to nebudeš znát nazpaměť, vracej se sem.
 | Vybrat zdroje | → [Zdroje](#zdroje) |
 | Napsat text | → [Psaní](#psaní) |
 | Zkontrolovat | → [Kontrola](#kontrola) |
+| Sjednotit lokalni styl thesis | → [`notes/stylisticky-formatovaci-guide.md`](stylisticky-formatovaci-guide.md) |
 | Mantru | → [Mantra](#mantra) |
 
 ---

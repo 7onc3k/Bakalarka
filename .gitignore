@@ -42,3 +42,8 @@ coverage/
 
 # IDE
 .idea/
+
+# Local checkpoints and large archives — not committed
+thesis-checkpoint/
+docs/archive/
+thesis/.watch-*.lock
