@@ -3,38 +3,35 @@
 
 \section{Motivace}
 
-AI agenti se používají k~vývoji softwaru, ale výsledky ukazují, že to
-není tak jednoduché, jak se čekalo. Randomizovaná studie
-METR~\cite{metr2025} na 246~úlohách ukázala, že s~AI nástroji byli
-vývojáři o~19\,\% pomalejší.
+AI coding agenti, tedy autonomní systémy schopné samostatně psát
+kód, spravovat verzovací historii a~interagovat s~vývojovým
+prostředím, se v~posledních letech staly rozšířeným nástrojem
+každodenního vývoje softwaru. Slibují výrazné zrychlení práce:
+implementace, která vývojáři zabere hodiny, je teoreticky proveditelná
+v~řádu minut. Empirická data ale ukazují, že tento příslib se
+nenaplňuje automaticky. Randomizovaná studie METR~\cite{metr2025}
+na 246~úlohách doložila, že vývojáři s~AI nástroji byli ve
+skutečnosti o~19\,\% pomalejší.
 
-Agent často produkuje funkční výstup, ale nedodržuje vývojové praktiky.
-Ehsani et al.~\cite{ehsani2026failedprs} analyzovali 33~tisíc agentních
-pull requestů a~zjistili, že procesní nedostatky jsou jedním z~hlavních
-důvodů odmítnutí. Klíčovým nástrojem jak chování agenta řídit jsou
-instrukce: Shin et al.~\cite{shin2025prompt} ukazují, že iterativní
-zpřesňování instrukcí výrazně zlepšuje výsledky na úlohách s~kódem.
+Současné benchmarky jako SWE-bench~\cite{swebench2024} hodnotí
+izolované aspekty práce agenta, především funkční korektnost. Tři
+empirické studie ale shodně ukazují, že samotný pass/fail výsledek
+pro praktickou použitelnost nestačí. METR~\cite{metr2026}\footnote{Jiná
+studie téže organizace než~\cite{metr2025}; zde analýza SWE-bench
+pull requestů, ne randomizovaný experiment.} doložila, že polovina
+patchů projitých automatickými testy by nebyla přijata při code
+review. Li et al.~\cite{li2026beyondbugfixes} na 1\,210 sloučených
+pull requestech zjistili kvalitativní nedostatky i~v~přijatém kódu.
+Ehsani et al.~\cite{ehsani2026failedprs} pak z~33~tisíc agentních
+pull requestů identifikovali, že vedle funkčních chyb tvoří významný
+podíl odmítnutí i~procesní selhání. Každá studie pojmenovává jinou
+stranu téhož problému: pass/fail neměří, zda by řešení obstálo
+v~code review, zda je kód udržovatelný a~zda vznikl auditovatelným
+postupem. Holistický pohled, který by tyto dimenze zachytil společně,
+dosud chybí.
 
-Současné benchmarky jako SWE-bench~\cite{swebench2024} hodnotí izolované
-aspekty práce agenta, především funkční korektnost. Studie
-METR~\cite{metr2026}\footnote{Jiná studie téže organizace než~\cite{metr2025};
-zde analýza SWE-bench pull requestů, ne randomizovaný experiment.} ukázala,
-že polovina řešení která projdou testy by nebyla přijata při code review.
-Li et al.~\cite{li2026beyondbugfixes}
-analyzovali 1\,210 sloučených pull requestů a~zjistili kvalitativní
-nedostatky i~v~přijatém kódu. Holistický pohled, který by zachytil proces,
-kvalitu kódu a~efektivitu společně, však chybí.
-
-Jak instrukce systematicky navrhovat a~jak měřit, zda agent dodržuje
-požadované praktiky, je méně prozkoumané. Lulla
-et al.~\cite{lulla2026} zjistili, že přítomnost instrukčního souboru
-je spojena se zkrácením doby běhu o~28,6\,\%, ale Gloaguen
-et al.~\cite{gloaguen2025agentsmd} upozorňují, že generické instrukce
-přinášejí marginální zlepšení při vyšších nákladech. Které složky
-instrukcí k~měřenému chování skutečně přispívají a~které jen zabírají
-kontextové okno, dosud nebylo izolováno.
-
-Chování agenta lze přizpůsobit trénováním modelu nebo instrukcemi
+Výsledky agenta nejsou dány jen schopnostmi modelu samotného; lze
+je ovlivnit dvěma způsoby: trénováním modelu nebo instrukcemi
 v~kontextovém okně. S~rostoucí velikostí kontextových oken
 a~zkracujícími se cykly mezi generacemi modelů se instrukce stávají
 praktičtější alternativou: jsou dostupné komukoliv, iterativně
@@ -44,83 +41,15 @@ na konkrétní verzi modelu. Shin et al.~\cite{shin2025prompt}
 ukazují, že iterativní zpřesňování instrukcí dosahuje srovnatelných
 výsledků s~fine-tuned modely na úlohách s~kódem.
 
-\begin{raw}
-\textbf{Audit trail (motivace, předchozí verze DRAFT v4):}
-3 odstavce: (1)~METR + Ehsani + Shin v~jednom, (2)~benchmarky jen
-SWE-bench, (3)~gap instrukcí bez citací.
-Změny v~v5: odst.~1 rozdělen na kontext (METR) a~problém (Ehsani +
-Shin); benchmarky doplněny o~METR pass$\neq$merge a~Li
-merge$\neq$kvalita; gap instrukcí doplněn o~Lulla a~Gloaguen
-(protichůdné výsledky).
-
-\medskip
-\textbf{Audit trail (motivace, předchozí verze DRAFT v3):}
-4 odstavce: (1)~METR + agent chybuje, (2)~benchmarky měří jen výsledek,
-(3)~ICL vs fine-tuning, Shin, chybí postup, (4)~co práce dělá.
-Změny v~v4: přesunuto ICL/fine-tuning do rozsahu (1.3); instrukce
-jako klíčový nástroj sloučeny do odst.~1; odst.~4 smazán (duplicitní
-s~cíli a~úvodem); přidána motivace pro ablace (odst.~3).
-\end{raw}
-
-\begin{raw}
-\textbf{Předchozí verze motivace (audit trail):}
-
-Velké jazykové modely (LLM) dnes umí generovat kód, ale to neznamená, že umí vyvíjet software. Randomizovaná studie METR \cite{metr2025} na 16 zkušených vývojářích a~246 úlohách ukázala, že s~AI nástroji byli vývojáři o~19\,\% pomalejší, přestože sami odhadovali zrychlení o~24\,\%. Když projekt roste, bývá těžší jej rozšiřovat, jak pro člověka, tak pro LLM. Vývojáři přicházejí o~kontext a hlubokou znalost kódové základny, zatímco agenti jsou limitováni omezeným context window. Otázka tedy není, co modely umí, ale jak je zasadit do vývojového procesu tak, aby produkovaly kvalitní výstup.
-
-Ukazuje se, že odpověď leží spíš v~instrukcích než v~samotných modelech. Breunig \cite{breunig2025} zjistil, že změna promptu mění chování agenta výrazněji než výměna modelu. Lulla et al. \cite{lulla2026} dokládají, že přítomnost instrukčního souboru (AGENTS.md) je spojena se zkrácením mediánové doby běhu o~28,6\,\% a~snížením výstupních tokenů o~16,6\,\%. Scaffolding, tedy struktura instrukcí a procesních pravidel, která agenta provází vývojem, má na výsledek zásadní vliv. Ale nikdo systematicky nezkoumal, \emph{které} složky tohoto scaffoldingu jsou pro dodržování softwarově-inženýrských praktik nezbytné a které jsou zbytečné.
-
-Tato práce zkoumá právě to: jak musí být strukturovány instrukce pro AI coding agenta, aby dodržoval specifikací řízený vývoj, test-driven development a granulární správu verzí; a co z~těch instrukcí je skutečně kritické.
-
-\medskip
-\textbf{Původní poznámky:}
-
-Studie společnosti METR.ORG ukazuje, že LLM zkušené vývojáře spíše zpomaluje. S rychlým vývojem schopností modelů se situace pravděpodobně mění. Ale to neznamená, že je LLM samo o sobě dostatečné k vypracování dlouhotrvajících úkolů. Není to problém pouze LLM, když projekt roste, bývá těžší jej rozšiřovat jak pro člověka, tak i pro LLM. AI programování tenhle problém ještě více prohlubuje. Vývojáři přicházejí o kontext a hlubokou znalost kódové základny (codebase), zatímco velké jazykové modely (LLM) jsou limitovány omezenou pamětí (context window). Jak nastavit harness/scaffolding tak, aby v tom mohli fungovat agenti a lidé to stále měli pod kontrolou?
-\end{raw}
-
-\begin{raw}
-\textbf{Review poznámky (2026-03-21):}
-
-\textbf{(a) Motivace nemotivuje cíl~3 (ablace):}
-Motivace vysvětluje proč potřebujeme metriky (cíl~1) a~iterativní postup (cíl~2),
-ale neříká proč potřebujeme zjišťovat které složky instrukcí jsou nezbytné.
-Chybí věta typu: ``Zůstává otevřená otázka, které složky instrukcí jsou
-pro dodržování praktik skutečně nezbytné a~které jsou redundantní.''
-Starší verze motivace (audit trail, řádek~39) to obsahuje (``nikdo
-systematicky nezkoumal, \emph{které} složky''), ale aktuální DRAFT ne.
-
-\textbf{(b) Řádek~27, silný claim bez citace:}
-``pro systematické navrhování a~vyhodnocování instrukcí obdobný postup
-dosud nevznikl''; buď citovat systematic review ukazující gap,
-nebo zeslabit na ``je méně formalizován'' s~odkazem na kap02.
-
-\textbf{(c) Řádek~56, ``exit kritéria'' bez vysvětlení:}
-Čtenář narazí na pojem poprvé v~cíli~2, ale definice je až v~kap03.
-Buď přidat závorku ``(měřitelné prahy pro úspěšnost běhu, viz
-sekce~\ref{sec:pilotni-iterace})'', nebo přeformulovat na
-``stanovených požadavků''.
-
-\textbf{(d) Terminologie ``evaluační systém'' vs ``sada metrik'':}
-Řádek~29 říká ``evaluační systém'', cíl~1 říká ``sada metrik''.
-Jsou to totéž? Pokud evaluační systém = sada metrik + postup + exit
-kritéria, definovat explicitně. Pokud totéž, sjednotit.
-
-\medskip
-\textbf{TODO (2026-03-26): po přeformulaci cílů (DRAFT v6, PoC framing):}
-\begin{itemize}
-    \item \textbf{Motivace nemotivuje cíl~3:} přidat větu o~tom, že
-          zůstává otevřená otázka které složky instrukcí jsou nezbytné
-          (viz bod~(a) výše).
-    \item \textbf{Rozsah:} přidat větu o~feasibility demonstration;
-          práce ukazuje že přístup funguje na jednom případu, ne že
-          platí obecně. Sladit s~PoC framingem cílů.
-    \item \textbf{Rozsah ř.~152:} ``evaluační systém'' sjednotit s~cíli
-          (cíl~1 říká ``sadu metrik'', cíl~2 říká ``iterativní
-          postup''). Buď definovat ``evaluační systém = metriky + postup''
-          nebo nahradit konkrétními pojmy.
-    \item \textbf{Cíl~2:} ``exit kritéria'' zmizela z~cíle (teď říká
-          ``měřitelné zlepšení''), takže bod~(c) výše je vyřešen.
-\end{itemize}
-\end{raw}
+Empirie o~účinnosti instrukcí je ale nejednoznačná. Lulla
+et al.~\cite{lulla2026} zjistili, že přítomnost instrukčního souboru
+je spojena se zkrácením doby běhu o~28,6\,\%, zatímco Gloaguen
+et al.~\cite{gloaguen2025agentsmd} upozorňují, že generické instrukce
+přinášejí marginální zlepšení při vyšších nákladech. Které složky
+instrukcí k~měřenému chování skutečně přispívají a~které jen zabírají
+kontextové okno, dosud nebylo izolováno. Jak instrukce systematicky
+navrhovat a~jak měřit, zda agent dodržuje požadované chování,
+zůstává proto otevřenou otázkou.
 
 \Needspace{10\baselineskip}
 \section{Cíle práce}
@@ -131,66 +60,13 @@ kritéria, definovat explicitně. Pokud totéž, sjednotit.
           pokrývající proces, kvalitu kódu a~efektivitu, a~tím zachytit
           dimenze, které stávající benchmarky neměří.
     \item Na případové studii demonstrovat iterativní postup návrhu
-          instrukcí řízený těmito metrikami a~ukázat, že vede
-          k~měřitelnému zlepšení dodržování vývojových praktik.
+          instrukcí řízený těmito metrikami a~vyhodnotit, zda a~jak
+          vede k~měřitelným změnám v~chování agenta podle navržených
+          metrik.
     \item Z~instrukcí vytvořených v~cíli~2 prozkoumat ablacemi, které
           složky přispívají k~měřenému chování agenta a~které jsou
           redundantní.
 \end{enumerate}
-
-\begin{raw}
-\textbf{Audit trail: předchozí verze cílů (DRAFT v5):}
-
-\begin{enumerate}
-    \item Navrhnout sadu metrik která měří proces a~kvalitu práce AI agenta, ne jen výsledek.
-    \item Iterativním postupem navrhnout instrukce které dovedou agenta k~dodržování stanovených exit kritérií.
-    \item Ablacemi identifikovat, které složky instrukcí přispívají k~měřenému chování agenta a~které jsou redundantní.
-\end{enumerate}
-
-\medskip
-\textbf{Audit trail: předchozí verze cílů (DRAFT v4):}
-
-\begin{enumerate}
-    \item Navrhnout sadu metrik která měří proces a~kvalitu práce AI agenta, ne jen výsledek.
-    \item Na případové studii demonstrovat iterativní postup pro návrh instrukcí s~využitím těchto metrik.
-    \item Popsat pozorované tendence v~chování agenta a~vliv jednotlivých složek instrukcí na tyto tendence.
-\end{enumerate}
-
-\medskip
-\textbf{Poznámky ze schůzky s~vedoucím (2026-03-16):}
-Cíle práce = 3 fáze: (1)~research gap: procesní metriky, (2)~pilotní fáze: docílit exit kritérií, (3)~komparativní fáze: ablace/substituce. Research question potřebuje přesná kritéria a~kvantifikaci. \textbf{Pozn.:} substituce se nakonec realizovala implicitně v~pilotní fázi (r1$\to$r3), komparativní fáze obsahuje jen ablace.
-
-\medskip
-\textbf{Předchozí verze cílů (audit trail v3):}
-
-\begin{enumerate}
-    \item Navrhnout instrukce které dovedou AI coding agenta k~dodržování
-          strukturovaného vývojového postupu na případové studii
-          (systém upomínek faktur).
-    \item Navrhnout sadu metrik která měří proces a~kvalitu práce agenta,
-          ne jen výsledek.
-    \item Navrhnout a~demonstrovat iterativní postup pro systematický návrh
-          a~vyhodnocování instrukcí.
-\end{enumerate}
-
-\medskip
-\textbf{Předchozí verze cílů (audit trail v2):}
-
-\begin{enumerate}
-    \item Popsat, jak se řízení softwarových projektů mění v~kontextu AI agentů, a zmapovat co víme o~vlivu instrukcí na jejich chování.
-    \item Iterativně navrhnout instrukce, které dovedou AI coding agenta k~dodržování vývojového postupu na case study projektu (systém upomínek faktur).
-    \item Zjistit, které složky těchto instrukcí jsou pro dodržování vývojového postupu nezbytné, které jsou zbytečné, a jaký kontext agent potřebuje k~tomu, aby vytvářel a využíval projektové artefakty.
-\end{enumerate}
-
-\medskip
-\textbf{Původní verze:}
-\begin{enumerate}
-    \item Popsat jak se řízení SWE projektů mění v kontextu agentních systémů (teoretický rámec)
-    \item Navrhnout a implementovat experimentální prostředí (case study: systém upomínek faktur)
-    \item Prozkoumat vliv různých nastavení scaffoldingu na schopnost agenta provést kvalitní práci
-    \item Identifikovat jaký kontext je pro agenty klíčový a jak instrukce/procesy ovlivňují schopnost agenta tento kontext vytvářet a využívat
-\end{enumerate}
-\end{raw}
 
 \section{Rozsah práce}
 
@@ -212,47 +88,4 @@ výsledek pro všechny modely a~projekty.
 Zdůvodnění volby projektu a~podrobnosti experimentálního designu
 popisuje kapitola~\ref{kap:metodika}.
 
-\begin{raw}
-\textbf{Audit trail (rozsah, předchozí verze DRAFT v3):}
-3 odstavce bez kontextu originálu. Změny v~v4: vráceno blíže
-k~originálu (v1). Ponechány: proč případová studie, dunning systém
-stručně, co neděláme, přenositelnost. Odstraněno oproti v1:
-``evaluační systém'' $\to$ ``sada metrik a~iterativní postup'';
-kontrolované podmínky zkráceny (detaily v~kap03). ICL/fine-tuning
-přesunuto do motivace (odst.~5).
 
-\medskip
-\textbf{Audit trail (rozsah, předchozí verze DRAFT v2):}
-3 odstavce: (1)~instrukce ne fine-tuning (stručně), (2)~jedna případová
-studie, feasibility, (3)~co neděláme.
-
-\medskip
-\textbf{Audit trail (rozsah, předchozí verze DRAFT v1):}
-4 odstavce: (1)~proč případová studie (nelze teoreticky), (2)~kontrolované
-podmínky (vše stejné, jen instrukce), (3)~dunning systém (deterministický,
-testovatelný), (4)~co neděláme + přenositelnost.
-\end{raw}
-
-\begin{raw}
-\textbf{Poznámky k propojení:}
-\begin{itemize}
-    \item Řízení vyžaduje holistický pohled (vidět celek, ne jen část) - proto celý SDLC, ne jedna fáze
-    \item Billing Reminder Engine jako case study: malý projekt, ale reálné nuance (state machine, business days, edge cases)
-    \item Deterministická logika (stejný vstup = stejný výstup) + jasná pravidla správnosti = objektivně testovatelné
-    \item Hraniční případy (víkendy, svátky, grace periods) = místa kde lze testovat kvalitu agentní práce
-\end{itemize}
-
-\textbf{TODO: Vysvětlit termíny:}
-\begin{itemize}
-    \item state machine - ?
-    \item edge cases / hraniční případy - ?
-    \item SDLC - ?
-\end{itemize}
-
-\textbf{Scope SDLC (k diskuzi):}
-\begin{itemize}
-    \item Primární plán: celý SDLC včetně deployment/maintenance
-    \item Fallback: zúžit na implementation + testing (hlavní doména coding agents)
-    \item Poznámka: i impl + testing má feedback loop (implementace → testy → chyba → úprava) = stále systémový pohled
-\end{itemize}
-\end{raw}
