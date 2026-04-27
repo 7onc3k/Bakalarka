@@ -83,14 +83,14 @@ body {{
   padding: 12px;
 }}
 .card {{
-  border: 1px solid #d8dee6;
+  border: 1px solid #94a3b8;
   border-radius: 10px;
   overflow: hidden;
   background: #ffffff;
 }}
 .header {{
-  background: #f6f8fb;
-  border-bottom: 1px solid #d8dee6;
+  background: #d8e0ec;
+  border-bottom: 1px solid #94a3b8;
   padding: 10px 16px;
   font: 600 {header_size}px/1.25 'IBM Plex Sans', system-ui, sans-serif;
   color: #1f2937;
@@ -113,10 +113,10 @@ pre {{
   border-radius: 4px;
 }}
 .add {{
-  background: #e8f5e9;
+  background: #b7e4bf;
 }}
 .del {{
-  background: #fdecec;
+  background: #f5b7b7;
 }}
 {extra_css}
 </style>

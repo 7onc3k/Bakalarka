@@ -1,0 +1,21 @@
+\acswitchoff 
+\babel@toc {czech}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Iterativní cyklus: čtyři kroky jedné iterace a~smyčka opakování až do splnění exit kritérií.}}{27}{figure.caption.5}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Stavový automat systému upomínek}}{38}{figure.caption.18}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Baseline \texttt {AGENTS.md} (pilot-r1): kompletní znění instrukcí použitých jako výchozí bod pilotních iterací.}}{41}{figure.caption.19}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Vizuální diff změn \texttt {AGENTS.md} mezi pilot-r1 a~pilot-r2}}{45}{figure.caption.22}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Vizuální diff změn \texttt {AGENTS.md} mezi pilot-r2 a~pilot-r3}}{46}{figure.caption.24}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Vizuální diff změn \texttt {AGENTS.md} mezi pilot-r3 a~pilot-r4}}{48}{figure.caption.26}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Vizuální diff změn \texttt {AGENTS.md} mezi pilot-r3 a~pilot-r5}}{49}{figure.caption.28}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Změny AGENTS.md pro ablaci~A}}{52}{figure.caption.30}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Změny AGENTS.md pro ablaci~B: odebrána celá sekce Package Quality (konvence, strict TypeScript, JSDoc, čisté API).}}{52}{figure.caption.31}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Míra splnění exit kritérií \ifstrequal {P}{P}{\hyperref [tab:metriky-prehled]{procesní metriky (P1--P8)}}{}\ifstrequal {P}{Q}{\hyperref [tab:metriky-prehled]{produktové metriky (Q1--Q8)}}{}\ifstrequal {P}{E}{\hyperref [tab:metriky-prehled]{metriky efektivity (E1--E3)}}{} napříč devíti běhy. \acs {P2} a~\acs {P5} byly splněny nejméně často (3/9), \acs {P6} a~\acs {P7} ve všech bězích. Deterministické položky (\acs {P1}--\acs {P5}) vykazují vyšší variabilitu než kvalitativní (\acs {P6}--\acs {P8}).}}{62}{figure.caption.35}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Míra splnění exit kritérií \ifstrequal {Q}{P}{\hyperref [tab:metriky-prehled]{procesní metriky (P1--P8)}}{}\ifstrequal {Q}{Q}{\hyperref [tab:metriky-prehled]{produktové metriky (Q1--Q8)}}{}\ifstrequal {Q}{E}{\hyperref [tab:metriky-prehled]{metriky efektivity (E1--E3)}}{} napříč devíti běhy. \acs {Q1} a~\acs {Q6} byly splněny ve všech bězích; \acs {Q3} a~\acs {Q5} nejméně často. \acs {Q3} počítáno ze~7 běhů (2~bez dat). Metriky efektivity (E1--E3) nemají exit kritérium a~nejsou zahrnuty.}}{63}{figure.caption.36}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Cena běhu vs.\ počet splněných deterministických kritérií}}{64}{figure.caption.37}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Spektrum operacionalizace instrukcí. Tři nezávislá selhání (\acs {P2}, \acs {P3}, \acs {Q8}) prošla stejnými fázemi: pravidlo (agent ignoruje)~$\to $ příkaz (agent obchází)~$\to $ verifikační krok (agent dodržuje).}}{68}{figure.caption.38}%
+\addvspace {10\p@ }

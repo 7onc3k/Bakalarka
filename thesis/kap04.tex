@@ -35,123 +35,169 @@ ablace $\to$ souhrnné výsledky.
 \label{sec:priprava-experimentu}
 %% ================================================================
 
-Před spuštěním pilotních běhů bylo nutné připravit tři výchozí podklady
-každého experimentálního běhu: specifikaci projektu (co má agent
-implementovat), referenční implementaci (měřicí nástroj pro
-Q2~-- referenční test pass rate)
-a~baseline instrukce (jak má agent pracovat).
-
-\begin{raw}
-\textbf{Audit trail: předchozí verze úvodu 4.1:}
-
-Před spuštěním pilotních běhů bylo nutné připravit tři artefakty:
-specifikaci projektu (co má agent implementovat), referenční implementaci
-(baseline pro měření kvality) a~výchozí instrukce (jak má agent pracovat).
-\end{raw}
+Před spuštěním pilotních běhů bylo nutné připravit dva výchozí
+podklady každého experimentálního běhu: testovací prostředí
+(specifikace projektu spolu s~referenční implementací jako stropem
+měření) a~baseline instrukce (jak má agent pracovat).
 
 %% ----------------------------------------------------------------
-\subsection{Konstrukce specifikace}
+\subsection{Systém upomínek faktur}
 \label{sec:konstrukce-specifikace}
+\phantomsection\label{sec:ref-implementace-postup}%
 
-Specifikace definuje fixní zadání, které agent dostává v~Issue~\#1.
-Navazuje na metodické vymezení fixních vstupů v~sekci~\ref{sec:experimentalni-design}:
-kromě instrukcí v~souboru \texttt{AGENTS.md} agent pracuje právě s~touto
-specifikací a~žádný další architektonický návrh nedostává. Issue má dvě
-části: \textbf{Requirements} (co business potřebuje) a~\textbf{API Contract}
+Specifikace systému upomínek faktur tvoří fixní zadání, které agent
+dostává v~Issue~\#1. Navazuje na metodické vymezení fixních vstupů
+v~sekci~\ref{sec:experimentalni-design}: kromě instrukcí
+v~\texttt{AGENTS.md} agent pracuje právě s~touto specifikací a~žádný
+další architektonický návrh nedostává. Issue má dvě části:
+\textbf{Requirements} (co business potřebuje) a~\textbf{API Contract}
 (co musí implementace exportovat). API kontrakt je současně jediným
 technickým omezením implementace a~vstupem pro metriku~\ac{Q1}.
 
-Specifikace obsahuje:
-\begin{itemize}
-    \item \textbf{25 acceptance criteria} ve formátu Given/When/Then
-          s~konkrétními hodnotami: eskalační flow (8 stavových
-          přechodů), platby, terminální stavy, pause/resume, manuální
-          advance, konfigurovatelné timeouty, výpočet pracovních dní
-    \item \textbf{API kontrakt} v~TypeScriptu: veřejná funkce
-          \texttt{process(state, event, now)} vracející nový stav
-          a~action descriptory; typy pro 12 stavů, 6 událostí,
-          3 typy akcí; konfigurační interface pro timeouty a~svátky
-    \item \textbf{Doménový slovník}: 9 pojmů definujících business
-          doménu (dunning, grace period, business days, action
-          descriptor aj.)
-    \item \textbf{Out of scope}: 6 explicitně vyloučených oblastí
-          (payment retry, late fees, partial payments, email sending,
-          scheduling, persistence)
-\end{itemize}
+\paragraph{Doménová logika.}
+Systém eskaluje neuhrazené faktury sérií stavů od přátelské upomínky
+před splatností přes stupňující se urgentnost až po pozastavení
+služby a~odpis pohledávky. Každá faktura má vlastní nezávislou
+instanci, časové prodlevy se počítají v~pracovních dnech (víkendy
+a~konfigurovatelné svátky se přeskakují automaticky v~aritmetice
+timeoutů, nejsou samostatným stavem). Hlavní eskalační větev má 9
+stavů spojených 8 časovými přechody (obrázek~\ref{fig:dunning-fsm}).
+Popisky šipek používají notaci \texttt{[guard]\,/\,effect}: guard
+v~hranatých závorkách udává timeout v~pracovních dnech (\textit{bd}~=~business
+days) od vstupu do předchozího stavu, effect za~lomítkem je akce
+vrácená volajícímu (typicky odeslání e-mailu, u~přechodu do
+\texttt{SUSPENDED} navíc pozastavení služby). Eskalační přechody
+spouští událost \texttt{tick} při splnění guardu; alternativně
+\texttt{manual\_advance} posune stav na další bezpodmínečně (bypass
+timeoutu, v~diagramu nezakreslen). Vedle hlavní větve jsou
+ze~všech aktivních stavů kdykoliv dostupné \texttt{PAID}
+a~\texttt{CANCELLED} (z~9 stavů, vše kromě terminálů) a~\texttt{PAUSED}
+(jen ze~6 aktivních: \texttt{OVERDUE} až \texttt{SUSPENDED}).
 
-Specifikace je záměrně stručná a~strukturovaná, aby omezovala
-interpretační volnost agenta a~současně zůstala přímo měřitelná.
-Formát Given/When/Then usnadňuje převod požadavků do referenčních testů
-(\ac{Q2}) i~mapování acceptance criteria na agentem vytvořené testy
-(\ac{Q4}). Systém je definován jako pure function
-\texttt{process(state, event, now)}, takže stejné deterministické
-rozhraní lze použít napříč všemi běhy pro referenční testy~\acs{Q2}
-i~mutation testing~\acs{Q3}. Explicitní sekce out of scope navíc
-omezuje riziko, že agent rozšíří řešení nad rámec sledovaného zadání.
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    >=stealth,
+    s/.style={rectangle, draw, rounded corners=2pt,
+              minimum height=0.55cm, minimum width=2.0cm,
+              font=\scriptsize\sffamily, inner sep=2pt},
+    term/.style={s, fill=black!8},
+    side/.style={s, fill=blue!6},
+    arr/.style={->, thick, gray!75},
+    barr/.style={->, thick, blue!55!black},
+    tx/.style={font=\scriptsize\sffamily, inner sep=1pt},
+    note/.style={font=\scriptsize\sffamily\itshape, text=black!55, inner sep=1pt}
+]
+    %% --- Hlavní eskalace, vertikálně ---
+    \node[s] (issued) {ISSUED};
+    \node[s, below=0.5cm of issued]  (due)   {DUE\_SOON};
+    \node[s, below=0.5cm of due]     (over)  {OVERDUE};
+    \node[s, below=0.5cm of over]    (grace) {GRACE};
+    \node[s, below=0.5cm of grace]   (rem1)  {REMINDER\_1};
+    \node[s, below=0.5cm of rem1]    (rem2)  {REMINDER\_2};
+    \node[s, below=0.5cm of rem2]    (final) {FINAL\_NOTICE};
+    \node[s, below=0.5cm of final]   (susp)  {SUSPENDED};
+    \node[term, below=0.5cm of susp] (wrof)  {WRITTEN\_OFF};
 
-\begin{raw}
-\textbf{Audit trail: předchozí verze 4.1.1:}
+    %% --- Šipky s guards a~effects ---
+    \draw[arr] (issued) -- node[tx, right]{[\,now\,$\geq$\,due\,$-7$\,bd\,] / email} (due);
+    \draw[arr] (due)    -- node[tx, right]{[\,now\,$\geq$\,due\,]} (over);
+    \draw[arr] (over)   -- node[tx, right]{[\,elapsed\,$\geq$\,3\,bd\,]} (grace);
+    \draw[arr] (grace)  -- node[tx, right]{[\,elapsed\,$\geq$\,7\,bd\,] / email} (rem1);
+    \draw[arr] (rem1)   -- node[tx, right]{[\,elapsed\,$\geq$\,14\,bd\,] / email} (rem2);
+    \draw[arr] (rem2)   -- node[tx, right]{[\,elapsed\,$\geq$\,14\,bd\,] / email} (final);
+    \draw[arr] (final)  -- node[tx, right]{[\,elapsed\,$\geq$\,7\,bd\,] / email\,+\,suspend\_service} (susp);
+    \draw[arr] (susp)   -- node[tx, right]{[\,elapsed\,$\geq$\,30\,bd\,] / email} (wrof);
 
-Jak vznikla specifikace dunning systému (Issue \#1).
+    %% --- Boční panel ---
+    \node[term, anchor=west] (paid) at ($(issued.east)+(7.0cm,0)$)  {PAID};
+    \node[term, below=0.4cm of paid]  (canc) {CANCELLED};
+    \node[side, below=0.4cm of canc]  (paus) {PAUSED};
 
-Specifikace definuje \textit{co} má agent implementovat. Její konstrukce
-je součástí provedení experimentu; metodické zdůvodnění výběru projektu
-viz sekce~\ref{sec:vyber-projektu}.
+    \draw[arr] ($(paid.west)+(-1.4cm,0)$) -- node[tx, above]{payment} (paid.west);
+    \draw[arr] ($(canc.west)+(-1.4cm,0)$) -- node[tx, above]{cancel}  (canc.west);
+    \draw[arr] ($(paus.west)+(-1.4cm,0)$) -- node[tx, above]{paused}  (paus.west);
 
-\textbf{Šablona specifikace.}
-Pro specifikaci byla navržena strukturovaná GitHub issue šablona
-(YAML form). Výchozí verze měla tři vrstvy inspirované IEEE~830:
-[enumerate 3 vrstvy]
-Vrstva Specification byla při revizi odstraněna (zjednodušení na 2 vrstvy).
-Důvody: [itemize redundance, context rot, údržba]
-Výsledná 2-vrstvá šablona: Requirements + Architecture.
+    \node[note, below=0.3cm of paus, text width=4.6cm, align=left] (resnote)
+        {\textbf{resumed:} status\,$:=$\,pausedFrom; stateEnteredAt\,$:=$\,now\,$-$\,pausedElapsed};
+    \draw[barr, dashed] (paus.south) -- (resnote.north);
+\end{tikzpicture}
+\caption[Stavový automat systému upomínek]{Stavový automat systému
+upomínek faktur: hlavní eskalace shora dolů (vlevo) a~tři boční
+stavy dostupné z~většiny aktivních (vpravo). Notaci a~zdrojové
+stavy popisuje text výše.}
+\label{fig:dunning-fsm}
+\end{figure}
 
-\textbf{Obsah specifikace.} [itemize 25 AC, API kontrakt, slovník, behavioral model, out of scope]
+\paragraph{API kontrakt.}
+Systém je definován jako čistá funkce \texttt{process(state, event,
+now)}, která pro daný stav, událost a~aktuální čas vrátí nový stav
+a~seznam akcí. Pevné jsou názvy 12 stavů, 6 typů událostí
+(\texttt{tick}, \texttt{payment\_received}, \texttt{invoice\_cancelled},
+\texttt{dunning\_paused}, \texttt{dunning\_resumed},
+\texttt{manual\_advance}) a~3 typy akčních deskriptorů
+(\texttt{send\_email}, \texttt{suspend\_service},
+\texttt{resume\_service}). Stav nese kromě \texttt{status} pole pro
+datum splatnosti, čas vstupu do aktuálního stavu, konfiguraci a~při
+pauze \texttt{pausedFrom} s~\texttt{pausedElapsed}. Vnitřní
+implementace (modulární rozdělení, funkční vs.\ objektový styl)
+zůstává na agentovi.
 
-\textbf{Designová rozhodnutí a~jejich vliv na experiment.}
-\par\noindent
-[itemize behavior-driven AC,\allowbreak{} infrastructure-agnostic,\allowbreak{}
-strict API contract,\allowbreak{} explicitní out of scope]
-\end{raw}
+\paragraph{Implicitní pravidla domény.}
+Stavový automat je sám o~sobě lineární a~implementačně přímočarý;
+specifikace ale klade dvě implicitní pravidla, která z~úlohy dělají
+test pečlivého čtení kontraktu spíš než implementaci samotného
+automatu. Za~prvé,
+pause/resume musí přes pole \texttt{pausedElapsed} zachovat uplynulý
+čas: bez něj by se musel řešit trikem (posun \texttt{stateEnteredAt}
+zpět v~čase), který funguje pro jednu pauzu, ale selhává při
+opakovaném pause/resume, protože druhá pauza ztratí historii první.
+Za~druhé, všechny timeouty se počítají v~pracovních dnech, takže
+\texttt{+14\,bd} od pátku není čtrnáct kalendářních dnů a~hranice
+mezi víkendem a~pondělím jsou off-by-one zóna. V~pilotu se obě
+pravidla opakovaně projevila jako konkrétní implementační odchylky
+agenta (sekce~\ref{sec:pilot-r3}, sekce~\ref{sec:pilot-r4}).
 
-%% ----------------------------------------------------------------
-\subsection{Referenční implementace}
-\label{sec:ref-implementace-postup}
+\paragraph{Acceptance criteria.}
+Specifikace obsahuje 25 acceptance criteria ve formátu Given/When/Then.
+Pokrývají sedm okruhů: časové přechody eskalace, platby, terminální
+stavy, storno, pauza/obnovení, manuální postup a~výpočet pracovních
+dní. Ukázka jednoho kritéria z~okruhu pauza/obnovení:
 
-Referenční implementace slouží jako měřicí nástroj: definuje strop
-kvality proti kterému se porovnávají agentovy běhy. Její role
-v~metrikách popisuje sekce~\ref{sec:produktove-metriky}.
+\begin{quote}\small\sffamily
+Given an invoice is in PAUSED state\\
+When a \texttt{dunning\_resumed} event occurs\\
+Then the state transitions back to the state it was in before pausing\\
+And the timeout resumes from where it left off
+\end{quote}
 
-Testy byly napsány metodou \textit{spec-first TDD}~(sekce~\ref{sec:procesni-kvalita}):
-expected values pochází ze specifikace, ne z~pozorování kódu.
+Formát Given/When/Then usnadňuje převod požadavků do referenčních
+testů (\ac{Q2}) i~mapování acceptance criteria na agentovy vlastní
+testy (\ac{Q4}). Doménový slovník (9 pojmů: dunning, grace period,
+business days, action descriptor aj.) sjednocuje terminologii mezi
+specifikací a~implementací.
 
+\paragraph{Out of scope.}
+Specifikace explicitně vylučuje šest oblastí: opakování plateb,
+úroky a~poplatky z~prodlení, částečné platby, odesílání e-mailů,
+plánování (cron) a~persistenci dat. Sekce out of scope omezuje
+riziko, že agent rozšíří řešení nad rámec sledovaného zadání,
+a~drží úlohu na úrovni čisté business logiky.
+
+\paragraph{Referenční implementace jako strop měření.}
+Souběžně se specifikací vznikla referenční implementace, která
+slouží jako měřicí nástroj: definuje strop kvality, proti kterému se
+porovnávají agentovy běhy (sekce~\ref{sec:produktove-metriky}). Testy
+byly napsány metodou \textit{spec-first TDD}~\cite{mathews2024}:
+očekávané hodnoty pochází ze specifikace, ne z~pozorování kódu.
 Výsledná implementace obsahuje 42 behavioral testů pokrývajících
-všech 25 acceptance criteria (některá kritéria vyžadují více testových
-případů pro hraniční situace), dosahuje mutation score 91{,}9\,\%.
-Kód kompiluje bez typecheck errors, neobsahuje žádné \texttt{any}
-a~má 3 lint warnings (kosmetické, bez vlivu na funkční korektnost).
-Metrika~\ac{Q8} ohodnotila design quality na 3/3
-ve všech dimenzích. Tyto výsledky validují, že specifikace je
-implementovatelná a~že exit kritéria
-(sekce~\ref{sec:pilotni-iterace}) jsou dosažitelná lidským
-vývojářem.
-
-\begin{raw}
-\textbf{Audit trail: předchozí verze 4.1.2:}
-
-Human-expert baseline pro měření kvality.
-
-Referenční implementace slouží jako měřicí nástroj; definuje strop
-kvality proti kterému se porovnávají agentovy běhy. Podrobnosti o~jejím
-použití v~měření viz sekce~\ref{sec:referencni-testy} (kap.~3).
-Zde popisujeme \textit{jak} vznikla.
-
-\textbf{Postup.} Testy byly napsány metodou spec-first TDD~\cite{mathews2024}.
-\textbf{Výsledky:} [itemize 42 behavioral testů, mutation score, typecheck, Q8]
-
-Referenční implementace validuje, že specifikace je implementovatelná
-a~že exit kritéria (kap.~3) jsou dosažitelná lidským vývojářem.
-\end{raw}
+všech 25 acceptance criteria (některá kritéria vyžadují víc testových
+případů pro hraniční situace), dosahuje mutation score 91{,}9\,\%,
+kompiluje bez typecheck errors, neobsahuje žádné \texttt{any}
+a~má 3 kosmetické lint warnings. Metrika~\ac{Q8} ohodnotila design
+quality na 3/3 ve všech dimenzích. Tyto výsledky validují, že
+specifikace je implementovatelná a~exit kritéria
+(sekce~\ref{sec:pilotni-iterace}) jsou dosažitelná lidským vývojářem.
 
 %% ----------------------------------------------------------------
 \subsection{Konstrukce baseline instrukcí}
@@ -321,7 +367,7 @@ Q8 & Design quality        & 1/3        & $\geq$ 2/3 & $\times$ \\
 \midrule
 E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 115 / 60 / 11528 & ---      & záznam \\
 E2 & Trvání                & 32{,}7 min & ---      & záznam \\
-E3 & Stabilita session      & dokončeno  & ---      & záznam \\
+E3 & Počet kompakcí         & 0          & 0        & \checkmark \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -474,7 +520,7 @@ Q8 & Design quality           & 1/3        & 3/3         & průlom \\
 \midrule
 E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 76 / 41 / 3196 & 62 / 30 / 4770 & záznam \\
 E2 & Trvání                   & 37{,}2 min & 24{,}8 min & záznam \\
-E3 & Stabilita session         & dokončeno  & 1 kompakce  & záznam \\
+E3 & Počet kompakcí            & 0          & 0           & stabilní \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -505,7 +551,7 @@ Diagnostika r3 odhalila dva problémy, každý s~vlastní opravou:
     \item Procesní hygiena: do pre-PR checklistu přidán příkaz
           \texttt{npx vitest run}, aby agent ověřil, že jeho vlastní
           testy procházejí ještě před otevřením pull requestu
-    \item Agent nedodržel API kontrakt:\allowbreak{} spec definuje pole
+    \item Agent nedodržel API kontrakt:\allowbreak{} specifikace definuje pole
           \texttt{pausedElapsed}\allowbreak{} v~typu \texttt{DunningState}, ale
           agent ho nepoužil a~vymyslel vlastní řešení. Do~Constraints
           přidáno pravidlo: každé pole v~API kontraktu musí\allowbreak{} být
@@ -549,7 +595,7 @@ Q8 & Design quality          & 3/3        & 2/3         & horší \\
 \midrule
 E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & 81 / 36 / 5996 & záznam \\
 E2 & Trvání                  & 24{,}8 min & 25{,}9 min & stabilní \\
-E3 & Stabilita session        & dokončeno  & dokončeno   & záznam \\
+E3 & Počet kompakcí          & 0          & 0           & stabilní \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -644,7 +690,7 @@ Q7 & Složitost kódu          & 1 viol.    & 0           & opraveno \\
 \midrule
 E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & 65 / 23 / 3028 & záznam \\
 E2 & Trvání                  & 24{,}8 min & 13{,}2 min & záznam \\
-E3 & Stabilita session        & dokončeno  & dokončeno   & záznam \\
+E3 & Počet kompakcí          & 0          & 0           & stabilní \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -702,18 +748,6 @@ Pět iterací (r1--r5) přineslo čtyři pozorování:
 Pilotní baseline pro ablace zůstává r3, jediný běh kde agent
 workflow dodržel. Ablace testují, které z~těchto pozorování
 vydrží cílenou kontrolu.
-
-Obrázek~\ref{fig:diff-r1-r3} ukazuje souhrnnou evoluci instrukcí
-od baseline k~nejlepší iteraci. Bílé řádky zůstaly z~r1, zelené
-byly přidány během iterací.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{img/generated/agents-diff-r1-r3.png}
-\caption{Souhrnná evoluce \texttt{AGENTS.md}: pilot-r1~$\to$~pilot-r3.
-Zelené řádky = přidáno, červené = odebráno.}
-\label{fig:diff-r1-r3}
-\end{figure}
 
 %% ================================================================
 \section{Ablace}
@@ -851,7 +885,7 @@ Q8 & Design quality            & 3/3        & 2/3        & 2/3 \\
 \midrule
 E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & n/a & n/a \\
 E2 & Trvání                    & 25 min     & 39 min     & 24 min \\
-E3 & Stabilita session          & dokončeno  & dokončeno  & dokončeno \\
+E3 & Počet kompakcí            & 0          & 0          & 0 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -925,7 +959,7 @@ Q8 & Design quality            & 3/3        & ---$^*$    & 2/3 \\
 \midrule
 E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & n/a & n/a \\
 E2 & Trvání                    & 25 min     & 28 min     & 21 min \\
-E3 & Stabilita session          & dokončeno  & dokončeno  & dokončeno \\
+E3 & Počet kompakcí            & 0          & 0          & 0 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1056,7 +1090,7 @@ Q8 design quality       & \cbad{1/3}  & \cbad{1/3}  & \cgood{3/3}   & \cmid{2/3}
 \midrule
 E1 in/out/cache (tis.)  & 115/60/11k & 76/41/3k & 62/30/5k & 81/36/6k & 65/23/3k & \cna{n/a} & \cna{n/a} & \cna{n/a} & \cna{n/a} \\
 E2 trvání (min)         & 32{,}7     & 37{,}2     & 24{,}8     & 25{,}9     & 13{,}2     & 39         & 24        & 28        & 21 \\
-E3 stabilita session    & \cna{ok}   & \cna{ok}   & \cna{1 komp.}   & \cna{ok}   & \cna{ok}   & \cna{ok}   & \cna{ok}  & \cna{ok}  & \cna{ok} \\
+E3 počet kompakcí       & \cna{0}    & \cna{0}    & \cna{0}         & \cna{0}    & \cna{0}    & \cna{0}    & \cna{0}   & \cna{0}   & \cna{0} \\
 \bottomrule
 \end{tabularx}
 

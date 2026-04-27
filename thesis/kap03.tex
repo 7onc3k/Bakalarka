@@ -196,7 +196,7 @@ Naše sada obsahuje 19~metrik ve třech kategoriích:
           (\acs{Q3}--\acs{Q4}) a~udržovatelnost kódu (\acs{Q5}--\acs{Q8}).
     \item[E~-- efektivita (E1--E3)] Za jakou cenu?
           Zaznamenáváme spotřebované tokeny (\acs{E1}), čas (\acs{E2})
-          a~stabilitu session (\acs{E3}).
+          a~počet kompakcí kontextu (\acs{E3}).
 \end{description}
 
 Teoretické základy jednotlivých metrik (proč jsou validní, jaká je
@@ -440,11 +440,11 @@ inference cost o~více než 20\,\%. \\
 \acs{E2} & Trvání běhu &
 Wall-clock time v~minutách od spuštění agenta po poslední commit. \\
 \addlinespace
-\acs{E3} & Stabilita session &
-Sleduje, zda agent dokončil úlohu bez ztráty kontextu. Odvozujeme
-z~exportu session jako heuristický záznam kompakce doplněný
-informací o~úspěšném dokončení běhu. Pomocná záznamová metrika
-zachycující zjevné kolapsy kontinuity práce mezi kroky. \\
+\acs{E3} & Počet kompakcí &
+Počet kompakcí kontextu během běhu, čtený přímo z~OpenCode DB
+(pole \texttt{time\_compacting}). Kompakce indikuje, že agent
+narazil na limit kontextového okna a~část historie byla shrnuta;
+každá kompakce je riziko ztráty detailu pro další kroky. Cíl: 0. \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -755,7 +755,7 @@ Q8 & Design quality              & LLM-as-judge (GLM-5)   & $\geq$ 2/3 & judge \
 \multicolumn{5}{@{}l}{\textit{Efektivita (E): za jakou cenu}} \\[2pt]
 E1 & Vstup / výstup / $\Sigma$ cache (tis.) z exportu & OpenCode export & --- & záznam \\
 E2 & Trvání (minuty)             & session timestamps & --- & záznam \\
-E3 & Stabilita session (dokončení bez ztráty kontextu) & session export & --- & záznam \\
+E3 & Počet kompakcí kontextu & OpenCode DB (\texttt{time\_compacting}) & 0 & deter. \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -795,8 +795,14 @@ a~GitHub API pro běhy r4 a~r5. Žádná diskrepance nebyla identifikována.
 
 \textbf{Interní validita} (jsou závěry podložené daty?).
 Hlavní hrozba je nedeterminismus LLM: stejné instrukce mohou při
-různých bězích dát různé výsledky~\cite{razavi2025}. Dva běhy per
-variaci jsou mitigací, ale neposkytují statistickou sílu.
+různých bězích dát různé výsledky~\cite{razavi2025}. Pilotní běhy
+r1--r5 probíhaly jednorázově, a~tato hrozba
+v~nich není mitigována; jejich roli je proto třeba číst jako
+formativní (iterativní návrh instrukcí), ne jako konfirmační
+měření efektu. Mitigace se uplatňuje až v~ablacích, kde každou
+variaci spouštíme dvakrát: shoda obou běhů ve~směru efektu zvyšuje
+důvěru, že nejde o~náhodu, byť ani dva běhy neposkytují
+statistickou sílu.
 Další hrozbou je confirmation bias: autor navrhuje instrukce
 i~evaluuje výsledky. Tuto hrozbu oslabují automatizované metriky
 (\acs{P1}, \acs{Q1}--\acs{Q3}, \acs{Q5}--\acs{Q7}), které nepodléhají

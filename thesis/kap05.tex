@@ -404,9 +404,9 @@ verifikační krok (agent dodržuje).
 ]
 
 % Phase boxes
-\node[phase, fill=red!12] (rule) {Pravidlo\\[-2pt]{\scriptsize\textit{co má platit}}};
-\node[phase, fill=orange!12, right=1.0cm of rule] (cmd) {Příkaz\\[-2pt]{\scriptsize\textit{co udělat}}};
-\node[phase, fill=green!12, right=1.0cm of cmd] (ver) {Verifikační krok\\[-2pt]{\scriptsize\textit{zkontroluj + oprav}}};
+\node[phase, fill=red!12] (rule) {Pravidlo\\{\scriptsize\textit{co má platit}}};
+\node[phase, fill=orange!12, right=1.0cm of rule] (cmd) {Příkaz\\{\scriptsize\textit{co udělat}}};
+\node[phase, fill=green!12, right=1.0cm of cmd] (ver) {Verifikační krok\\{\scriptsize\textit{zkontroluj + oprav}}};
 
 % Arrows between phases
 \draw[arr] (rule) -- (cmd);
@@ -448,7 +448,7 @@ verifikační krok (agent dodržuje).
 
 % Axis label — fixed position relative to phase boxes
 \draw[<->, thick, black!40]
-    ([yshift=-4.2cm]rule.south west) -- ([yshift=-4.2cm]ver.south east)
+    ($(rule.south west)+(0,-4.2cm)$) -- ($(ver.south east)+(0,-4.2cm)$)
     node[midway, below=0.15cm, font=\scriptsize\sffamily, text=black!50]
     {rostoucí konkrétnost};
 
