@@ -8,30 +8,30 @@ BUILDDIR = .build
 # Všechno (raw + draft + finální) — pro nás
 prace-full:
 	@mkdir -p $(BUILDDIR)
-	-$(LATEX) -output-directory=$(BUILDDIR) -jobname=prace-full prace.tex > /dev/null 2>&1
-	-biber --input-directory=$(BUILDDIR) --output-directory=$(BUILDDIR) prace-full > /dev/null 2>&1
-	-$(LATEX) -output-directory=$(BUILDDIR) -jobname=prace-full prace.tex > /dev/null 2>&1
-	-$(LATEX) -output-directory=$(BUILDDIR) -jobname=prace-full prace.tex > /dev/null 2>&1
+	$(LATEX) -output-directory=$(BUILDDIR) -jobname=prace-full prace.tex > /dev/null 2>&1
+	biber --input-directory=$(BUILDDIR) --output-directory=$(BUILDDIR) prace-full > /dev/null 2>&1
+	$(LATEX) -output-directory=$(BUILDDIR) -jobname=prace-full prace.tex > /dev/null 2>&1
+	$(LATEX) -output-directory=$(BUILDDIR) -jobname=prace-full prace.tex > /dev/null 2>&1
 	@cp $(BUILDDIR)/prace-full.pdf prace-full.pdf 2>/dev/null || true
 	@echo "✓ prace-full.pdf (vše)"
 
 # Bez RAW bloků (draft + finální) — pro vedoucího
 prace-draft:
 	@mkdir -p $(BUILDDIR)
-	-$(LATEX) -output-directory=$(BUILDDIR) -jobname=prace-draft '\def\hideraw{1}\input{prace}' > /dev/null 2>&1
-	-biber --input-directory=$(BUILDDIR) --output-directory=$(BUILDDIR) prace-draft > /dev/null 2>&1
-	-$(LATEX) -output-directory=$(BUILDDIR) -jobname=prace-draft '\def\hideraw{1}\input{prace}' > /dev/null 2>&1
-	-$(LATEX) -output-directory=$(BUILDDIR) -jobname=prace-draft '\def\hideraw{1}\input{prace}' > /dev/null 2>&1
+	$(LATEX) -output-directory=$(BUILDDIR) -jobname=prace-draft '\def\hideraw{1}\input{prace}' > /dev/null 2>&1
+	biber --input-directory=$(BUILDDIR) --output-directory=$(BUILDDIR) prace-draft > /dev/null 2>&1
+	$(LATEX) -output-directory=$(BUILDDIR) -jobname=prace-draft '\def\hideraw{1}\input{prace}' > /dev/null 2>&1
+	$(LATEX) -output-directory=$(BUILDDIR) -jobname=prace-draft '\def\hideraw{1}\input{prace}' > /dev/null 2>&1
 	@cp $(BUILDDIR)/prace-draft.pdf prace-draft.pdf 2>/dev/null || true
 	@echo "✓ prace-draft.pdf (bez RAW)"
 
 # Jen finální text (bez raw i draft)
 prace-clean:
 	@mkdir -p $(BUILDDIR)
-	-$(LATEX) -output-directory=$(BUILDDIR) -jobname=prace-clean '\def\hideraw{1}\def\hidedraft{1}\input{prace}' > /dev/null 2>&1
-	-biber --input-directory=$(BUILDDIR) --output-directory=$(BUILDDIR) prace-clean > /dev/null 2>&1
-	-$(LATEX) -output-directory=$(BUILDDIR) -jobname=prace-clean '\def\hideraw{1}\def\hidedraft{1}\input{prace}' > /dev/null 2>&1
-	-$(LATEX) -output-directory=$(BUILDDIR) -jobname=prace-clean '\def\hideraw{1}\def\hidedraft{1}\input{prace}' > /dev/null 2>&1
+	$(LATEX) -output-directory=$(BUILDDIR) -jobname=prace-clean '\def\hideraw{1}\def\hidedraft{1}\input{prace}' > /dev/null 2>&1
+	biber --input-directory=$(BUILDDIR) --output-directory=$(BUILDDIR) prace-clean > /dev/null 2>&1
+	$(LATEX) -output-directory=$(BUILDDIR) -jobname=prace-clean '\def\hideraw{1}\def\hidedraft{1}\input{prace}' > /dev/null 2>&1
+	$(LATEX) -output-directory=$(BUILDDIR) -jobname=prace-clean '\def\hideraw{1}\def\hidedraft{1}\input{prace}' > /dev/null 2>&1
 	@cp $(BUILDDIR)/prace-clean.pdf prace-clean.pdf 2>/dev/null || true
 	@echo "✓ prace-clean.pdf (jen finální)"
 

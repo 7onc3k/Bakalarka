@@ -102,19 +102,27 @@ o~redundanci složek mohli jen spekulovat.
 
 \paragraph{Pilotní fáze.}
 \phantomsection\label{sec:pilotni-iterace}%
-Pilotní fáze běží dokud agent nesplní exit kritéria definovaná
-ve sloupci \textit{Exit kritérium}
-tabulky~\ref{tab:metriky-prehled}. S~ohledem na scope práce (jeden
-projekt, jeden model) definujeme \textit{úspěšný běh} jako dokončení
-bez manuálního zásahu, při kterém agent splnil všechna tvrdá
-deterministická kritéria (\acs{P1}--\acs{P5}, \acs{Q1}, \acs{Q2},
-\acs{Q5}, \acs{Q6}) a~překročil prahy prahových metrik
-(\acs{Q3}~$\geq$~70\,\%, \acs{Q7}~$\leq$~10 na funkci); judge-based
-metriky u~tohoto běhu nesmí klesnout pod baseline. Pilotní fáze
-končí, jakmile takový běh nastane a~vykáže prokazatelné zlepšení
-oproti baseline. Tím se ukazuje proveditelnost postupu na jednom
-případu; neimplikuje to, že zvolené prahy obecně platí pro všechny
-agenty a~projekty.
+Pilotní fáze postupuje proti exit kritériím ve sloupci
+\textit{Exit kritérium} tabulky~\ref{tab:metriky-prehled}. Tato
+kritéria představují principiální ideál: striktní 42/42 referenčních
+testů, nulové lint warnings, nulové porušení složitosti. Sám zvolený
+projekt nemusí být v~tomto smyslu plně dosažitelný v~jediném
+autonomním běhu; pro orientační srovnání měla i~referenční implementace
+napsaná ručně tři kosmetická lint warnings
+(sekce~\ref{sec:konstrukce-specifikace}). Pro praktické řízení iterací
+proto pracujeme s~\textit{operačními prahy} (Q2~$\geq$~37/42, \acs{Q3}
+$\geq$~70\,\%, Q4~$\geq$~24/25, Q5~$\leq$~1, Q7~$\leq$~1 porušení),
+které lépe rozlišují běhy mezi sebou a~odpovídají barevnému kódování
+souhrnné tabulky a~vizualizací v~kapitole~\ref{kap:vyhodnoceni}.
+Pilotní fázi proto vyhodnocujeme dvěma pohledy současně: kolik
+\textit{striktních} kritérií běh splnil (kapitola~\ref{kap:vysledky},
+počty ``$X$ z~10'') a~zda splnil operační prahy
+(graf~\ref{fig:variability-quality}). Pilotní fáze končí, když některý
+běh splní celý procesní checklist \acs{P1}--\acs{P5} a~vykáže
+operačně rozeznatelné zlepšení proti baseline; další iterace by
+přinášely jen drobné lokální úpravy. Tato definice odpovídá
+proveditelnosti na jednom případu, neimplikuje obecnou platnost
+prahů pro jiné agenty a~projekty.
 
 \paragraph{Ablace.}
 \phantomsection\label{sec:komparativni-variace}%
@@ -430,12 +438,10 @@ kritérium a~slouží k~porovnání nákladů mezi iteracemi.
 \textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} \\
 \midrule
 \acs{E1} & Spotřeba tokenů &
-Z~exportu \texttt{transcript.json} tři složky v~tisících: maximální vstup
-na jednom kroku včetně cache, součet výstupních tokenů a~součet cache
-tokenů přes kroky. Rozdělení odlišuje šířku promptu, objem generování
-a~cenu opakovaného čtení kontextu. Motivace: Gloaguen et
-al.~\cite{gloaguen2025agentsmd} ukazují, že context files zvyšují
-inference cost o~více než 20\,\%. \\
+Tři složky z~exportu session v~tisících: maximální vstup na jednom
+kroku, součet výstupních tokenů a~součet cache tokenů. Motivace:
+Gloaguen et al.~\cite{gloaguen2025agentsmd} ukazují, že context files
+zvyšují inference cost o~více než 20\,\%. \\
 \addlinespace
 \acs{E2} & Trvání běhu &
 Wall-clock time v~minutách od spuštění agenta po poslední commit. \\
@@ -531,7 +537,7 @@ dostane kromě instrukcí.
 
 \textbf{Model MiniMax-M2.5} byl zvolen jako model schopný autonomně
 dokončit zadaný úkol. Cílem práce je vyhodnotit sadu metrik
-a~iterativní postup, ne srovnávat výkon modelů — volba konkrétního
+a~iterativní postup, ne srovnávat výkon modelů; volba konkrétního
 modelu je v~tomto ohledu sekundární. MiniMax-M2.5 je zároveň z~jiné
 modelové rodiny než judge (GLM-5, Zhipu AI), čímž se eliminuje
 self-preference bias~(sekce~\ref{sec:llm-as-judge}).
@@ -546,6 +552,21 @@ významně omezuje vliv vedlejších vstupů z~prostředí, ale
 nevylučuje všechny zdroje variability. Sdílený
 autentizační svazek zajišťuje konzistentní přístup k~API napříč
 běhy.
+
+\textbf{Harness OpenCode} je CLI nástroj, který orchestruje běh
+agenta: spravuje session, zprostředkovává volání modelu, zpřístupňuje
+nástroje (čtení a~zápis souborů, shell, vyhledávání) a~zaznamenává
+transcript. Harness sám není měřeným chováním; měříme to, co agent
+přes něj udělá. Verze nástroje je pinovaná v~Docker image, konfigurace
+agenta (povolené nástroje, MCP servery) je součástí auditovatelného
+balíku v~repozitáři práce. Volba OpenCode je dána open-source
+licencí (umožňuje pinování verze a~záznam interní telemetrie),
+strojově čitelným exportem session a~přístupem do interní databáze,
+ze které čerpá metrika \acs{E3} (počet kompakcí kontextu).
+Vlastnosti harness, které ovlivňují měření, jsou diskutovány
+u~jednotlivých metrik: tichý retry po selhání API
+(sekce~\ref{sec:limity-vysledky}) a~automatická kompakce kontextu
+(metrika \acs{E3}).
 
 \textbf{System prompt agenta} (\texttt{build.md}) nahrazuje výchozí
 system prompt nástroje OpenCode, jehož instrukce o~verzování
@@ -604,13 +625,13 @@ Tabulka~\ref{tab:zaznamy-bezhu} shrnuje strukturu balíku.
 \end{table}
 
 Doplňující materiály jsou v~repozitáři práce
-(\url{https://github.com/7onc3k/Bakalarka}): kompletní operační
+(\url{https://github.com/7onc3k/Bakalarka/tree/thesis-final}): kompletní operační
 procedura, šablony \texttt{FINDINGS.md} a~\texttt{DIAGNOSIS.md},
 všechny verze \texttt{AGENTS.md} včetně baseline a~ablačních
 variant, plné rubriky a~prompty LLM-as-judge, transcripty
 session, surová výstupní data nástrojů a~specifikace projektu
 v~plném znění. Stav repozitáře k~datu odevzdání je zafixován
-gitovým tagem.
+gitovým tagem \texttt{thesis-final}.
 
 
 \subsection{Diagnostika a~úprava instrukcí}
@@ -718,7 +739,9 @@ místě. Sloupec \textit{typ} rozlišuje deterministická exit kritéria
 (automatizované měření), judge-based metriky
 (rubrikové hodnocení LLM-as-judge) a~záznamové metriky
 (bez kritéria, slouží k~porovnání mezi běhy). Prahové požadavky
-jsou uvedeny ve sloupci \textit{Exit kritérium}. Způsob sběru
+ve~sloupci \textit{Exit kritérium} popisují striktní ideál; pro
+praktické rozlišení mezi běhy se v~analýze používají též operační
+prahy popsané v~sekci~\ref{sec:pilotni-iterace}. Způsob sběru
 odpovídá rozlišení \mmet{det}, \mmet{qual} a~\mmet{zaz}
 zavedenému v~kapitole~\ref{kap:teorie}.
 
@@ -726,8 +749,8 @@ zavedenému v~kapitole~\ref{kap:teorie}.
 \centering
 \caption{Sada metrik: kód, měřená vlastnost, nástroj, exit kritérium a~typ}
 \label{tab:metriky-prehled}
-\footnotesize
-\setlength{\tabcolsep}{3pt}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
 \begin{tabular}{@{}lllll@{}}
 \toprule
 \textbf{Kód} & \textbf{Metrika} & \textbf{Nástroj} & \textbf{Exit kritérium} & \textbf{Typ} \\

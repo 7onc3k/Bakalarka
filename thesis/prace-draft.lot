@@ -1,19 +1,27 @@
+\acswitchoff 
 \babel@toc {czech}{}\relax 
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {3.1}{\ignorespaces Sada metrik: kód, měřená vlastnost, nástroj, exit kritérium a~typ}}{24}{table.caption.18}%
+\contentsline {table}{\numberline {3.1}{\ignorespaces Procesní compliance metriky P1--P5}}{28}{table.caption.6}%
+\contentsline {table}{\numberline {3.2}{\ignorespaces Judge-based procesní metriky P6--P8}}{29}{table.caption.7}%
+\contentsline {table}{\numberline {3.3}{\ignorespaces Metriky funkční korektnosti Q1--Q2}}{29}{table.caption.8}%
+\contentsline {table}{\numberline {3.4}{\ignorespaces Metriky kvality testů Q3--Q4}}{30}{table.caption.10}%
+\contentsline {table}{\numberline {3.5}{\ignorespaces Metriky kvality kódu Q5--Q8}}{30}{table.caption.11}%
+\contentsline {table}{\numberline {3.6}{\ignorespaces Metriky efektivity E1--E3}}{31}{table.caption.12}%
+\contentsline {table}{\numberline {3.7}{\ignorespaces Záznamy pořízené pro jeden běh a~jednu iteraci}}{33}{table.caption.13}%
+\contentsline {table}{\numberline {3.8}{\ignorespaces Diagnostické rámce a~otázky, které kladou}}{34}{table.caption.14}%
+\contentsline {table}{\numberline {3.9}{\ignorespaces Mapování klasifikace příčiny na diagnostický rámec a~typ opravy}}{34}{table.caption.15}%
+\contentsline {table}{\numberline {3.10}{\ignorespaces Sada metrik: kód, měřená vlastnost, nástroj, exit kritérium a~typ}}{35}{table.caption.16}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {4.1}{\ignorespaces Mapování sekcí baseline \texttt {AGENTS.md} na metriky}}{31}{table.caption.20}%
-\contentsline {table}{\numberline {4.2}{\ignorespaces Pilot-r1: naměřené metriky}}{32}{table.caption.21}%
-\contentsline {table}{\numberline {4.3}{\ignorespaces Pilot-r2: metriky s~změnou oproti r1}}{33}{table.caption.26}%
-\contentsline {table}{\numberline {4.4}{\ignorespaces Pilot-r3: metriky s~změnou oproti r2}}{35}{table.caption.30}%
-\contentsline {table}{\numberline {4.5}{\ignorespaces Pilot-r4: metriky s~změnou oproti r3}}{36}{table.caption.34}%
-\contentsline {table}{\numberline {4.6}{\ignorespaces Pilot-r5: metriky s~změnou oproti r3}}{38}{table.caption.38}%
-\contentsline {table}{\numberline {4.7}{\ignorespaces Ablace~A: srovnání s~r3 (bez verifikačních kroků)}}{43}{table.caption.46}%
-\contentsline {table}{\numberline {4.8}{\ignorespaces Ablace~B: srovnání s~r3 (bez sekce Package Quality)}}{44}{table.caption.48}%
-\contentsline {table}{\numberline {4.9}{\ignorespaces Souhrnné výsledky všech běhů (pilot + ablace)}}{46}{table.caption.50}%
-\addvspace {10\p@ }
-\addvspace {10\p@ }
+\contentsline {table}{\numberline {4.1}{\ignorespaces Mapování sekcí baseline \texttt {AGENTS.md} na metriky}}{42}{table.caption.20}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces Pilot-r1: naměřené metriky}}{43}{table.caption.21}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces Pilot-r2: metriky s~změnou oproti r1}}{44}{table.caption.23}%
+\contentsline {table}{\numberline {4.4}{\ignorespaces Pilot-r3: metriky s~změnou oproti r2}}{46}{table.caption.25}%
+\contentsline {table}{\numberline {4.5}{\ignorespaces Pilot-r4: metriky s~změnou oproti r3}}{47}{table.caption.27}%
+\contentsline {table}{\numberline {4.6}{\ignorespaces Pilot-r5: metriky s~změnou oproti r3}}{48}{table.caption.29}%
+\contentsline {table}{\numberline {4.7}{\ignorespaces Ablace~A: srovnání s~r3 (bez verifikačních kroků)}}{51}{table.caption.32}%
+\contentsline {table}{\numberline {4.8}{\ignorespaces Ablace~B: srovnání s~r3 (bez sekce Package Quality)}}{53}{table.caption.33}%
+\contentsline {table}{\numberline {4.9}{\ignorespaces Souhrnné výsledky všech běhů (pilot + ablace)}}{55}{table.caption.34}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }

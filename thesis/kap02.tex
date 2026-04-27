@@ -176,11 +176,11 @@ kódu, se kterým budou dál pracovat~\cite{kitchenham1996}. Tyto pohledy
 jsou navíc vzájemně nezávislé. Funkčně správný software může být obtížně udržovatelný,
 a~naopak elegantně napsaný kód nemusí dělat to, co má.
 
-Standardizovaným rámcem, který tuto vícevrstvou povahu formalizuje,
-je ISO/IEC~25010~\cite{iso25010}. Model rozkládá kvalitu produktu do
-osmi charakteristik (funkční vhodnost, výkonnostní efektivita,
+Standardizovaný rámec pro tuto vícevrstvou povahu poskytuje
+ISO/IEC~25010~\cite{iso25010}. Model rozkládá kvalitu produktu do
+osmi charakteristik: funkční vhodnost, výkonnostní efektivita,
 kompatibilita, použitelnost, spolehlivost, bezpečnost, udržovatelnost
-a~přenositelnost), které lze posuzovat odděleně. Pro tuto práci jsou
+a~přenositelnost. Tyto charakteristiky lze posuzovat odděleně. Pro tuto práci jsou
 nejrelevantnější dvě. \textit{Funkční vhodnost} vyjadřuje, do jaké
 míry software poskytuje funkce naplňující stanovené potřeby,
 a~v~praxi se zajišťuje testováním. \textit{Udržovatelnost} vyjadřuje,
@@ -441,25 +441,20 @@ Ehsani et al.~\cite{ehsani2026failedprs}) shodně dokládají, že
 pass/fail výsledek nezachycuje, zda by patch obstál v~code review,
 byl udržovatelný nebo vznikl auditovatelným postupem.
 
-% TODO(kap02-hodnoceni): zapracovat Yin et al. 2025 (arXiv:2511.00872,
-% yin2025agents) jako další důkaz mezery při hodnocení harness/frameworků.
-% Yin hodnotí 7 agentních frameworků na 3 úlohách ve 3 osách: effectiveness
-% (task success na benchmarku), efficiency (reasoning/orchestration -- délka
-% kroků, korekční pokusy), overhead (tokeny). Sami se prezentují jako
-% "holistic" multi-dim eval (listopad 2025). Ale jejich "process" = reasoning
-% execution path, ne SE workflow (issues/branches/PR/test-first). Code quality
-% beyond correctness chybí úplně. Hodí se jako příklad nejnovější
-% multi-dim eval, která stále nepokrývá SE praktiky ani strukturální kvalitu.
-% Materiál: thesis/sources/yin-2025-agent-frameworks-evaluation.pdf.
 Existují benchmarky, které hodnocení rozšiřují nad rámec pass/fail.
 SWE-bench Pro~\cite{swebenchpro2025} přidává strukturované
 požadavky, ACE-Bench~\cite{acebench2025} testuje end-to-end vývoj
 a~FeatureBench~\cite{featurebench2026} hodnotí implementaci celých
-funkcí. Žádný z~nich však systematicky neměří kvalitu procesu (jak
-agent organizoval práci), kvalitu kódu nad rámec funkční korektnosti
-(udržovatelnost, čistota) a~efektivitu (spotřeba zdrojů) současně.
-Tato mezera naznačuje potřebu metrického rámce, který by
-dimenze procesu, kvality kódu a~efektivity pokrýval současně.
+funkcí. Yin et al.~\cite{yin2025agents} jdou ještě dál a~hodnotí
+sedm agentních frameworků na třech osách (úspěšnost, efektivita
+reasoning kroků a~tokenová režie); jejich pohled na proces je ale
+omezen na trasu reasoning kroků agenta a~strukturální kvalita kódu
+v~hodnocení chybí. Žádný z~uvedených benchmarků tedy systematicky
+neměří kvalitu procesu (jak agent organizoval práci), kvalitu kódu
+nad rámec funkční korektnosti (udržovatelnost, čistota) a~efektivitu
+(spotřeba zdrojů) současně. Tato mezera naznačuje potřebu metrického
+rámce, který by dimenze procesu, kvality kódu a~efektivity pokrýval
+současně.
 Návrh takového rámce a~jeho operacionalizaci v~kontextu této
 práce popisuje kapitola~\ref{kap:metodika}.
 

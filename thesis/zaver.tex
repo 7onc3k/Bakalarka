@@ -40,58 +40,12 @@ klesla. Výsledky zároveň ukázaly, že procesní compliance je výrazně
 citlivá na nedeterminismus modelu. Stejná sada instrukcí proto může
 vést k~odlišnému dodržení vícekrokového workflow.
 
-% TODO(zaver-prinos): rozšířit tento odstavec o explicitní 3-bodový claim
-% přínosu (kalibrovaně, viz research níže):
-%   (1) Sada 19 metrik P/Q/E adaptující Fenton & Bieman taxonomii pro AI
-%       coding agenty -- konkrétní výběr metrik a kombinace
-%       deterministických/judge/záznamových je autorská.
-%   (2) Iterativní postup s 5-rámcovou diagnostikou (Mao FSE, Hassan SASE,
-%       Razavi/Breunig, Lulla, filter Li) -- syntéza dosud samostatně
-%       používaných rámců do jednoho toolkitu pro coding agenty.
-%   (3) Empirické zjištění o spektru operacionalizace (compliance ordering
-%       pravidlo < příkaz < verifikační krok) + pairing heuristika.
-%
-% RESEARCH (2026-04-26) o spektru operacionalizace: taxonomie sama NENÍ nová.
-% Existující literatura:
-%   - Declarative vs imperative prompting: Wu (Three Ways to Program with
-%     LLMs); Liu et al. PDL arXiv:2410.19135 2024; Prompt Decorators
-%     arXiv:2510.19850 2025. Pokrývá pravidlo (declarative) vs příkaz
-%     (imperative) přímo.
-%   - Self-Refine / Self-Verification: Madaan 2023 (Self-Refine);
-%     Weng 2022 (Self-Verification reasoners); Miao SelfCheck
-%     arXiv:2308.00436. Odpovídá verifikačnímu kroku, ale framed
-%     pro reasoning, ne jako instruction-design tier.
-%   - Mao et al. FSE 2025: 7 component types (Constraints/Directive/
-%     Workflow). Naše tiers ≈ jejich komponenty, ale jiná osa
-%     (compliance/operationalizace vs component type).
-%   - Builder.io / Copilot industry: Rules vs Commands vs Skills.
-%     Pokrývá tiers 1-2, ne verifikační.
-%   - Breunig 2025 "operationalization": SYSTEMS-LEVEL meaning
-%     (versioning, observability, testability), NEKONFLATOVAT.
-% Kalibrace claim: přínos = (i) compliance-ordering pro coding agenty,
-% (ii) pairing heuristika; samotné rozlišení deklarativní/imperativní/
-% self-verification čerpá z výše uvedených zdrojů. Taxonomii samotnou
-% NEOZNAČOVAT za novum.
 Hlavním přínosem práce je iterativní postup a~sada metrik, které
 může praktik aplikovat na vlastním projektu s~vlastními prahy.
 Konkrétní instrukce a~naměřené hodnoty platí pro tuto případovou
 studii. Přenositelný je postup, ne výsledná čísla. Práce je omezena
 na jeden model a~jeden projekt. Závěry mají povahu analytické
 generalizace na teorii, nikoliv statistické generalizace na populaci.
-
-% TODO(zaver-scope): Zvážit explicitní delimitaci "co tato práce není" před
-% odstavcem s doporučeními. Feasibility framing (ř. 46--48) je tu dobře, ale
-% chybí pojmenování, čím práce NENÍ -- není benchmark agentů, není přenositelná
-% instrukční sada, není srovnání modelů ani prompt-engineering návod. Bez toho
-% může oponent v posudku argumentovat, že rozsah je roztříštěný (metriky +
-% postup + ablace + AGENTS.md), protože hlavní výstup splývá s vedlejšími
-% produkty. Jedna věta navíc tohle riziko zavře.
-%
-% TODO(zaver-meta): Závěr zmiňuje instrukce jako "samostatně měřenou nezávislou
-% proměnnou" (ř. 53--54), ale neodkazuje zpět na meta-strukturu (testbed /
-% subjekt / IV) z metodiky. Pokud bude tato struktura explicitně pojmenovaná
-% v úvodu (viz TODO uvod-meta), závěr by ji měl uzavřít -- aby komise viděla,
-% že práce o této meta-úrovni vědomě uvažuje a nedrolí ji.
 
 Pro praktika z~toho plyne jednoduché doporučení: nestačí sledovat,
 zda agent úkol vyřešil, ale i~jak k~řešení došel a~jak kvalitní kód

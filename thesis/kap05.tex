@@ -9,16 +9,6 @@ výzkumu (sekce~\ref{sec:porovnani-literatura}) a~nakonec diskutuje,
 jak se metodologická omezení identifikovaná v~sekci~\ref{sec:omezeni-validita}
 projevila v~praxi (sekce~\ref{sec:limity-vysledky}).
 
-\begin{raw}
-\textbf{Audit trail (5.1, 2026-04-22):}
-Sekce interpretace byla při finalizaci sladěna s~finální formulací tří
-cílů z~kapitoly~\ref{kap:vymezeni}. Uzavřené změny: cíl~1 nyní hodnotí
-přínos sady metrik nad pass/fail výsledky, cíl~2 interpretuje iterace
-jako postup řízený metrikami a~cíl~3 používá exploratory wording
-odpovídající ablacím. Současně byly ztlumeny příliš silné formulace
-a~zpřesněno členění podskupin metrik.
-\end{raw}
-
 %% ================================================================
 \section{Interpretace výsledků}
 \label{sec:interpretace}
@@ -29,25 +19,6 @@ naplnila cíle stanovené v~kapitole~\ref{kap:vymezeni}. Vracíme se tím
 k~hlavnímu problému práce: jak hodnotit a~iterativně zlepšovat chování
 AI coding agenta v~situaci, kdy samotný pass/fail výsledek nestačí pro
 praktické rozhodování o použitelnosti řešení.
-
-\begin{raw}
-Co výsledky znamenají: propojení s cíli práce.
-
-\begin{itemize}
-    \item Které složky scaffoldingu jsou nezbytné a které redundantní?
-    \item Jaký kontext agent potřebuje k dodržování SWE praktik?
-    \item Odpovědi na cíle práce (viz kap01)
-\end{itemize}
-
-\medskip
-\textbf{Doporučení k validaci (strukturální audit, 2026-04-22):}
-Zvážit, zda 5.1.1 neplní tři role najednou: (1) obhajobu přínosu
-sady metrik, (2) průchod jednotlivými skupinami metrik a~(3) kritiku
-designu měření. Pokud ano, sekci zkrátit na jasný claim o~přínosu sady
-a~kritickou reflexi designu přesunout do samostatného závěru nebo do
-limitační části. Riziko současného stavu: katalog běhových detailů
-oslabuje chapter contract ``interpretace cíle~1''.
-\end{raw}
 
 %% ----------------------------------------------------------------
 \subsection{Cíl~1: Sada metrik}
@@ -115,7 +86,8 @@ se ale metriky chovají odlišně podle toho, co měří.
 \acs{Q1} zůstala stabilní ve všech bězích: agent vždy vytvořil
 veřejné API odpovídající kontraktu, takže \acs{Q1} na této úloze
 nepřinesla rozlišení. \ac{Q2} je naopak nejvariabilnější produktová
-metrika (splněna v~6 z~9 běhů): opakovaně selhávaly testy
+metrika: striktní exit (42/42) nesplnil žádný běh, operační práh
+$\geq$~37/42 splnilo 6 z~9 běhů. Opakovaně selhávaly testy
 pokrývající přechody pause/resume. Specifikace i~API kontrakt
 jednoznačně vyžadují zachování elapsed time (pole
 \texttt{pausedElapsed}), ale agent toto pole opakovaně ignoroval.
@@ -206,13 +178,6 @@ na cyklické debugování, ne na kvalitnější práci
 
 \input{generated/scatter-cost-performance}
 
-%% TODO (2026-03-29): Scatter plot — zvážit jestli osa Y (počet splněných
-%% deterministických kritérií) je nejlepší volba. Alternativy:
-%% - Q2 pass rate (jemnější škála, přímo měří kvalitu implementace)
-%% - Kompozitní skóre (vážený průměr P+Q)
-%% - Dvě osy: cena vs Q2 a cena vs P compliance
-%% Aktuální graf ukazuje že cena ≠ kvalita, ale "počet kritérií" je hrubé.
-
 \paragraph{Shrnutí a~reflexe.}
 Sada se ukázala jako proveditelná pro opakované měření:
 \mmet{det} se extrahují automatizovaně, \mmet{qual} hodnotí
@@ -234,131 +199,6 @@ zachytily problémy které automatizované nevidí, ale bez validace
 Cohenovým~$\kappa$ zůstávají podpůrnými indikátory. Metriky
 efektivity byly na této úloze nejslabší skupinou: pouze \acs{E1}
 přinesla použitelný insight.
-\begin{raw}
-\textbf{Audit trail, předchozí verze 5.1.1 (DRAFT v1):}
-
-\paragraph{Procesní metriky jako hlavní přínos.}
-Stávající benchmarky (SWE-bench, HumanEval) měří funkční korektnost:
-projdou testy, tedy agent úlohu vyřešil. Procesní metriky P1--P5
-měří \textit{jak} agent pracoval: zda vytvořil issues, branche,
-testy před kódem, PR. Tuto dimenzi žádný z~existujících benchmarků
-nepokrývá. Na naší případové studii se ukázala jako informativní:
-běh~r3 dosáhl Q2~=~41/42 (funkčně téměř bezchybný), ale procesní
-metriky v~následujících bězích r4 a~r5 se stejnými instrukcemi
-odhalily, že dodržování pracovního postupu je nestabilní. Bez
-procesních metrik by tyto běhy vypadaly srovnatelně; s~nimi vidíme
-podstatný rozdíl v~chování agenta.
-
-\paragraph{Kvalitativní metriky.}
-Metriky kvality kódu (Q3--Q8) rozšiřují binární pohled benchmarků
-na hlubší analýzu. Q8 (design quality, LLM-as-judge) identifikovalo
-chybějící modularitu a~dokumentaci v~ablačních bězích, přestože
-automatizované metriky (Q5, Q6, Q7) žádný problém nehlásily.
-Kombinace automatizovaných a~kvalitativních metrik zachycuje víc
-než kterýkoliv typ sám.
-
-\paragraph{Stabilní a variabilní metriky.}
-Tři metriky zůstaly stabilní napříč všemi devíti běhy: Q1 (API
-contract match~=~shoda), Q6 (typecheck errors~=~0) a~E3 (žádná
-kompakce kontextu). U~Q1 a~Q6 lze nabídnout hypotézu proč: Q1 naznačuje, že
-model z~tréninku zná konvenci veřejného API natolik, že ji dodrží
-i~bez explicitní instrukce. Q6 pravděpodobně souvisí s~tím, že
-statické typování v~TypeScriptu je pro LLM explicitnější než
-dynamické jazyky; kompilátor odmítne nevalidní kód dříve, než
-se projeví v~metrice. Alternativním vysvětlením je, že obě metriky
-mají příliš hrubý práh: Q1 je binární (match/no match, nezachytí
-drobné odchylky v~pojmenování), Q6 počítá chyby kompilace (nezachytí
-problematické \texttt{any} typy). Jemnější měření, například
-srovnání názvů metod s~kontraktem, nebo podíl explicitních typů,
-by mohlo odhalit rozdíly, které binární metriky nezachytí.
-
-Nejvyšší variabilitu vykazovaly procesní metriky P2--P5. Kolísaly
-nejen mezi iteracemi s~různými instrukcemi, ale i~mezi běhy se
-stejnými instrukcemi (r3: 5/5 vs.\ r4: $\sim$3/5 vs.\ r5:
-$\sim$1/5). Tato variabilita pravděpodobně neodráží slabinu metrik,
-ale podstatnou vlastnost měřeného systému: dodržování vícekrokového
-pracovního postupu je u~tohoto modelu nedeterministické. Metriky
-tento fenomén zachytily, což umožnilo diagnostiku v~cíli~2.
-
-\paragraph{Proveditelnost a limity.}
-Sada se ukázala jako proveditelná pro opakované měření.
-Deterministické metriky se extrahují automatizovaně, kvalitativní
-metriky hodnotí LLM-as-judge s~fixní rubrikou. Jedno kompletní
-měření trvá řádově minuty, což umožňuje zpětnou vazbu v~rámci jedné
-iterace. Při dalším použití by stálo za úvahu přidat jemnější
-škálu pro Q1 a~Q6 (viz výše) a~rozšířit procesní metriky
-o~transparentnost agentova reasoning procesu: naše P1--P8 měří
-pozorovatelné artefakty (commity, issues, PR), ale ne kvalitu
-rozhodovacího procesu, který k~nim vedl.
-\end{raw}
-
-\begin{raw}
-\textbf{TODO (2026-03-26):}
-\begin{itemize}
-    \item \textbf{Přeučení na metriky (overfitting):} Iterativní postup
-          optimalizuje instrukce na fixní sadu metrik. Hrozí, že instrukce
-          se ``přeučí'' na konkrétní metriky místo aby zlepšily obecné
-          chování. Příklad: přidání \texttt{npx eslint} zlepší Q5, ale
-          neznamená že agent píše lepší kód; jen ho zkontroluje.
-          Kam patří: future work nebo limity? Zvážit.
-    \item \textbf{E3 (compaction):} HOTOVO. Snapshot heuristika nahrazena
-          přímým dotazem do OpenCode DB (\texttt{time\_compacting}).
-          Kompakce nenastala v~žádném běhu.
-    \item \textbf{Benchmark research (HOTOVO):} Žádný benchmark neměří
-          všechny 3~dimenze (proces + kvalita + efektivita) společně.
-          Doplnit do 5.1.1 nebo do porovnání s~literaturou (5.2):
-          \begin{itemize}
-              \item \textbf{METR (2026):} polovina SWE-bench passing PRs
-                    by nebyla merged. Přímo validuje náš argument
-                    že pass/fail nestačí. Citovat!
-              \item \textbf{GitGoodBench (2025, JetBrains):} měří kvalitu
-                    commitů (LLM-as-judge); nejbližší našim P6--P8,
-                    ale pokrývá jen git operace, ne celý SDLC.
-              \item \textbf{RACE (Zheng 2024):} readability, maintainability,
-                    efficiency; blízké našim Q5--Q8, ale function-level.
-              \item \textbf{DevBench (Li 2024):} 5~SDLC fází včetně
-                    design quality; částečně proces, ale implementation
-                    je stále pass/fail.
-              \item \textbf{MAESTRO (2026):} execution traces, run-to-run
-                    variance; transparentnost procesu, ale ne pro kódování.
-              \item \textbf{Terminal-bench:} jen pass/fail, neměří proces.
-          \end{itemize}
-    \item \textbf{Kam doplnit:} METR + GitGoodBench do kap02 (gap argument
-          ; i~když pass/fail projde, kvalita nemusí stačit). RACE, DevBench
-          do kap02 (existující multi-dim benchmarky). Do 5.2 porovnání
-          naší sady s~těmito benchmarky.
-\end{itemize}
-
-\medskip
-\textbf{Audit trail, klíčové rozhodnutí 5.1.1 (2026-03-26):}
-
-Předchozí verze (DRAFT v1, viz audit trail výše) míchala dvě věci:
-prezentaci výsledků (hodnoty metrik z~běhů) a~diskuzi o~designu
-sady. Hodnoty patří do kap04, v~5.1.1 diskutujeme co jsme se
-dozvěděli \textbf{o~metrikách samotných}: jejich design, co
-funguje, co ne, co bychom změnili. Konkrétní čísla z~běhů jen jako
-ilustrace, ne jako narování tabulky.
-
-Rozlišení: kap04 = co jsme naměřili; kap05 5.1.1 = co jsme se
-dozvěděli o~designu metrik.
-
-Struktura 5.1.1 sleduje 3~dimenze z~cíle~1 (proces, kvalita,
-efektivita) + limity.
-
-\medskip
-\textbf{TODO, úpravy mimo kap05:}
-\begin{itemize}
-    \item \textbf{CLAUDE.md:} odstranit reference na DSR terminologii
-          (artefakt, build-evaluate), ponechat ML styl.
-    \item \textbf{kap03 metriky efektivity:} příliš technický odstavec
-          (token výpočty), patří do kap04/přílohy. Odkaz na pilot-r1
-          nepatří do metodiky (TODO již přidáno).
-    \item \textbf{kap03 Fenton:} upřesnit že Fentonova taxonomie
-          (Process/Product/Resource) je z~doby před LLM; naše
-          adaptace (P/Q/E) přidává LLM-as-judge metriky které Fenton
-          neměl. Zmapovat kde přesně mapujeme a~kde rozšiřujeme.
-\end{itemize}
-\end{raw}
 
 %% ----------------------------------------------------------------
 \subsection{Cíl~2: Iterativní postup}
@@ -398,7 +238,8 @@ verifikační krok (agent dodržuje).
                   font=\small\sffamily, align=center},
     result/.style={font=\scriptsize\sffamily, align=center,
                    text=black!60},
-    example/.style={font=\scriptsize, align=left, text width=3.0cm},
+    example/.style={font=\scriptsize, align=left, text width=3.0cm,
+                    minimum height=0.85cm, anchor=north, inner ysep=2pt},
     arr/.style={->, thick, gray!70},
     node distance=0.6cm and 1.0cm
 ]
@@ -720,6 +561,19 @@ metrika zachytila pokles designové kvality v~ablacích, který
 \mmet{det} nehlásily. Bez $\kappa$ validace ale nelze sílu
 tohoto závěru plně posoudit.
 
+\textbf{Optimalizace na fixní sadu metrik.}
+Iterativní postup ladí instrukce proti pevně dané sadě 19~metrik.
+S~každou iterací roste riziko, že úprava cílí na metriku samotnou,
+ne na chování, které metrika měří. Příkladem je přidání
+\texttt{npx eslint} do verifikačních kroků: \acs{Q5} kleslo,
+ale agent kvůli tomu nepíše čistší kód, jen ho po sobě kontroluje.
+Goodhartův zákon je v~úzké sadě metrik akutnější; pokrytí třemi
+dimenzemi ho částečně omezuje, protože zlepšení jedné metriky bez
+zlepšení reálného chování se obvykle projeví zhoršením v~jiné.
+Spolehlivá ochrana proti přeučení by ale vyžadovala validaci na
+nezávislé sadě metrik nebo na jiném projektu, což přesahuje rozsah
+této studie.
+
 
 %% ---- Skupina 3: Kde výsledky neplatí ----
 
@@ -744,41 +598,6 @@ zpracovávat instrukční soubory odlišně. Zda by instrukce fungovaly
 stejně na projektech s~vyšší nejednoznačností specifikace, na
 jiných modelech nebo s~jinými nástroji, zůstává otevřenou otázkou
 (sekce~\ref{sec:dalsi-vyzkum}).
-
-\begin{raw}
-\textbf{Audit trail (DRAFT v3, 2026-04-04):} 3~skupiny podle
-dopadu: (1)~co oslabuje závěry (nedeterminismus, efekt učení
-autora, konfigurace, tiché ukončení), (2)~co omezuje měření
-(nerozlišující metriky, $\kappa$), (3)~kde výsledky neplatí
-(kontrolované podmínky, generalizovatelnost+tool-specific).
-Oproti v2: odstraněn ``chybějící baseline bez instrukcí'' (ablace
-testují složky, ne přítomnost vs nepřítomnost; legitimní design),
-confirmation bias sloučen do efektu učení (diagnostika závisí na
-autorovi), E1 orientační a~AGENTS.md v~transcriptu odstraněny
-(implementační detail), infrastrukturní nedostatky P7+Q6 odstraněny
-(opraveny v~kódu), Q4 rubrika opravena (24$\to$25~AC, manuálně
-ověřeno).
-
-\medskip
-\textbf{Audit trail (DRAFT v1, 2026-03-26):} Předchozí verze měla
-8~samostatných témat (Nedeterminismus, Prompt sensitivity,
-Diagnostická chyba, ESLint disconnect, $\kappa$, Infrastruktura,
-Prostředí, Tiché ukončení, Generalizovatelnost). Sloučeno do
-6~bloků, pak do 3~skupin. Odstraněny: detaily E1 výpočtu,
-duplicitní odkaz na kap03, ESLint config disconnect, diagnostická
-chyba výzkumníka (data opravena), infrastrukturní nedostatky P7
-a~Q6 (opraveny v~kódu).
-
-\medskip
-\textbf{Doporučení k validaci (strukturální audit, 2026-04-22):}
-Znovu zkontrolovat rozhraní mezi sekcí 3.5 a~touto sekcí. Aktuálně se
-v~obou vrstvách vracejí podobná témata: nedeterminismus, validita
-judge-based metrik, Q4 reporting, změny prostředí a~generalizovatelnost.
-Pokud se potvrzuje překryv, 3.5 má nést předem deklarované hrozby
-designu a~tato sekce jen jejich konkrétní dopad na interpretaci
-výsledků v~datech. Riziko současného stavu: rozmazaný chapter contract
-mezi metodikou a~diskusí.
-\end{raw}
 
 \section{Doporučení pro praxi}
 \label{sec:doporuceni}
@@ -850,29 +669,6 @@ Praktický důsledek je přímočarý: místo delšího a~obecnějšího
 instrukčního souboru je účelnější budovat kratší, měřitelný pracovní
 postup s~jasnými verifikačními body a~opakovaně ho ladit podle dat.
 
-\begin{raw}
-\textbf{Audit trail (DRAFT v1, 2026-03-26):}
-5~doporučení: (1)~verifikační kroky klíčové, (2)~konkrétní
-instrukce > obecná pravidla, (3)~konvence redundantní,
-(4)~počítat s~nedeterminismem, (5)~minimální efektivní instrukce.
-
-\medskip
-\textbf{Audit trail (DRAFT v2, 2026-04-04):}
-Sloučeno 1+2 do operacionalizace; 3 přeformulováno (verifikace
-vs aktivace, ne ``redundantní''); 5 nahrazeno blokem o~iteraci
-na základě dat; doplněn disclaimer o~přenositelnosti (postup ano,
-prahy ne); doplněny konkrétní hodnoty z~ablací; odkaz na kap02
-operacionalizační spektrum.
-
-\medskip
-\textbf{Doporučení k validaci (strukturální audit, 2026-04-22):}
-Ověřit, zda sekce 5.4 přináší nový výstup pro praktika, nebo jen třetí
-průchod závěry z~5.1 a~5.2. Pokud se potvrzuje druhá možnost, sekci
-zkrátit na několik skutečně akčních doporučení a~odstranit pasáže,
-které jen znovu interpretují verifikační kroky, aktivaci vs.\ verifikaci
-nebo nedeterminismus bez nové vrstvy rozhodnutí.
-\end{raw}
-
 %% ================================================================
 \section{Náměty pro další výzkum}
 \label{sec:dalsi-vyzkum}
@@ -902,17 +698,9 @@ procesní instrukce vytváří nejen pozorovatelný, ale i~přenositelný
 pracovní kontext.
 
 \paragraph{Automatizace iteračního postupu.}
-%% TODO (2026-03-29): Rozšířit o automatizaci diagnostiky — konkrétně:
-%% 1. Klasifikace příčin (chybí/obecná/ignorovaná) je strukturovaná
-%%    a potenciálně automatizovatelná (LLM porovná metriky + FINDINGS
-%%    s textem instrukcí).
-%% 2. Prohledávání transcriptu jsme v pilotu nepotřebovali (stačily
-%%    metriky + git data), ale u složitějších úloh by mohl být nutný —
-%%    a tam by automatizace pomohla nejvíc (transcripty mají 26k-76k řádků).
-%% 3. Propojit s existujícím textem (PromptWizard, Prompt Alchemy).
 Fáze Diagnóza a~Úprava jsou v~této práci prováděny manuálně
 autorem. Frameworky jako PromptWizard~\cite{agarwal2024promptwizard}
-a~Prompt Alchemy~\cite{promptalchemy2025} ukazují, že cyklus
+a~Prompt Alchemy~\cite{ye2025promptalchemy} ukazují, že cyklus
 analýzy selhání a~návrhu úprav lze automatizovat. Kombinace
 automatizovaného prompt optimizeru s~metrikami P/Q/E by umožnila
 rychlejší iteraci bez manuální diagnózy.
@@ -926,37 +714,7 @@ běhu (agent musí explicitně potvrdit přečtení a~aktivaci
 pracovního postupu před prvním zápisem kódu) by mohl tento problém
 adresovat.
 
-\paragraph{Mechanismy účinku instrukcí a~unfaithful reasoning.}
-\begin{raw}
-\textbf{TODO (2026-03-30, aktualizováno):} Přepsat tento odstavec.
-Tři otevřené otázky přesunuté z~5.2:
-\begin{enumerate}
-\item \textbf{Proč konvence ovlivňují Q8?} Hypotéza: fungují jako
-      nápověda aktivující latentní znalosti modelu (analogie CoT:
-      Wei et al.\ 2022, Min et al.\ 2022). Pro emergentní chování
-      (architektura, design) které nelze verifikovat deterministicky
-      může být nápověda jediný dostupný nástroj. Ale nemáme data.
-\item \textbf{Proč pravidla nefungují?} Hypotézy: (a)~kumulace
-      instrukcí snižuje compliance (Curse of Instructions 2024:
-      $P(\text{all}) = P(\text{single})^N$), (b)~unfaithful reasoning
-      (Turpin et al.\ 2023, Lanham et al.\ 2023: agent zpracuje
-      instrukci v~CoT ale nekoná podle ní). Izolovat PROČ = future work.
-\item \textbf{Závisí optimum na modelu?} Lepší modely možná potřebují
-      méně specifické instrukce (expertise reversal, Kalyuga 2003).
-\end{enumerate}
-Zdroje k~doplnění do kap02: Turpin (arXiv:2305.04388), Lanham
-(arXiv:2307.13702), Curse of Instructions (OpenReview 2024).
-
-\medskip
-\textbf{Doporučení k validaci (strukturální audit, 2026-04-22):}
-Sekce 5.5 pravděpodobně míchá tři různé úrovně: čisté research
-questions, metodická rozšíření studie a~návrhy nových instrukčních
-mechanismů typu ingestion checkpoint. Před dalším přepisem ověřit,
-zda každá položka opravdu patří do ``dalšího výzkumu'' a~není spíš
-praktickým návrhem, limitation nebo spekulativní interpretací.
-Zvlášť tento odstavec je kandidát na zúžení, protože stojí více na
-analogiích a~hypotézách než na pevném napojení na data práce.
-\end{raw}
+\paragraph{Mechanismy účinku instrukcí.}
 Naše data naznačují dva odlišné mechanismy: \textit{vynucení}
 (verifikační kroky přímo kontrolují výstup) a~\textit{aktivace}
 (obecné konvence připomínají modelu znalosti z~tréninku). Analogie
@@ -996,82 +754,15 @@ s~vyšší nejednoznačností specifikace (sekce~\ref{sec:limity-vysledky}),
 kde by obecnější instrukce (enabling constraints) mohly být
 efektivnější než detailní příkazy.
 
-\begin{raw}
-Future work.
-
-\begingroup
-\sloppy
-\setlength{\emergencystretch}{1em}
-\begin{itemize}
-    \item Více modelů, více projektů
-    \item Systematické porovnání formátů specifikace
-    \item Multi-agent vs. single-agent scaffolding
-    \item Longitudinální studie (více issues, evoluce projektu)
-    \item \textbf{Proč agent nedodržuje multi-step workflow.} Pilotní data
-          ukazují, že agent dodržuje verifikační příkazy (jednokrokové akce)
-          deterministicky, ale multi-step workflow (issue~$\to$\allowbreak{}
-          branch~$\to$\allowbreak{} test~$\to$\allowbreak{} PR)
-          nedeterministicky: r3 dodržel kompletně, r5 zcela
-          ignoroval při téměř identických instrukcích. Možné vysvětlení:
-          (a)~jednoduché příkazy nevyžadují plánování, agent je kopíruje
-          do terminálu; workflow vyžaduje udržet plán přes desítky kroků.
-          (b)~Tréninková data modelu obsahují oba vzorce, strukturovaný
-          i~nestrukturovaný vývoj, a~model mezi nimi volí stochasticky.
-          (c)~Pozice instrukce v~kontextovém okně: s~rostoucí délkou konverzace
-          klesá vliv dřívějších instrukcí. Granulární ablace workflow struktury
-          (které kroky jsou kritické?) a~opakované běhy se stejnými instrukcemi
-          by tento fenomén pomohly lépe pochopit.
-    \item \textbf{Kontinuita práce mezi agenty.} \mgrp{P}
-          měří transparentnost artefaktů: issues, commit zprávy, PR popisy.
-          Otevřená otázka: stačí tato transparentnost k~tomu, aby jiný agent
-          (nebo člověk) navázal na rozpracovaný projekt? Testování handoff
-          scénářů by ověřilo, zda procesní scaffolding vytváří nejen
-          pozorovatelný, ale i~přenositelný pracovní kontext.
-    \item \textbf{Automatizace iteračního postupu.}\par\noindent
-          Fáze Diagnóza a~Úprava jsou v~této práci prováděny manuálně.
-          Frameworky jako PromptWizard\allowbreak{}
-          \cite{agarwal2024promptwizard} (Score→Critique→Synthesize) nebo
-          Prompt Alchemy~\cite{promptalchemy2025} ukazují, že tento cyklus
-          lze automatizovat: model sám analyzuje kde instrukce selhaly
-          a~navrhuje úpravy.\allowbreak{}
-          Kombinace automatizovaného APO s~metrikami P/Q/E
-          by umožnila rychlejší iteraci bez manuální diagnózy.
-\item \textbf{Ingestion checkpoint.} Pilotní data ukazují, že agent
-          instrukce přečte (v~transcriptu cituje jejich obsah), ale neaktivuje
-          je jako řídicí smyčku běhu; místo workflow z~\texttt{AGENTS.md}
-          použije vlastní implementační smyčku odvozenou ze specifikace.
-          Ověřitelný checkpoint na začátku běhu (agent musí explicitně
-          potvrdit přečtení a~aktivaci workflow před prvním zápisem kódu)
-          by mohl tento problém adresovat.
-\end{itemize}
-\endgroup
-
-\medskip
-\textbf{Doporučení k validaci (strukturální audit, 2026-04-22):}
-Při finalizaci 5.5 zkontrolovat, zda výsledný seznam drží jednotnou
-logiku. Preferovaný stav: každá položka = jedna otevřená výzkumná
-otázka nebo jedno jasné metodické rozšíření této studie. Kandidáti na
-vyřazení nebo přesun jsou body, které už působí jako návrh nového
-prompt designu nebo jako repackaging předchozí diskuse.
-\end{raw}
-
-\begin{raw}
-\textbf{Feature work / námět k diskuzi: exit kritéria jako součást instrukcí:}
-
-Otázka: co by se stalo kdybychom agentovi předali exit kritéria přímo v AGENTS.md?
-(``Musíš dosáhnout P1=5/5, Q3$\geq$70\,\%, Q5=0; ověř si to před PR.'')
-
-Argument PRO: pokud máme dostatečný počet metrik pokrývající různé dimenze (proces, kvalita, efektivita),
-optimalizace na metriky = dobrá práce. Goodhartův zákon platí pro jednorozměrné metriky;
-agent který optimalizuje jen coverage může zanedbat kvalitu. Ale s 19 metrikami napříč P/Q/E
-je těžší gaminovat všechny najednou bez skutečné kvality.
-%% Pozn.: původně bylo ``13 metrik'' --- opraveno na 19 (P1-P8 + Q1-Q8 + E1-E3).
-
-Argument PROTI: agent může najít zkratky (napr. trivální testy pro Q3, verbose kód pro Q7).
-Také: explicitní metriky v instrukcích mění povahu experimentu; měříme pak schopnost agenta
-sledovat metriky, ne schopnost dodržovat vývojové praktiky.
-
-Kompromis k prozkoumání: přidat do AGENTS.md jen deterministické quality gates jako self-check
-(``Run tsc --noEmit before PR, run eslint src/, zero warnings required'') bez číselných prahů.
-Agent ví co zkontrolovat, ale neví jaký je náš práh → nelze triválně optimalizovat.
-\end{raw}
+\paragraph{Exit kritéria jako součást instrukcí.}
+V~naší studii zůstávala exit kritéria mimo \texttt{AGENTS.md}: agent
+dostal instrukce, \textit{jak} pracovat, ne \textit{jakých hodnot}
+metrik dosáhnout. Otevřenou otázkou je, zda by zahrnutí kritérií
+přímo do instrukcí, například jako pre-PR self-check
+(``spusť \texttt{tsc -{}-noEmit}, žádné chyby''), výsledky zlepšilo,
+nebo zda by agent kritéria začal optimalizovat triviálními zkratkami
+(verbose kód proti prahu složitosti, povrchní testy proti pokrytí).
+Riziko Goodhartova zákona je v~úzké sadě metrik vyšší; sada
+pokrývající tři dimenze ho částečně omezuje, protože gaming jedné
+metriky se projeví v~jiné. Hranice mezi legitimním řízením
+a~změnou povahy měřeného chování zůstává otevřenou otázkou.
