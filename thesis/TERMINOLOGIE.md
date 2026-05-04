@@ -8,6 +8,8 @@ Kanonické pojmy pro konzistentní psani a pripravu na obhajobu.
 |-------|----------|----------|
 | DSR (Design Science Research) | Vyzkumny pristup: navrhujeme artefakt a evaluujeme ho | Peffers 2008, Hevner 2004 |
 | Pripadova studie (case study) | Vyzkumna strategie: evaluace na jednom pripadu do hloubky | Yin 2018; NE "experiment" pro celek |
+| Demonstrace proveditelnosti | Prakticke ramovani: pripadova studie ukazuje, ze navrzenou sadu metrik a iterativni postup lze aplikovat na jednom pripadu | NE "feasibility demonstrace" v ceske prose |
+| Analyticka generalizace | Metodologicke ramovani pripadove studie podle Yina: z jednoho pripadu lze formulovat principy pro dalsi overeni, ne statisticke tvrzeni o populaci | Neni synonymum demonstrace proveditelnosti; pouzit jen pri diskusi validity a logiky zobecneni |
 | Experimentalni beh | Jedno spusteni agenta s konkretni verzi instrukci | "run" v infrastrukture |
 | Iterace | Jeden cyklus Spusteni/Mereni/Diagnoza/Uprava | |
 | Pilotni faze | Cela serie iteraci r1-r5 | NE "pilotni iterace" pro fazi |
@@ -108,3 +110,4 @@ DSR (pristup)          --> CO delame (navrhujeme metriky + postup, evaluujeme)
 | workflow (v textu) | Anglicismus | pracovni postup |
 | experiment (samostatne) | Nejednoznacne | pripadova studie (celek), experimentalni beh (jednotlivy) |
 | pilotni iterace (pro fazi) | Matouci — iterace je jeden cyklus | pilotni faze |
+| feasibility demonstrace | Hybridni anglicismus | demonstrace proveditelnosti |
