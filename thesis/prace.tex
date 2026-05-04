@@ -64,71 +64,70 @@ za~podporu během celého studia.
 %%% Abstrakt (doporučený rozsah cca 150-250 slov; nejedná se o zadání práce)
 %%% Struktura: kontext, cíl, metodika, výsledky, přínos.
 \def\Abstrakt{%
-AI coding agenti dokáží generovat funkční kód, ale bez vhodných instrukcí
-nedodržují softwarově-inženýrské praktiky. Existující benchmarky měří pouze
-výsledek (vyřešil agent úkol?), nikoli kvalitu procesu ani kódu.
-Formalizovaný postup pro návrh a~vyhodnocování instrukcí dosud chybí.
+AI coding agenti dokáží samostatně generovat kód, testy i~vývojové
+artefakty, ale jejich praktická použitelnost nezávisí jen na tom,
+zda výsledný program projde testy. Pro nasazení ve vývoji je důležité
+také to, jak agent pracoval, zda zanechal auditovatelnou stopu
+a~jakou kvalitu má výsledný kód. Současné benchmarky tyto dimenze
+typicky nezachycují společně a~chybí postup, jak podle nich
+systematicky navrhovat instrukce.
 %
-Práce si klade tři cíle: (1)~navrhnout sadu metrik měřících proces, kvalitu
-a~efektivitu práce agenta; (2)~demonstrovat iterativní postup návrhu instrukcí
-řízený těmito metrikami; (3)~ablacemi prozkoumat, které složky instrukční
-sady přispívají k~měřenému chování agenta a~které jsou redundantní.
+Práce proto navrhuje sadu metrik pokrývající proces, kvalitu kódu
+a~efektivitu a~ukazuje, jak ji použít k~iterativnímu návrhu
+instrukcí. Postup demonstruje na případové studii systému upomínek
+faktur: agent opakovaně implementuje stejnou specifikaci, výsledky
+jsou vyhodnoceny navrženými metrikami a~instrukce jsou mezi běhy
+upravovány podle diagnostiky selhání. Následné ablace zkoumají,
+které složky instrukcí mají měřitelný přínos.
 %
-Sadu metrik a~postup ověřujeme na případové studii systému upomínek
-faktur. Agent (model MiniMax-M2.5 prostřednictvím nástroje OpenCode) prošel pěti
-pilotními iteracemi a~dvěma ablacemi, každou ve dvou nezávislých bězích.
-Chování bylo měřeno 19~metrikami
-ve třech kategoriích: procesní (P), produktové~(Q) a~efektivita~(E).
+Výsledky ukazují, že metriky dokáží odlišit funkčně úspěšný výstup
+od výstupu vzniklého slabým nebo neauditovatelným procesem.
+Iterativní úpravy instrukcí vedly ke zlepšení, ale ne monotónně:
+některé změny způsobily regresi a~stejné instrukce vedly v~různých
+bězích k~odlišnému dodržení pracovního postupu. Opakovaným vzorcem
+úspěšných úprav byl posun od obecného pravidla ke konkrétnímu
+příkazu a~nakonec k~verifikačnímu kroku. Ablace ukázaly, že
+verifikační kroky nejsou redundantní. Odebrání části kódových konvencí
+automatizované metriky téměř nezhoršilo, ale zhoršilo designovou
+kvalitu hodnocenou LLM-as-judge.
 %
-Metriky zachytily, že iterativní úpravy instrukcí zlepšily dodržování
-pracovního postupu, ale ne monotónně. Nejlepší pilotní běh dosáhl
-plného splnění procesních metrik P1--P5 a~zvýšil počet projitých
-referenčních testů z~39/42 na~41/42. Analýza odhalila vzorec vývoje
-instrukcí: obecné pravidlo $\to$ konkrétní příkaz $\to$ verifikační krok.
-Ablace ukázaly, že verifikační kroky nejsou redundantní; jejich odebrání
-zhoršilo funkční korektnost i~automatizované metriky kvality kódu.
-Sekce kódových konvencí byla pro automatizované metriky převážně
-redundantní, ale ovlivňovala designovou kvalitu hodnocenou
-LLM-as-judge. Výsledky současně ukázaly, že procesní compliance je
-výrazně citlivá na nedeterminismus modelu.
-%
-Přenositelným přínosem jsou sada metrik a~iterativní postup; konkrétní
-naměřené hodnoty jsou vázány na podmínky případové studie.
+Přínosem práce je demonstrace proveditelnosti metrického rámce
+a~iterativního postupu návrhu instrukcí. Konkrétní naměřené hodnoty
+platí pro daný model, nástroj a~projekt; přenositelný je postup,
+sada metrik a~poznatky určené k~dalšímu ověření.
 }
 \def\AbstraktEN{%
-AI coding agents can generate functional code, but without proper instructions
-they fail to follow software engineering practices. Existing benchmarks measure
-only the outcome (did the agent solve the task?), not process quality or code
-quality. A~formalized process for designing and evaluating instructions is
-still lacking.
+AI coding agents can generate code, tests, and development artifacts
+autonomously, but their practical usefulness depends on more than whether
+the resulting program passes tests. In software development, it also matters
+how the agent worked, whether it left an auditable trace, and what quality
+the resulting code has. Existing benchmarks typically do not capture these
+dimensions together, and there is no established process for designing
+instructions against such measurements.
 %
-This thesis pursues three goals: (1)~design a~metric suite measuring agent
-process, quality, and efficiency; (2)~demonstrate an iterative instruction
-design process driven by these metrics; (3)~use ablation to explore which
-instruction components contribute to the observed behavior and which are
-redundant.
+This thesis proposes a~metric suite covering process, code quality, and
+efficiency, and shows how it can guide iterative instruction design. The
+process is demonstrated on a~case study of a~dunning system: the agent
+repeatedly implements the same specification, each run is evaluated using
+the proposed metrics, and the instructions are revised according to a
+diagnosis of observed failures. Subsequent ablations examine which parts of
+the instructions have a~measurable contribution.
 %
-The metric suite and process are evaluated on a~single case study of
-a~dunning system. The agent (MiniMax-M2.5 model via the OpenCode tool)
-underwent five pilot iterations and two ablations, each evaluated in two
-independent runs. Behavior was measured
-using 19~metrics in three categories: process~(P), product~(Q), and
-efficiency~(E).
+The results show that the metrics can distinguish a functionally successful
+output from one produced by a weak or non-auditable process. Iterative
+instruction changes improved the agent's behavior, but not monotonically:
+some changes caused regressions, and identical instructions led to different
+levels of process adherence across runs. A recurring pattern in successful
+changes was a shift from a general rule to a specific command and then to a
+verification step. Ablations showed that verification steps were not
+redundant. Removing part of the code-convention section had little effect on
+automated metrics, but reduced design quality as assessed by an LLM-as-judge.
 %
-The metrics showed that iterative instruction changes improved workflow
-adherence, but not monotonically. The best pilot run achieved full
-compliance on process metrics P1--P5 and increased reference-test
-performance from 39/42 to 41/42. Analysis revealed an instruction
-evolution pattern: general rule $\to$ specific command $\to$ verification
-step. Ablation showed that verification steps are not redundant:
-removing them degraded both functional correctness and automated code-quality
-metrics. The code-convention section proved largely redundant for automated
-metrics, but it still affected design quality as assessed by an
-LLM-as-judge. The results also showed that process compliance is highly
-sensitive to model non-determinism.
-%
-The transferable contributions are the metric suite and the iterative process;
-the specific measured values are bound to the case study conditions.
+The contribution is a feasibility demonstration of the metric framework and
+the iterative instruction-design process. The specific measured values are
+bound to the model, tool, and project used in the case study; what transfers
+is the process, the metric suite, and findings intended for further
+validation.
 }
 
 %%% 3 až 5 klíčových slov (doporučeno)
