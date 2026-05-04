@@ -333,8 +333,9 @@ behaviorální popis z~\texttt{FINDINGS.md} a~analýzu transcriptu
 agenta. Zjištěný vzorec na spektru operacionalizace
 (pravidlo~$\to$ příkaz~$\to$ verifikační krok) považujeme za
 jeden z~hlavních poznatků práce, ale vychází z~jedné případové
-studie s~jedním modelem. Jeho platnost pro jiné modely a~typy
-úloh vyžaduje další výzkum.
+studie s~jedním modelem a~z~domény, kde existují deterministické
+nástroje zpětné vazby. Jeho platnost pro jiné modely, typy úloh
+a~domény mimo programování vyžaduje další výzkum.
 
 %% ----------------------------------------------------------------
 \subsection{Cíl~3: Ablace}
@@ -658,9 +659,10 @@ a~kontrolovat je opakovaně.
 Přínos této práce nespočívá v~konkrétních instrukcích,
 ale v~postupu jejich návrhu: naměřit metriky, diagnostikovat
 příčinu selhání, provést cílenou úpravu instrukcí a~změřit
-znovu (sekce~\ref{sec:pilotni-iterace}). Tento cyklus je
-přenositelný nezávisle na modelu a~projektu. Podmínkou je
-sada metrik pokrývající více dimenzí (proces, kvalitu, efektivitu),
+znovu (sekce~\ref{sec:pilotni-iterace}). Tento cyklus lze přenést
+na jiný model nebo projekt jen po přizpůsobení metrik a~prahů
+danému prostředí. Podmínkou je sada metrik pokrývající více dimenzí
+(proces, kvalitu, efektivitu),
 protože jednodimenzionální měření (např. jen test pass rate)
 může zakrýt problém v~jiné dimenzi
 (sekce~\ref{sec:interpretace}).
@@ -735,24 +737,26 @@ zpomalují experty).
 Účinnost verifikačních kroků v~naší studii závisela na existenci
 deterministických nástrojů (\texttt{eslint}, \texttt{tsc}, test
 runner), které produkují jednoznačný výstup zpět do kontextu
-agenta. Kódování je v~tomto ohledu specifická doména: většina
+agenta. Kódování je v~tomto ohledu specifická doména: řada
 požadavků na kvalitu má odpovídající nástroj. U~jiných typů
 úloh (dokumentace, architektonická rozhodnutí, plánování) takové
-nástroje neexistují a~operacionalizace se zastaví na úrovni
-pravidla nebo příkazu bez externího feedbacku. Otevřená otázka
+nástroje často neexistují a~operacionalizace se může zastavit na úrovni
+pravidla nebo příkazu bez externí zpětné vazby. Otevřená otázka
 je, zda principy operacionalizace platí i~mimo kódování, nebo
 zda je jejich účinnost podmíněna dostupností deterministické
 zpětné vazby.
 
-\paragraph{Rozšíření na další modely a~projekty.}
+\paragraph{Rozšíření na další modely, projekty a~domény.}
 Výsledky platí pro jeden model (MiniMax-M2.5) a~jeden typ projektu
-(deterministická business logika). Replikace s~jinými modely,
-nedeterministickými doménami (UI, strojové učení) a~většími
-projekty by ukázala, které poznatky jsou přenositelné a~které
-specifické pro tento případ. Zvláště zajímavá je otázka projektů
-s~vyšší nejednoznačností specifikace (sekce~\ref{sec:limity-vysledky}),
-kde by obecnější instrukce (enabling constraints) mohly být
-efektivnější než detailní příkazy.
+(deterministická business logika). První osa dalšího výzkumu je
+replikace uvnitř programování: jiné modely, jiné agentní nástroje
+a~projekty s~vyšší nejednoznačností specifikace
+(sekce~\ref{sec:limity-vysledky}). Druhá osa je ověření mimo
+programování, kde nemusí existovat ekvivalent test runneru, lintu
+nebo typechecku. Právě tam se ukáže, zda vzorec
+pravidlo~$\to$ příkaz~$\to$ verifikační krok vyjadřuje obecnější
+princip řízení agentů, nebo hlavně výhodu programovací domény
+s~deterministickou zpětnou vazbou.
 
 \paragraph{Exit kritéria jako součást instrukcí.}
 V~naší studii zůstávala exit kritéria mimo \texttt{AGENTS.md}: agent
