@@ -355,7 +355,7 @@ pokles v~modularitě a~dokumentaci.
 Co tyto výsledky znamenají pro cíl~3? Ablace rozlišily dva typy
 složek instrukcí. V~této případové studii mají verifikační kroky
 zjevný instrumentální přínos: bez explicitní instrukce agent
-kontrolní příkazy nespouštěl spolehlivě. Kódové konvence agent
+verifikační příkazy nespouštěl spolehlivě. Kódové konvence agent
 dodržuje i~bez instrukce, pravděpodobně ze znalostí z~tréninku.
 Instrukce ale ovlivňují strukturální rozhodnutí (modularita,
 dokumentace) která automatizované metriky nezachytí. Dimenze
@@ -432,7 +432,7 @@ generických repository-level souborů a~upozorňují na vyšší náklady.
 SkillsBench~\cite{skillsbench2025} dále rozlišuje mezi kurátorovanou
 a~automaticky generovanou instrukční podporou a~ukazuje, že rozhodující
 je kvalita a~relevance obsahu. Naše výsledky jsou s~těmito zjištěními
-kompatibilní: ne všechny složky instrukčního souboru přispívají stejně.
+kompatibilní: ne všechny složky \texttt{AGENTS.md} přispívají stejně.
 
 Nejvýraznější efekt měly v~naší studii verifikační kroky. Ablace~A
 ukázala pokles jak ve funkční korektnosti, tak v~automatizovaných
@@ -475,7 +475,7 @@ kauzální zákon.
 Sekce~\ref{sec:omezeni-validita} identifikovala metodologická
 omezení designu studie předem. Zde ukazujeme, jak se tato omezení
 projevila v~naměřených datech, a~popisujeme omezení která se
-objevila až v~průběhu experimentu. Omezení řadíme podle toho, co
+objevila až v~průběhu studie. Omezení řadíme podle toho, co
 ohrožují: nejprve sílu závěrů, pak spolehlivost měření a~nakonec
 rozsah platnosti výsledků.
 
@@ -597,7 +597,7 @@ projevila zejména u~\mgrp{P}: variabilita neumožňuje odlišit efekt
 instrukcí od nedeterminismu modelu bez většího počtu běhů.
 Výsledky jsou navíc specifické pro OpenCode a~model MiniMax-M2.5.
 Jiné nástroje (GitHub Copilot, Cursor, Claude Code) mohou
-zpracovávat instrukční soubory odlišně. Zda by instrukce fungovaly
+zpracovávat soubory s~instrukcemi odlišně. Zda by instrukce fungovaly
 stejně na projektech s~vyšší nejednoznačností specifikace, na
 jiných modelech nebo s~jinými nástroji, zůstává otevřenou otázkou
 (sekce~\ref{sec:dalsi-vyzkum}).
@@ -672,8 +672,8 @@ může zakrýt problém v~jiné dimenzi
 (sekce~\ref{sec:interpretace}).
 
 Praktický důsledek je přímočarý: místo delšího a~obecnějšího
-instrukčního souboru je účelnější budovat kratší, měřitelný pracovní
-postup s~jasnými verifikačními body a~opakovaně ho ladit podle dat.
+\texttt{AGENTS.md} je účelnější budovat kratší, měřitelný pracovní
+postup s~jasnými verifikačními kroky a~opakovaně ho ladit podle dat.
 
 %% ================================================================
 \section{Náměty pro další výzkum}
@@ -711,11 +711,11 @@ analýzy selhání a~návrhu úprav lze automatizovat. Kombinace
 automatizovaného prompt optimizeru s~metrikami P/Q/E by umožnila
 rychlejší iteraci bez manuální diagnózy.
 
-\paragraph{Kontrolní bod načtení instrukcí.}
+\paragraph{Ověření načtení instrukcí.}
 Pilotní data ukazují, že agent instrukce přečte (v~transcriptu
 cituje jejich obsah), ale ne vždy je aktivuje jako řídicí smyčku
 běhu. Místo pracovního postupu z~\texttt{AGENTS.md} použije vlastní
-postup odvozený ze specifikace. Ověřitelný kontrolní bod na začátku
+postup odvozený ze specifikace. Ověřitelný krok na začátku
 běhu (agent musí explicitně potvrdit přečtení a~aktivaci
 pracovního postupu před prvním zápisem kódu) by mohl tento problém
 adresovat.

@@ -2,7 +2,7 @@
 \label{kap:prakticka-cast}
 
 Tato kapitola popisuje provedení případové studie. Struktura sleduje
-chronologii experimentu: nejprve příprava tří výchozích podkladů
+chronologii studie: nejprve příprava tří výchozích podkladů
 (specifikace, referenční implementace, instrukce), pak pilotní fázi
 kde se instrukce opakovaně upravují na základě naměřených metrik,
 a~nakonec ablace, kde z~fungující sady systematicky
@@ -12,7 +12,7 @@ vznikla.
 
 
 %% ================================================================
-\section{Příprava experimentu}
+\section{Příprava případové studie}
 \label{sec:priprava-experimentu}
 %% ================================================================
 
@@ -192,7 +192,7 @@ specifikace je implementovatelná a~exit kritéria
 Baseline verze \texttt{AGENTS.md} byla konstruována čistě z~literatury.
 Cílem bylo vytvořit výchozí bod jehož každá komponenta má opodstatnění
 v~empirických zjištěních. Literatura společně naznačuje, že výchozí
-instrukční soubor musí spojit tři vrstvy: jasné vymezení úkolu, stručný
+\texttt{AGENTS.md} musí spojit tři vrstvy: jasné vymezení úkolu, stručný
 procedurální pracovní postup a~explicitní verifikační kroky kvality. Mao
 et al.~\cite{mao2025fse} poskytují kostru komponent, Li
 et al.~\cite{skillsbench2025} ukazují vyšší účinnost procedurálních
@@ -267,7 +267,7 @@ Funkční korektnost     & Specification (AC)           & Q2, Q4 \\
 \end{table}
 
 Specifikace, referenční implementace a~baseline instrukce tvoří výchozí
-bod experimentu. Následující sekce popisuje průběh
+bod případové studie. Následující sekce popisuje průběh
 pilotních iterací cyklem
 Spuštění/\allowbreak Měření/\allowbreak Diagnóza/\allowbreak Úprava (sekce~\ref{sec:pilotni-iterace}).
 
@@ -448,9 +448,9 @@ obrázek~\ref{fig:agents-diff-r2-r3}.
 \subsection{Pilot-r3}
 \label{sec:pilot-r3}
 
-Třetí běh ověřoval tři změny instrukcí z~r2: kontrolní příkaz po commitu
+Třetí běh ověřoval tři změny instrukcí z~r2: verifikační příkaz po commitu
 s~testy, výběr issue přes \texttt{gh issue list} a~přesun požadavku
-na JSDoc do kontrolního kroku před pull requestem.
+na JSDoc do verifikačního kroku před pull requestem.
 Tabulka~\ref{tab:pilot-r3-delta} ukazuje metriky s~výraznou změnou.
 
 \begin{table}[htbp]
@@ -482,7 +482,7 @@ Všechny tři změny zabraly. Agent poprvé splnil celý procesní checklist
 \acs{P1}--\acs{P5}~=~5/5: vytvořil issues před kódem, každý issue dostal vlastní
 branch, test commit předcházel kódu, pull requesty obsahovaly
 \texttt{Closes \#N} a~žádný test nebyl dodatečně upraven. Současně
-\acs{Q8}~=~3/3 ukazuje, že přesun požadavku na JSDoc do kontrolního kroku
+\acs{Q8}~=~3/3 ukazuje, že přesun požadavku na JSDoc do verifikačního kroku
 vedl i~k~doplnění dokumentace.
 
 \acs{Q2}~=~41/42: zbývá jedna chyba v~implementaci, a~odpovídá prvnímu
@@ -814,7 +814,7 @@ ne ablace.
 Agent bez verifikačních kroků spotřeboval přibližně dvakrát více
 testovacích cyklů (44~spuštění \texttt{vitest} oproti $\sim$20
 u~ablace~B). To naznačuje, že verifikační kroky plní kromě kontroly
-kvality i~druhou funkci: fungují jako kontrolní body, které strukturují
+kvality i~druhou funkci: strukturují
 práci agenta a~zabraňují cyklickému debugování.
 
 
@@ -899,10 +899,10 @@ Výsledky ukazují odlišný charakter obou složek.
 
 Bez verifikačních kroků (\texttt{tsc}, \texttt{eslint})
 klesly metriky kvality kódu i~funkční korektnosti
-(tabulka~\ref{tab:ablace-a}). Agent bez kontrolních bodů navíc
+(tabulka~\ref{tab:ablace-a}). Agent bez těchto verifikačních kroků navíc
 spotřeboval přibližně dvakrát více testovacích cyklů. Verifikační
 kroky tak v~této studii fungují nejen jako kontrola kvality, ale
-i~jako kontrolní body strukturující práci agenta.
+i~jako prvky strukturující práci agenta.
 
 Bez sekce Package Quality zůstaly automatizované metriky kvality
 (\acs{Q5}--\acs{Q7}) na srovnatelné úrovni (tabulka~\ref{tab:ablace-b}),
