@@ -60,6 +60,12 @@ Spektrum od nejslabsiho po nejsilnejsi:
 Klicove zjisteni z pilotu: agent verifikacni kroky dodrzoval spolehlive, pravidla ignoroval. Prikazy dodrzoval castecne (zavisi na nedeterminismu).
 
 POZOR: Toto je empiricke pozorovani z nasi case study, ne taxonomie z literatury.
+
+**Vynuceni / aktivace**: vlastni interpretacni rozliseni teto prace, pouzivane primarne v diskusi vysledku (kap05), ne teoreticka taxonomie z kap02.
+- vynuceni = instrukce prevadi pozadavek na overitelny krok s externi zpetnou vazbou (napr. `tsc`, `eslint`, `git log`)
+- aktivace = instrukce pripomina nebo vyvolava chovani, ktere model pravdepodobne umi z treninku (napr. modularita, dokumentace, designove konvence)
+- literatura poskytuje neprimo oporu pro oba typy pusobeni instrukci, ale nezavadi tuto dvojici pojmu jako hotovou taxonomii
+
 Souvisejici literatura:
 - Kim et al. 2025 (DETAIL): specificita zlepsuje vysledky, ale prilis detail omezuje reasoning
 - Kalyuga et al. 2003: expertise reversal effect — instrukce pro novacka skodi expertovi

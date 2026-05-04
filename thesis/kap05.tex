@@ -450,12 +450,14 @@ Sekce Package Quality se chovala odlišně. Její odebrání nezhoršilo
 automatizované metriky stejným způsobem jako odebrání verifikačních
 kroků, ale projevilo se v~designové kvalitě hodnocené
 LLM-as-judge. Data jsou proto konzistentní s~tím, že část instrukcí
-nefunguje primárně jako přímé vynucení chování, ale jako rámec, který
-aktivuje latentní znalosti modelu. V~tomto ohledu je užitečná analogie
-s~promptingem: minimální nápověda může vyvolat žádoucí chování i~bez
-detailního skriptu~\cite{wei2022cot, min2022rethinking}. V~naší studii
-tak vznikají dvě funkce instrukcí: verifikační kroky vynucují měřitelné
-požadavky, zatímco obecnější konvence podporují designová rozhodnutí.
+nefunguje primárně jako přímá kontrola chování, ale jako rámec, který
+připomíná modelu relevantní znalosti z~tréninku. V~tomto ohledu je
+užitečná analogie s~promptingem: minimální nápověda může vyvolat
+žádoucí chování i~bez detailního skriptu~\cite{wei2022cot,
+min2022rethinking}. V~této práci tento rozdíl interpretujeme jako
+rozdíl mezi \textit{vynucením} a~\textit{aktivací}: verifikační
+kroky vynucují měřitelné požadavky, zatímco obecnější konvence
+podporují designová rozhodnutí.
 
 Zároveň ale platí, že vliv instrukcí nelze od nedeterminismu modelu
 oddělit dokonale. Razavi a~Fard~\cite{razavi2025} upozorňují na vysokou
@@ -630,7 +632,9 @@ Quality ponechalo automatizované metriky (\mmet{det}) beze změny,
 zatímco \ac{Q8} kleslo z~3/3 na 2/3 (sekce~\ref{sec:ablace-b}).
 Konvence zřejmě nepůsobí jako přímé vynucení, ale spíš jako
 \textit{aktivace} latentních znalostí modelu, tedy jako
-připomínka toho, co se model v~tréninkových datech naučil. Z~toho plyne praktické
+připomínka toho, co se model v~tréninkových datech naučil. Toto
+rozlišení je interpretační pojmenování výsledků této studie, ne
+převzatá taxonomie z~literatury. Z~toho plyne praktické
 rozlišení: měřitelné požadavky převést na verifikovatelné kroky
 v~pre-PR checklistu, zatímco požadavky, které nelze měřit
 deterministicky (srozumitelnost dokumentace, vhodnost dekompozice),
@@ -717,7 +721,8 @@ pracovního postupu před prvním zápisem kódu) by mohl tento problém
 adresovat.
 
 \paragraph{Mechanismy účinku instrukcí.}
-Naše data naznačují dva odlišné mechanismy: \textit{vynucení}
+Naše data naznačují dva odlišné mechanismy, které v~této práci
+označujeme jako \textit{vynucení}
 (verifikační kroky přímo kontrolují výstup) a~\textit{aktivace}
 (obecné konvence připomínají modelu znalosti z~tréninku). Analogie
 existuje v~prompt engineeringu: chain-of-thought prompting ukazuje,
