@@ -193,7 +193,7 @@ Baseline verze \texttt{AGENTS.md} byla konstruována čistě z~literatury.
 Cílem bylo vytvořit výchozí bod jehož každá komponenta má opodstatnění
 v~empirických zjištěních. Literatura společně naznačuje, že výchozí
 instrukční soubor musí spojit tři vrstvy: jasné vymezení úkolu, stručný
-procedurální pracovní postup a~explicitní kontrolní kroky kvality. Mao
+procedurální pracovní postup a~explicitní verifikační kroky kvality. Mao
 et al.~\cite{mao2025fse} poskytují kostru komponent, Li
 et al.~\cite{skillsbench2025} ukazují vyšší účinnost procedurálních
 instrukcí než popisné dokumentace, Breunig et al.~\cite{breunig2025}
@@ -257,7 +257,7 @@ instrukcí použitých jako výchozí bod pilotních iterací.}
 \textbf{Cíl} & \textbf{Sekce AGENTS.md} & \textbf{Metriky} \\
 \midrule
 Spec-first             & Specification, Process krok~2 & P1 \\
-Strukturovaný workflow & Process kroky 1--4            & P2, P3, P4 \\
+Strukturovaný pracovní postup & Process kroky 1--4            & P2, P3, P4 \\
 TDD                    & Process krok~2, Constraints   & P3, P5 \\
 Modulární kód          & Package Quality              & Q5, Q7, Q8 \\
 API kompatibilita      & Specification (API Contract) & Q1 \\
@@ -626,7 +626,7 @@ zabraly: \acs{Q5}~=~0 a~\acs{Q7}~=~0. Agent konfiguroval ESLint s~pravidlem
 \acs{Q5}/\acs{Q7} tak pravděpodobně přinesla jediná konkrétní instrukce:
 ``your ESLint config must include \texttt{complexity: [warn, 10]}''.
 
-Přesto agent ignoroval celý Process workflow: žádné issues,
+Přesto agent ignoroval celý pracovní postup v~Process: žádné issues,
 branches ani pull requesty. Analýza transcriptu ukazuje posloupnost:
 agent přečetl instrukce (zpráva~4: ``I need to decompose the spec
 into focused GitHub issues''), v~následujícím kroku však místo
@@ -634,12 +634,12 @@ into focused GitHub issues''), v~následujícím kroku však místo
 (\texttt{todowrite}) a~implementoval vše v~jednom \texttt{feat:}
 commitu. Pre-PR checks (tsc, eslint) přitom dodržel. Agent tedy
 selektivně plnil instrukce: jednokrokové příkazy s~okamžitým
-výstupem (``spusť eslint'') ano, vícekrokový workflow (``vytvoř
+výstupem (``spusť eslint'') ano, vícekrokový pracovní postup (``vytvoř
 issue, pak branch, pak test, pak implementuj, pak PR'') ne.
 
 Srovnání r3, r4 a~r5 ukazuje, že tento vzorec není náhodný.
-R3 agent dodržel celý workflow (\acs{P1}--\acs{P5}~=~5/5). R4 dodržel částečně
-($\sim$3/5), vytvořil issues ale ne pro všechny branch. R5 workflow
+R3 agent dodržel celý pracovní postup (\acs{P1}--\acs{P5}~=~5/5). R4 dodržel částečně
+($\sim$3/5), vytvořil issues ale ne pro všechny branch. R5 pracovní postup
 ignoroval zcela ($\sim$1/5). Instrukce se přitom mezi r3 a~r5 liší
 minimálně (2~řádky v~pre-PR checklistu).
 Data tak naznačují, že nedeterminismus modelu je pro dodržování
@@ -655,12 +655,12 @@ Pět iterací (r1--r5) přineslo čtyři pozorování:
 \begin{enumerate}
     \item \textbf{Verifikační kroky fungují spolehlivě.}
           Jednokrokové příkazy s~okamžitým výstupem agent dodržoval
-          stabilněji než zbytek workflow.
-    \item \textbf{Vícekrokový workflow je nedeterministický.}\par\noindent
-          Stejná instrukční sada vedla od plného dodržení (r3) přes
-          částečné dodržení (r4) až po kolaps workflow (r5).
+          stabilněji než zbytek pracovního postupu.
+    \item \textbf{Vícekrokový pracovní postup je nedeterministický.}\par\noindent
+          Stejné instrukce vedly od plného dodržení (r3) přes
+          částečné dodržení (r4) až po kolaps pracovního postupu (r5).
     \item \textbf{Deklarativní pravidla byla slabší než procedurální verifikace.}
-          Pravidlo v~Constraints nepomohlo, zatímco konkrétní kontrolní
+          Pravidlo v~Constraints nepomohlo, zatímco konkrétní verifikační
           kroky opakovaně vedly ke zlepšení.
     \item \textbf{Instrukce neopravila některá implementační rozhodnutí.}\par\noindent
           Problém s~\texttt{pausedElapsed} přetrval i~po dalších úpravách,
@@ -669,7 +669,7 @@ Pět iterací (r1--r5) přineslo čtyři pozorování:
 \endgroup
 
 Pilotní baseline pro ablace zůstává r3, jediný běh kde agent
-workflow dodržel. Ablace testují, které z~těchto pozorování
+pracovní postup dodržel. Ablace testují, které z~těchto pozorování
 vydrží cílenou kontrolu.
 
 %% ================================================================
@@ -677,12 +677,12 @@ vydrží cílenou kontrolu.
 \label{sec:komparativni-vysledky}
 %% ================================================================
 
-Pilotní iterace ukázaly, že část zlepšení souvisí s~přidáním
-konkrétních kontrolních kroků. Zbývá proto otázka, které složky
+Pilotní fáze ukázala, že část zlepšení souvisí s~přidáním
+konkrétních verifikačních kroků. Zbývá proto otázka, které složky
 výsledných instrukcí jsou pro chování agenta nezbytné a~které lze
 odebrat bez dopadu. Po pilotu zůstaly otevřené dvě konkrétní
 nejistoty: zda agent potřebuje explicitně předepsané verifikační kroky
-a~zda sekce Package Quality nese samostatný přínos nad rámec workflow.
+a~zda sekce Package Quality nese samostatný přínos nad rámec pracovního postupu.
 Ablace proto nejsou generickým odebíráním částí \texttt{AGENTS.md}.
 Každá odpovídá na otázku, která po r1--r5 zůstala neuzavřená.
 
@@ -704,17 +704,17 @@ rozlišujeme sekce definující \textit{co} implementovat
 (Process, Package Quality, Constraints). Odebrání kontextových sekcí
 by testovalo jinou otázku než vliv instrukcí na proces a~kvalitu.
 Constraints zde navíc neablujeme, protože jejich efekt se v~pilotních
-bězích částečně překrýval s~workflow v~Process. Proto testujeme dvě
+bězích částečně překrýval s~pracovním postupem v~Process. Proto testujeme dvě
 složky, u~nichž zůstala největší nejistota: verifikační kroky
 v~Process a~sekci Package Quality.
 
 \paragraph{Ablace~A: bez verifikačních kroků.}
 Odebíráme explicitní verifikační příkazy
 (\texttt{tsc --noEmit}, \texttt{npx eslint},
-\texttt{git log --oneline -3}), ale ponecháváme workflow
+\texttt{git log --oneline -3}), ale ponecháváme pracovní postup
 issue~$\to$ branch~$\to$ test~$\to$ implement~$\to$ PR
 (obrázek~\ref{fig:diff-r3-ablace-a}). Cílem je ověřit, zda agent tyto
-kontrolní kroky spouští i~bez instrukce.
+verifikační kroky spouští i~bez instrukce.
 
 \begin{figure}[H]
 \centering
@@ -807,14 +807,14 @@ odevzdáním kódu, což naznačuje, že verifikační kroky nejsou
 redundantní. Agent je bez instrukce nespouští sám.
 
 Procesní metriky vykazují vzorec známý z~pilotních iterací: A-1
-dodržel workflow kompletně, A-2 nikoliv. Instrukce se mezi běhy
+dodržel pracovní postup kompletně, A-2 nikoliv. Instrukce se mezi běhy
 nelišily. Variabilita je důsledkem nedeterminismu modelu,
 ne ablace.
 
 Agent bez verifikačních kroků spotřeboval přibližně dvakrát více
 testovacích cyklů (44~spuštění \texttt{vitest} oproti $\sim$20
 u~ablace~B). To naznačuje, že verifikační kroky plní kromě kontroly
-kvality i~druhou funkci: fungují jako checkpointy které strukturují
+kvality i~druhou funkci: fungují jako kontrolní body, které strukturují
 práci agenta a~zabraňují cyklickému debugování.
 
 
@@ -902,7 +902,7 @@ klesly metriky kvality kódu i~funkční korektnosti
 (tabulka~\ref{tab:ablace-a}). Agent bez kontrolních bodů navíc
 spotřeboval přibližně dvakrát více testovacích cyklů. Verifikační
 kroky tak v~této studii fungují nejen jako kontrola kvality, ale
-i~jako checkpointy strukturující práci agenta.
+i~jako kontrolní body strukturující práci agenta.
 
 Bez sekce Package Quality zůstaly automatizované metriky kvality
 (\acs{Q5}--\acs{Q7}) na srovnatelné úrovni (tabulka~\ref{tab:ablace-b}),
@@ -915,7 +915,7 @@ strukturální rozhodnutí instrukce ovlivňují.
 Procesní metriky (\acs{P1}--\acs{P5}) vykazovaly v~obou ablacích variabilitu
 srovnatelnou s~pilotními iteracemi (r3 vs.\ r4/r5). Tato variabilita
 není důsledkem ablace, ale nedeterminismu modelu: instrukce
-pro workflow zůstaly v~obou ablacích beze změny.
+pro pracovní postup zůstaly v~obou ablacích beze změny.
 
 %% ================================================================
 \section{Souhrnné výsledky}

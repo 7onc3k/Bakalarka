@@ -39,7 +39,7 @@ obhajitelným postupem a~zanechává použitelný kód.
 
 \paragraph{Procesní metriky (P1--P8).}
 \mgrp{P} měří zda agent dodržoval vývojové praktiky (issues, branching,
-test-first, PR workflow), tedy dimenzi kterou stávající benchmarky
+test-first, PR), tedy dimenzi kterou stávající benchmarky
 pokrývají jen okrajově (sekce~\ref{sec:hodnoceni-agentu}). Na devíti bězích se ukázaly
 jako nejcitlivější složka sady: byly jediné metriky které
 kolísaly i~mezi běhy se stejnými instrukcemi. Možným vysvětlením
@@ -364,7 +364,7 @@ běhu, takže závěry ablační fáze stojí primárně na \mgrp{P}
 a~\mgrp{Q}.
 
 Variabilita procesních metrik byla v~ablacích srovnatelná
-s~pilotními iteracemi, přestože instrukce pro workflow zůstaly beze
+s~pilotními iteracemi, přestože instrukce pro pracovní postup zůstaly beze
 změny. Data naznačují, že procesní compliance je u~tohoto modelu
 stochastická vlastnost, kterou instrukce ovlivňují jen částečně.
 Variabilita mezi B-1 (\acs{Q2}~=~37/42) a~B-2 (\acs{Q2}~=~11/42)
@@ -382,7 +382,7 @@ v~pilotních iteracích právě proto, že bez nich metriky selhávaly.
 Novým poznatkem byla dvojí funkce verifikačních kroků: kromě
 kontroly kvality strukturují práci agenta a~zabraňují cyklickému
 debugování (sekce~\ref{sec:ablace-a}). Informativnější by byla
-ablace Constraints nebo workflow struktury, kde výsledek z~pilotů
+ablace Constraints nebo struktury pracovního postupu, kde výsledek z~pilotů
 předvídatelný není. To zůstává námětem pro další výzkum.
 
 %% ================================================================
@@ -438,7 +438,7 @@ ukázala pokles jak ve funkční korektnosti, tak v~automatizovaných
 metrikách kvality kódu, když byly explicitní kontroly odstraněny.
 To doplňuje pozorování Breuniga~\cite{breunig2025}, že opakování
 ignorované instrukce nepomáhá a~účinnější je její přestrukturování do
-pracovního postupu. Pilotní iterace v~našich datech ukázaly stejný
+pracovního postupu. Pilotní fáze v~našich datech ukázala stejný
 vzorec: obecné pravidlo nestačilo, konkrétní příkaz pomohl jen
 částečně a~stabilnější zlepšení přinesl až verifikační krok. Tento
 vývoj je konzistentní i~s~výzkumem specificity instrukcí, podle něhož
@@ -484,7 +484,7 @@ Pět binárních procesních metrik \acs{P1}--\acs{P5}
 $\sim$1/5 (r5), přestože procesní instrukce v~těchto bězích
 zůstaly stejné. R4 přidalo dva řádky do Constraints a~procesní
 compliance se zhoršila, přestože žádná změna přímo necílila na
-workflow. Razavi a~Fard~\cite{razavi2025} tento jev popisují jako
+pracovní postup. Razavi a~Fard~\cite{razavi2025} tento jev popisují jako
 prompt sensitivity. Alternativním vysvětlením je efekt kumulace
 instrukcí: s~rostoucím počtem instrukcí klesá pravděpodobnost
 dodržení všech současně. Instrukce rostly z~r1 (baseline) do r5.
@@ -655,8 +655,8 @@ zavést měřitelná exit kritéria pokrývající proces i~kvalitu
 a~kontrolovat je opakovaně.
 
 \paragraph{Iterovat na základě dat.}
-Přínos této práce nespočívá v~konkrétní instrukční sadě,
-ale v~postupu jejího návrhu: naměřit metriky, diagnostikovat
+Přínos této práce nespočívá v~konkrétních instrukcích,
+ale v~postupu jejich návrhu: naměřit metriky, diagnostikovat
 příčinu selhání, provést cílenou úpravu instrukcí a~změřit
 znovu (sekce~\ref{sec:pilotni-iterace}). Tento cyklus je
 přenositelný nezávisle na modelu a~projektu. Podmínkou je
@@ -705,11 +705,11 @@ analýzy selhání a~návrhu úprav lze automatizovat. Kombinace
 automatizovaného prompt optimizeru s~metrikami P/Q/E by umožnila
 rychlejší iteraci bez manuální diagnózy.
 
-\paragraph{Ingestion checkpoint.}
+\paragraph{Kontrolní bod načtení instrukcí.}
 Pilotní data ukazují, že agent instrukce přečte (v~transcriptu
 cituje jejich obsah), ale ne vždy je aktivuje jako řídicí smyčku
 běhu. Místo pracovního postupu z~\texttt{AGENTS.md} použije vlastní
-postup odvozený ze specifikace. Ověřitelný checkpoint na začátku
+postup odvozený ze specifikace. Ověřitelný kontrolní bod na začátku
 běhu (agent musí explicitně potvrdit přečtení a~aktivaci
 pracovního postupu před prvním zápisem kódu) by mohl tento problém
 adresovat.
