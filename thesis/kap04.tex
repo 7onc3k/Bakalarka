@@ -6,20 +6,13 @@ chronologii studie: nejprve příprava tří výchozích podkladů
 (specifikace, referenční implementace, instrukce), pak pilotní fázi
 kde se instrukce opakovaně upravují na základě naměřených metrik,
 a~nakonec ablace, kde z~fungující sady systematicky
-odebíráme jednotlivé části a~měříme dopad. Kapitola aplikuje metodiku z~kapitoly~\ref{kap:metodika} na konkrétní
-běhy a~referuje, jak se navržený postup projevil a~jaká data při tom
-vznikla.
+odebíráme jednotlivé části a~měříme dopad.
 
 
 %% ================================================================
 \section{Příprava případové studie}
 \label{sec:priprava-experimentu}
 %% ================================================================
-
-Před spuštěním pilotních běhů bylo nutné připravit dva výchozí
-podklady každého experimentálního běhu: testovací prostředí
-(specifikace projektu spolu s~referenční implementací jako stropem
-měření) a~baseline instrukce (jak má agent pracovat).
 
 %% ----------------------------------------------------------------
 \subsection{Systém upomínek faktur}
@@ -266,23 +259,10 @@ Funkční korektnost     & Specification (AC)           & Q2, Q4 \\
 \end{tabular}
 \end{table}
 
-Specifikace, referenční implementace a~baseline instrukce tvoří výchozí
-bod případové studie. Následující sekce popisuje průběh
-pilotních iterací cyklem
-Spuštění/\allowbreak Měření/\allowbreak Diagnóza/\allowbreak Úprava (sekce~\ref{sec:pilotni-iterace}).
-
-
 %% ================================================================
 \section{Pilotní fáze}
 \label{sec:pilotni-vysledky}
 %% ================================================================
-
-Každá iterace sleduje cyklus Spuštění/Měření/Diagnóza/Úprava
-(sekce~\ref{sec:pilotni-iterace}) a~popisujeme ji ve stejné struktuře:
-tabulkou metrik, diagnostikou (pozorování chování agenta, interpretace
-selhání a~posun do další iterace) a~vizuálním diffem upravené verze
-\texttt{AGENTS.md}. U~prvního běhu uvádíme kompletní tabulku metrik,
-u~dalších jen řádky, kde došlo ke změně.
 
 Diagnóza každé iterace stojí na jednom běhu, takže opakující se selhání
 napříč iteracemi mají vyšší výpovědní hodnotu než jednorázová; tuto
