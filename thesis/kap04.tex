@@ -29,40 +29,23 @@ hodnoty. Baseline proto nevznikla jako vyčerpávající manuál, ale jako
 kompaktní soubor instrukcí, jehož sekce se mapují na konkrétní měřené
 dimenze.
 
-Toto mapování zakládá metodologickou otázku: pokud sekce instrukcí
-sledují měřené dimenze, hrozí, že metriky budou měřit shodu instrukce
-s~vlastním zápisem, ne kvalitu výstupu. U~procesních metrik
-\acs{P1}--\acs{P5} je tato vazba nejtěsnější, ale měření probíhá
-na auditovatelných artefaktech (commity, větve, pull requesty),
-ne na agentově deklaraci o~postupu; mezera mezi instrukcí
-a~skutečným chováním se proto v~datech projevuje. Produktové metriky
-\acs{Q1}--\acs{Q3}, \acs{Q6} a~\acs{Q7} vychází z~nezávislé
-literatury (typecheck, mutation testing, cyklomatická složitost,
-API kontrakt) a~jejich splnění vyžaduje funkční kód, ne převzetí
-instrukce. U~judge-based metrik (\acs{Q4}, \acs{Q8}) je hranice
-neostrá; jejich citlivost vůči samotné instrukci testuje
-ablace~B (sekce~\ref{sec:ablace-b}).
-
-Konstrukce proběhla ve dvou krocích: návrh struktury podle pořadí
-komponent popsaných Mao et al.~\cite{mao2025fse} a~mapování tří
-dimenzí chování (sekce~\ref{sec:sada-metrik}) na konkrétní instrukce. Výsledné sekce
-(Role, Goal, Specification, Environment, Process, Package Quality,
-Constraints) jsou adaptací tohoto rámce na doménu případové studie.
+Konstrukce proběhla ve dvou krocích: adaptace sedmi typů komponent
+identifikovaných Mao et al.~\cite{mao2025fse} na konkrétní sekce
+\texttt{AGENTS.md} (Role, Goal, Specification, Environment, Process,
+Package Quality, Constraints) a~mapování tří měřených dimenzí
+(sekce~\ref{sec:sada-metrik}) na obsah těchto sekcí.
 
 Sekce Package Quality byla přidána proto, že udržovatelnost a~design
 nejsou ve specifikaci projektu explicitně vynutitelné, ale v~naší sadě
-metrik je chceme sledovat. Nejde o~tvrzení, že ``architektura
-+ konvence'' jsou obecně nejúčinnější obsah instrukcí, ale
-o~operacionalizaci požadavků na kvalitu do podoby, kterou lze v~této
-případové studii měřit. Constraints obsahuje zákazy vzorců, které jsme
-ve fázi přípravy považovali za rizikové pro autonomního agenta
+metrik je chceme sledovat. Constraints obsahuje zákazy vzorců, které
+jsme ve fázi přípravy považovali za rizikové pro autonomního agenta
 (slučování více issues do jedné větve, modifikace existujících testů,
 přepis git historie). Výsledný dokument má 53~řádků a~$\sim$350~slov;
 tabulka~\ref{tab:mapovani-instrukci} ukazuje mapování jednotlivých
 sekcí na metriky a~obrázek~\ref{fig:baseline-agents} uvádí kompletní
 znění instrukcí.
 
-\begin{table}[htbp]
+\begin{table}[!htbp]
 \centering
 \caption{Mapování sekcí baseline \texttt{AGENTS.md} na metriky}
 \label{tab:mapovani-instrukci}
@@ -80,11 +63,10 @@ Funkční korektnost     & Specification (AC)           & Q2, Q4 \\
 \bottomrule
 \end{tabular}
 \end{table}
-\FloatBarrier
 
-\begin{figure}[tbp]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=\textwidth]{img/generated/app03-baseline-single.png}
+\includegraphics[width=0.9\textwidth]{img/generated/app03-baseline-single.png}
 \caption{Baseline \texttt{AGENTS.md} (pilot-r1): kompletní znění
 instrukcí použitých jako výchozí bod pilotních iterací.}
 \label{fig:baseline-agents}
