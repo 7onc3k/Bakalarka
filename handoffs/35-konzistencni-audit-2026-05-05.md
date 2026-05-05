@@ -24,14 +24,57 @@ Diskuse s uživatelem probíhá per-položku v pořadí závažnosti.
     teď ve všech kontextech znamená sběr automatizovaný, ne přítomnost
     exit kritéria
 
-- ⏳ **A4** — vyřešeno bonusem výše (forward ref kap03 → kap02 zmizela
+- ✅ **A4** — vyřešeno bonusem výše (forward ref kap03 → kap02 zmizela
   s drop Typ sloupce; trichotomie det/qual/zaz neexistuje, není co
   mostit)
-- ⏳ **A5** — neřešeno (diagnostické rámce kap03 vs aplikace kap04)
+- 🔍 **A5 (verifikováno, deferred)** — viz níže "A5 deferral"
 - ⏳ **T1** — neřešeno ("Závěr pilotních iterací" → "pilotní fáze")
 - ⏳ **T2** — neřešeno (multi-label hygiena, debt)
 - ⏳ **Z1–Z9** — neřešeno (jazykové zkomoleniny)
 - ⏳ **D1–D5** — neřešeno (diskutabilní)
+
+## A5 deferral (2026-05-05)
+
+**Verdikt z evidence:** kap04 je inkonzistentní strana, ne kap03.
+
+Ověřeno proti `experiments/`:
+
+- `experiments/CLAUDE.md` definuje proceduru: "Diagnose — analýza
+  proti FSE 2025 (7 komponent), SASE (script balance), Lulla 2026
+  (content effectiveness), Breunig (fighting-the-weights). AGENTbench
+  meta-princip: 'Kdyby řádek chyběl, udělal by agent neočividnou
+  chybu?'"
+- `pilot-r1/DIAGNOSIS.md`, `pilot-r2/DIAGNOSIS.md`,
+  `pilot-r3/DIAGNOSIS.md` mají strukturované sekce per rámec:
+  *FSE 2025 — komponentní analýza*, *SASE — script balance*,
+  *Lulla 2026 — content effectiveness*, *Breunig/Razavi — prompt
+  sensitivity*. Každý fix má sloupec `Literatura` s explicitní
+  citací.
+
+Tabulka 3.7 v `kap03 sec:diagnostika-uprava` (mapa typ příčiny →
+primární rámec → typ opravy) odráží reálnou proceduru. Kap04
+paragraphy *Diagnostika.* v sekcích Pilot-rN ale odkazují jen
+Breunig (r3→r4, r4→r5); Mao/Hassan/Lulla v próze chybí, přestože
+v DIAGNOSIS.md hrály explicitní roli.
+
+**Plán fixu (deferred dokud kap04 práce nedokončena):**
+
+| Sekce kap04 | Doplnit citaci | Kde v textu |
+|---|---|---|
+| 4.2.1 Pilot-r1 *Diagnostika.* | `\cite{mao2025fse}` (Workflow slabý), `\cite{breunig2025, razavi2025}` (pravidlo bez operacionalizace) | věta *"sdílí stejný vzor: instrukce uvedla, co má platit"* |
+| 4.2.2 Pilot-r2 *Diagnostika.* | `\cite{breunig2025}` (P2+Q8 opakovaná ignorance) | věta *"V obou procesních pravidlech splnil agent literu... ale ne jeho záměr"* |
+| 4.2.3 Pilot-r3 *Diagnostika.* | již má `\cite{breunig2025}` | OK |
+| 4.2.4 Pilot-r4 *Diagnostika.* | již má `\cite{breunig2025}` | OK |
+
+V **kap03 sec:diagnostika-uprava** za tab:diagnostika-mapa
+(odstavec *"Hranice mezi typy příčin jsou v praxi neostré..."*)
+doplnit větu: úplná rámcová analýza každého běhu je v
+`DIAGNOSIS.md` v repu; v próze kap04 citujeme jen rámce, které
+pro daný fix dominovaly.
+
+**Proč deferred:** kap04 je v aktivní revizi mimo tento audit;
+není smysl mixovat změny do PR terminology cleanup. A5 si
+vezmeme znovu, až kap04 stabilizuje.
 
 ## Pořadí řešení
 
