@@ -80,9 +80,162 @@ jde o~úlohu dostatečně bohatou na netriviální rozhodování, ale stále
 zvládnutelnou pro opakované běhy: agent musí kombinovat stavové
 přechody, časové výpočty a~testování hraničních případů, takže
 metriky zachycují víc než průchod jednoduchou CRUD implementací.
-Detailní popis specifikace včetně stavového automatu, API kontraktu
-a~úplného výčtu acceptance criteria uvádí
-sekce~\ref{sec:konstrukce-specifikace}.
+
+\phantomsection\label{sec:konstrukce-specifikace}%
+Specifikace projektu tvoří fixní zadání, které agent dostává
+v~Issue~\#1. Issue má dvě části: \textbf{Requirements} (co business
+potřebuje) a~\textbf{API Contract} (co musí implementace exportovat).
+API kontrakt je současně jediným technickým omezením implementace
+a~vstupem pro metriku~\ac{Q1}.
+
+\paragraph{Doménová logika.}
+Systém eskaluje neuhrazené faktury sérií stavů od přátelské upomínky
+před splatností přes stupňující se urgentnost až po pozastavení
+služby a~odpis pohledávky. Každá faktura má vlastní nezávislou
+instanci, časové prodlevy se počítají v~pracovních dnech (víkendy
+a~konfigurovatelné svátky se přeskakují automaticky v~aritmetice
+timeoutů, nejsou samostatným stavem). Hlavní eskalační větev má 9
+stavů spojených 8 časovými přechody (obrázek~\ref{fig:dunning-fsm}).
+Popisky šipek používají notaci \texttt{[guard]\,/\,effect}: guard
+v~hranatých závorkách udává timeout v~pracovních dnech (\textit{bd}~=~business
+days) od vstupu do předchozího stavu, effect za~lomítkem je akce
+vrácená volajícímu (typicky odeslání e-mailu, u~přechodu do
+\texttt{SUSPENDED} navíc pozastavení služby). Eskalační přechody
+spouští událost \texttt{tick} při splnění guardu; alternativně
+\texttt{manual\_advance} posune stav na další bezpodmínečně (bypass
+timeoutu, v~diagramu nezakreslen). Vedle hlavní větve jsou
+ze~všech aktivních stavů kdykoliv dostupné \texttt{PAID}
+a~\texttt{CANCELLED} (z~9 stavů, vše kromě terminálů) a~\texttt{PAUSED}
+(jen ze~6 aktivních: \texttt{OVERDUE} až \texttt{SUSPENDED}).
+
+\begin{figure}[tbp]
+\centering
+\begin{tikzpicture}[
+    >=stealth,
+    s/.style={rectangle, draw, rounded corners=2pt,
+              minimum height=0.55cm, minimum width=2.0cm,
+              font=\scriptsize\sffamily, inner sep=2pt},
+    term/.style={s, fill=black!8},
+    side/.style={s, fill=blue!6},
+    arr/.style={->, thick, gray!75},
+    barr/.style={->, thick, blue!55!black},
+    tx/.style={font=\scriptsize\sffamily, inner sep=1pt},
+    note/.style={font=\scriptsize\sffamily\itshape, text=black!55, inner sep=1pt}
+]
+    %% --- Hlavní eskalace, vertikálně ---
+    \node[s] (issued) {ISSUED};
+    \node[s, below=0.5cm of issued]  (due)   {DUE\_SOON};
+    \node[s, below=0.5cm of due]     (over)  {OVERDUE};
+    \node[s, below=0.5cm of over]    (grace) {GRACE};
+    \node[s, below=0.5cm of grace]   (rem1)  {REMINDER\_1};
+    \node[s, below=0.5cm of rem1]    (rem2)  {REMINDER\_2};
+    \node[s, below=0.5cm of rem2]    (final) {FINAL\_NOTICE};
+    \node[s, below=0.5cm of final]   (susp)  {SUSPENDED};
+    \node[term, below=0.5cm of susp] (wrof)  {WRITTEN\_OFF};
+
+    %% --- Šipky s guards a~effects ---
+    \draw[arr] (issued) -- node[tx, right]{[\,now\,$\geq$\,due\,$-7$\,bd\,] / email} (due);
+    \draw[arr] (due)    -- node[tx, right]{[\,now\,$\geq$\,due\,]} (over);
+    \draw[arr] (over)   -- node[tx, right]{[\,elapsed\,$\geq$\,3\,bd\,]} (grace);
+    \draw[arr] (grace)  -- node[tx, right]{[\,elapsed\,$\geq$\,7\,bd\,] / email} (rem1);
+    \draw[arr] (rem1)   -- node[tx, right]{[\,elapsed\,$\geq$\,14\,bd\,] / email} (rem2);
+    \draw[arr] (rem2)   -- node[tx, right]{[\,elapsed\,$\geq$\,14\,bd\,] / email} (final);
+    \draw[arr] (final)  -- node[tx, right]{[\,elapsed\,$\geq$\,7\,bd\,] / email\,+\,suspend\_service} (susp);
+    \draw[arr] (susp)   -- node[tx, right]{[\,elapsed\,$\geq$\,30\,bd\,] / email} (wrof);
+
+    %% --- Boční panel ---
+    \node[term, anchor=west] (paid) at ($(issued.east)+(7.0cm,0)$)  {PAID};
+    \node[term, below=0.4cm of paid]  (canc) {CANCELLED};
+    \node[side, below=0.4cm of canc]  (paus) {PAUSED};
+
+    \draw[arr] ($(paid.west)+(-1.4cm,0)$) -- node[tx, above]{payment} (paid.west);
+    \draw[arr] ($(canc.west)+(-1.4cm,0)$) -- node[tx, above]{cancel}  (canc.west);
+    \draw[arr] ($(paus.west)+(-1.4cm,0)$) -- node[tx, above]{paused}  (paus.west);
+
+    \node[note, below=0.3cm of paus, text width=4.6cm, align=left] (resnote)
+        {\textbf{resumed:} status\,$:=$\,pausedFrom; stateEnteredAt\,$:=$\,now\,$-$\,pausedElapsed};
+    \draw[barr, dashed] (paus.south) -- (resnote.north);
+\end{tikzpicture}
+\caption[Stavový automat systému upomínek]{Stavový automat systému
+upomínek faktur: hlavní eskalace shora dolů (vlevo) a~tři boční
+stavy dostupné z~většiny aktivních (vpravo). Notaci a~zdrojové
+stavy popisuje text výše.}
+\label{fig:dunning-fsm}
+\end{figure}
+
+\paragraph{API kontrakt.}
+Aby bylo možné agentovu implementaci porovnávat s~referenční sadou
+behavioral testů (\acs{Q2}), specifikace fixuje veřejné rozhraní:
+systém je čistá funkce \texttt{process(state, event, now)}, která
+pro daný stav, událost a~aktuální čas vrátí nový stav a~seznam akcí.
+Pevné jsou názvy 12 stavů (9 v~hlavní eskalační větvi a~3 boční:
+\texttt{PAID}, \texttt{CANCELLED}, \texttt{PAUSED}), 6~typů událostí
+(\texttt{tick}, \texttt{payment\_received}, \texttt{invoice\_cancelled},
+\texttt{dunning\_paused}, \texttt{dunning\_resumed},
+\texttt{manual\_advance}) a~3 typy akčních deskriptorů
+(\texttt{send\_email}, \texttt{suspend\_service},
+\texttt{resume\_service}). Stav nese kromě \texttt{status} pole pro
+datum splatnosti, čas vstupu do aktuálního stavu, konfiguraci a~při
+pauze \texttt{pausedFrom} s~\texttt{pausedElapsed}. Vnitřní
+implementace (modulární rozdělení, funkční vs.\ objektový styl)
+zůstává na agentovi: kontrakt je úzký právě v~tom, co testy potřebují
+volat a~pozorovat, a~všechno ostatní nechává otevřené.
+
+\paragraph{Implicitní pravidla domény.}
+Stavový automat je sám o~sobě lineární a~implementačně přímočarý.
+Obtížnost úlohy leží jinde: ve dvou implicitních pravidlech, která
+specifikace klade na chování implementace a~jejichž přehlédnutí vede
+ke kódu, který sice prochází triviálními případy, ale na hraničních
+selhává. Za~prvé,
+pause/resume musí přes pole \texttt{pausedElapsed} zachovat uplynulý
+čas: bez něj by se musel řešit trikem (posun \texttt{stateEnteredAt}
+zpět v~čase), který funguje pro jednu pauzu, ale selhává při
+opakovaném pause/resume, protože druhá pauza ztratí historii první.
+Za~druhé, všechny timeouty se počítají v~pracovních dnech, takže
+\texttt{+14\,bd} od pátku není čtrnáct kalendářních dnů a~hranice
+mezi víkendem a~pondělím jsou off-by-one zóna. Obě pravidla jsou
+plně určená API kontraktem; jejich zachycení ale vyžaduje doslovné
+čtení typů a~doménového slovníku, ne odvozování z~diagramu automatu.
+
+\paragraph{Acceptance criteria.}
+Specifikace obsahuje 25 acceptance criteria ve formátu Given/When/Then.
+Pokrývají sedm okruhů: časové přechody eskalace, platby, terminální
+stavy, storno, pauza/obnovení, manuální postup a~výpočet pracovních
+dní. Ukázka jednoho kritéria z~okruhu pauza/obnovení:
+
+\begin{quote}\small\sffamily
+Given an invoice is in PAUSED state\\
+When a \texttt{dunning\_resumed} event occurs\\
+Then the state transitions back to the state it was in before pausing\\
+And the timeout resumes from where it left off
+\end{quote}
+
+Formát Given/When/Then usnadňuje převod požadavků do referenčních
+testů (\ac{Q2}) i~mapování acceptance criteria na agentovy vlastní
+testy (\ac{Q4}). Doménový slovník (9 pojmů: dunning, grace period,
+business days, action descriptor aj.) sjednocuje terminologii mezi
+specifikací a~implementací.
+
+\paragraph{Out of scope.}
+Specifikace explicitně vylučuje šest oblastí: opakování plateb,
+úroky a~poplatky z~prodlení, částečné platby, odesílání e-mailů,
+plánování (cron) a~persistenci dat. Sekce out of scope omezuje
+riziko, že agent rozšíří řešení nad rámec sledovaného zadání,
+a~drží úlohu na úrovni čisté business logiky.
+
+\paragraph{Referenční testy jako oracle.}
+\phantomsection\label{sec:ref-implementace-postup}%
+Pro metriku~\ac{Q2} (sec~\ref{sec:produktove-metriky}) byla souběžně
+se specifikací připravena sada 42 referenčních testů metodou
+spec-first TDD~\cite{mathews2024}: očekávané hodnoty pochází ze
+specifikace, ne z~pozorování kódu. Testy jsou agentovi neviditelné
+a~spouští se až po běhu samostatným skriptem, takže slouží jako
+externí oracle, který agent nemůže přepsat
+(sec~\ref{sec:hodnoceni-ai-agentu}). Mutation testing nad referenční
+test suite dosáhl 91{,}9\,\%, což indikuje, že referenční testy samy
+detekují cílené poruchy v~doménové logice. Tato hodnota slouží jako
+pojistka kvality měřicího nástroje, ne jako srovnávací baseline pro
+agentovy běhy.
 
 V~tomto designu vystupují tři roviny, které se snadno zaměňují.
 \textit{Instrukce} v~souboru \texttt{AGENTS.md} jsou nezávislou
@@ -154,7 +307,7 @@ Cyklus iteraci opakuje, dokud nejsou splněna exit kritéria
 (obr.~\ref{fig:iterativni-cyklus}). Substantivní část iterace
 popisuje sekce~\ref{sec:diagnostika-uprava}.
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \centering
 \begin{tikzpicture}[
     node distance=1.8cm,
@@ -231,7 +384,7 @@ v~commit messages a~PR descriptions.
 Tabulka~\ref{tab:p1-p5} shrnuje deterministické procesní metriky.
 Všechny mají binární výstup pass/fail.
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
 \caption{Procesní compliance metriky P1--P5}
 \label{tab:p1-p5}
@@ -272,7 +425,7 @@ nově přidané testy se nezapočítávají. \\
 Tabulka~\ref{tab:p6-p8} shrnuje judge-based procesní metriky.
 Postup hodnocení je společný a~popsaný v~sekci~\ref{sec:llm-as-judge-aplikace}.
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
 \caption{Judge-based procesní metriky P6--P8}
 \label{tab:p6-p8}
@@ -315,7 +468,7 @@ agentovy testy skutečné chyby (Q3--Q4) a~je kód udržovatelný
 
 Tabulka~\ref{tab:q1-q2} shrnuje metriky funkční korektnosti.
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
 \caption{Metriky funkční korektnosti Q1--Q2}
 \label{tab:q1-q2}
@@ -355,7 +508,7 @@ který agent nemůže přepsat (sekce~\ref{sec:hodnoceni-ai-agentu}).
 
 Tabulka~\ref{tab:q3-q4} shrnuje metriky kvality testů.
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
 \caption{Metriky kvality testů Q3--Q4}
 \label{tab:q3-q4}
@@ -387,7 +540,7 @@ test v~agentově test suite. Škála \texttt{N/25}. \\
 
 Tabulka~\ref{tab:q5-q8} shrnuje metriky kvality kódu.
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
 \caption{Metriky kvality kódu Q5--Q8}
 \label{tab:q5-q8}
@@ -431,7 +584,7 @@ maskované silnými dimenzemi.
 Metriky zdrojů zachycují vstupy spotřebované při vývoji. Nemají exit
 kritérium a~slouží k~porovnání nákladů mezi iteracemi.
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
 \caption{Metriky zdrojů E1--E3}
 \label{tab:e1-e3}
@@ -534,10 +687,9 @@ a~konfiguraci agenta. Žádný existující kód, testy ani
 \texttt{package.json}. Agent musí inicializovat projekt
 a~zvolit strukturu sám.
 
-\textbf{Specifikace v~GitHub Issue~\#1} obsahuje 25 acceptance
-criteria, API kontrakt (TypeScript typy a~signatury), doménový
-slovník a~out of scope. Je to hlavní věcný vstup, který agent
-dostane kromě instrukcí.
+\textbf{Specifikace projektu} (popsaná v~sekci~\ref{sec:konstrukce-specifikace})
+zůstává napříč všemi běhy beze změny a~je dodávána agentovi
+v~GitHub Issue~\#1 jako hlavní věcný vstup vedle instrukcí.
 
 \textbf{Model MiniMax-M2.5} byl zvolen jako model schopný autonomně
 dokončit zadaný úkol. Cílem práce je vyhodnotit sadu metrik
@@ -607,7 +759,7 @@ patří navíc \texttt{DIAGNOSIS.md} s~analytickým výstupem
 zdůvodňující úpravu \texttt{AGENTS.md} pro další běh.
 Tabulka~\ref{tab:zaznamy-bezhu} shrnuje strukturu balíku.
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
 \caption{Záznamy pořízené pro jeden běh a~jednu iteraci}
 \label{tab:zaznamy-bezhu}
@@ -653,7 +805,7 @@ agent nedodržel očekávané chování. Opírá se o~pět rámců, z~nichž
 každý klade jinou diagnostickou otázku
 (tabulka~\ref{tab:diagnostika-ramce}).
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
 \caption{Diagnostické rámce a~otázky, které kladou}
 \label{tab:diagnostika-ramce}
@@ -684,7 +836,7 @@ opakujícího se problému instrukcí. Identifikovaná příčina se
 klasifikuje podle tabulky~\ref{tab:diagnostika-mapa}, která mapuje
 typ příčiny na primární rámec a~typ opravy.
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
 \caption{Mapování klasifikace příčiny na diagnostický rámec a~typ opravy}
 \label{tab:diagnostika-mapa}
@@ -747,7 +899,7 @@ ukazuje konkrétní automatizovaný nástroj) a~\mmet{qual} (sloupec
 běhy. Pro praktické rozlišení mezi běhy se v~analýze používají též
 operační prahy popsané v~sekci~\ref{sec:pilotni-iterace}.
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
 \caption{Sada metrik: kód, měřená vlastnost, nástroj a~exit kritérium}
 \label{tab:metriky-prehled}
