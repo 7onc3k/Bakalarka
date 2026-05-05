@@ -647,30 +647,12 @@ vícekrokových sekvencí silnějším faktorem než drobné lokální změny
 v~pre-PR checklistu.
 \endgroup
 
-\paragraph{Závěr pilotních iterací.}
-Pět iterací (r1--r5) přineslo čtyři pozorování:
-
-\begingroup
-\setlength{\emergencystretch}{0.5em}
-\begin{enumerate}
-    \item \textbf{Verifikační kroky fungují spolehlivě.}
-          Jednokrokové příkazy s~okamžitým výstupem agent dodržoval
-          stabilněji než zbytek pracovního postupu.
-    \item \textbf{Vícekrokový pracovní postup je nedeterministický.}\par\noindent
-          Stejné instrukce vedly od plného dodržení (r3) přes
-          částečné dodržení (r4) až po kolaps pracovního postupu (r5).
-    \item \textbf{Deklarativní pravidla byla slabší než procedurální verifikace.}
-          Pravidlo v~Constraints nepomohlo, zatímco konkrétní verifikační
-          kroky opakovaně vedly ke zlepšení.
-    \item \textbf{Instrukce neopravila některá implementační rozhodnutí.}\par\noindent
-          Problém s~\texttt{pausedElapsed} přetrval i~po dalších úpravách,
-          přestože specifikace i~API kontrakt byly jednoznačné.
-\end{enumerate}
-\endgroup
-
+\paragraph{Přechod k~ablacím.}
 Pilotní baseline pro ablace zůstává r3, jediný běh kde agent
-pracovní postup dodržel. Ablace testují, které z~těchto pozorování
-vydrží cílenou kontrolu.
+dodržel celý pracovní postup. Ablace testují, které složky
+fungujících instrukcí ke zlepšení skutečně přispěly.
+Interpretaci pilotních pozorování ve vztahu k~cílům práce uvádí
+kapitola~\ref{kap:vyhodnoceni}.
 
 %% ================================================================
 \section{Ablace}
@@ -889,33 +871,6 @@ vlastní testy po implementaci. Stejný problém se objevoval
 i~v~pilotních iteracích (r1, r4) se stejnými instrukcemi,
 jde tedy o~projev nedeterminismu modelu, ne ablace.
 
-
-\subsection{Závěr ablací}
-\label{sec:zaver-ablaci}
-
-Dvě ablace testovaly dvě složky instrukcí z~r3: verifikační
-kroky v~Process (ablace~A) a~sekci Package Quality (ablace~B).
-Výsledky ukazují odlišný charakter obou složek.
-
-Bez verifikačních kroků (\texttt{tsc}, \texttt{eslint})
-klesly metriky kvality kódu i~funkční korektnosti
-(tabulka~\ref{tab:ablace-a}). Agent bez těchto verifikačních kroků navíc
-spotřeboval přibližně dvakrát více testovacích cyklů. Verifikační
-kroky tak v~této studii fungují nejen jako kontrola kvality, ale
-i~jako prvky strukturující práci agenta.
-
-Bez sekce Package Quality zůstaly deterministické metriky kvality
-(\acs{Q5}--\acs{Q7}) na srovnatelné úrovni (tabulka~\ref{tab:ablace-b}),
-avšak \ac{Q8} kleslo ve všech ablačních bězích.
-Judge identifikoval chybějící modularitu a~neúplnou dokumentaci.
-Data jsou konzistentní s~hypotézou, že základní kódové konvence
-jsou u~tohoto modelu řízeny znalostmi z~tréninku, zatímco
-strukturální rozhodnutí instrukce ovlivňují.
-
-Procesní metriky (\acs{P1}--\acs{P5}) vykazovaly v~obou ablacích variabilitu
-srovnatelnou s~pilotními iteracemi (r3 vs.\ r4/r5). Tato variabilita
-není důsledkem ablace, ale nedeterminismu modelu: instrukce
-pro pracovní postup zůstaly v~obou ablacích beze změny.
 
 %% ================================================================
 \section{Souhrnné výsledky}
