@@ -5,6 +5,12 @@ Tento soubor je zamerne minimalni, aby nefungoval jako zastaraly steering dokume
 Aktualni kotva pro dalsi session:
 - `handoffs/27-thesis-full-pass-anchor.md`
 
+Bezici audity (otevrene polozky):
+- `handoffs/35-konzistencni-audit-2026-05-05.md` — cross-chapter
+  konzistence; A1-A4 hotovo, A5 verifikovano ale **deferred dokud
+  kap04 revize neskonci** (nemixovat scope do PR #49), zbyva
+  T1 + Z1-Z9 + D1-D5.
+
 Pred jakoukoli dalsi praci na thesis:
 1. Otevri `handoffs/27-thesis-full-pass-anchor.md`.
 2. Otevri `handoffs/27-thesis-state-snapshot.md` a over `Last verified`.
