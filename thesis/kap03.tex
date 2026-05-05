@@ -9,7 +9,7 @@ Sekce~\ref{sec:vyzkumny-pristup} zdůvodňuje volbu případové studie
 jako výzkumné strategie, představuje zvolený projekt, fáze studie
 (pilot a~ablace) a~strukturu iterativního cyklu.
 Sekce~\ref{sec:sada-metrik} definuje sadu 19~metrik ve třech
-kategoriích (proces, produkt, efektivita).
+kategoriích (proces, produkt, zdroje).
 Sekce~\ref{sec:experimentalni-design} popisuje operační detail:
 fixní proměnné, záznam běhu a~diagnostickou proceduru.
 Sekce~\ref{sec:prehledova-tabulka} shrnuje metriky tabulkou
@@ -34,7 +34,7 @@ cyklus, který v~rámci případu opakujeme
 
 Z~tří cílů formulovaných v~kapitole~\ref{kap:vymezeni} plynou
 společné nároky na metodiku. Cíl~1, návrh sady metrik pokrývající
-proces, kvalitu kódu a~efektivitu, lze ověřit jen tehdy, když
+proces, kvalitu produktu a~zdroje, lze ověřit jen tehdy, když
 metriky reagují na změny v~chování; to vyžaduje porovnání více běhů
 s~různými variantami instrukcí. Cíl~2, iterativní postup návrhu
 instrukcí řízený těmito metrikami, vyžaduje navíc, aby běhy tvořily
@@ -44,7 +44,7 @@ schopnosti porovnat běhy lišící se v~jediné složce. Všechny tři cíle
 tedy společně kladou na metodiku dva požadavky: opakované spouštění
 agenta s~různými variantami instrukcí na témže projektu a~podrobnou
 analýzu každého běhu napříč třemi dimenzemi (proces, produkt,
-efektivita).
+zdroje).
 
 Tomuto profilu odpovídá případová studie. Řízený experiment
 s~počtem běhů potřebným pro statistickou izolaci by byl vzhledem
@@ -53,7 +53,10 @@ Volíme proto hloubku před šířkou: jeden projekt s~detailní analýzou
 každého běhu (git historie, transcript, naměřené metriky).
 Yin~\cite{yin2018} pro tento typ výzkumu používá pojem
 \textit{analytická generalizace}: na jednom případě ukazujeme
-princip, který lze dále ověřovat na dalších projektech.
+princip, který lze dále ověřovat na dalších případech.
+Praktický přínos této práce proto formulujeme jako demonstraci
+proveditelnosti, zatímco analytická generalizace vymezuje způsob,
+jak opatrně číst přenositelné principy.
 Všechny běhy vycházejí ze stejné specifikace projektu, liší se
 verzí instrukcí, výslednou git historií a~naměřenými hodnotami
 metrik.
@@ -110,8 +113,9 @@ projekt nemusí být v~tomto smyslu plně dosažitelný v~jediném
 autonomním běhu; pro orientační srovnání měla i~referenční implementace
 napsaná ručně tři kosmetická lint warnings
 (sekce~\ref{sec:konstrukce-specifikace}). Pro praktické řízení iterací
-proto pracujeme s~\textit{operačními prahy} (Q2~$\geq$~37/42, \acs{Q3}
-$\geq$~70\,\%, Q4~$\geq$~24/25, Q5~$\leq$~1, Q7~$\leq$~1 porušení),
+proto pracujeme s~\textit{operačními prahy} (\acs{Q2}~$\geq$~37/42, \acs{Q3}
+$\geq$~70\,\%, \acs{Q4}~$\geq$~24/25, \acs{Q5}~$\leq$~1,
+\acs{Q7}~$\leq$~1 porušení),
 které lépe rozlišují běhy mezi sebou a~odpovídají barevnému kódování
 souhrnné tabulky a~vizualizací v~kapitole~\ref{kap:vyhodnoceni}.
 Pilotní fázi proto vyhodnocujeme dvěma pohledy současně: kolik
@@ -196,13 +200,13 @@ Naše sada obsahuje 19~metrik ve třech kategoriích:
 
 \begin{description}
     \item[P~-- proces (P1--P8)] Dodržel agent předepsaný postup?
-          Měříme dodržování workflow pravidel z~instrukcí
+          Měříme dodržování pravidel pracovního postupu z~instrukcí
           (\acs{P1}--\acs{P5}) a~kvalitu procesních výstupů jako commit
           messages, issue a~PR descriptions (\acs{P6}--\acs{P8}).
     \item[Q~-- kvalita produktu (Q1--Q8)] Je kód kvalitní?
           Měříme funkční korektnost (\acs{Q1}--\acs{Q2}), kvalitu testů
           (\acs{Q3}--\acs{Q4}) a~udržovatelnost kódu (\acs{Q5}--\acs{Q8}).
-    \item[E~-- efektivita (E1--E3)] Za jakou cenu?
+    \item[E~-- zdroje (E1--E3)] Za jakou cenu?
           Zaznamenáváme spotřebované tokeny (\acs{E1}), čas (\acs{E2})
           a~počet kompakcí kontextu (\acs{E3}).
 \end{description}
@@ -421,15 +425,15 @@ z~McCabe (sekce~\ref{sec:staticka-analyza}). Celkové skóre \acs{Q8} je
 jeden slabý rozměr má stáhnout celkový výsledek dolů, aby slabiny nebyly
 maskované silnými dimenzemi.
 
-\subsection{Metriky efektivity (E1--E3)}
-\label{sec:metriky-efektivity}
+\subsection{Metriky zdrojů (E1--E3)}
+\label{sec:metriky-zdroju}
 
-Metriky efektivity měří zdroje spotřebované při vývoji. Nemají exit
+Metriky zdrojů zachycují vstupy spotřebované při vývoji. Nemají exit
 kritérium a~slouží k~porovnání nákladů mezi iteracemi.
 
 \begin{table}[H]
 \centering
-\caption{Metriky efektivity E1--E3}
+\caption{Metriky zdrojů E1--E3}
 \label{tab:e1-e3}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
@@ -491,7 +495,7 @@ všemi běhy, aby hodnocení bylo srovnatelné mezi iteracemi.
 \textbf{Interpretace výsledků.} LLM-as-judge zde neslouží jako plně
 objektivní měření, ale jako strukturované posouzení vlastností, které
 nelze spolehlivě vyhodnotit deterministickým skriptem. Výsledky těchto
-metrik proto interpretujeme jako podpůrné kvalitativní indikátory a~ne
+metrik proto interpretujeme jako podpůrné judge-based indikátory a~ne
 jako hlavní důkazní osu případové studie.
 
 %% ==========================================================================
@@ -735,50 +739,48 @@ najít kombinaci s~nejvyšším score.
 \label{sec:prehledova-tabulka}
 
 Tabulka~\ref{tab:metriky-prehled} shrnuje všechny metriky na jednom
-místě. Sloupec \textit{typ} rozlišuje deterministická exit kritéria
-(automatizované měření), judge-based metriky
-(rubrikové hodnocení LLM-as-judge) a~záznamové metriky
-(bez kritéria, slouží k~porovnání mezi běhy). Prahové požadavky
-ve~sloupci \textit{Exit kritérium} popisují striktní ideál; pro
-praktické rozlišení mezi běhy se v~analýze používají též operační
-prahy popsané v~sekci~\ref{sec:pilotni-iterace}. Způsob sběru
-odpovídá rozlišení \mmet{det}, \mmet{qual} a~\mmet{zaz}
-zavedenému v~kapitole~\ref{kap:teorie}.
+místě. Sběr má dvě podoby: \mmet{det} (sloupec \textit{Nástroj}
+ukazuje konkrétní automatizovaný nástroj) a~\mmet{qual} (sloupec
+\textit{Nástroj} obsahuje LLM-as-judge). Prahové požadavky ve~sloupci
+\textit{Exit kritérium} popisují striktní ideál; metriky bez prahu
+(E1, E2) mají v~tomto sloupci pomlčku a~slouží jen k~porovnání mezi
+běhy. Pro praktické rozlišení mezi běhy se v~analýze používají též
+operační prahy popsané v~sekci~\ref{sec:pilotni-iterace}.
 
 \begin{table}[H]
 \centering
-\caption{Sada metrik: kód, měřená vlastnost, nástroj, exit kritérium a~typ}
+\caption{Sada metrik: kód, měřená vlastnost, nástroj a~exit kritérium}
 \label{tab:metriky-prehled}
 \scriptsize
 \setlength{\tabcolsep}{2pt}
-\begin{tabular}{@{}lllll@{}}
+\begin{tabular}{@{}llll@{}}
 \toprule
-\textbf{Kód} & \textbf{Metrika} & \textbf{Nástroj} & \textbf{Exit kritérium} & \textbf{Typ} \\
+\textbf{Kód} & \textbf{Metrika} & \textbf{Nástroj} & \textbf{Exit kritérium} \\
 \midrule
-\multicolumn{5}{@{}l}{\textit{Procesní (P): jak agent pracuje}} \\[2pt]
-P1 & Issues before code            & git, GitHub API & pass & deter. \\
-P2 & Branch per issue              & git, GitHub API & pass & deter. \\
-P3 & Test-first commits            & git log         & pass & deter. \\
-P4 & PRs linked to issues          & GitHub API      & pass & deter. \\
-P5 & No existing test modifications & git diff       & pass & deter. \\
-P6 & Commit message quality        & LLM-as-judge (GLM-5) & $\geq$ 2/3 & judge \\
-P7 & Issue description quality     & LLM-as-judge (GLM-5) & $\geq$ 2/3 & judge \\
-P8 & PR description quality        & LLM-as-judge (GLM-5) & $\geq$ 2/3 & judge \\
+\multicolumn{4}{@{}l}{\textit{Procesní (P): jak agent pracuje}} \\[2pt]
+P1 & Issues before code            & git, GitHub API & pass \\
+P2 & Branch per issue              & git, GitHub API & pass \\
+P3 & Test-first commits            & git log         & pass \\
+P4 & PRs linked to issues          & GitHub API      & pass \\
+P5 & No existing test modifications & git diff       & pass \\
+P6 & Commit message quality        & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
+P7 & Issue description quality     & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
+P8 & PR description quality        & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
 \midrule
-\multicolumn{5}{@{}l}{\textit{Produktové (Q): co agent vyrobil}} \\[2pt]
-Q1 & API contract match         & tsc (import + typecheck) & match & deter. \\
-Q2 & Referenční test pass rate  & Vitest (42 testů)       & 42/42 & deter. \\
-Q3 & Mutation score              & Stryker                 & $\geq$ 70\,\% & min. \\
-Q4 & AC coverage agentových testů (25 krit.) & LLM-as-judge (GLM-5)   & 25/25 & judge \\
-Q5 & Lint warnings               & ESLint                  & 0 & deter. \\
-Q6 & Typecheck errors            & tsc \texttt{-{}-noEmit} & 0 & deter. \\
-Q7 & Cyklomatická složitost      & ESLint (complexity)     & $\leq$ 10/fn & min. \\
-Q8 & Design quality              & LLM-as-judge (GLM-5)   & $\geq$ 2/3 & judge \\
+\multicolumn{4}{@{}l}{\textit{Produktové (Q): co agent vyrobil}} \\[2pt]
+Q1 & API contract match         & tsc (import + typecheck) & match \\
+Q2 & Referenční test pass rate  & Vitest (42 testů)       & 42/42 \\
+Q3 & Mutation score              & Stryker                 & $\geq$ 70\,\% \\
+Q4 & AC coverage agentových testů (25 krit.) & LLM-as-judge (GLM-5)   & 25/25 \\
+Q5 & Lint warnings               & ESLint                  & 0 \\
+Q6 & Typecheck errors            & tsc \texttt{-{}-noEmit} & 0 \\
+Q7 & Cyklomatická složitost      & ESLint (complexity)     & $\leq$ 10/fn \\
+Q8 & Design quality              & LLM-as-judge (GLM-5)   & $\geq$ 2/3 \\
 \midrule
-\multicolumn{5}{@{}l}{\textit{Efektivita (E): za jakou cenu}} \\[2pt]
-E1 & Vstup / výstup / $\Sigma$ cache (tis.) z exportu & OpenCode export & --- & záznam \\
-E2 & Trvání (minuty)             & session timestamps & --- & záznam \\
-E3 & Počet kompakcí kontextu & OpenCode DB (\texttt{time\_compacting}) & 0 & deter. \\
+\multicolumn{4}{@{}l}{\textit{Zdroje (E): za jakou cenu}} \\[2pt]
+E1 & Vstup / výstup / $\Sigma$ cache (tis.) z exportu & OpenCode export & --- \\
+E2 & Trvání (minuty)             & session timestamps & --- \\
+E3 & Počet kompakcí kontextu & OpenCode DB (\texttt{time\_compacting}) & 0 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -804,7 +806,7 @@ taxonomie procesních a~produktových metrik~\cite{fenton2014}. Konkrétní
 kombinace metrik do sady a~volba exit kritérií jsou autorské a~představují
 návrh, ne ověřený standard. Pět metrik (\acs{P6}, \acs{P7}, \acs{P8},
 \acs{Q4}, \acs{Q8}) obsahuje subjektivní složku (LLM-as-judge). Tyto
-metriky proto slouží jako podpůrné kvalitativní indikátory, zatímco
+metriky proto slouží jako podpůrné judge-based indikátory, zatímco
 hlavní opora vyhodnocení stojí na deterministických metrikách
 a~auditovatelných artefaktech. Spolehlivost LLM-as-judge nebyla
 validována proti lidskému hodnocení (např.\ Cohenovým~$\kappa$)
@@ -827,7 +829,7 @@ variaci spouštíme dvakrát: shoda obou běhů ve~směru efektu zvyšuje
 důvěru, že nejde o~náhodu, byť ani dva běhy neposkytují
 statistickou sílu.
 Další hrozbou je confirmation bias: autor navrhuje instrukce
-i~evaluuje výsledky. Tuto hrozbu oslabují automatizované metriky
+i~evaluuje výsledky. Tuto hrozbu oslabují deterministické metriky
 (\acs{P1}, \acs{Q1}--\acs{Q3}, \acs{Q5}--\acs{Q7}), které nepodléhají
 subjektivnímu posouzení, a~volba judge modelu z~jiné rodiny.
 Mitigací je také auditovatelný řetězec rozhodnutí (changelog per
@@ -841,8 +843,12 @@ rozlišuje analytickou generalizaci: z~jednoho případu lze ukázat
 principy, ne statistické zákonitosti. Systém upomínek má
 deterministickou logiku a~výsledky nemusí platit pro projekty
 s~uživatelským rozhraním, strojovým učením nebo nedeterministickými
-výstupy. Přenositelné jsou metriky a~postup (kdokoliv je může použít
-na svém projektu), konkrétní naměřené hodnoty a~instrukce platí pro
+výstupy. Další ověřování má proto dvě osy: replikaci v~programování
+na jiných modelech, nástrojích a~projektech a~ověření mimo
+programování, kde nemusí existovat deterministická zpětná vazba.
+Přenositelné jsou
+metriky a~postup (kdokoliv je může použít na svém projektu), konkrétní
+naměřené hodnoty a~instrukce platí pro
 tuto studii.
 
 Výzkum nezahrnuje lidské účastníky. Veškerá data (git log, metriky,

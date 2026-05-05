@@ -6,14 +6,14 @@ testy, spravovat verzovací historii a~komunikovat prostřednictvím
 issues a~pull requestů. S~rostoucí autonomií těchto nástrojů roste
 i~potřeba systematicky hodnotit kvalitu jejich práce. Současné benchmarky hodnotí izolované aspekty práce agenta,
 především funkční korektnost. Holistický pohled, který by
-zachytil proces, kvalitu kódu a~efektivitu společně, však chybí.
+zachytil proces, kvalitu produktu a~zdroje společně, však chybí.
 Přitom i~funkčně správné řešení může být v~praxi odmítnuto
 kvůli nedostatkům v~procesu nebo udržovatelnosti. Praktik, který vidí
 jen pass/fail výsledek, tak může přecenit řešení, které by ve skutečném
 vývoji neprošlo code review nebo by se obtížně rozvíjelo.
 
 Kvalitu práce agenta výrazně ovlivňují instrukce, které dostane.
-V~praxi se etablují instrukční soubory jako \texttt{AGENTS.md}
+V~praxi se etablují soubory s~instrukcemi jako \texttt{AGENTS.md}
 nebo \texttt{CLAUDE.md}, které definují pracovní postup, konvence
 a~omezení projektu. Tyto soubory se stávají standardním rozhraním
 mezi člověkem a~agentem nejen v~softwarovém vývoji, ale
@@ -21,8 +21,8 @@ i~v~univerzálních agentních nástrojích. Jak instrukce systematicky
 navrhovat a~jak měřit, zda agent dodržuje požadované praktiky,
 zůstává otevřenou otázkou.
 
-Tato práce navrhuje sadu metrik pokrývající proces, kvalitu kódu
-a~efektivitu práce agenta. Na případové studii necháváme agenta
+Tato práce navrhuje sadu metrik pokrývající proces, kvalitu produktu
+a~zdroje spotřebované při práci agenta. Na případové studii necháváme agenta
 opakovaně implementovat systém upomínek faktur ze specifikace,
 výsledky měříme navrženými metrikami a~na jejich základě
 upravujeme instrukce mezi iteracemi. Ablacemi dále zkoumáme,

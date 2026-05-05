@@ -150,6 +150,17 @@ Vědecký text = přesný, ne složitý.
 - Doménové termíny piš česky, industry standard může zůstat anglicky.
 - Em dash nepoužívej vůbec.
 
+## Odkazování na místa v thesis
+
+Uživatel čte text v PDF, ne v `.tex` souborech. Čísla řádků v PDF nevidí.
+
+Při odkazování na konkrétní místo v thesis vždy uváděj:
+- **kapitolu a sekci** (číslo sekce nebo `\label`, např. `kap03 sec:diagnostika-uprava`)
+- **odstavec / blok** (např. "závěr sekce", "odstavec za tabulkou X", "v paragraph header `Diagnostické rámce`")
+- **citaci úvodních slov** odstavce nebo věty, aby uživatel místo našel v PDF
+
+Nepoužívej čísla řádků `.tex` souboru jako primární odkaz. Pokud je řádek nutný pro vlastní orientaci v editoru, drž ho v poznámce, ne v hlavním textu.
+
 Metriky:
 - Kódy metrik v thesis prose zapisuj přes acro makra z `thesis/makra.tex`.
 - Nepiš v textu ručně bare `P1`, `Q3` apod.

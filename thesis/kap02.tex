@@ -299,12 +299,14 @@ slova smyslu.
 Reakcí na tato omezení jsou rámce DORA~\cite{forsgren2018}
 a~navazující SPACE~\cite{forsgren2021space}, které explicitně varují
 před redukcí výkonnosti na jedinou metriku a~místo toho pracují
-s~několika osami současně. Pro hodnocení agentní práce se týž princip
-uplatňuje na třech osách (sekce~\ref{sec:metriky-efektivity}): tokenech
-jako proxy výpočetního úsilí, wall-clock času běhu a~stabilitě
-session. Tyto osy a~jejich specifika v~agentním prostředí (kontextové
-okno jako vzácný zdroj, riziko překročení kontextu) podrobněji popisuje
-sekce~\ref{sec:agenti-meni-sdlc}.
+s~několika osami současně. Stejný princip víceosého měření přenášíme
+i~na hodnocení agenta, ale s~posunem v~obsahu zdrojové dimenze:
+lidské úsilí v~klasickém Fentonově smyslu u~autonomního agenta
+odpadá a~jeho místo zaujímají tokeny jako proxy výpočetního úsilí,
+wall-clock čas běhu a~stabilita session, k~níž v~agentním prostředí
+přibývá kontextové okno jako vzácný zdroj
+(sekce~\ref{sec:metriky-zdroju}). Tyto osy a~jejich specifika
+podrobněji popisuje sekce~\ref{sec:agenti-meni-sdlc}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{AI coding agenti}
@@ -450,10 +452,10 @@ sedm agentních frameworků na třech osách (úspěšnost, efektivita
 reasoning kroků a~tokenová režie); jejich pohled na proces je ale
 omezen na trasu reasoning kroků agenta a~strukturální kvalita kódu
 v~hodnocení chybí. Žádný z~uvedených benchmarků tedy systematicky
-neměří kvalitu procesu (jak agent organizoval práci), kvalitu kódu
-nad rámec funkční korektnosti (udržovatelnost, čistota) a~efektivitu
-(spotřeba zdrojů) současně. Tato mezera naznačuje potřebu metrického
-rámce, který by dimenze procesu, kvality kódu a~efektivity pokrýval
+neměří kvalitu procesu (jak agent organizoval práci), kvalitu produktu
+nad rámec funkční korektnosti (udržovatelnost, čistota)
+a~spotřebu zdrojů současně. Tato mezera naznačuje potřebu metrického
+rámce, který by dimenze procesu, kvality produktu a~zdrojů pokrýval
 současně.
 Návrh takového rámce a~jeho operacionalizaci v~kontextu této
 práce popisuje kapitola~\ref{kap:metodika}.
@@ -523,10 +525,10 @@ a~kontext čerpá z~meetingů, code review a~zkušenosti. V~\textit{SE4A}
 (\textit{Software Engineering for Agents}) je vývojářem autonomní
 systém, který pracuje výhradně s~tím, co dostane jako vstup.
 
-\paragraph{Scaffolding a~instrukční soubory.}
+\paragraph{Scaffolding a~soubory s~instrukcemi.}
 \textit{Scaffolding} označuje strukturované artefakty v~prostředí
 agenta, které jeho chování řídí. V~praxi jde nejčastěji
-o~instrukční soubory umístěné v~repozitáři
+o~soubory s~instrukcemi umístěné v~repozitáři
 (např.\ \texttt{AGENTS.md}, \texttt{CLAUDE.md}), které se v~poslední
 době prosazují jako de facto standard napříč většinou coding agentů.
 Tyto soubory definují roli agenta, pracovní postup, konvence
@@ -582,10 +584,11 @@ modelu jedním mechanismem. Wei et al.~\cite{wei2022cot} ukazují, že
 i~krátká nápověda (``think step by step'') aktivuje reasoning, který
 se bez ní neprojeví, a~Min et al.~\cite{min2022rethinking} dokládají,
 že demonstrace v~in-context learning působí spíš jako strukturální
-vodítka než jako přímé příkazy. Chování modelu lze tedy ovlivnit
-přímým \textit{vynucením} i~\textit{aktivací} latentních znalostí;
-která z~cest je v~konkrétním případě účinnější, nelze rozhodnout
-předem.
+vodítka než jako přímé příkazy. Instrukce tedy nemusí působit jen
+jako explicitní příkazy: mohou také strukturovat řešení nebo
+připomínat schopnosti, které se bez vhodného podnětu neprojeví.
+Která forma instrukce bude v~konkrétním případě účinnější, nelze
+rozhodnout předem.
 
 Otevřenou otázkou proto není jen to, zda instrukce obecně pomáhají,
 ale jak jejich obsah systematicky navrhovat a~jak poznat, které

@@ -7,8 +7,10 @@ Kanonické pojmy pro konzistentní psani a pripravu na obhajobu.
 | Pojem | Definice | Poznamka |
 |-------|----------|----------|
 | DSR (Design Science Research) | Vyzkumny pristup: navrhujeme artefakt a evaluujeme ho | Peffers 2008, Hevner 2004 |
-| Pripadova studie (case study) | Vyzkumna strategie: evaluace na jednom pripadu do hloubky | Yin 2018; NE "experiment" pro celek |
-| Experimentalni beh | Jedno spusteni agenta s konkretni verzi instrukci | "run" v infrastrukture |
+| Pripadova studie (case study) | Vyzkumna strategie: evaluace na jednom pripadu do hloubky | Yin 2018; NE "experiment" pro celek studie |
+| Demonstrace proveditelnosti | Prakticke ramovani: pripadova studie ukazuje, ze navrzenou sadu metrik a iterativni postup lze aplikovat na jednom pripadu | NE "feasibility demonstrace" v ceske prose |
+| Analyticka generalizace | Metodologicke ramovani pripadove studie podle Yina: z jednoho pripadu lze formulovat principy pro dalsi overeni, ne statisticke tvrzeni o populaci | Neni synonymum demonstrace proveditelnosti; pouzit jen pri diskusi validity a logiky zobecneni |
+| Experimentalni beh | Jedno spusteni agenta s konkretni verzi instrukci | "run" v infrastrukture; "beh" v bezne prose |
 | Iterace | Jeden cyklus Spusteni/Mereni/Diagnoza/Uprava | |
 | Pilotni faze | Cela serie iteraci r1-r5 | NE "pilotni iterace" pro fazi |
 | Ablace | Faze kde z fungujici sady systematicky odebirame slozky instrukci a merime dopad | Druha faze pripadove studie (po pilotu); cil 3 |
@@ -58,6 +60,12 @@ Spektrum od nejslabsiho po nejsilnejsi:
 Klicove zjisteni z pilotu: agent verifikacni kroky dodrzoval spolehlive, pravidla ignoroval. Prikazy dodrzoval castecne (zavisi na nedeterminismu).
 
 POZOR: Toto je empiricke pozorovani z nasi case study, ne taxonomie z literatury.
+
+**Vynuceni / aktivace**: vlastni interpretacni rozliseni teto prace, pouzivane primarne v diskusi vysledku (kap05), ne teoreticka taxonomie z kap02.
+- vynuceni = instrukce prevadi pozadavek na overitelny krok s externi zpetnou vazbou (napr. `tsc`, `eslint`, `git log`)
+- aktivace = instrukce pripomina nebo vyvolava chovani, ktere model pravdepodobne umi z treninku (napr. modularita, dokumentace, designove konvence)
+- literatura poskytuje neprimo oporu pro oba typy pusobeni instrukci, ale nezavadi tuto dvojici pojmu jako hotovou taxonomii
+
 Souvisejici literatura:
 - Kim et al. 2025 (DETAIL): specificita zlepsuje vysledky, ale prilis detail omezuje reasoning
 - Kalyuga et al. 2003: expertise reversal effect — instrukce pro novacka skodi expertovi
@@ -108,3 +116,4 @@ DSR (pristup)          --> CO delame (navrhujeme metriky + postup, evaluujeme)
 | workflow (v textu) | Anglicismus | pracovni postup |
 | experiment (samostatne) | Nejednoznacne | pripadova studie (celek), experimentalni beh (jednotlivy) |
 | pilotni iterace (pro fazi) | Matouci — iterace je jeden cyklus | pilotni faze |
+| feasibility demonstrace | Hybridni anglicismus | demonstrace proveditelnosti |

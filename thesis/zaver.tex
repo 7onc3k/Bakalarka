@@ -10,17 +10,18 @@ pět pilotních iterací a~dvě ablace, každou ověřenou dvěma nezávislými
 běhy.
 
 Prvním cílem bylo navrhnout sadu metrik pokrývající proces,
-kvalitu kódu a~efektivitu, a~tím rozšířit hodnocení nad rámec
+kvalitu produktu a~zdroje, a~tím rozšířit hodnocení nad rámec
 pass/fail výsledku. Výsledná sada 19~metrik
 pokrývá tři dimenze odvozené z~taxonomie Fentona a~Biemana.
 Procesní metriky odhalily problémy, které výsledkové metriky samy
 o~sobě nezachytily: běh s~téměř plným skóre funkčních testů
 vykazoval nestabilní procesní compliance. Kombinace deterministických
-a~kvalitativních metrik přinesla komplementární pohled, protože
+a~judge-based metrik přinesla komplementární pohled, protože
 každý typ zachycuje jinou dimenzi chování agenta.
 
-Druhým cílem bylo iterativním postupem navrhnout instrukce
-a~vyhodnotit měřitelné změny v~chování agenta podle navržených metrik. Cyklus
+Druhým cílem bylo na~případové studii demonstrovat iterativní postup
+návrhu instrukcí řízený těmito metrikami a~vyhodnotit, zda a~jak vede
+k~měřitelným změnám v~chování agenta. Cyklus
 měření, diagnózy a~úpravy vedl k~měřitelnému zlepšení, ale ne
 monotónnímu: jedna iterace způsobila regresi, po které bylo nutné
 vrátit se k~předchozí verzi instrukcí. Opakujícím se vzorcem
@@ -30,22 +31,26 @@ na dostupnosti deterministických nástrojů s~jednoznačným výstupem.
 U~požadavků bez takového nástroje zůstává instrukce
 na úrovni pravidla nebo příkazu bez vnější zpětné vazby.
 
-Třetím cílem bylo ablacemi prozkoumat, které složky instrukční
-sady přispívají k~měřenému chování agenta a~které jsou redundantní.
+Třetím cílem bylo ablacemi prozkoumat, které složky instrukcí
+vytvořených v~cíli~2 přispívají k~měřenému chování agenta
+a~které jsou redundantní.
 Ablace potvrdila závislost
 klíčových metrik na verifikačních krocích, kterou pilotní fáze už
 naznačila: jejich odebrání zhoršilo funkční korektnost i~čistotu kódu. Konvence kvality kódu automatizované
 metriky neovlivnily, ale designová kvalita hodnocená LLM-as-judge
 klesla. Výsledky zároveň ukázaly, že procesní compliance je výrazně
 citlivá na nedeterminismus modelu. Stejná sada instrukcí proto může
-vést k~odlišnému dodržení vícekrokového workflow.
+vést k~odlišnému dodržení vícekrokového pracovního postupu.
 
 Hlavním přínosem práce je iterativní postup a~sada metrik, které
 může praktik aplikovat na vlastním projektu s~vlastními prahy.
 Konkrétní instrukce a~naměřené hodnoty platí pro tuto případovou
-studii. Přenositelný je postup, ne výsledná čísla. Práce je omezena
-na jeden model a~jeden projekt. Závěry mají povahu analytické
-generalizace na teorii, nikoliv statistické generalizace na populaci.
+studii. Přenositelný je postup, ne výsledná čísla. Práce tím
+demonstruje proveditelnost navrženého rámce na jednom případu,
+zatímco závěry mají povahu analytické generalizace: formulují
+principy k~dalšímu ověření, zejména otázku platnosti vzorce
+operacionalizace mimo programování, nikoliv statistické tvrzení
+o~populaci.
 
 Pro praktika z~toho plyne jednoduché doporučení: nestačí sledovat,
 zda agent úkol vyřešil, ale i~jak k~řešení došel a~jak kvalitní kód
