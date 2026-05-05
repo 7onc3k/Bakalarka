@@ -9,7 +9,7 @@ Sekce~\ref{sec:vyzkumny-pristup} zdůvodňuje volbu případové studie
 jako výzkumné strategie, představuje zvolený projekt, fáze studie
 (pilot a~ablace) a~strukturu iterativního cyklu.
 Sekce~\ref{sec:sada-metrik} definuje sadu 19~metrik ve třech
-kategoriích (proces, produkt, efektivita).
+kategoriích (proces, produkt, zdroje).
 Sekce~\ref{sec:experimentalni-design} popisuje operační detail:
 fixní proměnné, záznam běhu a~diagnostickou proceduru.
 Sekce~\ref{sec:prehledova-tabulka} shrnuje metriky tabulkou
@@ -34,7 +34,7 @@ cyklus, který v~rámci případu opakujeme
 
 Z~tří cílů formulovaných v~kapitole~\ref{kap:vymezeni} plynou
 společné nároky na metodiku. Cíl~1, návrh sady metrik pokrývající
-proces, kvalitu produktu a~efektivitu, lze ověřit jen tehdy, když
+proces, kvalitu produktu a~zdroje, lze ověřit jen tehdy, když
 metriky reagují na změny v~chování; to vyžaduje porovnání více běhů
 s~různými variantami instrukcí. Cíl~2, iterativní postup návrhu
 instrukcí řízený těmito metrikami, vyžaduje navíc, aby běhy tvořily
@@ -44,7 +44,7 @@ schopnosti porovnat běhy lišící se v~jediné složce. Všechny tři cíle
 tedy společně kladou na metodiku dva požadavky: opakované spouštění
 agenta s~různými variantami instrukcí na témže projektu a~podrobnou
 analýzu každého běhu napříč třemi dimenzemi (proces, produkt,
-efektivita).
+zdroje).
 
 Tomuto profilu odpovídá případová studie. Řízený experiment
 s~počtem běhů potřebným pro statistickou izolaci by byl vzhledem
@@ -206,7 +206,7 @@ Naše sada obsahuje 19~metrik ve třech kategoriích:
     \item[Q~-- kvalita produktu (Q1--Q8)] Je kód kvalitní?
           Měříme funkční korektnost (\acs{Q1}--\acs{Q2}), kvalitu testů
           (\acs{Q3}--\acs{Q4}) a~udržovatelnost kódu (\acs{Q5}--\acs{Q8}).
-    \item[E~-- efektivita (E1--E3)] Za jakou cenu?
+    \item[E~-- zdroje (E1--E3)] Za jakou cenu?
           Zaznamenáváme spotřebované tokeny (\acs{E1}), čas (\acs{E2})
           a~počet kompakcí kontextu (\acs{E3}).
 \end{description}
@@ -425,15 +425,15 @@ z~McCabe (sekce~\ref{sec:staticka-analyza}). Celkové skóre \acs{Q8} je
 jeden slabý rozměr má stáhnout celkový výsledek dolů, aby slabiny nebyly
 maskované silnými dimenzemi.
 
-\subsection{Metriky efektivity (E1--E3)}
+\subsection{Metriky zdrojů (E1--E3)}
 \label{sec:metriky-efektivity}
 
-Metriky efektivity měří zdroje spotřebované při vývoji. Nemají exit
+Metriky zdrojů zachycují vstupy spotřebované při vývoji. Nemají exit
 kritérium a~slouží k~porovnání nákladů mezi iteracemi.
 
 \begin{table}[H]
 \centering
-\caption{Metriky efektivity E1--E3}
+\caption{Metriky zdrojů E1--E3}
 \label{tab:e1-e3}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
@@ -779,7 +779,7 @@ Q6 & Typecheck errors            & tsc \texttt{-{}-noEmit} & 0 & deter. \\
 Q7 & Cyklomatická složitost      & ESLint (complexity)     & $\leq$ 10/fn & min. \\
 Q8 & Design quality              & LLM-as-judge (GLM-5)   & $\geq$ 2/3 & judge \\
 \midrule
-\multicolumn{5}{@{}l}{\textit{Efektivita (E): za jakou cenu}} \\[2pt]
+\multicolumn{5}{@{}l}{\textit{Zdroje (E): za jakou cenu}} \\[2pt]
 E1 & Vstup / výstup / $\Sigma$ cache (tis.) z exportu & OpenCode export & --- & záznam \\
 E2 & Trvání (minuty)             & session timestamps & --- & záznam \\
 E3 & Počet kompakcí kontextu & OpenCode DB (\texttt{time\_compacting}) & 0 & deter. \\

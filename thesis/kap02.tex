@@ -299,12 +299,14 @@ slova smyslu.
 Reakcí na tato omezení jsou rámce DORA~\cite{forsgren2018}
 a~navazující SPACE~\cite{forsgren2021space}, které explicitně varují
 před redukcí výkonnosti na jedinou metriku a~místo toho pracují
-s~několika osami současně. Pro hodnocení agentní práce se týž princip
-uplatňuje na třech osách (sekce~\ref{sec:metriky-efektivity}): tokenech
-jako proxy výpočetního úsilí, wall-clock času běhu a~stabilitě
-session. Tyto osy a~jejich specifika v~agentním prostředí (kontextové
-okno jako vzácný zdroj, riziko překročení kontextu) podrobněji popisuje
-sekce~\ref{sec:agenti-meni-sdlc}.
+s~několika osami současně. Stejný princip víceosého měření přenášíme
+i~na hodnocení agenta, ale s~posunem v~obsahu zdrojové dimenze:
+lidské úsilí v~klasickém Fentonově smyslu u~autonomního agenta
+odpadá a~jeho místo zaujímají tokeny jako proxy výpočetního úsilí,
+wall-clock čas běhu a~stabilita session, k~níž v~agentním prostředí
+přibývá kontextové okno jako vzácný zdroj
+(sekce~\ref{sec:metriky-efektivity}). Tyto osy a~jejich specifika
+podrobněji popisuje sekce~\ref{sec:agenti-meni-sdlc}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{AI coding agenti}
@@ -450,10 +452,10 @@ sedm agentních frameworků na třech osách (úspěšnost, efektivita
 reasoning kroků a~tokenová režie); jejich pohled na proces je ale
 omezen na trasu reasoning kroků agenta a~strukturální kvalita kódu
 v~hodnocení chybí. Žádný z~uvedených benchmarků tedy systematicky
-neměří kvalitu procesu (jak agent organizoval práci), kvalitu kódu
-nad rámec funkční korektnosti (udržovatelnost, čistota) a~efektivitu
-(spotřeba zdrojů) současně. Tato mezera naznačuje potřebu metrického
-rámce, který by dimenze procesu, kvality kódu a~efektivity pokrýval
+neměří kvalitu procesu (jak agent organizoval práci), kvalitu produktu
+nad rámec funkční korektnosti (udržovatelnost, čistota)
+a~spotřebu zdrojů současně. Tato mezera naznačuje potřebu metrického
+rámce, který by dimenze procesu, kvality produktu a~zdrojů pokrýval
 současně.
 Návrh takového rámce a~jeho operacionalizaci v~kontextu této
 práce popisuje kapitola~\ref{kap:metodika}.

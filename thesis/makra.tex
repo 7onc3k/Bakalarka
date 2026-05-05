@@ -255,17 +255,17 @@
 \DeclareAcronym{Q7}{short=Q7, long=složitost kódu, tag=quality}
 \DeclareAcronym{Q8}{short=Q8, long=design quality, tag=quality}
 
-% --- Metriky efektivity (E) ---
-\DeclareAcronym{E1}{short=E1, long=vstup/výstup/cache tokeny, tag=efficiency}
-\DeclareAcronym{E2}{short=E2, long=trvání, tag=efficiency}
-\DeclareAcronym{E3}{short=E3, long=počet kompakcí, tag=efficiency}
+% --- Metriky zdrojů (E) ---
+\DeclareAcronym{E1}{short=E1, long=vstup/výstup/cache tokeny, tag=resources}
+\DeclareAcronym{E2}{short=E2, long=trvání, tag=resources}
+\DeclareAcronym{E3}{short=E3, long=počet kompakcí, tag=resources}
 
 % --- Skupiny: CO měříme ---
 % Použití: \mgrp{P}, \mgrp{Q}, \mgrp{E}
 \newcommand{\mgrp}[1]{%
   \ifstrequal{#1}{P}{\hyperref[tab:metriky-prehled]{procesní metriky (P1--P8)}}{}%
   \ifstrequal{#1}{Q}{\hyperref[tab:metriky-prehled]{produktové metriky (Q1--Q8)}}{}%
-  \ifstrequal{#1}{E}{\hyperref[tab:metriky-prehled]{metriky efektivity (E1--E3)}}{}%
+  \ifstrequal{#1}{E}{\hyperref[tab:metriky-prehled]{metriky zdrojů (E1--E3)}}{}%
 }
 
 % --- Skupiny: JAK měříme ---

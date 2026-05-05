@@ -26,7 +26,7 @@ praktické rozhodování o použitelnosti řešení.
 
 \textit{Na základě analýzy existujících standardů kvality softwaru
 a~současných benchmarků pro AI agenty navrhnout sadu metrik
-pokrývající proces, kvalitu produktu a~efektivitu (dimenze,
+pokrývající proces, kvalitu produktu a~zdroje (dimenze,
 které stávající benchmarky neměří).}
 
 Sada 19~metrik byla navržena (kapitola~\ref{kap:metodika}) a~použita
@@ -152,7 +152,7 @@ kritérií produktových metrik napříč devíti běhy.
 
 \input{generated/variability-quality}
 
-\paragraph{Efektivita (E1--E3).}
+\paragraph{Zdroje (E1--E3).}
 \ac{E1} ukázala užitečný vzorec: bez verifikačních kroků agent
 spotřeboval přibližně dvakrát více testovacích cyklů, což se
 projevilo na vyšší spotřebě tokenů. \ac{E2} závisí převážně na
@@ -197,7 +197,7 @@ neříká \textit{proč} a~k~diagnostice bylo vždy nutné vrátit se
 k~transcriptu agenta. Kvalitativní metriky (\acs{Q4}, \acs{Q8})
 zachytily problémy které automatizované nevidí, ale bez validace
 Cohenovým~$\kappa$ zůstávají podpůrnými indikátory. Metriky
-efektivity byly na této úloze nejslabší skupinou: pouze \acs{E1}
+zdrojů byly na této úloze nejslabší skupinou: pouze \acs{E1}
 přinesla použitelný insight.
 
 %% ----------------------------------------------------------------
@@ -359,7 +359,7 @@ verifikační příkazy nespouštěl spolehlivě. Kódové konvence agent
 dodržuje i~bez instrukce, pravděpodobně ze znalostí z~tréninku.
 Instrukce ale ovlivňují strukturální rozhodnutí (modularita,
 dokumentace) která automatizované metriky nezachytí. Dimenze
-efektivity byla v~ablacích vyhodnocena jen částečně: \acs{E1}
+zdrojů byla v~ablacích vyhodnocena jen částečně: \acs{E1}
 nešlo kvůli chybějícím exportům spočítat ani v~jednom ablačním
 běhu, takže závěry ablační fáze stojí primárně na \mgrp{P}
 a~\mgrp{Q}.
@@ -666,7 +666,7 @@ příčinu selhání, provést cílenou úpravu instrukcí a~změřit
 znovu (sekce~\ref{sec:pilotni-iterace}). Tento cyklus lze přenést
 na jiný model nebo projekt jen po přizpůsobení metrik a~prahů
 danému prostředí. Podmínkou je sada metrik pokrývající více dimenzí
-(proces, kvalitu, efektivitu),
+(proces, kvalitu produktu, zdroje),
 protože jednodimenzionální měření (např. jen test pass rate)
 může zakrýt problém v~jiné dimenzi
 (sekce~\ref{sec:interpretace}).
