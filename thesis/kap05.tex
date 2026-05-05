@@ -26,7 +26,7 @@ praktické rozhodování o použitelnosti řešení.
 
 \textit{Na základě analýzy existujících standardů kvality softwaru
 a~současných benchmarků pro AI agenty navrhnout sadu metrik
-pokrývající proces, kvalitu kódu a~efektivitu (dimenze,
+pokrývající proces, kvalitu produktu a~efektivitu (dimenze,
 které stávající benchmarky neměří).}
 
 Sada 19~metrik byla navržena (kapitola~\ref{kap:metodika}) a~použita
@@ -43,7 +43,7 @@ test-first, PR), tedy dimenzi kterou stávající benchmarky
 pokrývají jen okrajově (sekce~\ref{sec:hodnoceni-agentu}). Na devíti bězích se ukázaly
 jako nejcitlivější složka sady: byly jediné metriky které
 kolísaly i~mezi běhy se stejnými instrukcemi. Možným vysvětlením
-je, že kvalita kódu je u~tohoto modelu řízena převážně tréninkovými
+je, že kvalita produktu je u~tohoto modelu řízena převážně tréninkovými
 daty (Q~metriky zůstaly stabilní), zatímco dodržování vícekrokového
 postupu (issue $\to$ branch $\to$ test $\to$ implement $\to$ PR)
 je inherentně náchylnější k~selhání: agent musí udržet sekvenci
@@ -73,11 +73,11 @@ kritérií procesních metrik napříč devíti běhy.
 
 \input{generated/variability-process}
 
-\paragraph{Kvalita kódu (Q1--Q8).}
+\paragraph{Kvalita produktu (Q1--Q8).}
 Na rozdíl od procesních metrik vykazují \mgrp{Q} celkově vyšší
 stabilitu: \ac{Q1} a~\ac{Q6} byly splněny ve všech devíti bězích,
 a~\ac{Q4} dosáhla ve většině hodnocených běhů plného skóre 25/25.
-Data naznačují, že základní kvalita kódu
+Data naznačují, že základní kvalita produktu
 je u~tohoto modelu řízena převážně tréninkovými daty, zatímco
 procesní chování závisí na instrukcích výrazněji. Uvnitř skupiny
 se ale metriky chovají odlišně podle toho, co měří.
