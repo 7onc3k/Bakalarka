@@ -6,8 +6,32 @@ Tento handoff drží nálezy z auditu konzistence napříč všemi kapitolami.
 Audit pokrýval tři osy: terminologie, argumentace/fakta, jazykové
 zkomoleniny (ČJ + AJ míchání mimo zavedené odborné termíny).
 
-Diskuse s uživatelem probíhá per-položku v pořadí závažnosti, není
-zatím nic editováno. Následující seznam je závazný plán.
+Diskuse s uživatelem probíhá per-položku v pořadí závažnosti.
+
+## Stav řešení (2026-05-05 progress)
+
+- ✅ **A1** — vyřešeno (commit `6badcfa`): rozpor 5→4 větve v pilot-r1
+- ✅ **A2** — vyřešeno (commit `dca928e`): kvalita kódu → kvalita produktu
+- ✅ **A3** — vyřešeno (commit `db774a4` + `951b938`): efektivita → zdroje;
+  argumentace posunu Fenton (lidské úsilí) → agent (tokeny + čas + kontext)
+- ✅ **bonus: Drop Typ sloupec + sjednocení det/judge** (čeká commit):
+  - `\mmet{zaz}` smazáno (mrtvý kód, nikdo nepoužíval)
+  - `\mmet{qual}` přejmenováno: "kvalitativní metriky" → "judge-based metriky"
+  - `tab:metriky-prehled` zbavena Typ sloupce (5 sloupců → 4)
+  - "automatizované metriky" → "deterministické metriky" (sjednocení)
+  - "kvalitativní metriky" → "judge-based metriky" (sjednocení)
+  - Tím vyřešena i terminologická tenze: "deterministické metriky"
+    teď ve všech kontextech znamená sběr automatizovaný, ne přítomnost
+    exit kritéria
+
+- ⏳ **A4** — vyřešeno bonusem výše (forward ref kap03 → kap02 zmizela
+  s drop Typ sloupce; trichotomie det/qual/zaz neexistuje, není co
+  mostit)
+- ⏳ **A5** — neřešeno (diagnostické rámce kap03 vs aplikace kap04)
+- ⏳ **T1** — neřešeno ("Závěr pilotních iterací" → "pilotní fáze")
+- ⏳ **T2** — neřešeno (multi-label hygiena, debt)
+- ⏳ **Z1–Z9** — neřešeno (jazykové zkomoleniny)
+- ⏳ **D1–D5** — neřešeno (diskutabilní)
 
 ## Pořadí řešení
 
