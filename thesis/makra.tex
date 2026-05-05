@@ -215,7 +215,7 @@
 \definecolor{draftcolor}{RGB}{80, 100, 120}    % tlumená modro-šedá
 
 %%% Systém odkazování metrik (acro + custom příkazy)
-%%% Dvě dimenze: CO měříme (P/Q/E) a JAK měříme (deter./kvalit./záznam.)
+%%% Dvě dimenze: CO měříme (P/Q/E) a JAK měříme (deter./judge-based)
 \usepackage{acro}
 \usepackage{etoolbox}
 
@@ -269,11 +269,10 @@
 }
 
 % --- Skupiny: JAK měříme ---
-% Použití: \mmet{det}, \mmet{qual}, \mmet{zaz}
+% Použití: \mmet{det}, \mmet{qual}
 \newcommand{\mmet}[1]{%
   \ifstrequal{#1}{det}{\hyperref[tab:metriky-prehled]{deterministické metriky}}{}%
-  \ifstrequal{#1}{qual}{\hyperref[tab:metriky-prehled]{kvalitativní metriky}}{}%
-  \ifstrequal{#1}{zaz}{\hyperref[tab:metriky-prehled]{záznamové metriky}}{}%
+  \ifstrequal{#1}{qual}{\hyperref[tab:metriky-prehled]{judge-based metriky}}{}%
 }
 
 \ifdefined\hideraw

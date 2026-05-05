@@ -64,7 +64,7 @@ ale ne \textit{jak kvalitní} ten PR je. \ac{P6}--\ac{P8}
 mezeru doplňují.
 V~běhu~r1 \acs{P4} hlásila ``splněno'' (agent skutečně vytvořil
 linkované PR), ale \acs{P8}~=~2/3 zachytila, že část PR slučovala více
-issues do jednoho review artefaktu. Binární a~kvalitativní metriky
+issues do jednoho review artefaktu. Binární a~judge-based metriky
 tedy měří odlišné aspekty téhož procesu a~jejich kombinace se ukázala
 jako nutná.
 
@@ -132,7 +132,7 @@ součástí trénovacích dat a~model je při generování dodržuje.
 U~dynamicky typovaných jazyků by \acs{Q6} pravděpodobně
 rozlišovala lépe.
 
-\ac{Q8} doplňuje automatizované metriky o~strukturální pohled na kód.
+\ac{Q8} doplňuje deterministické metriky o~strukturální pohled na kód.
 Hodnocení provádí LLM-as-judge na základě rubriky s~pěti dimenzemi:
 naming, separation of concerns, idiomatický TypeScript, dokumentace
 a~složitost.
@@ -348,7 +348,7 @@ redundantní.}
 Sekce~\ref{sec:zaver-ablaci} shrnuje výsledky obou ablací.
 Verifikační kroky (ablace~A) přispívají: bez nich klesly metriky
 kvality i~korektnosti. Sekce Package Quality (ablace~B) je pro
-automatizované metriky převážně redundantní: \acs{Q5}, \acs{Q6}
+deterministické metriky převážně redundantní: \acs{Q5}, \acs{Q6}
 a~\acs{Q7} zůstaly na srovnatelné úrovni. Pouze \acs{Q8} zachytila
 pokles v~modularitě a~dokumentaci.
 
@@ -358,7 +358,7 @@ zjevný instrumentální přínos: bez explicitní instrukce agent
 verifikační příkazy nespouštěl spolehlivě. Kódové konvence agent
 dodržuje i~bez instrukce, pravděpodobně ze znalostí z~tréninku.
 Instrukce ale ovlivňují strukturální rozhodnutí (modularita,
-dokumentace) která automatizované metriky nezachytí. Dimenze
+dokumentace) která deterministické metriky nezachytí. Dimenze
 zdrojů byla v~ablacích vyhodnocena jen částečně: \acs{E1}
 nešlo kvůli chybějícím exportům spočítat ani v~jednom ablačním
 běhu, takže závěry ablační fáze stojí primárně na \mgrp{P}
@@ -447,7 +447,7 @@ vyšší konkrétnost pomáhá zejména u~procedurálních úloh, ale přílišn
 detail může omezovat flexibilitu modelu~\cite{kim2025detail, zi2025specificity}.
 
 Sekce Package Quality se chovala odlišně. Její odebrání nezhoršilo
-automatizované metriky stejným způsobem jako odebrání verifikačních
+deterministické metriky stejným způsobem jako odebrání verifikačních
 kroků, ale projevilo se v~designové kvalitě hodnocené
 LLM-as-judge. Data jsou proto konzistentní s~tím, že část instrukcí
 nefunguje primárně jako přímá kontrola chování, ale jako rámec, který
@@ -555,7 +555,7 @@ je dostatečně malá na to, aby se kontext nezaplnil (\acs{E3}).
 %% AC25 (holiday calendar) pokryté ve všech 9 bězích. Formální
 %% přeměření LLM judge zatím neprovedeno, ale thesis reportuje 25 AC.
 
-\textbf{Kvalitativní metriky bez validace.}
+\textbf{Judge-based metriky bez validace.}
 Hlavní závěry studie stojí na \mmet{det}. \mmet{qual} slouží
 jako podpůrné indikátory, protože jejich spolehlivost nebyla
 validována proti lidskému hodnocení (Cohenovo~$\kappa$). Jedinou
@@ -628,7 +628,7 @@ příkazu, tím spolehlivěji ji agent v~této případové studii
 dodržoval.
 
 Ablace~B ale ukázala i~druhou stránku. Odstranění sekce Package
-Quality ponechalo automatizované metriky (\mmet{det}) beze změny,
+Quality ponechalo deterministické metriky (\mmet{det}) beze změny,
 zatímco \ac{Q8} kleslo z~3/3 na 2/3 (sekce~\ref{sec:ablace-b}).
 Konvence zřejmě nepůsobí jako přímé vynucení, ale spíš jako
 \textit{aktivace} latentních znalostí modelu, tedy jako
