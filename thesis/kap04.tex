@@ -31,13 +31,16 @@ dimenze.
 
 Toto mapování zakládá metodologickou otázku: pokud sekce instrukcí
 sledují měřené dimenze, hrozí, že metriky budou měřit shodu instrukce
-s~vlastním zápisem, ne kvalitu výstupu. Procesní metriky
-\acs{P1}--\acs{P5} skutečně měří dodržení postupu, který instrukce
-předepisuje, a~jejich diagnostická hodnota leží v~nedodržení.
-Produktové metriky \acs{Q1}--\acs{Q3}, \acs{Q6} a~\acs{Q7} ale vychází
-z~nezávislé literatury a~jejich splnění vyžaduje funkční kód, ne
-převzetí instrukce. U~judge-based metrik (\acs{Q4}, \acs{Q8}) je
-hranice neostrá; jejich citlivost vůči samotné instrukci testuje
+s~vlastním zápisem, ne kvalitu výstupu. U~procesních metrik
+\acs{P1}--\acs{P5} je tato vazba nejtěsnější, ale měření probíhá
+na auditovatelných artefaktech (commity, větve, pull requesty),
+ne na agentově deklaraci o~postupu; mezera mezi instrukcí
+a~skutečným chováním se proto v~datech projevuje. Produktové metriky
+\acs{Q1}--\acs{Q3}, \acs{Q6} a~\acs{Q7} vychází z~nezávislé
+literatury (typecheck, mutation testing, cyklomatická složitost,
+API kontrakt) a~jejich splnění vyžaduje funkční kód, ne převzetí
+instrukce. U~judge-based metrik (\acs{Q4}, \acs{Q8}) je hranice
+neostrá; jejich citlivost vůči samotné instrukci testuje
 ablace~B (sekce~\ref{sec:ablace-b}).
 
 Konstrukce proběhla ve dvou krocích: návrh struktury podle pořadí
@@ -46,25 +49,18 @@ dimenzí chování (sekce~\ref{sec:sada-metrik}) na konkrétní instrukce. Výsl
 (Role, Goal, Specification, Environment, Process, Package Quality,
 Constraints) jsou adaptací tohoto rámce na doménu případové studie.
 
-Procesní sekce obsahuje stručné instrukce pro spec-first
-TDD~\cite{mathews2024}, dekompozici do sub-issues, branch-per-issue
-a~conventional commits. Sekce Package Quality vymezuje očekávání
-na modularitu, striktní typování, dokumentaci a~čisté veřejné API.
-Tyto požadavky přímo míří na metriky kvality kódu (\ac{Q5}--\ac{Q8}).
-Sekce byla přidána proto, že udržovatelnost a~design nejsou ve
-specifikaci projektu explicitně vynutitelné, ale v~naší sadě metrik je
-chceme sledovat. Nejde tedy o~tvrzení, že ``architektura + konvence''
-jsou obecně nejúčinnější obsah instrukcí, ale o~operacionalizaci
-požadavků na kvalitu do podoby, kterou lze v~této případové studii
-měřit.
-Sekce Constraints pak obsahuje explicitní zákazy typu nekombinovat
-issues, nemodifikovat existující testy a~nepřepisovat git historii.
-Výsledný dokument má 53~řádků a~$\sim$350~slov.
-
-Tabulka~\ref{tab:mapovani-instrukci} ukazuje mapování jednotlivých
-sekcí na metriky. Obrázek~\ref{fig:baseline-agents} pak uvádí
-kompletní znění baseline instrukcí, aby bylo dohledatelné, z~jakého
-artefaktu pilotní fáze vycházela.
+Sekce Package Quality byla přidána proto, že udržovatelnost a~design
+nejsou ve specifikaci projektu explicitně vynutitelné, ale v~naší sadě
+metrik je chceme sledovat. Nejde o~tvrzení, že ``architektura
++ konvence'' jsou obecně nejúčinnější obsah instrukcí, ale
+o~operacionalizaci požadavků na kvalitu do podoby, kterou lze v~této
+případové studii měřit. Constraints obsahuje zákazy vzorců, které jsme
+ve fázi přípravy považovali za rizikové pro autonomního agenta
+(slučování více issues do jedné větve, modifikace existujících testů,
+přepis git historie). Výsledný dokument má 53~řádků a~$\sim$350~slov;
+tabulka~\ref{tab:mapovani-instrukci} ukazuje mapování jednotlivých
+sekcí na metriky a~obrázek~\ref{fig:baseline-agents} uvádí kompletní
+znění instrukcí.
 
 \begin{table}[htbp]
 \centering
