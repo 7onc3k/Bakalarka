@@ -84,6 +84,7 @@ Funkční korektnost     & Specification (AC)           & Q2, Q4 \\
 \bottomrule
 \end{tabular}
 \end{table}
+\FloatBarrier
 
 \begin{figure}[tbp]
 \centering
@@ -92,6 +93,7 @@ Funkční korektnost     & Specification (AC)           & Q2, Q4 \\
 instrukcí použitých jako výchozí bod pilotních iterací.}
 \label{fig:baseline-agents}
 \end{figure}
+\FloatBarrier
 
 %% ================================================================
 \section{Pilotní fáze}
@@ -147,6 +149,7 @@ E3 & Počet kompakcí         & 0          & 0        & \checkmark \\
 \bottomrule
 \end{tabular}
 \end{table}
+\FloatBarrier
 
 Ze 10 deterministických metrik splnil agent 4 (\acs{P1}, \acs{P4}, \acs{Q1}, \acs{Q6}).
 
@@ -188,6 +191,7 @@ obrázek~\ref{fig:agents-diff-r1-r2}.
 \caption{Vizuální diff změn \texttt{AGENTS.md} mezi pilot-r1 a~pilot-r2}
 \label{fig:agents-diff-r1-r2}
 \end{figure}
+\FloatBarrier
 
 
 \subsection{Pilot-r2}
@@ -218,6 +222,7 @@ E2       & Trvání                 & 32{,}7 min & 37{,}2 min & záznam \\
 \bottomrule
 \end{tabular}
 \end{table}
+\FloatBarrier
 
 \paragraph{Diagnostika.}
 \acs{P5} a~\acs{Q7} byly opraveny: existující testy zůstaly
@@ -257,6 +262,7 @@ obrázek~\ref{fig:agents-diff-r2-r3}.
 \caption{Vizuální diff změn \texttt{AGENTS.md} mezi pilot-r2 a~pilot-r3}
 \label{fig:agents-diff-r2-r3}
 \end{figure}
+\FloatBarrier
 
 %% ----------------------------------------------------------------
 \subsection{Pilot-r3}
@@ -290,6 +296,7 @@ E3 & Počet kompakcí            & 0          & 0           & stabilní \\
 \bottomrule
 \end{tabular}
 \end{table}
+\FloatBarrier
 
 \paragraph{Diagnostika.}
 Všechny tři změny zabraly. Agent poprvé splnil celý procesní checklist
@@ -323,6 +330,7 @@ obrázek~\ref{fig:agents-diff-r3-r4}.
 \caption{Vizuální diff změn \texttt{AGENTS.md} mezi pilot-r3 a~pilot-r4}
 \label{fig:agents-diff-r3-r4}
 \end{figure}
+\FloatBarrier
 
 %% ----------------------------------------------------------------
 \subsection{Pilot-r4}
@@ -354,6 +362,7 @@ E3 & Počet kompakcí          & 0          & 0           & stabilní \\
 \bottomrule
 \end{tabular}
 \end{table}
+\FloatBarrier
 
 \paragraph{Diagnostika.}
 R4 je regrese oproti r3. Současně ale platí, že mezi běhy r3 a~r4
@@ -396,6 +405,7 @@ Konkrétní text změn ukazuje obrázek~\ref{fig:agents-diff-r3-r5}.
 \caption{Vizuální diff změn \texttt{AGENTS.md} mezi pilot-r3 a~pilot-r5}
 \label{fig:agents-diff-r3-r5}
 \end{figure}
+\FloatBarrier
 
 %% ----------------------------------------------------------------
 \subsection{Pilot-r5: verifikace kontraktu}
@@ -431,6 +441,7 @@ E3 & Počet kompakcí          & 0          & 0           & stabilní \\
 \bottomrule
 \end{tabular}
 \end{table}
+\FloatBarrier
 
 \paragraph{Diagnostika.}
 Instrukce r5 se lišily od r3 pouze ve dvou řádcích pre-PR checklistu
@@ -521,6 +532,7 @@ verifikační kroky spouští i~bez instrukce.
 \end{figure}
 \footnotetext{Zelené řádky v~diffu neobsahují nový text; vznikly
 přečíslováním kroků po odebrání kroku~c~(Verify).}
+\FloatBarrier
 
 \textit{Očekávání:} pokud agent typecheck a~lint spustí i~bez
 instrukce, verifikační kroky jsou redundantní; pokud ne, jde
@@ -539,6 +551,7 @@ API). Process a~Constraints zůstanou beze změny
 (konvence, strict TypeScript, JSDoc, čisté API).}
 \label{fig:diff-r3-ablace-b}
 \end{figure}
+\FloatBarrier
 
 \textit{Očekávání:} pokud \acs{Q5}, \acs{Q7} a~\acs{Q8} zůstanou na úrovni r3,
 jsou konvenční instrukce převážně redundantní s~tréninkem modelu;
@@ -585,6 +598,7 @@ E3 & Počet kompakcí            & 0          & 0          & 0 \\
 \bottomrule
 \end{tabular}
 \end{table}
+\FloatBarrier
 
 \textit{Poznámka k~\acs{E1}:} sloupec r3 odpovídá hodnotám z~pilotního \texttt{transcript.json} (62 / 30 / 4770 tis.). U~A-1 a~A-2 chybí export v~lokálním snapshotu, \acs{E1} pro tyto běhy nešlo dopočítat.
 
@@ -652,6 +666,7 @@ E3 & Počet kompakcí            & 0          & 0          & 0 \\
 \bottomrule
 \end{tabular}
 \end{table}
+\FloatBarrier
 
 $^*$ \acs{Q8} v~B-1: judge nedokončil hodnocení (API timeout).
 
@@ -757,15 +772,9 @@ Q4 v~uložených judge artefaktech historicky používalo 24bodovou
 rubriku. Ve thesis jsou hodnoty převedeny na 25 AC po manuálním
 dopočítání AC25 (\textit{custom holiday calendar}).
 \end{table}
+\FloatBarrier
 \end{landscape}
 
-Tabulka shrnuje dva hlavní vzorce. V~pilotní fázi se instrukce podařilo
-iterativně zlepšit: r1 splnila 4/10 tvrdých deterministických kritérií,
-r3 po dvou cyklech úprav 7/10. Ablace zároveň ukazují, že ne všechny
-složky instrukcí přispívají stejně: odebrání verifikačních kroků
-zhoršilo \acs{Q2}, \acs{Q3}, \acs{Q5} a~\acs{Q7}, zatímco odebrání
-sekce Package Quality ponechalo deterministické metriky kvality na
-srovnatelné úrovni. Napříč všemi devíti běhy zůstaly stabilní zejména
-\ac{Q1} a~\ac{Q6}; nejvyšší variabilitu naopak vykazovaly procesní
-metriky \acs{P2}--\acs{P5}. Interpretaci těchto výsledků ve vztahu
-k~cílům práce uvádí kapitola~\ref{kap:vyhodnoceni}.
+Tabulka zaznamenává deterministické metriky napříč pěti pilotními
+iteracemi a~čtyřmi ablačními běhy. Vývoj hodnot a~jejich interpretaci
+ve vztahu k~cílům práce uvádí kapitola~\ref{kap:vyhodnoceni}.
