@@ -135,7 +135,7 @@ Q6 & Typecheck errors      & 0          & 0        & \checkmark \\
 Q7 & Complexity violations  & 2 viol.    & 0 viol.  & $\times$ \\
 Q8 & Design quality        & 1/3        & $\geq$ 2/3 & $\times$ \\
 \midrule
-E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 115 / 60 / 11528 & \cna{n/a}      & záznam \\
+E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 115/60/11528 & \cna{n/a}      & záznam \\
 E2 & Trvání                & 33 min & \cna{n/a}      & záznam \\
 E3 & Počet kompakcí         & 0          & \cna{n/a}   & záznam \\
 \bottomrule
@@ -158,23 +158,28 @@ E3 & Počet kompakcí         & 0          & \cna{n/a}   & záznam \\
 \acs{P2} & Issues seskupeny do~méně větví (4~větve / 11~issues) & Instrukce neuvádí pravidlo \enquote{1~issue = 1~větev}; chybí procedurální páka \\
 \acs{P3} & Implementace předcházela testům napříč všemi větvemi & Žádné explicitní pravidlo ani kontrola pořadí test/kód \\
 \acs{P5} & V~jedné větvi upraven existující test & Žádná hard-rule pro existující testy \\
-\acs{Q7} & 2~funkce nad prahem složitosti & Package Quality nevynucuje kontrolu složitosti \\
-\acs{Q8} & Chybějící JSDoc na~veřejném API & Deklarativní požadavek bez verifikačního kroku \\
+\acs{Q5}, \acs{Q7} & 2~lint warnings, 2~funkce nad prahem složitosti & Package Quality nevynucuje spuštění lintu ani kontrolu složitosti \\
+\acs{Q8} & Chybějící JSDoc na~veřejných funkcích z~API kontraktu & Deklarativní požadavek bez verifikačního kroku \\
 \acs{Q2} & 3~z~42 referenčních testů selhaly (pause/resume, eskalace) & Implementační rozhodnutí v~doménové logice mimo dosah baseline instrukcí \\
+\acs{Q4} & Agentovy testy pokryly 23~z~25 AC (chyběly testy pro custom holiday calendar a~edge case) & Process (TDD) nevyžaduje kontrolu, že každé AC má pokrývající test \\
 \bottomrule
 \end{tabularx}
 \end{table}
 \FloatBarrier
 
 \paragraph{Závěry a~intervence pro r2.}
-Společný pattern napříč \acs{P2}, \acs{P3}, \acs{P5} a~\acs{Q7}: instrukce
-nese \enquote{co} má platit bez konkrétního \enquote{jak} a~bez kontroly
-(viz tabulka). Selhání \acs{Q2} jsou jiného typu: implementační
-rozhodnutí v~pause/resume logice a~výpočtech v~pracovních dnech, na~která
-úroveň baseline instrukcí nedosahuje. Pro r2 doplňujeme procedurální
-páku ke~každému selhanému procesnímu pravidlu (příkaz pro vytvoření
-větve, oddělené staging testů a~kódu, korektivní pravidlo pro
-selhávající test) a~kontrolu lintu před otevřením pull requestu
+Společný pattern napříč \acs{P2}, \acs{P3}, \acs{P5} a~\acs{Q5}/\acs{Q7}:
+instrukce nese \enquote{co} má platit bez konkrétního \enquote{jak} a~bez
+kontroly (viz tabulka). Selhání \acs{Q2} a~\acs{Q4} jsou jiného typu:
+implementační rozhodnutí v~pause/resume logice a~chybějící AC pokrytí
+v~doménové logice, na~která úroveň baseline instrukcí nedosahuje. Pro
+r2 doplňujeme procedurální páku ke~každému selhanému procesnímu
+pravidlu (příkaz pro vytvoření větve, oddělené staging testů a~kódu,
+korektivní pravidlo pro selhávající test) a~kontrolu lintu před otevřením
+pull requestu. \acs{Q8} (JSDoc) a~\acs{Q4} (AC pokrytí) ponecháváme
+jako deklarativní pravidla v~Package Quality, abychom v~r2 vyhodnotili,
+zda zopakovaná deklarace bez verifikace zabere; pokud ne, přesuneme
+je v~r3 do~verifikačního kroku
 (obrázek~\ref{fig:agents-diff-r1-r2}).
 
 \begin{figure}[H]
@@ -195,22 +200,27 @@ ke změně.
 
 \begin{table}[htbp]
 \centering
-\caption{Pilot-r2: metriky se změnou oproti r1}
+\caption{Pilot-r2: vývoj sledovaných metrik oproti r1}
 \label{tab:pilot-r2-delta}
 \small
 \begin{tabularx}{\linewidth}{@{}p{0.05\linewidth}Xp{0.18\linewidth}p{0.18\linewidth}p{0.12\linewidth}@{}}
 \toprule
 \textbf{Kód} & \textbf{Metrika} & \textbf{r1} & \textbf{r2} & \textbf{Trend} \\
 \midrule
-P5       & Testy nezměněny             & $\times$   & \checkmark  & zlepšení \\
-Q2       & Ref.\ test pass rate   & 39/42      & 32/42       & regrese \\
-Q3       & Mutation score         & 84\,\%    & 68\,\%      & regrese \\
-Q5       & Lint warnings          & 2          & 1           & zlepšení \\
-Q7       & Complexity violations  & 2 viol.    & 0           & zlepšení \\
-Q8       & Design quality         & 1/3        & 1/3         & stabilní \\
+\multicolumn{5}{@{}l}{\textit{Přetrvávající selhání (intervence cílila, hodnota beze změny):}} \\
+P2       & Branch per issue            & $\times$   & $\times$    & přetrvává \\
+P3       & Test-first commits          & $\times$   & $\times$    & přetrvává \\
+Q8       & Design quality              & 1/3        & 1/3         & přetrvává \\
 \midrule
-E1       & Vstup / výstup / $\Sigma$ cache (tis.) & 115 / 60 / 11528 & 76 / 41 / 3196 & záznam \\
-E2       & Trvání                 & 33 min & 37 min & záznam \\
+\multicolumn{5}{@{}l}{\textit{Změna proti r1:}} \\
+Q2       & Ref.\ test pass rate        & 39/42      & 32/42       & regrese \\
+Q3       & Mutation score              & 84\,\%     & 68\,\%      & regrese \\
+P5       & Testy nezměněny             & $\times$   & \checkmark  & zlepšení \\
+Q5       & Lint warnings               & 2          & 1           & zlepšení \\
+Q7       & Complexity violations       & 2 viol.    & 0           & zlepšení \\
+\midrule
+E1       & Vstup / výstup / $\Sigma$ cache (tis.) & 115/60/11528 & 76/41/3196 & záznam \\
+E2       & Trvání                      & 33 min     & 37 min      & záznam \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -229,7 +239,7 @@ E2       & Trvání                 & 33 min & 37 min & záznam \\
 \textbf{Metriky} & \textbf{Pozorované chování} & \textbf{Příčina} \\
 \midrule
 \acs{P2} & Issues agregovány do menšího počtu větví (7~issues / 3~větve) & Procedura neměla pravidlo \enquote{1~issue = 1~větev} \\
-\acs{P3} & Test+kód v~jednom commitu s~prefixem \texttt{test:}; žádný \texttt{feat:} commit & Litera bez záměru, formální dodržení procedurálního příkazu \\
+\acs{P3} & Test+kód v~jednom commitu s~prefixem \texttt{test:}; žádný \texttt{feat:} commit & Formální dodržení příkazu bez naplnění jeho záměru (oddělit testovací a~implementační commity) \\
 \acs{Q8} & JSDoc neaplikován & Deklarativní pravidlo bez verifikační opory \\
 \acs{Q2}, \acs{Q3} & Pokles kvality test suite (více testů, méně zachycených mutantů) & Hromadné psaní testů ze specifikace místo iterativního test-fix cyklu \\
 \bottomrule
@@ -238,15 +248,18 @@ E2       & Trvání                 & 33 min & 37 min & záznam \\
 \FloatBarrier
 
 \paragraph{Závěry a~intervence pro r3.}
-V~obou procesních pravidlech (\acs{P2}, \acs{P3}) splnil agent literu
-příkazu, ne~záměr: typický pattern u~deklarativních instrukcí bez
-verifikační opory (viz tabulka). Stejný posun se projevil i~na~produktové
+V~obou procesních pravidlech (\acs{P2}, \acs{P3}) agent příkaz dodržel
+formálně, ne podle záměru: typický pattern u~deklarativních instrukcí
+bez verifikační opory (viz tabulka). Stejný posun se projevil i~na~produktové
 straně, pokles \acs{Q2} a~\acs{Q3} ukazuje, že hromadná write strategie
 produkuje testy s~nižší diskriminační schopností než iterativní
 test-fix cyklus. Pro r3 přesouváme tři instrukce z~roviny příkazu
 do~verifikačního kroku: explicitní listing otevřených issues před
 výběrem práce, kontrolní \texttt{git log} mezi commity testů a~kódu
-a~přesun požadavku na~JSDoc do~pre-PR checklistu
+a~přesun požadavku na~JSDoc do~pre-PR checklistu. Na~\acs{Q2}/\acs{Q3}
+necílíme přímo, ale očekáváme nepřímý efekt přes test-fix cyklus,
+který kontrolní \texttt{git log} mezi commity testů a~kódu strukturálně
+podporuje (oproti hromadnému psaní testů ze specifikace)
 (obrázek~\ref{fig:agents-diff-r2-r3}).
 
 \begin{figure}[tbp]
@@ -281,9 +294,10 @@ P6 & Commit msg quality       & 2/3        & 3/3         & zlepšení \\
 P7 & Issue quality            & 2/3        & 3/3         & zlepšení \\
 Q2 & Ref.\ test pass rate     & 32/42      & 41/42       & zlepšení \\
 Q3 & Mutation score           & 68\,\%     & 71\,\%      & zlepšení \\
+Q7 & Complexity violations    & 0          & 1 viol.     & regrese \\
 Q8 & Design quality           & 1/3        & 3/3         & zlepšení \\
 \midrule
-E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 76 / 41 / 3196 & 62 / 30 / 4770 & záznam \\
+E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 76/41/3196 & 62/30/4770 & záznam \\
 E2 & Trvání                   & 37 min & 25 min & záznam \\
 E3 & Počet kompakcí            & 0          & 0           & záznam \\
 \bottomrule
@@ -305,10 +319,11 @@ uplynulého času a~API kontrakt poskytoval explicitní pole.
 Tři změny z~r2 ukazují, že přesun deklarativních pravidel do~verifikačního
 kroku funguje. Zbývající nález naznačuje, že explicitní opora v~typech
 sama o~sobě nestačí, pokud agent učiní vlastní implementační rozhodnutí.
-Pro r4 doplňujeme do~pre-PR checklistu příkaz \texttt{npx vitest run},
-aby agent před otevřením pull requestu ověřil průchod vlastních testů,
-a~do~Constraints pravidlo, že každé pole v~API kontraktu musí být
-v~implementaci použito~\cite{breunig2025}
+Mírná regrese \acs{Q7} (0$\to$1) je v~pásmu variability mezi běhy,
+neřešíme samostatně. Pro r4 doplňujeme do~pre-PR checklistu příkaz
+\texttt{npx vitest run}, aby agent před otevřením pull requestu ověřil
+průchod vlastních testů, a~do~Constraints pravidlo, že každé pole
+v~API kontraktu musí být v~implementaci použito~\cite{breunig2025}
 (obrázek~\ref{fig:agents-diff-r3-r4}).
 
 \begin{figure}[H]
@@ -343,13 +358,15 @@ Q2 & Ref.\ test pass rate    & 41/42      & 39/42       & regrese \\
 Q3 & Mutation score           & 71\,\%    & \cna{n/a}        & \cna{n/a} \\
 Q8 & Design quality          & 3/3        & 2/3         & regrese \\
 \midrule
-E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & 81 / 36 / 5996 & záznam \\
+E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62/30/4770 & 81/36/5996 & záznam \\
 E2 & Trvání                  & 25 min & 26 min & záznam \\
 E3 & Počet kompakcí          & 0          & 0           & záznam \\
 \bottomrule
 \end{tabularx}
 \end{table}
 \FloatBarrier
+
+\noindent\textit{Poznámka:} \acs{Q3} = n/a: agentovy vlastní testy selhávají (timezone bug ve~\texttt{businessDays}, viz tab.~\ref{tab:pilot-r4-nalezy}); Stryker vyžaduje funkční test suite, mutace nelze odlišit od~baseline. Nejde o~regresi měřené hodnoty.
 
 \paragraph{Diagnostika chování.}
 
@@ -363,8 +380,10 @@ E3 & Počet kompakcí          & 0          & 0           & záznam \\
 \toprule
 \textbf{Metriky} & \textbf{Pozorované chování} & \textbf{Příčina} \\
 \midrule
+\acs{P2}, \acs{P5} & Procesní pravidla porušena (žádné větve per issue, modifikované vlastní testy) & Mezi-běhová variabilita modelu (změna konfigurace v~Docker prostředí + nedeterminismus); intervence r3$\to$r4 cílila \acs{Q2}, ne procesní pravidla \\
 \acs{Q2} & Pole \texttt{pausedElapsed} opět nepoužito; přibyly chyby v~eskalaci v~pracovních dnech a~na~boundary přechodu DUE\_SOON & Pravidlo o~API kontraktu v~Constraints (deklarativní) bez verifikace neúčinné \\
 \acs{Q2} & Mergován kód s~timezone bugem ve~vlastním testu & \texttt{npx vitest run} v~pre-PR checklistu nevynutilo skutečný pass \\
+\acs{Q8} & Pokles design quality (3/3$\to$2/3): JSDoc chybí na~utility functions (\texttt{businessDays.ts}), pause/resume logika nedokumentovaná & Intervence r3$\to$r4 cílila \acs{Q2}, požadavek na~JSDoc z~r3 zůstal deklarativní bez kontroly \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -386,7 +405,7 @@ zahrnující \texttt{complexity: [warn, 10]}, protože v~r3 agent spustil
 eslint s~vlastním configem bez tohoto pravidla
 (obrázek~\ref{fig:agents-diff-r3-r5}).
 
-\begin{figure}[tbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{img/generated/agents-diff-r3-r5.png}
 \caption{Vizuální diff změn \texttt{AGENTS.md} mezi pilot-r3 a~pilot-r5}
@@ -400,7 +419,7 @@ eslint s~vlastním configem bez tohoto pravidla
 
 \begingroup
 \sloppy
-Pátý běh ověřoval změny zavedené po r4: API contract verifikaci
+Pátý běh ověřoval změny zavedené po r4: verifikaci API kontraktu
 v~pre-PR checklistu a~ESLint complexity pravidlo.
 
 \begin{table}[htbp]
@@ -412,20 +431,25 @@ v~pre-PR checklistu a~ESLint complexity pravidlo.
 \toprule
 \textbf{Kód} & \textbf{Metrika} & \textbf{r3} & \textbf{r5} & \textbf{Trend} \\
 \midrule
+P1 & Issues before code      & \checkmark & $\times$    & regrese \\
 P2 & Branch per issue        & \checkmark & $\times$    & regrese \\
 P3 & Test-first commits      & \checkmark & $\times$    & regrese \\
 P4 & PRs linked              & \checkmark & $\times$    & regrese \\
+P8 & PR quality              & 3/3        & 1/3         & regrese \\
 Q2 & Ref.\ test pass rate    & 41/42      & 38/42       & regrese \\
+Q3 & Mutation score          & 71\,\%     & \cna{n/a}   & \cna{n/a} \\
 Q5 & Lint warnings           & 1          & 0           & zlepšení \\
 Q7 & Complexity violations   & 1 viol.    & 0           & zlepšení \\
 \midrule
-E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & 65 / 23 / 3028 & záznam \\
+E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62/30/4770 & 65/23/3028 & záznam \\
 E2 & Trvání                  & 25 min & 13 min & záznam \\
 E3 & Počet kompakcí          & 0          & 0           & záznam \\
 \bottomrule
 \end{tabularx}
 \end{table}
 \FloatBarrier
+
+\noindent\textit{Poznámka:} \acs{Q3} = n/a: agentovy vlastní testy selhávají dramaticky (4/29 fail, chyby v~přechodech stavů); Stryker vyžaduje funkční test suite, mutace nelze odlišit od~baseline. Stejný mechanismus jako u~r4 a~Ablace~A-2. Nejde o~regresi měřené hodnoty.
 
 \paragraph{Diagnostika chování.}
 
@@ -439,9 +463,7 @@ E3 & Počet kompakcí          & 0          & 0           & záznam \\
 \toprule
 \textbf{Metriky} & \textbf{Pozorované chování} & \textbf{Příčina} \\
 \midrule
-\acs{Q5}, \acs{Q7} & ESLint nakonfigurován s~pravidlem \texttt{complexity}, funkce \texttt{processTick} rozložena & Konkrétní instrukce v~pre-PR checklistu (\enquote{ESLint config must include complexity: [warn, 10]}) zabrala \\
-\acs{P2}, \acs{P3}, \acs{P4} & Žádné issues, branches ani PR; vše v~jednom \texttt{feat:} commitu po~použití interního \texttt{todowrite} místo \texttt{gh issue create} & Selektivní plnění instrukcí: agent přečetl celý postup, ale provedl jen závěrečný checklist \\
-\acs{Q5}, \acs{Q6} & Pre-PR checks (tsc, eslint) dodrženy & Jednokrokové příkazy s~okamžitým výstupem agent plní spolehlivě \\
+\acs{P1}, \acs{P2}, \acs{P3}, \acs{P4}, \acs{P8} & Žádné issues, branches ani PR; vše v~jednom \texttt{feat:} commitu po~použití interního \texttt{todowrite} místo \texttt{gh issue create}; PR quality 1/3 (chybějící popis a~kontext) & Selektivní plnění instrukcí: agent přečetl celý postup, ale provedl jen závěrečný checklist \\
 \acs{Q2} & Stále neúplné pause/resume a~nové edge cases & Verifikace API kontraktu nezabrala bez~současného dodržení procesu \\
 \bottomrule
 \end{tabularx}
@@ -455,6 +477,10 @@ celý pracovní postup dodržel (\acs{P1}--\acs{P5}~=~5/5), r4 částečně
 r3 a~r5 lišily minimálně (2~řádky v~pre-PR checklistu). Data tak
 naznačují, že nedeterminismus modelu je pro dodržování vícekrokových
 sekvencí silnějším faktorem než drobné lokální změny v~checklistu.
+Lokální zlepšení (\acs{Q5}, \acs{Q7}~=~0) přitom přišlo díky
+konkrétnímu ESLint pravidlu v~pre-PR checklistu, což ukazuje, že
+jednokrokové verifikační příkazy zafungovaly i~při selhání procesní
+sekvence.
 Pilotní baseline pro ablace zůstává r3. Ablace testují, které složky
 fungujících instrukcí ke~zlepšení skutečně přispěly; interpretaci
 pilotních pozorování ve~vztahu k~cílům práce uvádí
@@ -575,7 +601,7 @@ Q6 & Typecheck errors          & 0          & 0          & 0 \\
 Q7 & Complexity violations     & 1          & 4          & 1 \\
 Q8 & Design quality            & 3/3        & 2/3        & 2/3 \\
 \midrule
-E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & 72 / 32 / 4558 & 92 / 36 / 8210 \\
+E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62/30/4770 & 72/32/4558 & 92/36/8210 \\
 E2 & Trvání                    & 25 min     & 39 min     & 24 min \\
 E3 & Počet kompakcí            & 0          & 0          & 0 \\
 \bottomrule
@@ -592,21 +618,31 @@ commitl kód s~nefunkčními testy.
 
 \paragraph{Interpretace.}
 Tabulka~\ref{tab:ablace-a} ukazuje pokles napříč metrikami kvality
-kódu (\ac{Q5}, \ac{Q7}) i~funkční korektnosti (\acs{Q2}, \acs{Q3}). Bez explicitního
-příkazu \texttt{npx eslint} agent neprovedl kontrolu kvality před
-odevzdáním kódu, což naznačuje, že verifikační kroky nejsou
-redundantní. Agent je bez instrukce nespouští sám.
+kódu (\ac{Q5}, \ac{Q7}) i~funkční korektnosti (\acs{Q2}, \acs{Q3}).
+Bez explicitního příkazu \texttt{npx eslint} agent neprovedl kontrolu
+kvality před odevzdáním kódu, což naznačuje, že verifikační kroky
+nejsou redundantní; agent je bez instrukce nespouští sám.
+
+Pokles \acs{Q8} (3/3$\to$2/3 v~obou bězích) má v~každém běhu jiný
+mechanismus: A-1 obešel typový systém pomocí \texttt{undefined as
+unknown as number} v~\texttt{getDefaultTimeouts()} místo modelování
+volitelných hodnot, A-2 produkoval monolitní strukturu s~duplicitními
+helpery (\texttt{startOfDay}) a~bez modulových hranic. Bez verifikačního
+kroku zůstávají oba problémy v~commitnutém kódu.
 
 Procesní metriky vykazují vzorec známý z~pilotních iterací: A-1
-dodržel pracovní postup kompletně, A-2 nikoliv. Instrukce se mezi běhy
-nelišily. Variabilita je důsledkem nedeterminismu modelu,
-ne ablace.
+dodržel pracovní postup kromě modifikace vlastních testů (\acs{P5}~=~$\times$),
+A-2 selhal v~klíčových procesních pravidlech (\acs{P2}, \acs{P3}, \acs{P4}).
+Instrukce se mezi běhy nelišily. Variabilita je důsledkem nedeterminismu
+modelu, ne ablace.
 
-Agent bez verifikačních kroků spotřeboval přibližně dvakrát více
-testovacích cyklů (44~spuštění \texttt{vitest} oproti $\sim$20
-u~Ablace~B). To naznačuje, že verifikační kroky plní kromě kontroly
-kvality i~druhou funkci: strukturují
-práci agenta a~zabraňují cyklickému debugování.
+Agent v~Ablaci~A spustil v~průměru o~$\sim$40\,\% více testovacích
+cyklů než v~Ablaci~B (A-1: 25, A-2: 20; B-1: 20, B-2: 12; měřeno
+spuštěními \texttt{vitest} a~\texttt{npm test} v~tool-call logu).
+Verifikační kroky tak plní kromě kontroly kvality i~druhou funkci:
+strukturují práci agenta a~zabraňují cyklickému debugování — chained
+\texttt{tsc + eslint + vitest} v~Ablaci~B zachycuje chyby dříve
+a~snižuje potřebu opakovaných test runs.
 
 
 \subsection{Ablace~B: bez Package Quality}
@@ -642,7 +678,7 @@ Q6 & Typecheck errors          & 0          & 0          & 0 \\
 Q7 & Complexity violations     & 1          & 1          & 2 \\
 Q8 & Design quality            & 3/3        & \cna{n/a}$^*$    & 2/3 \\
 \midrule
-E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & 78 / 40 / 6273 & 55 / 23 / 3604 \\
+E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62/30/4770 & 78/40/6273 & 55/23/3604 \\
 E2 & Trvání                    & 25 min     & 28 min     & 21 min \\
 E3 & Počet kompakcí            & 0          & 0          & 0 \\
 \bottomrule
@@ -653,31 +689,41 @@ E3 & Počet kompakcí            & 0          & 0          & 0 \\
 $^*$ \acs{Q8} v~B-1: judge nedokončil hodnocení (API timeout).
 
 \paragraph{Interpretace.}
-Deterministické metriky kvality kódu (\acs{Q5}, \acs{Q6}, \acs{Q7}) zůstaly na podobné
-úrovni jako v~r3 (tabulka~\ref{tab:ablace-b}). Agent produkoval
-modulární kód, striktní TypeScript a~v~B-1 i~JSDoc dokumentaci,
-přestože instrukce tyto požadavky neobsahovaly. Jediný pokles
-zaznamenalo \ac{Q8}: judge identifikoval chybějící
-modularitu (veškerý kód v~jednom souboru) a~neúplnou dokumentaci.
-Data naznačují, že základní kódové konvence jsou u~tohoto modelu
-řízeny převážně znalostmi z~tréninku. Strukturální rozhodnutí
-(modularita, dokumentace) instrukce pravděpodobně ovlivňují. Tento
-závěr je ale založen na~\acs{Q8}, tedy na judge-based metrice bez
-validace proti lidskému hodnocení.
+Deterministické metriky kvality kódu (\acs{Q5}, \acs{Q6}, \acs{Q7})
+zůstaly na~podobné úrovni jako v~r3 (tabulka~\ref{tab:ablace-b}).
+Agent produkoval modulární kód, striktní TypeScript a~v~B-1 i~JSDoc
+dokumentaci, přestože instrukce tyto požadavky neobsahovaly. Data
+naznačují, že základní kódové konvence jsou u~tohoto modelu řízeny
+převážně znalostmi z~tréninku.
 
-Funkční korektnost (\acs{Q2}) vykazuje extrémní variabilitu: B-1 dosáhl
-37/42 (srovnatelné s~r3), zatímco B-2 pouze 11/42. Mutation score
-zůstal stabilní (67--72\,\%). Propad \acs{Q2} v~B-2 není důsledkem ablace
-Package Quality, ta neobsahuje žádné instrukce o~implementační
-logice. Jde o~projev nedeterminismu modelu: agent v~B-2 implementoval
-business day výpočty chybně, což způsobilo kaskádové selhání
-eskalačních přechodů. Stejný typ chyby se objevoval i~v~pilotních
-iteracích (r1, r4).
+\acs{Q8} zaznamenalo pokles (3/3$\to$2/3) v~B-2; v~B-1 judge nedokončil
+hodnocení (API timeout, ne výsledek běhu). Konkrétní mechanismus
+v~B-2: veškerý kód v~jednom souboru (single-file monolith), date
+utilities smíšeny se~state machine logikou. Strukturální rozhodnutí
+(modularita) instrukce ovlivňují více než lokální konvence — bez
+sekce Package Quality se ztrácí oddělení modulů, ale ne kódový styl.
+Závěr je založen na~judge-based metrice bez validace proti lidskému
+hodnocení.
 
-\acs{P5} selhalo v~obou bězích. Agent modifikoval
-vlastní testy po implementaci. Stejný problém se objevoval
-i~v~pilotních iteracích (r1, r4) se stejnými instrukcemi,
-jde tedy o~projev nedeterminismu modelu, ne ablace.
+Funkční korektnost (\acs{Q2}) vykazuje extrémní variabilitu: B-1
+dosáhl 37/42 (srovnatelné s~r3), zatímco B-2 pouze 11/42. Mutation
+score zůstal stabilní (67--72\,\%). Propad \acs{Q2} v~B-2 není
+důsledkem ablace Package Quality, ta neobsahuje žádné instrukce
+o~implementační logice. Jde o~projev nedeterminismu modelu: agent
+v~B-2 implementoval business day výpočty chybně, což způsobilo
+kaskádové selhání eskalačních přechodů. Stejný typ chyby se objevoval
+i~v~pilotních iteracích (r1, r4).
+
+Procesní metriky vykazují variabilitu mezi B-1 a~B-2 (\acs{P2}:
+\checkmark/$\times$, \acs{P4}: $\times$/\checkmark) a~sdílenou
+regresi \acs{P8} (3/3$\to$2/3 v~obou bězích; mechanismus v~dostupných
+artefaktech nezachycen). Žádný z~těchto vzorců nesouvisí s~ablací
+Package Quality, jde o~nedeterminismus modelu.
+
+\acs{P5} selhalo v~obou bězích. Agent modifikoval vlastní testy
+po implementaci. Stejný problém se objevoval i~v~pilotních iteracích
+(r1, r4) se stejnými instrukcemi, jde tedy o~projev nedeterminismu
+modelu, ne ablace.
 
 
 %% ================================================================
@@ -717,7 +763,7 @@ P8 PR quality           & \cmid{2/3}  & \cgood{3/3}  & \cgood{3/3}  & \cgood{3/3
 \midrule
 Q1 API contract         & \cna{match} & \cna{match} & \cna{match} & \cna{match} & \cna{match} & \cna{match} & \cna{match} & \cna{match} & \cna{match} \\
 Q2 ref.\ testy          & \cmid{39}  & \cbad{32} & \cgood{41} & \cmid{39} & \cmid{38}  & \cbad{35} & \cmid{37} & \cmid{37} & \cbad{11} \\
-Q3 mutation score       & \cgood{84\,\%} & \cbad{68\,\%} & \cmid{71\,\%} & \cna{n/a} & \cna{n/a} & \cbad{62\,\%} & \cna{n/a$^*$} & \cbad{67\,\%} & \cmid{72\,\%} \\
+Q3 mutation score       & \cgood{84\,\%} & \cbad{68\,\%} & \cmid{71\,\%} & \cna{n/a$^*$} & \cna{n/a$^*$} & \cbad{62\,\%} & \cna{n/a$^*$} & \cbad{67\,\%} & \cmid{72\,\%} \\
 Q4 AC coverage          & \cmid{23}  & \cgood{25}  & \cgood{25}  & \cgood{25}  & \cmid{24}  & \cgood{25}  & \cgood{25} & \cgood{25} & \cmid{23} \\
 Q5 lint warnings        & \cbad{2}    & \cmid{1}      & \cmid{1}      & \cmid{1}      & \cgood{0}      & \cbad{4}    & \cbad{3}   & \cbad{2}   & \cbad{2} \\
 Q6 typecheck errors     & \cna{0}     & \cna{0}     & \cna{0}     & \cna{0}     & \cna{0}     & \cna{0}     & \cna{0}    & \cna{0}    & \cna{0} \\
@@ -733,7 +779,7 @@ E3 počet kompakcí       & \cna{0}    & \cna{0}    & \cna{0}         & \cna{0} 
 \smallskip
 \raggedright
 $^\ddagger$~P7 v~r5: judge hodnotil specifikační issue, ne agentovu.\\
-$^*$~Stryker v~A-2 nedokončil analýzu (timeout).\\
+$^*$~Stryker nedokončil analýzu — agentovy testy selhávají, mutace nelze odlišit od~baseline (r4, r5, A-2).\\
 Q4 v~uložených judge artefaktech historicky používalo 24bodovou
 rubriku. Ve thesis jsou hodnoty převedeny na 25 AC po manuálním
 dopočítání AC25 (\textit{custom holiday calendar}).
