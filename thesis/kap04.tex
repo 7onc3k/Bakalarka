@@ -221,6 +221,7 @@ Q7       & Complexity violations       & 2 viol.    & 0           & zlepšení \
 \midrule
 E1       & Vstup / výstup / $\Sigma$ cache (tis.) & 115/60/11528 & 76/41/3196 & záznam \\
 E2       & Trvání                      & 33 min     & 37 min      & záznam \\
+E3       & Počet kompakcí              & 0          & 0           & záznam \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -252,7 +253,7 @@ V~obou procesních pravidlech (\acs{P2}, \acs{P3}) agent příkaz dodržel
 formálně, ne podle záměru: typický pattern u~deklarativních instrukcí
 bez verifikační opory (viz tabulka). Stejný posun se projevil i~na~produktové
 straně, pokles \acs{Q2} a~\acs{Q3} ukazuje, že hromadná write strategie
-produkuje testy s~nižší diskriminační schopností než iterativní
+produkuje testy, které hůř zachytí chyby v~kódu než iterativní
 test-fix cyklus. Pro r3 přesouváme tři instrukce z~roviny příkazu
 do~verifikačního kroku: explicitní listing otevřených issues před
 výběrem práce, kontrolní \texttt{git log} mezi commity testů a~kódu
@@ -279,7 +280,7 @@ s~testy, výběr issue přes \texttt{gh issue list} a~přesun požadavku
 na JSDoc do verifikačního kroku před pull requestem.
 Tabulka~\ref{tab:pilot-r3-delta} ukazuje metriky s~výraznou změnou.
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Pilot-r3: metriky se změnou oproti r2}
 \label{tab:pilot-r3-delta}
@@ -305,7 +306,7 @@ E3 & Počet kompakcí            & 0          & 0           & záznam \\
 \end{table}
 \FloatBarrier
 
-\paragraph{Diagnostika chování.}
+\paragraph{Diagnostika chování.}\footnote{V~r3 uvádíme diagnostiku jako prose, protože iterace identifikuje jediný informativní nález; samostatná findings tabulka by duplikovala obklopující text.}
 Tři změny instrukcí z~r2 zabraly: agent dodržel celý procesní checklist
 (\acs{P1}--\acs{P5}~=~5/5) a~doplnil JSDoc dokumentaci
 (\acs{Q8}~=~3/3). Zbývá jediný nález: agent zvolil vlastní implementaci
@@ -609,16 +610,14 @@ E3 & Počet kompakcí            & 0          & 0          & 0 \\
 \end{table}
 \FloatBarrier
 
-\textit{Poznámka k~\acs{E1}:} sloupec r3 vychází z~pilotního \texttt{transcript.json}; pro A-1 a~A-2 chybí \texttt{transcript.json}, hodnoty jsou agregovány z~uložené OpenCode session DB (\texttt{.opencode/opencode.db}) podle stejného vzorce.
-
 $^\dagger$ \acs{Q3} v~A-2 nelze měřit: agentovy vlastní testy selhávají
 (test očekává stav \texttt{REMINDER\_1}, kód vrací \texttt{GRACE}),
 Stryker vyžaduje funkční test suite. Bez verifikačních kroků agent
 commitl kód s~nefunkčními testy.
 
-\paragraph{Interpretace.}
+\paragraph{Diagnostika chování.}
 Tabulka~\ref{tab:ablace-a} ukazuje pokles napříč metrikami kvality
-kódu (\ac{Q5}, \ac{Q7}) i~funkční korektnosti (\acs{Q2}, \acs{Q3}).
+kódu (\acs{Q5}, \acs{Q7}) i~funkční korektnosti (\acs{Q2}, \acs{Q3}).
 Bez explicitního příkazu \texttt{npx eslint} agent neprovedl kontrolu
 kvality před odevzdáním kódu, což naznačuje, že verifikační kroky
 nejsou redundantní; agent je bez instrukce nespouští sám.
@@ -636,13 +635,11 @@ A-2 selhal v~klíčových procesních pravidlech (\acs{P2}, \acs{P3}, \acs{P4}).
 Instrukce se mezi běhy nelišily. Variabilita je důsledkem nedeterminismu
 modelu, ne ablace.
 
-Agent v~Ablaci~A spustil v~průměru o~$\sim$40\,\% více testovacích
-cyklů než v~Ablaci~B (A-1: 25, A-2: 20; B-1: 20, B-2: 12; měřeno
-spuštěními \texttt{vitest} a~\texttt{npm test} v~tool-call logu).
-Verifikační kroky tak plní kromě kontroly kvality i~druhou funkci:
-strukturují práci agenta a~zabraňují cyklickému debugování — chained
-\texttt{tsc + eslint + vitest} v~Ablaci~B zachycuje chyby dříve
-a~snižuje potřebu opakovaných test runs.
+Agent v~Ablaci~A spustil přibližně o~40\,\% více testovacích cyklů
+než v~Ablaci~B (A-1: 25, A-2: 20; B-1: 20, B-2: 12; měřeno spuštěními
+\texttt{vitest} a~\texttt{npm test} v~tool-call logu). Chained
+\texttt{tsc} + \texttt{eslint} + \texttt{vitest} v~Ablaci~B zachycuje
+chyby dříve.
 
 
 \subsection{Ablace~B: bez Package Quality}
@@ -688,7 +685,7 @@ E3 & Počet kompakcí            & 0          & 0          & 0 \\
 
 $^*$ \acs{Q8} v~B-1: judge nedokončil hodnocení (API timeout).
 
-\paragraph{Interpretace.}
+\paragraph{Diagnostika chování.}
 Deterministické metriky kvality kódu (\acs{Q5}, \acs{Q6}, \acs{Q7})
 zůstaly na~podobné úrovni jako v~r3 (tabulka~\ref{tab:ablace-b}).
 Agent produkoval modulární kód, striktní TypeScript a~v~B-1 i~JSDoc
@@ -699,31 +696,20 @@ převážně znalostmi z~tréninku.
 \acs{Q8} zaznamenalo pokles (3/3$\to$2/3) v~B-2; v~B-1 judge nedokončil
 hodnocení (API timeout, ne výsledek běhu). Konkrétní mechanismus
 v~B-2: veškerý kód v~jednom souboru (single-file monolith), date
-utilities smíšeny se~state machine logikou. Strukturální rozhodnutí
-(modularita) instrukce ovlivňují více než lokální konvence — bez
-sekce Package Quality se ztrácí oddělení modulů, ale ne kódový styl.
-Závěr je založen na~judge-based metrice bez validace proti lidskému
-hodnocení.
+utilities smíšeny se~state machine logikou. Bez sekce Package Quality
+se ztrácí oddělení modulů, ale ne kódový styl. Závěr stojí
+na~judge-based metrice bez validace proti lidskému hodnocení.
 
-Funkční korektnost (\acs{Q2}) vykazuje extrémní variabilitu: B-1
-dosáhl 37/42 (srovnatelné s~r3), zatímco B-2 pouze 11/42. Mutation
-score zůstal stabilní (67--72\,\%). Propad \acs{Q2} v~B-2 není
-důsledkem ablace Package Quality, ta neobsahuje žádné instrukce
-o~implementační logice. Jde o~projev nedeterminismu modelu: agent
-v~B-2 implementoval business day výpočty chybně, což způsobilo
-kaskádové selhání eskalačních přechodů. Stejný typ chyby se objevoval
-i~v~pilotních iteracích (r1, r4).
-
-Procesní metriky vykazují variabilitu mezi B-1 a~B-2 (\acs{P2}:
-\checkmark/$\times$, \acs{P4}: $\times$/\checkmark) a~sdílenou
-regresi \acs{P8} (3/3$\to$2/3 v~obou bězích; mechanismus v~dostupných
-artefaktech nezachycen). Žádný z~těchto vzorců nesouvisí s~ablací
-Package Quality, jde o~nedeterminismus modelu.
-
-\acs{P5} selhalo v~obou bězích. Agent modifikoval vlastní testy
-po implementaci. Stejný problém se objevoval i~v~pilotních iteracích
-(r1, r4) se stejnými instrukcemi, jde tedy o~projev nedeterminismu
-modelu, ne ablace.
+Variabilita mezi B-1 a~B-2 v~\acs{Q2} (37/42 vs.\ 11/42; mutation
+score stabilní 67--72\,\%), v~procesních pravidlech (\acs{P2}:
+\checkmark/$\times$, \acs{P4}: $\times$/\checkmark; sdílená regrese
+\acs{P8} 3/3$\to$2/3) a~v~\acs{P5} (selhání obou běhů, modifikace
+vlastních testů) nesouvisí s~ablací Package Quality, ta neobsahuje
+instrukce o~implementační logice ani procesu. Jde o~nedeterminismus
+modelu: \acs{Q2} pokles v~B-2 způsobil chybný business day výpočet
+a~kaskádové selhání eskalačních přechodů, \acs{P5} a~procesní
+variabilita se objevují i~v~r1 a~r4 se shodnými instrukcemi.
+Mechanismus regrese \acs{P8} v~dostupných artefaktech nezachycen.
 
 
 %% ================================================================
