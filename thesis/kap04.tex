@@ -142,39 +142,38 @@ E3 & Počet kompakcí         & 0          & \cna{n/a}   & záznam \\
 \end{table}
 \FloatBarrier
 
-Z~binárních pass/fail kritérií prošla v~r1 jen procesní složka (\acs{P1}, \acs{P4}) a~minimální produktová sada (\acs{Q1}, \acs{Q6}); ostatní kritéria včetně \acs{Q2}, \acs{Q5} a~\acs{Q7} agent nesplnil.
+\paragraph{Diagnostika chování.}
 
-\paragraph{Diagnostika.}
-Agent vytvořil 11~issues hromadně na začátku běhu (před prvním commitem
-do \texttt{src/}) a~rozložil implementaci do 4~větví, každá s~vlastním
-pull requestem. Větve agregovaly související issues, takže \ac{P2}
-selhala v~poměru 4~větve na 11~issues. Napříč všemi 4~větvemi předcházela
-implementace testům (\ac{P3}); agent vlastní testy psal až po kódu
-a~v~jedné větvi navíc upravil existující test (\ac{P5}). Z~referenčních
-testů selhaly 3 z~42 (\ac{Q2}): jedno selhání pause/resume na zachování
-uplynulého času a~dvě v~manuálním přechodu mezi stavy. \ac{Q8}~=~1/3
-kvůli chybějící JSDoc dokumentaci na veřejném API. Vlastních testů
-napsal agent 59 a~všechny procházely. Strukturu kódu zvolil modulární
-(\texttt{types.ts}, \texttt{businessDays.ts}, \texttt{dunning.ts},
-\texttt{index.ts}), což odpovídá požadavkům sekce Package Quality
-v~instrukcích.
+\begin{table}[H]
+\centering
+\caption{Pilot-r1: nálezy a~jejich příčiny}
+\label{tab:pilot-r1-nalezy}
+\small
+\begin{tabularx}{\linewidth}{@{}p{0.32\linewidth}p{0.16\linewidth}X@{}}
+\toprule
+\textbf{Pozorované chování} & \textbf{Metriky} & \textbf{Příčina} \\
+\midrule
+Issues seskupeny do~méně větví (4~větve / 11~issues) & \acs{P2}: $\times$ & Instrukce neuvádí pravidlo \enquote{1~issue = 1~větev}; chybí procedurální páka \\
+Implementace předcházela testům napříč všemi větvemi & \acs{P3}: $\times$ & Žádné explicitní pravidlo ani kontrola pořadí test/kód \\
+V~jedné větvi upraven existující test & \acs{P5}: $\times$ & Žádná hard-rule pro existující testy \\
+2~funkce nad prahem složitosti & \acs{Q7}: 2~viol. & Package Quality nevynucuje kontrolu složitosti \\
+Chybějící JSDoc na~veřejném API & \acs{Q8}: 1/3 & Deklarativní požadavek bez verifikačního kroku \\
+3~z~42 referenčních testů selhaly (pause/resume, eskalace) & \acs{Q2}: 39/42 & Implementační rozhodnutí v~doménové logice mimo dosah baseline instrukcí \\
+\bottomrule
+\end{tabularx}
+\end{table}
+\FloatBarrier
 
-Procesní selhání \acs{P2}, \acs{P3} a~\acs{P5} sdílí stejný vzor:
-instrukce uvedla, \textit{co} má platit (jeden issue ve vlastní větvi,
-testy před kódem, existující test se neupravuje), bez konkrétního
-příkazu nebo kontroly. Agent v~každém z~nich zvolil rychlejší
-alternativu, která literu pravidla neporušila. \ac{Q7} (2 funkce nad
-prahem) sledovala stejný vzor: \enquote{Package Quality} požadovala
-modulární kód, ale neenforcovala kontrolu složitosti. Selhání
-referenčních testů jsou jiného typu, jde o~implementační rozhodnutí
-v~pause/resume logice a~výpočtech v~pracovních dnech, na která
-úroveň instrukcí v~baseline nedosahuje.
-
-Pro r2 doplňujeme procedurální páku ke každému selhanému procesnímu
-pravidlu (příkaz pro vytvoření větve, oddělené staging testů a~kódu,
-korektivní pravidlo pro selhávající test) a~kontrolu lintu před
-otevřením pull requestu. Konkrétní text změn ukazuje
-obrázek~\ref{fig:agents-diff-r1-r2}.
+\paragraph{Závěry a~intervence pro r2.}
+Společný pattern napříč \acs{P2}, \acs{P3}, \acs{P5} a~\acs{Q7}: instrukce
+nese \enquote{co} má platit bez konkrétního \enquote{jak} a~bez kontroly
+(viz tabulka). Selhání \acs{Q2} jsou jiného typu: implementační
+rozhodnutí v~pause/resume logice a~výpočtech v~pracovních dnech, na~která
+úroveň baseline instrukcí nedosahuje. Pro r2 doplňujeme procedurální
+páku ke~každému selhanému procesnímu pravidlu (příkaz pro vytvoření
+větve, oddělené staging testů a~kódu, korektivní pravidlo pro
+selhávající test) a~kontrolu lintu před otevřením pull requestu
+(obrázek~\ref{fig:agents-diff-r1-r2}).
 
 \begin{figure}[H]
 \centering
@@ -215,37 +214,38 @@ E2       & Trvání                 & 33 min & 37 min & záznam \\
 \end{table}
 \FloatBarrier
 
-\paragraph{Diagnostika.}
-\acs{P5} a~\acs{Q7} byly opraveny: existující testy zůstaly
-nezměněné a~žádná funkce nepřekročila práh složitosti. \acs{P2}
-a~\acs{P3} ale přetrvaly v~jiné podobě než v~r1. Agent vytvořil
-7~issues a~3~větve (jedna nesla 4~issues), tedy stejný vzor agregace
-jako v~r1, jen v~menším měřítku. \acs{P3} selhala formálně přesně
-opačně: všechny tři commity dostaly prefix \texttt{test:} a~obsahovaly
-současně testy i~implementaci, takže metrika \enquote{\texttt{test:}
-commit před \texttt{feat:}} nemohla projít, protože žádný \texttt{feat:}
-commit nevznikl. \acs{Q8}~=~1/3 zůstala beze změny: deklarativní
-požadavek na JSDoc agent ignoroval. \acs{Q2} a~\acs{Q3} se zhoršily
-(32/42, resp.\ 68\,\%); selhaly zejména testy eskalace v~pracovních
-dnech. Vlastních testů napsal agent 70 (oproti 59 v~r1), ale nižší
-kvality.
+\paragraph{Diagnostika chování.}
 
-V~obou procesních pravidlech splnil agent literu nového procedurálního
-příkazu, ale ne jeho záměr. Procedura vyžadovala
-\texttt{git checkout -b issue-N} bez explicitního pravidla
-\enquote{jeden issue $\Rightarrow$ jedna větev}, a~oddělené staging
-testů a~kódu bez podmínky, že každý commit nese jen jednu z~obou stran.
-Pokles kvality testů ukazuje analogický posun na produktové straně:
-agent patrně napsal celou test suite hromadně ze specifikace místo
-postupného test-fix cyklu, takže více testů kontrolovalo méně mutantů.
-\acs{E1} klesla na promptové i~výstupní straně, ale pro rozhodnutí
-o~další úpravě byla podstatná hlavně regrese v~testování a~dokumentaci.
+\begin{table}[H]
+\centering
+\caption{Pilot-r2: nálezy a~jejich příčiny}
+\label{tab:pilot-r2-nalezy}
+\small
+\begin{tabularx}{\linewidth}{@{}p{0.32\linewidth}p{0.16\linewidth}X@{}}
+\toprule
+\textbf{Pozorované chování} & \textbf{Metriky} & \textbf{Příčina} \\
+\midrule
+Existující testy nezměněny, žádná funkce nad prahem složitosti & \acs{P5}: $\times{\to}\checkmark$, \acs{Q7}: 2${\to}$0 & Nové instrukce z~r1 účinné \\
+Issues agregovány do menšího počtu větví (7~issues / 3~větve) & \acs{P2}: stagnace & Procedura neměla pravidlo \enquote{1~issue = 1~větev} \\
+Test+kód v~jednom commitu s~prefixem \texttt{test:}; žádný \texttt{feat:} commit & \acs{P3}: 0${\to}$0 (inverzní forma) & Litera bez záměru, formální dodržení procedurálního příkazu \\
+JSDoc neaplikován & \acs{Q8}: 1/3 stabilní & Deklarativní pravidlo bez verifikační opory \\
+Pokles kvality test suite (více testů, méně zachycených mutantů) & \acs{Q2}: 39/42${\to}$32/42, \acs{Q3}: 84\,\%${\to}$68\,\% & Hromadné psaní testů ze specifikace místo iterativního test-fix cyklu \\
+\bottomrule
+\end{tabularx}
+\end{table}
+\FloatBarrier
 
-Pro r3 přesouváme tři instrukce z~roviny příkazu do verifikačního
-kroku: explicitní listing otevřených issues před výběrem práce,
-kontrolní \texttt{git log} mezi commity testů a~kódu a~přesun
-požadavku na JSDoc do pre-PR checklistu. Konkrétní text změn ukazuje
-obrázek~\ref{fig:agents-diff-r2-r3}.
+\paragraph{Závěry a~intervence pro r3.}
+V~obou procesních pravidlech (\acs{P2}, \acs{P3}) splnil agent literu
+příkazu, ne~záměr: typický pattern u~deklarativních instrukcí bez
+verifikační opory (viz tabulka). Stejný posun se projevil i~na~produktové
+straně, pokles \acs{Q2} a~\acs{Q3} ukazuje, že hromadná write strategie
+produkuje testy s~nižší diskriminační schopností než iterativní
+test-fix cyklus. Pro r3 přesouváme tři instrukce z~roviny příkazu
+do~verifikačního kroku: explicitní listing otevřených issues před
+výběrem práce, kontrolní \texttt{git log} mezi commity testů a~kódu
+a~přesun požadavku na~JSDoc do~pre-PR checklistu
+(obrázek~\ref{fig:agents-diff-r2-r3}).
 
 \begin{figure}[tbp]
 \centering
@@ -289,31 +289,34 @@ E3 & Počet kompakcí            & 0          & 0           & záznam \\
 \end{table}
 \FloatBarrier
 
-\paragraph{Diagnostika.}
-Agent poprvé splnil celý procesní checklist \acs{P1}--\acs{P5}~=~5/5:
-vytvořil issues před kódem, každý issue dostal vlastní branch, test
-commit předcházel kódu, pull requesty obsahovaly \texttt{Closes \#N}
-a~žádný test nebyl dodatečně upraven. \acs{Q8}~=~3/3 odpovídá doplnění
-JSDoc dokumentace po přesunu požadavku do verifikačního kroku.
-Všechny tři změny tedy zabraly.
+\paragraph{Diagnostika chování.}
 
-\acs{Q2}~=~41/42: zbývá jedna chyba v~implementaci, a~odpovídá prvnímu
-ze dvou implicitních pravidel popsaných v~sekci~\ref{sec:konstrukce-specifikace}.
-Specifikace definuje chování pause/resume jednoznačně: acceptance criteria vyžadují
-``elapsed time are preserved'' při pauzování a~``timeout resumes
-from where it left off'' při obnovení. API kontrakt navíc poskytuje
-pole \texttt{pausedElapsed} s~komentářem ``business days elapsed
-before pause''. Agent přesto zvolil vlastní přístup (posunutí
-\texttt{stateEnteredAt} zpět v~čase) místo použití pole z~kontraktu.
-Agentův přístup fungoval pro jedno pozastavení, ale selhal při
-opakovaném pause/resume. Spec není nejednoznačná. Agent učinil
-implementační rozhodnutí navzdory explicitnímu poli v~kontraktu.
+\begin{table}[H]
+\centering
+\caption{Pilot-r3: nálezy a~jejich příčiny}
+\label{tab:pilot-r3-nalezy}
+\small
+\begin{tabularx}{\linewidth}{@{}p{0.32\linewidth}p{0.16\linewidth}X@{}}
+\toprule
+\textbf{Pozorované chování} & \textbf{Metriky} & \textbf{Příčina} \\
+\midrule
+Celý procesní checklist dodržen: issues před kódem, branch per issue, test-first commits, žádný test nezměněn, PRs s~\texttt{Closes \#N} & \acs{P1}--\acs{P5}: 5/5 & Tři změny instrukcí z~r2 účinné (verifikace místo příkazu) \\
+JSDoc dodán & \acs{Q8}: 1/3${\to}$3/3 & Přesun požadavku do~verifikačního kroku zabral \\
+Vlastní implementace pause/resume (posunutí \texttt{stateEnteredAt}) místo pole \texttt{pausedElapsed} z~API kontraktu; fungovala pro jedno pozastavení, selhala při opakovaném & \acs{Q2}: 41/42 & Implementační rozhodnutí navzdory explicitnímu poli v~kontraktu a~jednoznačným acceptance criteria \\
+\bottomrule
+\end{tabularx}
+\end{table}
+\FloatBarrier
 
-Pro r4 doplňujeme do pre-PR checklistu příkaz \texttt{npx vitest run},
-aby agent před otevřením pull requestu ověřil průchod vlastních testů,
-a~do Constraints pravidlo: každé pole v~API kontraktu musí být
-v~implementaci použito~\cite{breunig2025}. Konkrétní text změn ukazuje
-obrázek~\ref{fig:agents-diff-r3-r4}.
+\paragraph{Závěry a~intervence pro r4.}
+Tři změny instrukcí z~r2 zabraly: pracovní postup i~JSDoc nyní fungují
+(viz tabulka). Zbývá jediný nález, kdy agent ignoroval explicitní pole
+API kontraktu navzdory dvojité opoře (acceptance criteria a~komentář
+v~kontraktu). Pro r4 doplňujeme do~pre-PR checklistu příkaz
+\texttt{npx vitest run}, aby agent před otevřením pull requestu ověřil
+průchod vlastních testů, a~do~Constraints pravidlo, že každé pole
+v~API kontraktu musí být v~implementaci použito~\cite{breunig2025}
+(obrázek~\ref{fig:agents-diff-r3-r4}).
 
 \begin{figure}[H]
 \centering
@@ -355,38 +358,40 @@ E3 & Počet kompakcí          & 0          & 0           & záznam \\
 \end{table}
 \FloatBarrier
 
-\paragraph{Diagnostika.}
-Agent vytvořil 7~issues ale zpracoval jen 5. Dva issues zůstaly
-bez branch (\acs{P2}~=~4/6) a~upravil dva vlastní testové soubory
-po implementaci (\acs{P5}). Tabulka~\ref{tab:pilot-r4-delta} ukazuje
-regresi i~v~\acs{Q2} a~\acs{Q8}.
+\paragraph{Diagnostika chování.}
 
-Tato regrese ale nemá jediný zdroj: mezi běhy r3 a~r4 se kromě
-instrukcí změnila i~konfigurace modelu v~Docker prostředí
-(sekce~\ref{sec:limity-vysledky}). Pokles proto nelze připsat
-výhradně dvěma novým řádkům v~\texttt{Constraints}.
+\begin{table}[H]
+\centering
+\caption{Pilot-r4: nálezy a~jejich příčiny}
+\label{tab:pilot-r4-nalezy}
+\small
+\begin{tabularx}{\linewidth}{@{}p{0.32\linewidth}p{0.16\linewidth}X@{}}
+\toprule
+\textbf{Pozorované chování} & \textbf{Metriky} & \textbf{Příčina} \\
+\midrule
+Vytvořeno 7~issues, zpracováno 5; dva issues bez branch & \acs{P2}: 4/6 & Regrese vůči r3 (částečná příčina viz dále) \\
+Po~implementaci upraveny dva vlastní testové soubory & \acs{P5}: $\times$ & Regrese vůči r3 (částečná příčina viz dále) \\
+Pole \texttt{pausedElapsed} opět nepoužito; přibyly chyby v~eskalaci v~pracovních dnech a~na~boundary přechodu DUE\_SOON & \acs{Q2}: 41/42${\to}$39/42 & Pravidlo o~API kontraktu v~Constraints (deklarativní) bez verifikace neúčinné \\
+Mergován kód s~timezone bugem ve~vlastním testu & \acs{Q2} regrese & \texttt{npx vitest run} v~pre-PR checklistu nevynutilo skutečný pass \\
+\bottomrule
+\end{tabularx}
+\end{table}
+\FloatBarrier
 
-\acs{Q2} se zhoršilo z~41/42 na 39/42: k~přetrvávajícímu elapsed time bugu
-přibyly dvě nové chyby (výpočet víkendů v~eskalaci a~boundary
-DUE\_SOON přechodu) odpovídající druhému implicitnímu pravidlu domény
-(sekce~\ref{sec:konstrukce-specifikace}). Pravidlo o~dodržení API kontraktu nepomohlo.
-Agent pole \texttt{pausedElapsed} opět nepoužil. Agentův vlastní test
-navíc obsahoval timezone bug a~přesto agent mergoval kód, přestože
-pre-PR checklist zahrnoval \texttt{npx vitest run}.
-
-Deklarativní pravidlo v~\texttt{Constraints} tedy zde nepřineslo
-zlepšení a~instrukce na této úloze zůstávají citlivé na variabilitu
-mezi běhy.
-
-Pro r5 vycházíme z~r3 (ne z~r4) a~cílíme na dvě zbývající selhání
-verifikačními kroky. Pro \acs{Q2} doplňujeme do pre-PR checklistu
-ověření, že každé pole z~typů v~API kontraktu je v~implementaci
-čteno i~zapisováno; oproti r4, kde pravidlo bylo v~Constraints, je
-verifikace v~Process~\cite{breunig2025}. Pro \acs{Q5}/\acs{Q7}
-přidáváme explicitní požadavek na ESLint config zahrnující
-\texttt{complexity: [warn, 10]}, protože v~r3 agent spustil eslint
-s~vlastním configem bez tohoto pravidla a~kód považoval za hotový.
-Konkrétní text změn ukazuje obrázek~\ref{fig:agents-diff-r3-r5}.
+\paragraph{Závěry a~intervence pro r5.}
+Deklarativní pravidlo v~Constraints nepřineslo zlepšení a~instrukce
+na~této úloze zůstávají citlivé na~variabilitu mezi běhy: mezi r3
+a~r4 se kromě instrukcí změnila i~konfigurace modelu v~Docker prostředí
+(sekce~\ref{sec:limity-vysledky}), pokles proto nelze připsat výhradně
+dvěma novým řádkům. Pro r5 vycházíme z~r3 (ne~z~r4) a~cílíme na~dvě
+zbývající selhání verifikačními kroky. Pro \acs{Q2} doplňujeme
+do~pre-PR checklistu ověření, že každé pole z~typů v~API kontraktu
+je v~implementaci čteno i~zapisováno (oproti r4, kde pravidlo bylo
+v~Constraints, je verifikace v~Process~\cite{breunig2025}); pro
+\acs{Q5}/\acs{Q7} přidáváme explicitní požadavek na~ESLint config
+zahrnující \texttt{complexity: [warn, 10]}, protože v~r3 agent spustil
+eslint s~vlastním configem bez tohoto pravidla
+(obrázek~\ref{fig:agents-diff-r3-r5}).
 
 \begin{figure}[tbp]
 \centering
@@ -429,40 +434,38 @@ E3 & Počet kompakcí          & 0          & 0           & záznam \\
 \end{table}
 \FloatBarrier
 
-\paragraph{Diagnostika.}
-Instrukce r5 se lišily od r3 pouze ve dvou řádcích pre-PR checklistu
-(API contract verifikace a~ESLint complexity config). Obě cílené opravy
-zabraly: \acs{Q5}~=~0 a~\acs{Q7}~=~0. Agent konfiguroval ESLint s~pravidlem
-\texttt{complexity} a~rozložil funkci \texttt{processTick}. Opravu
-\acs{Q5}/\acs{Q7} tak pravděpodobně přinesla jediná konkrétní instrukce:
-``your ESLint config must include \texttt{complexity: [warn, 10]}''.
+\paragraph{Diagnostika chování.}
 
-Přesto agent ignoroval celý pracovní postup v~Process: žádné issues,
-branches ani pull requesty. Analýza transcriptu ukazuje posloupnost:
-agent přečetl instrukce (zpráva~4: ``I need to decompose the spec
-into focused GitHub issues''), v~následujícím kroku však místo
-\texttt{gh issue create} použil interní plánovací nástroj
-(\texttt{todowrite}) a~implementoval vše v~jednom \texttt{feat:}
-commitu. Pre-PR checks (tsc, eslint) přitom dodržel. Agent tedy
-selektivně plnil instrukce: jednokrokové příkazy s~okamžitým
-výstupem (``spusť eslint'') ano, vícekrokový pracovní postup (``vytvoř
-issue, pak branch, pak test, pak implementuj, pak PR'') ne.
+\begin{table}[H]
+\centering
+\caption{Pilot-r5: nálezy a~jejich příčiny}
+\label{tab:pilot-r5-nalezy}
+\small
+\begin{tabularx}{\linewidth}{@{}p{0.32\linewidth}p{0.16\linewidth}X@{}}
+\toprule
+\textbf{Pozorované chování} & \textbf{Metriky} & \textbf{Příčina} \\
+\midrule
+ESLint nakonfigurován s~pravidlem \texttt{complexity}, funkce \texttt{processTick} rozložena & \acs{Q5}: 0, \acs{Q7}: 0 & Konkrétní instrukce v~pre-PR checklistu (\enquote{ESLint config must include complexity: [warn, 10]}) zabrala \\
+Žádné issues, branches ani PR; vše v~jednom \texttt{feat:} commitu po~použití interního \texttt{todowrite} místo \texttt{gh issue create} & \acs{P2}, \acs{P3}, \acs{P4}: regrese & Selektivní plnění instrukcí: agent přečetl celý postup, ale provedl jen závěrečný checklist \\
+Pre-PR checks (tsc, eslint) dodrženy & \acs{Q5}, \acs{Q6} & Jednokrokové příkazy s~okamžitým výstupem agent plní spolehlivě \\
+\acs{Q2} stále neúplné (pause/resume + nové edge cases) & \acs{Q2}: 41/42${\to}$38/42 & Verifikace API kontraktu nezabrala bez~současného dodržení procesu \\
+\bottomrule
+\end{tabularx}
+\end{table}
+\FloatBarrier
 
-Srovnání r3, r4 a~r5 ukazuje, že tento vzorec není náhodný.
-R3 agent dodržel celý pracovní postup (\acs{P1}--\acs{P5}~=~5/5). R4 dodržel částečně
-($\sim$3/5), vytvořil issues ale ne pro všechny branch. R5 pracovní postup
-ignoroval zcela ($\sim$1/5). Instrukce se přitom mezi r3 a~r5 liší
-minimálně (2~řádky v~pre-PR checklistu).
-Data tak naznačují, že nedeterminismus modelu je pro dodržování
-vícekrokových sekvencí silnějším faktorem než drobné lokální změny
-v~pre-PR checklistu.
+\paragraph{Závěr pilotní fáze.}
+Srovnání r3, r4 a~r5 ukazuje, že selektivní plnění není náhodné: r3
+celý pracovní postup dodržel (\acs{P1}--\acs{P5}~=~5/5), r4 částečně
+($\sim$3/5), r5 ignoroval zcela ($\sim$1/5), přitom instrukce se mezi
+r3 a~r5 lišily minimálně (2~řádky v~pre-PR checklistu). Data tak
+naznačují, že nedeterminismus modelu je pro dodržování vícekrokových
+sekvencí silnějším faktorem než drobné lokální změny v~checklistu.
+Pilotní baseline pro ablace zůstává r3. Ablace testují, které složky
+fungujících instrukcí ke~zlepšení skutečně přispěly; interpretaci
+pilotních pozorování ve~vztahu k~cílům práce uvádí
+kapitola~\ref{kap:vyhodnoceni}.
 \endgroup
-
-\paragraph{Přechod k~ablacím.}
-Pilotní baseline pro ablace zůstává r3 (viz srovnání r3--r5 výše).
-Ablace testují, které složky fungujících instrukcí ke zlepšení
-skutečně přispěly. Interpretaci pilotních pozorování ve vztahu
-k~cílům práce uvádí kapitola~\ref{kap:vyhodnoceni}.
 
 %% ================================================================
 \section{Ablace}
