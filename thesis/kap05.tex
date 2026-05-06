@@ -162,10 +162,14 @@ agentovy práce. Nejkratší běh (r5, 13~min) vznikl tím, že agent
 ignoroval celý pracovní postup. \acs{E2} je proto nutné číst
 společně s~procesními metrikami.
 
-\ac{E3} na této úloze přinesla jen malé rozlišení: sessiony byly
-většinou dostatečně krátké
-na to, aby se vešly do kontextového okna. Pro rozsáhlejší projekty
-by \acs{E3} pravděpodobně rozlišovala lépe.
+\ac{E3} ve všech devíti bězích~=~0 potvrzuje, že kontext zůstal
+celistvý: žádný běh nevyčerpal kontextové okno a~runtime nemusel
+historii zhušťovat. \acs{E3} je proto deskriptivní indikátor stability
+runtime, ne pass/fail kritérium; na této úloze plní roli kontextového
+faktu, že naměřené hodnoty ostatních metrik nebyly zkresleny ztrátou
+detailu z~kompakce. Pro rozsáhlejší projekty s~delšími sessiony by
+\acs{E3} rozlišovala výrazněji a~stejný kontextový fakt by pak mohl
+naopak indikovat tlak na kontext.
 
 Při orientačním přepočtu na cenu (ceník poskytovatele Alibaba
 Cloud Model Studio) se ukázalo, že vyšší spotřeba tokenů
@@ -186,10 +190,11 @@ LLM-as-judge s~fixní rubrikou. Jedno kompletní měření trvá řádově
 minuty, což umožňuje zpětnou vazbu v~rámci jedné iterace.
 
 Kritický pohled na design sady odhaluje několik slabých míst.
-Tři metriky (\acs{Q1}, \acs{Q6}, \acs{E3}) nepřinesly na této
-úloze žádné rozlišení. Jsou pojistkou pro jiné úlohy nebo
-jazyky, ale na devíti bězích zabíraly místo bez informačního
-přínosu. Procesní metriky přinesly nejvíc nových poznatků
+Dvě pass/fail kritéria (\acs{Q1}, \acs{Q6}) byla splněna ve všech
+devíti bězích, takže pro rozlišování běhů na této úloze nepřinesla
+informaci; jsou pojistkou pro jiné úlohy nebo jazyky. Deskriptivní
+\acs{E3} zůstala konstantně 0; v~roli kontextového indikátoru
+ale potvrzuje, že kompakce kontextu nezkreslila ostatní měření. Procesní metriky přinesly nejvíc nových poznatků
 (nestabilita chování kterou produktové metriky nezachytily),
 ale jsou zároveň nejméně spolehlivé: kolísají i~mezi běhy se
 stejnými instrukcemi, takže u~jednoho běhu jim nelze plně věřit.
@@ -545,13 +550,15 @@ nebo síťové timeouty), ale příčina nebyla potvrzena.
 
 %% ---- Skupina 2: Co omezuje měření ----
 
-\textbf{Nerozlišující metriky.}
-\ac{Q1}, \ac{Q6} a~\ac{E3} nepřinesly na této úloze žádné
-rozlišení. \acs{Q1} byla splněna a~\acs{Q6} zůstala nulová ve
-všech devíti bězích. \acs{E3} nezaznamenala žádnou kompakci
-kontextu. Pravděpodobným vysvětlením je design úlohy: specifikace
-poskytuje explicitní TypeScript typy (\acs{Q1}, \acs{Q6}) a~úloha
-je dostatečně malá na to, aby se kontext nezaplnil (\acs{E3}).
+\textbf{Nerozlišující pass/fail kritéria.}
+\ac{Q1} a~\ac{Q6} prošly ve všech devíti bězích, takže pro rozlišení
+běhů na této úloze nepřinesly informaci. Pravděpodobným vysvětlením
+je design úlohy: specifikace poskytuje explicitní TypeScript typy,
+takže shoda s~kontraktem (\acs{Q1}) i~typecheck (\acs{Q6}) jsou pro
+model nízkonákladové. \acs{E3} je deskriptivní indikátor (ne pass/fail
+kritérium) a~ve všech bězích~=~0; pro tuto úlohu má roli kontextového
+faktu o~stabilitě runtime, na rozsáhlejších projektech by mohla
+diskriminovat výrazněji.
 
 %% Q4 rubrika opravena (24→25 AC, 2026-04-04). Manuální ověření:
 %% AC25 (holiday calendar) pokryté ve všech 9 bězích. Formální

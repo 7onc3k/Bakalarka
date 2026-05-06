@@ -272,7 +272,7 @@ které lépe rozlišují běhy mezi sebou a~odpovídají barevnému kódování
 souhrnné tabulky a~vizualizací v~kapitole~\ref{kap:vyhodnoceni}.
 Pilotní fázi proto vyhodnocujeme dvěma pohledy současně: která
 \textit{striktní} kritéria běh splnil (kapitola~\ref{kap:vysledky},
-per-běh tabulky deterministických metrik) a~zda splnil operační prahy
+per-běh tabulky pass/fail kritérií) a~zda splnil operační prahy
 (graf~\ref{fig:variability-quality}). Pilotní fáze končí, když některý
 běh splní celý procesní checklist \acs{P1}--\acs{P5} a~vykáže
 operačně rozeznatelné zlepšení proti baseline; další iterace by
@@ -369,6 +369,20 @@ evidence) popisuje sekce~\ref{sec:mereni-kvality}. Tato sekce
 definuje postup měření: jaký nástroj používáme, jaká data jsou
 vstupem a~co přesně je výsledkem. Interpretace přínosu jednotlivých
 metrik patří až do kapitoly~\ref{kap:vyhodnoceni}.
+
+\paragraph{Tři osy klasifikace metriky.}
+Každou metriku popisují tři nezávislé osy, které je užitečné držet
+oddělené. \textit{Způsob měření} odlišuje \mmet{det} (skript, regex,
+parsing logu, statická analýza) od \mmet{qual} hodnocených LLM-as-judge;
+jde o~vlastnost nástroje, ne o~roli metriky v~hodnocení.
+\textit{Role v~hodnocení} pak rozlišuje pass/fail kritérium s~exit
+prahem od deskriptivního indikátoru, který hodnotu jen zaznamenává
+bez prahu. \textit{Kategorie} je taxonomie P/Q/E
+(sekce~\ref{sec:mereni-kvality-obecne}). V~této práci se pass/fail
+soud o~úspěšnosti běhu opírá o~kritéria s~exit prahem v~kategoriích
+P~a~Q (binární i~judge-based); celá zdrojová skupina (\acs{E1}--\acs{E3})
+slouží jako deskriptivní kontext, žádná z~jejích metrik nemá exit
+práh.
 
 \subsection{Procesní metriky (P1--P8)}
 \label{sec:procesni-metriky}
@@ -586,8 +600,10 @@ maskované silnými dimenzemi.
 \subsection{Metriky zdrojů (E1--E3)}
 \label{sec:metriky-zdroju}
 
-Metriky zdrojů zachycují vstupy spotřebované při vývoji. Nemají exit
-kritérium a~slouží k~porovnání nákladů mezi iteracemi.
+Metriky zdrojů zachycují vstupy spotřebované při vývoji. Celá
+skupina (\acs{E1}--\acs{E3}) je homogenně deskriptivní: žádná
+z~metrik nemá exit práh; hodnoty zaznamenáváme pro porovnání
+nákladů a~stability runtime mezi iteracemi.
 
 \begin{table}[htbp]
 \centering
@@ -611,8 +627,10 @@ Wall-clock time v~minutách od spuštění agenta po poslední commit. \\
 \acs{E3} & Počet kompakcí &
 Počet kompakcí kontextu během běhu, čtený přímo z~OpenCode DB
 (pole \texttt{time\_compacting}). Kompakce indikuje, že agent
-narazil na limit kontextového okna a~část historie byla shrnuta;
-každá kompakce je riziko ztráty detailu pro další kroky. Cíl: 0. \\
+vyčerpal kontextové okno a~runtime musel obsah zhustit.
+Deskriptivní indikátor stability runtime; metrika nemá exit
+práh a~nulová hodnota potvrzuje, že kontext zůstal celistvý
+po celou dobu běhu. \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -903,10 +921,12 @@ Tabulka~\ref{tab:metriky-prehled} shrnuje všechny metriky na jednom
 místě. Sběr má dvě podoby: \mmet{det} (sloupec \textit{Nástroj}
 ukazuje konkrétní automatizovaný nástroj) a~\mmet{qual} (sloupec
 \textit{Nástroj} obsahuje LLM-as-judge). Prahové požadavky ve~sloupci
-\textit{Exit kritérium} popisují striktní ideál; metriky bez prahu
-(E1, E2) mají v~tomto sloupci pomlčku a~slouží jen k~porovnání mezi
-běhy. Pro praktické rozlišení mezi běhy se v~analýze používají též
-operační prahy popsané v~sekci~\ref{sec:pilotni-iterace}.
+\textit{Exit kritérium} popisují striktní ideál pro \mgrp{P}
+a~\mgrp{Q}; deskriptivní indikátory bez prahu (celá zdrojová
+skupina E1--E3) mají v~tomto sloupci pomlčku a~slouží jen
+k~porovnání mezi běhy. Pro praktické rozlišení mezi běhy se
+v~analýze používají též operační prahy popsané
+v~sekci~\ref{sec:pilotni-iterace}.
 
 \begin{table}[htbp]
 \centering
@@ -941,7 +961,7 @@ Q8 & Design quality              & LLM-as-judge (GLM-5)   & $\geq$ 2/3 \\
 \multicolumn{4}{@{}l}{\textit{Zdroje (E): za jakou cenu}} \\[2pt]
 E1 & Vstup / výstup / $\Sigma$ cache (tis.) z exportu & OpenCode export & --- \\
 E2 & Trvání (minuty)             & session timestamps & --- \\
-E3 & Počet kompakcí kontextu & OpenCode DB (\texttt{time\_compacting}) & 0 \\
+E3 & Počet kompakcí kontextu & OpenCode DB (\texttt{time\_compacting}) & --- \\
 \bottomrule
 \end{tabular}
 \end{table}

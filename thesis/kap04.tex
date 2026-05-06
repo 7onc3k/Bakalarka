@@ -136,13 +136,13 @@ Q8 & Design quality        & 1/3        & $\geq$ 2/3 & $\times$ \\
 \midrule
 E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 115 / 60 / 11528 & \cna{n/a}      & záznam \\
 E2 & Trvání                & 33 min & \cna{n/a}      & záznam \\
-E3 & Počet kompakcí         & 0          & 0        & \checkmark \\
+E3 & Počet kompakcí         & 0          & \cna{n/a}   & záznam \\
 \bottomrule
 \end{tabular}
 \end{table}
 \FloatBarrier
 
-Z~deterministických kritérií prošla v~r1 jen procesní složka (\acs{P1}, \acs{P4}) a~minimální produktová sada (\acs{Q1}, \acs{Q6}); ostatní kritéria včetně \acs{Q2}, \acs{Q5} a~\acs{Q7} agent nesplnil.
+Z~binárních pass/fail kritérií prošla v~r1 jen procesní složka (\acs{P1}, \acs{P4}) a~minimální produktová sada (\acs{Q1}, \acs{Q6}); ostatní kritéria včetně \acs{Q2}, \acs{Q5} a~\acs{Q7} agent nesplnil.
 
 \paragraph{Diagnostika.}
 Agent vytvořil 11~issues hromadně na začátku běhu (před prvním commitem
@@ -283,7 +283,7 @@ Q8 & Design quality           & 1/3        & 3/3         & zlepšení \\
 \midrule
 E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 76 / 41 / 3196 & 62 / 30 / 4770 & záznam \\
 E2 & Trvání                   & 37 min & 25 min & záznam \\
-E3 & Počet kompakcí            & 0          & 0           & stabilní \\
+E3 & Počet kompakcí            & 0          & 0           & záznam \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -349,7 +349,7 @@ Q8 & Design quality          & 3/3        & 2/3         & regrese \\
 \midrule
 E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & 81 / 36 / 5996 & záznam \\
 E2 & Trvání                  & 25 min & 26 min & záznam \\
-E3 & Počet kompakcí          & 0          & 0           & stabilní \\
+E3 & Počet kompakcí          & 0          & 0           & záznam \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -423,7 +423,7 @@ Q7 & Complexity violations   & 1 viol.    & 0           & zlepšení \\
 \midrule
 E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & 65 / 23 / 3028 & záznam \\
 E2 & Trvání                  & 25 min & 13 min & záznam \\
-E3 & Počet kompakcí          & 0          & 0           & stabilní \\
+E3 & Počet kompakcí          & 0          & 0           & záznam \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -691,9 +691,9 @@ jde tedy o~projev nedeterminismu modelu, ne ablace.
 \label{sec:souhrnne-vysledky}
 %% ================================================================
 
-Tabulka~\ref{tab:cross-run} shrnuje deterministické metriky všech
-devíti běhů: pět pilotních iterací a~dvě ablační varianty, každou
-ve dvou nezávislých bězích. Pilotní sloupce ukazují evoluci instrukcí,
+Tabulka~\ref{tab:cross-run} shrnuje naměřené hodnoty všech metrik
+(\mmet{det} i~\mmet{qual}) napříč devíti běhy: pět pilotních iterací
+a~dvě ablační varianty, každou ve dvou nezávislých bězích. Pilotní sloupce ukazují evoluci instrukcí,
 ablační sloupce ukazují dopad odebrání jednotlivých složek a~současně
 variabilitu mezi opakováním téže varianty. Baseline pro srovnání je r3,
 jediný pilotní běh kde agent splnil celý procesní checklist.
@@ -747,6 +747,6 @@ dopočítání AC25 (\textit{custom holiday calendar}).
 \FloatBarrier
 \end{landscape}
 
-Tabulka zaznamenává deterministické metriky napříč pěti pilotními
+Tabulka zaznamenává hodnoty všech 19~metrik napříč pěti pilotními
 iteracemi a~čtyřmi ablačními běhy. Vývoj hodnot a~jejich interpretaci
 ve vztahu k~cílům práce uvádí kapitola~\ref{kap:vyhodnoceni}.
