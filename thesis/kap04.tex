@@ -1,6 +1,19 @@
 \chapter{Praktická část}
 \label{kap:prakticka-cast}
 
+% Barvy pro heatmap (jemné, tisk-safe) — používají se v tabulkách napříč kapitolou
+\definecolor{cGood}{HTML}{D1FAE5}    % světle zelená — splněno / exit
+\definecolor{cMid}{HTML}{FEF3C7}     % světle žlutá  — částečně
+\definecolor{cBad}{HTML}{FEE2E2}     % světle červená — nesplněno
+\definecolor{cNeutral}{HTML}{F3F4F6} % šedá — N/A nebo konstantní
+
+\newcommand{\cmark}{\cellcolor{cGood}\checkmark}
+\newcommand{\xmark}{\cellcolor{cBad}$\times$}
+\newcommand{\cgood}[1]{\cellcolor{cGood}#1}
+\newcommand{\cmid}[1]{\cellcolor{cMid}#1}
+\newcommand{\cbad}[1]{\cellcolor{cBad}#1}
+\newcommand{\cna}[1]{\cellcolor{cNeutral}#1}
+
 Tato kapitola popisuje provedení případové studie. Specifikace
 projektu, referenční testy a~experimentální setup jsou popsané
 v~kapitole~\ref{kap:metodika}. Struktura kapitoly sleduje chronologii
@@ -108,7 +121,7 @@ P1 & Issues before code    & \checkmark & splněno  & \checkmark \\
 P2 & Branch per issue      & $\times$   & branches $\geq$ issues & $\times$ \\
 P3 & Test-first commits    & $\times$   & test: před feat: & $\times$ \\
 P4 & PRs linked to issues  & \checkmark & všechny PR & \checkmark \\
-P5 & Existující testy nezměněny & $\times$   & 0 změn   & $\times$ \\
+P5 & Testy nezměněny & $\times$   & 0 změn   & $\times$ \\
 P6 & Commit msg quality    & n/a        & $\geq$ 2/3 & n/a \\
 P7 & Issue quality         & 3/3        & $\geq$ 2/3 & \checkmark \\
 P8 & PR quality            & 2/3        & $\geq$ 2/3 & \checkmark \\
@@ -118,18 +131,18 @@ Q3 & Mutation score        & 84\,\%     & $\geq$ 70\,\% & \checkmark \\
 Q4 & AC coverage (agentovy testy) & 23/25 & 25/25    & $\times$ \\
 Q5 & Lint warnings         & 2          & 0        & $\times$ \\
 Q6 & Typecheck errors      & 0          & 0        & \checkmark \\
-Q7 & Složitost kódu        & 2 viol.    & 0 viol.  & $\times$ \\
+Q7 & Complexity violations  & 2 viol.    & 0 viol.  & $\times$ \\
 Q8 & Design quality        & 1/3        & $\geq$ 2/3 & $\times$ \\
 \midrule
-E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 115 / 60 / 11528 & ---      & záznam \\
-E2 & Trvání                & 32{,}7 min & ---      & záznam \\
+E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 115 / 60 / 11528 & \cna{n/a}      & záznam \\
+E2 & Trvání                & 33 min & \cna{n/a}      & záznam \\
 E3 & Počet kompakcí         & 0          & 0        & \checkmark \\
 \bottomrule
 \end{tabular}
 \end{table}
 \FloatBarrier
 
-Ze 10 deterministických metrik splnil agent 4 (\acs{P1}, \acs{P4}, \acs{Q1}, \acs{Q6}).
+Z~deterministických kritérií prošla v~r1 jen procesní složka (\acs{P1}, \acs{P4}) a~minimální produktová sada (\acs{Q1}, \acs{Q6}); ostatní kritéria včetně \acs{Q2}, \acs{Q5} a~\acs{Q7} agent nesplnil.
 
 \paragraph{Diagnostika.}
 Agent vytvořil 11~issues hromadně na začátku běhu (před prvním commitem
@@ -163,7 +176,7 @@ korektivní pravidlo pro selhávající test) a~kontrolu lintu před
 otevřením pull requestu. Konkrétní text změn ukazuje
 obrázek~\ref{fig:agents-diff-r1-r2}.
 
-\begin{figure}[tbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{img/generated/agents-diff-r1-r2.png}
 \caption{Vizuální diff změn \texttt{AGENTS.md} mezi pilot-r1 a~pilot-r2}
@@ -181,22 +194,22 @@ ke změně.
 
 \begin{table}[htbp]
 \centering
-\caption{Pilot-r2: metriky s~změnou oproti r1}
+\caption{Pilot-r2: metriky se změnou oproti r1}
 \label{tab:pilot-r2-delta}
 \small
 \begin{tabular}{@{}llccc@{}}
 \toprule
 \textbf{Kód} & \textbf{Metrika} & \textbf{r1} & \textbf{r2} & \textbf{Trend} \\
 \midrule
-P5       & Existující testy nezměněny  & $\times$   & \checkmark  & opraveno \\
-Q2       & Ref.\ test pass rate   & 39/42      & 32/42       & horší \\
-Q3       & Mutation score         & 84\,\%    & 68\,\%      & pod prahem \\
+P5       & Testy nezměněny             & $\times$   & \checkmark  & zlepšení \\
+Q2       & Ref.\ test pass rate   & 39/42      & 32/42       & regrese \\
+Q3       & Mutation score         & 84\,\%    & 68\,\%      & regrese \\
 Q5       & Lint warnings          & 2          & 1           & zlepšení \\
-Q7       & Složitost kódu         & 2 viol.    & 0           & opraveno \\
-Q8       & Design quality         & 1/3        & 1/3         & beze změny \\
+Q7       & Complexity violations  & 2 viol.    & 0           & zlepšení \\
+Q8       & Design quality         & 1/3        & 1/3         & stabilní \\
 \midrule
 E1       & Vstup / výstup / $\Sigma$ cache (tis.) & 115 / 60 / 11528 & 76 / 41 / 3196 & záznam \\
-E2       & Trvání                 & 32{,}7 min & 37{,}2 min & záznam \\
+E2       & Trvání                 & 33 min & 37 min & záznam \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -253,23 +266,23 @@ Tabulka~\ref{tab:pilot-r3-delta} ukazuje metriky s~výraznou změnou.
 
 \begin{table}[htbp]
 \centering
-\caption{Pilot-r3: metriky s~změnou oproti r2}
+\caption{Pilot-r3: metriky se změnou oproti r2}
 \label{tab:pilot-r3-delta}
 \small
 \begin{tabular}{@{}llccc@{}}
 \toprule
 \textbf{Kód} & \textbf{Metrika} & \textbf{r2} & \textbf{r3} & \textbf{Trend} \\
 \midrule
-P2 & Branch per issue         & $\times$   & \checkmark  & opraveno \\
-P3 & Test-first commity       & $\times$   & \checkmark  & opraveno \\
-P6 & Kvalita commit zpráv     & 2/3        & 3/3         & zlepšení \\
-P7 & Kvalita issue popisů     & 2/3        & 3/3         & zlepšení \\
+P2 & Branch per issue         & $\times$   & \checkmark  & zlepšení \\
+P3 & Test-first commits       & $\times$   & \checkmark  & zlepšení \\
+P6 & Commit msg quality       & 2/3        & 3/3         & zlepšení \\
+P7 & Issue quality            & 2/3        & 3/3         & zlepšení \\
 Q2 & Ref.\ test pass rate     & 32/42      & 41/42       & zlepšení \\
-Q3 & Mutation score           & 68\,\%     & 71\,\%      & nad prahem \\
-Q8 & Design quality           & 1/3        & 3/3         & průlom \\
+Q3 & Mutation score           & 68\,\%     & 71\,\%      & zlepšení \\
+Q8 & Design quality           & 1/3        & 3/3         & zlepšení \\
 \midrule
 E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 76 / 41 / 3196 & 62 / 30 / 4770 & záznam \\
-E2 & Trvání                   & 37{,}2 min & 24{,}8 min & záznam \\
+E2 & Trvání                   & 37 min & 25 min & záznam \\
 E3 & Počet kompakcí            & 0          & 0           & stabilní \\
 \bottomrule
 \end{tabular}
@@ -302,7 +315,7 @@ a~do Constraints pravidlo: každé pole v~API kontraktu musí být
 v~implementaci použito~\cite{breunig2025}. Konkrétní text změn ukazuje
 obrázek~\ref{fig:agents-diff-r3-r4}.
 
-\begin{figure}[tbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{img/generated/agents-diff-r3-r4.png}
 \caption{Vizuální diff změn \texttt{AGENTS.md} mezi pilot-r3 a~pilot-r4}
@@ -321,7 +334,7 @@ Tabulka~\ref{tab:pilot-r4-delta} ukazuje metriky s~nejvýraznější změnou.
 
 \begin{table}[htbp]
 \centering
-\caption{Pilot-r4: metriky s~změnou oproti r3}
+\caption{Pilot-r4: metriky se změnou oproti r3}
 \label{tab:pilot-r4-delta}
 \small
 \begin{tabular}{@{}llccc@{}}
@@ -330,12 +343,12 @@ Tabulka~\ref{tab:pilot-r4-delta} ukazuje metriky s~nejvýraznější změnou.
 \midrule
 P2 & Branch per issue        & \checkmark & $\times$    & regrese \\
 P5 & Testy nezměněny         & \checkmark & $\times$    & regrese \\
-Q2 & Ref.\ test pass rate    & 41/42      & 39/42       & horší \\
-Q3 & Mutation score           & 71\,\%    & n/a         & n/a \\
-Q8 & Design quality          & 3/3        & 2/3         & horší \\
+Q2 & Ref.\ test pass rate    & 41/42      & 39/42       & regrese \\
+Q3 & Mutation score           & 71\,\%    & \cna{n/a}        & \cna{n/a} \\
+Q8 & Design quality          & 3/3        & 2/3         & regrese \\
 \midrule
 E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & 81 / 36 / 5996 & záznam \\
-E2 & Trvání                  & 24{,}8 min & 25{,}9 min & stabilní \\
+E2 & Trvání                  & 25 min & 26 min & záznam \\
 E3 & Počet kompakcí          & 0          & 0           & stabilní \\
 \bottomrule
 \end{tabular}
@@ -394,7 +407,7 @@ v~pre-PR checklistu a~ESLint complexity pravidlo.
 
 \begin{table}[htbp]
 \centering
-\caption{Pilot-r5: metriky s~změnou oproti r3}
+\caption{Pilot-r5: metriky se změnou oproti r3}
 \label{tab:pilot-r5-delta}
 \small
 \begin{tabular}{@{}llccc@{}}
@@ -402,14 +415,14 @@ v~pre-PR checklistu a~ESLint complexity pravidlo.
 \textbf{Kód} & \textbf{Metrika} & \textbf{r3} & \textbf{r5} & \textbf{Trend} \\
 \midrule
 P2 & Branch per issue        & \checkmark & $\times$    & regrese \\
-P3 & Test-first commity      & \checkmark & $\times$    & regrese \\
+P3 & Test-first commits      & \checkmark & $\times$    & regrese \\
 P4 & PRs linked              & \checkmark & $\times$    & regrese \\
-Q2 & Ref.\ test pass rate    & 41/42      & 38/42       & horší \\
-Q5 & Lint warnings           & 1          & 0           & opraveno \\
-Q7 & Složitost kódu          & 1 viol.    & 0           & opraveno \\
+Q2 & Ref.\ test pass rate    & 41/42      & 38/42       & regrese \\
+Q5 & Lint warnings           & 1          & 0           & zlepšení \\
+Q7 & Complexity violations   & 1 viol.    & 0           & zlepšení \\
 \midrule
 E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & 65 / 23 / 3028 & záznam \\
-E2 & Trvání                  & 24{,}8 min & 13{,}2 min & záznam \\
+E2 & Trvání                  & 25 min & 13 min & záznam \\
 E3 & Počet kompakcí          & 0          & 0           & stabilní \\
 \bottomrule
 \end{tabular}
@@ -498,7 +511,7 @@ verifikační kroky spouští i~bez instrukce.
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=\textwidth]{img/generated/agents-diff-r3-ablace-a.png}
-\caption[Změny AGENTS.md pro ablaci~A]{Změny AGENTS.md pro ablaci~A: odebrány verifikační kroky
+\caption[Změny AGENTS.md pro Ablaci~A]{Změny AGENTS.md pro Ablaci~A: odebrány verifikační kroky
 (\texttt{git log}, \texttt{tsc}, \texttt{eslint}) z~Process.\protect\footnotemark}
 \label{fig:diff-r3-ablace-a}
 \end{figure}
@@ -519,7 +532,7 @@ API). Process a~Constraints zůstanou beze změny
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=\textwidth]{img/generated/agents-diff-r3-ablace-b.png}
-\caption{Změny AGENTS.md pro ablaci~B: odebrána celá sekce Package Quality
+\caption{Změny AGENTS.md pro Ablaci~B: odebrána celá sekce Package Quality
 (konvence, strict TypeScript, JSDoc, čisté API).}
 \label{fig:diff-r3-ablace-b}
 \end{figure}
@@ -558,13 +571,13 @@ P8 & PR quality                & 3/3        & 3/3        & 1/3 \\
 \midrule
 Q1 & API contract match        & match      & match      & match \\
 Q2 & Ref.\ test pass rate      & 41/42      & 35/42      & 37/42 \\
-Q3 & Mutation score            & 71\,\%     & 62\,\%     & ---$^\dagger$ \\
+Q3 & Mutation score            & 71\,\%     & 62\,\%     & \cna{n/a}$^\dagger$ \\
 Q5 & Lint warnings             & 1          & 4          & 3 \\
 Q6 & Typecheck errors          & 0          & 0          & 0 \\
 Q7 & Complexity violations     & 1          & 4          & 1 \\
 Q8 & Design quality            & 3/3        & 2/3        & 2/3 \\
 \midrule
-E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & n/a & n/a \\
+E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & \cna{n/a} & \cna{n/a} \\
 E2 & Trvání                    & 25 min     & 39 min     & 24 min \\
 E3 & Počet kompakcí            & 0          & 0          & 0 \\
 \bottomrule
@@ -595,7 +608,7 @@ ne ablace.
 
 Agent bez verifikačních kroků spotřeboval přibližně dvakrát více
 testovacích cyklů (44~spuštění \texttt{vitest} oproti $\sim$20
-u~ablace~B). To naznačuje, že verifikační kroky plní kromě kontroly
+u~Ablace~B). To naznačuje, že verifikační kroky plní kromě kontroly
 kvality i~druhou funkci: strukturují
 práci agenta a~zabraňují cyklickému debugování.
 
@@ -630,9 +643,9 @@ Q3 & Mutation score            & 71\,\%     & 67\,\%     & 72\,\% \\
 Q5 & Lint warnings             & 1          & 2          & 2 \\
 Q6 & Typecheck errors          & 0          & 0          & 0 \\
 Q7 & Complexity violations     & 1          & 1          & 2 \\
-Q8 & Design quality            & 3/3        & ---$^*$    & 2/3 \\
+Q8 & Design quality            & 3/3        & \cna{n/a}$^*$    & 2/3 \\
 \midrule
-E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & n/a & n/a \\
+E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & \cna{n/a} & \cna{n/a} \\
 E2 & Trvání                    & 25 min     & 28 min     & 21 min \\
 E3 & Počet kompakcí            & 0          & 0          & 0 \\
 \bottomrule
@@ -646,7 +659,7 @@ $^*$ \acs{Q8} v~B-1: judge nedokončil hodnocení (API timeout).
 Stejně jako u~tabulky~\ref{tab:ablace-a} chybí u~ablace export
 \texttt{transcript.json}. Řádek \acs{E1} proto zůstává n/a.
 
-Automatizované metriky kvality kódu (\acs{Q5}, \acs{Q6}, \acs{Q7}) zůstaly na podobné
+Deterministické metriky kvality kódu (\acs{Q5}, \acs{Q6}, \acs{Q7}) zůstaly na podobné
 úrovni jako v~r3 (tabulka~\ref{tab:ablace-b}). Agent produkoval
 modulární kód, striktní TypeScript a~v~B-1 i~JSDoc dokumentaci,
 přestože instrukce tyto požadavky neobsahovaly. Jediný pokles
@@ -688,19 +701,6 @@ Sloupec E1 uvádí vstup (max.\ na kroku včetně \texttt{cache} v~exportu),
 výstup a~součet \texttt{cache} přes kroky, vše v~tisících. Stejný přehled
 generuje skript \texttt{summary.ts} do \texttt{experiments/runs/SUMMARY.md}.
 
-% Barvy pro heatmap (jemné, tisk-safe)
-\definecolor{cGood}{HTML}{D1FAE5}    % světle zelená — splněno / exit
-\definecolor{cMid}{HTML}{FEF3C7}     % světle žlutá  — částečně
-\definecolor{cBad}{HTML}{FEE2E2}     % světle červená — nesplněno
-\definecolor{cNeutral}{HTML}{F3F4F6} % šedá — N/A nebo konstantní
-
-\newcommand{\cmark}{\cellcolor{cGood}\checkmark}
-\newcommand{\xmark}{\cellcolor{cBad}$\times$}
-\newcommand{\cgood}[1]{\cellcolor{cGood}#1}
-\newcommand{\cmid}[1]{\cellcolor{cMid}#1}
-\newcommand{\cbad}[1]{\cellcolor{cBad}#1}
-\newcommand{\cna}[1]{\cellcolor{cNeutral}#1}
-
 \begin{landscape}
 \begin{table}[H]
 \centering
@@ -723,7 +723,7 @@ P8 PR quality           & \cmid{2/3}  & \cgood{3/3}  & \cgood{3/3}  & \cgood{3/3
 \midrule
 Q1 API contract         & \cna{match} & \cna{match} & \cna{match} & \cna{match} & \cna{match} & \cna{match} & \cna{match} & \cna{match} & \cna{match} \\
 Q2 ref.\ testy          & \cmid{39}  & \cbad{32} & \cgood{41} & \cmid{39} & \cmid{38}  & \cbad{35} & \cmid{37} & \cmid{37} & \cbad{11} \\
-Q3 mutation score       & \cgood{84\,\%} & \cbad{68\,\%} & \cmid{71\,\%} & \cna{n/a} & \cna{---} & \cbad{62\,\%} & \cna{---$^*$} & \cbad{67\,\%} & \cmid{72\,\%} \\
+Q3 mutation score       & \cgood{84\,\%} & \cbad{68\,\%} & \cmid{71\,\%} & \cna{n/a} & \cna{n/a} & \cbad{62\,\%} & \cna{n/a$^*$} & \cbad{67\,\%} & \cmid{72\,\%} \\
 Q4 AC coverage          & \cmid{23}  & \cgood{25}  & \cgood{25}  & \cgood{25}  & \cmid{24}  & \cgood{25}  & \cgood{25} & \cgood{25} & \cmid{23} \\
 Q5 lint warnings        & \cbad{2}    & \cmid{1}      & \cmid{1}      & \cmid{1}      & \cgood{0}      & \cbad{4}    & \cbad{3}   & \cbad{2}   & \cbad{2} \\
 Q6 typecheck errors     & \cna{0}     & \cna{0}     & \cna{0}     & \cna{0}     & \cna{0}     & \cna{0}     & \cna{0}    & \cna{0}    & \cna{0} \\
@@ -731,7 +731,7 @@ Q7 složitost            & \cbad{2}    & \cgood{0}      & \cmid{1}      & \cmid{
 Q8 design quality       & \cbad{1/3}  & \cbad{1/3}  & \cgood{3/3}   & \cmid{2/3}    & \cmid{2/3}    & \cmid{2/3}    & \cmid{2/3}   & \cmid{2/3}   & \cmid{2/3} \\
 \midrule
 E1 in/out/cache (tis.)  & 115/60/11k & 76/41/3k & 62/30/5k & 81/36/6k & 65/23/3k & \cna{n/a} & \cna{n/a} & \cna{n/a} & \cna{n/a} \\
-E2 trvání (min)         & 32{,}7     & 37{,}2     & 24{,}8     & 25{,}9     & 13{,}2     & 39         & 24        & 28        & 21 \\
+E2 trvání (min)         & 33     & 37     & 25     & 26     & 13     & 39         & 24        & 28        & 21 \\
 E3 počet kompakcí       & \cna{0}    & \cna{0}    & \cna{0}         & \cna{0}    & \cna{0}    & \cna{0}    & \cna{0}   & \cna{0}   & \cna{0} \\
 \bottomrule
 \end{tabularx}

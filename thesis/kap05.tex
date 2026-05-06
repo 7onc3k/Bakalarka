@@ -40,14 +40,15 @@ obhajitelným postupem a~zanechává použitelný kód.
 \paragraph{Procesní metriky (P1--P8).}
 \mgrp{P} měří zda agent dodržoval vývojové praktiky (issues, branching,
 test-first, PR), tedy dimenzi kterou stávající benchmarky
-pokrývají jen okrajově (sekce~\ref{sec:hodnoceni-agentu}). Na devíti bězích se ukázaly
+pokrývají jen okrajově (sekce~\ref{sec:hodnoceni-agentu}). Na devíti
+bězích se ukázaly
 jako nejcitlivější složka sady: byly jediné metriky které
 kolísaly i~mezi běhy se stejnými instrukcemi. Možným vysvětlením
 je, že kvalita produktu je u~tohoto modelu řízena převážně tréninkovými
 daty (Q~metriky zůstaly stabilní), zatímco dodržování vícekrokového
 postupu (issue $\to$ branch $\to$ test $\to$ implement $\to$ PR)
-je inherentně náchylnější k~selhání: agent musí udržet sekvenci
-kroků v~kontextu a~každý krok je příležitost k~odchylce.
+je náchylnější k~selhání: agent musí udržet sekvenci kroků
+v~kontextu a~každý krok je příležitost k~odchylce.
 \acs{P1}--\acs{P5} ale říkají jen splněno/nesplněno, což přináší ztrátu nuancí.
 Například \ac{P3} hlásila v~prvních dvou bězích stejný
 výsledek ``nesplněno'', ale z~git historie a~behaviorálního popisu
@@ -142,7 +143,7 @@ dokumentaci: r1 a~r2 dostaly 1/3 (žádné JSDoc), r4 a~r5 dostaly
 Teprve po přidání explicitního verifikačního kroku do instrukcí
 (r3) agent dokumentaci doplnil (3/3). V~ablačních bězích klesla
 navíc dimenze separation of concerns: agent soustředil kód do
-jednoho souboru. Automatizované metriky
+jednoho souboru. Deterministické metriky
 \acs{Q5}--\acs{Q7} přitom žádný z~těchto problémů nehlásily.
 Kombinace \mmet{det} a~\mmet{qual} tak zachycuje víc než
 kterýkoliv typ sám.
@@ -195,7 +196,7 @@ stejnými instrukcemi, takže u~jednoho běhu jim nelze plně věřit.
 Binární \acs{P1}--\acs{P5} navíc ztrácí nuance: ``nesplněno''
 neříká \textit{proč} a~k~diagnostice bylo vždy nutné vrátit se
 k~transcriptu agenta. Kvalitativní metriky (\acs{Q4}, \acs{Q8})
-zachytily problémy které automatizované nevidí, ale bez validace
+zachytily problémy které deterministické nevidí, ale bez validace
 Cohenovým~$\kappa$ zůstávají podpůrnými indikátory. Metriky
 zdrojů byly na této úloze nejslabší skupinou: pouze \acs{E1}
 přinesla použitelný insight.
@@ -211,10 +212,11 @@ k~měřitelným změnám v~chování agenta podle navržených metrik.}
 Případová studie ukazuje, že tento postup lze na jednom projektu
 prakticky použít a~že může vést k~měřitelnému zlepšení, nikoli však
 že stejný efekt nastane obecně. Postup vedl k~měřitelnému zlepšení,
-ale ne monotónnímu. Baseline (r1) splnila čtyři z~deseti tvrdých
-deterministických procesních a~produktových kritérií. Po dvou cyklech
-úprav (r3) agent splnil sedm z~deseti. Regrese r4 (pět z~deseti)
-ukázala, že zlepšení není trvalé: po neúspěšné iteraci bylo nutné
+ale ne monotónnímu. Baseline (r1) splnila pouze \acs{P1}, \acs{P4},
+\acs{Q1} a~\acs{Q6}; po dvou cyklech úprav (r3) agent splnil celý
+procesní checklist \acs{P1}--\acs{P5} a~současně udržel \acs{Q1}
+i~\acs{Q6}. Regrese r4 vrátila procesní část zpět ($\sim$3/5)
+a~ukázala, že zlepšení není trvalé: po neúspěšné iteraci bylo nutné
 vrátit se k~předchozí verzi instrukcí (r5 vycházel z~r3, ne z~r4).
 
 Metriky poskytly vodítka kam zasáhnout: tabulka metrik ukázala
@@ -230,7 +232,7 @@ ukazuje, jak se tři nezávislá selhání vyvíjela přes stejné fáze:
 pravidlo (agent ignoruje)~$\to$ příkaz (agent obchází)~$\to$
 verifikační krok (agent dodržuje).
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \centering
 \begin{tikzpicture}[
     phase/.style={rectangle, draw, rounded corners=4pt,
@@ -300,6 +302,7 @@ verifikační krok (agent dodržuje).
 (agent dodržuje).}
 \label{fig:operacionalizace}
 \end{figure}
+\FloatBarrier
 
 Tento vzorec se zopakoval u~všech tří selhání. Tři nezávislá selhání
 v~rámci jedné případové studie prošla stejnými fázemi. Tuto opakující
@@ -434,7 +437,7 @@ je kvalita a~relevance obsahu. Naše výsledky jsou s~těmito zjištěními
 kompatibilní: ne všechny složky \texttt{AGENTS.md} přispívají stejně.
 
 Nejvýraznější efekt měly v~naší studii verifikační kroky. Ablace~A
-ukázala pokles jak ve funkční korektnosti, tak v~automatizovaných
+ukázala pokles jak ve funkční korektnosti, tak v~deterministických
 metrikách kvality kódu, když byly explicitní kontroly odstraněny.
 To doplňuje pozorování Breuniga~\cite{breunig2025}, že opakování
 ignorované instrukce nepomáhá a~účinnější je její přestrukturování do
@@ -509,8 +512,8 @@ znamená, že každá úprava instrukcí vyžaduje měření celé sady
 metrik, ne jen těch na které úprava cílila.
 
 \textbf{Efekt učení autora.}
-Zlepšení mezi iteracemi (r1: 4/10 deterministických kritérií,
-r3: 7/10) nemusí plynout jen z~lepších instrukcí. Autor se
+Zlepšení mezi iteracemi (r1 splnila \acs{P1}, \acs{P4}, \acs{Q1}
+a~\acs{Q6}; r3 navíc \acs{P2}--\acs{P5}) nemusí plynout jen z~lepších instrukcí. Autor se
 v~průběhu iterací učil diagnostikovat selhání a~formulovat opravy.
 Tento efekt nelze od efektu instrukcí oddělit. Diagnostická fáze
 (výběr příčiny selhání a~návrh opravy) závisí výhradně na

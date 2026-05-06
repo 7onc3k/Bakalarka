@@ -162,6 +162,7 @@ stavy dostupné z~většiny aktivních (vpravo). Notaci a~zdrojové
 stavy popisuje text výše.}
 \label{fig:dunning-fsm}
 \end{figure}
+\FloatBarrier
 
 \paragraph{API kontrakt.}
 Aby bylo možné agentovu implementaci porovnávat s~referenční sadou
@@ -269,9 +270,9 @@ $\geq$~70\,\%, \acs{Q4}~$\geq$~24/25, \acs{Q5}~$\leq$~1,
 \acs{Q7}~$\leq$~1 porušení),
 které lépe rozlišují běhy mezi sebou a~odpovídají barevnému kódování
 souhrnné tabulky a~vizualizací v~kapitole~\ref{kap:vyhodnoceni}.
-Pilotní fázi proto vyhodnocujeme dvěma pohledy současně: kolik
-\textit{striktních} kritérií běh splnil (kapitola~\ref{kap:vysledky},
-počty ``$X$ z~10'') a~zda splnil operační prahy
+Pilotní fázi proto vyhodnocujeme dvěma pohledy současně: která
+\textit{striktní} kritéria běh splnil (kapitola~\ref{kap:vysledky},
+per-běh tabulky deterministických metrik) a~zda splnil operační prahy
 (graf~\ref{fig:variability-quality}). Pilotní fáze končí, když některý
 běh splní celý procesní checklist \acs{P1}--\acs{P5} a~vykáže
 operačně rozeznatelné zlepšení proti baseline; další iterace by
@@ -329,6 +330,7 @@ popisuje sekce~\ref{sec:diagnostika-uprava}.
 \caption{Iterativní cyklus: čtyři kroky jedné iterace a~smyčka opakování až do splnění exit kritérií.}
 \label{fig:iterativni-cyklus}
 \end{figure}
+\FloatBarrier
 
 %% ==========================================================================
 %% 3.2 Sada metrik
@@ -417,6 +419,7 @@ nově přidané testy se nezapočítávají. \\
 \bottomrule
 \end{tabularx}
 \end{table}
+\FloatBarrier
 
 \subsubsection*{P6--P8: kvalita procesních artefaktů (LLM-as-judge)}
 
@@ -445,6 +448,7 @@ implementaci). \\
 \bottomrule
 \end{tabularx}
 \end{table}
+\FloatBarrier
 
 \subsection{Produktové metriky (Q1--Q8)}
 \label{sec:produktove-metriky}
@@ -488,6 +492,7 @@ popisuje sekce~\ref{sec:ref-implementace-postup}. \\
 \bottomrule
 \end{tabularx}
 \end{table}
+\FloatBarrier
 
 \textit{Poznámka:} \acs{Q1} je vstupní podmínkou pro \acs{Q2}: pokud
 agentův kód neimplementuje správné API, referenční testy nelze ani
@@ -530,6 +535,7 @@ test v~agentově test suite. Škála \texttt{N/25}. \\
 \bottomrule
 \end{tabularx}
 \end{table}
+\FloatBarrier
 
 \textit{Poznámka:} Na rozdíl od \acs{Q2} (funguje implementace?) se
 \acs{Q4} ptá, jestli agent \textit{testoval všechno co měl}.
@@ -569,6 +575,7 @@ a~zbytečnou komplexitu. \\
 \bottomrule
 \end{tabularx}
 \end{table}
+\FloatBarrier
 
 \textit{Poznámka:} Práh $\leq$~10 per funkci pro \acs{Q7} vychází
 z~McCabe (sekce~\ref{sec:staticka-analyza}). Celkové skóre \acs{Q8} je
@@ -609,6 +616,7 @@ každá kompakce je riziko ztráty detailu pro další kroky. Cíl: 0. \\
 \bottomrule
 \end{tabularx}
 \end{table}
+\FloatBarrier
 
 Se dvěma běhy per variaci jsou tyto hodnoty deskriptivní,
 ne inferenční.
@@ -744,7 +752,7 @@ zpětně rekonstruovat naměřené hodnoty i~chování agenta.
 historie, GitHub API a~transcriptu (\acs{P1}--\acs{P5},
 \acs{Q1}--\acs{Q3}, \acs{Q5}--\acs{Q7}, \acs{E1}--\acs{E3}).
 Skript \texttt{judge.ts} spouští LLM-as-judge (GLM-5) pro
-subjektivní metriky (\acs{P6}--\acs{P8}, \acs{Q4}, \acs{Q8})
+\mmet{qual} (\acs{P6}--\acs{P8}, \acs{Q4}, \acs{Q8})
 podle rubrik uložených v~repozitáři práce. Souhrnným výstupem
 je \texttt{FINDINGS.md} s~tabulkou metrik a~faktickým popisem
 chování agenta.
@@ -777,6 +785,7 @@ Tabulka~\ref{tab:zaznamy-bezhu} shrnuje strukturu balíku.
 \bottomrule
 \end{tabularx}
 \end{table}
+\FloatBarrier
 
 Doplňující materiály jsou v~repozitáři práce
 (\url{https://github.com/7onc3k/Bakalarka/tree/thesis-final}): kompletní operační
@@ -825,6 +834,7 @@ Filter \textcite{skillsbench2025}              & \textit{Kdyby tento řádek chy
 {\footnotesize $^{*}$ Lulla měří přítomnost celého souboru, ne jednotlivé
 typy obsahu; rámec proto používáme interpretativně.}
 \end{table}
+\FloatBarrier
 
 \textbf{Postup diagnózy.} Z~tabulky metrik se vyberou nesplněné
 nebo hraniční hodnoty, dohledají se faktické projevy ve
@@ -851,6 +861,7 @@ Redundantní obsah                 & Lulla + filter Li  & Odebrání \\
 \bottomrule
 \end{tabularx}
 \end{table}
+\FloatBarrier
 
 Hranice mezi typy příčin jsou v~praxi neostré a~klasifikace vyžaduje
 úsudek; rámce slouží jako heuristické vodítko, ne algoritmus. Roli
@@ -934,6 +945,7 @@ E3 & Počet kompakcí kontextu & OpenCode DB (\texttt{time\_compacting}) & 0 \\
 \bottomrule
 \end{tabular}
 \end{table}
+\FloatBarrier
 
 %% ==========================================================================
 %% 3.5 Omezení a validita
