@@ -277,12 +277,12 @@ E3 & Počet kompakcí            & 0          & 0           & stabilní \\
 \FloatBarrier
 
 \paragraph{Diagnostika.}
-Všechny tři změny zabraly. Agent poprvé splnil celý procesní checklist
-\acs{P1}--\acs{P5}~=~5/5: vytvořil issues před kódem, každý issue dostal vlastní
-branch, test commit předcházel kódu, pull requesty obsahovaly
-\texttt{Closes \#N} a~žádný test nebyl dodatečně upraven. Současně
-\acs{Q8}~=~3/3 ukazuje, že přesun požadavku na JSDoc do verifikačního kroku
-vedl i~k~doplnění dokumentace.
+Agent poprvé splnil celý procesní checklist \acs{P1}--\acs{P5}~=~5/5:
+vytvořil issues před kódem, každý issue dostal vlastní branch, test
+commit předcházel kódu, pull requesty obsahovaly \texttt{Closes \#N}
+a~žádný test nebyl dodatečně upraven. \acs{Q8}~=~3/3 odpovídá doplnění
+JSDoc dokumentace po přesunu požadavku do verifikačního kroku.
+Všechny tři změny tedy zabraly.
 
 \acs{Q2}~=~41/42: zbývá jedna chyba v~implementaci, a~odpovídá prvnímu
 ze dvou implicitních pravidel popsaných v~sekci~\ref{sec:konstrukce-specifikace}.
@@ -343,13 +343,15 @@ E3 & Počet kompakcí          & 0          & 0           & stabilní \\
 \FloatBarrier
 
 \paragraph{Diagnostika.}
-R4 je regrese oproti r3. Současně ale platí, že mezi běhy r3 a~r4
-se nezměnily jen instrukce: od r4 byla upravena i~konfigurace modelu
-v~Docker prostředí (sekce~\ref{sec:limity-vysledky}). Regresi proto
-nelze připsat výhradně dvěma novým řádkům v~\texttt{Constraints}.
-Agent vytvořil 7~issues ale zpracoval jen 5.
-Dva issues zůstaly bez branch (\acs{P2}~=~4/6). Upravil dva vlastní testové
-soubory po implementaci (\acs{P5}).
+Agent vytvořil 7~issues ale zpracoval jen 5. Dva issues zůstaly
+bez branch (\acs{P2}~=~4/6) a~upravil dva vlastní testové soubory
+po implementaci (\acs{P5}). Tabulka~\ref{tab:pilot-r4-delta} ukazuje
+regresi i~v~\acs{Q2} a~\acs{Q8}.
+
+Tato regrese ale nemá jediný zdroj: mezi běhy r3 a~r4 se kromě
+instrukcí změnila i~konfigurace modelu v~Docker prostředí
+(sekce~\ref{sec:limity-vysledky}). Pokles proto nelze připsat
+výhradně dvěma novým řádkům v~\texttt{Constraints}.
 
 \acs{Q2} se zhoršilo z~41/42 na 39/42: k~přetrvávajícímu elapsed time bugu
 přibyly dvě nové chyby (výpočet víkendů v~eskalaci a~boundary
@@ -359,13 +361,9 @@ Agent pole \texttt{pausedElapsed} opět nepoužil. Agentův vlastní test
 navíc obsahoval timezone bug a~přesto agent mergoval kód, přestože
 pre-PR checklist zahrnoval \texttt{npx vitest run}.
 
-Regrese ukázala dvě věci důležité pro další iteraci: samotné
-deklarativní pravidlo v~\texttt{Constraints} zde neprokázalo
+Deklarativní pravidlo v~\texttt{Constraints} tedy zde nepřineslo
 zlepšení a~instrukce na této úloze zůstávají citlivé na variabilitu
-mezi běhy. Zbývající selhání
-současně nebyla důsledkem nejednoznačné specifikace, ale rozhodnutí
-agenta ignorovat pole \texttt{pausedElapsed} a~nerozložit složitou
-funkci \texttt{processTick}.
+mezi běhy.
 
 Pro r5 vycházíme z~r3 (ne z~r4) a~cílíme na dvě zbývající selhání
 verifikačními kroky. Pro \acs{Q2} doplňujeme do pre-PR checklistu
@@ -391,11 +389,8 @@ Konkrétní text změn ukazuje obrázek~\ref{fig:agents-diff-r3-r5}.
 
 \begingroup
 \sloppy
-Pátý běh ověřoval změny zavedené po r4. Agent přečetl \texttt{AGENTS.md}
-(v~transcriptu potvrzeno), ale místo
-\texttt{gh issue create} použil interní plánovací nástroj
-(\texttt{todowrite}) a~implementoval vše v~jednom \texttt{feat:} commitu
-bez issues, branches a~pull requestů.
+Pátý běh ověřoval změny zavedené po r4: API contract verifikaci
+v~pre-PR checklistu a~ESLint complexity pravidlo.
 
 \begin{table}[htbp]
 \centering
