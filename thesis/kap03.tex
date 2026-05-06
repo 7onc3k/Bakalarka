@@ -404,7 +404,7 @@ Všechny mají binární výstup pass/fail.
 \label{tab:p1-p5}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabularx}{\linewidth}{@{}llX@{}}
+\begin{tabularx}{\linewidth}{@{}lMX@{}}
 \toprule
 \textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} \\
 \midrule
@@ -446,7 +446,7 @@ Postup hodnocení je společný a~popsaný v~sekci~\ref{sec:llm-as-judge-aplikac
 \label{tab:p6-p8}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabularx}{\linewidth}{@{}llX@{}}
+\begin{tabularx}{\linewidth}{@{}lMX@{}}
 \toprule
 \textbf{Kód} & \textbf{Co hodnotí} & \textbf{Škála} \\
 \midrule
@@ -490,7 +490,7 @@ Tabulka~\ref{tab:q1-q2} shrnuje metriky funkční korektnosti.
 \label{tab:q1-q2}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabularx}{\linewidth}{@{}llX@{}}
+\begin{tabularx}{\linewidth}{@{}lMX@{}}
 \toprule
 \textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} \\
 \midrule
@@ -531,7 +531,7 @@ Tabulka~\ref{tab:q3-q4} shrnuje metriky kvality testů.
 \label{tab:q3-q4}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabularx}{\linewidth}{@{}llX@{}}
+\begin{tabularx}{\linewidth}{@{}lMX@{}}
 \toprule
 \textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} \\
 \midrule
@@ -564,7 +564,7 @@ Tabulka~\ref{tab:q5-q8} shrnuje metriky kvality kódu.
 \label{tab:q5-q8}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabularx}{\linewidth}{@{}llX@{}}
+\begin{tabularx}{\linewidth}{@{}lMX@{}}
 \toprule
 \textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} \\
 \midrule
@@ -611,7 +611,7 @@ nákladů a~stability runtime mezi iteracemi.
 \label{tab:e1-e3}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabularx}{\linewidth}{@{}llX@{}}
+\begin{tabularx}{\linewidth}{@{}lMX@{}}
 \toprule
 \textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} \\
 \midrule
@@ -868,7 +868,7 @@ typ příčiny na primární rámec a~typ opravy.
 \label{tab:diagnostika-mapa}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabularx}{\linewidth}{@{}lll@{}}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lll@{}}
 \toprule
 \textbf{Klasifikace příčiny} & \textbf{Primární rámec} & \textbf{Typ opravy} \\
 \midrule
@@ -877,7 +877,7 @@ Nevyvážený obsah                  & Hassan          & Přestrukturování \\
 Opakovaně ignorovaná instrukce    & Razavi, Breunig & Přestrukturování + verifikace \\
 Redundantní obsah                 & Lulla + filter Li  & Odebrání \\
 \bottomrule
-\end{tabularx}
+\end{tabular*}
 \end{table}
 \FloatBarrier
 
@@ -932,9 +932,9 @@ v~sekci~\ref{sec:pilotni-iterace}.
 \centering
 \caption{Sada metrik: kód, měřená vlastnost, nástroj a~exit kritérium}
 \label{tab:metriky-prehled}
-\scriptsize
-\setlength{\tabcolsep}{2pt}
-\begin{tabular}{@{}llll@{}}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\linewidth}{@{}p{0.06\linewidth}Xp{0.30\linewidth}p{0.18\linewidth}@{}}
 \toprule
 \textbf{Kód} & \textbf{Metrika} & \textbf{Nástroj} & \textbf{Exit kritérium} \\
 \midrule
@@ -963,7 +963,7 @@ E1 & Vstup / výstup / $\Sigma$ cache (tis.) z exportu & OpenCode export & --- \
 E2 & Trvání (minuty)             & session timestamps & --- \\
 E3 & Počet kompakcí kontextu & OpenCode DB (\texttt{time\_compacting}) & --- \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 \FloatBarrier
 
@@ -975,11 +975,9 @@ E3 & Počet kompakcí kontextu & OpenCode DB (\texttt{time\_compacting}) & --- \
 \label{sec:omezeni-validita}
 
 Případová studie nese omezení daná zvolenou metodikou. Tato sekce
-deklaruje hrozby validity, které jsou s~designem spojené a~známe je
-předem; analýza vychází z~kategorizace Runeson
-a~Höst~\cite{runeson2009}. Jak se tyto hrozby skutečně projevily
-v~naměřených datech, diskutuje
-sekce~\ref{sec:limity-vysledky}.
+pojmenovává předem známé hrozby validity podle Runesona
+a~Hösta~\cite{runeson2009}; jejich konkrétní projevy v~datech
+diskutuje sekce~\ref{sec:limity-vysledky}.
 
 \textbf{Konstruktová validita} (měříme to, co chceme měřit?).
 Jednotlivé metriky vychází z~existující teorie: mutation
@@ -991,25 +989,21 @@ návrh, ne ověřený standard. Pět metrik (\acs{P6}, \acs{P7}, \acs{P8},
 metriky proto slouží jako podpůrné judge-based indikátory, zatímco
 hlavní opora vyhodnocení stojí na deterministických metrikách
 a~auditovatelných artefaktech. Spolehlivost LLM-as-judge nebyla
-validována proti lidskému hodnocení (např.\ Cohenovým~$\kappa$)
-z~důvodu časových omezení.
-U~metriky \acs{Q4} byly historicky uložené judge běhy exportovány
-ve~24bodovém formátu; chybějící bod AC25 (\textit{custom holiday
-calendar}) byl při finalizaci práce dopočítán manuálně. Správnost
-skriptu \texttt{analyze-run.ts} pro metriky \acs{P1}--\acs{P5} byla
-ověřena manuálním srovnáním výstupů s~raw daty z~git logu
-a~GitHub API pro běhy r4 a~r5. Žádná diskrepance nebyla identifikována.
+validována proti lidskému hodnocení. U~metriky \acs{Q4} byly
+historické judge běhy uloženy ve~24bodovém formátu; chybějící bod
+AC25 (\textit{custom holiday calendar}) byl dopočítán manuálně.
+Skript \texttt{analyze-run.ts} pro \acs{P1}--\acs{P5} byl ověřen
+srovnáním s~raw daty z~git logu a~GitHub API pro běhy r4 a~r5
+bez zjištěné diskrepance.
 
 \textbf{Interní validita} (jsou závěry podložené daty?).
 Hlavní hrozba je nedeterminismus LLM: stejné instrukce mohou při
 různých bězích dát různé výsledky~\cite{razavi2025}. Pilotní běhy
-r1--r5 probíhaly jednorázově, a~tato hrozba
-v~nich není mitigována; jejich roli je proto třeba číst jako
-formativní (iterativní návrh instrukcí), ne jako konfirmační
-měření efektu. Mitigace se uplatňuje až v~ablacích, kde každou
-variaci spouštíme dvakrát: shoda obou běhů ve~směru efektu zvyšuje
-důvěru, že nejde o~náhodu, byť ani dva běhy neposkytují
-statistickou sílu.
+r1--r5 probíhaly jednorázově, takže jejich role je formativní
+(iterativní návrh instrukcí), ne konfirmační měření efektu. Mitigace
+se uplatňuje až v~ablacích: shoda dvou nezávislých běhů ve~směru
+efektu zvyšuje důvěru, že nejde o~náhodu, byť ani dva běhy
+neposkytují statistickou sílu.
 Další hrozbou je confirmation bias: autor navrhuje instrukce
 i~evaluuje výsledky. Tuto hrozbu oslabují deterministické metriky
 (\acs{P1}, \acs{Q1}--\acs{Q3}, \acs{Q5}--\acs{Q7}), které nepodléhají
@@ -1025,17 +1019,15 @@ rozlišuje analytickou generalizaci: z~jednoho případu lze ukázat
 principy, ne statistické zákonitosti. Systém upomínek má
 deterministickou logiku a~výsledky nemusí platit pro projekty
 s~uživatelským rozhraním, strojovým učením nebo nedeterministickými
-výstupy. Další ověřování má proto dvě osy: replikaci v~programování
-na jiných modelech, nástrojích a~projektech a~ověření mimo
-programování, kde nemusí existovat deterministická zpětná vazba.
-Přenositelné jsou
-metriky a~postup (kdokoliv je může použít na svém projektu), konkrétní
-naměřené hodnoty a~instrukce platí pro
+výstupy. Další ověřování má proto dvě osy: replikaci na jiných
+modelech, nástrojích a~projektech a~ověření mimo programování, kde
+nemusí existovat deterministická zpětná vazba. Přenositelné jsou
+metriky a~postup, konkrétní naměřené hodnoty a~instrukce platí pro
 tuto studii.
 
-Výzkum nezahrnuje lidské účastníky. Veškerá data (git log, metriky,
-session transcripts) jsou generována experimentální infrastrukturou.
-Zdrojový kód a~experimentální data jsou veřejně dostupná.
+Výzkum nezahrnuje lidské účastníky; data (git log, metriky, session
+transcripts), zdrojový kód i~experimentální artefakty jsou veřejně
+dostupné.
 
 
 %% ==========================================================================

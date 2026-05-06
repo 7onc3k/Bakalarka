@@ -365,11 +365,12 @@ zjevný instrumentální přínos: bez explicitní instrukce agent
 verifikační příkazy nespouštěl spolehlivě. Kódové konvence agent
 dodržuje i~bez instrukce, pravděpodobně ze znalostí z~tréninku.
 Instrukce ale ovlivňují strukturální rozhodnutí (modularita,
-dokumentace) která deterministické metriky nezachytí. Dimenze
-zdrojů byla v~ablacích vyhodnocena jen částečně: \acs{E1}
-nešlo kvůli chybějícím exportům spočítat ani v~jednom ablačním
-běhu, takže závěry ablační fáze stojí primárně na \mgrp{P}
-a~\mgrp{Q}.
+dokumentace) která deterministické metriky nezachytí. Dimenze zdrojů hraje v~ablacích podpůrnou roli: \acs{E1}
+(rekonstruovaná z~uložené OpenCode session DB) potvrzuje vzorce
+viditelné v~\mgrp{P} a~\mgrp{Q} (A-2 čerpá výrazně více
+kontextu kvůli opakovaným spuštěním testů; B-2 vykazuje nízké
+hodnoty díky předčasnému selhání, ne díky efektivitě), ale sama
+nediskriminuje varianty.
 
 Variabilita procesních metrik byla v~ablacích srovnatelná
 s~pilotními iteracemi, přestože instrukce pro pracovní postup zůstaly beze

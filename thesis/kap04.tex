@@ -63,7 +63,7 @@ znění instrukcí.
 \caption{Mapování sekcí baseline \texttt{AGENTS.md} na metriky}
 \label{tab:mapovani-instrukci}
 \small
-\begin{tabular}{@{}lll@{}}
+\begin{tabularx}{\linewidth}{@{}p{0.30\linewidth}p{0.42\linewidth}X@{}}
 \toprule
 \textbf{Cíl} & \textbf{Sekce AGENTS.md} & \textbf{Metriky} \\
 \midrule
@@ -74,7 +74,7 @@ Modulární kód          & Package Quality              & Q5, Q7, Q8 \\
 API kompatibilita      & Specification (API Contract) & Q1 \\
 Funkční korektnost     & Specification (AC)           & Q2, Q4 \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \begin{figure}[tbp]
@@ -113,7 +113,7 @@ shrnuje naměřené metriky.
 \caption{Pilot-r1: naměřené metriky}
 \label{tab:pilot-r1}
 \small
-\begin{tabular}{@{}llccl@{}}
+\begin{tabularx}{\linewidth}{@{}p{0.05\linewidth}Xp{0.16\linewidth}p{0.18\linewidth}c@{}}
 \toprule
 \textbf{Kód} & \textbf{Metrika} & \textbf{Hodnota} & \textbf{Kritérium} & \textbf{Splněno?} \\
 \midrule
@@ -125,6 +125,7 @@ P5 & Testy nezměněny & $\times$   & 0 změn   & $\times$ \\
 P6 & Commit msg quality    & n/a        & $\geq$ 2/3 & n/a \\
 P7 & Issue quality         & 3/3        & $\geq$ 2/3 & \checkmark \\
 P8 & PR quality            & 2/3        & $\geq$ 2/3 & \checkmark \\
+\midrule
 Q1 & API contract match    & match      & match    & \checkmark \\
 Q2 & Ref.\ test pass rate  & 39/42      & 42/42    & $\times$ \\
 Q3 & Mutation score        & 84\,\%     & $\geq$ 70\,\% & \checkmark \\
@@ -138,7 +139,7 @@ E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 115 / 60 / 11528 & \cna{n/a}     
 E2 & Trvání                & 33 min & \cna{n/a}      & záznam \\
 E3 & Počet kompakcí         & 0          & \cna{n/a}   & záznam \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 \FloatBarrier
 
@@ -150,16 +151,16 @@ E3 & Počet kompakcí         & 0          & \cna{n/a}   & záznam \\
 \label{tab:pilot-r1-nalezy}
 \footnotesize
 \renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\linewidth}{Xp{0.14\linewidth}X}
+\begin{tabularx}{\linewidth}{@{}p{0.12\linewidth}XX@{}}
 \toprule
-\textbf{Pozorované chování} & \textbf{Metriky} & \textbf{Příčina} \\
+\textbf{Metriky} & \textbf{Pozorované chování} & \textbf{Příčina} \\
 \midrule
-Issues seskupeny do~méně větví (4~větve / 11~issues) & \acs{P2}: $\times$ & Instrukce neuvádí pravidlo \enquote{1~issue = 1~větev}; chybí procedurální páka \\
-Implementace předcházela testům napříč všemi větvemi & \acs{P3}: $\times$ & Žádné explicitní pravidlo ani kontrola pořadí test/kód \\
-V~jedné větvi upraven existující test & \acs{P5}: $\times$ & Žádná hard-rule pro existující testy \\
-2~funkce nad prahem složitosti & \acs{Q7}: 2~viol. & Package Quality nevynucuje kontrolu složitosti \\
-Chybějící JSDoc na~veřejném API & \acs{Q8}: 1/3 & Deklarativní požadavek bez verifikačního kroku \\
-3~z~42 referenčních testů selhaly (pause/resume, eskalace) & \acs{Q2}: 39/42 & Implementační rozhodnutí v~doménové logice mimo dosah baseline instrukcí \\
+\acs{P2} & Issues seskupeny do~méně větví (4~větve / 11~issues) & Instrukce neuvádí pravidlo \enquote{1~issue = 1~větev}; chybí procedurální páka \\
+\acs{P3} & Implementace předcházela testům napříč všemi větvemi & Žádné explicitní pravidlo ani kontrola pořadí test/kód \\
+\acs{P5} & V~jedné větvi upraven existující test & Žádná hard-rule pro existující testy \\
+\acs{Q7} & 2~funkce nad prahem složitosti & Package Quality nevynucuje kontrolu složitosti \\
+\acs{Q8} & Chybějící JSDoc na~veřejném API & Deklarativní požadavek bez verifikačního kroku \\
+\acs{Q2} & 3~z~42 referenčních testů selhaly (pause/resume, eskalace) & Implementační rozhodnutí v~doménové logice mimo dosah baseline instrukcí \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -197,7 +198,7 @@ ke změně.
 \caption{Pilot-r2: metriky se změnou oproti r1}
 \label{tab:pilot-r2-delta}
 \small
-\begin{tabular}{@{}llccc@{}}
+\begin{tabularx}{\linewidth}{@{}p{0.05\linewidth}Xp{0.18\linewidth}p{0.18\linewidth}p{0.12\linewidth}@{}}
 \toprule
 \textbf{Kód} & \textbf{Metrika} & \textbf{r1} & \textbf{r2} & \textbf{Trend} \\
 \midrule
@@ -211,7 +212,7 @@ Q8       & Design quality         & 1/3        & 1/3         & stabilní \\
 E1       & Vstup / výstup / $\Sigma$ cache (tis.) & 115 / 60 / 11528 & 76 / 41 / 3196 & záznam \\
 E2       & Trvání                 & 33 min & 37 min & záznam \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 \FloatBarrier
 
@@ -223,14 +224,14 @@ E2       & Trvání                 & 33 min & 37 min & záznam \\
 \label{tab:pilot-r2-nalezy}
 \footnotesize
 \renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\linewidth}{Xp{0.14\linewidth}X}
+\begin{tabularx}{\linewidth}{@{}p{0.12\linewidth}XX@{}}
 \toprule
-\textbf{Pozorované chování} & \textbf{Metriky} & \textbf{Příčina} \\
+\textbf{Metriky} & \textbf{Pozorované chování} & \textbf{Příčina} \\
 \midrule
-Issues agregovány do menšího počtu větví (7~issues / 3~větve) & \acs{P2}: stagnace & Procedura neměla pravidlo \enquote{1~issue = 1~větev} \\
-Test+kód v~jednom commitu s~prefixem \texttt{test:}; žádný \texttt{feat:} commit & \acs{P3}: 0${\to}$0 (inverzní forma) & Litera bez záměru, formální dodržení procedurálního příkazu \\
-JSDoc neaplikován & \acs{Q8}: 1/3 stabilní & Deklarativní pravidlo bez verifikační opory \\
-Pokles kvality test suite (více testů, méně zachycených mutantů) & \acs{Q2}: 39/42${\to}$32/42, \acs{Q3}: 84\,\%${\to}$68\,\% & Hromadné psaní testů ze specifikace místo iterativního test-fix cyklu \\
+\acs{P2} & Issues agregovány do menšího počtu větví (7~issues / 3~větve) & Procedura neměla pravidlo \enquote{1~issue = 1~větev} \\
+\acs{P3} & Test+kód v~jednom commitu s~prefixem \texttt{test:}; žádný \texttt{feat:} commit & Litera bez záměru, formální dodržení procedurálního příkazu \\
+\acs{Q8} & JSDoc neaplikován & Deklarativní pravidlo bez verifikační opory \\
+\acs{Q2}, \acs{Q3} & Pokles kvality test suite (více testů, méně zachycených mutantů) & Hromadné psaní testů ze specifikace místo iterativního test-fix cyklu \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -270,7 +271,7 @@ Tabulka~\ref{tab:pilot-r3-delta} ukazuje metriky s~výraznou změnou.
 \caption{Pilot-r3: metriky se změnou oproti r2}
 \label{tab:pilot-r3-delta}
 \small
-\begin{tabular}{@{}llccc@{}}
+\begin{tabularx}{\linewidth}{@{}p{0.05\linewidth}Xp{0.18\linewidth}p{0.18\linewidth}p{0.12\linewidth}@{}}
 \toprule
 \textbf{Kód} & \textbf{Metrika} & \textbf{r2} & \textbf{r3} & \textbf{Trend} \\
 \midrule
@@ -286,7 +287,7 @@ E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 76 / 41 / 3196 & 62 / 30 / 4770 &
 E2 & Trvání                   & 37 min & 25 min & záznam \\
 E3 & Počet kompakcí            & 0          & 0           & záznam \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 \FloatBarrier
 
@@ -332,7 +333,7 @@ Tabulka~\ref{tab:pilot-r4-delta} ukazuje metriky s~nejvýraznější změnou.
 \caption{Pilot-r4: metriky se změnou oproti r3}
 \label{tab:pilot-r4-delta}
 \small
-\begin{tabular}{@{}llccc@{}}
+\begin{tabularx}{\linewidth}{@{}p{0.05\linewidth}Xp{0.18\linewidth}p{0.18\linewidth}p{0.12\linewidth}@{}}
 \toprule
 \textbf{Kód} & \textbf{Metrika} & \textbf{r3} & \textbf{r4} & \textbf{Trend} \\
 \midrule
@@ -346,7 +347,7 @@ E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & 81 / 36 / 5996 &
 E2 & Trvání                  & 25 min & 26 min & záznam \\
 E3 & Počet kompakcí          & 0          & 0           & záznam \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 \FloatBarrier
 
@@ -358,12 +359,12 @@ E3 & Počet kompakcí          & 0          & 0           & záznam \\
 \label{tab:pilot-r4-nalezy}
 \footnotesize
 \renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\linewidth}{Xp{0.14\linewidth}X}
+\begin{tabularx}{\linewidth}{@{}p{0.12\linewidth}XX@{}}
 \toprule
-\textbf{Pozorované chování} & \textbf{Metriky} & \textbf{Příčina} \\
+\textbf{Metriky} & \textbf{Pozorované chování} & \textbf{Příčina} \\
 \midrule
-Pole \texttt{pausedElapsed} opět nepoužito; přibyly chyby v~eskalaci v~pracovních dnech a~na~boundary přechodu DUE\_SOON & \acs{Q2}: 41/42${\to}$39/42 & Pravidlo o~API kontraktu v~Constraints (deklarativní) bez verifikace neúčinné \\
-Mergován kód s~timezone bugem ve~vlastním testu & \acs{Q2} regrese & \texttt{npx vitest run} v~pre-PR checklistu nevynutilo skutečný pass \\
+\acs{Q2} & Pole \texttt{pausedElapsed} opět nepoužito; přibyly chyby v~eskalaci v~pracovních dnech a~na~boundary přechodu DUE\_SOON & Pravidlo o~API kontraktu v~Constraints (deklarativní) bez verifikace neúčinné \\
+\acs{Q2} & Mergován kód s~timezone bugem ve~vlastním testu & \texttt{npx vitest run} v~pre-PR checklistu nevynutilo skutečný pass \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -407,7 +408,7 @@ v~pre-PR checklistu a~ESLint complexity pravidlo.
 \caption{Pilot-r5: metriky se změnou oproti r3}
 \label{tab:pilot-r5-delta}
 \small
-\begin{tabular}{@{}llccc@{}}
+\begin{tabularx}{\linewidth}{@{}p{0.05\linewidth}Xp{0.18\linewidth}p{0.18\linewidth}p{0.12\linewidth}@{}}
 \toprule
 \textbf{Kód} & \textbf{Metrika} & \textbf{r3} & \textbf{r5} & \textbf{Trend} \\
 \midrule
@@ -422,7 +423,7 @@ E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & 65 / 23 / 3028 &
 E2 & Trvání                  & 25 min & 13 min & záznam \\
 E3 & Počet kompakcí          & 0          & 0           & záznam \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 \FloatBarrier
 
@@ -434,14 +435,14 @@ E3 & Počet kompakcí          & 0          & 0           & záznam \\
 \label{tab:pilot-r5-nalezy}
 \footnotesize
 \renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\linewidth}{Xp{0.14\linewidth}X}
+\begin{tabularx}{\linewidth}{@{}p{0.12\linewidth}XX@{}}
 \toprule
-\textbf{Pozorované chování} & \textbf{Metriky} & \textbf{Příčina} \\
+\textbf{Metriky} & \textbf{Pozorované chování} & \textbf{Příčina} \\
 \midrule
-ESLint nakonfigurován s~pravidlem \texttt{complexity}, funkce \texttt{processTick} rozložena & \acs{Q5}: 0, \acs{Q7}: 0 & Konkrétní instrukce v~pre-PR checklistu (\enquote{ESLint config must include complexity: [warn, 10]}) zabrala \\
-Žádné issues, branches ani PR; vše v~jednom \texttt{feat:} commitu po~použití interního \texttt{todowrite} místo \texttt{gh issue create} & \acs{P2}, \acs{P3}, \acs{P4}: regrese & Selektivní plnění instrukcí: agent přečetl celý postup, ale provedl jen závěrečný checklist \\
-Pre-PR checks (tsc, eslint) dodrženy & \acs{Q5}, \acs{Q6} & Jednokrokové příkazy s~okamžitým výstupem agent plní spolehlivě \\
-\acs{Q2} stále neúplné (pause/resume + nové edge cases) & \acs{Q2}: 41/42${\to}$38/42 & Verifikace API kontraktu nezabrala bez~současného dodržení procesu \\
+\acs{Q5}, \acs{Q7} & ESLint nakonfigurován s~pravidlem \texttt{complexity}, funkce \texttt{processTick} rozložena & Konkrétní instrukce v~pre-PR checklistu (\enquote{ESLint config must include complexity: [warn, 10]}) zabrala \\
+\acs{P2}, \acs{P3}, \acs{P4} & Žádné issues, branches ani PR; vše v~jednom \texttt{feat:} commitu po~použití interního \texttt{todowrite} místo \texttt{gh issue create} & Selektivní plnění instrukcí: agent přečetl celý postup, ale provedl jen závěrečný checklist \\
+\acs{Q5}, \acs{Q6} & Pre-PR checks (tsc, eslint) dodrženy & Jednokrokové příkazy s~okamžitým výstupem agent plní spolehlivě \\
+\acs{Q2} & Stále neúplné pause/resume a~nové edge cases & Verifikace API kontraktu nezabrala bez~současného dodržení procesu \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -552,7 +553,8 @@ ve srovnání s~r3.
 \caption{Ablace~A: srovnání s~r3 (bez verifikačních kroků)}
 \label{tab:ablace-a}
 \small
-\begin{tabular}{@{}llccc@{}}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\linewidth}{@{}p{0.05\linewidth}Xp{0.18\linewidth}p{0.12\linewidth}p{0.12\linewidth}@{}}
 \toprule
 \textbf{Kód} & \textbf{Metrika} & \textbf{r3} & \textbf{A-1} & \textbf{A-2} \\
 \midrule
@@ -573,15 +575,15 @@ Q6 & Typecheck errors          & 0          & 0          & 0 \\
 Q7 & Complexity violations     & 1          & 4          & 1 \\
 Q8 & Design quality            & 3/3        & 2/3        & 2/3 \\
 \midrule
-E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & \cna{n/a} & \cna{n/a} \\
+E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & 72 / 32 / 4558 & 92 / 36 / 8210 \\
 E2 & Trvání                    & 25 min     & 39 min     & 24 min \\
 E3 & Počet kompakcí            & 0          & 0          & 0 \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 \FloatBarrier
 
-\textit{Poznámka k~\acs{E1}:} sloupec r3 odpovídá hodnotám z~pilotního \texttt{transcript.json} (62 / 30 / 4770 tis.). U~A-1 a~A-2 chybí export v~lokálním snapshotu, \acs{E1} pro tyto běhy nešlo dopočítat.
+\textit{Poznámka k~\acs{E1}:} sloupec r3 vychází z~pilotního \texttt{transcript.json}; pro A-1 a~A-2 chybí \texttt{transcript.json}, hodnoty jsou agregovány z~uložené OpenCode session DB (\texttt{.opencode/opencode.db}) podle stejného vzorce.
 
 $^\dagger$ \acs{Q3} v~A-2 nelze měřit: agentovy vlastní testy selhávají
 (test očekává stav \texttt{REMINDER\_1}, kód vrací \texttt{GRACE}),
@@ -589,8 +591,6 @@ Stryker vyžaduje funkční test suite. Bez verifikačních kroků agent
 commitl kód s~nefunkčními testy.
 
 \paragraph{Interpretace.}
-\acs{E1} u~ablace nelze dopočítat, protože v~lokálním snapshotu chybí
-\texttt{transcript.json}.
 Tabulka~\ref{tab:ablace-a} ukazuje pokles napříč metrikami kvality
 kódu (\ac{Q5}, \ac{Q7}) i~funkční korektnosti (\acs{Q2}, \acs{Q3}). Bez explicitního
 příkazu \texttt{npx eslint} agent neprovedl kontrolu kvality před
@@ -620,7 +620,8 @@ ve srovnání s~r3.
 \caption{Ablace~B: srovnání s~r3 (bez sekce Package Quality)}
 \label{tab:ablace-b}
 \small
-\begin{tabular}{@{}llccc@{}}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\linewidth}{@{}p{0.05\linewidth}Xp{0.18\linewidth}p{0.12\linewidth}p{0.12\linewidth}@{}}
 \toprule
 \textbf{Kód} & \textbf{Metrika} & \textbf{r3} & \textbf{B-1} & \textbf{B-2} \\
 \midrule
@@ -641,20 +642,17 @@ Q6 & Typecheck errors          & 0          & 0          & 0 \\
 Q7 & Complexity violations     & 1          & 1          & 2 \\
 Q8 & Design quality            & 3/3        & \cna{n/a}$^*$    & 2/3 \\
 \midrule
-E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & \cna{n/a} & \cna{n/a} \\
+E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62 / 30 / 4770 & 78 / 40 / 6273 & 55 / 23 / 3604 \\
 E2 & Trvání                    & 25 min     & 28 min     & 21 min \\
 E3 & Počet kompakcí            & 0          & 0          & 0 \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 \FloatBarrier
 
 $^*$ \acs{Q8} v~B-1: judge nedokončil hodnocení (API timeout).
 
 \paragraph{Interpretace.}
-Stejně jako u~tabulky~\ref{tab:ablace-a} chybí u~ablace export
-\texttt{transcript.json}. Řádek \acs{E1} proto zůstává n/a.
-
 Deterministické metriky kvality kódu (\acs{Q5}, \acs{Q6}, \acs{Q7}) zůstaly na podobné
 úrovni jako v~r3 (tabulka~\ref{tab:ablace-b}). Agent produkoval
 modulární kód, striktní TypeScript a~v~B-1 i~JSDoc dokumentaci,
@@ -726,7 +724,7 @@ Q6 typecheck errors     & \cna{0}     & \cna{0}     & \cna{0}     & \cna{0}     
 Q7 složitost            & \cbad{2}    & \cgood{0}      & \cmid{1}      & \cmid{1}      & \cgood{0}      & \cbad{4}    & \cmid{1}     & \cmid{1}     & \cbad{2} \\
 Q8 design quality       & \cbad{1/3}  & \cbad{1/3}  & \cgood{3/3}   & \cmid{2/3}    & \cmid{2/3}    & \cmid{2/3}    & \cmid{2/3}   & \cmid{2/3}   & \cmid{2/3} \\
 \midrule
-E1 in/out/cache (tis.)  & 115/60/11k & 76/41/3k & 62/30/5k & 81/36/6k & 65/23/3k & \cna{n/a} & \cna{n/a} & \cna{n/a} & \cna{n/a} \\
+E1 in/out/cache (tis.)  & 115/60/11k & 76/41/3k & 62/30/5k & 81/36/6k & 65/23/3k & 72/32/5k & 92/36/8k & 78/40/6k & 55/23/4k \\
 E2 trvání (min)         & 33     & 37     & 25     & 26     & 13     & 39         & 24        & 28        & 21 \\
 E3 počet kompakcí       & \cna{0}    & \cna{0}    & \cna{0}         & \cna{0}    & \cna{0}    & \cna{0}    & \cna{0}   & \cna{0}   & \cna{0} \\
 \bottomrule
