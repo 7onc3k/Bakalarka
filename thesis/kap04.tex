@@ -149,7 +149,8 @@ E3 & Počet kompakcí         & 0          & \cna{n/a}   & záznam \\
 \caption{Pilot-r1: nálezy a~jejich příčiny}
 \label{tab:pilot-r1-nalezy}
 \footnotesize
-\renewcommand{\arraystretch}{1.15}
+\renewcommand{\arraystretch}{1.25}
+\rowcolors{2}{cNeutral}{white}
 \begin{tabularx}{\linewidth}{@{}Xp{0.14\linewidth}X@{}}
 \toprule
 \textbf{Pozorované chování} & \textbf{Metriky} & \textbf{Příčina} \\
@@ -222,12 +223,12 @@ E2       & Trvání                 & 33 min & 37 min & záznam \\
 \caption{Pilot-r2: nálezy a~jejich příčiny}
 \label{tab:pilot-r2-nalezy}
 \footnotesize
-\renewcommand{\arraystretch}{1.15}
+\renewcommand{\arraystretch}{1.25}
+\rowcolors{2}{cNeutral}{white}
 \begin{tabularx}{\linewidth}{@{}Xp{0.14\linewidth}X@{}}
 \toprule
 \textbf{Pozorované chování} & \textbf{Metriky} & \textbf{Příčina} \\
 \midrule
-Existující testy nezměněny, žádná funkce nad prahem složitosti & \acs{P5}: $\times{\to}\checkmark$, \acs{Q7}: 2${\to}$0 & Nové instrukce z~r1 účinné \\
 Issues agregovány do menšího počtu větví (7~issues / 3~větve) & \acs{P2}: stagnace & Procedura neměla pravidlo \enquote{1~issue = 1~větev} \\
 Test+kód v~jednom commitu s~prefixem \texttt{test:}; žádný \texttt{feat:} commit & \acs{P3}: 0${\to}$0 (inverzní forma) & Litera bez záměru, formální dodržení procedurálního příkazu \\
 JSDoc neaplikován & \acs{Q8}: 1/3 stabilní & Deklarativní pravidlo bez verifikační opory \\
@@ -292,33 +293,23 @@ E3 & Počet kompakcí            & 0          & 0           & záznam \\
 \FloatBarrier
 
 \paragraph{Diagnostika chování.}
-
-\begin{table}[H]
-\centering
-\caption{Pilot-r3: nálezy a~jejich příčiny}
-\label{tab:pilot-r3-nalezy}
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabularx}{\linewidth}{@{}Xp{0.14\linewidth}X@{}}
-\toprule
-\textbf{Pozorované chování} & \textbf{Metriky} & \textbf{Příčina} \\
-\midrule
-Celý procesní checklist dodržen: issues před kódem, branch per issue, test-first commits, žádný test nezměněn, PRs s~\texttt{Closes \#N} & \acs{P1}--\acs{P5}: 5/5 & Tři změny instrukcí z~r2 účinné (verifikace místo příkazu) \\
-JSDoc dodán & \acs{Q8}: 1/3${\to}$3/3 & Přesun požadavku do~verifikačního kroku zabral \\
-Vlastní implementace pause/resume (posunutí \texttt{stateEnteredAt}) místo pole \texttt{pausedElapsed} z~API kontraktu; fungovala pro jedno pozastavení, selhala při opakovaném & \acs{Q2}: 41/42 & Implementační rozhodnutí navzdory explicitnímu poli v~kontraktu a~jednoznačným acceptance criteria \\
-\bottomrule
-\end{tabularx}
-\end{table}
-\FloatBarrier
+Tři změny instrukcí z~r2 zabraly: agent dodržel celý procesní checklist
+(\acs{P1}--\acs{P5}~=~5/5) a~doplnil JSDoc dokumentaci
+(\acs{Q8}~=~3/3). Zbývá jediný nález: agent zvolil vlastní implementaci
+pause/resume (posunutí \texttt{stateEnteredAt}) místo pole
+\texttt{pausedElapsed} z~API kontraktu; přístup fungoval pro jedno
+pozastavení, ale selhal při opakovaném (\acs{Q2}~=~41/42). Specifikace
+přitom byla jednoznačná, acceptance criteria vyžadovala zachování
+uplynulého času a~API kontrakt poskytoval explicitní pole.
 
 \paragraph{Závěry a~intervence pro r4.}
-Tři změny instrukcí z~r2 zabraly: pracovní postup i~JSDoc nyní fungují
-(viz tabulka). Zbývá jediný nález, kdy agent ignoroval explicitní pole
-API kontraktu navzdory dvojité opoře (acceptance criteria a~komentář
-v~kontraktu). Pro r4 doplňujeme do~pre-PR checklistu příkaz
-\texttt{npx vitest run}, aby agent před otevřením pull requestu ověřil
-průchod vlastních testů, a~do~Constraints pravidlo, že každé pole
-v~API kontraktu musí být v~implementaci použito~\cite{breunig2025}
+Tři změny z~r2 ukazují, že přesun deklarativních pravidel do~verifikačního
+kroku funguje. Zbývající nález naznačuje, že explicitní opora v~typech
+sama o~sobě nestačí, pokud agent učiní vlastní implementační rozhodnutí.
+Pro r4 doplňujeme do~pre-PR checklistu příkaz \texttt{npx vitest run},
+aby agent před otevřením pull requestu ověřil průchod vlastních testů,
+a~do~Constraints pravidlo, že každé pole v~API kontraktu musí být
+v~implementaci použito~\cite{breunig2025}
 (obrázek~\ref{fig:agents-diff-r3-r4}).
 
 \begin{figure}[H]
@@ -368,13 +359,12 @@ E3 & Počet kompakcí          & 0          & 0           & záznam \\
 \caption{Pilot-r4: nálezy a~jejich příčiny}
 \label{tab:pilot-r4-nalezy}
 \footnotesize
-\renewcommand{\arraystretch}{1.15}
+\renewcommand{\arraystretch}{1.25}
+\rowcolors{2}{cNeutral}{white}
 \begin{tabularx}{\linewidth}{@{}Xp{0.14\linewidth}X@{}}
 \toprule
 \textbf{Pozorované chování} & \textbf{Metriky} & \textbf{Příčina} \\
 \midrule
-Vytvořeno 7~issues, zpracováno 5; dva issues bez branch & \acs{P2}: 4/6 & Regrese vůči r3 (částečná příčina viz dále) \\
-Po~implementaci upraveny dva vlastní testové soubory & \acs{P5}: $\times$ & Regrese vůči r3 (částečná příčina viz dále) \\
 Pole \texttt{pausedElapsed} opět nepoužito; přibyly chyby v~eskalaci v~pracovních dnech a~na~boundary přechodu DUE\_SOON & \acs{Q2}: 41/42${\to}$39/42 & Pravidlo o~API kontraktu v~Constraints (deklarativní) bez verifikace neúčinné \\
 Mergován kód s~timezone bugem ve~vlastním testu & \acs{Q2} regrese & \texttt{npx vitest run} v~pre-PR checklistu nevynutilo skutečný pass \\
 \bottomrule
@@ -386,8 +376,9 @@ Mergován kód s~timezone bugem ve~vlastním testu & \acs{Q2} regrese & \texttt{
 Deklarativní pravidlo v~Constraints nepřineslo zlepšení a~instrukce
 na~této úloze zůstávají citlivé na~variabilitu mezi běhy: mezi r3
 a~r4 se kromě instrukcí změnila i~konfigurace modelu v~Docker prostředí
-(sekce~\ref{sec:limity-vysledky}), pokles proto nelze připsat výhradně
-dvěma novým řádkům. Pro r5 vycházíme z~r3 (ne~z~r4) a~cílíme na~dvě
+(sekce~\ref{sec:limity-vysledky}). Procesní regrese (\acs{P2}, \acs{P5})
+i~kvalitativní pokles (\acs{Q2}, \acs{Q8}) proto nelze připsat výhradně
+dvěma novým řádkům v~Constraints. Pro r5 vycházíme z~r3 (ne~z~r4) a~cílíme na~dvě
 zbývající selhání verifikačními kroky. Pro \acs{Q2} doplňujeme
 do~pre-PR checklistu ověření, že každé pole z~typů v~API kontraktu
 je v~implementaci čteno i~zapisováno (oproti r4, kde pravidlo bylo
@@ -445,7 +436,8 @@ E3 & Počet kompakcí          & 0          & 0           & záznam \\
 \caption{Pilot-r5: nálezy a~jejich příčiny}
 \label{tab:pilot-r5-nalezy}
 \footnotesize
-\renewcommand{\arraystretch}{1.15}
+\renewcommand{\arraystretch}{1.25}
+\rowcolors{2}{cNeutral}{white}
 \begin{tabularx}{\linewidth}{@{}Xp{0.14\linewidth}X@{}}
 \toprule
 \textbf{Pozorované chování} & \textbf{Metriky} & \textbf{Příčina} \\
