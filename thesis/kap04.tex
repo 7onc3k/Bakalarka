@@ -134,12 +134,12 @@ Ze 10 deterministických metrik splnil agent 4 (\acs{P1}, \acs{P4}, \acs{Q1}, \a
 \paragraph{Diagnostika.}
 Agent vytvořil 11~issues hromadně na začátku běhu (před prvním commitem
 do \texttt{src/}) a~rozložil implementaci do 4~větví, každá s~vlastním
-pull requestem. Větve agregovaly související issues, takže \acs{P2}
+pull requestem. Větve agregovaly související issues, takže \ac{P2}
 selhala v~poměru 4~větve na 11~issues. Napříč všemi 4~větvemi předcházela
-implementace testům (\acs{P3}); agent vlastní testy psal až po kódu
-a~v~jedné větvi navíc upravil existující test (\acs{P5}). Z~referenčních
-testů selhaly 3 z~42 (\acs{Q2}): jedno selhání pause/resume na zachování
-uplynulého času a~dvě v~manuálním přechodu mezi stavy. \acs{Q8}~=~1/3
+implementace testům (\ac{P3}); agent vlastní testy psal až po kódu
+a~v~jedné větvi navíc upravil existující test (\ac{P5}). Z~referenčních
+testů selhaly 3 z~42 (\ac{Q2}): jedno selhání pause/resume na zachování
+uplynulého času a~dvě v~manuálním přechodu mezi stavy. \ac{Q8}~=~1/3
 kvůli chybějící JSDoc dokumentaci na veřejném API. Vlastních testů
 napsal agent 59 a~všechny procházely. Strukturu kódu zvolil modulární
 (\texttt{types.ts}, \texttt{businessDays.ts}, \texttt{dunning.ts},
@@ -150,7 +150,7 @@ Procesní selhání \acs{P2}, \acs{P3} a~\acs{P5} sdílí stejný vzor:
 instrukce uvedla, \textit{co} má platit (jeden issue ve vlastní větvi,
 testy před kódem, existující test se neupravuje), bez konkrétního
 příkazu nebo kontroly. Agent v~každém z~nich zvolil rychlejší
-alternativu, která literu pravidla neporušila. \acs{Q7} (2 funkce nad
+alternativu, která literu pravidla neporušila. \ac{Q7} (2 funkce nad
 prahem) sledovala stejný vzor: \enquote{Package Quality} požadovala
 modulární kód, ale neenforcovala kontrolu složitosti. Selhání
 referenčních testů jsou jiného typu, jde o~implementační rozhodnutí
@@ -589,7 +589,7 @@ commitl kód s~nefunkčními testy.
 \acs{E1} u~ablace nelze dopočítat, protože v~lokálním snapshotu chybí
 \texttt{transcript.json}.
 Tabulka~\ref{tab:ablace-a} ukazuje pokles napříč metrikami kvality
-kódu (\acs{Q5}, \acs{Q7}) i~funkční korektnosti (\acs{Q2}, \acs{Q3}). Bez explicitního
+kódu (\ac{Q5}, \ac{Q7}) i~funkční korektnosti (\acs{Q2}, \acs{Q3}). Bez explicitního
 příkazu \texttt{npx eslint} agent neprovedl kontrolu kvality před
 odevzdáním kódu, což naznačuje, že verifikační kroky nejsou
 redundantní. Agent je bez instrukce nespouští sám.
