@@ -383,7 +383,7 @@ v~každé dimenzi projevují trochu jinak.
 
 Procesní stránka se mění v~tom, kdo provádí jednotlivé kroky,
 a~v~tom, jakou stopu po sobě zanechávají. Typická procesní selhání
-dokládají empirická pozorování agent-generovaných pull requestů.
+dokládají pozorování agent-generovaných pull requestů.
 Ty se od těch lidských liší mírou nadbytečnosti, konzistencí commit
 zpráv a~ochotou reviewera je přijmout~\cite{watanabe2025agentprs,
 ehsani2026failedprs}.
@@ -442,10 +442,10 @@ pass/fail výsledek nezachycuje, zda by patch obstál v~code review,
 byl udržovatelný nebo vznikl auditovatelným postupem.
 
 Existují benchmarky, které hodnocení rozšiřují nad rámec pass/fail.
-SWE-bench Pro přidává strukturované požadavky a~FeatureBench hodnotí
-end-to-end implementaci celých funkcí
-\cite{swebenchpro2025,featurebench2026}. Empirická
-evaluace sedmi agentních frameworků jde ještě dál a~hodnotí je
+SWE-bench Pro~\cite{swebenchpro2025} přidává strukturované požadavky
+a~FeatureBench~\cite{featurebench2026} hodnotí end-to-end implementaci
+celých funkcí. Evaluace sedmi agentních frameworků jde ještě dál
+a~hodnotí je
 na třech osách (úspěšnost, efektivita reasoning kroků a~tokenová
 režie)~\cite{yin2025agents}; její pohled na proces je ale
 omezen na trasu reasoning kroků agenta a~strukturální kvalita kódu
@@ -469,8 +469,8 @@ systematické biasy: \textit{position bias} (preferuje odpověď
 na určité pozici), \textit{verbosity bias} (preferuje delší
 odpovědi) a~\textit{self-enhancement bias} (preferuje vlastní
 výstupy). \textcite{panickssery2024} prokázali
-korelaci mezi schopností modelu rozpoznat vlastní výstupy a~mírou,
-do jaké je preferuje, což naznačuje kauzální vztah mezi
+korelaci mezi schopností modelu rozpoznat vlastní výstupy a~silou
+preference těchto výstupů, což naznačuje kauzální vztah mezi
 self-recognition a~self-preference. \textcite{verga2024poll}
 navrhli mitigaci formou panelu diverzních modelů (PoLL), který
 dosahuje lepší shody s~lidským hodnocením než jednotlivý model.
@@ -488,8 +488,9 @@ dokládají, že generátory testů zahazují právě ty testy, které
 by chybu odhalily. Až 68,1\,\% výsledných testovacích sad pak
 validuje chybné chování místo jeho odhalení. Obranou je odvozovat
 očekávané hodnoty ze specifikace (\textit{spec-first TDD},
-sekce~\ref{sec:procesni-kvalita}). Specifikace tím vystupuje
-jako externí oracle, který agent nemůže přepsat.
+sekce~\ref{sec:procesni-kvalita}). Specifikace tím vystupuje jako
+externí oracle, tedy zdroj očekávaných výsledků, který agent nemůže
+přepsat.
 
 Benchmarky i~doplňkové mechanismy z~této sekce hodnotí
 převážně izolované úlohy a~jednotlivé aspekty výstupu. Pro
@@ -515,8 +516,7 @@ je kód strukturovaný určitým způsobem nebo jaké chyby se v~projektu
 opakují. \textcite{nonaka1995} popisují převod tacit
 knowledge na explicitní jako klíčový proces v~organizacích. Pro
 agenty je tento převod nutný v~plném rozsahu: veškerý kontext, který
-agent potřebuje, musí být zapsán explicitně. Hassan
-et al.~\cite{hassan2025sase} tuto dualitu formalizují v~rámci
+agent potřebuje, musí být zapsán explicitně. \textcite{hassan2025sase} tuto dualitu formalizují v~rámci
 frameworku SASE, který rozlišuje dva režimy vývoje. V~\textit{SE4H}
 (\textit{Software Engineering for Humans}) je vývojářem člověk
 a~kontext čerpá z~meetingů, code review a~zkušenosti. V~\textit{SE4A}
@@ -541,12 +541,12 @@ prompt šablon a~identifikovali sedm typů komponent: Role,
 Directive, Context, Workflow, Output, Constraints a~Examples.
 Zjistili, že Role a~Directive se nejčastěji objevují na začátku
 dokumentu a~že Workflow (procedurální kroky) je nejúčinnější
-komponentou pro složité úkoly. Toto zjištění potvrzují Li
-et al.~\cite{skillsbench2025}, kteří ukazují, že procedurální
+komponentou pro složité úkoly. Toto zjištění potvrzuje
+\textcite{skillsbench2025}, kteří ukazují, že procedurální
 instrukce jsou efektivnější než popisná dokumentace.
 
 \paragraph{Empirie účinnosti.}
-Empirická evidence o~účinnosti instrukčních souborů je smíšená
+Dostupná evidence o~účinnosti instrukčních souborů je smíšená
 a~závisí na tom, co se měří a~jaký je obsah souboru. V~efektivitě
 běhu \textcite{lulla2026} pozorují, že přítomnost
 \texttt{AGENTS.md} zkracuje mediánovou dobu, kterou agent
@@ -561,13 +561,13 @@ a~relevance, ne pouhá přítomnost souboru. Účinnost jednotlivých
 typů obsahu přitom dosud nebyla izolována.
 
 \paragraph{Specificita a~citlivost.}
-Konkrétnost instrukce je sama o~sobě faktor: Kim
-et al.~\cite{kim2025detail} v~benchmarku DETAIL a~Zi
-et al.~\cite{zi2025specificity} na úlohách s~kódem shodně ukazují,
-že vyšší \textit{specificita} zvyšuje úspěšnost agenta, ale přílišný
-detail může omezit jeho reasoning. Instrukce se tak pohybují po
-ose od volné nápovědy po explicitní příkaz, přičemž optimální bod
-závisí na úloze i~modelu.
+Instrukce musí být dostatečně konkrétní, ale ne nutně co nejdelší.
+\textcite{kim2025detail} v~benchmarku DETAIL a~\textcite{zi2025specificity}
+na úlohách s~kódem shodně ukazují, že vyšší
+\textit{specificita} zvyšuje úspěšnost agenta, přílišný detail
+však může omezit jeho reasoning. Instrukce se tak pohybují po ose
+od volné nápovědy po explicitní příkaz, přičemž optimální bod závisí
+na úloze i~modelu.
 
 Modely jsou kromě toho citlivé na samotnou formulaci. \textcite{razavi2025} dokládají, že drobné změny promptu
 mohou dramaticky změnit chování modelu. \textcite{breunig2025}
@@ -580,10 +580,11 @@ Výzkum promptingu navíc naznačuje, že instrukce nepůsobí na chování
 modelu jedním mechanismem. \textcite{wei2022cot} ukazují, že
 i~krátká nápověda (``think step by step'') aktivuje reasoning, který
 se bez ní neprojeví, a~\textcite{min2022rethinking} dokládají,
-že demonstrace v~in-context learning působí spíš jako strukturální
-vodítka než jako přímé příkazy. Instrukce tedy nemusí působit jen
-jako explicitní příkazy: mohou také strukturovat řešení nebo
-připomínat schopnosti, které se bez vhodného podnětu neprojeví.
+že ukázkové příklady vložené do kontextu modelu působí spíš jako
+strukturální vodítka než jako přímé příkazy. Instrukce tedy nemusí
+působit jen jako explicitní příkazy. Mohou také určit pořadí kroků,
+formát výstupu nebo vyvolat reasoning, který se bez vhodného podnětu
+neprojeví.
 Která forma instrukce bude v~konkrétním případě účinnější, nelze
 rozhodnout předem.
 
@@ -593,7 +594,7 @@ složky skutečně mění chování agenta.
 
 Z~této kapitoly plynou dvě motivace pro zbytek práce: současné
 hodnocení agentů nepokrývá tři dimenze měření společně a~návrh
-instrukcí, ač hlavní páka chování, nemá ustanovený systematický
-postup. Oba problémy adresuje kapitola~\ref{kap:metodika}, která
+instrukcí nemá ustanovený systematický postup. Oba problémy
+adresuje kapitola~\ref{kap:metodika}, která
 zavádí sadu metrik pokrývajících tři dimenze a~iterativní postup
 návrhu instrukcí řízený těmito metrikami.

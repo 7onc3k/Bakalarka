@@ -286,7 +286,7 @@ se specifikací připravena sada 42 referenčních testů metodou
 spec-first TDD~\cite{mathews2024}: očekávané hodnoty pochází ze
 specifikace, ne z~pozorování kódu. Testy jsou agentovi neviditelné
 a~spouští se až po běhu samostatným skriptem, takže slouží jako
-externí oracle, který agent nemůže přepsat
+externí oracle, tedy zdroj očekávaných výsledků, který agent nemůže přepsat
 (sec~\ref{sec:hodnoceni-ai-agentu}). Mutation testing nad referenční
 test suite dosáhl 91{,}9\,\%, což indikuje, že referenční testy samy
 detekují cílené poruchy v~doménové logice. Tato hodnota slouží jako
@@ -580,8 +580,9 @@ Případová studie rozlišuje dva druhy testů. \textit{Referenční testy}
 TDD~\cite{mathews2024} a~spouštěné po běhu samostatným skriptem,
 takže pro agenta jsou neviditelné. \textit{Agentovy vlastní testy}
 píše agent během běhu, jsou viditelné a~spustitelné agentem; vztahuje
-se k~nim metrika \acs{P5}. Referenční testy slouží jako externí oracle,
-který agent nemůže přepsat (sekce~\ref{sec:hodnoceni-ai-agentu}).
+se k~nim metrika \acs{P5}. Referenční testy slouží jako externí
+oracle, tedy zdroj očekávaných výsledků, který agent nemůže přepsat
+(sekce~\ref{sec:hodnoceni-ai-agentu}).
 
 \subsubsection*{Kvalita testů (Q3--Q4)}
 

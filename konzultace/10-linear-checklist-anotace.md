@@ -183,18 +183,23 @@ Routování: #63 otevření, #64 kap02, #65 kap03, #66 kap04, #62 závěrečná 
 - [x] `p21-citace-benchmarky` (#64) **Uživatelská kontrola:** opakované citace benchmarků v odstavci o rozšířených benchmarkách
   - Problém: ACE-Bench a FeatureBench se v PDF citovaly názvem, protože bib záznamy neměly skutečné autory; zároveň byly citace roztříštěné za každý benchmark zvlášť.
   - Kontrola: FeatureBench má doplněné autory a URL na arXiv; starý/duplicitní záznam ACE-Bench podle OpenReview id odpovídal téže práci pod dřívějším názvem, proto byl z odstavce i bibliografie odstraněn.
-- [ ] `p22-01` (#64) **HL:** mírou
+- [x] `p22-01` (#64) **HL:** mírou
   - Vedoucí: míru?
-- [ ] `p22-02` (#64) **HL:** í oracle,
+  - Kontrola: vazba „mírou, do jaké“ nahrazena přesnější formulací „silou preference těchto výstupů“.
+- [x] `p22-02` (#64) **HL:** í oracle,
   - Vedoucí: to má český výraz ne?
+  - Kontrola: `oracle` ponechán jako zavedený termín, ale vysvětlen jako „zdroj očekávaných výsledků“; stejná formulace sjednocena v kap02 i kap03 a doplněna do `TERMINOLOGIE.md`.
 
 ## str. 24
-- [ ] `p24-01` (#64) **HL:** Konkrétnost instrukce je sama o sobě faktor: Kim et al. (Kim, 2025) v benchmarku DETAIL a Zi et al. (Zi et al., 2025) na úlohách s kódem shodně ukazují, že vyšší specificita zvyšuje úspěšnost agenta, ale přílišný detail může omezit jeho reasoning.
+- [x] `p24-01` (#64) **HL:** Konkrétnost instrukce je sama o sobě faktor: Kim et al. (Kim, 2025) v benchmarku DETAIL a Zi et al. (Zi et al., 2025) na úlohách s kódem shodně ukazují, že vyšší specificita zvyšuje úspěšnost agenta, ale přílišný detail může omezit jeho reasoning.
   - Vedoucí: Jen zase připomenu tu strukturu věty
-- [ ] `p24-02` (#64) **HL:** Chování modelu lze tedy ovlivnit přímým vynucením i aktivací latentních znalostí; která z cest je v konkrétním případě účinnější, nelze rozhodnout předem.
+  - Kontrola: dvojtečková konstrukce nahrazena přímým claimem o míře konkrétnosti instrukce; citace zůstaly u konkrétních studií.
+- [x] `p24-02` (#64) **HL:** Chování modelu lze tedy ovlivnit přímým vynucením i aktivací latentních znalostí; která z cest je v konkrétním případě účinnější, nelze rozhodnout předem.
   - Vedoucí: Lze tuto větu formulovat jinak?
-- [ ] `p24-03` (#64) **HL:** ač hlavní páka chování
+  - Kontrola: věta převedena na kratší výklad bez dvojtečky a bez abstraktního „aktivace latentních znalostí“.
+- [x] `p24-03` (#64) **HL:** ač hlavní páka chování
   - Vedoucí: To je divná vsuvka
+  - Kontrola: vsuvka odstraněna; věta ponechává jen claim, že návrh instrukcí nemá ustanovený systematický postup.
 
 ## str. 25 — Případ a jeho prostředí
 - [ ] `p25-01` (#65) **HL:** Předchozí kapitoly ukázaly potřebu vícerozměrného hodnocení agenta a roli instrukcí jako nezávislé proměnné. Tato kapitola na nich staví metodiku.
