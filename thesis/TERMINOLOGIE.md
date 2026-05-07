@@ -33,6 +33,25 @@ Kanonické pojmy pro konzistentní psani a pripravu na obhajobu.
 - "kvalita kodu (Q5--Q8)"
 Pri dalsich vyskytech ve stejne kapitole staci jen kod.
 
+### Klasifikace metrik
+
+Tri ortogonalni osy:
+
+1. **Zpusob mereni** — `deterministicka` (skript, regex, log parsing, staticka analyza) vs `judge-based` (LLM judge, GLM-5)
+2. **Role v hodnoceni** — `exit kriterium` / `pass/fail kriterium` (ma prah uspesnosti) vs `deskriptivni indikator` (zadny prah, hodnotu jen zaznamenavame)
+3. **Kategorie (bucket)** — `procesni (P)` vs `produktove (Q)` vs `zdrojove (E)`
+
+#### Pravidla pouziti
+
+- `deterministicka metrika` = jen zpusob mereni; NIKDY jako synonymum pro "kriterium s pass/fail prahem"
+- `binarni pass/fail kriterium` / `procesni a produktove kriterium s exit prahem` = role v hodnoceni; preferovat per-metric vycet pokud mozno
+- `deskriptivni indikator` = metrika bez exit prahu; v teto praci sem patri **cely E bucket** (E1, E2, E3) — pass/fail soud o behu se opira jen o P + Q
+- judge-based metrika v pass/fail soudu existuje (Q4, Q8 maji prahy) ale je odlisena od deterministickych; nemichat „deterministicka" a „pass/fail" do jednoho slova
+
+#### E3 specificky
+
+E3 (pocet kompakci kontextu) je **deskriptivni indikator stability runtime**, ne pass/fail kriterium. Cil 0 nema v teto praci roli exit prahu — je to kontextovy fakt, ze kontext zustal celistvy. E bucket je tim homogenne deskriptivni (E1, E2, E3 vsechny bez prahu).
+
 ## Instrukce a agent
 
 | Pojem | Definice | Poznamka |
@@ -117,3 +136,6 @@ DSR (pristup)          --> CO delame (navrhujeme metriky + postup, evaluujeme)
 | experiment (samostatne) | Nejednoznacne | pripadova studie (celek), experimentalni beh (jednotlivy) |
 | pilotni iterace (pro fazi) | Matouci — iterace je jeden cyklus | pilotni faze |
 | feasibility demonstrace | Hybridni anglicismus | demonstrace proveditelnosti |
+| „X z N deterministickych kriterii" | Slovo „deterministickych" je nadbytecne nebo zavadejici (mate zpusob mereni a roli v hodnoceni) | per-metric vycet, nebo „X binarnich pass/fail kriterii" |
+| „kompakce jako kriterium" / „cil E3 = 0" | E3 je deskriptivni indikator stability runtime, ne pass/fail kriterium; cil 0 nema v teto praci roli exit prahu | „E3 = 0 potvrzuje, ze kontext zustal celistvy" |
+| „deterministicka kriteria" jako synonymum pass/fail | Mate zpusob mereni (det vs judge) a roli v hodnoceni (exit vs deskriptivni) | „pass/fail kriteria" / „kriteria s exit prahem" |
