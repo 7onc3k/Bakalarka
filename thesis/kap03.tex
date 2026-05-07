@@ -8,10 +8,12 @@ staví metodiku.
 Sekce~\ref{sec:vyzkumny-pristup} zdůvodňuje volbu případové studie
 jako výzkumné strategie, představuje zvolený projekt, fáze studie
 (pilot a~ablace) a~strukturu iterativního cyklu.
+Sekce~\ref{sec:fixni-promenne} popisuje proměnné držené fixní mezi
+běhy (model, harness, prostředí, system prompt, specifikaci).
 Sekce~\ref{sec:sada-metrik} definuje sadu 19~metrik ve třech
 kategoriích (proces, produkt, zdroje).
-Sekce~\ref{sec:experimentalni-design} popisuje operační detail:
-fixní proměnné, záznam běhu a~diagnostickou proceduru.
+Sekce~\ref{sec:procedura-behu} popisuje proceduru jednoho běhu:
+záznam, vyhodnocení a~diagnostickou úpravu instrukcí.
 Sekce~\ref{sec:prehledova-tabulka} shrnuje metriky tabulkou
 a~sekce~\ref{sec:omezeni-validita} diskutuje hrozby validity.
 
@@ -334,7 +336,81 @@ popisuje sekce~\ref{sec:diagnostika-uprava}.
 \FloatBarrier
 
 %% ==========================================================================
-%% 3.2 Sada metrik
+%% 3.2 Fixní proměnné
+%% ==========================================================================
+
+\section{Fixní proměnné}
+\label{sec:fixni-promenne}
+
+Aby bylo možné měřit vliv instrukcí, musí být všechno ostatní
+co nejstabilnější. Hlavní měněnou proměnnou mezi běhy je obsah
+souboru \texttt{AGENTS.md}, tedy procedurálních instrukcí, které
+definují pracovní postup, omezení a~quality gates. Tento design
+negarantuje dokonalou izolaci všech vlivů; jeho cílem je omezit
+zjevné vedlejší vstupy a~udělat jejich případný vliv auditovatelný.
+Na rozdíl od generických context files,
+které typicky popisují adresářovou strukturu a~build
+příkazy~\cite{gloaguen2025agentsmd}, jde o~fokusované instrukce
+s~konkrétními procedurami~\cite{skillsbench2025}.
+
+Fixní proměnné jsou:
+
+\textbf{Prázdné GitHub repo} obsahuje pouze \texttt{AGENTS.md}
+a~konfiguraci agenta. Žádný existující kód, testy ani
+\texttt{package.json}. Agent musí inicializovat projekt
+a~zvolit strukturu sám.
+
+\textbf{Specifikace projektu} (popsaná v~sekci~\ref{sec:konstrukce-specifikace})
+zůstává napříč všemi běhy beze změny a~je dodávána agentovi
+v~GitHub Issue~\#1 jako hlavní věcný vstup vedle instrukcí.
+
+\textbf{Model MiniMax-M2.5} byl zvolen jako model schopný autonomně
+dokončit zadaný úkol. Cílem práce je vyhodnotit sadu metrik
+a~iterativní postup, ne srovnávat výkon modelů; volba konkrétního
+modelu je v~tomto ohledu sekundární. Jako judge pro LLM-as-judge
+metriky (sekce~\ref{sec:llm-as-judge-aplikace}) používáme GLM-5
+(Zhipu AI), záměrně z~jiné modelové rodiny než agent: model má
+tendenci hodnotit výstupy svého vlastního druhu lépe, i~když jsou
+objektivně slabší (self-preference bias~\cite{panickssery2024}),
+a~volba judge z~jiné rodiny tento bias snižuje~\cite{verga2024poll}.
+Teplota modelu nebyla mezi běhy explicitně nastavena. Agent běžel
+s~výchozí konfigurací poskytovatele. Dopad této volby na variabilitu
+výsledků diskutuje sekce~\ref{sec:limity-vysledky}.
+
+\textbf{Běhové prostředí (Docker container)} zajišťuje, že agent
+nemá přístup ke globální konfiguraci nástroje, MCP serverům ani
+rozšířením nainstalovaným na hostitelském systému. Izolace tím
+významně omezuje vliv vedlejších vstupů z~prostředí, ale
+nevylučuje všechny zdroje variability. Sdílený
+autentizační svazek zajišťuje konzistentní přístup k~API napříč
+běhy.
+
+\textbf{Harness OpenCode} je CLI nástroj, který orchestruje běh
+agenta: spravuje session, zprostředkovává volání modelu, zpřístupňuje
+nástroje (čtení a~zápis souborů, shell, vyhledávání) a~zaznamenává
+transcript. Harness sám není měřeným chováním; měříme to, co agent
+přes něj udělá. Verze nástroje je pinovaná v~Docker image, konfigurace
+agenta (povolené nástroje, MCP servery) je součástí auditovatelného
+balíku v~repozitáři práce. Volba OpenCode je dána open-source
+licencí (umožňuje pinování verze a~záznam interní telemetrie),
+strojově čitelným exportem session a~přístupem do interní databáze,
+ze které čerpá metrika \acs{E3} (počet kompakcí kontextu).
+Vlastnosti harness, které ovlivňují měření, jsou diskutovány
+u~jednotlivých metrik: tichý retry po selhání API
+(sekce~\ref{sec:limity-vysledky}) a~automatická kompakce kontextu
+(metrika \acs{E3}).
+
+\textbf{System prompt agenta} (\texttt{build.md}) nahrazuje výchozí
+system prompt nástroje OpenCode, jehož instrukce o~verzování
+konfliktovaly s~procesními požadavky případové studie. Vlastní system prompt
+obsahuje pouze obecné kódové konvence (styl, bezpečnost, zákaz
+komentářů) a~odkaz na \texttt{AGENTS.md}. Veškeré procesní instrukce
+jsou výhradně v~\texttt{AGENTS.md}, aby bylo možné změny procesního
+chování přisuzovat této vrstvě obhajitelněji než při jejich
+rozptýlení mezi více vstupů.
+
+%% ==========================================================================
+%% 3.3 Sada metrik
 %% ==========================================================================
 
 \section{Sada metrik}
@@ -343,9 +419,9 @@ popisuje sekce~\ref{sec:diagnostika-uprava}.
 Každý experimentální běh probíhá tak, že agent dostane prázdné
 GitHub repo, specifikaci v~Issue~\#1 a~instrukce v~\texttt{AGENTS.md},
 a~autonomně implementuje zadaný projekt. Výstup jednoho běhu (kód,
-testy, git historie) měříme sadou 19~metrik. Postup běhu
-a~experimentální design popisuje
-sekce~\ref{sec:experimentalni-design}.
+testy, git historie) měříme sadou 19~metrik. Proceduru jednoho běhu
+(záznam, vyhodnocení a~diagnostickou úpravu instrukcí) popisuje
+sekce~\ref{sec:procedura-behu}.
 
 Sada metrik pokrývá tři otázky: jak agent pracoval, co vyrobil
 a~za jakou cenu. Tyto tři otázky odpovídají taxonomii proces /
@@ -647,13 +723,9 @@ Pět metrik (\acs{P6}, \acs{P7}, \acs{P8}, \acs{Q4}, \acs{Q8}) hodnotí vlastnos
 automatizovaným nástrojem. Pro jejich hodnocení používáme metodu
 LLM-as-judge (sekce~\ref{sec:llm-as-judge}).
 
-\textbf{Volba modelu.} Jako judge používáme GLM-5 (Zhipu AI).
-Agentní běhy provádí model MiniMax-M2.5; judge je tedy z~jiné modelové
-rodiny. Důvod: model má tendenci hodnotit výstupy svého vlastního
-druhu lépe, i~když jsou objektivně slabší
-(self-preference bias~\cite{panickssery2024}). Volba judge
-z~jiné modelové rodiny než agent tento bias
-snižuje~\cite{verga2024poll}.
+\textbf{Volba modelu.} Jako judge používáme GLM-5 (Zhipu AI),
+záměrně z~jiné modelové rodiny než agent
+(zdůvodnění v~sekci~\ref{sec:fixni-promenne}).
 
 \textbf{Škála.} Hodnocení probíhá na škále 1--3 per dimenze:
 1~=~nevyhovující, 2~=~přijatelné, 3~=~dobré.
@@ -677,86 +749,17 @@ metrik proto interpretujeme jako podpůrné judge-based indikátory a~ne
 jako hlavní důkazní osu případové studie.
 
 %% ==========================================================================
-%% 3.3 Experimentální design
+%% 3.4 Procedura běhu
 %% ==========================================================================
 
-\section{Experimentální design}
-\label{sec:experimentalni-design}
+\section{Procedura běhu}
+\label{sec:procedura-behu}
 
-Sekce~\ref{sec:vyzkumny-pristup} představila výzkumnou strategii,
-zvolený projekt, fáze případové studie a~strukturu iterativního
-cyklu. Tato sekce navazuje operačním detailem: jaké proměnné
-držíme fixní mezi běhy (sekce~\ref{sec:fixni-promenne}), jak jeden
-běh zaznamenáváme a~vyhodnocujeme
-(sekce~\ref{sec:zaznam-bezhu}) a~jakou procedurou diagnostikujeme
-a~upravujeme instrukce (sekce~\ref{sec:diagnostika-uprava}).
-
-\subsection{Fixní proměnné}
-\label{sec:fixni-promenne}
-
-Aby bylo možné měřit vliv instrukcí, musí být všechno ostatní
-co nejstabilnější. Hlavní měněnou proměnnou mezi běhy je obsah
-souboru \texttt{AGENTS.md}, tedy procedurálních instrukcí, které
-definují pracovní postup, omezení a~quality gates. Tento design
-negarantuje dokonalou izolaci všech vlivů; jeho cílem je omezit
-zjevné vedlejší vstupy a~udělat jejich případný vliv auditovatelný.
-Na rozdíl od generických context files,
-které typicky popisují adresářovou strukturu a~build
-příkazy~\cite{gloaguen2025agentsmd}, jde o~fokusované instrukce
-s~konkrétními procedurami~\cite{skillsbench2025}.
-
-Fixní proměnné jsou:
-
-\textbf{Prázdné GitHub repo} obsahuje pouze \texttt{AGENTS.md}
-a~konfiguraci agenta. Žádný existující kód, testy ani
-\texttt{package.json}. Agent musí inicializovat projekt
-a~zvolit strukturu sám.
-
-\textbf{Specifikace projektu} (popsaná v~sekci~\ref{sec:konstrukce-specifikace})
-zůstává napříč všemi běhy beze změny a~je dodávána agentovi
-v~GitHub Issue~\#1 jako hlavní věcný vstup vedle instrukcí.
-
-\textbf{Model MiniMax-M2.5} byl zvolen jako model schopný autonomně
-dokončit zadaný úkol. Cílem práce je vyhodnotit sadu metrik
-a~iterativní postup, ne srovnávat výkon modelů; volba konkrétního
-modelu je v~tomto ohledu sekundární. MiniMax-M2.5 je zároveň z~jiné
-modelové rodiny než judge (GLM-5, Zhipu AI), čímž se eliminuje
-self-preference bias~(sekce~\ref{sec:llm-as-judge}).
-Teplota modelu nebyla mezi běhy explicitně nastavena. Agent běžel
-s~výchozí konfigurací poskytovatele. Dopad této volby na variabilitu
-výsledků diskutuje sekce~\ref{sec:limity-vysledky}.
-
-\textbf{Běhové prostředí (Docker container)} zajišťuje, že agent
-nemá přístup ke globální konfiguraci nástroje, MCP serverům ani
-rozšířením nainstalovaným na hostitelském systému. Izolace tím
-významně omezuje vliv vedlejších vstupů z~prostředí, ale
-nevylučuje všechny zdroje variability. Sdílený
-autentizační svazek zajišťuje konzistentní přístup k~API napříč
-běhy.
-
-\textbf{Harness OpenCode} je CLI nástroj, který orchestruje běh
-agenta: spravuje session, zprostředkovává volání modelu, zpřístupňuje
-nástroje (čtení a~zápis souborů, shell, vyhledávání) a~zaznamenává
-transcript. Harness sám není měřeným chováním; měříme to, co agent
-přes něj udělá. Verze nástroje je pinovaná v~Docker image, konfigurace
-agenta (povolené nástroje, MCP servery) je součástí auditovatelného
-balíku v~repozitáři práce. Volba OpenCode je dána open-source
-licencí (umožňuje pinování verze a~záznam interní telemetrie),
-strojově čitelným exportem session a~přístupem do interní databáze,
-ze které čerpá metrika \acs{E3} (počet kompakcí kontextu).
-Vlastnosti harness, které ovlivňují měření, jsou diskutovány
-u~jednotlivých metrik: tichý retry po selhání API
-(sekce~\ref{sec:limity-vysledky}) a~automatická kompakce kontextu
-(metrika \acs{E3}).
-
-\textbf{System prompt agenta} (\texttt{build.md}) nahrazuje výchozí
-system prompt nástroje OpenCode, jehož instrukce o~verzování
-konfliktovaly s~procesními požadavky případové studie. Vlastní system prompt
-obsahuje pouze obecné kódové konvence (styl, bezpečnost, zákaz
-komentářů) a~odkaz na \texttt{AGENTS.md}. Veškeré procesní instrukce
-jsou výhradně v~\texttt{AGENTS.md}, aby bylo možné změny procesního
-chování přisuzovat této vrstvě obhajitelněji než při jejich
-rozptýlení mezi více vstupů.
+Tato sekce popisuje proceduru jedné iterace cyklu z~obrázku~\ref{fig:iterativni-cyklus}.
+Sekce~\ref{sec:zaznam-bezhu} popisuje, jak běh agenta zaznamenáváme a~jak z~něj
+extrahujeme hodnoty metrik. Sekce~\ref{sec:diagnostika-uprava} popisuje, jak
+z~naměřených hodnot odvodíme diagnózu selhání a~konkrétní úpravu instrukcí
+pro další iteraci.
 
 \subsection{Záznam a~vyhodnocení běhu}
 \label{sec:zaznam-bezhu}
