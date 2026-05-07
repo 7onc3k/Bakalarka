@@ -74,24 +74,30 @@ Routování: #63 otevření, #64 kap02, #65 kap03, #66 kap04, #62 závěrečná 
   - Kontrola: odstavec přepsán jako souvislý argument bez zbytečného středníku.
 
 ## str. 13 — Rozsah práce
-- [ ] `p13-01` (#63) **HL:** demonstrovat
+- [x] `p13-01` (#63) **HL:** demonstrovat
   - Vedoucí: toto je ošemetné, jak změříte, že bylo demonstrováno
-- [ ] `p13-02` (#63) **HL:** naše
+  - Kontrola: aktuální cíl 2 je formulován jako „ověřit proveditelnost“; v rozsahu zůstává jen kanonická „demonstrace proveditelnosti“ jako typ závěru.
+- [x] `p13-02` (#63) **HL:** naše
   - Vedoucí: tato místo naše
+  - Kontrola: „naše práce“ nahrazeno „Tato práce“ a okolní věta přepsána do neosobního stylu.
 
 ## str. 14 — Kvalita software a její měření
-- [ ] `p14-01` (#64) **HL:** vývojáři tuto složitost
+- [x] `p14-01` (#64) **HL:** vývojáři tuto složitost
   - Vedoucí: kterou z nich?
-- [ ] `p14-02` (#64) **HL:** náklady,
+  - Kontrola: zpřesněno na „tuto kombinaci složitostí“ bez zavádění dalších pojmů.
+- [x] `p14-02` (#64) **HL:** náklady,
   - Vedoucí: Asi by se hodilo promluvit o zdrojích
+  - Kontrola: věta navázána na spotřebované zdroje a zbytečnou nákladnost řešení.
 
 ## str. 15 — Procesní kvalita
-- [ ] `p15-01` (#64) **HL:** proxy nákladů
+- [x] `p15-01` (#64) **HL:** proxy nákladů
   - Vedoucí: lze zvolit jiný pojem?
+  - Kontrola: ve shrnující větě nahrazeno za „nepřímé ukazatele spotřeby zdrojů“; technické „proxy“ zůstává jen v sekci, kde se pojem vysvětluje.
 
 ## str. 16 — Produktová kvalita
-- [ ] `p16-01` (#64) **HL:** Atomicita
+- [x] `p16-01` (#64) **HL:** Atomicita
   - Vedoucí: Je to správné slovo?
+  - Kontrola: nahrazeno formulací „malé a časté commity“, která je blíž opře o Humble & Farley / Continuous Delivery; `TERMINOLOGIE.md` říká nepoužívat „atomicita“ mimo přímé vysvětlení anglického „atomic commit“.
 - [ ] `p16-02` (#64) **HL:** maintainer
   - Vedoucí: zkuste najít lepší slovo
 

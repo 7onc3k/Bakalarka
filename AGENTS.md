@@ -89,8 +89,17 @@ K3-44b zdrojů z 3.3 do kap02, konsolidace duplicit).
 Workflow:
 - Lineárně podle `konzultace/10-linear-checklist-anotace.md`, jeden bod
   checklistu po druhém
+- Při vstupu do nové kapitoly nebo sekce nejdřív načti celý aktuální text této
+  kapitoly/sekce a teprve potom hodnoť jednotlivé anotace. Checklist říká, co
+  vedoucí označil v PDF; aktuální thesis text rozhoduje, jestli je bod ještě
+  otevřený.
 - U každého bodu nejdřív určit roli/problém sekce, pak status
   `keep` / `fix` / `rewrite` / `move` / `delete`, teprve potom edit
+- Buď proaktivní v dohledání kontextu a návrhu řešení: u každé anotace si
+  načti okolní text, vysvětli, proč je nebo není problém stále relevantní,
+  a předlož konkrétní řešení nebo navrženou formulaci. Do textu sahat až po
+  domluvě, pokud nejde o jednoznačnou technickou opravu. Nezůstávej jen
+  u hlášení „další položka je...“.
 - GH sub-issues (#63-#66) jsou tracking/commit hranice; pořadí uvnitř nich
   určuje checklist `10`, ne starý DAG ani vrstvy v `09`
 - C6 (terminologie) jako závěrečný polish pass
@@ -125,6 +134,11 @@ Globální guardraily z anotací vedoucího:
 - V metodice nepiš, jako by výsledky už byly známé. Metodika má říct, jaké
   varianty lze udělat, podle čeho se rozhoduje a jak se bude měřit; výsledkový
   pattern patří do kapitol 4 a 5.
+- Když anotace odhalí nevhodný nebo nejasný termín, neřeš jen lokální výskyt.
+  Projdi výskyty napříč thesis i v semanticky podobných větách, rozhodni
+  konzistentní termín s ohledem na kontext a zapiš ho do
+  `thesis/TERMINOLOGIE.md`, pokud má platit opakovaně. Potom uprav jen místa,
+  kde je změna skutečně potřeba.
 - Pokud anotace upozorní na globální vzorec, přidej ho sem jen tehdy, když jde
   o opakovatelný guardrail. Neodkládej kvůli tomu lineární průchod checklistem.
 

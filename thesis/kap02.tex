@@ -28,7 +28,7 @@ vlastní vrstvu složitosti, která s~podstatou úlohy přímo nesouvisí.
 že zatímco akcidentální vrstvu lze snižovat lepšími nástroji,
 esenciální zůstává a~je třeba ji systematicky zvládat.
 
-Aby vývojáři tuto složitost udrželi pod kontrolou, opírá se obor
+Aby vývojáři tuto kombinaci složitostí udrželi pod kontrolou, opírá se obor
 o~soubor zavedených praktik (testování, revize kódu, správa verzí,
 systematická diagnostika chyb), které tvoří jeho metodickou
 páteř~\cite{swebok2024}. Samotné dodržování praktik
@@ -57,8 +57,8 @@ měřitelných entit:
 \label{sec:mereni-kvality}%
 Každá entita nese jiný typ evidence o~kvalitě: dodržení procesu
 nezaručuje funkční výsledek, funkčně správný produkt může vzniknout
-i~chaotickým procesem, a~náklady, za které řešení vzniklo, jsou na
-obou předchozích nezávislé. Ucelený obraz proto vzniká až jejich
+i~chaotickým procesem a~řešení může být z~hlediska spotřebovaných
+zdrojů zbytečně nákladné. Ucelený obraz proto vzniká až jejich
 kombinací.
 
 Následující tři podsekce rozebírají každou dimenzi zvlášť: její
@@ -67,7 +67,7 @@ operacionalizuje. Hloubka zpracování se mezi nimi liší. Procesní
 stránka stojí na rodině etablovaných praktik vývoje software
 (sekce~\ref{sec:procesni-kvalita}), produktová má dnes zralý
 standardizovaný rámec (sekce~\ref{sec:produktova-kvalita})
-a~zdrojová se zachycuje převážně přes proxy nákladů, úsilí a~času
+a~zdrojová přes nepřímé ukazatele spotřeby zdrojů
 (sekce~\ref{sec:zdrojova-dimenze}).
 
 \subsection{Procesní kvalita}
@@ -93,12 +93,11 @@ Z~těchto artefaktů lze průběh práce zpětně zrekonstruovat, a~právě
 z~nich, ne z~deklarace o~tom, jaký postup se údajně dodržuje, je
 třeba procesní kvalitu měřit. Jak velký rozdíl bývá mezi tím, co
 lidé o~svém procesu říkají, a~tím, co skutečně dělají, ukázali
-\textcite{beller2019testing} v~rozsáhlé field study
-sledující 2\,443~vývojářů v~IDE po dobu 2,5~roku: polovina z~nich
-systematicky netestuje, test-driven development není rozšířený ani
-v~komunitě, která se k~němu hlásí, a~čas skutečně strávený
-testováním je výrazně nižší než ten, který si vývojáři sami
-přisuzují.
+\textcite{beller2019testing} v~rozsáhlé field study sledující
+2\,443~vývojářů v~IDE po dobu 2,5~roku. Polovina z~nich systematicky
+netestuje, test-driven development není rozšířený ani v~komunitě,
+která se k~němu hlásí, a~čas skutečně strávený testováním je výrazně
+nižší než ten, který si vývojáři sami přisuzují.
 
 \paragraph{Issue-driven vývoj a~větvení.}
 Změna v~projektu obvykle začíná \textit{issue}, tedy záznamem
@@ -116,14 +115,14 @@ implementace zapisuje. Práce na jedné změně tak zůstává izolovaná
 od ostatních, paralelní vývoj se vzájemně neruší a~code review
 může posuzovat rozsah změny ohraničeně.
 
-\paragraph{Atomicita a~konvence commitů.}
-Granulární commity, kde každá změna odpovídá jednomu logickému
+\paragraph{Malé commity a~konvence commitů.}
+Malé commity, kde každá změna odpovídá jednomu logickému
 kroku, usnadňují zpětnou analýzu chyb i~code
-review~\cite{humble2010}. Kromě atomicity se v~praxi rozšířila
+review~\cite{humble2010}. Kromě malých a~častých commitů se v~praxi rozšířila
 i~konvence formátu commit zprávy: prefix v~podobě \texttt{feat:},
 \texttt{test:} nebo \texttt{fix:} signalizuje typ změny ještě před
 přečtením celé zprávy a~zkracuje čas potřebný k~orientaci v~historii.
-Atomicita a~konzistentní formát se ukazují jako nutná podmínka toho,
+Malé commity a~konzistentní formát se ukazují jako nutná podmínka toho,
 aby commity nesly užitečnou informaci pro lidského i~automatizovaného
 čtenáře.
 
