@@ -127,7 +127,8 @@ Globální guardraily z anotací vedoucího:
 - Omez „AI dvojtečkové věty“ typu `Tvrzení: vysvětlení`. V akademické próze je
   většinou přepiš na normální větu, odrážku nebo explicitní signpost.
   Dvojtečka je v pořádku u skutečného výčtu, definice nebo záměrného
-  signpostu; nesmí nahrazovat normální návaznost vět.
+  signpostu; nesmí nahrazovat normální návaznost vět. Vedoucí tento vzorec
+  komentoval jako „Opět ten druh věty s dvojtečkou, není to hezké čtení“.
 - Sloveso „demonstrovat“ nepoužívej jako měřitelný cíl práce. Pro cíl 2 platí
   kanonicky „ověřit proveditelnost“; „demonstruje“ může zůstat jen jako popis
   toho, že případová studie něco ukazuje na jednom případu.

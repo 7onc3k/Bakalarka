@@ -108,7 +108,7 @@ Souvisejici literatura:
 | Acceptance criteria (AC) | Popisy ocekavaneho chovani v zadani, typicky ve formatu Given/When/Then | 25 AC v case study; zdroj ocekavani pro behavioral testy a metriku Q4 |
 | Spec-first TDD | TDD varianta kde expected values v testech pochazi ze specifikace, ne z pozorovani kodu | Obrana proti test oracle problemu (Mathews 2024); diskutovano v kap02 sec:procesni-kvalita |
 | Male a caste commity | Jeden commit odpovida jednomu logickemu kroku nebo zameru zmeny; zmeny se integruji casto | Blizsi Humble & Farley / Continuous Delivery nez "atomicita"; nepouzivat "atomicita" mimo prime vysvetleni anglickeho "atomic commit" |
-| Mutation testing | Sileni testovaci sady pomoci zavadeni drobnych zmen (mutantu) do kodu a sledovani kolik test odhali | Papadakis 2019; metrika Q3 |
+| Mutation testing | Hodnoceni sily testovaci sady pomoci zavadeni drobnych syntaktickych zmen do kodu a sledovani, kolik mutovanych variant programu testy odhali | Pri prvnim vysvetleni zavest "mutovane varianty programu, tzv. mutanty"; pak lze pouzivat "mutanti"; Papadakis 2019; metrika Q3 |
 | Coverage (line/branch) | Podil kodu vykonaneho testy | Sama o sobe nekoreluje silne s detekci chyb (Inozemtseva & Holmes 2014) |
 
 ## Projekt

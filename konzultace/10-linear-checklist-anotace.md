@@ -12,6 +12,27 @@ Statusy:
 
 Routování: #63 otevření, #64 kap02, #65 kap03, #66 kap04, #62 závěrečná terminologie. Systémové body S/C se řeší v kontextu stránky, ne jako nový předblok.
 
+## Cross-cutting task items
+
+- [ ] `C-opener-signposts` **Šablonové openery sekcí/kapitol**
+  - Problém: opakovaný vzor „Předchozí sekce/kapitola popsala... Tato sekce/kapitola... Následující sekce...“ působí mechanicky, pokud nenese skutečnou navigační funkci.
+  - Postup: neprovádět globální rewrite naslepo. U každého openeru nejdřív určit, zda má navigační funkci, nebo jen vycpává začátek.
+- [ ] `C-opener-kap03` **kap03 opener**
+  - Místo: `thesis/kap03.tex` opener kapitoly 3.
+  - Úkol: zkontrolovat, zda úvod metodiky nemá jen strukturální hlášení „Předchozí kapitoly... Tato kapitola... Sekce...“.
+- [ ] `C-opener-kap03-33` **kap03 sekce 3.3**
+  - Místo: `thesis/kap03.tex` sekce 3.3.
+  - Úkol: přepsat „Tato sekce popisuje...“ na věcný vstup do procedury jedné iterace, pokud navigační věta jen opakuje nadpis.
+- [ ] `C-opener-kap03-diagnostika` **kap03 diagnostika a úprava instrukcí**
+  - Místo: `thesis/kap03.tex` diagnostika a úprava instrukcí.
+  - Úkol: zkontrolovat opener „Tato sekce popisuje analytickou část iterace“ a případně ho nahradit definicí role diagnostiky v metodice.
+- [ ] `C-opener-kap03-validita` **kap03 omezení a validita**
+  - Místo: `thesis/kap03.tex` omezení a validita.
+  - Úkol: nechat věcnou větu o omezeních případové studie, ale zvážit přepis „Tato sekce pojmenovává...“.
+- [ ] `C-opener-kap05` **kap05 opener**
+  - Místo: `thesis/kap05.tex` opener kapitoly 5.
+  - Úkol: zkontrolovat, zda kapitola vyhodnocení nezačíná mechanicky „Předchozí kapitola popsala... Tato kapitola...“ místo přímé interpretace výsledků.
+
 ## Checklist
 
 ## str. 4
@@ -98,48 +119,65 @@ Routování: #63 otevření, #64 kap02, #65 kap03, #66 kap04, #62 závěrečná 
 - [x] `p16-01` (#64) **HL:** Atomicita
   - Vedoucí: Je to správné slovo?
   - Kontrola: nahrazeno formulací „malé a časté commity“, která je blíž opře o Humble & Farley / Continuous Delivery; `TERMINOLOGIE.md` říká nepoužívat „atomicita“ mimo přímé vysvětlení anglického „atomic commit“.
-- [ ] `p16-02` (#64) **HL:** maintainer
+- [x] `p16-02` (#64) **HL:** maintainer
   - Vedoucí: zkuste najít lepší slovo
+  - Kontrola: `maintainer` byl jediný výskyt v thesis; věta převedena na obecné role v množném čísle („koncoví uživatelé a zadavatelé“, „vývojáři“) bez zavádění termínu „udržovatel“.
 
 ## str. 17
-- [ ] `p17-01` (#64) **HL:** (ISO/IEC, 2023)
+- [x] `p17-01` (#64) **HL:** (ISO/IEC, 2023)
   - Vedoucí: ISO/IEC není autor ne? Do citace se píše autor a rok
-- [ ] `p17-02` (#64) **HL:** (Inozemtseva & Holmes, 2014
+  - Kontrola: text nyní odkazuje na `Standard ISO/IEC~25010:2023`, ne na ISO/IEC jako narativního autora; bibliografický záznam doplněn o plné korporátní autory a `shortauthor`.
+- [x] `p17-02` (#64) **HL:** (Inozemtseva & Holmes, 2014
   - Vedoucí: Jen připomínám problémy s citováním (Pokud v textu je již autor uvedený, pak se do závorky - citace - píše jen rok)
-- [ ] `p17-03` (#64) **HL:** drobné změny (mutanty),
+  - Kontrola: věta převedena na tematický tvar „Empirická studie...“ s parentetickou citací na hranici claimu; jména autorů se v textu neopakují.
+- [x] `p17-03` (#64) **HL:** drobné změny (mutanty),
   - Vedoucí: Nejsem si jistý, jestli se opravdu v češtině používá mutanty
+  - Kontrola: termín je v českém mutation-testing úzu obhajitelný; první výskyt zpřesněn jako „mutované varianty programu, tzv. mutanty“ a `TERMINOLOGIE.md` doplněna.
 
 ## str. 18 — Zdrojová dimenze
-- [ ] `p18-01` (#64) **HL:** et al. (Beller et al., 2016)
+- [x] `p18-01` (#64) **HL:** et al. (Beller et al., 2016)
   - Vedoucí: zde také
-- [ ] `p18-02` (#64) **HL:** procesního úhlu, kde je relevantní samotný fakt, že review proběhlo, a jeho navázání na issue
+  - Kontrola: narativní citace převedena na `\textcite{beller2016}`, takže autoři zůstávají ve větě a závorka nese jen rok.
+- [x] `p18-02` (#64) **HL:** procesního úhlu, kde je relevantní samotný fakt, že review proběhlo, a jeho navázání na issue
   - Vedoucí: Tahle věta je zvláštně formulovaná
+  - Kontrola: odstavec přepsán tak, aby jasně oddělil procesní roli review od produktové role připomínek; odstraněny dvojtečkové konstrukce a navazující narativní citace McIntosh et al. převedena na `\textcite`.
 
 ## str. 19 — Základní pojmy
-- [ ] `p19-01` (#64) **HL:** Cost models
+- [x] `p19-01` (#64) **HL:** Cost models
   - Vedoucí: Český výraz?
-- [ ] `p19-02` (#64) **HL:** chybu
+  - Kontrola: přeloženo jako „modely odhadu pracnosti“; zároveň sjednoceno `proxy` na „nepřímé ukazatele“.
+- [x] `p19-02` (#64) **HL:** chybu
   - Vedoucí: ne chybu, ale chybovost ne?
-- [ ] `p19-03` (#64) **HL:** wall-clock
+  - Kontrola: změněno na „vysokou chybovost“.
+- [x] `p19-03` (#64) **HL:** wall-clock
   - Vedoucí: lze toto také říci jinak?
-- [ ] `p19-04` (#64) **HL:** Předchozí sekce popsala kvalitu software v tradičním vývoji. AI coding agenti tento kontext mění: kód nepíše člověk, ale autonomní systém řízený instrukcemi
+  - Kontrola: nahrazeno českým „reálný čas běhu“.
+- [x] `p19-04` (#64) **HL:** Předchozí sekce popsala kvalitu software v tradičním vývoji. AI coding agenti tento kontext mění: kód nepíše člověk, ale autonomní systém řízený instrukcemi
   - Vedoucí: Tento styl začátku odstavce máte skoro všude:
-- [ ] `p19-05` (#64) **HL:** Tři dimenze
+  - Kontrola: začátek sekce přepsán jako věcný bridge k agentům bez šablonového „předchozí sekce popsala“.
+- [x] `p19-05` (#64) **HL:** Tři dimenze
   - Vedoucí: Na konci předchozí "sekce" (kapitoly spíš ne?) ovšem již změnu u agentů popisujete, tak proč tady říkáte, že se to mění?
-- [ ] `p19-06` (#64) **HL:** Samotný LLM je pasivní:
+  - Kontrola: formulace změněna tak, že tři dimenze zůstávají relevantní, ale mění se mechanismus jejich vzniku; nejde o opakování předchozí sekce.
+- [x] `p19-06` (#64) **HL:** Samotný LLM je pasivní:
   - Vedoucí: Opět ten druh věty s dvojtečkou, není to hezké čtení
+  - Kontrola: dvojtečka odstraněna rozdělením na dvě věty.
 
 ## str. 20 — Jak agenti mění softwarové inženýrství
-- [ ] `p20-01` (#64) **HL:** u SWE-agent
+- [x] `p20-01` (#64) **HL:** u SWE-agent
   - Vedoucí: Tady by bylo dobré skloňovat nebo přidat nějaké slovo, aby to působilo jasněji
-- [ ] `p20-02` (#64) **HL:** sekce.
+  - Kontrola: změněno na „v open-source nástroji SWE-agent“.
+- [x] `p20-02` (#64) **HL:** sekce.
   - Vedoucí: kapitola
-- [ ] `p20-03` (#64) **HL:** Tato práce se zaměřuje na fáze generování kódu a testů, ke kterým je dnes k dispozici nejvíce empirických studií agentního chování.
+  - Kontrola: odkaz změněn na „následující podkapitola“.
+- [x] `p20-03` (#64) **HL:** Tato práce se zaměřuje na fáze generování kódu a testů, ke kterým je dnes k dispozici nejvíce empirických studií agentního chování.
   - Vedoucí: Nemluvte zde o zaměření práce, mluví o ní v odstavci výše a je to tedy tady zbytečně.
-- [ ] `p20-04` (#64) **HL:** Tento posun zároveň přináší typická selhání, která se v každé dimenzi projevují jinak. Jejich společným pozadím jsou omezení, která agent dědí z LLM: omezené kontextové okno, absence implicitní znalosti projektu a pravděpodobnostní povaha výstupu.
+  - Kontrola: věta o zaměření práce odstraněna; podkapitola jde rovnou k omezením a selháním.
+- [x] `p20-04` (#64) **HL:** Tento posun zároveň přináší typická selhání, která se v každé dimenzi projevují jinak. Jejich společným pozadím jsou omezení, která agent dědí z LLM: omezené kontextové okno, absence implicitní znalosti projektu a pravděpodobnostní povaha výstupu.
   - Vedoucí: Tyto AI structured věty mě vytáčí
-- [ ] `p20-05` (#64) **HL:** code smells,
+  - Kontrola: AI-structured věta rozdělena do kratšího výkladu bez dvojtečkové konstrukce.
+- [x] `p20-05` (#64) **HL:** code smells,
   - Vedoucí: Hezké, ale musíte vysvětlit
+  - Kontrola: doplněno vysvětlení „signálů špatné vnitřní struktury kódu, duplikací a strukturálních problémů“.
 
 ## str. 22 — Instrukce jako nezávislá proměnná
 - [ ] `p22-01` (#64) **HL:** mírou
