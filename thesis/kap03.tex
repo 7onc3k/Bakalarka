@@ -5,33 +5,33 @@ Předchozí kapitoly ukázaly potřebu vícerozměrného hodnocení agenta
 a~roli instrukcí jako nezávislé proměnné. Tato kapitola na nich
 staví metodiku.
 
-Sekce~\ref{sec:vyzkumny-pristup} zdůvodňuje volbu případové studie
-jako výzkumné strategie, představuje zvolený projekt, fáze studie
-(pilot a~ablace) a~strukturu iterativního cyklu.
-Sekce~\ref{sec:fixni-promenne} popisuje proměnné držené fixní mezi
-běhy (model, harness, prostředí, system prompt, specifikaci).
-Sekce~\ref{sec:sada-metrik} definuje sadu 19~metrik ve třech
-kategoriích (proces, produkt, zdroje).
-Sekce~\ref{sec:procedura-behu} popisuje proceduru jednoho běhu:
-záznam, vyhodnocení a~diagnostickou úpravu instrukcí.
-Sekce~\ref{sec:prehledova-tabulka} shrnuje metriky tabulkou
-a~sekce~\ref{sec:omezeni-validita} diskutuje hrozby validity.
+Sekce~\ref{sec:vyzkumny-pristup} představuje návrh studie:
+strategii a~fáze, případ a~jednotky analýzy, fixní proměnné mezi
+běhy. Sekce~\ref{sec:sada-metrik} definuje sadu 19~metrik
+(proces, produkt, zdroje) — operacionalizaci cíle~1 této práce.
+Sekce~\ref{sec:procedura-behu} popisuje proceduru jedné iterace:
+iterativní cyklus, záznam a~vyhodnocení běhu, diagnostiku
+a~úpravu instrukcí. Sekce~\ref{sec:prehledova-tabulka} shrnuje
+metriky tabulkou a~sekce~\ref{sec:omezeni-validita} diskutuje
+hrozby validity.
 
 %% ==========================================================================
-%% 3.1 Výzkumný přístup
+%% 3.1 Návrh studie
 %% ==========================================================================
 
-\section{Výzkumný přístup}
+\section{Návrh studie}
 \label{sec:vyzkumny-pristup}
 
-Tato sekce postupně odpovídá na tři otázky: jakou výzkumnou
-strategii volíme a~proč
-(sekce~\ref{sec:volba-strategie}), na jakém případě strategii
-ověřujeme (sekce~\ref{sec:vyber-projektu}) a~jak vypadá iterativní
-cyklus, který v~rámci případu opakujeme
-(sekce~\ref{sec:iterativni-cyklus}).
+Návrh studie postupně odpovídá na tři otázky: jakou strategii
+volíme a~jak ji členíme do fází
+(sekce~\ref{sec:volba-strategie}), na jakém případě a~jakých
+jednotkách analýzy strategii ověřujeme
+(sekce~\ref{sec:vyber-projektu}) a~jaké proměnné mezi běhy držíme
+fixní (sekce~\ref{sec:fixni-promenne}). Strukturu sleduje konvence
+case study reportingu pro empirický software engineering
+výzkum~\cite{runeson2009,yin2018}.
 
-\subsection{Volba výzkumné strategie}
+\subsection{Strategie, cíle a~fáze}
 \label{sec:volba-strategie}
 
 Z~tří cílů formulovaných v~kapitole~\ref{kap:vymezeni} plynou
@@ -64,9 +64,61 @@ Všechny běhy vycházejí ze stejné specifikace projektu, liší se
 verzí instrukcí, výslednou git historií a~naměřenými hodnotami
 metrik.
 
-\subsection{Případ a~jeho prostředí}
+Touto volbou se práce vědomě staví mimo benchmark
+paradigma~\cite{swebench2024}, které srovnává mnoho modelů na
+mnoha úlohách s~agregovanými skóre. Cílem této studie není rank
+modelů, ale podrobné porozumění tomu, jak iterativní úpravy
+instrukcí mění chování jednoho agenta na jednom projektu; to je
+úloha pro case study, ne pro benchmark.
+
+\paragraph{Pilotní fáze.}
+\phantomsection\label{sec:pilotni-iterace}%
+Případová studie postupuje ve dvou fázích. Pilotní fáze ověřuje
+proveditelnost cílů~1 a~2: opakovaně spouští agenta a~upravuje
+instrukce, dokud agent na zvolených kritériích nedosáhne stabilního
+zlepšení. Pilotní fáze postupuje proti exit kritériím ve sloupci
+\textit{Exit kritérium} tabulky~\ref{tab:metriky-prehled}. Tato
+kritéria představují principiální ideál: striktní 42/42
+referenčních testů, nulové lint warnings, nulové porušení složitosti.
+Sám zvolený projekt nemusí být v~tomto smyslu plně dosažitelný
+v~jediném autonomním běhu. Pro praktické řízení iterací proto
+pracujeme s~\textit{operačními prahy} (\acs{Q2}~$\geq$~37/42,
+\acs{Q3}~$\geq$~70\,\%, \acs{Q4}~$\geq$~24/25, \acs{Q5}~$\leq$~1,
+\acs{Q7}~$\leq$~1 porušení), které lépe rozlišují běhy mezi sebou
+a~odpovídají barevnému kódování souhrnné tabulky a~vizualizací
+v~kapitole~\ref{kap:vyhodnoceni}. Pilotní fázi proto vyhodnocujeme
+dvěma pohledy současně: která \textit{striktní} kritéria běh splnil
+(kapitola~\ref{kap:vysledky}, per-běh tabulky pass/fail kritérií)
+a~zda splnil operační prahy (graf~\ref{fig:variability-quality}).
+Pilotní fáze končí, když některý běh splní celý procesní checklist
+\acs{P1}--\acs{P5} a~vykáže operačně rozeznatelné zlepšení proti
+baseline; další iterace by přinášely jen drobné lokální úpravy.
+Tato definice odpovídá proveditelnosti na jednom případu,
+neimplikuje obecnou platnost prahů pro jiné agenty a~projekty.
+
+\paragraph{Ablace.}
+\phantomsection\label{sec:komparativni-variace}%
+Z~fungující sady instrukcí (výstup pilotní fáze) systematicky
+odebíráme jednotlivé složky a~měříme dopad na chování agenta:
+potřebuje agent danou část instrukcí, nebo je redundantní?
+Konkrétní variace nelze specifikovat předem; vycházejí
+z~diagnostiky pilotních běhů. Pokud se v~pilotu ukáže, že agent
+konzistentně nedodržuje určité pravidlo, ablace testuje, zda jeho
+odebrání změní i~ostatní metriky. Každá ablace se provádí ve dvou
+nezávislých bězích se stejným nastavením, aby bylo možné odlišit
+systematický efekt změny od přirozené variability nedeterministického
+modelu. I~se dvěma běhy nelze dosáhnout statistické
+průkaznosti~(sekce~\ref{sec:omezeni-validita}); výsledky proto
+interpretujeme jako indikativní, ne kauzální.
+
+\subsection{Případ a~jednotky analýzy}
 \label{sec:vyber-projektu}
 
+\textit{Případem} v~Yinově smyslu~\cite{yin2018} je projekt
+systému upomínek faktur popsaný níže. \textit{Jednotkami analýzy}
+jsou jednotlivé běhy agenta nad tímto projektem (pilotní iterace
+a~ablační varianty), z~nichž každý poskytuje vlastní data pro
+hodnocení napříč třemi dimenzemi (proces, produkt, zdroje).
 Případová studie potřebuje projekt, na kterém lze opakovaně spouštět
 agenta s~různými instrukcemi a~objektivně měřit výsledky. Projekt
 musí mít deterministickou logiku (stejný vstup vždy dá stejný
@@ -249,97 +301,7 @@ je závislou proměnnou, kterou měříme. Systém upomínek faktur slouží
 jako testovací prostředí, na~kterém chování pozorujeme; není
 předmětem zkoumání.
 
-\subsection{Fáze a~iterativní cyklus}
-\label{sec:iterativni-cyklus}
-
-Případová studie postupuje ve dvou fázích. \textit{Pilotní fáze}
-ověřuje proveditelnost cílů~1 a~2: opakovaně spouští agenta
-a~upravuje instrukce, dokud agent na zvolených kritériích nedosáhne
-stabilního zlepšení. \textit{Ablace} pak ověřuje cíl~3: na fungující
-verzi instrukcí systematicky odebírá jednotlivé složky a~měří dopad.
-Bez pilotu by ablace neměla z~čeho vycházet, bez ablace bychom
-o~redundanci složek mohli jen spekulovat.
-
-\paragraph{Pilotní fáze.}
-\phantomsection\label{sec:pilotni-iterace}%
-Pilotní fáze postupuje proti exit kritériím ve sloupci
-\textit{Exit kritérium} tabulky~\ref{tab:metriky-prehled}. Tato
-kritéria představují principiální ideál: striktní 42/42 referenčních
-testů, nulové lint warnings, nulové porušení složitosti. Sám zvolený
-projekt nemusí být v~tomto smyslu plně dosažitelný v~jediném
-autonomním běhu. Pro praktické řízení iterací
-proto pracujeme s~\textit{operačními prahy} (\acs{Q2}~$\geq$~37/42, \acs{Q3}
-$\geq$~70\,\%, \acs{Q4}~$\geq$~24/25, \acs{Q5}~$\leq$~1,
-\acs{Q7}~$\leq$~1 porušení),
-které lépe rozlišují běhy mezi sebou a~odpovídají barevnému kódování
-souhrnné tabulky a~vizualizací v~kapitole~\ref{kap:vyhodnoceni}.
-Pilotní fázi proto vyhodnocujeme dvěma pohledy současně: která
-\textit{striktní} kritéria běh splnil (kapitola~\ref{kap:vysledky},
-per-běh tabulky pass/fail kritérií) a~zda splnil operační prahy
-(graf~\ref{fig:variability-quality}). Pilotní fáze končí, když některý
-běh splní celý procesní checklist \acs{P1}--\acs{P5} a~vykáže
-operačně rozeznatelné zlepšení proti baseline; další iterace by
-přinášely jen drobné lokální úpravy. Tato definice odpovídá
-proveditelnosti na jednom případu, neimplikuje obecnou platnost
-prahů pro jiné agenty a~projekty.
-
-\paragraph{Ablace.}
-\phantomsection\label{sec:komparativni-variace}%
-Z~fungující sady instrukcí (výstup pilotní fáze) systematicky
-odebíráme jednotlivé složky a~měříme dopad na chování agenta:
-potřebuje agent danou část instrukcí, nebo je redundantní?
-Konkrétní variace nelze specifikovat předem; vycházejí z~diagnostiky
-pilotních běhů. Pokud se v~pilotu ukáže, že agent konzistentně
-nedodržuje určité pravidlo, ablace testuje, zda jeho odebrání změní
-i~ostatní metriky. Každá ablace se provádí ve dvou nezávislých
-bězích se stejným nastavením, aby bylo možné odlišit systematický
-efekt změny od přirozené variability nedeterministického modelu.
-I~se dvěma běhy nelze dosáhnout statistické
-průkaznosti~(sekce~\ref{sec:omezeni-validita}); výsledky proto
-interpretujeme jako indikativní, ne kauzální.
-
-\paragraph{Iterativní cyklus.}
-V~obou fázích je vlastní postup iterativní cyklus, protože jediná
-iterace nestačí ověřit cíl~2. Pokud má sada metrik fungovat jako
-diagnostický nástroj, musí naměřená hodnota vést k~identifikovatelné
-úpravě instrukcí a~další běh musí ukázat, zda úprava zabrala.
-Iterace má čtyři kroky: Spuštění (běh agenta), Měření (extrakce
-metrik), Diagnóza (analýza odchylek) a~Úprava (změna instrukcí).
-Cyklus iteraci opakuje, dokud nejsou splněna exit kritéria
-(obr.~\ref{fig:iterativni-cyklus}). Substantivní část iterace
-popisuje sekce~\ref{sec:diagnostika-uprava}.
-
-\begin{figure}[tbp]
-\centering
-\begin{tikzpicture}[
-    node distance=1.8cm,
-    box/.style={rectangle, draw, rounded corners=3pt,
-                minimum width=2.2cm, minimum height=0.8cm,
-                font=\small\sffamily},
-    arr/.style={->, thick}
-]
-    \node[box] (run)      {Spuštění};
-    \node[box, right=of run]     (measure) {Měření};
-    \node[box, right=of measure] (diagnose){Diagnóza};
-    \node[box, right=of diagnose](fix)     {Úprava};
-
-    \draw[arr] (run)      -- (measure);
-    \draw[arr] (measure)  -- (diagnose);
-    \draw[arr] (diagnose) -- (fix);
-    \draw[arr] (fix.south) -- ++(0,-0.5) -| (run.south)
-        node[midway, below, font=\footnotesize\sffamily]
-        {opakovat dokud exit kritéria};
-\end{tikzpicture}
-\caption{Iterativní cyklus: čtyři kroky jedné iterace a~smyčka opakování až do splnění exit kritérií.}
-\label{fig:iterativni-cyklus}
-\end{figure}
-\FloatBarrier
-
-%% ==========================================================================
-%% 3.2 Fixní proměnné
-%% ==========================================================================
-
-\section{Fixní proměnné}
+\subsection{Fixní proměnné}
 \label{sec:fixni-promenne}
 
 Aby bylo možné měřit vliv instrukcí, musí být všechno ostatní
@@ -410,7 +372,7 @@ chování přisuzovat této vrstvě obhajitelněji než při jejich
 rozptýlení mezi více vstupů.
 
 %% ==========================================================================
-%% 3.3 Sada metrik
+%% 3.2 Sada metrik
 %% ==========================================================================
 
 \section{Sada metrik}
@@ -460,6 +422,29 @@ soud o~úspěšnosti běhu opírá o~kritéria s~exit prahem v~kategoriích
 P~a~Q (binární i~judge-based); celá zdrojová skupina (\acs{E1}--\acs{E3})
 slouží jako deskriptivní kontext, žádná z~jejích metrik nemá exit
 práh.
+
+\paragraph{LLM-as-judge protokol.}
+\phantomsection\label{sec:llm-as-judge-aplikace}%
+Pět metrik (\acs{P6}, \acs{P7}, \acs{P8}, \acs{Q4}, \acs{Q8})
+hodnotí vlastnosti, které nelze spolehlivě extrahovat
+deterministickým skriptem. Pro ně používáme metodu LLM-as-judge
+(teorie v~sekci~\ref{sec:llm-as-judge}); volbu modelu GLM-5
+z~jiné modelové rodiny než agent zdůvodňuje
+sekce~\ref{sec:fixni-promenne}. Hodnocení probíhá na škále~1--3
+per dimenze (1~=~nevyhovující, 2~=~přijatelné, 3~=~dobré); jemnější
+škály (1--5, 1--10) produkují při malém počtu hodnocených artefaktů
+nižší shodu mezi hodnotiteli~\cite{zheng2023mtbench}, třístupňová
+škála je pro tento rozsah spolehlivější. Judge dostává artefakty
+agentova běhu (zdrojový kód, commit messages, issue a~PR
+descriptions) spolu s~rubrikou definující dimenze a~popis stupňů.
+Konkrétní dimenze rubriky pro každou judge-based metriku jsou
+uvedeny v~jejím definičním záznamu níže (\acs{P6}--\acs{P8}
+v~tabulce~\ref{tab:p6-p8}, \acs{Q4} v~tabulce~\ref{tab:q3-q4},
+\acs{Q8} v~tabulce~\ref{tab:q5-q8}); plné formulace rubrik
+a~promptu jsou v~repozitáři práce. Prompt je fixní napříč všemi
+běhy, aby hodnocení bylo srovnatelné mezi iteracemi. Spolehlivost
+judge-based měření a~jeho roli jako podpůrného indikátoru
+diskutuje sekce~\ref{sec:omezeni-validita}.
 
 \subsection{Procesní metriky (P1--P8)}
 \label{sec:procesni-metriky}
@@ -716,50 +701,62 @@ po celou dobu běhu. \\
 Se dvěma běhy per variaci jsou tyto hodnoty deskriptivní,
 ne inferenční.
 
-\subsection{Aplikace LLM-as-judge}
-\label{sec:llm-as-judge-aplikace}
-
-Pět metrik (\acs{P6}, \acs{P7}, \acs{P8}, \acs{Q4}, \acs{Q8}) hodnotí vlastnosti které nelze extrahovat
-automatizovaným nástrojem. Pro jejich hodnocení používáme metodu
-LLM-as-judge (sekce~\ref{sec:llm-as-judge}).
-
-\textbf{Volba modelu.} Jako judge používáme GLM-5 (Zhipu AI),
-záměrně z~jiné modelové rodiny než agent
-(zdůvodnění v~sekci~\ref{sec:fixni-promenne}).
-
-\textbf{Škála.} Hodnocení probíhá na škále 1--3 per dimenze:
-1~=~nevyhovující, 2~=~přijatelné, 3~=~dobré.
-Jemnější škály (1--5, 1--10) produkují při malém počtu hodnocených
-artefaktů nižší shodu mezi hodnotiteli~\cite{zheng2023mtbench};
-třístupňová škála je pro tento rozsah spolehlivější.
-
-\textbf{Rubrika.} Judge dostane artefakty agentova běhu (zdrojový
-kód, commit messages, issue a~PR descriptions) spolu s~rubrikou
-obsahující popis každého stupně. Dimenze per metriku jsou popsány
-při definici metrik (\acs{P6}--\acs{P8} v~sekci~\ref{sec:procesni-metriky},
-\acs{Q4} a~\acs{Q8} v~sekci~\ref{sec:produktove-metriky}). Kompletní
-formulace rubrik a~promptu je v~repozitáři práce.
-Prompt je fixní napříč
-všemi běhy, aby hodnocení bylo srovnatelné mezi iteracemi.
-
-\textbf{Interpretace výsledků.} LLM-as-judge zde neslouží jako plně
-objektivní měření, ale jako strukturované posouzení vlastností, které
-nelze spolehlivě vyhodnotit deterministickým skriptem. Výsledky těchto
-metrik proto interpretujeme jako podpůrné judge-based indikátory a~ne
-jako hlavní důkazní osu případové studie.
-
 %% ==========================================================================
-%% 3.4 Procedura běhu
+%% 3.3 Procedura jedné iterace
 %% ==========================================================================
 
-\section{Procedura běhu}
+\section{Procedura jedné iterace}
 \label{sec:procedura-behu}
 
-Tato sekce popisuje proceduru jedné iterace cyklu z~obrázku~\ref{fig:iterativni-cyklus}.
-Sekce~\ref{sec:zaznam-bezhu} popisuje, jak běh agenta zaznamenáváme a~jak z~něj
-extrahujeme hodnoty metrik. Sekce~\ref{sec:diagnostika-uprava} popisuje, jak
-z~naměřených hodnot odvodíme diagnózu selhání a~konkrétní úpravu instrukcí
-pro další iteraci.
+Tato sekce popisuje, co se v~rámci jedné iterace
+(sekce~\ref{sec:cyklus-iterace}) konkrétně provádí: jak běh agenta
+zaznamenáváme a~jak z~něj extrahujeme hodnoty metrik
+(sekce~\ref{sec:zaznam-bezhu}) a~jak z~naměřených hodnot odvodíme
+diagnózu selhání a~konkrétní úpravu instrukcí pro další iteraci
+(sekce~\ref{sec:diagnostika-uprava}).
+
+\subsection{Iterativní cyklus}
+\label{sec:cyklus-iterace}
+
+Pilotní i~ablační fáze (sekce~\ref{sec:pilotni-iterace}) realizují
+společný iterativní cyklus, protože jediná iterace nestačí ověřit
+cíl~2. Pokud má sada metrik fungovat jako diagnostický nástroj,
+musí naměřená hodnota vést k~identifikovatelné úpravě instrukcí
+a~další běh musí ukázat, zda úprava zabrala. Iterace má čtyři
+kroky: Spuštění (běh agenta), Měření (extrakce metrik), Diagnóza
+(analýza odchylek) a~Úprava (změna instrukcí). Cyklus iteraci
+opakuje, dokud nejsou splněna exit kritéria
+(obr.~\ref{fig:iterativni-cyklus}). Cyklus nepředpokládá monotónní
+zlepšování: pokud iterace vede k~regresi, další iterace vychází
+z~předchozí úspěšné verze instrukcí, ne z~regresní~\cite{peffers2008}.
+Substantivní část iterace popisuje
+sekce~\ref{sec:diagnostika-uprava}.
+
+\begin{figure}[tbp]
+\centering
+\begin{tikzpicture}[
+    node distance=1.8cm,
+    box/.style={rectangle, draw, rounded corners=3pt,
+                minimum width=2.2cm, minimum height=0.8cm,
+                font=\small\sffamily},
+    arr/.style={->, thick}
+]
+    \node[box] (run)      {Spuštění};
+    \node[box, right=of run]     (measure) {Měření};
+    \node[box, right=of measure] (diagnose){Diagnóza};
+    \node[box, right=of diagnose](fix)     {Úprava};
+
+    \draw[arr] (run)      -- (measure);
+    \draw[arr] (measure)  -- (diagnose);
+    \draw[arr] (diagnose) -- (fix);
+    \draw[arr] (fix.south) -- ++(0,-0.5) -| (run.south)
+        node[midway, below, font=\footnotesize\sffamily]
+        {opakovat dokud exit kritéria};
+\end{tikzpicture}
+\caption{Iterativní cyklus: čtyři kroky jedné iterace a~smyčka opakování až do splnění exit kritérií.}
+\label{fig:iterativni-cyklus}
+\end{figure}
+\FloatBarrier
 
 \subsection{Záznam a~vyhodnocení běhu}
 \label{sec:zaznam-bezhu}
