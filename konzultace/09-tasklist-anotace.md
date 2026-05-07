@@ -1,15 +1,47 @@
 # Tasklist — anotace vedoucího (PDF z 2026-04-27)
 
-Trackovací dokument pro průchod 119 anotací z `prace-anotace.pdf`. Číslování odpovídá PDF stranám (viz `08-anotace-vedouci.md`).
+**Audit trail** s plnými citacemi anotací. Live tracking probíhá v GitHub:
 
-**Legenda statusu:**
-- `[ ]` = open (ještě se neřešilo)
-- `[x]` = resolved (vyřešeno — uveden commit/PR)
-- `[~]` = partial (částečně, doplnit)
-- `[?]` = to discuss (rozhodnutí s vedoucím / strategická otázka)
-- `[!]` = rozpor (PR udělal opak, nutné rozhodnout)
+- **Parent issue:** [#51](https://github.com/7onc3k/Bakalarka/issues/51)
+- **PR draft:** [#52](https://github.com/7onc3k/Bakalarka/pull/52) (`review/anotace-vedouci-2026-05-07` → `dev`)
+- **Sub-issues:** mapping níže; status check-off **manuálně v issue UI**
 
-**Workflow:** každou položku po vyřešení označit `[x]` + commit hash. Když je celá sekce hotová, přesunout do "Vyřešeno" na konci.
+Tento dokument je referenční snapshot s plnými citacemi anotací. Číslování odpovídá PDF stranám (viz `08-anotace-vedouci.md`).
+
+## Sub-issues mapping
+
+| Group | Issue | Pokrývá |
+|---|---|---|
+| **Strategie** | | |
+| S1 | [#53](https://github.com/7onc3k/Bakalarka/issues/53) | Framing cíle 2 — „demonstrovat" → ? |
+| S2 | [#54](https://github.com/7onc3k/Bakalarka/issues/54) | Exit kritéria + operační prahy zdůvodnit |
+| S3 | [#55](https://github.com/7onc3k/Bakalarka/issues/55) | Anticipace výsledků v metodice kap03 |
+| S4 | [#56](https://github.com/7onc3k/Bakalarka/issues/56) | AGENTS.md figura vs. kód (rozpor) |
+| **Cross-cutting** | | |
+| C1 | [#57](https://github.com/7onc3k/Bakalarka/issues/57) | Citace formát X et al. (X et al., 2026) |
+| C2 | [#58](https://github.com/7onc3k/Bakalarka/issues/58) | 1. osoba → 3. osoba |
+| C3 | [#59](https://github.com/7onc3k/Bakalarka/issues/59) | AI dvojtečkové věty |
+| C4 | [#60](https://github.com/7onc3k/Bakalarka/issues/60) | Středníky |
+| C5 | [#61](https://github.com/7onc3k/Bakalarka/issues/61) | Forward refs v kap03 |
+| C6 | [#62](https://github.com/7onc3k/Bakalarka/issues/62) | Terminologie (19 termínů) |
+| **Lokální** | | |
+| L-Otevreni | [#63](https://github.com/7onc3k/Bakalarka/issues/63) | Abstract + Úvod (po cross-cutting) |
+| L-Kap02 | [#64](https://github.com/7onc3k/Bakalarka/issues/64) | Teoretická východiska (po cross-cutting) |
+| L-Kap03 | [#65](https://github.com/7onc3k/Bakalarka/issues/65) | Metodika — zbytek (po S2/S3/cross-cutting) |
+| L-Kap04 | [#66](https://github.com/7onc3k/Bakalarka/issues/66) | Případová studie — zbytek (po S4) |
+
+**Legenda statusu** (pro audit trail níže — live status v issues):
+- `[ ]` = open
+- `[x]` = resolved (commit/PR uveden)
+- `[~]` = partial
+- `[?]` = to discuss
+- `[!]` = rozpor
+
+**Workflow:**
+1. Lineárně po stranách PDF; cross-cutting C1 (citace) jako úvodní script pass, ostatní cestou
+2. Strategická rozhodnutí (S1–S4) blokují příslušné lokální issues — diskutovat dřív než lokální fix
+3. Status check-off v issue UI sub-issue checkbox (manuálně, realtime během sezení)
+4. Tento MD slouží jako audit trail (citace anotací, kontext); per-položka status žije v issues
 
 ---
 
@@ -289,8 +321,12 @@ Pravděpodobně FIS šablona / nelze měnit / koncepční rozdíl.
 
 ## Postupový workflow
 
-1. **Týden 1:** Vrstva 0 (S1, S2, S3, S4) — strategická diskuse + rozhodnutí
-2. **Týden 2:** Vrstva 1 cross-cutting (C1–C6) — globální průchody
-3. **Týden 3+:** Vrstva 2 per-kapitola od shora dolů (Abstract → Úvod → Kap02 → Kap03 → Kap04 → Kap05)
+Viz „Sub-issues mapping" nahoře. Pořadí práce:
 
-Cílem je projít vše do následující konzultace s tím, že většinu cross-cutting bude vyřešeno globálně, a per-kapitola položky budou cílené opravy.
+1. **Strategie (S1–S4)** — diskuse + rozhodnutí (blokují lokální issues)
+2. **C1 (citace)** — úvodní script pass přes celou bibliografii a `*.tex`
+3. **Lineárně po stranách PDF** — Abstract → Úvod → Kap02 → Kap03 → Kap04 → Kap05
+   - Ostatní cross-cutting (C2–C6) řešíme cestou per stránka
+   - Lokální issues (L-*) se uzavírají postupně, jak procházíme stránky
+
+Cílem je projít vše do následující konzultace s tím, že strategická rozhodnutí budou domluvená s vedoucím, cross-cutting passy budou jako evidence systematické práce, a lokální fixy budou postupně commitovány na branch `review/anotace-vedouci-2026-05-07`.

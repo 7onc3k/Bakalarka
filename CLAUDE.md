@@ -63,17 +63,25 @@ Rozlišuj tři režimy:
 
 Práce je teď primárně ve fázi revize a přepisu, ne jen dopisování.
 
-**Aktuální fáze (2026-04-26): cleanup pass.**
-Text je hotový a buildí se. Procházíme kapitoly sekci po sekci, hledáme
-nedostatky (nesoulad, slabé claimy, vágní formulace) a odstraňujeme
-audit trail bloky (`\begin{raw}...\end{raw}`) které nepatří do
-finálního textu. Snapshot s plnou historií je v `thesis-checkpoint/`,
-revize probíhá v `thesis/` (Overleaf-připojená).
+**Aktuální fáze (2026-05-07): review anotací vedoucího.**
+Vedoucí dodal anotovaný PDF (build 2026-04-27, 119 anotací). Text je
+hotový a buildí se. Tracking přes parent issue #51 + 14 sub-issues
+(S1–S4 strategie, C1–C6 cross-cutting, L-Otevreni / L-Kap02 / L-Kap03
+/ L-Kap04 lokální). Branch `review/anotace-vedouci-2026-05-07` → dev,
+PR #52 (draft).
 
-Při průchodu sekce: nejprve vyhodnotit jestli text dává smysl a navazuje,
-pak teprve řešit `raw` bloky. U každého raw bloku rozhodnout DELETE
-(čistá historie) / EXTRACT (obsahuje nedořešený TODO nebo nezpracovaný
-materiál) / KEEP (skutečně potřebné).
+Audit trail s plnými citacemi anotací: `konzultace/08-anotace-vedouci.md`
+a `konzultace/09-tasklist-anotace.md`. PDF: `konzultace/prace-anotace.pdf`.
+
+Workflow:
+- Status check-off **manuálně v issue UI** (uživatel chce přehled
+  bez preklikávání)
+- Lineárně po stranách PDF; cross-cutting C1 (citace) jako úvodní
+  script pass, ostatní cestou
+- Strategická rozhodnutí (S1–S4) blokují příslušné lokální issues —
+  diskutovat a rozhodnout dřív než lokální fix
+- Realtime co-editing v sezení; subagent jen na batch operace
+  (issue create, citace globální regex)
 
 Default:
 - Nejprve určuj roli sekce, až potom lešti věty.
