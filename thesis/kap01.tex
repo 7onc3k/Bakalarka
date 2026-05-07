@@ -19,7 +19,7 @@ empirické studie ale shodně ukazují, že samotný pass/fail výsledek
 pro praktickou použitelnost nestačí. \textcite{metr2026}\footnote{Jiná
 studie téže organizace než~\cite{metr2025}; zde analýza SWE-bench
 pull requestů, ne randomizovaný experiment.} doložila, že polovina
-patchů projitých automatickými testy by nebyla přijata při code
+patchů, které prošly automatickými testy, by nebyla přijata při code
 review. \textcite{li2026beyondbugfixes} na 1\,210 sloučených
 pull requestech zjistili kvalitativní nedostatky i~v~přijatém kódu.
 \textcite{ehsani2026failedprs} pak z~33~tisíc agentních
@@ -30,16 +30,15 @@ v~code review, zda je kód udržovatelný a~zda vznikl auditovatelným
 postupem. Holistický pohled, který by tyto dimenze zachytil společně,
 dosud chybí.
 
-Výsledky agenta nejsou dány jen schopnostmi modelu samotného; lze
-je ovlivnit dvěma způsoby: trénováním modelu nebo instrukcemi
-v~kontextovém okně. S~rostoucí velikostí kontextových oken
-a~zkracujícími se cykly mezi generacemi modelů se instrukce stávají
-praktičtější alternativou: jsou dostupné komukoliv, iterativně
-upravitelné a~přenositelné mezi modely. Fine-tuning naproti tomu
-vyžaduje trénovací data, výpočetní kapacitu a~investici vázanou
-na konkrétní verzi modelu. \textcite{shin2025prompt}
-ukazují, že iterativní zpřesňování instrukcí dosahuje srovnatelných
-výsledků s~fine-tuned modely na úlohách s~kódem.
+Výsledky agenta nejsou dány jen schopnostmi modelu samotného. Lze je
+ovlivnit buď trénováním modelu, nebo instrukcemi v~kontextovém okně.
+Tato práce se zaměřuje na druhou možnost. S~rostoucí velikostí
+kontextových oken a~zkracujícími se cykly mezi generacemi modelů jsou
+instrukce prakticky dostupnější než fine-tuning: lze je upravovat bez
+trénovacích dat, výpočetní kapacity a~investice vázané na konkrétní
+verzi modelu. \textcite{shin2025prompt} ukazují, že iterativní
+zpřesňování instrukcí dosahuje srovnatelných výsledků s~fine-tuned
+modely na úlohách s~kódem.
 
 Empirie o~účinnosti instrukcí je ale nejednoznačná. Lulla
 et al.~\cite{lulla2026} zjistili, že přítomnost souboru s~instrukcemi

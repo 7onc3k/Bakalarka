@@ -54,18 +54,24 @@ Routování: #63 otevření, #64 kap02, #65 kap03, #66 kap04, #62 závěrečná 
   - Kontrola: závěr úvodu doplněn o formulaci doporučení pro návrh instrukcí.
 
 ## str. 12 — Motivace
-- [ ] `p12-01` (#63) **HL:** projitých
+- [x] `p12-01` (#63) **HL:** projitých
   - Vedoucí: prošlých? Nebo jinak opsat
-- [ ] `p12-02` (#63) **HL:** (B. Li et al., 2026
+  - Kontrola: opsáno jako „patchů, které prošly automatickými testy“.
+- [x] `p12-02` (#63) **HL:** (B. Li et al., 2026
   - Vedoucí: Tady už se podruhé jméno neopakuje, pokud je součástí věty
-- [ ] `p12-03` (#63) **HL:** METR (METR, 2026
+  - Kontrola: aktuální text používá `\textcite{li2026beyondbugfixes}` bez opakování autora v závorce.
+- [x] `p12-03` (#63) **HL:** METR (METR, 2026
   - Vedoucí: V citaci se podruhé jméno neopakuje
-- [ ] `p12-04` (#63) **HL:** METR (METR, 2025
+  - Kontrola: aktuální text používá `\textcite{metr2026}` bez opakování autora v závorce.
+- [x] `p12-04` (#63) **HL:** METR (METR, 2025
   - Vedoucí: v citaci se podruhé jméno neobjevuje
-- [ ] `p12-05` (#63) **HL:** Ehsani et al. (Ehsani et al., 2026)
+  - Kontrola: aktuální text používá `\textcite{metr2025}` bez opakování autora v závorce.
+- [x] `p12-05` (#63) **HL:** Ehsani et al. (Ehsani et al., 2026)
   - Vedoucí: Už naposledy, ale evidentně to v práci máte všude, tak opravit
-- [ ] `p12-06` (#63) **HL:** o;
+  - Kontrola: aktuální text používá `\textcite{ehsani2026failedprs}` bez opakování autora v závorce.
+- [x] `p12-06` (#63) **HL:** o;
   - Vedoucí: nepoužívejte pokud není potřeba, spíše se ve větách používá ,
+  - Kontrola: odstavec přepsán jako souvislý argument bez zbytečného středníku.
 
 ## str. 13 — Rozsah práce
 - [ ] `p13-01` (#63) **HL:** demonstrovat

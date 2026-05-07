@@ -112,10 +112,13 @@ Globální guardraily z anotací vedoucího:
 - Opravuj citace typu `Autor (Autor, rok)`: když je jméno součástí věty,
   v závorce má zůstat jen rok nebo citační příkaz bez opakování jména.
 - Nepoužívej středník jako běžnou interpunkci. Pokud jen spojuje dvě věty,
-  rozděl ho na tečku nebo čárku; nech ho jen tam, kde je technicky nutný
-  v tabulce, makru, výčtu nebo kódu.
+  rozděl ho na tečku, čárku nebo větu přepiš. Nech ho jen tam, kde opravdu
+  pomáhá vztahu mezi větami nebo je technicky nutný v tabulce, makru, výčtu
+  či kódu.
 - Omez „AI dvojtečkové věty“ typu `Tvrzení: vysvětlení`. V akademické próze je
   většinou přepiš na normální větu, odrážku nebo explicitní signpost.
+  Dvojtečka je v pořádku u skutečného výčtu, definice nebo záměrného
+  signpostu; nesmí nahrazovat normální návaznost vět.
 - Sloveso „demonstrovat“ nepoužívej jako měřitelný cíl práce. Pro cíl 2 platí
   kanonicky „ověřit proveditelnost“; „demonstruje“ může zůstat jen jako popis
   toho, že případová studie něco ukazuje na jednom případu.
