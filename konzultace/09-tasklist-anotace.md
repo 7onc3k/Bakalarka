@@ -75,9 +75,9 @@ Tyto se opakují skoro v každé kapitole. Lépe je řešit jedním passem než 
 - [ ] **C1 — Citace `X et al. (X et al., 2026)` → `X et al. (2026)`** — anotace str. 12, 17, 18
   - Vedoucí to chytá opakovaně, evidentně problém v textu **i bibstylu**
   - Akce: regex přes `*.tex` + případně úprava `bibstyle`
-- [ ] **C2 — První osoba (`necháváme`, `naše`, `známe`, `myslíme`) → 3. osoba** — anotace str. 11, 13, 36
+- [ ] **C2 — První osoba (`necháváme`, `naše`, `známe`, `myslíme`) → 3. osoba** — anotace str. 4, 11, 13, 26, 36
   - Vedoucí: „nepište v 1. osobě, ale ve 3. — v abstraktu bylo totéž"
-  - Hotspots: abstrakt, úvod, kap03 sec 3.5
+  - Hotspots: abstrakt, úvod, kap03 sec 3.1.2 (str. 26 — „Zvolili jsme systém upomínek faktur" + POZN „opět"), kap03 sec 3.5
 - [ ] **C3 — AI dvojtečkové věty (`Text: vysvětlení`, `LLM je pasivní:`)** — anotace str. 19, 20, 24, 27, 31, 32
   - Vedoucí to zmiňuje ~6× a označuje za **„AI structured věty které mě vytáčí"**
   - Akce: stylistický pass kap02 + úvodní odstavce sekcí v kap03
@@ -151,6 +151,7 @@ Tyto se opakují skoro v každé kapitole. Lépe je řešit jedním passem než 
 - [ ] T8 — sec 2.2.1: `Cost models`, `wall-clock`, `chybu→chybovost` (C6)
 - [ ] T9 — sec 2.2.1 začátek odstavce („Předchozí sekce..."): **AI prose vzor** (C3) — vedoucí: „takto píše pouze AI, přepište"
 - [ ] T10 — sec 2.2.1: `sekce` vs `kapitola` — terminologická konzistence
+- [ ] T10-rozpor — sec 2.2 (str. 19): **„Tři dimenze"** — strukturální rozpor v argumentaci kap02. Anotace HL „Tři dimenze" + POZN „Na konci předchozí 'sekce' (kapitoly spíš ne?) ovšem již změnu u agentů popisujete, tak proč tady říkáte, že se to mění?" — NE jen sekce/kapitola, ale **logický rozpor**: změna u agentů byla popsána výš, zde se ale opakovaně uvádí, že „se to mění". Vyřešit přepisem návaznosti, ne pouhou opravou termínu.
 - [ ] T11 — sec 2.2.1: „Tento posun zároveň přináší... omezené kontextové okno, absence implicitní znalosti..." — **AI structured věty** (C3) („vytáčí mě")
 - [ ] T12 — sec 2.2.2: `code smells` (C6)
 - [ ] T13 — sec 2.2.2: u SWE-agent skloňování / přidat slovo
@@ -158,6 +159,7 @@ Tyto se opakují skoro v každé kapitole. Lépe je řešit jedním passem než 
 - [ ] T15 — sec 2.2.4: `mírou`→`míru`, `oracle` česky (C6)
 - [ ] T16 — sec 2.2.5 (str. 24): „Konkrétnost instrukce... shodně ukazují, ale přílišný detail..." — AI struktura (C3)
 - [ ] T17 — sec 2.2.5: „ač hlavní páka chování" — divná vsuvka
+- [ ] T18-rewrite — sec 2.2.5 (str. 24): HL „Chování modelu lze tedy ovlivnit přímým vynucením i aktivací latentních znalostí; která z cest je v konkrétním případě účinnější, nelze rozhodnout předem." + POZN vedoucího „Lze tuto větu formulovat jinak?" — přepsat (středník + AI-stylová formulace).
 
 ### Kap03 — Metodika (str. 25–36) — **48 anotací, největší hustota**
 
@@ -166,6 +168,7 @@ Tyto se opakují skoro v každé kapitole. Lépe je řešit jedním passem než 
 - [ ] K3-1 — sec 3.1 intro: pozorovat střídání `kapitoly`/`sekce` v textu — terminologická chyba
 - [ ] K3-2 — sec 3.1 intro: „Sekce 3.1 zdůvodňuje... Sekce 3.2 definuje..." — **odkazovací odstavec smazat** (str. 25)
 - [ ] K3-3 — sec 3.1.2: „Bez pilotu by ablace neměla z čeho vycházet" — divná, asi zbytečná
+- [ ] K3-3b — sec 3.1.2 (str. 26): HL „Zvolili jsme systém upomínek faktur: systém pro automatické odesílání připomínek k nezaplaceným fakturám." + POZN vedoucího „opět" (= opět 1. osoba). Cross-link na C2 (#58); přepsat na 3. osobu / impersonal.
 - [ ] K3-4 — sec 3.1.3: „proti exit kritériím" — **vysvětlit co jsou exit kritéria** (S2)
 - [ ] K3-5 — sec 3.1.3: „operační prahy (Q2 ≥ 37/42, Q3 ≥ 70%...)" — **Q kódy zaváděné dopředu** (C5, S2)
 - [ ] K3-6 — sec 3.1.3: „barevné kódování souhrnné tabulky a vizualizací v kapitole 5" — **forward ref** (C5)
@@ -214,6 +217,7 @@ Tyto se opakují skoro v každé kapitole. Lépe je řešit jedním passem než 
 - [ ] K3-42 — sec 3.3.3: kurzíva u otázky „Kdyby tento řádek chyběl..." — proč kurzívou?
 - [ ] K3-43 — sec 3.3.3: „Hranice mezi typy příčin... Roli AI asistence popisuje sekce 3.5" — **redundantní popis + forward ref** (C5)
 - [ ] K3-44 — sec 3.3.3: zdroje na „přestrukturování instrukcí má přednost" — v metodice už zbytečné
+- [ ] K3-44b — sec 3.3.3 (str. 34): HL „Přestrukturování instrukcí má přednost před jejich rozšiřováním: redundantní obsah zvyšuje inference cost (Gloaguen et al., 2026) a fokusované instrukce překonávají vyčerpávající dokumentaci (X. Li et al., 2026)." + POZN vedoucího „Tady už jsou zdroje zbytečné ne? Pokud to je teoretický základ, tak to mělo být popsáno v teorii." — **přesunout zdroje (Gloaguen, X. Li) do kap02** (teoretický základ), v metodice ponechat jen rozhodnutí bez citací.
 
 #### Sec 3.4 + 3.5 (str. 35–36)
 
