@@ -51,7 +51,7 @@ s~počtem běhů potřebným pro statistickou izolaci by byl vzhledem
 k~ceně jedné iterace (tisíce tokenů, desítky minut) nepraktický.
 Volíme proto hloubku před šířkou: jeden projekt s~detailní analýzou
 každého běhu (git historie, transcript, naměřené metriky).
-Yin~\cite{yin2018} pro tento typ výzkumu používá pojem
+\textcite{yin2018} pro tento typ výzkumu používá pojem
 \textit{analytická generalizace}: na jednom případě ukazujeme
 princip, který lze dále ověřovat na dalších případech.
 % RAW TODO: doplnit citaci Bowen et al. 2009 (feasibility study framework) — see #53 close
@@ -619,7 +619,7 @@ nákladů a~stability runtime mezi iteracemi.
 \acs{E1} & Spotřeba tokenů &
 Tři složky z~exportu session v~tisících: maximální vstup na jednom
 kroku, součet výstupních tokenů a~součet cache tokenů. Motivace:
-Gloaguen et al.~\cite{gloaguen2025agentsmd} ukazují, že context files
+\textcite{gloaguen2025agentsmd} ukazují, že context files
 zvyšují inference cost o~více než 20\,\%. \\
 \addlinespace
 \acs{E2} & Trvání běhu &
@@ -976,9 +976,9 @@ E3 & Počet kompakcí kontextu & OpenCode DB (\texttt{time\_compacting}) & --- \
 \label{sec:omezeni-validita}
 
 Případová studie nese omezení daná zvolenou metodikou. Tato sekce
-pojmenovává předem známé hrozby validity podle Runesona
-a~Hösta~\cite{runeson2009}; jejich konkrétní projevy v~datech
-diskutuje sekce~\ref{sec:limity-vysledky}.
+pojmenovává předem známé hrozby validity podle case study frameworku
+\textcite{runeson2009}; jejich konkrétní projevy v~datech diskutuje
+sekce~\ref{sec:limity-vysledky}.
 
 \textbf{Konstruktová validita} (měříme to, co chceme měřit?).
 Jednotlivé metriky vychází z~existující teorie: mutation
@@ -1015,7 +1015,7 @@ měřicí infrastruktury od agentova prostředí.
 
 \textbf{Externí validita} (lze zobecnit?). Případová studie na jednom
 projektu, jednom modelu a~jednom agentním nástroji neumožňuje
-statistickou generalizaci. Yin~\cite{yin2018} pro tento typ výzkumu
+statistickou generalizaci. \textcite{yin2018} pro tento typ výzkumu
 rozlišuje analytickou generalizaci: z~jednoho případu lze ukázat
 principy, ne statistické zákonitosti. Systém upomínek má
 deterministickou logiku a~výsledky nemusí platit pro projekty

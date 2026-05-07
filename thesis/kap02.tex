@@ -23,7 +23,7 @@ nevyhnutelně přenáší do systému, který je má modelovat. Druhá část
 přichází z~nástrojů a~technologií, kterými software stavíme:
 programovací jazyky, frameworky, build systémy a~knihovny vnášejí
 vlastní vrstvu složitosti, která s~podstatou úlohy přímo nesouvisí.
-Brooks~\cite{brooks1987} tyto dva zdroje pojmenoval jako
+\textcite{brooks1987} tyto dva zdroje pojmenoval jako
 \textit{esenciální} a~\textit{akcidentální} složitost a~argumentuje,
 že zatímco akcidentální vrstvu lze snižovat lepšími nástroji,
 esenciální zůstává a~je třeba ji systematicky zvládat.
@@ -43,7 +43,7 @@ měřením, ne jen předpokládat z~deklarace, že se nějaká praktika
 dodržuje.
 
 Měření ale nemůže stát na jediné metrice ani na jediném typu
-evidence. Fenton a~Bieman~\cite{fenton2014} rozlišují tři kategorie
+evidence. \textcite{fenton2014} rozlišují tři kategorie
 měřitelných entit:
 \begin{itemize}
     \item \textit{proces}, tedy aktivity a~postupy, kterými
@@ -76,7 +76,7 @@ a~zdrojová se zachycuje převážně přes proxy nákladů, úsilí a~času
 \label{sec:faze-zivotniho-cyklu}
 
 Procesní kvalitou se rozumí vlastnosti aktivit a~postupů, kterými
-produkt vzniká. Fenton a~Bieman~\cite{fenton2014} mezi procesní
+produkt vzniká. \textcite{fenton2014} mezi procesní
 atributy řadí zejména pracnost, trvání, shodu s~definovaným postupem
 a~stabilitu výstupu, tedy vlastnosti, které lze pozorovat na chování
 vývojáře, ne na hotovém kódu.
@@ -93,7 +93,7 @@ Z~těchto artefaktů lze průběh práce zpětně zrekonstruovat, a~právě
 z~nich, ne z~deklarace o~tom, jaký postup se údajně dodržuje, je
 třeba procesní kvalitu měřit. Jak velký rozdíl bývá mezi tím, co
 lidé o~svém procesu říkají, a~tím, co skutečně dělají, ukázali
-Beller et al.~\cite{beller2019testing} v~rozsáhlé field study
+\textcite{beller2019testing} v~rozsáhlé field study
 sledující 2\,443~vývojářů v~IDE po dobu 2,5~roku: polovina z~nich
 systematicky netestuje, test-driven development není rozšířený ani
 v~komunitě, která se k~němu hlásí, a~čas skutečně strávený
@@ -106,7 +106,7 @@ v~issue trackeru, který popisuje, co je třeba udělat a~jak poznat,
 že je úkol hotov. Issue plní dvě role současně: dává implementaci
 jasné zadání ještě předtím, než vznikne kód, a~zároveň zůstává
 trvalým záznamem, k~němuž lze později dohledat související změny.
-Velkoplošná empirická studie Bissyandé et al.~\cite{bissyande2013}
+Velkoplošná empirická studie \textcite{bissyande2013}
 na stovkách tisíc projektů na GitHubu doložila, že issue trackery
 jsou v~open source vývoji rozšířenou a~aktivně používanou součástí
 projektové infrastruktury.
@@ -137,10 +137,9 @@ požadavku, nikoli zpětnou kontrolou napsaného kódu, a~vývojář je
 nucen vyjádřit záměr ještě před tím, než ho začne realizovat.
 Z~této role plyne i~praxe, že existující testy se v~rámci
 implementace neupravují, jinak ztrácejí svou specifikační funkci.
-Meta-analýza 27~studií Rafiqueho a~Mišiće~\cite{rafique2013} ukazuje,
-že TDD má pozitivní efekt na kvalitu kódu měřenou hustotou defektů,
-přičemž efekt je výraznější v~průmyslových projektech než
-v~akademických experimentech.
+Meta-analýza 27~studií ukazuje, že TDD má pozitivní efekt na
+kvalitu kódu měřenou hustotou defektů, přičemž efekt je výraznější
+v~průmyslových projektech než v~akademických experimentech~\cite{rafique2013}.
 
 \paragraph{Code review a~traceability pull requestů.}
 Začleňování změn do hlavního kódu strukturuje code review, dnes ve
@@ -287,9 +286,9 @@ velikosti projektu a~sady korekčních faktorů, v~agilních týmech se
 používají relativní odhady (\textit{story points}) a~ukazatele
 průchodu prací (\textit{cycle time}, \textit{lead time}). Predikční
 přesnost těchto modelů je ale dlouhodobě sporná. Systematický přehled
-304~studií Jørgensena a~Shepperda~\cite{jorgensen2007review} ukazuje,
-že odhady pracnosti běžně vykazují vysokou chybu a~že strojově
-spočítané modely často neporazí lidský odhad zkušeného inženýra.
+304~studií ukazuje, že odhady pracnosti běžně vykazují vysokou chybu
+a~že strojově spočítané modely často neporazí lidský odhad zkušeného
+inženýra~\cite{jorgensen2007review}.
 Společným omezením všech těchto měřítek je navíc to, že redukují
 vícerozměrný jev (čas, úsilí, kvalita výstupu, dopad na tým) na
 jedinou osu, a~samy o~sobě nezachytí, zda je vývoj efektivní v~širším
@@ -395,7 +394,7 @@ ehsani2026failedprs}.
 Produktová stránka zůstává vymezena stejnými charakteristikami
 (viz sekce~\ref{sec:dimenze-kvality}), ale typické vzorce
 agent-generovaného kódu jsou jiné než u~lidského vývojáře.
-Li et al.~\cite{li2026beyondbugfixes} na 1210~merged agent-PR
+\textcite{li2026beyondbugfixes} na 1210~merged agent-PR
 z~reálných repozitářů zjistili, že i~přijaté patche nesou vyšší
 výskyt code smells, duplikací a~strukturálních problémů, které
 merge samotný neodhalí. Tato produktová selhání se proto v~literatuře hodnotí
@@ -406,7 +405,7 @@ a~s~hodnocením od LLM-judgů či lidských reviewerů.
 Zdrojová stránka dostává u~agentů nové proxy. Na místě člověko-hodin
 stojí spotřebované tokeny a~čas běhu na úlohu, kontextové okno
 a~rate limit vystupují jako vzácné zdroje, které ovlivňují, kolik
-úloh a~jak dlouhých agent zvládne. Zdrojová selhání pak souvisejí s~neefektivním řízením kontextu: Lindenbauer et al.~\cite{jetbrains2025complexity}
+úloh a~jak dlouhých agent zvládne. Zdrojová selhání pak souvisejí s~neefektivním řízením kontextu: \textcite{jetbrains2025complexity}
 pozorují, že jednoduché skrývání starších výstupů z~tool calls
 (\textit{observation masking}) dosáhne srovnatelné úspěšnosti
 jako jejich shrnutí pomocí LLM za polovinu nákladů.
@@ -438,8 +437,8 @@ to, co má. Neměří však, jak agent pracoval (dodržoval proces?),
 jakou strukturální kvalitu má výsledný kód (je udržovatelný?) ani za
 jakou cenu výsledku dosáhl (kolik tokenů spotřeboval?).
 Tři empirické studie zmíněné v~kapitole~\ref{kap:vymezeni}
-(METR~\cite{metr2026}, Li et al.~\cite{li2026beyondbugfixes},
-Ehsani et al.~\cite{ehsani2026failedprs}) shodně dokládají, že
+(\textcite{metr2026}, \textcite{li2026beyondbugfixes},
+\textcite{ehsani2026failedprs}) shodně dokládají, že
 pass/fail výsledek nezachycuje, zda by patch obstál v~code review,
 byl udržovatelný nebo vznikl auditovatelným postupem.
 
@@ -447,7 +446,7 @@ Existují benchmarky, které hodnocení rozšiřují nad rámec pass/fail.
 SWE-bench Pro~\cite{swebenchpro2025} přidává strukturované
 požadavky, ACE-Bench~\cite{acebench2025} testuje end-to-end vývoj
 a~FeatureBench~\cite{featurebench2026} hodnotí implementaci celých
-funkcí. Yin et al.~\cite{yin2025agents} jdou ještě dál a~hodnotí
+funkcí. \textcite{yin2025agents} jdou ještě dál a~hodnotí
 sedm agentních frameworků na třech osách (úspěšnost, efektivita
 reasoning kroků a~tokenová režie); jejich pohled na proces je ale
 omezen na trasu reasoning kroků agenta a~strukturální kvalita kódu
@@ -464,16 +463,16 @@ práce popisuje kapitola~\ref{kap:metodika}.
 Některé dimenze kvality, jako srozumitelnost commit zpráv, kvalita
 dokumentace nebo vhodnost návrhových vzorů, nelze spolehlivě hodnotit
 deterministickými nástroji. Jedním z~přístupů je využití LLM jako
-hodnotitele (\textit{LLM-as-judge}). Zheng et al.~\cite{zheng2023mtbench}
+hodnotitele (\textit{LLM-as-judge}). \textcite{zheng2023mtbench}
 ukázali, že LLM dokáže hodnotit kvalitu výstupů na úrovni
 srovnatelné s~lidskými hodnotiteli, ale identifikovali tři
 systematické biasy: \textit{position bias} (preferuje odpověď
 na určité pozici), \textit{verbosity bias} (preferuje delší
 odpovědi) a~\textit{self-enhancement bias} (preferuje vlastní
-výstupy). Panickssery et al.~\cite{panickssery2024} prokázali
+výstupy). \textcite{panickssery2024} prokázali
 korelaci mezi schopností modelu rozpoznat vlastní výstupy a~mírou,
 do jaké je preferuje, což naznačuje kauzální vztah mezi
-self-recognition a~self-preference. Verga et al.~\cite{verga2024poll}
+self-recognition a~self-preference. \textcite{verga2024poll}
 navrhli mitigaci formou panelu diverzních modelů (PoLL), který
 dosahuje lepší shody s~lidským hodnocením než jednotlivý model.
 Praktickou implikací je volba hodnotícího modelu z~odlišné modelové
@@ -485,7 +484,7 @@ nebo co určuje správný výsledek, proti kterému se test porovnává?
 U~autonomního agenta se zostřuje tím, že agent generuje
 implementaci i~testy současně. Pokud testy odvodí z~toho, jak
 se kód právě chová, jejich průchod potvrzuje jen vzájemnou
-konzistenci, ne shodu se specifikací. Mathews et al.~\cite{mathews2024}
+konzistenci, ne shodu se specifikací. \textcite{mathews2024}
 dokládají, že generátory testů zahazují právě ty testy, které
 by chybu odhalily. Až 68,1\,\% výsledných testovacích sad pak
 validuje chybné chování místo jeho odhalení. Obranou je odvozovat
@@ -514,7 +513,7 @@ pojem \textit{instrukce}, který obě tyto disciplíny zastřešuje.
 Autonomní agent nemá \textit{tacit knowledge}, tedy implicitní znalosti, které
 lidský vývojář získává zkušeností: jaké konvence tým dodržuje, proč
 je kód strukturovaný určitým způsobem nebo jaké chyby se v~projektu
-opakují. Nonaka a~Takeuchi~\cite{nonaka1995} popisují převod tacit
+opakují. \textcite{nonaka1995} popisují převod tacit
 knowledge na explicitní jako klíčový proces v~organizacích. Pro
 agenty je tento převod nutný v~plném rozsahu: veškerý kontext, který
 agent potřebuje, musí být zapsán explicitně. Hassan
@@ -538,7 +537,7 @@ upravované, což z~nich činí \enquote{living documents}, jejichž vývoj
 lze zpětně sledovat.
 
 \paragraph{Komponenty instrukcí.}
-Mao et al.~\cite{mao2025fse} analyzovali 2\,163 produkčních
+\textcite{mao2025fse} analyzovali 2\,163 produkčních
 prompt šablon a~identifikovali sedm typů komponent: Role,
 Directive, Context, Workflow, Output, Constraints a~Examples.
 Zjistili, že Role a~Directive se nejčastěji objevují na začátku
@@ -550,7 +549,7 @@ instrukce jsou efektivnější než popisná dokumentace.
 \paragraph{Empirie účinnosti.}
 Empirická evidence o~účinnosti instrukčních souborů je smíšená
 a~závisí na tom, co se měří a~jaký je obsah souboru. V~efektivitě
-běhu Lulla et al.~\cite{lulla2026} pozorují, že přítomnost
+běhu \textcite{lulla2026} pozorují, že přítomnost
 \texttt{AGENTS.md} zkracuje mediánovou dobu, kterou agent
 potřebuje na splnění úlohy, o~$28{,}6\,\%$. V~úspěšnosti řešení
 úlohy ale rozhoduje původ obsahu: LLM-generované instrukce
@@ -571,18 +570,17 @@ detail může omezit jeho reasoning. Instrukce se tak pohybují po
 ose od volné nápovědy po explicitní příkaz, přičemž optimální bod
 závisí na úloze i~modelu.
 
-Modely jsou kromě toho citlivé na samotnou formulaci. Razavi
-a~Fard~\cite{razavi2025} dokládají, že drobné změny promptu
-mohou dramaticky změnit chování modelu. Breunig et al.~\cite{breunig2025}
+Modely jsou kromě toho citlivé na samotnou formulaci. \textcite{razavi2025} dokládají, že drobné změny promptu
+mohou dramaticky změnit chování modelu. \textcite{breunig2025}
 na to navazují praktickým doporučením: když agent pravidlo ignoruje,
 nepomůže ho zopakovat, je třeba ho přeformulovat tak, aby se stalo
 součástí pracovního postupu.
 
 \paragraph{Mechanismy účinku.}
 Výzkum promptingu navíc naznačuje, že instrukce nepůsobí na chování
-modelu jedním mechanismem. Wei et al.~\cite{wei2022cot} ukazují, že
+modelu jedním mechanismem. \textcite{wei2022cot} ukazují, že
 i~krátká nápověda (``think step by step'') aktivuje reasoning, který
-se bez ní neprojeví, a~Min et al.~\cite{min2022rethinking} dokládají,
+se bez ní neprojeví, a~\textcite{min2022rethinking} dokládají,
 že demonstrace v~in-context learning působí spíš jako strukturální
 vodítka než jako přímé příkazy. Instrukce tedy nemusí působit jen
 jako explicitní příkazy: mohou také strukturovat řešení nebo

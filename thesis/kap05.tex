@@ -406,7 +406,7 @@ Literatura shrnutá v~kapitole~\ref{kap:teorie} ukazuje, že hodnocení
 AI coding agentů je stále silně orientováno na funkční výsledek.
 SWE-bench a~jemu podobné benchmarky jsou postaveny především na
 pass/fail logice. Právě proti tomuto omezení vystupují novější
-empirické práce. METR~\cite{metr2026} ukazuje, že část patchů, které
+empirické práce. \textcite{metr2026} ukazuje, že část patchů, které
 projdou testy, by nebyla přijata při code review. Li
 et al.~\cite{li2026beyondbugfixes} dokládají, že ani sloučený pull
 request negarantuje udržovatelný kód. Ehsani
@@ -434,7 +434,7 @@ nástroji než klasickému benchmarku.
 \subsection{Vliv instrukcí na chování agenta}
 
 Studie o~instrukčních souborech zatím většinou měří jejich přítomnost
-nebo absenci jako celek. Lulla et al.~\cite{lulla2026} spojují
+nebo absenci jako celek. \textcite{lulla2026} spojují
 \texttt{AGENTS.md} s~nižším mediánovým runtime, zatímco Gloaguen
 et al.~\cite{gloaguen2025agentsmd} ukazují jen marginální přínos
 generických repository-level souborů a~upozorňují na vyšší náklady.
@@ -446,9 +446,9 @@ kompatibilní: ne všechny složky \texttt{AGENTS.md} přispívají stejně.
 Nejvýraznější efekt měly v~naší studii verifikační kroky. Ablace~A
 ukázala pokles jak ve funkční korektnosti, tak v~deterministických
 metrikách kvality kódu, když byly explicitní kontroly odstraněny.
-To doplňuje pozorování Breuniga~\cite{breunig2025}, že opakování
-ignorované instrukce nepomáhá a~účinnější je její přestrukturování do
-pracovního postupu. Pilotní fáze v~našich datech ukázala stejný
+To doplňuje pozorování, že opakování ignorované instrukce nepomáhá
+a~účinnější je její přestrukturování do pracovního
+postupu~\cite{breunig2025}. Pilotní fáze v~našich datech ukázala stejný
 vzorec: obecné pravidlo nestačilo, konkrétní příkaz pomohl jen
 částečně a~stabilnější zlepšení přinesl až verifikační krok. Tento
 vývoj je konzistentní i~s~výzkumem specificity instrukcí, podle něhož
@@ -469,7 +469,7 @@ kroky vynucují měřitelné požadavky, zatímco obecnější konvence
 podporují designová rozhodnutí.
 
 Zároveň ale platí, že vliv instrukcí nelze od nedeterminismu modelu
-oddělit dokonale. Razavi a~Fard~\cite{razavi2025} upozorňují na vysokou
+oddělit dokonale. \textcite{razavi2025} upozorňují na vysokou
 citlivost modelů na drobné změny promptu a~naše pilotní i~ablační běhy
 tento problém potvrzují. Proto je třeba naše výsledky číst jako
 indikativní syntézu na úrovni případové studie: ukazují, které typy
@@ -496,7 +496,7 @@ Pět binárních procesních metrik \acs{P1}--\acs{P5}
 $\sim$1/5 (r5), přestože procesní instrukce v~těchto bězích
 zůstaly stejné. R4 přidalo dva řádky do Constraints a~procesní
 compliance se zhoršila, přestože žádná změna přímo necílila na
-pracovní postup. Razavi a~Fard~\cite{razavi2025} tento jev popisují jako
+pracovní postup. \textcite{razavi2025} tento jev popisují jako
 prompt sensitivity. Alternativním vysvětlením je efekt kumulace
 instrukcí: s~rostoucím počtem instrukcí klesá pravděpodobnost
 dodržení všech současně. Instrukce rostly z~r1 (baseline) do r5.
@@ -630,7 +630,7 @@ s~okamžitou zpětnou vazbou (\texttt{npx eslint}, \texttt{tsc
 pracovního postupu (sekce~\ref{sec:ablace-a}). Ablace potvrdila
 komplementární stranu: odstranění verifikačních kroků (ablace~A)
 vedlo k~poklesu \ac{Q2} z~41/42 na 35--37/42 a~nárůstu \ac{Q5}
-z~1 na 3--4 varování. Breunig~\cite{breunig2025} formuloval stejný
+z~1 na 3--4 varování. \textcite{breunig2025} formuloval stejný
 princip: když agent instrukci ignoruje, nepomůže ji zopakovat;
 je třeba ji převést na konkrétní akci. Spektrum operacionalizace
 (obrázek~\ref{fig:operacionalizace}) popisuje, po jaké ose se
