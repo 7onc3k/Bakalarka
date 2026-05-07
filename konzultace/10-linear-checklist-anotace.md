@@ -202,10 +202,11 @@ Routování: #63 otevření, #64 kap02, #65 kap03, #66 kap04, #62 závěrečná 
   - Kontrola: vsuvka odstraněna; věta ponechává jen claim, že návrh instrukcí nemá ustanovený systematický postup.
 
 ## str. 25 — Případ a jeho prostředí
-- [ ] `p25-01` (#65) **HL:** Předchozí kapitoly ukázaly potřebu vícerozměrného hodnocení agenta a roli instrukcí jako nezávislé proměnné. Tato kapitola na nich staví metodiku.
+- [x] `p25-01` (#65) **HL:** Předchozí kapitoly ukázaly potřebu vícerozměrného hodnocení agenta a roli instrukcí jako nezávislé proměnné. Tato kapitola na nich staví metodiku.
   - Vedoucí: Tady už používáte kapitoly to je dobře, ale hned pod tím opět sekce
-- [ ] `p25-02` (#65) **HL:** Sekce 3.1 zdůvodňuje volbu případové studie jako výzkumné strategie, představuje zvolený projekt, fáze studie (pilot a ablace) a strukturu iterativního cyklu. Sekce 3.2 definuje sadu 19 metrik ve třech kategoriích (proces, produkt, efektivita). Sekce 3.3 po...
+- [x] `p25-02` (#65) **HL:** Sekce 3.1 zdůvodňuje volbu případové studie jako výzkumné strategie, představuje zvolený projekt, fáze studie (pilot a ablace) a strukturu iterativního cyklu. Sekce 3.2 definuje sadu 19 metrik ve třech kategoriích (proces, produkt, efektivita). Sekce 3.3 po...
   - Vedoucí: Asi tento odstavec nepotřebuji. Obecně těch odkazovacích odstavců máte zbytečně moc, zkuste je odstranit
+  - Kontrola: roadmap odstavec „Sekce 3.1... Sekce 3.2...“, krátký náhradní opener i roadmap úvod sekce `Výzkumný přístup` odstraněny; kapitola jde rovnou k volbě výzkumné strategie.
 
 ## str. 26 — Fáze a iterativní cyklus
 - [ ] `p26-01` (#65) **HL:** Zvolili jsme systém upomínek faktur: systém pro automatické odesílání připomínek k nezapla- ceným fakturám.

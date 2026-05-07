@@ -1,37 +1,14 @@
 \chapter{Metodika}
 \label{kap:metodika}
 
-Předchozí kapitoly ukázaly potřebu vícerozměrného hodnocení agenta
-a~roli instrukcí jako nezávislé proměnné. Tato kapitola na nich
-staví metodiku.
-
-Sekce~\ref{sec:vyzkumny-pristup} představuje návrh studie:
-strategii a~fáze, případ a~jednotky analýzy, fixní proměnné mezi
-běhy. Sekce~\ref{sec:sada-metrik} definuje sadu 19~metrik
-(proces, produkt, zdroje) — operacionalizaci cíle~1 této práce.
-Sekce~\ref{sec:procedura-behu} popisuje proceduru jedné iterace:
-iterativní cyklus, záznam a~vyhodnocení běhu, diagnostiku
-a~úpravu instrukcí. Sekce~\ref{sec:prehledova-tabulka} shrnuje
-metriky tabulkou a~sekce~\ref{sec:omezeni-validita} diskutuje
-hrozby validity.
-
 %% ==========================================================================
 %% 3.1 Návrh studie
 %% ==========================================================================
 
-\section{Návrh studie}
+\section{Výzkumný přístup}
 \label{sec:vyzkumny-pristup}
 
-Návrh studie postupně odpovídá na tři otázky: jakou strategii
-volíme a~jak ji členíme do fází
-(sekce~\ref{sec:volba-strategie}), na jakém případě a~jakých
-jednotkách analýzy strategii ověřujeme
-(sekce~\ref{sec:vyber-projektu}) a~jaké proměnné mezi běhy držíme
-fixní (sekce~\ref{sec:fixni-promenne}). Strukturu sleduje konvence
-case study reportingu pro empirický software engineering
-výzkum~\cite{runeson2009,yin2018}.
-
-\subsection{Strategie, cíle a~fáze}
+\subsection{Volba výzkumné strategie}
 \label{sec:volba-strategie}
 
 Z~tří cílů formulovaných v~kapitole~\ref{kap:vymezeni} plynou
@@ -48,18 +25,22 @@ agenta s~různými variantami instrukcí na témže projektu a~podrobnou
 analýzu každého běhu napříč třemi dimenzemi (proces, produkt,
 zdroje).
 
-Tomuto profilu odpovídá případová studie. Řízený experiment
-s~počtem běhů potřebným pro statistickou izolaci by byl vzhledem
-k~ceně jedné iterace (tisíce tokenů, desítky minut) nepraktický.
-Volíme proto hloubku před šířkou: jeden projekt s~detailní analýzou
-každého běhu (git historie, transcript, naměřené metriky).
+Tomuto profilu odpovídá případová studie, která v~empirickém
+software engineering výzkumu slouží k~detailnímu zkoumání jevu
+v~jeho reálném kontextu~\cite{runeson2009}. Řízený
+experiment s~počtem běhů potřebným pro statistickou izolaci by byl
+vzhledem k~ceně jedné iterace (tisíce tokenů, desítky minut)
+nepraktický. Přednost proto dostává hloubka před šířkou: jeden
+projekt s~detailní analýzou každého běhu (git historie, transcript,
+naměřené metriky).
 \textcite{yin2018} pro tento typ výzkumu používá pojem
 \textit{analytická generalizace}: na jednom případě ukazujeme
 princip, který lze dále ověřovat na dalších případech.
 % RAW TODO: doplnit citaci Bowen et al. 2009 (feasibility study framework) — see #53 close
-Praktický přínos této práce proto formulujeme jako demonstraci
-proveditelnosti, zatímco analytická generalizace vymezuje způsob,
-jak opatrně číst přenositelné principy.
+Praktický přínos této práce spočívá v~ověření, že navrženou sadu
+metrik a~iterativní postup lze aplikovat na jednom případu, zatímco
+analytická generalizace vymezuje způsob, jak opatrně číst
+přenositelné principy.
 Všechny běhy vycházejí ze stejné specifikace projektu, liší se
 verzí instrukcí, výslednou git historií a~naměřenými hodnotami
 metrik.
