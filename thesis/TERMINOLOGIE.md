@@ -9,6 +9,7 @@ Kanonické pojmy pro konzistentní psani a pripravu na obhajobu.
 | DSR (Design Science Research) | Vyzkumny pristup: navrhujeme artefakt a evaluujeme ho | Peffers 2008, Hevner 2004 |
 | Pripadova studie (case study) | Vyzkumna strategie: evaluace na jednom pripadu do hloubky | Yin 2018; NE "experiment" pro celek studie |
 | Demonstrace proveditelnosti | Prakticke ramovani: pripadova studie ukazuje, ze navrzenou sadu metrik a iterativni postup lze aplikovat na jednom pripadu | NE "feasibility demonstrace" v ceske prose |
+| Overit proveditelnost | Sloveso pro akt cile 2: na jednom pripadu prokazat, ze postup lze aplikovat a produkuje meritelne diagnosticke vystupy | Kanonicky termin v cilech a zaveru; NE "demonstrovat" jako akt cile (vedouci 2026-04-27 anotace str. 13, 62) |
 | Analyticka generalizace | Metodologicke ramovani pripadove studie podle Yina: z jednoho pripadu lze formulovat principy pro dalsi overeni, ne statisticke tvrzeni o populaci | Neni synonymum demonstrace proveditelnosti; pouzit jen pri diskusi validity a logiky zobecneni |
 | Experimentalni beh | Jedno spusteni agenta s konkretni verzi instrukci | "run" v infrastrukture; "beh" v bezne prose |
 | Iterace | Jeden cyklus Spusteni/Mereni/Diagnoza/Uprava | |
@@ -136,6 +137,7 @@ DSR (pristup)          --> CO delame (navrhujeme metriky + postup, evaluujeme)
 | experiment (samostatne) | Nejednoznacne | pripadova studie (celek), experimentalni beh (jednotlivy) |
 | pilotni iterace (pro fazi) | Matouci — iterace je jeden cyklus | pilotni faze |
 | feasibility demonstrace | Hybridni anglicismus | demonstrace proveditelnosti |
+| „demonstrovat" jako sloveso v cili | Vedouci: „jak zmerite, ze bylo demonstrovano?" — neoperacionalizovatelne | „overit proveditelnost" v cilech a zaveru; „demonstruje" jako popis aktu pripustny v abstract |
 | „X z N deterministickych kriterii" | Slovo „deterministickych" je nadbytecne nebo zavadejici (mate zpusob mereni a roli v hodnoceni) | per-metric vycet, nebo „X binarnich pass/fail kriterii" |
 | „kompakce jako kriterium" / „cil E3 = 0" | E3 je deskriptivni indikator stability runtime, ne pass/fail kriterium; cil 0 nema v teto praci roli exit prahu | „E3 = 0 potvrzuje, ze kontext zustal celistvy" |
 | „deterministicka kriteria" jako synonymum pass/fail | Mate zpusob mereni (det vs judge) a roli v hodnoceni (exit vs deskriptivni) | „pass/fail kriteria" / „kriteria s exit prahem" |
