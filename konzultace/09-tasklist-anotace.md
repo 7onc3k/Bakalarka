@@ -45,6 +45,124 @@ Tento dokument je referenční snapshot s plnými citacemi anotací. Číslován
 
 ---
 
+## Sekvence implementace — units + DAG (revize 2026-05-07)
+
+Vrstvy 0–4 níže jsou **katalog** anotací. Tato sekce je **akční DAG**: do jakých
+logických celků se anotace seskupují pro exekuci, jaké jsou závislosti, a v jakém
+pořadí dělat commity, aby každý PR/commit dával sémantický smysl pro review.
+
+**Pravidla DAG:**
+- *Decision* (S*) předchází content edit dotčené sekce
+- *Move* (přesun bloků) mění plátno — předchází content edit
+- *Content rewrite* spotřebuje cestou cross-cutting C2–C5 (per kapitola)
+- *Polish* (C6, finální konzistence) jako poslední
+
+```
+Unit 0 (rozhodnutí) ──► Unit 1 (struktura) ──► Unit 2 (kap03) ──┬──► Unit 3 (kap02)
+                                                                ├──► Unit 4 (kap04)
+                                                                └──► Unit 5 (kap05)
+                                                                            │
+                                                            Unit 6 (úvod) ◄─┘
+                                                                            │
+                                                            Unit 7 (polish) ◄┘
+```
+
+### Unit 0 — Strategická rozhodnutí (zero edits)
+
+- **Cíl:** rozhodnutí dokumentovaná v issue komentech, žádný diff v `*.tex`
+- **Položky:**
+  - [x] S1 #53 closed (framing cíle 2)
+  - [x] S4 #56 closed (AGENTS.md jako listing)
+  - [x] S2 #54 — rozhodnutí v komentu, ready to close
+  - [ ] S3 #55 — audit subagent → diskuse → rozhodnutí → close
+- **Závislost:** žádná
+- **Deliverable:** closed S* issues, audit komenty jako audit trail
+
+### Unit 1 — Strukturální přesuny („mění plátno")
+
+- **Cíl:** kap02/03/04 mají správnou kostru před content přepisem
+- **Položky:**
+  - [x] Spec/system upomínek kap04 → kap03 sec 3.1.2 — **hotovo v PR #50** (recheck že str. 37 *„toto mělo být popsáno dříve"* sedí)
+  - [ ] K3-44b: zdroje kap03 sec 3.3 → kap02 (mutation testing, McCabe, Fenton & Bieman) — anotace str. 26 ř. 259
+  - [ ] Konsolidace duplicitního bloku — anotace str. 26 ř. 269 *„informace by měly být jasně řečeny na začátku metodiky"*
+  - [ ] Verify pass: PR #50 nerozbil nic relevantního pro S2/S3
+- **Závislost:** Unit 0 (S2, S3 rozhodnutí, jinak nevíme co konsolidovat)
+- **Deliverable:** jeden commit „structural moves only" + verify komentář na #51
+
+### Unit 2 — Kap03 koordinovaný přepis ⭐ (největší unit)
+
+- **Cíl:** kap03 hotová od 3.1 po 3.5
+- **Položky:**
+  - [ ] **S2 #54 implementace:**
+    - paragraph header v 3.1.3 (definice exit + hierarchie kotev)
+    - sloupec „Exit kritérium" do `tab:p1-p5`, `tab:p6-p8`, `tab:q1-q2`, `tab:q3-q4`, `tab:q5-q8`
+    - oprava `tab:metriky-prehled` (Q4: 25/25, Q3: ≥80 %, ostatní podle nové matice)
+    - termín „operační prahy" odstranit (6 výskytů)
+  - [ ] **S3 #55 implementace:**
+    - sec 3.5 konstruktová validita — odstranit zpětné výroky o výsledcích
+    - sec 3.3.3 volba APO — přepsat ze zpětné perspektivy (varianty + kritéria)
+  - [ ] **Cross-cutting cestou v kap03** (z C2–C5 #58–#61):
+    - C5 forward refs: ř. 273, 275, 277, dále hotspots
+    - C2 1. osoba: hotspots z anotací
+    - C3 dvojtečkové věty
+    - C4 středníky
+  - [ ] TERMINOLOGIE.md ř. 28 — nový text pro „Exit kritéria"
+  - [ ] `experiments/CLAUDE.md` poznámka (už uncommitted) — zahrnout do commitu
+  - [ ] Recheck `tab:pilot-r*` v kap04 (sloupec „Splněno?" proti striktnímu exit)
+- **Závislost:** Unit 0 + Unit 1
+- **Deliverable:** commit set s `Closes #54, Closes #55, Closes #65, refs #58, refs #59, refs #60, refs #61`
+
+### Unit 3 — Kap02 sjednocení
+
+- **Cíl:** L-Kap02 #64 (22 anotací) + integrace přesunutých zdrojů z Unit 1
+- **Položky:**
+  - [ ] L-Kap02 #64 lokálie (str. 14–22)
+  - [ ] Integrace zdrojů přesunutých z kap03 (Unit 1)
+  - [ ] Cross-cutting cestou v kap02: C2, C3, C4, C5
+  - [ ] C6 terminologie hotspots v kap02
+- **Závislost:** Unit 1 (zdroje musí dorazit)
+- **Deliverable:** commit s `Closes #64, refs #58, #59, #60, #61, #62`
+
+### Unit 4 — Kap04 zbytek
+
+- **Cíl:** L-Kap04 #66 — co zbylo po PR #50
+- **Položky:**
+  - [ ] Recheck per anotace zbylé v kap04 (str. 37–61)
+  - [ ] Cross-cutting cestou v kap04: C2, C3, C4, C5
+- **Závislost:** Unit 2 (kap03 referenci)
+- **Deliverable:** commit s `Closes #66, refs C*`
+
+### Unit 5 — Kap05 recheck
+
+- **Cíl:** kap05 souladná po sjednocení exit + 1 anotace (str. 62)
+- **Položky:**
+  - [ ] Recheck výroků typu „splnil/nesplnil" po sjednocení na striktní exit
+  - [ ] kap05 ř. 90, 186–197, 670, 778 přepis dle nové terminologie
+  - [ ] Anotace str. 62
+- **Závislost:** Unit 2
+- **Deliverable:** commit `refs #51`
+
+### Unit 6 — Otevření (abstract + úvod + cíle/rozsah)
+
+- **Cíl:** úvodní páteř hotová (po finalizaci ostatních kapitol)
+- **Položky:**
+  - [ ] L-Otevreni #63 — abstract (A1 stránka, A5 přepis), úvod (str. 11), motivace/cíle/rozsah (str. 12–13)
+  - [ ] Cross-cutting v abstract+úvodu: C2, C3, C4
+- **Závislost:** Unit 5 (abstract reflektuje finální stav)
+- **Deliverable:** commit s `Closes #63, refs C*`
+
+### Unit 7 — Globální polish
+
+- **Cíl:** finální konzistence napříč
+- **Položky:**
+  - [ ] C6 #62 terminologie — final regex+context pass přes celý thesis (19 termínů)
+  - [ ] Final cross-chapter consistency audit
+  - [ ] Build sanity (žádné broken refs, citations validní)
+- **Závislost:** Units 2–6
+- **Deliverable:** commit s `Closes #62, refs #51`
+
+---
+
 ## Vrstva 0 — Strategická rozhodnutí (vyřešit první!)
 
 Bez těchto je leštění zbytku naprázdno.
@@ -325,12 +443,15 @@ Pravděpodobně FIS šablona / nelze měnit / koncepční rozdíl.
 
 ## Postupový workflow
 
-Viz „Sub-issues mapping" nahoře. Pořadí práce:
+**Aktuální postup — viz „Sekvence implementace — units + DAG" nahoře.**
 
-1. **Strategie (S1–S4)** — diskuse + rozhodnutí (blokují lokální issues)
-2. **C1 (citace)** — úvodní script pass přes celou bibliografii a `*.tex`
-3. **Lineárně po stranách PDF** — Abstract → Úvod → Kap02 → Kap03 → Kap04 → Kap05
-   - Ostatní cross-cutting (C2–C6) řešíme cestou per stránka
-   - Lokální issues (L-*) se uzavírají postupně, jak procházíme stránky
+Original (před revizí 2026-05-07): lineárně po stranách PDF, cross-cutting C1
+nejdřív, ostatní cestou. Tento přístup byl nahrazen unit-based DAG, protože:
 
-Cílem je projít vše do následující konzultace s tím, že strategická rozhodnutí budou domluvená s vedoucím, cross-cutting passy budou jako evidence systematické práce, a lokální fixy budou postupně commitovány na branch `review/anotace-vedouci-2026-05-07`.
+- position-related anotace (str. 39 spec, str. 37 API, str. 26 ř. 259 zdroje, str. 26 ř. 269 redundance) vyžadují strukturální přesuny **před** content přepisem
+- C2–C5 dělané samostatně jako globální průchody by se přepisovaly v Unit 2 znovu — proto splývají s lokálními pasy per-kapitola
+- Unit-based přístup vede ke commitům s jednotnou sémantikou (lepší review)
+
+Cílem je projít vše do následující konzultace s tím, že strategická rozhodnutí
+budou domluvená s vedoucím, a lokální fixy budou commitovány na branch
+`review/anotace-vedouci-2026-05-07` v pořadí Units 0 → 7.
