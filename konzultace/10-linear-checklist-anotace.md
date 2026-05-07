@@ -180,6 +180,9 @@ Routování: #63 otevření, #64 kap02, #65 kap03, #66 kap04, #62 závěrečná 
   - Kontrola: doplněno vysvětlení „signálů špatné vnitřní struktury kódu, duplikací a strukturálních problémů“.
 
 ## str. 22 — Instrukce jako nezávislá proměnná
+- [x] `p21-citace-benchmarky` (#64) **Uživatelská kontrola:** opakované citace benchmarků v odstavci o rozšířených benchmarkách
+  - Problém: ACE-Bench a FeatureBench se v PDF citovaly názvem, protože bib záznamy neměly skutečné autory; zároveň byly citace roztříštěné za každý benchmark zvlášť.
+  - Kontrola: FeatureBench má doplněné autory a URL na arXiv; starý/duplicitní záznam ACE-Bench podle OpenReview id odpovídal téže práci pod dřívějším názvem, proto byl z odstavce i bibliografie odstraněn.
 - [ ] `p22-01` (#64) **HL:** mírou
   - Vedoucí: míru?
 - [ ] `p22-02` (#64) **HL:** í oracle,
