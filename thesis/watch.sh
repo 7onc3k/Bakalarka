@@ -70,14 +70,20 @@ trap cleanup INT TERM EXIT
 
 open_viewer() {
     stop_viewer
-    "${VIEWER_CMD[@]}" "${VARIANT}.pdf" 2>/dev/null &
+    (
+        exec 8<&- 9>&-
+        "${VIEWER_CMD[@]}" "${VARIANT}.pdf" 2>/dev/null
+    ) &
     VIEWER_PID=$!
 }
 
 build_variant() {
     local status
 
-    timeout --foreground "${BUILD_TIMEOUT}s" make -s "$VARIANT" &
+    (
+        exec 8<&- 9>&-
+        timeout --foreground "${BUILD_TIMEOUT}s" make -s "$VARIANT"
+    ) &
     BUILD_PID=$!
     wait "$BUILD_PID"
     status=$?
