@@ -24,10 +24,14 @@ iterativního postupu návrhu instrukcí řízeného těmito metrikami
 a~vyhodnotit, zda a~jak vede k~měřitelným změnám v~chování agenta. Cyklus
 měření, diagnózy a~úpravy vedl k~měřitelnému zlepšení, ale ne
 monotónnímu: jedna iterace způsobila regresi, po které bylo nutné
-vrátit se k~předchozí verzi instrukcí. Opakujícím se vzorcem
-úspěšných úprav bylo nahrazení obecného pravidla konkrétním
-příkazem s~verifikačním krokem. Účinnost tohoto postupu závisela
-na dostupnosti deterministických nástrojů s~jednoznačným výstupem.
+vrátit se k~předchozí verzi instrukcí. Postup nevedl ke splnění
+všech exit kritérií; zejména referenční testy zůstaly u~nejlepšího
+běhu na hodnotě 41/42. Právě toto nesplnění ale metriky lokalizovaly
+jako stabilní slabinu, kterou další úpravy instrukcí neodstranily.
+Opakujícím se vzorcem úspěšných úprav bylo nahrazení obecného
+pravidla konkrétním příkazem s~verifikačním krokem. Účinnost tohoto
+postupu závisela na dostupnosti deterministických nástrojů
+s~jednoznačným výstupem.
 U~požadavků bez takového nástroje zůstává instrukce
 na úrovni pravidla nebo příkazu bez vnější zpětné vazby.
 
@@ -43,7 +47,7 @@ citlivá na nedeterminismus modelu. Stejná sada instrukcí proto může
 vést k~odlišnému dodržení vícekrokového pracovního postupu.
 
 Hlavním přínosem práce je iterativní postup a~sada metrik, které
-může praktik aplikovat na vlastním projektu s~vlastními prahy.
+může praktik aplikovat na vlastním projektu s~vlastními exit kritérii.
 Konkrétní instrukce a~naměřené hodnoty platí pro tuto případovou
 studii. Přenositelný je postup, ne výsledná čísla. Práce tím
 demonstruje proveditelnost navrženého rámce na jednom případu,

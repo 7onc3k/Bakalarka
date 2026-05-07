@@ -698,10 +698,13 @@ cíl~2. Pokud má sada metrik fungovat jako diagnostický nástroj,
 musí naměřená hodnota vést k~identifikovatelné úpravě instrukcí
 a~další běh musí ukázat, zda úprava zabrala. Iterace má čtyři
 kroky: Spuštění (běh agenta), Měření (extrakce metrik), Diagnóza
-(analýza odchylek) a~Úprava (změna instrukcí). Cyklus iteraci
-opakuje, dokud nejsou splněna exit kritéria
-(obr.~\ref{fig:iterativni-cyklus}). Cyklus nepředpokládá monotónní
-zlepšování: pokud iterace vede k~regresi, další iterace vychází
+(analýza odchylek) a~Úprava (změna instrukcí). Cyklus nepředpokládá
+automatické splnění všech exit kritérií. Iterace se opakuje, dokud
+metriky poskytují novou diagnostickou informaci a~lze navrhnout
+konkrétní úpravu; pokud se objeví regrese nebo stabilní limit,
+další krok se rozhoduje podle diagnostiky
+(obr.~\ref{fig:iterativni-cyklus}). Pokud iterace vede k~regresi,
+další iterace vychází
 z~předchozí úspěšné verze instrukcí, ne z~regresní~\cite{peffers2008}.
 Substantivní část iterace popisuje
 sekce~\ref{sec:diagnostika-uprava}.
@@ -725,9 +728,9 @@ sekce~\ref{sec:diagnostika-uprava}.
     \draw[arr] (diagnose) -- (fix);
     \draw[arr] (fix.south) -- ++(0,-0.5) -| (run.south)
         node[midway, below, font=\footnotesize\sffamily]
-        {opakovat dokud exit kritéria};
+        {opakovat podle diagnostiky};
 \end{tikzpicture}
-\caption{Iterativní cyklus: čtyři kroky jedné iterace a~smyčka opakování až do splnění exit kritérií.}
+\caption{Iterativní cyklus: čtyři kroky jedné iterace a~smyčka opakování řízená diagnostikou naměřených odchylek.}
 \label{fig:iterativni-cyklus}
 \end{figure}
 \FloatBarrier
