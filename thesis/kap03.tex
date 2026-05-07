@@ -54,43 +54,36 @@ instrukcí mění chování jednoho agenta na jednom projektu; to je
 
 \paragraph{Pilotní fáze.}
 \phantomsection\label{sec:pilotni-iterace}%
-Případová studie postupuje ve dvou fázích. Pilotní fáze ověřuje
-proveditelnost cílů~1 a~2: opakovaně spouští agenta a~upravuje
-instrukce, dokud agent na zvolených kritériích nedosáhne stabilního
-zlepšení. Pilotní fáze postupuje proti exit kritériím ve sloupci
-\textit{Exit kritérium} tabulky~\ref{tab:metriky-prehled}. Tato
-kritéria představují principiální ideál: striktní 42/42
-referenčních testů, nulové lint warnings, nulové porušení složitosti.
-Sám zvolený projekt nemusí být v~tomto smyslu plně dosažitelný
-v~jediném autonomním běhu. Pro praktické řízení iterací proto
-pracujeme s~\textit{operačními prahy} (\acs{Q2}~$\geq$~37/42,
-\acs{Q3}~$\geq$~70\,\%, \acs{Q4}~$\geq$~24/25, \acs{Q5}~$\leq$~1,
-\acs{Q7}~$\leq$~1 porušení), které lépe rozlišují běhy mezi sebou
-a~odpovídají barevnému kódování souhrnné tabulky a~vizualizací
-v~kapitole~\ref{kap:vyhodnoceni}. Pilotní fázi proto vyhodnocujeme
-dvěma pohledy současně: která \textit{striktní} kritéria běh splnil
-(kapitola~\ref{kap:vysledky}, per-běh tabulky pass/fail kritérií)
-a~zda splnil operační prahy (graf~\ref{fig:variability-quality}).
-Pilotní fáze končí, když některý běh splní celý procesní checklist
-\acs{P1}--\acs{P5} a~vykáže operačně rozeznatelné zlepšení proti
-baseline; další iterace by přinášely jen drobné lokální úpravy.
-Tato definice odpovídá proveditelnosti na jednom případu,
-neimplikuje obecnou platnost prahů pro jiné agenty a~projekty.
+Případová studie postupuje ve dvou fázích. Pilotní fáze slouží
+k~ověření, zda lze navrženou sadu metrik použít k~diagnostice běhu
+agenta a~k~následné úpravě instrukcí. Každá iterace se proto hodnotí
+proti exit kritériím, tedy předem stanoveným hranicím úspěchu pro
+jednotlivé metriky. Tato kritéria vyjadřují striktní ideál běhu,
+který splní předepsaný proces a~současně vytvoří korektní,
+otestované a~udržovatelné řešení. Jejich konkrétní hodnoty jsou
+uvedeny souhrnně v~tabulce~\ref{tab:metriky-prehled}. Pro každou
+metriku jsou kotveny podle její povahy: buď ve specifikaci
+a~referenční implementaci, v~obecně používaném nástroji nebo
+standardu, případně v~hodnoticí rubrice tam, kde jde o~judge-based
+posouzení.
+Pilotní fáze tedy neslouží k~statistickému odhadu účinku instrukcí,
+ale k~nalezení použitelné sady instrukcí a~k~ověření, že metriky
+dávají dostatečně konkrétní diagnostickou zpětnou vazbu pro další
+iteraci.
 
 \paragraph{Ablace.}
 \phantomsection\label{sec:komparativni-variace}%
-Z~fungující sady instrukcí (výstup pilotní fáze) systematicky
-odebíráme jednotlivé složky a~měříme dopad na chování agenta:
-potřebuje agent danou část instrukcí, nebo je redundantní?
-Konkrétní variace nelze specifikovat předem; vycházejí
-z~diagnostiky pilotních běhů. Pokud se v~pilotu ukáže, že agent
-konzistentně nedodržuje určité pravidlo, ablace testuje, zda jeho
-odebrání změní i~ostatní metriky. Každá ablace se provádí ve dvou
-nezávislých bězích se stejným nastavením, aby bylo možné odlišit
-systematický efekt změny od přirozené variability nedeterministického
-modelu. I~se dvěma běhy nelze dosáhnout statistické
-průkaznosti~(sekce~\ref{sec:omezeni-validita}); výsledky proto
-interpretujeme jako indikativní, ne kauzální.
+Z~použitelné sady instrukcí vzniklé v~pilotní fázi se v~ablační
+fázi systematicky odebírají jednotlivé složky a~sleduje se, zda se
+změní chování agenta. Konkrétní ablace proto vycházejí
+z~diagnostiky pilotních běhů. Pokud se například ukáže, že určitá
+složka instrukcí může být redundantní, ablace ověří její vliv tím,
+že ji z~instrukcí odstraní a~porovná výsledný běh s~plnou verzí.
+Každá ablace se provádí ve dvou nezávislých bězích se stejným
+nastavením, aby bylo možné odlišit opakující se efekt změny od
+přirozené variability nedeterministického modelu. Ani dva běhy
+neposkytují statistickou průkaznost; výsledky proto mají
+indikativní, ne kauzální povahu.
 
 \subsection{Případ a~jednotky analýzy}
 \label{sec:vyber-projektu}
@@ -395,14 +388,14 @@ Každou metriku popisují tři nezávislé osy, které je užitečné držet
 oddělené. \textit{Způsob měření} odlišuje \mmet{det} (skript, regex,
 parsing logu, statická analýza) od \mmet{qual} hodnocených LLM-as-judge;
 jde o~vlastnost nástroje, ne o~roli metriky v~hodnocení.
-\textit{Role v~hodnocení} pak rozlišuje pass/fail kritérium s~exit
-prahem od deskriptivního indikátoru, který hodnotu jen zaznamenává
-bez prahu. \textit{Kategorie} je taxonomie P/Q/E
+\textit{Role v~hodnocení} pak rozlišuje pass/fail kritérium
+od deskriptivního indikátoru, který hodnotu jen zaznamenává.
+\textit{Kategorie} je taxonomie P/Q/E
 (sekce~\ref{sec:mereni-kvality-obecne}). V~této práci se pass/fail
-soud o~úspěšnosti běhu opírá o~kritéria s~exit prahem v~kategoriích
+soud o~úspěšnosti běhu opírá o~exit kritéria v~kategoriích
 P~a~Q (binární i~judge-based); celá zdrojová skupina (\acs{E1}--\acs{E3})
-slouží jako deskriptivní kontext, žádná z~jejích metrik nemá exit
-práh.
+slouží jako deskriptivní kontext a~žádná z~jejích metrik nemá
+exit kritérium.
 
 \paragraph{LLM-as-judge protokol.}
 \phantomsection\label{sec:llm-as-judge-aplikace}%
@@ -447,32 +440,32 @@ Všechny mají binární výstup pass/fail.
 \label{tab:p1-p5}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabularx}{\linewidth}{@{}lMX@{}}
+\begin{tabularx}{\linewidth}{@{}lp{0.22\linewidth}Xp{0.16\linewidth}@{}}
 \toprule
-\textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} \\
+\textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} & \textbf{Exit kritérium} \\
 \midrule
 \acs{P1} & Issues vznikla před kódem &
 Porovnání \texttt{created\_at} nejstaršího agentova issue (GitHub API)
 s~časem prvního commitu obsahujícího soubory v~\texttt{src/}
-nebo \texttt{tests/}. \\
+nebo \texttt{tests/}. & pass \\
 \addlinespace
 \acs{P2} & Branch per issue &
 Počet remote branches (bez \texttt{main}) vůči počtu issues; podmínka
 \textit{branches $\geq$ issues} (žádné slučování více issues do jedné
-větve). \\
+větve). & pass \\
 \addlinespace
 \acs{P3} & Test-first &
 Primární indikátor: existuje commit s~prefixem \texttt{test:} a~zároveň
 \texttt{feat:}. Behavioral trace \texttt{tddOrderViolations}: počet
 větví, kde první zápis do \texttt{src/} předchází prvnímu zápisu do
-\texttt{tests/}. \\
+\texttt{tests/}. & pass \\
 \addlinespace
 \acs{P4} & PR linkován na issue &
-Tělo každého PR (GitHub API) obsahuje regex \texttt{Closes \#N}. \\
+Tělo každého PR (GitHub API) obsahuje regex \texttt{Closes \#N}. & pass \\
 \addlinespace
 \acs{P5} & Žádné modifikace existujících testů &
 \texttt{git diff -{}-diff-filter=M} na souborech v~\texttt{tests/};
-nově přidané testy se nezapočítávají. \\
+nově přidané testy se nezapočítávají. & pass \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -489,19 +482,19 @@ Postup hodnocení je společný a~popsaný v~sekci~\ref{sec:llm-as-judge-aplikac
 \label{tab:p6-p8}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabularx}{\linewidth}{@{}lMX@{}}
+\begin{tabularx}{\linewidth}{@{}lp{0.22\linewidth}Xp{0.16\linewidth}@{}}
 \toprule
-\textbf{Kód} & \textbf{Co hodnotí} & \textbf{Škála} \\
+\textbf{Kód} & \textbf{Co hodnotí} & \textbf{Škála} & \textbf{Exit kritérium} \\
 \midrule
 \acs{P6} & Popisnost commit messages &
-1--3 (atomicita, konvenční prefix, srozumitelnost co a~proč bylo změněno). \\
+1--3 (atomicita, konvenční prefix, srozumitelnost co a~proč bylo změněno). & $\geq$ 2/3 \\
 \addlinespace
 \acs{P7} & Popisnost issue descriptions &
 1--3 (jasnost scope, přítomnost acceptance criteria, dostatečnost pro
-implementaci). \\
+implementaci). & $\geq$ 2/3 \\
 \addlinespace
 \acs{P8} & Popisnost PR descriptions &
-1--3 (odkaz na issue, popis co a~proč, dostatečnost pro code review). \\
+1--3 (odkaz na issue, popis co a~proč, dostatečnost pro code review). & $\geq$ 2/3 \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -533,19 +526,19 @@ Tabulka~\ref{tab:q1-q2} shrnuje metriky funkční korektnosti.
 \label{tab:q1-q2}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabularx}{\linewidth}{@{}lMX@{}}
+\begin{tabularx}{\linewidth}{@{}lp{0.22\linewidth}Xp{0.16\linewidth}@{}}
 \toprule
-\textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} \\
+\textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} & \textbf{Exit kritérium} \\
 \midrule
 \acs{Q1} & Shoda s~API kontraktem &
 Referenční typy se importují a~zkompilují proti agentovu kódu
-(\texttt{tsc}). Výsledek je binární: typy sedí, nebo ne. \\
+(\texttt{tsc}). Výsledek je binární: typy sedí, nebo ne. & match \\
 \addlinespace
 \acs{Q2} & Pass rate referenčních testů &
 Vitest spustí 42~testů proti agentovu kódu. Výsledek je počet passing
 testů z~42. Testy ověřují chování přes veřejné API (black-box,
 sekce~\ref{sec:testovani-mutation}). Konstrukci referenční test suite
-popisuje sekce~\ref{sec:ref-implementace-postup}. \\
+popisuje sekce~\ref{sec:ref-implementace-postup}. & 42/42 \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -575,21 +568,21 @@ Tabulka~\ref{tab:q3-q4} shrnuje metriky kvality testů.
 \label{tab:q3-q4}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabularx}{\linewidth}{@{}lMX@{}}
+\begin{tabularx}{\linewidth}{@{}lp{0.22\linewidth}Xp{0.16\linewidth}@{}}
 \toprule
-\textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} \\
+\textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} & \textbf{Exit kritérium} \\
 \midrule
 \acs{Q3} & Schopnost agentových testů detekovat chyby &
 Stryker (sekce~\ref{sec:testovani-mutation}) s~konfigurací
 \texttt{-{}-mutate 'src/**/*.ts'} a~mutátory pro TypeScript (conditional,
 arithmetic, string, logical operators) systematicky zavádí drobné změny
 do zdrojového kódu. Vstup: agentovy testy + zdrojový kód. Výstup: procento
-zabitých mutantů. \\
+zabitých mutantů. & $\geq$ 80\,\% \\
 \addlinespace
 \acs{Q4} & Pokrytí acceptance criteria agentovými testy &
 Specifikace obsahuje 25~acceptance criteria. Hodnocení LLM-as-judge
 (sekce~\ref{sec:llm-as-judge-aplikace}) určí, kolik z~nich má odpovídající
-test v~agentově test suite. Škála \texttt{N/25}. \\
+test v~agentově test suite. Škála \texttt{N/25}. & 25/25 \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -608,28 +601,28 @@ Tabulka~\ref{tab:q5-q8} shrnuje metriky kvality kódu.
 \label{tab:q5-q8}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabularx}{\linewidth}{@{}lMX@{}}
+\begin{tabularx}{\linewidth}{@{}lp{0.22\linewidth}Xp{0.16\linewidth}@{}}
 \toprule
-\textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} \\
+\textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} & \textbf{Exit kritérium} \\
 \midrule
 \acs{Q5} & Lint warnings + errors &
 ESLint s~fixní konfigurací (recommended + strict TypeScript rules).
 Konfigurace je součástí experimentální infrastruktury, ne agentova repo;
-agent ji nemůže měnit. Výstup: celkový počet warnings + errors. \\
+agent ji nemůže měnit. Výstup: celkový počet warnings + errors. & 0 \\
 \addlinespace
 \acs{Q6} & Typové chyby &
 \texttt{tsc -{}-noEmit} ve strict mode. Doplňuje počet explicitních
 \texttt{any} ve zdrojových souborech (grep v~\texttt{src/**/*.ts}) jako
-proxy pro obcházení typového systému. \\
+proxy pro obcházení typového systému. & 0 \\
 \addlinespace
 \acs{Q7} & Cyklomatická složitost &
 ESLint \texttt{complexity} rule reportuje funkce překračující práh.
-Výstup: maximální složitost přes všechny funkce. \\
+Výstup: maximální složitost přes všechny funkce. & 0 porušení limitu $\leq$ 10/fn \\
 \addlinespace
 \acs{Q8} & Designová kvalita kódu &
 LLM-as-judge (sekce~\ref{sec:llm-as-judge-aplikace}) hodnotí pojmenování,
 oddělení zodpovědností, idiomatický TypeScript, kvalitu dokumentace
-a~zbytečnou komplexitu. \\
+a~zbytečnou komplexitu. & $\geq$ 2/3 \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -646,7 +639,7 @@ maskované silnými dimenzemi.
 
 Metriky zdrojů zachycují vstupy spotřebované při vývoji. Celá
 skupina (\acs{E1}--\acs{E3}) je homogenně deskriptivní: žádná
-z~metrik nemá exit práh; hodnoty zaznamenáváme pro porovnání
+z~metrik nemá exit kritérium; hodnoty zaznamenáváme pro porovnání
 nákladů a~stability runtime mezi iteracemi.
 
 \begin{table}[htbp]
@@ -673,7 +666,7 @@ Počet kompakcí kontextu během běhu, čtený přímo z~OpenCode DB
 (pole \texttt{time\_compacting}). Kompakce indikuje, že agent
 vyčerpal kontextové okno a~runtime musel obsah zhustit.
 Deskriptivní indikátor stability runtime; metrika nemá exit
-práh a~nulová hodnota potvrzuje, že kontext zůstal celistvý
+kritérium a~nulová hodnota potvrzuje, že kontext zůstal celistvý
 po celou dobu běhu. \\
 \bottomrule
 \end{tabularx}
@@ -907,9 +900,7 @@ ukazuje konkrétní automatizovaný nástroj) a~\mmet{qual} (sloupec
 \textit{Exit kritérium} popisují striktní ideál pro \mgrp{P}
 a~\mgrp{Q}; deskriptivní indikátory bez prahu (celá zdrojová
 skupina E1--E3) mají v~tomto sloupci pomlčku a~slouží jen
-k~porovnání mezi běhy. Pro praktické rozlišení mezi běhy se
-v~analýze používají též operační prahy popsané
-v~sekci~\ref{sec:pilotni-iterace}.
+k~porovnání mezi běhy.
 
 \begin{table}[htbp]
 \centering
@@ -934,11 +925,11 @@ P8 & PR description quality        & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
 \multicolumn{4}{@{}l}{\textit{Produktové (Q): co agent vyrobil}} \\[2pt]
 Q1 & API contract match         & tsc (import + typecheck) & match \\
 Q2 & Referenční test pass rate  & Vitest (42 testů)       & 42/42 \\
-Q3 & Mutation score              & Stryker                 & $\geq$ 70\,\% \\
+Q3 & Mutation score              & Stryker                 & $\geq$ 80\,\% \\
 Q4 & AC coverage agentových testů (25 krit.) & LLM-as-judge (GLM-5)   & 25/25 \\
 Q5 & Lint warnings               & ESLint                  & 0 \\
 Q6 & Typecheck errors            & tsc \texttt{-{}-noEmit} & 0 \\
-Q7 & Cyklomatická složitost      & ESLint (complexity)     & $\leq$ 10/fn \\
+Q7 & Cyklomatická složitost      & ESLint (complexity)     & 0 porušení limitu $\leq$ 10/fn \\
 Q8 & Design quality              & LLM-as-judge (GLM-5)   & $\geq$ 2/3 \\
 \midrule
 \multicolumn{4}{@{}l}{\textit{Zdroje (E): za jakou cenu}} \\[2pt]

@@ -87,8 +87,8 @@ se ale metriky chovají odlišně podle toho, co měří.
 \acs{Q1} zůstala stabilní ve všech bězích: agent vždy vytvořil
 veřejné API odpovídající kontraktu, takže \acs{Q1} na této úloze
 nepřinesla rozlišení. \ac{Q2} je naopak nejvariabilnější produktová
-metrika: striktní exit (42/42) nesplnil žádný běh, operační práh
-$\geq$~37/42 splnilo 6 z~9 běhů. Opakovaně selhávaly testy
+metrika: exit kritérium 42/42 nesplnil žádný autonomní běh; nejblíže
+byl pilotní běh r3 s~hodnotou 41/42. Opakovaně selhávaly testy
 pokrývající přechody pause/resume. Specifikace i~API kontrakt
 jednoznačně vyžadují zachování elapsed time (pole
 \texttt{pausedElapsed}), ale agent toto pole opakovaně ignoroval.
@@ -617,8 +617,8 @@ jiných modelech nebo s~jinými nástroji, zůstává otevřenou otázkou
 \label{sec:doporuceni}
 
 Následující doporučení vycházejí z~pilotních iterací a~ablací
-popsaných v~kapitole~\ref{kap:prakticka-cast}. Konkrétní čísla a~prahy
-platí pro tento model a~typ projektu. Přenositelný je iterační
+popsaných v~kapitole~\ref{kap:prakticka-cast}. Konkrétní hranice
+kritérií platí pro tento model a~typ projektu. Přenositelný je iterační
 postup (měř~$\to$ diagnostikuj~$\to$ uprav~$\to$ měř znovu)
 a~principy strukturování instrukcí.
 

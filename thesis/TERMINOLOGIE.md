@@ -26,7 +26,7 @@ Kanonické pojmy pro konzistentní psani a pripravu na obhajobu.
 | Produktove metriky (Q1-Q8) | Co agent vyrobil | Q1-Q2 funkcni korektnost, Q3-Q4 kvalita testu, Q5-Q8 kvalita kodu |
 | Metriky efektivity (E1-E3) | E1 = max prompt na kroku + soucet vystupu + soucet cache; E2 = cas; E3 = pocet kompakci kontextu (z OpenCode DB time_compacting) | Resource v Fentonove taxonomii |
 | Zdroje / naklady | Kategorie se jmenuje zdroje; naklady pouzivat pro interpretaci ceny nebo spotreby zdroju | V metodice a prehledech drzet "zdroje" / "spotreba zdroju"; ve vysledcich a zaveru muze byt "naklady", kdyz veta odpovida na "za jakou cenu" |
-| Exit kriteria | Meritelne prahy uspesnosti pro kazdou metriku | Patri do pilotni faze (3.3.3), ne k metrikam |
+| Exit kriteria | Striktni hranice uspechu pro metriky s pass/fail roli | Kotvit per metriku podle povahy: specifikace/reference, standard nebo hodnotici rubrika; E metriky jsou deskriptivni bez exit prahu |
 | ~~evaluacni system~~ | NEPOUZIVAME | Prilis vague, konflikt se "sadou metrik" |
 
 **Pravidlo pro kody metrik:** Pri prvnim vyskytu skupiny v kazde kapitole pridat zavorku s kratkym vysvetlenim. Priklady:

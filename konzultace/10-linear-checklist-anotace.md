@@ -211,30 +211,41 @@ Routování: #63 otevření, #64 kap02, #65 kap03, #66 kap04, #62 závěrečná 
 ## str. 26 — Fáze a iterativní cyklus
 - [ ] `p26-01` (#65) **HL:** Zvolili jsme systém upomínek faktur: systém pro automatické odesílání připomínek k nezapla- ceným fakturám.
   - Vedoucí: opět
-- [ ] `p26-02` (#65) **HL:** Bez pilotu by ablace neměla z čeho vycházet, bez ablace bychom o redundanci složek mohli jen spekulovat.
+- [x] `p26-02` (#65) **HL:** Bez pilotu by ablace neměla z čeho vycházet, bez ablace bychom o redundanci složek mohli jen spekulovat.
   - Vedoucí: Divná věta, asi zbytečná, když je to cílem práce
-- [ ] `p26-03` (#65) **HL:** Pilotní fáze postupuje proti exit kritériím ve sloupci Exit kritérium tabulky 3.10.
+  - Kontrola: původní věta už v textu není; pilotní a ablační fáze jsou popsány přímo.
+- [x] `p26-03` (#65) **HL:** Pilotní fáze postupuje proti exit kritériím ve sloupci Exit kritérium tabulky 3.10.
   - Vedoucí: Tahle věta vůbec na první dobrou nedává smysl. Co jsou to exit kritéria musíte popsat
-- [ ] `p26-04` (#65) **HL:** Tato kritéria představují principiální ideál: striktní 42/42 referenčních testů, nulové lint warnings, nulové porušení složitosti.
+  - Kontrola: exit kritéria jsou při prvním použití vysvětlena jako předem stanovené hranice úspěchu pro jednotlivé metriky.
+- [x] `p26-04` (#65) **HL:** Tato kritéria představují principiální ideál: striktní 42/42 referenčních testů, nulové lint warnings, nulové porušení složitosti.
   - Vedoucí: I zde je potřeba vše vysvětlit
-- [ ] `p26-05` (#65) **HL:** Sám zvolený projekt nemusí být v tomto smyslu plně dosažitelný v jediném autonomním běhu; pro orientační srovnání měla i referenční implementace napsaná ručně tři kosmetická lint warnings (sekce 4.1.1). Pro praktické řízení iterací proto pracujeme s operačn...
+  - Kontrola: konkrétní příklady nahrazeny obecným vysvětlením striktního ideálu a kotvení kritérií.
+- [x] `p26-05` (#65) **HL:** Sám zvolený projekt nemusí být v tomto smyslu plně dosažitelný v jediném autonomním běhu; pro orientační srovnání měla i referenční implementace napsaná ručně tři kosmetická lint warnings (sekce 4.1.1). Pro praktické řízení iterací proto pracujeme s operačn...
   - Vedoucí: Ty Q se řeší až mnohem později v práci, buď je vysvětlete rovnou nebo na ně neodkazujte
-- [ ] `p26-06` (#65) **HL:** které lépe rozlišují běhy mezi sebou a odpovídají barevnému kódování souhrnné tabulky a vizualizací v kapitole 5.
+  - Kontrola: dopředné Q kódy a termín „operační prahy“ byly z prvního zavedení odstraněny.
+- [x] `p26-06` (#65) **HL:** které lépe rozlišují běhy mezi sebou a odpovídají barevnému kódování souhrnné tabulky a vizualizací v kapitole 5.
   - Vedoucí: Nechci se teď dívat na kapitolu 5. Vysvětlete to zde
-- [ ] `p26-07` (#65) **HL:** (kapitola 5, počty “ z 10”) a zda splnil operační prahy (graf 5.2). “X
+  - Kontrola: odkaz na barevné kódování a vizualizace v kapitole 5 byl z prvního zavedení odstraněn.
+- [x] `p26-07` (#65) **HL:** (kapitola 5, počty “ z 10”) a zda splnil operační prahy (graf 5.2). “X
   - Vedoucí: Chápu, že se zde chcete odkazovat na výsledky, ale to v práci teprve přijde. Představte si, že to píšete průběžně, když tu práci děláte. Také nevíte, kdy a jak budou vypadat výsledky.
+  - Kontrola: dopředné odkazy na kapitolu 5 a graf výsledků byly z pilotní fáze odstraněny; graf 5.2 už nepracuje s operačními prahy.
 
 ## str. 27 — Sada metrik
-- [ ] `p27-01` (#65) **HL:** další iterace by přinášely jen drobné lokální úpravy.
+- [x] `p27-01` (#65) **HL:** další iterace by přinášely jen drobné lokální úpravy.
   - Vedoucí: Toto je zaručeno/vzniklo jak?
-- [ ] `p27-02` (#65) **HL:** Tato definice odpovídá proveditelnosti na jednom případu, neimplikuje obecnou platnost prahů pro jiné agenty a projekty.
+  - Kontrola: věta předjímající výsledek pilotu byla odstraněna.
+- [x] `p27-02` (#65) **HL:** Tato definice odpovídá proveditelnosti na jednom případu, neimplikuje obecnou platnost prahů pro jiné agenty a projekty.
   - Vedoucí: Zkuste i tuto větu trochu přeformulovat
-- [ ] `p27-03` (#65) **HL:** Z fungující sady instrukcí (výstup pilotní fáze) systematicky odebíráme jednotlivé složky a měříme dopad na chování agenta: potřebuje agent danou část instrukcí, nebo je redundantní?
+  - Kontrola: původní těžká věta byla odstraněna; omezení přenositelnosti je nově pokryto opatrným framingem pilotu a pozdější validitou.
+- [x] `p27-03` (#65) **HL:** Z fungující sady instrukcí (výstup pilotní fáze) systematicky odebíráme jednotlivé složky a měříme dopad na chování agenta: potřebuje agent danou část instrukcí, nebo je redundantní?
   - Vedoucí: Vidíte, co říkám s tou větou s dvojtečkou?
-- [ ] `p27-04` (#65) **HL:** předem;
+  - Kontrola: ablační odstavec přepsán bez dvojtečkové otázky a v neosobním stylu.
+- [x] `p27-04` (#65) **HL:** předem;
   - Vedoucí: Mimochodem dlouho jsem nezmiňoval středníky. Kdo tak píše?
-- [ ] `p27-05` (#65) **HL:** I se dvěma běhy nelze dosáhnout statistické průkaznosti (sekce 3.5); výsledky proto interpretujeme jako indikativní, ne kauzální.
+  - Kontrola: středník byl odstraněn spolu s původní větou.
+- [x] `p27-05` (#65) **HL:** I se dvěma běhy nelze dosáhnout statistické průkaznosti (sekce 3.5); výsledky proto interpretujeme jako indikativní, ne kauzální.
   - Vedoucí: Tohle je strašně důležitá věta a bude to obecně důležité přiznávat během obhajoby
+  - Kontrola: limit dvou běhů ponechán bez dopředného odkazu a formulován jako indikativní, ne kauzální povaha výsledků.
 - [ ] `p27-06` (#65) **HL:** ověřit cíl 2
   - Vedoucí: Splnit? Cíl - ověřují se hypotézy, zodpovídají se otázky a cíle se plní. Raději se podívejte zda to jinde v práci také nemáte blbě
 - [ ] `p27-07` (#65) **HL:** Iterativní cyklus. V obou fázích je vlastní postup iterativní cyklus, protože jediná iterace nestačí ověřit cíl 2. Pokud má sada metrik fungovat jako diagnostický nástroj, musí naměřená hodnota vést k identifikovatelné úpravě instrukcí a další běh musí ukáz...
@@ -281,8 +292,9 @@ Routování: #63 otevření, #64 kap02, #65 kap03, #66 kap04, #62 závěrečná 
   - Vedoucí: Opět poznámka pod čarou?
 
 ## str. 31 — Experimentální design
-- [ ] `p31-01` (#65) **HL:** exit kritérium
+- [x] `p31-01` (#65) **HL:** exit kritérium
   - Vedoucí: stále sem se nikde nedočetl o Exit kritériu
+  - Kontrola: exit kritérium je nově vysvětleno už při prvním použití v pilotní fázi; pozdější použití v iterativním cyklu má kontext.
 - [ ] `p31-02` (#65) **HL:** Se dvěma běhy per variaci jsou tyto hodnoty deskriptivní, ne inferenční.
   - Vedoucí: Toto by vyžadovalo opět více rozepsat
 - [ ] `p31-03` (#65) **HL:** Agentní běhy provádí model MiniMax-M2.5;
@@ -317,8 +329,9 @@ Routování: #63 otevření, #64 kap02, #65 kap03, #66 kap04, #62 závěrečná 
   - Vedoucí: Tady mám pocit, že trochu pletete výsledek s metodikou. Resp. předpokládáte určitý výsledek. Zkuste si texty v této kapitole projít a popsat je skutečně bez informace o výsledku. Tedy ne že přepokládáte něco, ale řeknete varianty, které můžete udělat a podle XY se rozhodnete.
 - [ ] `p35-02` (#65) **HL:** Tabulka 3.10:
   - Vedoucí: Až teď to vidím, je zvykem, že všechny tabulky mají jednotné číáslování a ne s odkazem na kapitolu
-- [ ] `p35-03` (#65) **HL:** operační prahy
+- [x] `p35-03` (#65) **HL:** operační prahy
   - Vedoucí: Zpětně se také dívám a nejsem si jistý jestli operační prahy je zvoleno jako správný název pro to. Z čeho vycházíte?
+  - Kontrola: podle rozhodnutí v #54 termín „operační prahy“ zaniká jako metodologická vrstva; z `kap03` byl odstraněn, tabulky drží striktní exit kritéria a navazující grafy v kap. 5 jsou přepočtené bez starých prahů.
 - [ ] `p35-04` (#65) **HL:** 3.1.3. Způsob sběru odpovídá rozlišení deterministické metriky, kvalitativní metriky a záznamové metriky zavedenému v kapitole 2.
   - Vedoucí: Stále odkazuje skrz naskrz práci
 
