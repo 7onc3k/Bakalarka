@@ -1,0 +1,10 @@
+```json
+{
+  "naming": {"score": 3, "reasoning": "All names reflect domain concepts (DunningStatus, businessDays, stateEnteredAt, pausedElapsed). Consistent camelCase for variables/functions, PascalCase for types. Self-documenting names throughout."},
+  "separation": {"score": 3, "reasoning": "Clear module boundaries: types.ts for definitions, businessDays.ts for date calculations, dunning.ts for state machine, index.ts for public API. Functions are single-responsibility. Dependencies flow one direction."},
+  "idiomatic": {"score": 3, "reasoning": "No any usage. Discriminated unions (DunningStatus, EventType) with type narrowing. Uses readonly Date[], Partial<Record<>>, import type for type-only imports. Optional chaining and nullish coalescing where appropriate."},
+  "documentation": {"score": 3, "reasoning": "JSDoc on all public API functions with @param and @returns. Domain-specific rules explained inline (e.g., timeout values). Comments explain why, not what. No redundant comments."},
+  "complexity": {"score": 3, "reasoning": "Complexity matches the problem. Simple operations are simple (isBusinessDay, getNextStatus). No unnecessary abstractions, wrappers, or deep inheritance. Straightforward state machine with clear data flow."},
+  "overall": 3
+}
+```

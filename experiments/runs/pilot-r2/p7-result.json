@@ -1,0 +1,5 @@
+{
+  "metric": "P7",
+  "score": 2,
+  "rationale": "Issues have clear descriptions with acceptance criteria and well-defined scope (one concern per issue). However, none explicitly reference the specification (Issue #1), which is required for a score of 3. Format is structured with bullet points for context and acceptance criteria listed clearly."
+}

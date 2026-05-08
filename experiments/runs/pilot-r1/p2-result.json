@@ -1,0 +1,8 @@
+```json
+{
+  "commits": {"score": 2, "reasoning": "All commits use conventional prefixes and describe what changed, but there are ZERO `test:` commits despite the requirement to commit tests separately before implementation."},
+  "issues": {"score": 3, "reasoning": "All issues have clear descriptions with tasks and acceptance criteria. Each issue focuses on one concern and references the specification appropriately."},
+  "prs": {"score": 2, "reasoning": "PR descriptions are clear and well-structured, but PR #16 closes 7 issues (#5-#11), violating the one-branch-one-PR-per-issue requirement."},
+  "overall": 2
+}
+```

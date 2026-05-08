@@ -1,0 +1,126 @@
+name: Specification
+description: Structured specification (SDD spec-first)
+title: "[SPEC] "
+labels: ["spec"]
+body:
+  # ── Layer 1: Requirements (CO business potřebuje) ──────────────────
+  - type: markdown
+    attributes:
+      value: |
+        ## 1. Requirements
+        *Problémová doména — CO business potřebuje*
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Účel a kontext funkcionality. Co a proč.
+      placeholder: |
+        Systém upomínek faktur (dunning) automaticky eskaluje nezaplacené faktury
+        přes sérii upomínek až k pozastavení služeb. Cílem je...
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance Criteria
+      description: |
+        Pozorovatelné chování ve formátu Given/When/Then s konkrétními hodnotami.
+        Obsahuje implicitně vstupy, výstupy, pre/postconditions.
+      placeholder: |
+        - Given invoice is in state OVERDUE for 14 business days
+          When the system evaluates the invoice state
+          Then state transitions to REMINDER_1
+          And action SEND_REMINDER_EMAIL is returned
+
+        - Given invoice is in any dunning state
+          When payment is received
+          Then state transitions to PAID
+          And no further actions are scheduled
+    validations:
+      required: true
+
+  - type: textarea
+    id: domain_glossary
+    attributes:
+      label: Domain Glossary
+      description: Klíčové pojmy z business domény a jejich definice.
+      placeholder: |
+        - **Dunning** — process of escalating unpaid invoices through reminders
+        - **Grace period** — time after due date before first reminder
+        - **Write-off** — marking a receivable as uncollectable
+    validations:
+      required: true
+
+  # ── Layer 2: Architecture (JAK je to strukturované) ────────────────
+  - type: markdown
+    attributes:
+      value: |
+        ## 2. Architecture
+        *Struktura — JAK je řešení organizované*
+
+  - type: textarea
+    id: type_definitions
+    attributes:
+      label: Type Definitions
+      description: Datové typy, interfaces, enums. Definují "tvar" dat v systému.
+      placeholder: |
+        ```typescript
+        type DunningState = 'ISSUED' | 'DUE_SOON' | 'OVERDUE' | ...;
+
+        interface DunningEvent {
+          type: 'PAYMENT_RECEIVED' | 'DAY_PASSED' | 'MANUAL_OVERRIDE';
+          invoiceId: string;
+          timestamp: Date;
+        }
+
+        interface DunningResult {
+          newState: DunningState;
+          actions: ActionDescriptor[];
+        }
+        ```
+    validations:
+      required: true
+
+  - type: textarea
+    id: invariants
+    attributes:
+      label: Invariants
+      description: Business pravidla která musí vždy platit. Formální constraints.
+      placeholder: |
+        - State transitions only happen through defined edges (no direct jumps)
+        - PAID and WRITTEN_OFF are terminal states (no outgoing transitions)
+        - Time calculations use business days only (exclude weekends + holidays)
+        - Every transition returns at least one action descriptor
+    validations:
+      required: true
+
+  - type: textarea
+    id: behavioral_model
+    attributes:
+      label: Behavioral Model
+      description: State diagram, sekvenční logika (Mermaid, tabulka přechodů).
+      placeholder: |
+        ```mermaid
+        stateDiagram-v2
+            ISSUED --> DUE_SOON : approaching_due_date
+            DUE_SOON --> OVERDUE : due_date_passed
+            OVERDUE --> REMINDER_1 : 14_business_days
+            REMINDER_1 --> PAID : payment_received
+        ```
+    validations:
+      required: true
+
+  - type: textarea
+    id: tech_constraints
+    attributes:
+      label: Technical Constraints
+      description: Tech stack, patterns, rozhraní, packaging.
+      placeholder: |
+        - TypeScript, npm package
+        - Pure functions, no side effects
+        - Exports: transition(), createInitialState(), types
+        - No runtime dependency on DB, HTTP, messaging
+    validations:
+      required: true

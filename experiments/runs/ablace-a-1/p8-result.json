@@ -1,0 +1,7 @@
+```json
+{
+  "metric": "P8",
+  "score": 3,
+  "rationale": "All PRs have clear 'Closes #N' links to exactly one issue each, descriptive titles with conventional prefixes, and Summary sections that explain both what was implemented and why. Each PR description provides sufficient bullet-point detail for code review, and no PR combines multiple issues."
+}
+```

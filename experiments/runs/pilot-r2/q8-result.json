@@ -1,0 +1,10 @@
+```json
+{
+  "naming": {"score": 3, "reasoning": "All names reflect domain concepts consistently (DunningStatus, businessDays, stateEnteredAt). Casing follows conventions: camelCase for variables/functions, PascalCase for types, UPPER_SNAKE_CASE for constants."},
+  "separation": {"score": 3, "reasoning": "Clear modular separation: business day calculations, type definitions, state machine logic, and public API in distinct files. Functions have single responsibility with one-directional dependencies."},
+  "idiomatic": {"score": 3, "reasoning": "Strict TypeScript with no `any`. Discriminated unions for DunningStatus and EventType. Readonly used on array parameters. Explicit return types on public functions. Type-safe throughout."},
+  "documentation": {"score": 1, "reasoning": "No JSDoc on public API (createInstance, process). No inline comments explaining business logic like timeout values (-7 for ISSUED meaning 7 days before due), escalation thresholds, or business day calculation edge cases."},
+  "complexity": {"score": 3, "reasoning": "Complexity matches the problem. Simple, direct implementations without unnecessary abstractions. State transitions are straightforward switch statements, business day logic is appropriately recursive without over-engineering."},
+  "overall": 1
+}
+```

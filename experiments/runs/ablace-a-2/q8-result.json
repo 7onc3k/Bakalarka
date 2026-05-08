@@ -1,0 +1,10 @@
+```json
+{
+  "naming": {"score": 3, "reasoning": "Consistent camelCase for variables, PascalCase for types, SCREAMING_SNAKE_CASE for constants. Domain terms like DunningStatus, dueDate, grace, reminder are well-chosen and self-documenting."},
+  "separation": {"score": 2, "reasoning": "Business days in separate module, state machine in index. Functions are mostly single-responsibility. Minor issues: duplicated inline startOfDay helper in two functions, some state constants could be grouped differently."},
+  "idiomatic": {"score": 2, "reasoning": "Uses discriminated unions for DunningStatus and EventType, interfaces for domain objects, no any. Missing readonly on immutable properties, no type guards, no exhaustive switch checks on unions."},
+  "documentation": {"score": 2, "reasoning": "JSDoc on all public exports. Internal functions and constants lack documentation. No inline comments explaining business rules like escalation sequence thresholds or why ISSUED timeout is negative."},
+  "complexity": {"score": 3, "reasoning": "Complexity matches problem scope. State transitions use simple conditionals, business day calculations are iterative and clear. No over-engineered abstractions or unnecessary layers."},
+  "overall": 2
+}
+```

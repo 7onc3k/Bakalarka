@@ -1,0 +1,10 @@
+```json
+{
+  "naming": {"score": 3, "reasoning": "All names reflect domain concepts (DunningStatus, businessDays, stateEnteredAt). Consistent camelCase/PascalCase conventions throughout. Self-documenting names like TERMINAL_STATES, PAUSABLE_STATES, pausedElapsed."},
+  "separation": {"score": 3, "reasoning": "Clear module boundaries: types, instance creation, state machine logic, and business day calculations in separate files. Single-responsibility functions. One-directional dependencies (process → utils)."},
+  "idiomatic": {"score": 3, "reasoning": "No any usage. Discriminated unions for DunningStatus and EventType. Exhaustive switch handling on event.type. Proper use of interfaces, Record types, and optional properties."},
+  "documentation": {"score": 2, "reasoning": "Main public functions (createInstance, process) have JSDoc, but utility functions in businessDays.ts lack documentation. Some domain-specific logic (negative timeout values meaning days before due date) isn't explained."},
+  "complexity": {"score": 3, "reasoning": "Complexity matches the problem. Simple state machine with straightforward switch. No over-abstraction, unnecessary wrappers, or deep inheritance. Easy to trace data flow."},
+  "overall": 2
+}
+```

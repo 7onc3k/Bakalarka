@@ -1,0 +1,7 @@
+```json
+{
+  "metric": "P6",
+  "score": 2,
+  "rationale": "Both commits use conventional prefixes (feat:, chore:) and describe the changes, but there are zero test: commits despite the requirement to commit tests separately before implementation, so the score cannot be 3."
+}
+```

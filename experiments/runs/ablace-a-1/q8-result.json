@@ -1,0 +1,10 @@
+```json
+{
+  "naming": {"score": 3, "reasoning": "All names reflect domain concepts (DunningStatus, businessDays, stateEnteredAt). Consistent casing with camelCase for variables/functions and PascalCase for types. Status literals use SCREAMING_SNAKE_CASE appropriately."},
+  "separation": {"score": 3, "reasoning": "Clear module boundaries: business day calculations isolated in businessDays.ts, types in types.ts, state machine logic in stateMachine.ts, and public API in index.ts. Dependencies flow one direction. Each function has single responsibility."},
+  "idiomatic": {"score": 2, "reasoning": "Types are well-defined with discriminated unions and no `any` usage, but `getDefaultTimeouts()` uses `undefined as unknown as number` hack to bypass type system instead of properly modeling optional timeouts with optional types."},
+  "documentation": {"score": 3, "reasoning": "Public API has JSDoc with @param/@returns. Inline comments explain domain logic (e.g., weekend day numbers, terminal states, payment priority). Comments explain why, not what. No redundant comments."},
+  "complexity": {"score": 3, "reasoning": "Complexity matches the problem. Simple operations like isBusinessDay are simple. State machine logic is straightforward without excessive abstraction. No deep inheritance or unnecessary layers. Easy to trace data flow."},
+  "overall": 2
+}
+```

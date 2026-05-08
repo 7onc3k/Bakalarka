@@ -1,0 +1,10 @@
+```json
+{
+  "naming": {"score": 3, "reasoning": "All names reflect domain concepts (DunningStatus, DunningState, ActionDescriptor, businessDays). Consistent casing throughout—camelCase for variables/functions, PascalCase for types, SCREAMING_SNAKE_CASE for constants."},
+  "separation": {"score": 3, "reasoning": "Clear three-module separation: business-days.ts for date calculations, dunning.ts for state machine logic, index.ts for public API/types. Single-responsibility functions with one-directional dependencies."},
+  "idiomatic": {"score": 3, "reasoning": "No `any` usage. Discriminated unions for DunningStatus, EventType, ActionType. Proper type-only imports (`import type`). Non-null assertions only where safe. Interfaces for domain objects."},
+  "documentation": {"score": 2, "reasoning": "Only createInstance has JSDoc; other public functions (process, addBusinessDays, etc.) lack documentation. No inline comments explaining business rules (timeout values, escalation thresholds, pause/resume semantics). Types are self-documenting but not comprehensive."},
+  "complexity": {"score": 3, "reasoning": "Complexity matches the problem. State machine transitions are straightforward if-else chains. No unnecessary abstractions, wrappers, or indirection. Functions are appropriately sized for their responsibilities."},
+  "overall": 2
+}
+```

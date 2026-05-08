@@ -1,0 +1,7 @@
+```json
+{
+  "metric": "P8",
+  "score": 2,
+  "rationale": "PR descriptions have clear summaries explaining what changed with bullet points and proper 'Closes #N' references. However, PR #14 violates the one-issue-per-PR requirement by addressing issues #4-#10 together ('as they all relate to the process function'), which prevents a score of 3 per the rubric."
+}
+```

@@ -1,0 +1,10 @@
+```json
+{
+  "naming": {"score": 3, "reasoning": "All names clearly reflect domain concepts (DunningStatus, pausedFrom, pausedElapsed). Consistent camelCase for variables/functions, PascalCase for types, SCREAMING_SNAKE_CASE for constants."},
+  "separation": {"score": 2, "reasoning": "All code in single file with date utilities mixed alongside state machine logic. Functions have single responsibility but no module boundaries."},
+  "idiomatic": {"score": 3, "reasoning": "Strict TypeScript with discriminated unions (DunningStatus, EventType), proper interfaces, no any usage, and exhaustive state handling via lookup tables."},
+  "documentation": {"score": 2, "reasoning": "Core public API (createInstance, process) has JSDoc, but exported utilities (countBusinessDays, addBusinessDays, isBusinessDay) lack docs. No inline comments explaining business rules like timeout thresholds."},
+  "complexity": {"score": 3, "reasoning": "Complexity matches the problem - simple lookup tables for state transitions, straightforward functions, no over-abstraction or unnecessary layers."},
+  "overall": 2
+}
+```

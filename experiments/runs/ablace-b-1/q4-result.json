@@ -1,0 +1,34 @@
+```json
+{
+  "covered": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
+  "not_covered": [],
+  "total": 24,
+  "score": "24/24",
+  "mapping": {
+    "AC1": "should transition to DUE_SOON 7 business days before due date",
+    "AC2": "should transition to OVERDUE at due date",
+    "AC3": "should transition to GRACE after 3 business days",
+    "AC4": "should transition to REMINDER_1 after 7 business days",
+    "AC5": "should transition to REMINDER_2 after 14 business days",
+    "AC6": "should transition to FINAL_NOTICE after 14 business days",
+    "AC7": "should transition to SUSPENDED after 7 business days",
+    "AC8": "should transition to WRITTEN_OFF after 30 business days",
+    "AC9": "should transition to PAID from X state",
+    "AC10": "should return resume_service action when paying from SUSPENDED",
+    "AC11": "should not transition from PAID state",
+    "AC12": "should not transition from WRITTEN_OFF state",
+    "AC13": "should not transition from CANCELLED state",
+    "AC14": "should transition to CANCELLED from X state",
+    "AC15": "should return resume_service action when cancelling from SUSPENDED",
+    "AC16": "should transition to PAUSED from X state",
+    "AC17": "should transition back to previous state on resume",
+    "AC18": "should prioritize payment over pause",
+    "AC19": "should allow cancellation from PAUSED state",
+    "AC20": "should manually advance from X to next state",
+    "AC21": "should use custom timeout when provided",
+    "AC22": "should transition to DUE_SOON 7 business days before due date",
+    "AC23": "should add 14 business days starting Friday",
+    "AC24": "should skip holidays"
+  }
+}
+```

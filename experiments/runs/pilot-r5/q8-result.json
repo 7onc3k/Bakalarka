@@ -1,0 +1,10 @@
+```json
+{
+  "naming": {"score": 3, "reasoning": "Consistent camelCase/PascalCase throughout, domain-specific names like DunningStatus, stateEnteredAt, pausedElapsed clearly reflect business concepts."},
+  "separation": {"score": 3, "reasoning": "Clean module boundaries: types.ts for definitions, businessDays.ts for date utilities, dunning.ts for state machine logic. One-directional dependencies."},
+  "idiomatic": {"score": 3, "reasoning": "Discriminated unions for DunningStatus, no any usage, proper interfaces, type guards (isTerminalStatus, isActiveStatus), and utility types like Required<T>."},
+  "documentation": {"score": 2, "reasoning": "JSDoc on main public functions (createInstance, process), but businessDays.ts public functions lack documentation despite being exported in index.ts."},
+  "complexity": {"score": 3, "reasoning": "Complexity matches the problem. Simple helper functions, clear state transitions, no over-engineering or unnecessary abstractions."},
+  "overall": 2
+}
+```

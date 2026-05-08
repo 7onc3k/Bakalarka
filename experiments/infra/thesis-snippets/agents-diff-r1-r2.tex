@@ -1,0 +1,27 @@
+\begin{lstlisting}[language={},basicstyle=\ttfamily\small,breaklines=true,
+    frame=single,captionpos=b,label={lst:agents-diff-r1-r2},
+    caption={Ukazka iterativni upravy \texttt{AGENTS.md} (pilot-r1 $\rightarrow$ pilot-r2)}]
+@@ Process
+
+ 1. Create issues --- one concern per issue, starting with project setup
+-2. For each issue: branch from main, write tests first, implement, PR with "Closes #N", merge
++2. For each issue, follow this exact sequence:
++   a. `git checkout main && git pull && git checkout -b issue-N` (one branch per issue, no exceptions)
++   b. Write tests: `git add tests/ && git commit -m "test: <description>"`
++   c. Implement: `git add src/ && git commit -m "feat: <description>"`
++   d. Open PR: `gh pr create --title "..." --body "Closes #N"`, merge, delete branch
+ 3. Use conventional commits: `test:` for tests, `feat:` for implementation, `docs:` for documentation
+-4. Run `tsc --noEmit` before every PR --- no type errors allowed
++4. Before every PR, run these checks and fix all issues before opening:
++   - `tsc --noEmit` --- zero type errors
++   - `npx eslint src/ --max-warnings 0` --- zero lint warnings (includes complexity violations)
+
+@@ Constraints
+
+ - Never combine multiple issues into one branch.
+ - Never implement without a failing test first.
+- Never modify a test to match your implementation. Tests encode the spec --- fix the code, not the test.
++- Never modify a test to match your implementation. If a test fails after implementation, fix the code --- not the test. Tests encode the spec.
+ - Never rewrite git history (no amend, squash, rebase, force-push).
+ - Do not add dependencies beyond the dev toolchain (vitest, typescript).
+\end{lstlisting}

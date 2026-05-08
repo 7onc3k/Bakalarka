@@ -1,0 +1,7 @@
+```json
+{
+  "metric": "P7",
+  "score": 3,
+  "rationale": "All issues have clear descriptions with context, well-defined acceptance criteria, and focused scope (one concern per issue). Issues reference the specification (#1) appropriately and provide sufficient detail for implementation."
+}
+```

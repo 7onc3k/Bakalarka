@@ -1,0 +1,20 @@
+\begin{lstlisting}[language={},basicstyle=\ttfamily\small,breaklines=true,
+    frame=single,captionpos=b,
+    caption={Ukazka zmen \texttt{AGENTS.md} mezi pilot-r3 a~pilot-r4}]
+@@ Goal
+
+ Implement the dunning system (billing reminder state machine) specified in
+ GitHub Issue #1. Deliver a modular, documented, publishable TypeScript package.
+
++You are done when:
++- Every acceptance criterion from Issue #1 has at least one test
++- `npx vitest run` reports zero failures
++- All implementation issues are closed
+
+@@ Process
+
+ 4. Before every PR, run these checks and fix all issues before opening:
+    - `tsc --noEmit` --- zero type errors
+    - `npx eslint src/ --max-warnings 0` --- zero lint warnings (includes complexity violations)
++   - `npx vitest run` --- zero test failures
+\end{lstlisting}

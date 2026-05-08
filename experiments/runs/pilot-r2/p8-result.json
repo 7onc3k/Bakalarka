@@ -1,0 +1,7 @@
+```json
+{
+  "metric": "P8",
+  "score": 3,
+  "rationale": "All three PRs have clear descriptive titles, structured Summary sections with bullet points explaining what was implemented, and each closes exactly one issue (Closes #N). The 'why' is implicit through the issue linkage, satisfying the requirement for clear what and why."
+}
+```

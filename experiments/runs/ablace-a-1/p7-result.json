@@ -1,0 +1,7 @@
+```json
+{
+  "metric": "P7",
+  "score": 2,
+  "rationale": "Issues have clear scope with bullet-pointed deliverables and reference the parent spec. Each issue is focused on one concern. However, they lack explicit acceptance criteria (no 'Done when' or checkboxes) to clearly define completion."
+}
+```

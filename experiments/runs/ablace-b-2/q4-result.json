@@ -1,0 +1,34 @@
+```json
+{
+  "covered": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 21, 23, 24],
+  "not_covered": [19, 22],
+  "total": 24,
+  "score": "22/24",
+  "mapping": {
+    "AC1": "should transition from ISSUED to DUE_SOON at 7 business days before due date",
+    "AC2": "should transition from DUE_SOON to OVERDUE at due date",
+    "AC3": "should transition from OVERDUE to GRACE after 3 business days",
+    "AC4": "should transition from GRACE to REMINDER_1 after 7 business days",
+    "AC5": "should transition from REMINDER_1 to REMINDER_2 after 14 business days",
+    "AC6": "should transition from REMINDER_2 to FINAL_NOTICE after 14 business days",
+    "AC7": "should transition from FINAL_NOTICE to SUSPENDED after 7 business days",
+    "AC8": "should transition from SUSPENDED to WRITTEN_OFF after 30 business days",
+    "AC9": "should transition to PAID from any active state",
+    "AC10": "should return resume_service action when payment received from SUSPENDED",
+    "AC11": "should not transition from PAID state",
+    "AC12": "should not transition from WRITTEN_OFF state",
+    "AC13": "should not transition from CANCELLED state",
+    "AC14": "should transition to CANCELLED from any non-terminal state",
+    "AC15": "should return resume_service when cancelling from SUSPENDED",
+    "AC16": "should transition to PAUSED from active dunning state",
+    "AC17": "should resume to previous state on dunning_resumed",
+    "AC18": "should prioritize payment over pause state",
+    "AC19": null,
+    "AC20": "should advance to next state on manual_advance",
+    "AC21": "should use custom timeout when provided",
+    "AC22": null,
+    "AC23": "should add business days to a date excluding weekends",
+    "AC24": "should exclude public holidays from count"
+  }
+}
+```

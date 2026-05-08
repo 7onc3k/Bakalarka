@@ -1,0 +1,10 @@
+```json
+{
+  "naming": {"score": 3, "reasoning": "All names reflect domain concepts (DunningStatus, businessDaysBetween, stateEnteredAt). Consistent camelCase/PascalCase conventions throughout."},
+  "separation": {"score": 3, "reasoning": "Clear modular separation: types, business day utilities, state machine logic, and public API in distinct files. Single-responsibility functions with one-directional dependencies."},
+  "idiomatic": {"score": 3, "reasoning": "Strict mode compliant with no any. Uses discriminated unions (DunningStatus, EventType) with switch-based exhaustive handling. All public API typed."},
+  "documentation": {"score": 1, "reasoning": "No JSDoc on any exported functions. No inline comments explaining domain logic (escalation thresholds, business day rules, state transition rationale)."},
+  "complexity": {"score": 3, "reasoning": "Complexity matches the problem. Simple loop-based date calculations, direct state lookup tables, no unnecessary abstractions or indirection."},
+  "overall": 1
+}
+```

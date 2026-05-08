@@ -1,0 +1,12 @@
+```json
+{
+  "commits": {"score": 1, "reasoning": "No commits provided to evaluate."},
+  "issues": {"score": 1, "reasoning": "No issues provided to evaluate."},
+  "prs": {"score": 1, "reasoning": "No PRs were created. The agent failed to follow the required process of creating PRs with descriptions that close individual issues."},
+  "overall": 1
+}
+```
+
+```json
+{ "metric": "P8", "score": 1, "rationale": "No PR descriptions exist to evaluate. The agent did not create any PRs, failing the requirement to create PRs with proper issue references and descriptions for each issue." }
+```

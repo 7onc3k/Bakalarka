@@ -1,0 +1,7 @@
+```json
+{
+  "metric": "P8",
+  "score": 3,
+  "rationale": "All PRs have clear descriptions with bullet points explaining what changed, proper 'Closes #N' references linking to their single issue, and descriptive titles with conventional commit prefixes. Each PR closes exactly one issue as required."
+}
+```

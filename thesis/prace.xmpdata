@@ -1,0 +1,7 @@
+% Metadata k uložení do PDF, podrobnější popis viz dokumentace balíčku pdfx.
+
+\Author{Thanh An Nguyen}
+\Title{Návrh a testování prostředí pro AI agenty v softwarovém vývoji}
+\Keywords{AI coding agent\sep AGENTS.md\sep metriky kvality software\sep iterativní návrh\sep ablační studie}
+\Subject{Bakalářská práce navrhuje sadu metrik a iterativní postup pro návrh instrukcí AI coding agentů a ověřuje je případovou studií systému upomínek faktur s ablacemi vybraných složek instrukcí.}
+\Publisher{Vysoká škola ekonomická v Praze, fakulta informatiky a statistiky}

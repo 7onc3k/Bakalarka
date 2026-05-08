@@ -1,0 +1,976 @@
+\chapter{Metodika}
+\label{kap:metodika}
+
+%% ==========================================================================
+%% 3.1 Návrh studie
+%% ==========================================================================
+
+\section{Výzkumný přístup}
+\label{sec:vyzkumny-pristup}
+
+\subsection{Volba výzkumné strategie}
+\label{sec:volba-strategie}
+
+Z~tří cílů formulovaných v~kapitole~\ref{kap:vymezeni} plynou
+společné nároky na metodiku. Cíl~1, návrh sady metrik pokrývající
+proces, kvalitu produktu a~zdroje, vyžaduje sadu metrik citlivou na
+změny v~chování. To předpokládá porovnání více běhů s~různými
+variantami instrukcí. Cíl~2, iterativní postup návrhu
+instrukcí řízený těmito metrikami, vyžaduje navíc, aby běhy tvořily
+sekvenci, v~níž lze sledovat vztah měření $\to$ diagnóza $\to$
+úprava $\to$ další měření. Cíl~3, ablace složek instrukcí, stojí na
+schopnosti porovnat běhy lišící se v~jediné složce. Všechny tři cíle
+tedy společně kladou na metodiku dva požadavky: opakované spouštění
+agenta s~různými variantami instrukcí na témže projektu a~podrobnou
+analýzu každého běhu napříč třemi dimenzemi (proces, produkt,
+zdroje).
+
+Tomuto profilu odpovídá případová studie, která v~empirickém
+software engineering výzkumu slouží k~detailnímu zkoumání jevu
+v~jeho reálném kontextu~\cite{runeson2009}. Řízený
+experiment s~počtem běhů potřebným pro statistickou izolaci by byl
+vzhledem k~ceně jedné iterace (tisíce tokenů, desítky minut)
+nepraktický. Přednost proto dostává hloubka před šířkou: jeden
+projekt s~detailní analýzou každého běhu (git historie, transcript,
+naměřené metriky).
+\textcite{yin2018} pro tento typ výzkumu používá pojem
+\textit{analytická generalizace}: na jednom případě ukazujeme
+princip, který lze dále ověřovat na dalších případech.
+% RAW TODO: doplnit citaci Bowen et al. 2009 (feasibility study framework) — see #53 close
+Praktický přínos této práce spočívá v~ověření, že navrženou sadu
+metrik a~iterativní postup lze aplikovat na jednom případu, zatímco
+analytická generalizace vymezuje způsob, jak opatrně číst
+přenositelné principy.
+Všechny běhy vycházejí ze stejné specifikace projektu, liší se
+verzí instrukcí, výslednou git historií a~naměřenými hodnotami
+metrik.
+
+Touto volbou se práce vědomě staví mimo benchmark
+paradigma~\cite{swebench2024}, které srovnává mnoho modelů na
+mnoha úlohách s~agregovanými skóre. Cílem této studie není rank
+modelů, ale podrobné porozumění tomu, jak iterativní úpravy
+instrukcí mění chování jednoho agenta na jednom projektu; to je
+úloha pro case study, ne pro benchmark.
+
+\paragraph{Pilotní fáze.}
+\phantomsection\label{sec:pilotni-iterace}%
+Případová studie postupuje ve dvou fázích. Pilotní fáze slouží
+k~nalezení použitelné sady instrukcí. V~každém běhu se sleduje,
+zda agent dodržel požadovaný postup a~jak kvalitní řešení vytvořil.
+Naměřené odchylky se potom používají jako podklad pro další úpravu
+instrukcí. Pilotní fáze tak ukazuje, zda metriky dávají dostatečně
+konkrétní zpětnou vazbu pro řízené zlepšování instrukcí.
+
+\paragraph{Ablace.}
+\phantomsection\label{sec:komparativni-variace}%
+Ablační fáze vychází z~použitelné sady instrukcí nalezené v~pilotu.
+Z~této sady se odebere vybraná složka a~sleduje se, zda se změní
+chování agenta. Ablace tedy netvoří další ladicí cyklus, ale
+kontrolované porovnání plné verze instrukcí s~její zjednodušenou
+variantou. Každá ablace se provádí ve dvou nezávislých bězích se
+stejným nastavením, aby bylo možné odlišit opakující se efekt změny
+od přirozené variability nedeterministického modelu. Ani dva běhy
+neposkytují statistickou průkaznost; výsledky proto mají
+indikativní, ne kauzální povahu.
+
+Podrobnější postup jednoho běhu se vrací po definici metrik v~sekci
+\ref{sec:procedura-behu}.
+
+\subsection{Případ a~jednotky analýzy}
+\label{sec:vyber-projektu}
+
+\textit{Případem} v~Yinově smyslu~\cite{yin2018} je projekt
+systému upomínek faktur popsaný níže. \textit{Jednotkami analýzy}
+jsou jednotlivé běhy agenta nad tímto projektem (pilotní iterace
+a~ablační varianty), z~nichž každý poskytuje vlastní data pro
+hodnocení napříč třemi dimenzemi (proces, produkt, zdroje).
+Případová studie potřebuje projekt, na kterém lze opakovaně spouštět
+agenta s~různými instrukcemi a~objektivně měřit výsledky. Projekt
+musí mít deterministickou logiku (stejný vstup vždy dá stejný
+výstup), aby bylo možné ověřit korektnost automatizovanými testy
+a~mutation testingem. Zároveň musí být dostatečně malý pro více
+experimentálních běhů, ale obsahovat reálné nuance (hraniční případy,
+doménová pravidla), aby měl agent co řešit.
+
+Zvolený případ představuje aplikaci pro automatické odesílání
+připomínek k~nezaplaceným fakturám. Obsahuje stavový
+automat (nová, po splatnosti, upomínaná, eskalovaná), časové výpočty
+(pracovní dny, ochranné lhůty) a~pravidla pro eskalaci. Současně
+jde o~úlohu dostatečně bohatou na netriviální rozhodování, ale stále
+zvládnutelnou pro opakované běhy: agent musí kombinovat stavové
+přechody, časové výpočty a~testování hraničních případů, takže
+metriky zachycují víc než průchod jednoduchou CRUD implementací.
+
+\phantomsection\label{sec:konstrukce-specifikace}%
+Specifikace projektu tvoří fixní zadání, které agent dostává
+v~Issue~\#1. Issue má dvě části: \textbf{Requirements} (co business
+potřebuje) a~\textbf{API Contract} (co musí implementace exportovat).
+API kontrakt je současně jediným technickým omezením implementace
+a~vstupem pro metriku~\ac{Q1}.
+
+\paragraph{Doménová logika.}
+Systém eskaluje neuhrazené faktury sérií stavů od přátelské upomínky
+před splatností přes stupňující se urgentnost až po pozastavení
+služby a~odpis pohledávky. Každá faktura má vlastní nezávislou
+instanci, časové prodlevy se počítají v~pracovních dnech (víkendy
+a~konfigurovatelné svátky se přeskakují automaticky v~aritmetice
+timeoutů, nejsou samostatným stavem). Hlavní eskalační větev má 9
+stavů spojených 8 časovými přechody (obrázek~\ref{fig:dunning-fsm}).
+Popisky šipek používají notaci \texttt{[guard]\,/\,effect}: guard
+v~hranatých závorkách udává timeout v~pracovních dnech (\textit{bd}~=~business
+days) od vstupu do předchozího stavu, effect za~lomítkem je akce
+vrácená volajícímu (typicky odeslání e-mailu, u~přechodu do
+\texttt{SUSPENDED} navíc pozastavení služby). Eskalační přechody
+spouští událost \texttt{tick} při splnění guardu; alternativně
+\texttt{manual\_advance} posune stav na další bezpodmínečně (bypass
+timeoutu, v~diagramu nezakreslen). Vedle hlavní větve jsou
+ze~všech aktivních stavů kdykoliv dostupné \texttt{PAID}
+a~\texttt{CANCELLED} (z~9 stavů, vše kromě terminálů) a~\texttt{PAUSED}
+(jen ze~6 aktivních: \texttt{OVERDUE} až \texttt{SUSPENDED}).
+
+\begin{figure}[tbp]
+\centering
+\begin{tikzpicture}[
+    >=stealth,
+    s/.style={rectangle, draw, rounded corners=2pt,
+              minimum height=0.55cm, minimum width=2.0cm,
+              font=\scriptsize\sffamily, inner sep=2pt},
+    term/.style={s, fill=black!8},
+    side/.style={s, fill=blue!6},
+    arr/.style={->, thick, gray!75},
+    barr/.style={->, thick, blue!55!black},
+    tx/.style={font=\scriptsize\sffamily, inner sep=1pt},
+    note/.style={font=\scriptsize\sffamily\itshape, text=black!55, inner sep=1pt}
+]
+    %% --- Hlavní eskalace, vertikálně ---
+    \node[s] (issued) {ISSUED};
+    \node[s, below=0.5cm of issued]  (due)   {DUE\_SOON};
+    \node[s, below=0.5cm of due]     (over)  {OVERDUE};
+    \node[s, below=0.5cm of over]    (grace) {GRACE};
+    \node[s, below=0.5cm of grace]   (rem1)  {REMINDER\_1};
+    \node[s, below=0.5cm of rem1]    (rem2)  {REMINDER\_2};
+    \node[s, below=0.5cm of rem2]    (final) {FINAL\_NOTICE};
+    \node[s, below=0.5cm of final]   (susp)  {SUSPENDED};
+    \node[term, below=0.5cm of susp] (wrof)  {WRITTEN\_OFF};
+
+    %% --- Šipky s guards a~effects ---
+    \draw[arr] (issued) -- node[tx, right]{[\,now\,$\geq$\,due\,$-7$\,bd\,] / email} (due);
+    \draw[arr] (due)    -- node[tx, right]{[\,now\,$\geq$\,due\,]} (over);
+    \draw[arr] (over)   -- node[tx, right]{[\,elapsed\,$\geq$\,3\,bd\,]} (grace);
+    \draw[arr] (grace)  -- node[tx, right]{[\,elapsed\,$\geq$\,7\,bd\,] / email} (rem1);
+    \draw[arr] (rem1)   -- node[tx, right]{[\,elapsed\,$\geq$\,14\,bd\,] / email} (rem2);
+    \draw[arr] (rem2)   -- node[tx, right]{[\,elapsed\,$\geq$\,14\,bd\,] / email} (final);
+    \draw[arr] (final)  -- node[tx, right]{[\,elapsed\,$\geq$\,7\,bd\,] / email\,+\,suspend\_service} (susp);
+    \draw[arr] (susp)   -- node[tx, right]{[\,elapsed\,$\geq$\,30\,bd\,] / email} (wrof);
+
+    %% --- Boční panel ---
+    \node[term, anchor=west] (paid) at ($(issued.east)+(7.0cm,0)$)  {PAID};
+    \node[term, below=0.4cm of paid]  (canc) {CANCELLED};
+    \node[side, below=0.4cm of canc]  (paus) {PAUSED};
+
+    \draw[arr] ($(paid.west)+(-1.4cm,0)$) -- node[tx, above]{payment} (paid.west);
+    \draw[arr] ($(canc.west)+(-1.4cm,0)$) -- node[tx, above]{cancel}  (canc.west);
+    \draw[arr] ($(paus.west)+(-1.4cm,0)$) -- node[tx, above]{paused}  (paus.west);
+
+    \node[note, below=0.3cm of paus, text width=4.6cm, align=left] (resnote)
+        {\textbf{resumed:} status\,$:=$\,pausedFrom; stateEnteredAt\,$:=$\,now\,$-$\,pausedElapsed};
+    \draw[barr, dashed] (paus.south) -- (resnote.north);
+\end{tikzpicture}
+\caption[Stavový automat systému upomínek]{Stavový automat systému
+upomínek faktur: hlavní eskalace shora dolů (vlevo) a~tři boční
+stavy dostupné z~většiny aktivních (vpravo). Notaci a~zdrojové
+stavy popisuje text výše.}
+\label{fig:dunning-fsm}
+\end{figure}
+\FloatBarrier
+
+\paragraph{API kontrakt.}
+API kontrakt určuje, co musí agentova implementace poskytovat, aby ji
+bylo možné porovnávat s~referenční sadou behavioral testů (\acs{Q2}).
+Systém je čistá funkce \texttt{process(state, event, now)}, která
+pro daný stav, událost a~aktuální čas vrátí nový stav a~seznam akcí.
+Pevné jsou názvy 12 stavů (9 v~hlavní eskalační větvi a~3 boční:
+\texttt{PAID}, \texttt{CANCELLED}, \texttt{PAUSED}), 6~typů událostí
+(\texttt{tick}, \texttt{payment\_received}, \texttt{invoice\_cancelled},
+\texttt{dunning\_paused}, \texttt{dunning\_resumed},
+\texttt{manual\_advance}) a~3 typy akčních deskriptorů
+(\texttt{send\_email}, \texttt{suspend\_service},
+\texttt{resume\_service}). Stav nese kromě \texttt{status} pole pro
+datum splatnosti, čas vstupu do aktuálního stavu, konfiguraci a~při
+pauze \texttt{pausedFrom} s~\texttt{pausedElapsed}. Vnitřní
+implementace (modulární rozdělení, funkční vs.\ objektový styl)
+zůstává na agentovi. Kontrakt je úzký právě v~tom, co testy potřebují
+volat a~pozorovat, a~všechno ostatní nechává otevřené.
+
+\paragraph{Implicitní pravidla domény.}
+Stavový automat je sám o~sobě lineární a~implementačně přímočarý.
+Obtížnost úlohy leží jinde: ve dvou implicitních pravidlech, která
+specifikace klade na chování implementace a~jejichž přehlédnutí vede
+ke kódu, který sice prochází triviálními případy, ale na hraničních
+selhává. Za~prvé,
+pause/resume musí přes pole \texttt{pausedElapsed} zachovat uplynulý
+čas: bez něj by se musel řešit trikem (posun \texttt{stateEnteredAt}
+zpět v~čase), který funguje pro jednu pauzu, ale selhává při
+opakovaném pause/resume, protože druhá pauza ztratí historii první.
+Za~druhé, všechny timeouty se počítají v~pracovních dnech, takže
+\texttt{+14\,bd} od pátku není čtrnáct kalendářních dnů a~hranice
+mezi víkendem a~pondělím jsou off-by-one zóna. Obě pravidla jsou
+plně určená API kontraktem; jejich zachycení ale vyžaduje doslovné
+čtení typů a~doménového slovníku, ne odvozování z~diagramu automatu.
+
+\paragraph{Acceptance criteria.}
+Specifikace obsahuje 25 acceptance criteria ve formátu Given/When/Then.
+Pokrývají sedm okruhů: časové přechody eskalace, platby, terminální
+stavy, storno, pauza/obnovení, manuální postup a~výpočet pracovních
+dní. Ukázka jednoho kritéria z~okruhu pauza/obnovení:
+
+\begin{quote}\small\sffamily
+Given an invoice is in PAUSED state\\
+When a \texttt{dunning\_resumed} event occurs\\
+Then the state transitions back to the state it was in before pausing\\
+And the timeout resumes from where it left off
+\end{quote}
+
+Formát Given/When/Then usnadňuje převod požadavků do referenčních
+testů (\ac{Q2}) i~mapování acceptance criteria na agentovy vlastní
+testy (\ac{Q4}). Doménový slovník (9 pojmů: dunning, grace period,
+business days, action descriptor aj.) sjednocuje terminologii mezi
+specifikací a~implementací.
+
+\paragraph{Out of scope.}
+Specifikace explicitně vylučuje šest oblastí: opakování plateb,
+úroky a~poplatky z~prodlení, částečné platby, odesílání e-mailů,
+plánování (cron) a~persistenci dat. Sekce out of scope omezuje
+riziko, že agent rozšíří řešení nad rámec sledovaného zadání,
+a~drží úlohu na úrovni čisté business logiky.
+
+\paragraph{Referenční testy jako oracle.}
+\phantomsection\label{sec:ref-implementace-postup}%
+Pro metriku~\ac{Q2} (sec~\ref{sec:produktove-metriky}) byla souběžně
+se specifikací připravena sada 42 referenčních testů metodou
+spec-first TDD~\cite{mathews2024}: očekávané hodnoty pochází ze
+specifikace, ne z~pozorování kódu. Testy jsou agentovi neviditelné
+a~spouští se až po běhu samostatným skriptem, takže slouží jako
+externí oracle, tedy zdroj očekávaných výsledků, který agent nemůže přepsat
+(sec~\ref{sec:hodnoceni-ai-agentu}). Mutation testing nad referenční
+test suite dosáhl 91{,}9\,\%, což indikuje, že referenční testy samy
+detekují cílené poruchy v~doménové logice. Tato hodnota slouží jako
+pojistka kvality měřicího nástroje, ne jako srovnávací baseline pro
+agentovy běhy.
+
+V~tomto designu vystupují tři roviny, které se snadno zaměňují.
+\textit{Instrukce} v~souboru \texttt{AGENTS.md} jsou nezávislou
+proměnnou: měníme je mezi běhy a~sledujeme dopad. \textit{Chování
+agenta} (jak implementuje, jak strukturuje práci a~jaký kód vytváří)
+je závislou proměnnou, kterou měříme. Systém upomínek faktur slouží
+jako testovací prostředí, na~kterém chování pozorujeme; není
+předmětem zkoumání.
+
+\subsection{Fixní proměnné}
+\label{sec:fixni-promenne}
+
+Aby bylo možné měřit vliv instrukcí, musí být všechno ostatní
+co nejstabilnější. Hlavní měněnou proměnnou mezi běhy je obsah
+souboru \texttt{AGENTS.md}, tedy procedurálních instrukcí, které
+definují pracovní postup, omezení a~quality gates. Tento design
+negarantuje dokonalou izolaci všech vlivů; jeho cílem je omezit
+zjevné vedlejší vstupy a~udělat jejich případný vliv auditovatelný.
+Na rozdíl od generických context files,
+které typicky popisují adresářovou strukturu a~build
+příkazy~\cite{gloaguen2025agentsmd}, jde o~fokusované instrukce
+s~konkrétními procedurami~\cite{skillsbench2025}.
+
+Fixní proměnné jsou:
+
+\textbf{Prázdné GitHub repo} obsahuje pouze \texttt{AGENTS.md}
+a~konfiguraci agenta. Žádný existující kód, testy ani
+\texttt{package.json}. Agent musí inicializovat projekt
+a~zvolit strukturu sám.
+
+\textbf{Specifikace projektu} (popsaná v~sekci~\ref{sec:konstrukce-specifikace})
+zůstává napříč všemi běhy beze změny a~je dodávána agentovi
+v~GitHub Issue~\#1 jako hlavní věcný vstup vedle instrukcí.
+
+\textbf{Modely} jsou mezi běhy fixní. Agentní běhy provádí
+MiniMax-M2.5, model schopný autonomně dokončit zadaný úkol. Cílem
+práce je vyhodnotit sadu metrik a~iterativní postup, ne srovnávat
+výkon modelů. Konkrétní agentní model proto slouží jako součást
+experimentálního nastavení. Pro judge-based metriky je fixně použit
+GLM-5 (Zhipu AI), záměrně z~jiné modelové rodiny než agent. Tato volba
+navazuje na biasy LLM-as-judge popsané v~sekci~\ref{sec:llm-as-judge}.
+Teplota modelu nebyla mezi běhy explicitně nastavena. Agent běžel
+s~výchozí konfigurací poskytovatele. Dopad této volby na variabilitu
+výsledků diskutuje sekce~\ref{sec:limity-vysledky}.
+
+\textbf{Běhové prostředí (Docker container)} zajišťuje, že agent
+nemá přístup ke globální konfiguraci nástroje, MCP serverům ani
+rozšířením nainstalovaným na hostitelském systému. Izolace tím
+významně omezuje vliv vedlejších vstupů z~prostředí, ale
+nevylučuje všechny zdroje variability. Sdílený
+autentizační svazek zajišťuje konzistentní přístup k~API napříč
+běhy.
+
+\textbf{Harness OpenCode} je CLI nástroj, který orchestruje běh
+agenta: spravuje session, zprostředkovává volání modelu, zpřístupňuje
+nástroje (čtení a~zápis souborů, shell, vyhledávání) a~zaznamenává
+transcript. Harness sám není měřeným chováním; měříme to, co agent
+přes něj udělá. Verze nástroje je pinovaná v~Docker image, konfigurace
+agenta (povolené nástroje, MCP servery) je součástí auditovatelného
+balíku v~repozitáři práce. Volba OpenCode je dána open-source
+licencí (umožňuje pinování verze a~záznam interní telemetrie),
+strojově čitelným exportem session a~přístupem do interní databáze,
+ze které čerpá metrika \acs{E3} (počet kompakcí kontextu).
+Vlastnosti harness, které ovlivňují měření, jsou diskutovány
+u~jednotlivých metrik: tichý retry po selhání API
+(sekce~\ref{sec:limity-vysledky}) a~automatická kompakce kontextu
+(metrika \acs{E3}).
+
+\textbf{System prompt agenta} (\texttt{build.md}) nahrazuje výchozí
+system prompt nástroje OpenCode, jehož instrukce o~verzování
+konfliktovaly s~procesními požadavky případové studie. Vlastní system prompt
+obsahuje pouze obecné kódové konvence (styl, bezpečnost, zákaz
+komentářů) a~odkaz na \texttt{AGENTS.md}. Veškeré procesní instrukce
+jsou výhradně v~\texttt{AGENTS.md}, aby bylo možné změny procesního
+chování přisuzovat této vrstvě obhajitelněji než při jejich
+rozptýlení mezi více vstupů.
+
+%% ==========================================================================
+%% 3.2 Sada metrik
+%% ==========================================================================
+
+\section{Sada metrik}
+\label{sec:sada-metrik}
+
+Každý experimentální běh probíhá tak, že agent dostane prázdné
+GitHub repo, specifikaci v~Issue~\#1 a~instrukce v~\texttt{AGENTS.md},
+a~autonomně implementuje zadaný projekt. Výstup jednoho běhu (kód,
+testy, git historie) měříme sadou 19~metrik. Proceduru jednoho běhu
+(záznam, vyhodnocení a~diagnostickou úpravu instrukcí) popisuje
+sekce~\ref{sec:procedura-behu}.
+
+Sada metrik pokrývá tři otázky: jak agent pracoval, co vyrobil
+a~za jakou cenu. Tyto tři otázky odpovídají taxonomii proces /
+produkt / zdroje popsané v~sekci~\ref{sec:mereni-kvality-obecne}.
+Naše sada obsahuje 19~metrik ve třech kategoriích:
+
+\begin{description}
+    \item[P~-- proces (P1--P8)] Dodržel agent předepsaný postup?
+          Měříme dodržování pravidel pracovního postupu z~instrukcí
+          (\acs{P1}--\acs{P5}) a~kvalitu procesních výstupů jako commit
+          messages, issue a~PR descriptions (\acs{P6}--\acs{P8}).
+    \item[Q~-- kvalita produktu (Q1--Q8)] Je kód kvalitní?
+          Měříme funkční korektnost (\acs{Q1}--\acs{Q2}), kvalitu testů
+          (\acs{Q3}--\acs{Q4}) a~udržovatelnost kódu (\acs{Q5}--\acs{Q8}).
+    \item[E~-- zdroje (E1--E3)] Za jakou cenu?
+          Zaznamenáváme spotřebované tokeny (\acs{E1}), čas (\acs{E2})
+          a~počet kompakcí kontextu (\acs{E3}).
+\end{description}
+
+\paragraph{Tři osy klasifikace metriky.}
+Každou metriku popisujeme třemi vlastnostmi. První je kategorie
+\mgrp{P}, \mgrp{Q} nebo \mgrp{E}, tedy zda metrika sleduje proces,
+produkt nebo zdroje. Druhá je způsob měření. Deterministické metriky
+počítá skript, parser logu nebo statická analýza, zatímco
+judge-based metriky hodnotí LLM-as-judge podle hodnoticího schématu. Třetí
+vlastností je role v~hodnocení. Procesní a~produktové metriky mají
+exit kritéria a~slouží k~posouzení, zda byl běh úspěšný. Metriky
+zdrojů \acs{E1}--\acs{E3} exit kritéria nemají. Jejich hodnoty se
+pouze zaznamenávají a~slouží jako kontext pro porovnání nákladů
+a~stability kontextu během běhu.
+
+\paragraph{LLM-as-judge protokol.}
+\phantomsection\label{sec:llm-as-judge-aplikace}%
+Pět metrik (\acs{P6}, \acs{P7}, \acs{P8}, \acs{Q4}, \acs{Q8})
+hodnotí vlastnosti, které nelze spolehlivě extrahovat
+deterministickým skriptem. Proto používají LLM-as-judge s~modelem
+GLM-5 (Zhipu AI). GLM-5 je z~jiné modelové rodiny než agentní
+MiniMax-M2.5, protože modely mají tendenci zvýhodňovat výstupy svého
+vlastního druhu, tedy vykazují self-preference bias~\cite{panickssery2024}.
+Volba hodnotitele z~jiné rodiny tento bias snižuje~\cite{verga2024poll}.
+
+Judge dostává výstupy běhu, například zdrojový kód, commit messages,
+issue a~PR descriptions. Hodnotí je podle pevného hodnoticího schématu
+(\textit{scoring rubric}), které určuje posuzované dimenze a~význam
+stupňů 1 až 3 (1 = nejnižší kvalita, 3 = nejvyšší kvalita). Stejný
+prompt, hodnoticí schémata i~model GLM-5 se používají ve všech bězích,
+aby bylo hodnocení mezi iteracemi srovnatelné.
+
+Judge-based metriky mají v~této práci podpůrnou roli. Umožňují
+strukturovaně zachytit vlastnosti, které deterministické nástroje
+nepokrývají, ale nejsou interpretovány jako plně objektivní měření.
+
+\subsection{Procesní metriky (P1--P8)}
+\label{sec:procesni-metriky}
+
+Procesní metriky měří \textit{jak} agent pracuje.
+Instrukce v~AGENTS.md definují strukturovaný vývojový postup: agent
+má odvozovat práci ze specifikace, organizovat ji přes issues
+a~branches, psát testy před implementací a~dokumentovat rozhodnutí
+v~commit messages a~PR descriptions.
+
+\subsubsection*{P1--P5: compliance (binární)}
+
+Tabulka~\ref{tab:p1-p5} shrnuje deterministické procesní metriky.
+Všechny mají binární výstup pass/fail.
+
+\begin{table}[htbp]
+\centering
+\caption{Procesní compliance metriky P1--P5}
+\label{tab:p1-p5}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\linewidth}{@{}lp{0.22\linewidth}Xp{0.16\linewidth}@{}}
+\toprule
+\textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} & \textbf{Exit kritérium} \\
+\midrule
+\acs{P1} & Issues vznikla před kódem &
+Porovnání \texttt{created\_at} nejstaršího issue vytvořeného agentem (GitHub API)
+s~časem prvního commitu obsahujícího soubory v~\texttt{src/}
+nebo \texttt{tests/}. & pass \\
+\addlinespace
+\acs{P2} & Branch per issue &
+Počet remote branches (bez \texttt{main}) vůči počtu issues; podmínka
+\textit{branches $\geq$ issues} (žádné slučování více issues do jedné
+větve). & pass \\
+\addlinespace
+\acs{P3} & Test-first &
+Primárně se kontroluje, zda existuje commit s~prefixem \texttt{test:}
+před commitem \texttt{feat:}. Jako doplňková kontrola se z~git historie
+ověřuje, zda první změna v~\texttt{src/} nepředchází první změně
+v~\texttt{tests/}. & pass \\
+\addlinespace
+\acs{P4} & PR linkován na issue &
+Tělo každého PR (GitHub API) obsahuje regex \texttt{Closes \#N}. & pass \\
+\addlinespace
+\acs{P5} & Žádné modifikace existujících testů &
+Metrika sleduje, zda agent měnil již existující testy v~adresáři
+\texttt{tests/}. Kontrola používá \texttt{git diff -{}-diff-filter=M}.
+Nově přidané testy se nezapočítávají, protože rozšiřování test suite
+je v~zadání povolené. & pass \\
+\bottomrule
+\end{tabularx}
+\end{table}
+\FloatBarrier
+
+\subsubsection*{P6--P8: kvalita procesních výstupů (LLM-as-judge)}
+
+Tabulka~\ref{tab:p6-p8} shrnuje judge-based procesní metriky.
+
+\begin{table}[htbp]
+\centering
+\caption{Judge-based procesní metriky P6--P8}
+\label{tab:p6-p8}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\linewidth}{@{}lp{0.22\linewidth}Xp{0.16\linewidth}@{}}
+\toprule
+\textbf{Kód} & \textbf{Co hodnotí} & \textbf{Škála} & \textbf{Exit kritérium} \\
+\midrule
+\acs{P6} & Kvalita commit messages &
+1--3 (atomicita, konvenční prefix, srozumitelnost co a~proč bylo změněno). & $\geq$ 2/3 \\
+\addlinespace
+\acs{P7} & Kvalita issue descriptions &
+1--3 (jasnost scope, přítomnost acceptance criteria, dostatečnost pro
+implementaci). & $\geq$ 2/3 \\
+\addlinespace
+\acs{P8} & Kvalita PR descriptions &
+1--3 (odkaz na issue, popis co a~proč, dostatečnost pro code review). & $\geq$ 2/3 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+\FloatBarrier
+
+\subsection{Produktové metriky (Q1--Q8)}
+\label{sec:produktove-metriky}
+
+Produktové metriky měří \textit{co} agent vyrobil. Z~osmi
+charakteristik ISO/IEC~25010 (sekce~\ref{sec:dimenze-kvality})
+v~této sadě sledujeme dvě: \textit{funkční vhodnost}
+(\acs{Q1}--\acs{Q4}: agent vytváří správné řešení)
+a~\textit{udržovatelnost} (\acs{Q5}--\acs{Q8}: agent vytváří kód
+vhodný k~dalšímu pochopení a~rozvoji). Zbylé charakteristiky
+ISO/IEC~25010 by vyžadovaly jiný typ úlohy. Bezpečnost předpokládá
+autentizaci, oprávnění nebo práci s~citlivými daty, výkonnost
+měřitelnou zátěž a~použitelnost uživatelské rozhraní. Zvolený projekt
+je záměrně omezen na doménovou logiku, takže sada Q~metrik sleduje
+funkční korektnost, kvalitu testů a~udržovatelnost.
+
+\subsubsection*{Funkční korektnost (Q1--Q2)}
+
+Tabulka~\ref{tab:q1-q2} shrnuje metriky funkční korektnosti.
+
+\begin{table}[htbp]
+\centering
+\caption{Metriky funkční korektnosti Q1--Q2}
+\label{tab:q1-q2}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\linewidth}{@{}lp{0.22\linewidth}Xp{0.16\linewidth}@{}}
+\toprule
+\textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} & \textbf{Exit kritérium} \\
+\midrule
+\acs{Q1} & Kompatibilita s~API kontraktem &
+Referenční typy se importují a~zkompilují proti agentovu kódu
+(\texttt{tsc}). Výsledek je binární podle toho, zda typy odpovídají
+kontraktu. & match \\
+\addlinespace
+\acs{Q2} & Úspěšnost referenčních testů &
+Referenční testy se spouštějí nástrojem Vitest proti agentovu kódu.
+Výsledek je počet úspěšných testů z~42. & 42/42 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+\FloatBarrier
+
+\acs{Q1} ověřuje, zda implementace odpovídá API kontraktu. Pokud
+implementace API kontrakt nesplňuje, referenční testy \acs{Q2} se
+nedají spustit. Splnění \acs{Q1} ale samo neznamená, že se implementace
+chová správně. To ověřují až referenční testy \acs{Q2}.
+
+\phantomsection\label{sec:referencni-testy}%
+Případová studie rozlišuje dva druhy testů. \textit{Referenční testy}
+(měřené metrikou \acs{Q2}) jsou odvozené ze specifikace metodou
+TDD~\cite{mathews2024} a~spouštěné po běhu samostatným skriptem,
+takže pro agenta jsou neviditelné. \textit{Agentovy vlastní testy}
+píše agent během běhu, jsou viditelné a~spustitelné agentem; vztahuje
+se k~nim metrika \acs{P5}. Referenční testy slouží jako externí
+oracle, tedy zdroj očekávaných výsledků, který agent nemůže přepsat
+(sekce~\ref{sec:hodnoceni-ai-agentu}).
+
+\subsubsection*{Kvalita testů (Q3--Q4)}
+
+Tabulka~\ref{tab:q3-q4} shrnuje metriky kvality testů.
+
+\begin{table}[htbp]
+\centering
+\caption{Metriky kvality testů Q3--Q4}
+\label{tab:q3-q4}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\linewidth}{@{}lp{0.22\linewidth}Xp{0.16\linewidth}@{}}
+\toprule
+\textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} & \textbf{Exit kritérium} \\
+\midrule
+\acs{Q3} & Schopnost agentových testů detekovat chyby &
+Nástroj Stryker spouští mutation testing nad agentovými testy
+a~zdrojovým kódem. Výsledkem je mutation score, tedy podíl mutovaných
+variant programu, které testy odhalí. & $\geq$ 80\,\% \\
+\addlinespace
+\acs{Q4} & Pokrytí acceptance criteria agentovými testy\protect\footnotemark &
+Specifikace obsahuje 25~acceptance criteria. Hodnocení určí, kolik
+z~nich má odpovídající test v~agentově test suite. Výsledek má tvar
+\texttt{N/25}. & 25/25 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+\footnotetext{Na rozdíl od~\acs{Q2}, která ověřuje chování výsledné
+implementace, \acs{Q4} sleduje, zda agentovy vlastní testy pokrývají
+požadovaná acceptance criteria.}
+\FloatBarrier
+
+\subsubsection*{Kvalita kódu (Q5--Q8)}
+
+Tabulka~\ref{tab:q5-q8} shrnuje metriky kvality kódu.
+
+\begin{table}[htbp]
+\centering
+\caption{Metriky kvality kódu Q5--Q8}
+\label{tab:q5-q8}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\linewidth}{@{}lp{0.22\linewidth}Xp{0.16\linewidth}@{}}
+\toprule
+\textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} & \textbf{Exit kritérium} \\
+\midrule
+\acs{Q5} & Lint warnings + errors &
+ESLint s~fixní konfigurací (recommended + strict TypeScript rules).
+Konfigurace je součástí experimentální infrastruktury, ne agentova repo;
+agent ji nemůže měnit. Výstup: celkový počet warnings + errors. & 0 \\
+\addlinespace
+\acs{Q6} & Typové chyby &
+\texttt{tsc -{}-noEmit} ve strict mode. Doplňuje počet explicitních
+\texttt{any} ve zdrojových souborech (grep v~\texttt{src/**/*.ts}) jako
+proxy pro obcházení typového systému. & 0 \\
+\addlinespace
+\acs{Q7} & Cyklomatická složitost &
+ESLint \texttt{complexity} rule reportuje funkce s~cyklomatickou
+složitostí nad limitem 10. Výstupem je počet porušení tohoto limitu. & 0 porušení limitu $\leq$ 10/fn \\
+\addlinespace
+\acs{Q8} & Designová kvalita kódu &
+Hodnocení posuzuje pojmenování, oddělení zodpovědností, idiomatický
+TypeScript, kvalitu dokumentace a~zbytečnou komplexitu. Celkové skóre
+je minimum dílčích dimenzí, aby silná dimenze nemaskovala slabou. & $\geq$ 2/3 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+\FloatBarrier
+
+\subsection{Metriky zdrojů (E1--E3)}
+\label{sec:metriky-zdroju}
+
+Metriky zdrojů zachycují, kolik běh agenta spotřeboval tokenů a~času
+a~zda během něj došlo ke kompakci kontextu. Na rozdíl od procesních
+a~produktových metrik nemají \acs{E1}--\acs{E3} exit kritérium. Jejich
+hodnoty slouží k~porovnání nákladů a~stability kontextu během běhu
+mezi iteracemi.
+
+\begin{table}[htbp]
+\centering
+\caption{Metriky zdrojů E1--E3}
+\label{tab:e1-e3}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\linewidth}{@{}lMX@{}}
+\toprule
+\textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} \\
+\midrule
+\acs{E1} & Spotřeba tokenů &
+Tři složky z~exportu session v~tisících: maximální vstup na jednom
+kroku, součet výstupních tokenů a~součet cache tokenů. \\
+\addlinespace
+\acs{E2} & Trvání běhu &
+Reálný čas běhu v~minutách od spuštění agenta po poslední commit. \\
+\addlinespace
+\acs{E3} & Počet kompakcí &
+Počet kompakcí kontextu během běhu, čtený přímo z~OpenCode DB
+(pole \texttt{time\_compacting}). Kompakce indikuje, že agent
+vyčerpal kontextové okno a~prostředí muselo obsah zhustit.
+Metrika nemá exit kritérium. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+\FloatBarrier
+
+%% ==========================================================================
+%% 3.3 Procedura jedné iterace
+%% ==========================================================================
+
+\section{Procedura jedné iterace}
+\label{sec:procedura-behu}
+
+Jedna iterace pilotní fáze zahrnuje běh agenta, extrakci metrik
+z~výstupů běhu a~diagnostiku, ze~které může vzniknout úprava
+instrukcí pro navazující běh. Ablační fáze používá stejnou proceduru
+spuštění a~měření pro jednotlivé varianty instrukcí, ale nepracuje
+s~průběžnou úpravou téže varianty.
+
+\subsection{Iterativní cyklus}
+\label{sec:cyklus-iterace}
+
+Pilotní fáze používá iterativní cyklus návrhu instrukcí. V~každé
+iteraci agent nejprve provede zadaný běh, poté se z~výstupů běhu
+extrahují metriky, naměřené odchylky se interpretují jako diagnóza
+a~podle ní vzniká úprava instrukcí pro další běh. Cyklus má čtyři
+kroky. Spuštění zachycuje běh agenta, Měření extrakci metrik,
+Diagnóza interpretaci odchylek a~Úprava změnu instrukcí. Opakování
+cyklu se řídí tím, zda metriky stále poskytují použitelnou
+diagnostickou informaci. Pokud další běh vede k~regresi, navazující
+úprava vychází z~poslední úspěšné verze instrukcí
+(obr.~\ref{fig:iterativni-cyklus}).
+
+V~ablační fázi se stejná procedura spuštění a~měření používá pro
+předem zvolené varianty instrukcí. Výsledky jednotlivých běhů
+neslouží k~průběžné úpravě téže varianty, ale k~porovnání dopadu
+odebrané složky instrukcí s~plnou verzí.
+
+\begin{figure}[tbp]
+\centering
+\begin{tikzpicture}[
+    node distance=1.8cm,
+    box/.style={rectangle, draw, rounded corners=3pt,
+                minimum width=2.2cm, minimum height=0.8cm,
+                font=\small\sffamily},
+    arr/.style={->, thick}
+]
+    \node[box] (run)      {Spuštění};
+    \node[box, right=of run]     (measure) {Měření};
+    \node[box, right=of measure] (diagnose){Diagnóza};
+    \node[box, right=of diagnose](fix)     {Úprava};
+
+    \draw[arr] (run)      -- (measure);
+    \draw[arr] (measure)  -- (diagnose);
+    \draw[arr] (diagnose) -- (fix);
+    \draw[arr] (fix.south) -- ++(0,-0.5) -| (run.south)
+        node[midway, below, font=\footnotesize\sffamily]
+        {opakovat podle diagnostiky};
+\end{tikzpicture}
+\caption{Iterativní cyklus pilotní fáze se smyčkou opakování řízenou diagnostikou naměřených odchylek.}
+\label{fig:iterativni-cyklus}
+\end{figure}
+\FloatBarrier
+
+\subsection{Záznam a~vyhodnocení běhu}
+\label{sec:zaznam-bezhu}
+
+Každý běh produkuje strukturovaný balík záznamů, který umožňuje
+zpětně rekonstruovat naměřené hodnoty i~chování agenta.
+
+\textbf{Sběr metrik.} Po skončení běhu se spouštějí dva skripty.
+\texttt{new-run.ts} exportuje session do \texttt{transcript.json}
+(úplný záznam tool calls, vstupů a~výstupů agenta).
+\texttt{analyze-run.ts} extrahuje deterministické metriky z~git
+historie, GitHub API a~transcriptu (\acs{P1}--\acs{P5},
+\acs{Q1}--\acs{Q3}, \acs{Q5}--\acs{Q7}, \acs{E1}--\acs{E3}).
+Skript \texttt{judge.ts} spouští LLM-as-judge (GLM-5) pro
+\mmet{qual} (\acs{P6}--\acs{P8}, \acs{Q4}, \acs{Q8})
+podle hodnoticích schémat uložených v~repozitáři práce. Souhrnným výstupem
+je \texttt{FINDINGS.md} s~tabulkou metrik a~faktickým popisem
+chování agenta.
+
+\textbf{Auditovatelný balík.} Každý běh má vlastní adresář
+\texttt{experiments/runs/pilot-rN/} obsahující transcript,
+naměřené metriky a~\texttt{FINDINGS.md}. K~iteraci jako celku
+patří navíc \texttt{DIAGNOSIS.md} s~analytickým výstupem
+(sekce~\ref{sec:diagnostika-uprava}) a~záznam v~changelogu
+zdůvodňující úpravu \texttt{AGENTS.md} pro další běh.
+Tabulka~\ref{tab:zaznamy-bezhu} shrnuje strukturu balíku.
+
+\begin{table}[htbp]
+\centering
+\caption{Záznamy pořízené pro jeden běh a~jednu iteraci}
+\label{tab:zaznamy-bezhu}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\linewidth}{@{}lX@{}}
+\toprule
+\textbf{Soubor} & \textbf{Obsah} \\
+\midrule
+\texttt{transcript.json}            & úplný záznam session (tool calls, vstup, výstup) \\
+\addlinespace
+\texttt{FINDINGS.md}                & tabulka metrik a~faktický popis chování \\
+\addlinespace
+\texttt{DIAGNOSIS.md}               & klasifikace příčin a~návrh změn \\
+\addlinespace
+\texttt{changelog/r$N$-r$N{+}1$.md} & zdůvodnění úprav \texttt{AGENTS.md} (bylo / je / pozorování / diagnóza / literatura) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+\FloatBarrier
+
+Doplňující materiály jsou v~repozitáři práce
+(\url{https://github.com/7onc3k/Bakalarka/tree/thesis-final}): kompletní operační
+procedura, šablony \texttt{FINDINGS.md} a~\texttt{DIAGNOSIS.md},
+všechny verze \texttt{AGENTS.md} včetně baseline a~ablačních
+variant, plná hodnoticí schémata a~prompty LLM-as-judge, transcripty
+session, surová výstupní data nástrojů a~specifikace projektu
+v~plném znění. Stav repozitáře k~datu odevzdání je zafixován
+gitovým tagem \texttt{thesis-final}. Přímé odkazy na tyto doplňující
+materiály uvádí příloha~\ref{app:doplnujici-materialy}.
+
+
+\subsection{Diagnostika a~úprava instrukcí}
+\label{sec:diagnostika-uprava}
+
+Tato sekce popisuje analytickou část iterace: jak z~naměřených
+hodnot odvodíme příčinu selhání (diagnóza) a~jak z~ní vychází
+konkrétní úprava \texttt{AGENTS.md} (úprava). Vstupem je
+\texttt{FINDINGS.md} z~předchozího běhu
+(sekce~\ref{sec:zaznam-bezhu}), výstupem \texttt{DIAGNOSIS.md},
+upravená \texttt{AGENTS.md} pro příští běh a~záznam v~changelogu.
+
+\textbf{Diagnostické rámce.} Diagnóza identifikuje, kde a~proč
+agent nedodržel očekávané chování. Opírá se o~pět rámců, z~nichž
+každý klade jinou diagnostickou otázku
+(tabulka~\ref{tab:diagnostika-ramce}).
+
+\begin{table}[htbp]
+\centering
+\caption{Diagnostické rámce a~otázky, které kladou}
+\label{tab:diagnostika-ramce}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\linewidth}{@{}lX@{}}
+\toprule
+\textbf{Rámec} & \textbf{Diagnostická otázka} \\
+\midrule
+\textcite{mao2025fse}                          & Jsou komponenty instrukce přítomné a~ve~správném pořadí? \\
+\textcite{hassan2025sase}                      & Vyvažuje obsah cíl (briefing), postup (loop) a~omezení (mentor)? \\
+\textcite{razavi2025}, \textcite{breunig2025}  & Proč agent instrukci opakovaně ignoruje a~jak ji přestrukturovat? \\
+\textcite{lulla2026}                           & Které typy obsahu reálně přispívají k~chování?\,$^{*}$ \\
+Filter \textcite{skillsbench2025}              & \textit{Kdyby tento řádek chyběl, udělal by agent neočividnou chybu?} \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.3em}
+{\footnotesize $^{*}$ Lulla měří přítomnost celého souboru, ne jednotlivé
+typy obsahu; rámec proto používáme interpretativně.}
+\end{table}
+\FloatBarrier
+
+\textbf{Postup diagnózy.} Z~tabulky metrik se vyberou nesplněné
+nebo hraniční hodnoty, dohledají se faktické projevy ve
+\texttt{FINDINGS.md} a~v~artefaktech (git log, issues, PR,
+transcript), aby bylo možné odlišit jednorázové selhání běhu od
+opakujícího se problému instrukcí. Identifikovaná příčina se
+klasifikuje podle tabulky~\ref{tab:diagnostika-mapa}, která mapuje
+typ příčiny na primární rámec a~typ opravy.
+
+\begin{table}[htbp]
+\centering
+\caption{Mapování klasifikace příčiny na diagnostický rámec a~typ opravy}
+\label{tab:diagnostika-mapa}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lll@{}}
+\toprule
+\textbf{Klasifikace příčiny} & \textbf{Primární rámec} & \textbf{Typ opravy} \\
+\midrule
+Chybějící / příliš obecná složka  & Mao             & Doplnění / zpřesnění \\
+Nevyvážený obsah                  & Hassan          & Přestrukturování \\
+Opakovaně ignorovaná instrukce    & Razavi, Breunig & Přestrukturování + verifikace \\
+Redundantní obsah                 & Lulla + filter Li  & Odebrání \\
+\bottomrule
+\end{tabular*}
+\end{table}
+\FloatBarrier
+
+Hranice mezi typy příčin jsou v~praxi neostré a~klasifikace vyžaduje
+úsudek; rámce slouží jako heuristické vodítko, ne algoritmus. Roli
+AI asistence při této analýze popisuje
+sekce~\ref{sec:omezeni-validita}.
+
+\textbf{Úprava.} Na základě diagnózy se upraví \texttt{AGENTS.md}.
+Každá změna odpovídá jednomu identifikovanému problému, je podložena
+citací a~zaznamenaná v~changelogu ve formátu \textit{bylo / je /
+pozorování / diagnóza / literatura}, aby bylo zpětně dohledatelné,
+proč daná úprava vznikla a~co měla opravit. Přestrukturování
+instrukcí má přednost před jejich rozšiřováním: redundantní obsah
+zvyšuje inference cost bez přínosu k~úspěšnosti~\cite{gloaguen2025agentsmd}
+a~fokusované instrukce překonávají vyčerpávající
+dokumentaci~\cite{skillsbench2025}.
+
+Iterativní úpravu instrukcí by bylo možné automatizovat přístupy typu
+\textit{automatic prompt optimization} (APO)~\cite{schnabel2024sammo},
+kde smyčka \textit{score~$\to$~synthesize} formálně odpovídá našemu
+cyklu \textit{měření~$\to$~diagnóza~$\to$~úprava}; reprezentanty
+jsou například PromptWizard~\cite{agarwal2024promptwizard} a~Prompt
+Alchemy~\cite{ye2025promptalchemy}. Volíme ruční postup
+s~nástrojem Claude Code jako analytickým asistentem (popis využití
+v~příloze~\ref{app:ai-disclosure}): vícerozměrné hodnocení P/Q/E
+nelze sjednotit do jediné loss funkce, měřítko studie (desítky běhů)
+neodpovídá řádu APO (tisíce evaluací) a~cílem je vysvětlit,
+\textit{proč} instrukce selhává a~\textit{jak} se opravuje, ne jen
+najít kombinaci s~nejvyšším score.
+
+
+%% ==========================================================================
+%% 3.4 Přehled metrik
+%% ==========================================================================
+
+\section{Přehledová tabulka}
+\label{sec:prehledova-tabulka}
+
+Tabulka~\ref{tab:metriky-prehled} shrnuje všechny metriky na jednom
+místě. Sběr má dvě podoby: \mmet{det} (sloupec \textit{Nástroj}
+ukazuje konkrétní automatizovaný nástroj) a~\mmet{qual} (sloupec
+\textit{Nástroj} obsahuje LLM-as-judge). Prahové požadavky ve~sloupci
+\textit{Exit kritérium} popisují striktní ideál pro \mgrp{P}
+a~\mgrp{Q}; deskriptivní indikátory bez prahu (celá zdrojová
+skupina E1--E3) mají v~tomto sloupci pomlčku a~slouží jen
+k~porovnání mezi běhy.
+
+\begin{table}[htbp]
+\centering
+\caption{Sada metrik: kód, měřená vlastnost, nástroj a~exit kritérium}
+\label{tab:metriky-prehled}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\linewidth}{@{}p{0.06\linewidth}Xp{0.30\linewidth}p{0.18\linewidth}@{}}
+\toprule
+\textbf{Kód} & \textbf{Metrika} & \textbf{Nástroj} & \textbf{Exit kritérium} \\
+\midrule
+\multicolumn{4}{@{}l}{\textit{Procesní (P): jak agent pracuje}} \\[2pt]
+P1 & Issues before code            & git, GitHub API & pass \\
+P2 & Branch per issue              & git, GitHub API & pass \\
+P3 & Test-first commits            & git log         & pass \\
+P4 & PRs linked to issues          & GitHub API      & pass \\
+P5 & No existing test modifications & git diff       & pass \\
+P6 & Kvalita commit messages       & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
+P7 & Kvalita issue descriptions    & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
+P8 & Kvalita PR descriptions       & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
+\midrule
+\multicolumn{4}{@{}l}{\textit{Produktové (Q): co agent vyrobil}} \\[2pt]
+Q1 & API contract match         & tsc (import + typecheck) & match \\
+Q2 & Úspěšnost ref.\ testů      & Vitest (42 testů)       & 42/42 \\
+Q3 & Mutation score              & Stryker                 & $\geq$ 80\,\% \\
+Q4 & AC coverage agentových testů (25 krit.) & LLM-as-judge (GLM-5)   & 25/25 \\
+Q5 & Lint warnings               & ESLint                  & 0 \\
+Q6 & Typecheck errors            & tsc \texttt{-{}-noEmit} & 0 \\
+Q7 & Cyklomatická složitost      & ESLint (complexity)     & 0 porušení limitu $\leq$ 10/fn \\
+Q8 & Design quality              & LLM-as-judge (GLM-5)   & $\geq$ 2/3 \\
+\midrule
+\multicolumn{4}{@{}l}{\textit{Zdroje (E): za jakou cenu}} \\[2pt]
+E1 & Vstup / výstup / $\Sigma$ cache (tis.) z exportu & OpenCode export & --- \\
+E2 & Trvání (minuty)             & session timestamps & --- \\
+E3 & Počet kompakcí kontextu & OpenCode DB (\texttt{time\_compacting}) & --- \\
+\bottomrule
+\end{tabularx}
+\end{table}
+\FloatBarrier
+
+%% ==========================================================================
+%% 3.5 Omezení a validita
+%% ==========================================================================
+
+\section{Omezení a~validita}
+\label{sec:omezeni-validita}
+
+Případová studie nese omezení daná zvolenou metodikou. Tato sekce
+pojmenovává předem známé hrozby validity podle case study frameworku
+\textcite{runeson2009}; jejich konkrétní projevy v~datech diskutuje
+sekce~\ref{sec:limity-vysledky}.
+
+\textbf{Konstruktová validita} (měříme to, co chceme měřit?).
+Jednotlivé metriky vychází z~existující teorie: mutation
+testing~\cite{papadakis2019}, cyklomatická složitost~\cite{mccabe1976},
+taxonomie procesních a~produktových metrik~\cite{fenton2014}. Konkrétní
+kombinace metrik do sady a~volba exit kritérií jsou autorské a~představují
+návrh, ne ověřený standard. Pět metrik (\acs{P6}, \acs{P7}, \acs{P8},
+\acs{Q4}, \acs{Q8}) obsahuje subjektivní složku (LLM-as-judge). Tyto
+metriky proto slouží jako podpůrné judge-based indikátory, zatímco
+hlavní opora vyhodnocení stojí na deterministických metrikách
+a~auditovatelných artefaktech. Spolehlivost LLM-as-judge nebyla
+validována proti lidskému hodnocení. U~metriky \acs{Q4} byly
+historické judge běhy uloženy ve~24bodovém formátu; chybějící bod
+AC25 (\textit{custom holiday calendar}) byl dopočítán manuálně.
+Skript \texttt{analyze-run.ts} pro \acs{P1}--\acs{P5} byl ověřen
+srovnáním s~raw daty z~git logu a~GitHub API pro běhy r4 a~r5
+bez zjištěné diskrepance.
+
+\textbf{Interní validita} (jsou závěry podložené daty?).
+Hlavní hrozba je nedeterminismus LLM: stejné instrukce mohou při
+různých bězích dát různé výsledky~\cite{razavi2025}. Pilotní běhy
+r1--r5 probíhaly jednorázově, takže jejich role je formativní
+(iterativní návrh instrukcí), ne konfirmační měření efektu. Mitigace
+se uplatňuje až v~ablacích: shoda dvou nezávislých běhů ve~směru
+efektu zvyšuje důvěru, že nejde o~náhodu, byť ani dva běhy
+neposkytují statistickou sílu.
+Další hrozbou je confirmation bias: autor navrhuje instrukce
+i~evaluuje výsledky. Tuto hrozbu oslabují deterministické metriky
+(\acs{P1}, \acs{Q1}--\acs{Q3}, \acs{Q5}--\acs{Q7}), které nepodléhají
+subjektivnímu posouzení, a~volba judge modelu z~jiné rodiny.
+Mitigací je také auditovatelný řetězec rozhodnutí (changelog per
+iterace, korekční poznámky v~\texttt{FINDINGS.md}) a~oddělení
+měřicí infrastruktury od agentova prostředí.
+
+\textbf{Externí validita} (lze zobecnit?). Případová studie na jednom
+projektu, jednom modelu a~jednom agentním nástroji neumožňuje
+statistickou generalizaci. \textcite{yin2018} pro tento typ výzkumu
+rozlišuje analytickou generalizaci: z~jednoho případu lze ukázat
+principy, ne statistické zákonitosti. Systém upomínek má
+deterministickou logiku a~výsledky nemusí platit pro projekty
+s~uživatelským rozhraním, strojovým učením nebo nedeterministickými
+výstupy. Další ověřování má proto dvě osy: replikaci na jiných
+modelech, nástrojích a~projektech a~ověření mimo programování, kde
+nemusí existovat deterministická zpětná vazba. Přenositelné jsou
+metriky a~postup, konkrétní naměřené hodnoty a~instrukce platí pro
+tuto studii.
+
+Výzkum nezahrnuje lidské účastníky; data (git log, metriky, session
+transcripts), zdrojový kód i~experimentální artefakty jsou veřejně
+dostupné.
+
+
+%% ==========================================================================
+%% Audit trail — starý obsah
+%% ==========================================================================

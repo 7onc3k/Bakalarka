@@ -1,0 +1,7 @@
+```json
+{
+  "metric": "P8",
+  "score": 1,
+  "rationale": "No PR references an issue with 'Closes #N'. Descriptions list what changed but lack why/context. Fails score 2 requirement that 'most reference their issue'."
+}
+```

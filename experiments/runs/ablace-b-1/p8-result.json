@@ -1,0 +1,7 @@
+```json
+{
+  "metric": "P8",
+  "score": 2,
+  "rationale": "PRs have clear descriptions explaining what changed with bullet points, and descriptive titles with conventional prefixes. However, only 1 of 7 PRs references an issue (#15 mentions Issue #1 but without explicit 'Closes #N'), and no PRs use the required 'Closes #N' format. Most PRs lack issue linkage entirely."
+}
+```

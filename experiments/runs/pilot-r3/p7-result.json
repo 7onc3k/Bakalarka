@@ -1,0 +1,7 @@
+```json
+{
+  "metric": "P7",
+  "score": 3,
+  "rationale": "All issues have clear, descriptive titles with well-structured bodies containing specific acceptance criteria (numbered lists, bullet points). Each issue has a focused, single-concern scope and specifies implementation location. Issues reference the spec/API contract appropriately."
+}
+```
