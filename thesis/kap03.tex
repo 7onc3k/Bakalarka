@@ -185,9 +185,9 @@ stavy popisuje text výše.}
 \FloatBarrier
 
 \paragraph{API kontrakt.}
-Aby bylo možné agentovu implementaci porovnávat s~referenční sadou
-behavioral testů (\acs{Q2}), specifikace fixuje veřejné rozhraní:
-systém je čistá funkce \texttt{process(state, event, now)}, která
+API kontrakt určuje, co musí agentova implementace poskytovat, aby ji
+bylo možné porovnávat s~referenční sadou behavioral testů (\acs{Q2}).
+Systém je čistá funkce \texttt{process(state, event, now)}, která
 pro daný stav, událost a~aktuální čas vrátí nový stav a~seznam akcí.
 Pevné jsou názvy 12 stavů (9 v~hlavní eskalační větvi a~3 boční:
 \texttt{PAID}, \texttt{CANCELLED}, \texttt{PAUSED}), 6~typů událostí
@@ -199,7 +199,7 @@ Pevné jsou názvy 12 stavů (9 v~hlavní eskalační větvi a~3 boční:
 datum splatnosti, čas vstupu do aktuálního stavu, konfiguraci a~při
 pauze \texttt{pausedFrom} s~\texttt{pausedElapsed}. Vnitřní
 implementace (modulární rozdělení, funkční vs.\ objektový styl)
-zůstává na agentovi: kontrakt je úzký právě v~tom, co testy potřebují
+zůstává na agentovi. Kontrakt je úzký právě v~tom, co testy potřebují
 volat a~pozorovat, a~všechno ostatní nechává otevřené.
 
 \paragraph{Implicitní pravidla domény.}
@@ -291,15 +291,13 @@ a~zvolit strukturu sám.
 zůstává napříč všemi běhy beze změny a~je dodávána agentovi
 v~GitHub Issue~\#1 jako hlavní věcný vstup vedle instrukcí.
 
-\textbf{Model MiniMax-M2.5} byl zvolen jako model schopný autonomně
-dokončit zadaný úkol. Cílem práce je vyhodnotit sadu metrik
-a~iterativní postup, ne srovnávat výkon modelů; volba konkrétního
-modelu je v~tomto ohledu sekundární. Jako judge pro LLM-as-judge
-metriky (sekce~\ref{sec:llm-as-judge-aplikace}) používáme GLM-5
-(Zhipu AI), záměrně z~jiné modelové rodiny než agent: model má
-tendenci hodnotit výstupy svého vlastního druhu lépe, i~když jsou
-objektivně slabší (self-preference bias~\cite{panickssery2024}),
-a~volba judge z~jiné rodiny tento bias snižuje~\cite{verga2024poll}.
+\textbf{Modely} jsou mezi běhy fixní. Agentní běhy provádí
+MiniMax-M2.5, model schopný autonomně dokončit zadaný úkol. Cílem
+práce je vyhodnotit sadu metrik a~iterativní postup, ne srovnávat
+výkon modelů. Konkrétní agentní model proto slouží jako součást
+experimentálního nastavení. Pro judge-based metriky je fixně použit
+GLM-5 (Zhipu AI), záměrně z~jiné modelové rodiny než agent. Tato volba
+navazuje na biasy LLM-as-judge popsané v~sekci~\ref{sec:llm-as-judge}.
 Teplota modelu nebyla mezi běhy explicitně nastavena. Agent běžel
 s~výchozí konfigurací poskytovatele. Dopad této volby na variabilitu
 výsledků diskutuje sekce~\ref{sec:limity-vysledky}.
@@ -373,28 +371,33 @@ Každou metriku popisujeme třemi vlastnostmi. První je kategorie
 \mgrp{P}, \mgrp{Q} nebo \mgrp{E}, tedy zda metrika sleduje proces,
 produkt nebo zdroje. Druhá je způsob měření. Deterministické metriky
 počítá skript, parser logu nebo statická analýza, zatímco
-judge-based metriky hodnotí LLM-as-judge podle rubriky. Třetí
-vlastností je role v~hodnocení. Některé metriky mají exit kritérium
-a~slouží k~posouzení, zda byl běh úspěšný. Jiné jsou deskriptivní
-indikátory a~hodnotu pouze zaznamenávají. V~této práci mají exit
-kritéria procesní a~produktové metriky. Metriky zdrojů slouží jako
-deskriptivní kontext.
+judge-based metriky hodnotí LLM-as-judge podle hodnoticího schématu. Třetí
+vlastností je role v~hodnocení. Procesní a~produktové metriky mají
+exit kritéria a~slouží k~posouzení, zda byl běh úspěšný. Metriky
+zdrojů \acs{E1}--\acs{E3} exit kritéria nemají. Jejich hodnoty se
+pouze zaznamenávají a~slouží jako kontext pro porovnání nákladů
+a~stability kontextu během běhu.
 
 \paragraph{LLM-as-judge protokol.}
 \phantomsection\label{sec:llm-as-judge-aplikace}%
 Pět metrik (\acs{P6}, \acs{P7}, \acs{P8}, \acs{Q4}, \acs{Q8})
 hodnotí vlastnosti, které nelze spolehlivě extrahovat
-deterministickým skriptem. Proto používají LLM-as-judge. Judge
-dostává výstupy běhu, například zdrojový kód, commit messages, issue
-a~PR descriptions, a~hodnotí je podle pevné hodnoticí rubriky.
-Rubrika určuje, jaké dimenze se mají posoudit a~co znamenají stupně
-1 až 3.
+deterministickým skriptem. Proto používají LLM-as-judge s~modelem
+GLM-5 (Zhipu AI). GLM-5 je z~jiné modelové rodiny než agentní
+MiniMax-M2.5, protože modely mají tendenci zvýhodňovat výstupy svého
+vlastního druhu, tedy vykazují self-preference bias~\cite{panickssery2024}.
+Volba hodnotitele z~jiné rodiny tento bias snižuje~\cite{verga2024poll}.
+
+Judge dostává výstupy běhu, například zdrojový kód, commit messages,
+issue a~PR descriptions. Hodnotí je podle pevného hodnoticího schématu
+(\textit{scoring rubric}), které určuje posuzované dimenze a~význam
+stupňů 1 až 3 (1 = nejnižší kvalita, 3 = nejvyšší kvalita). Stejný
+prompt, hodnoticí schémata i~model GLM-5 se používají ve všech bězích,
+aby bylo hodnocení mezi iteracemi srovnatelné.
 
 Judge-based metriky mají v~této práci podpůrnou roli. Umožňují
 strukturovaně zachytit vlastnosti, které deterministické nástroje
 nepokrývají, ale nejsou interpretovány jako plně objektivní měření.
-Stejný prompt, rubriky i~model GLM-5 se používají ve všech bězích,
-aby bylo hodnocení mezi běhy srovnatelné.
 
 \subsection{Procesní metriky (P1--P8)}
 \label{sec:procesni-metriky}
@@ -452,7 +455,6 @@ je v~zadání povolené. & pass \\
 \subsubsection*{P6--P8: kvalita procesních výstupů (LLM-as-judge)}
 
 Tabulka~\ref{tab:p6-p8} shrnuje judge-based procesní metriky.
-Postup hodnocení je společný a~popsaný v~sekci~\ref{sec:llm-as-judge-aplikace}.
 
 \begin{table}[htbp]
 \centering
@@ -512,18 +514,18 @@ Referenční typy se importují a~zkompilují proti agentovu kódu
 (\texttt{tsc}). Výsledek je binární podle toho, zda typy odpovídají
 kontraktu. & match \\
 \addlinespace
-\acs{Q2} & Pass rate referenčních testů &
+\acs{Q2} & Úspěšnost referenčních testů &
 Referenční testy se spouštějí nástrojem Vitest proti agentovu kódu.
-Výsledek je počet passing testů z~42. Testy ověřují chování přes
-veřejné API bez znalosti vnitřní struktury implementace. & 42/42 \\
+Výsledek je počet úspěšných testů z~42. & 42/42 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 \FloatBarrier
 
-\acs{Q1} neměří funkční správnost implementace. Ověřuje pouze, zda
-agentův kód poskytuje rozhraní, proti kterému lze spustit referenční
-testy \acs{Q2}.
+\acs{Q1} ověřuje, zda implementace odpovídá API kontraktu. Pokud
+implementace API kontrakt nesplňuje, referenční testy \acs{Q2} se
+nedají spustit. Splnění \acs{Q1} ale samo neznamená, že se implementace
+chová správně. To ověřují až referenční testy \acs{Q2}.
 
 \phantomsection\label{sec:referencni-testy}%
 Případová studie rozlišuje dva druhy testů. \textit{Referenční testy}
@@ -550,24 +552,21 @@ Tabulka~\ref{tab:q3-q4} shrnuje metriky kvality testů.
 \textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} & \textbf{Exit kritérium} \\
 \midrule
 \acs{Q3} & Schopnost agentových testů detekovat chyby &
-Stryker (sekce~\ref{sec:testovani-mutation}) s~konfigurací
-\texttt{-{}-mutate 'src/**/*.ts'} a~mutátory pro TypeScript (conditional,
-arithmetic, string, logical operators) systematicky zavádí drobné změny
-do zdrojového kódu. Vstup: agentovy testy + zdrojový kód. Výstup: procento
-zabitých mutantů. & $\geq$ 80\,\% \\
+Nástroj Stryker spouští mutation testing nad agentovými testy
+a~zdrojovým kódem. Výsledkem je mutation score, tedy podíl mutovaných
+variant programu, které testy odhalí. & $\geq$ 80\,\% \\
 \addlinespace
-\acs{Q4} & Pokrytí acceptance criteria agentovými testy &
-Specifikace obsahuje 25~acceptance criteria. Hodnocení LLM-as-judge
-(sekce~\ref{sec:llm-as-judge-aplikace}) určí, kolik z~nich má odpovídající
-test v~agentově test suite. Škála \texttt{N/25}. & 25/25 \\
+\acs{Q4} & Pokrytí acceptance criteria agentovými testy\protect\footnotemark &
+Specifikace obsahuje 25~acceptance criteria. Hodnocení určí, kolik
+z~nich má odpovídající test v~agentově test suite. Výsledek má tvar
+\texttt{N/25}. & 25/25 \\
 \bottomrule
 \end{tabularx}
 \end{table}
+\footnotetext{Na rozdíl od~\acs{Q2}, která ověřuje chování výsledné
+implementace, \acs{Q4} sleduje, zda agentovy vlastní testy pokrývají
+požadovaná acceptance criteria.}
 \FloatBarrier
-
-\acs{Q2} měří, zda funguje výsledná implementace. \acs{Q4} doplňuje
-jiný pohled a~sleduje, zda agentovy vlastní testy pokrývají všechna
-požadovaná acceptance criteria.
 
 \subsubsection*{Kvalita kódu (Q5--Q8)}
 
@@ -598,10 +597,9 @@ ESLint \texttt{complexity} rule reportuje funkce s~cyklomatickou
 složitostí nad limitem 10. Výstupem je počet porušení tohoto limitu. & 0 porušení limitu $\leq$ 10/fn \\
 \addlinespace
 \acs{Q8} & Designová kvalita kódu &
-LLM-as-judge (sekce~\ref{sec:llm-as-judge-aplikace}) hodnotí pojmenování,
-oddělení zodpovědností, idiomatický TypeScript, kvalitu dokumentace
-a~zbytečnou komplexitu. Celkové skóre je minimum dílčích dimenzí,
-aby silná dimenze nemaskovala slabou. & $\geq$ 2/3 \\
+Hodnocení posuzuje pojmenování, oddělení zodpovědností, idiomatický
+TypeScript, kvalitu dokumentace a~zbytečnou komplexitu. Celkové skóre
+je minimum dílčích dimenzí, aby silná dimenze nemaskovala slabou. & $\geq$ 2/3 \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -610,10 +608,11 @@ aby silná dimenze nemaskovala slabou. & $\geq$ 2/3 \\
 \subsection{Metriky zdrojů (E1--E3)}
 \label{sec:metriky-zdroju}
 
-Metriky zdrojů zachycují vstupy spotřebované při vývoji. Celá
-skupina (\acs{E1}--\acs{E3}) je homogenně deskriptivní: žádná
-z~metrik nemá exit kritérium; hodnoty zaznamenáváme pro porovnání
-nákladů a~stability runtime mezi iteracemi.
+Metriky zdrojů zachycují, kolik běh agenta spotřeboval tokenů a~času
+a~zda během něj došlo ke kompakci kontextu. Na rozdíl od procesních
+a~produktových metrik nemají \acs{E1}--\acs{E3} exit kritérium. Jejich
+hodnoty slouží k~porovnání nákladů a~stability kontextu během běhu
+mezi iteracemi.
 
 \begin{table}[htbp]
 \centering
@@ -627,27 +626,20 @@ nákladů a~stability runtime mezi iteracemi.
 \midrule
 \acs{E1} & Spotřeba tokenů &
 Tři složky z~exportu session v~tisících: maximální vstup na jednom
-kroku, součet výstupních tokenů a~součet cache tokenů. Motivace:
-\textcite{gloaguen2025agentsmd} ukazují, že context files
-zvyšují inference cost o~více než 20\,\%. \\
+kroku, součet výstupních tokenů a~součet cache tokenů. \\
 \addlinespace
 \acs{E2} & Trvání běhu &
-Wall-clock time v~minutách od spuštění agenta po poslední commit. \\
+Reálný čas běhu v~minutách od spuštění agenta po poslední commit. \\
 \addlinespace
 \acs{E3} & Počet kompakcí &
 Počet kompakcí kontextu během běhu, čtený přímo z~OpenCode DB
 (pole \texttt{time\_compacting}). Kompakce indikuje, že agent
-vyčerpal kontextové okno a~runtime musel obsah zhustit.
-Deskriptivní indikátor stability runtime; metrika nemá exit
-kritérium a~nulová hodnota potvrzuje, že kontext zůstal celistvý
-po celou dobu běhu. \\
+vyčerpal kontextové okno a~prostředí muselo obsah zhustit.
+Metrika nemá exit kritérium. \\
 \bottomrule
 \end{tabularx}
 \end{table}
 \FloatBarrier
-
-Se dvěma běhy per variaci jsou tyto hodnoty deskriptivní,
-ne inferenční.
 
 %% ==========================================================================
 %% 3.3 Procedura jedné iterace
@@ -721,7 +713,7 @@ historie, GitHub API a~transcriptu (\acs{P1}--\acs{P5},
 \acs{Q1}--\acs{Q3}, \acs{Q5}--\acs{Q7}, \acs{E1}--\acs{E3}).
 Skript \texttt{judge.ts} spouští LLM-as-judge (GLM-5) pro
 \mmet{qual} (\acs{P6}--\acs{P8}, \acs{Q4}, \acs{Q8})
-podle rubrik uložených v~repozitáři práce. Souhrnným výstupem
+podle hodnoticích schémat uložených v~repozitáři práce. Souhrnným výstupem
 je \texttt{FINDINGS.md} s~tabulkou metrik a~faktickým popisem
 chování agenta.
 
@@ -759,10 +751,11 @@ Doplňující materiály jsou v~repozitáři práce
 (\url{https://github.com/7onc3k/Bakalarka/tree/thesis-final}): kompletní operační
 procedura, šablony \texttt{FINDINGS.md} a~\texttt{DIAGNOSIS.md},
 všechny verze \texttt{AGENTS.md} včetně baseline a~ablačních
-variant, plné rubriky a~prompty LLM-as-judge, transcripty
+variant, plná hodnoticí schémata a~prompty LLM-as-judge, transcripty
 session, surová výstupní data nástrojů a~specifikace projektu
 v~plném znění. Stav repozitáře k~datu odevzdání je zafixován
-gitovým tagem \texttt{thesis-final}.
+gitovým tagem \texttt{thesis-final}. Přímé odkazy na tyto doplňující
+materiály uvádí příloha~\ref{app:doplnujici-materialy}.
 
 
 \subsection{Diagnostika a~úprava instrukcí}
@@ -898,7 +891,7 @@ P8 & Kvalita PR descriptions       & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
 \midrule
 \multicolumn{4}{@{}l}{\textit{Produktové (Q): co agent vyrobil}} \\[2pt]
 Q1 & API contract match         & tsc (import + typecheck) & match \\
-Q2 & Referenční test pass rate  & Vitest (42 testů)       & 42/42 \\
+Q2 & Úspěšnost ref.\ testů      & Vitest (42 testů)       & 42/42 \\
 Q3 & Mutation score              & Stryker                 & $\geq$ 80\,\% \\
 Q4 & AC coverage agentových testů (25 krit.) & LLM-as-judge (GLM-5)   & 25/25 \\
 Q5 & Lint warnings               & ESLint                  & 0 \\

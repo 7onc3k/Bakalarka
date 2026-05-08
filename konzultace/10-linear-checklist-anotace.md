@@ -284,47 +284,58 @@ Routování: #63 otevření, #64 kap02, #65 kap03, #66 kap04, #62 závěrečná 
   - Kontrola: hovorová formulace nahrazena větou „Výsledek je binární podle toho, zda typy odpovídají kontraktu.“
 - [x] `p29-05` (#65) **HL:** Shoda s API kontraktem
   - Vedoucí: to je jediné měřítko správné implementace? Asi ne ne
-  - Kontrola: Q1 přejmenována na „Kompatibilita s API kontraktem“ a doplněno, že neměří funkční správnost, ale rozhraní potřebné pro spuštění Q2.
+  - Kontrola: Q1 přejmenována na „Kompatibilita s API kontraktem“; text vysvětluje, že Q1 ověřuje API kontrakt a funkční chování ověřují až referenční testy Q2.
 - [x] `p29-06` (#65) **HL:** Vitest
   - Vedoucí: Vitest
-  - Kontrola: popis Q2 přeformulován na „Referenční testy se spouštějí nástrojem Vitest...“.
+  - Kontrola: metrika Q2 přejmenována napříč thesis na „Úspěšnost referenčních testů“; popis měření uvádí Vitest jako nástroj spuštění.
 - [x] `p29-07` (#65) **HL:** . Testy ověřují chování přes veřejné API (black-box, sekce 2.1.2). Konstrukci referenční test suite popisuje sekce 4.1.1.
   - Vedoucí: Sem už odkazy na jiné kapitoly vůbec nepatří
-  - Kontrola: odkazy na teorii a konstrukci referenční test suite byly z řádku Q2 odstraněny; black-box význam je vysvětlen přímo jako testování přes veřejné API bez znalosti vnitřní struktury.
+  - Kontrola: odkazy na teorii, konstrukci referenční test suite i zbytečný black-box detail byly z řádku Q2 odstraněny.
 - [x] `p29-08` (#65) **HL:** Poznámka: Q1 je vstupní podmínkou pro Q2: pokud agentův kód neimplementuje správné API, referenční testy nelze ani zkompilovat a výsledek Q2 by byl nesmyslný.
   - Vedoucí: Poznámka pod čarou?
-  - Kontrola: blok „Poznámka:“ odstraněn; vztah Q1/Q2 je ponechán jako normální metodický text pod tabulkou.
+  - Kontrola: blok „Poznámka:“ odstraněn; vztah Q1/Q2 je ponechán jako normální metodický text pod tabulkou a po manuálním review zjednodušen.
 
 ## str. 30 — Metriky efektivity (E1–E3)
-- [ ] `p30-01` (#65) **HL:** Stryker
+- [x] `p30-01` (#65) **HL:** Stryker
   - Vedoucí: V této kapitole přímo o Strykeru nemluvíte
-- [ ] `p30-02` (#65) **HL:** zdrojový kód. Výstup: procento zabitých mutantů
+  - Kontrola: Q3 popisuje Stryker jako nástroj použitý pro měření, bez odkazu na teorii mutation testingu.
+- [x] `p30-02` (#65) **HL:** zdrojový kód. Výstup: procento zabitých mutantů
   - Vedoucí: Chápu, že se snažíte o překlad, ale tady naopak by byl lepší příklad a doslovné uvedení v AJ
-- [ ] `p30-03` (#65) **HL:** Cyklomatická složitost
+  - Kontrola: formulace „Vstup/Výstup“ a „zabití mutanti“ odstraněna; výsledek popsán jako mutation score, tedy podíl mutovaných variant programu, které testy odhalí.
+- [x] `p30-03` (#65) **HL:** Cyklomatická složitost
   - Vedoucí: Cyklomatická?
+  - Kontrola: termín je správný a je zavedený v kap02 u statické analýzy; v metodice může zůstat.
 - [x] `p30-04` (#65) **HL:** Práh 10 per funkci pro Q7 vychází z McCabe (sekce 2.1.2). ≤
   - Vedoucí: To víme.
   - Kontrola: odkaz na McCabe/teorii odstraněn z poznámky; limit 10 je uveden přímo v definici Q7 jako měřený práh.
 - [x] `p30-05` (#65) **HL:** Poznámka: Práh 10 per funkci pro Q7 vychází z McCabe (sekce 2.1.2). Celkové skóre Q8 ≤ je minimum pěti dimenzí, nikoliv průměr. Volba minima je záměrná: jeden slabý rozměr má stáhnout celkový výsledek dolů, aby slabiny nebyly maskované silnými dimenzemi
   - Vedoucí: Opět poznámka pod čarou?
   - Kontrola: blok „Poznámka:“ odstraněn; pravidlo minima pro Q8 je začleněno přímo do definice metriky.
+- [x] `p30-review` (#65) **HL:** manuální review Q4/Q8/E1--E3
+  - Kontrola: vztah Q2/Q4 přesunut do poznámky pod čarou k Q4; z Q4 a Q8 odstraněny nadbytečné odkazy na LLM-as-judge sekci; úvod E metrik přepsán bez dvojtečky a „homogenně deskriptivní“; z E1 odstraněna věta „Motivace:“; E2 přepsáno na „reálný čas běhu“; z E3 odstraněna samozřejmá věta o nulové hodnotě.
 
 ## str. 31 — Experimentální design
 - [x] `p31-01` (#65) **HL:** exit kritérium
   - Vedoucí: stále sem se nikde nedočetl o Exit kritériu
   - Kontrola: exit kritérium je nově vysvětleno už při prvním použití v pilotní fázi; pozdější použití v iterativním cyklu má kontext.
-- [ ] `p31-02` (#65) **HL:** Se dvěma běhy per variaci jsou tyto hodnoty deskriptivní, ne inferenční.
+- [x] `p31-02` (#65) **HL:** Se dvěma běhy per variaci jsou tyto hodnoty deskriptivní, ne inferenční.
   - Vedoucí: Toto by vyžadovalo opět více rozepsat
-- [ ] `p31-03` (#65) **HL:** Agentní běhy provádí model MiniMax-M2.5;
+  - Kontrola: věta odstraněna z nevhodného místa pod tabulkou E1--E3; její význam je vyložen v části interní validity, kde se řeší dvě ablační opakování, nedeterminismus modelu a absence statistické síly.
+- [x] `p31-03` (#65) **HL:** Agentní běhy provádí model MiniMax-M2.5;
   - Vedoucí: Tady se poprvé setkáme s tím jaký model je použitý. Nevím jestli to je dobře. Myslím, že by se to mělo objevovat téměř od začátku práce
-- [ ] `p31-04` (#65) **HL:** Důvod: model
+  - Kontrola: fixní proměnné byly přesunuty nahoru před sadu metrik; model MiniMax-M2.5 se zavádí v sekci fixních proměnných, ne až pozdě v experimentálním designu.
+- [x] `p31-04` (#65) **HL:** Důvod: model
   - Vedoucí: Takto nepište
-- [ ] `p31-05` (#65) **HL:** Hodnocení probíhá na škále 1–3 per dimenze: 1 = nevyhovující, 2 = přijatelné, 3 = dobré. Jemnější škály (1–5, 1–10) produkují při malém počtu hodnocených artefaktů nižší shodu mezi hodnotiteli (Zheng et al., 2023); třístupňová škála je pro tento rozsah spol...
+  - Kontrola: původní formát „Důvod:“ byl odstraněn při restrukturalizaci fixních proměnných; role modelu a judge modelu je rozepsaná v souvislém textu.
+- [x] `p31-05` (#65) **HL:** Hodnocení probíhá na škále 1–3 per dimenze: 1 = nevyhovující, 2 = přijatelné, 3 = dobré. Jemnější škály (1–5, 1–10) produkují při malém počtu hodnocených artefaktů nižší shodu mezi hodnotiteli (Zheng et al., 2023); třístupňová škála je pro tento rozsah spol...
   - Vedoucí: Opět AI formáty
-- [ ] `p31-06` (#65) **HL:** Rubrika.
+  - Kontrola: škála 1--3 je popsána souvisle v centrálním LLM-as-judge protokolu; původní formát „1 = ..., 2 = ...“ byl odstraněn.
+- [x] `p31-06` (#65) **HL:** Rubrika.
   - Vedoucí: Je Rubrika správné slovo?
-- [ ] `p31-07` (#65) **HL:** Interpretace výsledků. LLM-as-judge zde neslouží jako plně objektivní měření, ale jako strukturované posouzení vlastností, které nelze spolehlivě vyhodnotit deterministickým skrip- tem. Výsledky těchto metrik proto interpretujeme jako podpůrné kvalitativní...
+  - Kontrola: termín sjednocen na „hodnoticí schéma“; při prvním výskytu v metodice je doplněn anglický termín scoring rubric.
+- [x] `p31-07` (#65) **HL:** Interpretace výsledků. LLM-as-judge zde neslouží jako plně objektivní měření, ale jako strukturované posouzení vlastností, které nelze spolehlivě vyhodnotit deterministickým skrip- tem. Výsledky těchto metrik proto interpretujeme jako podpůrné kvalitativní...
   - Vedoucí: Opět toto by mělo být uvedeno pořádně i na začátku celého řešení jako jedna z hlavních point.
+  - Kontrola: role judge-based metrik je nově uvedena v centrálním LLM-as-judge protokolu před jednotlivými metrikami; jednotlivé metriky už judge znovu nevysvětlují.
 
 ## str. 32 — Fixní proměnné
 - [ ] `p32-01` (#65) **HL:** Tato sekce navazuje operačním detailem: jaké proměnné držíme fixní mezi běhy (sekce 3.3.1), jak jeden běh zaznamenáváme a vyhodnocujeme (sekce 3.3.2) a jakou procedurou diagnostikujeme a upravujeme instrukce (sekce 3.3.3).

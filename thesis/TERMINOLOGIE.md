@@ -26,7 +26,8 @@ Kanonické pojmy pro konzistentní psani a pripravu na obhajobu.
 | Produktove metriky (Q1-Q8) | Co agent vyrobil | Q1-Q2 funkcni korektnost, Q3-Q4 kvalita testu, Q5-Q8 kvalita kodu |
 | Metriky efektivity (E1-E3) | E1 = max prompt na kroku + soucet vystupu + soucet cache; E2 = cas; E3 = pocet kompakci kontextu (z OpenCode DB time_compacting) | Resource v Fentonove taxonomii |
 | Zdroje / naklady | Kategorie se jmenuje zdroje; naklady pouzivat pro interpretaci ceny nebo spotreby zdroju | V metodice a prehledech drzet "zdroje" / "spotreba zdroju"; ve vysledcich a zaveru muze byt "naklady", kdyz veta odpovida na "za jakou cenu" |
-| Exit kriteria | Striktni hranice uspechu pro metriky s pass/fail roli | Kotvit per metriku podle povahy: specifikace/reference, standard nebo hodnotici rubrika; E metriky jsou deskriptivni bez exit prahu |
+| Exit kriteria | Striktni hranice uspechu pro metriky s pass/fail roli | Kotvit per metriku podle povahy: specifikace/reference, standard nebo hodnotici schema; E metriky jsou deskriptivni bez exit prahu |
+| Hodnotici schema | Sada dimenzi a popisu stupnu pro LLM-as-judge hodnoceni | Pri prvnim vyskytu lze uvest anglicky termin `scoring rubric`; NE samotne "rubrika" jako hlavni cesky termin |
 | ~~evaluacni system~~ | NEPOUZIVAME | Prilis vague, konflikt se "sadou metrik" |
 
 **Pravidlo pro kody metrik:** Pri prvnim vyskytu skupiny v kazde kapitole pridat zavorku s kratkym vysvetlenim. Priklady:
@@ -52,7 +53,7 @@ Tri ortogonalni osy:
 
 #### E3 specificky
 
-E3 (pocet kompakci kontextu) je **deskriptivni indikator stability runtime**, ne pass/fail kriterium. Cil 0 nema v teto praci roli exit prahu — je to kontextovy fakt, ze kontext zustal celistvy. E bucket je tim homogenne deskriptivni (E1, E2, E3 vsechny bez prahu).
+E3 (pocet kompakci kontextu) je **deskriptivni indikator stability kontextu behem behu**, ne pass/fail kriterium. Cil 0 nema v teto praci roli exit prahu — je to kontextovy fakt, ze kontext zustal celistvy. E bucket je tim deskriptivni (E1, E2, E3 vsechny bez prahu).
 
 ## Instrukce a agent
 
@@ -142,5 +143,6 @@ DSR (pristup)          --> CO delame (navrhujeme metriky + postup, evaluujeme)
 | feasibility demonstrace | Hybridni anglicismus | demonstrace proveditelnosti |
 | „demonstrovat" jako sloveso v cili | Vedouci: „jak zmerite, ze bylo demonstrovano?" — neoperacionalizovatelne | „overit proveditelnost" v cilech a zaveru; „demonstruje" jako popis aktu pripustny v abstract |
 | „X z N deterministickych kriterii" | Slovo „deterministickych" je nadbytecne nebo zavadejici (mate zpusob mereni a roli v hodnoceni) | per-metric vycet, nebo „X binarnich pass/fail kriterii" |
-| „kompakce jako kriterium" / „cil E3 = 0" | E3 je deskriptivni indikator stability runtime, ne pass/fail kriterium; cil 0 nema v teto praci roli exit prahu | „E3 = 0 potvrzuje, ze kontext zustal celistvy" |
+| „kompakce jako kriterium" / „cil E3 = 0" | E3 je deskriptivni indikator stability kontextu behem behu, ne pass/fail kriterium; cil 0 nema v teto praci roli exit prahu | „E3 = 0 potvrzuje, ze kontext zustal celistvy" |
+| runtime jako obecny anglicismus | V ceske prose preferuj konkretni vyraz podle kontextu: beh, behove prostredi, trvani behu, stabilita kontextu behem behu | Anglicke runtime nech jen v nazvu/terminu ze zdroje, napr. median runtime |
 | „deterministicka kriteria" jako synonymum pass/fail | Mate zpusob mereni (det vs judge) a roli v hodnoceni (exit vs deskriptivni) | „pass/fail kriteria" / „kriteria s exit prahem" |
