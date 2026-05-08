@@ -282,14 +282,18 @@ Routování: #63 otevření, #64 kap02, #65 kap03, #66 kap04, #62 závěrečná 
 - [x] `p29-04` (#65) **HL:** typy sedí, nebo ne.
   - Vedoucí: bez čárky?
   - Kontrola: hovorová formulace nahrazena větou „Výsledek je binární podle toho, zda typy odpovídají kontraktu.“
-- [ ] `p29-05` (#65) **HL:** Shoda s API kontraktem
+- [x] `p29-05` (#65) **HL:** Shoda s API kontraktem
   - Vedoucí: to je jediné měřítko správné implementace? Asi ne ne
-- [ ] `p29-06` (#65) **HL:** Vitest
+  - Kontrola: Q1 přejmenována na „Kompatibilita s API kontraktem“ a doplněno, že neměří funkční správnost, ale rozhraní potřebné pro spuštění Q2.
+- [x] `p29-06` (#65) **HL:** Vitest
   - Vedoucí: Vitest
-- [ ] `p29-07` (#65) **HL:** . Testy ověřují chování přes veřejné API (black-box, sekce 2.1.2). Konstrukci referenční test suite popisuje sekce 4.1.1.
+  - Kontrola: popis Q2 přeformulován na „Referenční testy se spouštějí nástrojem Vitest...“.
+- [x] `p29-07` (#65) **HL:** . Testy ověřují chování přes veřejné API (black-box, sekce 2.1.2). Konstrukci referenční test suite popisuje sekce 4.1.1.
   - Vedoucí: Sem už odkazy na jiné kapitoly vůbec nepatří
-- [ ] `p29-08` (#65) **HL:** Poznámka: Q1 je vstupní podmínkou pro Q2: pokud agentův kód neimplementuje správné API, referenční testy nelze ani zkompilovat a výsledek Q2 by byl nesmyslný.
+  - Kontrola: odkazy na teorii a konstrukci referenční test suite byly z řádku Q2 odstraněny; black-box význam je vysvětlen přímo jako testování přes veřejné API bez znalosti vnitřní struktury.
+- [x] `p29-08` (#65) **HL:** Poznámka: Q1 je vstupní podmínkou pro Q2: pokud agentův kód neimplementuje správné API, referenční testy nelze ani zkompilovat a výsledek Q2 by byl nesmyslný.
   - Vedoucí: Poznámka pod čarou?
+  - Kontrola: blok „Poznámka:“ odstraněn; vztah Q1/Q2 je ponechán jako normální metodický text pod tabulkou.
 
 ## str. 30 — Metriky efektivity (E1–E3)
 - [ ] `p30-01` (#65) **HL:** Stryker
@@ -298,10 +302,12 @@ Routování: #63 otevření, #64 kap02, #65 kap03, #66 kap04, #62 závěrečná 
   - Vedoucí: Chápu, že se snažíte o překlad, ale tady naopak by byl lepší příklad a doslovné uvedení v AJ
 - [ ] `p30-03` (#65) **HL:** Cyklomatická složitost
   - Vedoucí: Cyklomatická?
-- [ ] `p30-04` (#65) **HL:** Práh 10 per funkci pro Q7 vychází z McCabe (sekce 2.1.2). ≤
+- [x] `p30-04` (#65) **HL:** Práh 10 per funkci pro Q7 vychází z McCabe (sekce 2.1.2). ≤
   - Vedoucí: To víme.
-- [ ] `p30-05` (#65) **HL:** Poznámka: Práh 10 per funkci pro Q7 vychází z McCabe (sekce 2.1.2). Celkové skóre Q8 ≤ je minimum pěti dimenzí, nikoliv průměr. Volba minima je záměrná: jeden slabý rozměr má stáhnout celkový výsledek dolů, aby slabiny nebyly maskované silnými dimenzemi
+  - Kontrola: odkaz na McCabe/teorii odstraněn z poznámky; limit 10 je uveden přímo v definici Q7 jako měřený práh.
+- [x] `p30-05` (#65) **HL:** Poznámka: Práh 10 per funkci pro Q7 vychází z McCabe (sekce 2.1.2). Celkové skóre Q8 ≤ je minimum pěti dimenzí, nikoliv průměr. Volba minima je záměrná: jeden slabý rozměr má stáhnout celkový výsledek dolů, aby slabiny nebyly maskované silnými dimenzemi
   - Vedoucí: Opět poznámka pod čarou?
+  - Kontrola: blok „Poznámka:“ odstraněn; pravidlo minima pro Q8 je začleněno přímo do definice metriky.
 
 ## str. 31 — Experimentální design
 - [x] `p31-01` (#65) **HL:** exit kritérium

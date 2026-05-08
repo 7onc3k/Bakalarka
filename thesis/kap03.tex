@@ -507,24 +507,23 @@ Tabulka~\ref{tab:q1-q2} shrnuje metriky funkční korektnosti.
 \toprule
 \textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} & \textbf{Exit kritérium} \\
 \midrule
-\acs{Q1} & Shoda s~API kontraktem &
+\acs{Q1} & Kompatibilita s~API kontraktem &
 Referenční typy se importují a~zkompilují proti agentovu kódu
 (\texttt{tsc}). Výsledek je binární podle toho, zda typy odpovídají
 kontraktu. & match \\
 \addlinespace
 \acs{Q2} & Pass rate referenčních testů &
-Vitest spustí 42~testů proti agentovu kódu. Výsledek je počet passing
-testů z~42. Testy ověřují chování přes veřejné API (black-box,
-sekce~\ref{sec:testovani-mutation}). Konstrukci referenční test suite
-popisuje sekce~\ref{sec:ref-implementace-postup}. & 42/42 \\
+Referenční testy se spouštějí nástrojem Vitest proti agentovu kódu.
+Výsledek je počet passing testů z~42. Testy ověřují chování přes
+veřejné API bez znalosti vnitřní struktury implementace. & 42/42 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 \FloatBarrier
 
-\textit{Poznámka:} \acs{Q1} je vstupní podmínkou pro \acs{Q2}: pokud
-agentův kód neimplementuje správné API, referenční testy nelze ani
-zkompilovat a~výsledek \acs{Q2} by byl nesmyslný.
+\acs{Q1} neměří funkční správnost implementace. Ověřuje pouze, zda
+agentův kód poskytuje rozhraní, proti kterému lze spustit referenční
+testy \acs{Q2}.
 
 \phantomsection\label{sec:referencni-testy}%
 Případová studie rozlišuje dva druhy testů. \textit{Referenční testy}
@@ -566,8 +565,9 @@ test v~agentově test suite. Škála \texttt{N/25}. & 25/25 \\
 \end{table}
 \FloatBarrier
 
-\textit{Poznámka:} Na rozdíl od \acs{Q2} (funguje implementace?) se
-\acs{Q4} ptá, jestli agent \textit{testoval všechno co měl}.
+\acs{Q2} měří, zda funguje výsledná implementace. \acs{Q4} doplňuje
+jiný pohled a~sleduje, zda agentovy vlastní testy pokrývají všechna
+požadovaná acceptance criteria.
 
 \subsubsection*{Kvalita kódu (Q5--Q8)}
 
@@ -594,23 +594,18 @@ agent ji nemůže měnit. Výstup: celkový počet warnings + errors. & 0 \\
 proxy pro obcházení typového systému. & 0 \\
 \addlinespace
 \acs{Q7} & Cyklomatická složitost &
-ESLint \texttt{complexity} rule reportuje funkce překračující práh.
-Výstup: maximální složitost přes všechny funkce. & 0 porušení limitu $\leq$ 10/fn \\
+ESLint \texttt{complexity} rule reportuje funkce s~cyklomatickou
+složitostí nad limitem 10. Výstupem je počet porušení tohoto limitu. & 0 porušení limitu $\leq$ 10/fn \\
 \addlinespace
 \acs{Q8} & Designová kvalita kódu &
 LLM-as-judge (sekce~\ref{sec:llm-as-judge-aplikace}) hodnotí pojmenování,
 oddělení zodpovědností, idiomatický TypeScript, kvalitu dokumentace
-a~zbytečnou komplexitu. & $\geq$ 2/3 \\
+a~zbytečnou komplexitu. Celkové skóre je minimum dílčích dimenzí,
+aby silná dimenze nemaskovala slabou. & $\geq$ 2/3 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 \FloatBarrier
-
-\textit{Poznámka:} Práh $\leq$~10 per funkci pro \acs{Q7} vychází
-z~McCabe (sekce~\ref{sec:staticka-analyza}). Celkové skóre \acs{Q8} je
-\textit{minimum} pěti dimenzí, nikoliv průměr. Volba minima je záměrná:
-jeden slabý rozměr má stáhnout celkový výsledek dolů, aby slabiny nebyly
-maskované silnými dimenzemi.
 
 \subsection{Metriky zdrojů (E1--E3)}
 \label{sec:metriky-zdroju}
