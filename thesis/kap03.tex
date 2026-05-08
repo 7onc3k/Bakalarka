@@ -13,9 +13,9 @@
 
 Z~tří cílů formulovaných v~kapitole~\ref{kap:vymezeni} plynou
 společné nároky na metodiku. Cíl~1, návrh sady metrik pokrývající
-proces, kvalitu produktu a~zdroje, lze ověřit jen tehdy, když
-metriky reagují na změny v~chování; to vyžaduje porovnání více běhů
-s~různými variantami instrukcí. Cíl~2, iterativní postup návrhu
+proces, kvalitu produktu a~zdroje, vyžaduje sadu metrik citlivou na
+změny v~chování. To předpokládá porovnání více běhů s~různými
+variantami instrukcí. Cíl~2, iterativní postup návrhu
 instrukcí řízený těmito metrikami, vyžaduje navíc, aby běhy tvořily
 sekvenci, v~níž lze sledovat vztah měření $\to$ diagnóza $\to$
 úprava $\to$ další měření. Cíl~3, ablace složek instrukcí, stojí na
@@ -55,34 +55,26 @@ instrukcí mění chování jednoho agenta na jednom projektu; to je
 \paragraph{Pilotní fáze.}
 \phantomsection\label{sec:pilotni-iterace}%
 Případová studie postupuje ve dvou fázích. Pilotní fáze slouží
-k~ověření, zda lze navrženou sadu metrik použít k~diagnostice běhu
-agenta a~k~následné úpravě instrukcí. Každá iterace se proto hodnotí
-proti exit kritériím, tedy předem stanoveným hranicím úspěchu pro
-jednotlivé metriky. Tato kritéria vyjadřují striktní ideál běhu,
-který splní předepsaný proces a~současně vytvoří korektní,
-otestované a~udržovatelné řešení. Pro každou metriku jsou
-kotveny podle její povahy: buď ve specifikaci
-a~referenční implementaci, v~obecně používaném nástroji nebo
-standardu, případně v~hodnoticí rubrice tam, kde jde o~judge-based
-posouzení. Souhrn kritérií uvádí tabulka~\ref{tab:metriky-prehled}.
-Pilotní fáze tedy neslouží k~statistickému odhadu účinku instrukcí,
-ale k~nalezení použitelné sady instrukcí a~k~ověření, že metriky
-dávají dostatečně konkrétní diagnostickou zpětnou vazbu pro další
-iteraci.
+k~nalezení použitelné sady instrukcí. V~každém běhu se sleduje,
+zda agent dodržel požadovaný postup a~jak kvalitní řešení vytvořil.
+Naměřené odchylky se potom používají jako podklad pro další úpravu
+instrukcí. Pilotní fáze tak ukazuje, zda metriky dávají dostatečně
+konkrétní zpětnou vazbu pro řízené zlepšování instrukcí.
 
 \paragraph{Ablace.}
 \phantomsection\label{sec:komparativni-variace}%
-Z~použitelné sady instrukcí vzniklé v~pilotní fázi se v~ablační
-fázi systematicky odebírají jednotlivé složky a~sleduje se, zda se
-změní chování agenta. Konkrétní ablace proto vycházejí
-z~diagnostiky pilotních běhů. Pokud se například ukáže, že určitá
-složka instrukcí může být redundantní, ablace ověří její vliv tím,
-že ji z~instrukcí odstraní a~porovná výsledný běh s~plnou verzí.
-Každá ablace se provádí ve dvou nezávislých bězích se stejným
-nastavením, aby bylo možné odlišit opakující se efekt změny od
-přirozené variability nedeterministického modelu. Ani dva běhy
+Ablační fáze vychází z~použitelné sady instrukcí nalezené v~pilotu.
+Z~této sady se odebere vybraná složka a~sleduje se, zda se změní
+chování agenta. Ablace tedy netvoří další ladicí cyklus, ale
+kontrolované porovnání plné verze instrukcí s~její zjednodušenou
+variantou. Každá ablace se provádí ve dvou nezávislých bězích se
+stejným nastavením, aby bylo možné odlišit opakující se efekt změny
+od přirozené variability nedeterministického modelu. Ani dva běhy
 neposkytují statistickou průkaznost; výsledky proto mají
 indikativní, ne kauzální povahu.
+
+Podrobnější postup jednoho běhu se vrací po definici metrik v~sekci
+\ref{sec:procedura-behu}.
 
 \subsection{Případ a~jednotky analýzy}
 \label{sec:vyber-projektu}
@@ -100,8 +92,8 @@ a~mutation testingem. Zároveň musí být dostatečně malý pro více
 experimentálních běhů, ale obsahovat reálné nuance (hraniční případy,
 doménová pravidla), aby měl agent co řešit.
 
-Zvolili jsme systém upomínek faktur: systém pro automatické
-odesílání připomínek k~nezaplaceným fakturám. Obsahuje stavový
+Zvolený případ představuje aplikaci pro automatické odesílání
+připomínek k~nezaplaceným fakturám. Obsahuje stavový
 automat (nová, po splatnosti, upomínaná, eskalovaná), časové výpočty
 (pracovní dny, ochranné lhůty) a~pravidla pro eskalaci. Současně
 jde o~úlohu dostatečně bohatou na netriviální rozhodování, ale stále
@@ -376,48 +368,33 @@ Naše sada obsahuje 19~metrik ve třech kategoriích:
           a~počet kompakcí kontextu (\acs{E3}).
 \end{description}
 
-Teoretické základy jednotlivých metrik (proč jsou validní, jaká je
-evidence) popisuje sekce~\ref{sec:mereni-kvality}. Tato sekce
-definuje postup měření: jaký nástroj používáme, jaká data jsou
-vstupem a~co přesně je výsledkem. Interpretace přínosu jednotlivých
-metrik patří až do kapitoly~\ref{kap:vyhodnoceni}.
-
 \paragraph{Tři osy klasifikace metriky.}
-Každou metriku popisují tři nezávislé osy, které je užitečné držet
-oddělené. \textit{Způsob měření} odlišuje \mmet{det} (skript, regex,
-parsing logu, statická analýza) od \mmet{qual} hodnocených LLM-as-judge;
-jde o~vlastnost nástroje, ne o~roli metriky v~hodnocení.
-\textit{Role v~hodnocení} pak rozlišuje pass/fail kritérium
-od deskriptivního indikátoru, který hodnotu jen zaznamenává.
-\textit{Kategorie} je taxonomie P/Q/E
-(sekce~\ref{sec:mereni-kvality-obecne}). V~této práci se pass/fail
-soud o~úspěšnosti běhu opírá o~exit kritéria v~kategoriích
-P~a~Q (binární i~judge-based); celá zdrojová skupina (\acs{E1}--\acs{E3})
-slouží jako deskriptivní kontext a~žádná z~jejích metrik nemá
-exit kritérium.
+Každou metriku popisujeme třemi vlastnostmi. První je kategorie
+\mgrp{P}, \mgrp{Q} nebo \mgrp{E}, tedy zda metrika sleduje proces,
+produkt nebo zdroje. Druhá je způsob měření. Deterministické metriky
+počítá skript, parser logu nebo statická analýza, zatímco
+judge-based metriky hodnotí LLM-as-judge podle rubriky. Třetí
+vlastností je role v~hodnocení. Některé metriky mají exit kritérium
+a~slouží k~posouzení, zda byl běh úspěšný. Jiné jsou deskriptivní
+indikátory a~hodnotu pouze zaznamenávají. V~této práci mají exit
+kritéria procesní a~produktové metriky. Metriky zdrojů slouží jako
+deskriptivní kontext.
 
 \paragraph{LLM-as-judge protokol.}
 \phantomsection\label{sec:llm-as-judge-aplikace}%
 Pět metrik (\acs{P6}, \acs{P7}, \acs{P8}, \acs{Q4}, \acs{Q8})
 hodnotí vlastnosti, které nelze spolehlivě extrahovat
-deterministickým skriptem. Pro ně používáme metodu LLM-as-judge
-(teorie v~sekci~\ref{sec:llm-as-judge}); volbu modelu GLM-5
-z~jiné modelové rodiny než agent zdůvodňuje
-sekce~\ref{sec:fixni-promenne}. Hodnocení probíhá na škále~1--3
-per dimenze (1~=~nevyhovující, 2~=~přijatelné, 3~=~dobré); jemnější
-škály (1--5, 1--10) produkují při malém počtu hodnocených artefaktů
-nižší shodu mezi hodnotiteli~\cite{zheng2023mtbench}, třístupňová
-škála je pro tento rozsah spolehlivější. Judge dostává artefakty
-agentova běhu (zdrojový kód, commit messages, issue a~PR
-descriptions) spolu s~rubrikou definující dimenze a~popis stupňů.
-Konkrétní dimenze rubriky pro každou judge-based metriku jsou
-uvedeny v~jejím definičním záznamu níže (\acs{P6}--\acs{P8}
-v~tabulce~\ref{tab:p6-p8}, \acs{Q4} v~tabulce~\ref{tab:q3-q4},
-\acs{Q8} v~tabulce~\ref{tab:q5-q8}); plné formulace rubrik
-a~promptu jsou v~repozitáři práce. Prompt je fixní napříč všemi
-běhy, aby hodnocení bylo srovnatelné mezi iteracemi. Spolehlivost
-judge-based měření a~jeho roli jako podpůrného indikátoru
-diskutuje sekce~\ref{sec:omezeni-validita}.
+deterministickým skriptem. Proto používají LLM-as-judge. Judge
+dostává výstupy běhu, například zdrojový kód, commit messages, issue
+a~PR descriptions, a~hodnotí je podle pevné hodnoticí rubriky.
+Rubrika určuje, jaké dimenze se mají posoudit a~co znamenají stupně
+1 až 3.
+
+Judge-based metriky mají v~této práci podpůrnou roli. Umožňují
+strukturovaně zachytit vlastnosti, které deterministické nástroje
+nepokrývají, ale nejsou interpretovány jako plně objektivní měření.
+Stejný prompt, rubriky i~model GLM-5 se používají ve všech bězích,
+aby bylo hodnocení mezi běhy srovnatelné.
 
 \subsection{Procesní metriky (P1--P8)}
 \label{sec:procesni-metriky}
@@ -444,7 +421,7 @@ Všechny mají binární výstup pass/fail.
 \textbf{Kód} & \textbf{Co měří} & \textbf{Jak se měří} & \textbf{Exit kritérium} \\
 \midrule
 \acs{P1} & Issues vznikla před kódem &
-Porovnání \texttt{created\_at} nejstaršího agentova issue (GitHub API)
+Porovnání \texttt{created\_at} nejstaršího issue vytvořeného agentem (GitHub API)
 s~časem prvního commitu obsahujícího soubory v~\texttt{src/}
 nebo \texttt{tests/}. & pass \\
 \addlinespace
@@ -454,23 +431,25 @@ Počet remote branches (bez \texttt{main}) vůči počtu issues; podmínka
 větve). & pass \\
 \addlinespace
 \acs{P3} & Test-first &
-Primární indikátor: existuje commit s~prefixem \texttt{test:} a~zároveň
-\texttt{feat:}. Behavioral trace \texttt{tddOrderViolations}: počet
-větví, kde první zápis do \texttt{src/} předchází prvnímu zápisu do
-\texttt{tests/}. & pass \\
+Primárně se kontroluje, zda existuje commit s~prefixem \texttt{test:}
+před commitem \texttt{feat:}. Jako doplňková kontrola se z~git historie
+ověřuje, zda první změna v~\texttt{src/} nepředchází první změně
+v~\texttt{tests/}. & pass \\
 \addlinespace
 \acs{P4} & PR linkován na issue &
 Tělo každého PR (GitHub API) obsahuje regex \texttt{Closes \#N}. & pass \\
 \addlinespace
 \acs{P5} & Žádné modifikace existujících testů &
-\texttt{git diff -{}-diff-filter=M} na souborech v~\texttt{tests/};
-nově přidané testy se nezapočítávají. & pass \\
+Metrika sleduje, zda agent měnil již existující testy v~adresáři
+\texttt{tests/}. Kontrola používá \texttt{git diff -{}-diff-filter=M}.
+Nově přidané testy se nezapočítávají, protože rozšiřování test suite
+je v~zadání povolené. & pass \\
 \bottomrule
 \end{tabularx}
 \end{table}
 \FloatBarrier
 
-\subsubsection*{P6--P8: kvalita procesních artefaktů (LLM-as-judge)}
+\subsubsection*{P6--P8: kvalita procesních výstupů (LLM-as-judge)}
 
 Tabulka~\ref{tab:p6-p8} shrnuje judge-based procesní metriky.
 Postup hodnocení je společný a~popsaný v~sekci~\ref{sec:llm-as-judge-aplikace}.
@@ -485,14 +464,14 @@ Postup hodnocení je společný a~popsaný v~sekci~\ref{sec:llm-as-judge-aplikac
 \toprule
 \textbf{Kód} & \textbf{Co hodnotí} & \textbf{Škála} & \textbf{Exit kritérium} \\
 \midrule
-\acs{P6} & Popisnost commit messages &
+\acs{P6} & Kvalita commit messages &
 1--3 (atomicita, konvenční prefix, srozumitelnost co a~proč bylo změněno). & $\geq$ 2/3 \\
 \addlinespace
-\acs{P7} & Popisnost issue descriptions &
+\acs{P7} & Kvalita issue descriptions &
 1--3 (jasnost scope, přítomnost acceptance criteria, dostatečnost pro
 implementaci). & $\geq$ 2/3 \\
 \addlinespace
-\acs{P8} & Popisnost PR descriptions &
+\acs{P8} & Kvalita PR descriptions &
 1--3 (odkaz na issue, popis co a~proč, dostatečnost pro code review). & $\geq$ 2/3 \\
 \bottomrule
 \end{tabularx}
@@ -507,13 +486,12 @@ charakteristik ISO/IEC~25010 (sekce~\ref{sec:dimenze-kvality})
 v~této sadě sledujeme dvě: \textit{funkční vhodnost}
 (\acs{Q1}--\acs{Q4}: agent vytváří správné řešení)
 a~\textit{udržovatelnost} (\acs{Q5}--\acs{Q8}: agent vytváří kód
-vhodný k~dalšímu pochopení a~rozvoji). Ostatní charakteristiky
-(bezpečnost, výkonnostní efektivita, kompatibilita, použitelnost,
-spolehlivost, přenositelnost) by se na rozsahu jedné malé případové
-studie systému upomínek smysluplně měřit nedaly. Sada Q~metrik proto
-pokrývá tři oblasti: funguje implementace správně (Q1--Q2), detekují
-agentovy testy skutečné chyby (Q3--Q4) a~je kód udržovatelný
-(Q5--Q8).
+vhodný k~dalšímu pochopení a~rozvoji). Zbylé charakteristiky
+ISO/IEC~25010 by vyžadovaly jiný typ úlohy. Bezpečnost předpokládá
+autentizaci, oprávnění nebo práci s~citlivými daty, výkonnost
+měřitelnou zátěž a~použitelnost uživatelské rozhraní. Zvolený projekt
+je záměrně omezen na doménovou logiku, takže sada Q~metrik sleduje
+funkční korektnost, kvalitu testů a~udržovatelnost.
 
 \subsubsection*{Funkční korektnost (Q1--Q2)}
 
@@ -531,7 +509,8 @@ Tabulka~\ref{tab:q1-q2} shrnuje metriky funkční korektnosti.
 \midrule
 \acs{Q1} & Shoda s~API kontraktem &
 Referenční typy se importují a~zkompilují proti agentovu kódu
-(\texttt{tsc}). Výsledek je binární: typy sedí, nebo ne. & match \\
+(\texttt{tsc}). Výsledek je binární podle toho, zda typy odpovídají
+kontraktu. & match \\
 \addlinespace
 \acs{Q2} & Pass rate referenčních testů &
 Vitest spustí 42~testů proti agentovu kódu. Výsledek je počet passing
@@ -682,32 +661,30 @@ ne inferenční.
 \section{Procedura jedné iterace}
 \label{sec:procedura-behu}
 
-Tato sekce popisuje, co se v~rámci jedné iterace
-(sekce~\ref{sec:cyklus-iterace}) konkrétně provádí: jak běh agenta
-zaznamenáváme a~jak z~něj extrahujeme hodnoty metrik
-(sekce~\ref{sec:zaznam-bezhu}) a~jak z~naměřených hodnot odvodíme
-diagnózu selhání a~konkrétní úpravu instrukcí pro další iteraci
-(sekce~\ref{sec:diagnostika-uprava}).
+Jedna iterace pilotní fáze zahrnuje běh agenta, extrakci metrik
+z~výstupů běhu a~diagnostiku, ze~které může vzniknout úprava
+instrukcí pro navazující běh. Ablační fáze používá stejnou proceduru
+spuštění a~měření pro jednotlivé varianty instrukcí, ale nepracuje
+s~průběžnou úpravou téže varianty.
 
 \subsection{Iterativní cyklus}
 \label{sec:cyklus-iterace}
 
-Pilotní i~ablační fáze (sekce~\ref{sec:pilotni-iterace}) realizují
-společný iterativní cyklus, protože jediná iterace nestačí ověřit
-cíl~2. Pokud má sada metrik fungovat jako diagnostický nástroj,
-musí naměřená hodnota vést k~identifikovatelné úpravě instrukcí
-a~další běh musí ukázat, zda úprava zabrala. Iterace má čtyři
-kroky: Spuštění (běh agenta), Měření (extrakce metrik), Diagnóza
-(analýza odchylek) a~Úprava (změna instrukcí). Cyklus nepředpokládá
-automatické splnění všech exit kritérií. Iterace se opakuje, dokud
-metriky poskytují novou diagnostickou informaci a~lze navrhnout
-konkrétní úpravu; pokud se objeví regrese nebo stabilní limit,
-další krok se rozhoduje podle diagnostiky
-(obr.~\ref{fig:iterativni-cyklus}). Pokud iterace vede k~regresi,
-další iterace vychází
-z~předchozí úspěšné verze instrukcí, ne z~regresní~\cite{peffers2008}.
-Substantivní část iterace popisuje
-sekce~\ref{sec:diagnostika-uprava}.
+Pilotní fáze používá iterativní cyklus návrhu instrukcí. V~každé
+iteraci agent nejprve provede zadaný běh, poté se z~výstupů běhu
+extrahují metriky, naměřené odchylky se interpretují jako diagnóza
+a~podle ní vzniká úprava instrukcí pro další běh. Cyklus má čtyři
+kroky. Spuštění zachycuje běh agenta, Měření extrakci metrik,
+Diagnóza interpretaci odchylek a~Úprava změnu instrukcí. Opakování
+cyklu se řídí tím, zda metriky stále poskytují použitelnou
+diagnostickou informaci. Pokud další běh vede k~regresi, navazující
+úprava vychází z~poslední úspěšné verze instrukcí
+(obr.~\ref{fig:iterativni-cyklus}).
+
+V~ablační fázi se stejná procedura spuštění a~měření používá pro
+předem zvolené varianty instrukcí. Výsledky jednotlivých běhů
+neslouží k~průběžné úpravě téže varianty, ale k~porovnání dopadu
+odebrané složky instrukcí s~plnou verzí.
 
 \begin{figure}[tbp]
 \centering
@@ -730,7 +707,7 @@ sekce~\ref{sec:diagnostika-uprava}.
         node[midway, below, font=\footnotesize\sffamily]
         {opakovat podle diagnostiky};
 \end{tikzpicture}
-\caption{Iterativní cyklus: čtyři kroky jedné iterace a~smyčka opakování řízená diagnostikou naměřených odchylek.}
+\caption{Iterativní cyklus pilotní fáze se smyčkou opakování řízenou diagnostikou naměřených odchylek.}
 \label{fig:iterativni-cyklus}
 \end{figure}
 \FloatBarrier
@@ -920,9 +897,9 @@ P2 & Branch per issue              & git, GitHub API & pass \\
 P3 & Test-first commits            & git log         & pass \\
 P4 & PRs linked to issues          & GitHub API      & pass \\
 P5 & No existing test modifications & git diff       & pass \\
-P6 & Commit message quality        & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
-P7 & Issue description quality     & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
-P8 & PR description quality        & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
+P6 & Kvalita commit messages       & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
+P7 & Kvalita issue descriptions    & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
+P8 & Kvalita PR descriptions       & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
 \midrule
 \multicolumn{4}{@{}l}{\textit{Produktové (Q): co agent vyrobil}} \\[2pt]
 Q1 & API contract match         & tsc (import + typecheck) & match \\

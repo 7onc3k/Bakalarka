@@ -20,9 +20,10 @@ Routování: #63 otevření, #64 kap02, #65 kap03, #66 kap04, #62 závěrečná 
 - [ ] `C-opener-kap03` **kap03 opener**
   - Místo: `thesis/kap03.tex` opener kapitoly 3.
   - Úkol: zkontrolovat, zda úvod metodiky nemá jen strukturální hlášení „Předchozí kapitoly... Tato kapitola... Sekce...“.
-- [ ] `C-opener-kap03-33` **kap03 sekce 3.3**
+- [x] `C-opener-kap03-33` **kap03 sekce 3.3**
   - Místo: `thesis/kap03.tex` sekce 3.3.
   - Úkol: přepsat „Tato sekce popisuje...“ na věcný vstup do procedury jedné iterace, pokud navigační věta jen opakuje nadpis.
+  - Kontrola: opener sekce `Procedura jedné iterace` přepsán z navigační věty na věcnou definici iterace jako jednotky sběru dat.
 - [ ] `C-opener-kap03-diagnostika` **kap03 diagnostika a úprava instrukcí**
   - Místo: `thesis/kap03.tex` diagnostika a úprava instrukcí.
   - Úkol: zkontrolovat opener „Tato sekce popisuje analytickou část iterace“ a případně ho nahradit definicí role diagnostiky v metodice.
@@ -209,8 +210,9 @@ Routování: #63 otevření, #64 kap02, #65 kap03, #66 kap04, #62 závěrečná 
   - Kontrola: roadmap odstavec „Sekce 3.1... Sekce 3.2...“, krátký náhradní opener i roadmap úvod sekce `Výzkumný přístup` odstraněny; kapitola jde rovnou k volbě výzkumné strategie.
 
 ## str. 26 — Fáze a iterativní cyklus
-- [ ] `p26-01` (#65) **HL:** Zvolili jsme systém upomínek faktur: systém pro automatické odesílání připomínek k nezapla- ceným fakturám.
+- [x] `p26-01` (#65) **HL:** Zvolili jsme systém upomínek faktur: systém pro automatické odesílání připomínek k nezapla- ceným fakturám.
   - Vedoucí: opět
+  - Kontrola: dvojtečkový opener a opakování „systém: systém“ odstraněny; věta nyní zavádí případ jako aplikaci pro upomínky faktur.
 - [x] `p26-02` (#65) **HL:** Bez pilotu by ablace neměla z čeho vycházet, bez ablace bychom o redundanci složek mohli jen spekulovat.
   - Vedoucí: Divná věta, asi zbytečná, když je to cílem práce
   - Kontrola: původní věta už v textu není; pilotní a ablační fáze jsou popsány přímo.
@@ -246,30 +248,40 @@ Routování: #63 otevření, #64 kap02, #65 kap03, #66 kap04, #62 závěrečná 
 - [x] `p27-05` (#65) **HL:** I se dvěma běhy nelze dosáhnout statistické průkaznosti (sekce 3.5); výsledky proto interpretujeme jako indikativní, ne kauzální.
   - Vedoucí: Tohle je strašně důležitá věta a bude to obecně důležité přiznávat během obhajoby
   - Kontrola: limit dvou běhů ponechán bez dopředného odkazu a formulován jako indikativní, ne kauzální povaha výsledků.
-- [ ] `p27-06` (#65) **HL:** ověřit cíl 2
+- [x] `p27-06` (#65) **HL:** ověřit cíl 2
   - Vedoucí: Splnit? Cíl - ověřují se hypotézy, zodpovídají se otázky a cíle se plní. Raději se podívejte zda to jinde v práci také nemáte blbě
-- [ ] `p27-07` (#65) **HL:** Iterativní cyklus. V obou fázích je vlastní postup iterativní cyklus, protože jediná iterace nestačí ověřit cíl 2. Pokud má sada metrik fungovat jako diagnostický nástroj, musí naměřená hodnota vést k identifikovatelné úpravě instrukcí a další běh musí ukáz...
+  - Kontrola: formulace „ověřit cíl“ odstraněna z iterativního cyklu; příbuzné formulace v kap. 1 a úvodu kap. 3 upraveny na naplňování cílů nebo metodické požadavky.
+- [x] `p27-07` (#65) **HL:** Iterativní cyklus. V obou fázích je vlastní postup iterativní cyklus, protože jediná iterace nestačí ověřit cíl 2. Pokud má sada metrik fungovat jako diagnostický nástroj, musí naměřená hodnota vést k identifikovatelné úpravě instrukcí a další běh musí ukáz...
   - Vedoucí: Je to pěkné, ale dá se to obecně říct jednodušeji
+  - Kontrola: odstavec zjednodušen na čtyřkrokový cyklus Spuštění–Měření–Diagnóza–Úprava; odstraněn obranný výklad exit kritérií a čistě odkazovací závěrečná věta.
 
 ## str. 28 — Procesní metriky (P1–P8)
-- [ ] `p28-01` (#65) **HL:** Teoretické základy jednotlivých metrik (proč jsou validní, jaká je evidence) popisuje sekce 2.1.
+- [x] `p28-01` (#65) **HL:** Teoretické základy jednotlivých metrik (proč jsou validní, jaká je evidence) popisuje sekce 2.1.
   - Vedoucí: To už čtenář četl. Jak jsem psal uberte většinu těchto odkazů
-- [ ] `p28-02` (#65) **HL:** agentova issue
+  - Kontrola: metatextový odstavec odkazující zpět na teorii a dopředu na vyhodnocení byl odstraněn.
+- [x] `p28-02` (#65) **HL:** agentova issue
   - Vedoucí: issue vytvořené agentem
-- [ ] `p28-03` (#65) **HL:** Behavioral trace
+  - Kontrola: formulace v metrice P1 změněna na „nejstarší issue vytvořené agentem“.
+- [x] `p28-03` (#65) **HL:** Behavioral trace
   - Vedoucí: Vysvětlit
-- [ ] `p28-04` (#65) **HL:** na souborech v tests/; nově přidané git diff --diff-filter=M testy se nezapočítávají.
+  - Kontrola: interní označení `Behavioral trace` a proměnná `tddOrderViolations` byly odstraněny; metrika P3 nyní popisuje princip doplňkové kontroly z git historie.
+- [x] `p28-04` (#65) **HL:** na souborech v tests/; nově přidané git diff --diff-filter=M testy se nezapočítávají.
   - Vedoucí: Ještě trochu dopopsat, nezačínat pokynem
+  - Kontrola: metrika P5 nyní nejprve vysvětluje, že sleduje modifikace existujících testů; příkaz `git diff --diff-filter=M` je uveden až jako nástroj kontroly a nové testy jsou explicitně vyňaty.
 
 ## str. 29 — Produktové metriky (Q1–Q8)
-- [ ] `p29-01` (#65) **HL:** Popisnost
+- [x] `p29-01` (#65) **HL:** Popisnost
   - Vedoucí: popisnost nebo popis? Popisnost se totiž jeví i více jako kreativní esejovité popisy a to není asi chtěné ne?
-- [ ] `p29-02` (#65) **HL:** (bezpečnost, výkonnostní efektivita, kompatibilita, použitelnost, spolehlivost, přenositelnost
+  - Kontrola: názvy P6--P8 změněny z „Popisnost ...“ na „Kvalita ...“; související nadpis používá „procesní výstupy“ místo přetíženého „artefakty“.
+- [x] `p29-02` (#65) **HL:** (bezpečnost, výkonnostní efektivita, kompatibilita, použitelnost, spolehlivost, přenositelnost
   - Vedoucí: proč se nedá měřit bezpečnost např?
-- [ ] `p29-03` (#65) **HL:** detekují agentovy testy skutečné chyby
+  - Kontrola: formulace „nedaly měřit“ nahrazena scope vymezením; text vysvětluje, že zbylé charakteristiky ISO/IEC 25010 vyžadují jiný typ úlohy než doménovou logiku bez autentizace, zátěže a UI.
+- [x] `p29-03` (#65) **HL:** detekují agentovy testy skutečné chyby
   - Vedoucí: zda detekuji..
-- [ ] `p29-04` (#65) **HL:** typy sedí, nebo ne.
+  - Kontrola: původní formulace byla odstraněna při přepisu scope odstavce; oblast Q3--Q4 je nyní souhrnně označena jako kvalita testů.
+- [x] `p29-04` (#65) **HL:** typy sedí, nebo ne.
   - Vedoucí: bez čárky?
+  - Kontrola: hovorová formulace nahrazena větou „Výsledek je binární podle toho, zda typy odpovídají kontraktu.“
 - [ ] `p29-05` (#65) **HL:** Shoda s API kontraktem
   - Vedoucí: to je jediné měřítko správné implementace? Asi ne ne
 - [ ] `p29-06` (#65) **HL:** Vitest

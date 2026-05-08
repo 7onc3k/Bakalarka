@@ -118,9 +118,9 @@ P2 & Branch per issue      & $\times$   & branches $\geq$ issues & $\times$ \\
 P3 & Test-first commits    & $\times$   & test: před feat: & $\times$ \\
 P4 & PRs linked to issues  & \checkmark & všechny PR & \checkmark \\
 P5 & Testy nezměněny & $\times$   & 0 změn   & $\times$ \\
-P6 & Commit msg quality    & n/a        & $\geq$ 2/3 & n/a \\
-P7 & Issue quality         & 3/3        & $\geq$ 2/3 & \checkmark \\
-P8 & PR quality            & 2/3        & $\geq$ 2/3 & \checkmark \\
+P6 & Kvalita commit msg    & n/a        & $\geq$ 2/3 & n/a \\
+P7 & Kvalita issue         & 3/3        & $\geq$ 2/3 & \checkmark \\
+P8 & Kvalita PR            & 2/3        & $\geq$ 2/3 & \checkmark \\
 \midrule
 Q1 & API contract match    & match      & match    & \checkmark \\
 Q2 & Ref.\ test pass rate  & 39/42      & 42/42    & $\times$ \\
@@ -287,8 +287,8 @@ Tabulka~\ref{tab:pilot-r3-delta} ukazuje metriky s~výraznou změnou.
 \midrule
 P2 & Branch per issue         & $\times$   & \checkmark  & zlepšení \\
 P3 & Test-first commits       & $\times$   & \checkmark  & zlepšení \\
-P6 & Commit msg quality       & 2/3        & 3/3         & zlepšení \\
-P7 & Issue quality            & 2/3        & 3/3         & zlepšení \\
+P6 & Kvalita commit msg       & 2/3        & 3/3         & zlepšení \\
+P7 & Kvalita issue            & 2/3        & 3/3         & zlepšení \\
 Q2 & Ref.\ test pass rate     & 32/42      & 41/42       & zlepšení \\
 Q3 & Mutation score           & 68\,\%     & 71\,\%      & zlepšení \\
 Q7 & Complexity violations    & 0          & 1 viol.     & regrese \\
@@ -432,7 +432,7 @@ P1 & Issues before code      & \checkmark & $\times$    & regrese \\
 P2 & Branch per issue        & \checkmark & $\times$    & regrese \\
 P3 & Test-first commits      & \checkmark & $\times$    & regrese \\
 P4 & PRs linked              & \checkmark & $\times$    & regrese \\
-P8 & PR quality              & 3/3        & 1/3         & regrese \\
+P8 & Kvalita PR              & 3/3        & 1/3         & regrese \\
 Q2 & Ref.\ test pass rate    & 41/42      & 38/42       & regrese \\
 Q3 & Mutation score          & 71\,\%     & \cna{n/a}   & \cna{n/a} \\
 Q5 & Lint warnings           & 1          & 0           & zlepšení \\
@@ -460,7 +460,7 @@ E3 & Počet kompakcí          & 0          & 0           & záznam \\
 \toprule
 \textbf{Metriky} & \textbf{Pozorované chování} & \textbf{Příčina} \\
 \midrule
-\acs{P1}, \acs{P2}, \acs{P3}, \acs{P4}, \acs{P8} & Žádné issues, branches ani PR; vše v~jednom \texttt{feat:} commitu po~použití interního \texttt{todowrite} místo \texttt{gh issue create}; PR quality 1/3 (chybějící popis a~kontext) & Selektivní plnění instrukcí: agent přečetl celý postup, ale provedl jen závěrečný checklist \\
+\acs{P1}, \acs{P2}, \acs{P3}, \acs{P4}, \acs{P8} & Žádné issues, branches ani PR; vše v~jednom \texttt{feat:} commitu po~použití interního \texttt{todowrite} místo \texttt{gh issue create}; kvalita PR 1/3 (chybějící popis a~kontext) & Selektivní plnění instrukcí: agent přečetl celý postup, ale provedl jen závěrečný checklist \\
 \acs{Q2} & Stále neúplné pause/resume a~nové edge cases & Verifikace API kontraktu nezabrala bez~současného dodržení procesu \\
 \bottomrule
 \end{tabularx}
@@ -586,9 +586,9 @@ P2 & Branch per issue          & \checkmark & \checkmark & $\times$ \\
 P3 & Test-first commits        & \checkmark & \checkmark & $\times$ \\
 P4 & PRs linked to issues      & \checkmark & \checkmark & $\times$ \\
 P5 & Testy nezměněny           & \checkmark & $\times$   & \checkmark \\
-P6 & Commit msg quality        & 3/3        & 2/3        & 2/3 \\
-P7 & Issue quality             & 3/3        & 2/3        & 3/3 \\
-P8 & PR quality                & 3/3        & 3/3        & 1/3 \\
+P6 & Kvalita commit msg        & 3/3        & 2/3        & 2/3 \\
+P7 & Kvalita issue             & 3/3        & 2/3        & 3/3 \\
+P8 & Kvalita PR                & 3/3        & 3/3        & 1/3 \\
 \midrule
 Q1 & API contract match        & match      & match      & match \\
 Q2 & Ref.\ test pass rate      & 41/42      & 35/42      & 37/42 \\
@@ -659,9 +659,9 @@ P2 & Branch per issue          & \checkmark & \checkmark & $\times$ \\
 P3 & Test-first commits        & \checkmark & \checkmark & \checkmark \\
 P4 & PRs linked to issues      & \checkmark & $\times$   & \checkmark \\
 P5 & Testy nezměněny           & \checkmark & $\times$   & $\times$ \\
-P6 & Commit msg quality        & 3/3        & 3/3        & 3/3 \\
-P7 & Issue quality             & 3/3        & 3/3        & 3/3 \\
-P8 & PR quality                & 3/3        & 2/3        & 2/3 \\
+P6 & Kvalita commit msg        & 3/3        & 3/3        & 3/3 \\
+P7 & Kvalita issue             & 3/3        & 3/3        & 3/3 \\
+P8 & Kvalita PR                & 3/3        & 2/3        & 2/3 \\
 \midrule
 Q1 & API contract match        & match      & match      & match \\
 Q2 & Ref.\ test pass rate      & 41/42      & 37/42      & 11/42 \\
@@ -739,9 +739,9 @@ P2 branch per issue     & \xmark & \xmark & \cmark & \xmark & \xmark       & \cm
 P3 test-first           & \xmark & \xmark & \cmark & \cmark & \xmark       & \cmark & \xmark & \cmark & \cmark \\
 P4 PRs linked           & \cmark & \cmark & \cmark & \cmark & \xmark       & \cmark & \xmark & \xmark & \cmark \\
 P5 testy nezměněny      & \xmark & \cmark & \cmark & \xmark & \cmark       & \xmark & \cmark & \xmark & \xmark \\
-P6 commit msg           & \cna{n/a}  & \cgood{2/3}  & \cgood{3/3}  & \cgood{3/3}  & \cgood{2/3}    & \cgood{2/3}  & \cgood{2/3}  & \cgood{3/3}  & \cgood{3/3} \\
-P7 issue quality        & \cgood{3/3}  & \cgood{2/3}  & \cgood{3/3}  & \cgood{3/3}  & \cgood{3/3}$^\ddagger$ & \cgood{2/3}  & \cgood{3/3}  & \cgood{3/3}  & \cgood{3/3} \\
-P8 PR quality           & \cgood{2/3}  & \cgood{3/3}  & \cgood{3/3}  & \cgood{3/3}  & \cbad{1/3}  & \cgood{3/3}  & \cbad{1/3}  & \cgood{2/3}  & \cgood{2/3} \\
+P6 commit kvalita       & \cna{n/a}  & \cgood{2/3}  & \cgood{3/3}  & \cgood{3/3}  & \cgood{2/3}    & \cgood{2/3}  & \cgood{2/3}  & \cgood{3/3}  & \cgood{3/3} \\
+P7 issue kvalita        & \cgood{3/3}  & \cgood{2/3}  & \cgood{3/3}  & \cgood{3/3}  & \cgood{3/3}$^\ddagger$ & \cgood{2/3}  & \cgood{3/3}  & \cgood{3/3}  & \cgood{3/3} \\
+P8 PR kvalita           & \cgood{2/3}  & \cgood{3/3}  & \cgood{3/3}  & \cgood{3/3}  & \cbad{1/3}  & \cgood{3/3}  & \cbad{1/3}  & \cgood{2/3}  & \cgood{2/3} \\
 \midrule
 Q1 API contract         & \cgood{match} & \cgood{match} & \cgood{match} & \cgood{match} & \cgood{match} & \cgood{match} & \cgood{match} & \cgood{match} & \cgood{match} \\
 Q2 ref.\ testy          & \cbad{39}  & \cbad{32} & \cbad{41} & \cbad{39} & \cbad{38}  & \cbad{35} & \cbad{37} & \cbad{37} & \cbad{11} \\
