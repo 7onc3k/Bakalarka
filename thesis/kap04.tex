@@ -524,8 +524,8 @@ verifikační kroky spouští i~bez instrukce.
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=\textwidth]{img/generated/agents-diff-r3-ablace-a.png}
-\caption[Změny AGENTS.md pro Ablaci~A]{Změny AGENTS.md pro Ablaci~A: odebrány verifikační kroky
-(\texttt{git log}, \texttt{tsc}, \texttt{eslint}) z~Process.\protect\footnotemark}
+\caption[Změny AGENTS.md pro Ablaci~A]{Vizuální diff \texttt{AGENTS.md}
+mezi pilot-r3 a~ablací~A.\protect\footnotemark}
 \label{fig:diff-r3-ablace-a}
 \end{figure}
 \footnotetext{Zelené řádky v~diffu neobsahují nový text; vznikly
@@ -545,8 +545,7 @@ API). Process a~Constraints zůstanou beze změny
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=\textwidth]{img/generated/agents-diff-r3-ablace-b.png}
-\caption{Změny AGENTS.md pro Ablaci~B: odebrána celá sekce Package Quality
-(konvence, strict TypeScript, JSDoc, čisté API).}
+\caption{Vizuální diff \texttt{AGENTS.md} mezi pilot-r3 a~ablací~B.}
 \label{fig:diff-r3-ablace-b}
 \end{figure}
 \FloatBarrier
@@ -720,6 +719,8 @@ jediný pilotní běh kde agent splnil celý procesní checklist.
 Sloupec E1 uvádí vstup (max.\ na kroku včetně \texttt{cache} v~exportu),
 výstup a~součet \texttt{cache} přes kroky, vše v~tisících. Stejný přehled
 generuje skript \texttt{summary.ts} do \texttt{experiments/runs/SUMMARY.md}.
+Vývoj hodnot a~jejich interpretaci ve vztahu k~cílům práce rozebírá
+další kapitola.
 
 \begin{landscape}
 \begin{table}[H]
@@ -769,7 +770,3 @@ dopočítání AC25 (\textit{custom holiday calendar}).
 \end{table}
 \FloatBarrier
 \end{landscape}
-
-Tabulka zaznamenává hodnoty všech 19~metrik napříč pěti pilotními
-iteracemi a~čtyřmi ablačními běhy. Vývoj hodnot a~jejich interpretaci
-ve vztahu k~cílům práce uvádí kapitola~\ref{kap:vyhodnoceni}.

@@ -182,9 +182,7 @@ a~\texttt{CANCELLED} (z~9 stavů, vše kromě terminálů) a~\texttt{PAUSED}
     \draw[barr, dashed] (paus.south) -- (resnote.north);
 \end{tikzpicture}
 \caption[Stavový automat systému upomínek]{Stavový automat systému
-upomínek faktur: hlavní eskalace shora dolů (vlevo) a~tři boční
-stavy dostupné z~většiny aktivních (vpravo). Notaci a~zdrojové
-stavy popisuje text výše.}
+upomínek faktur.}
 \label{fig:dunning-fsm}
 \end{figure}
 \FloatBarrier
@@ -697,7 +695,7 @@ V~ablační fázi se používá stejné spuštění a~měření, ale bez průbě
         node[midway, below, font=\footnotesize\sffamily]
         {opakovat podle diagnostiky};
 \end{tikzpicture}
-\caption{Iterativní cyklus pilotní fáze se smyčkou opakování řízenou diagnostikou naměřených odchylek.}
+\caption{Iterativní cyklus pilotní fáze.}
 \label{fig:iterativni-cyklus}
 \end{figure}
 \FloatBarrier
@@ -708,29 +706,44 @@ V~ablační fázi se používá stejné spuštění a~měření, ale bez průbě
 Každý běh zakládá samostatné experimentální prostředí pro jednu
 verzi instrukcí a~produkuje strukturovaný balík záznamů, který
 umožňuje zpětně rekonstruovat naměřené hodnoty i~chování agenta. Pro
-orientaci v~následujícím popisu slouží zjednodušená struktura
+orientaci v~následujícím popisu ukazuje
+výpis~\ref{lst:experiment-materials} zjednodušenou strukturu
 relevantních částí repozitáře.
 
-\noindent
-\begin{minipage}{\linewidth}
-\small\ttfamily
-\begin{tabular}{@{}ll@{}}
-experiments/ & \\
-\hspace*{1em}infra/ & \# měřicí infrastruktura a vstupy \\
-\hspace*{2em}inputs/ & \# build.md, AGENTS.md a specifikace zadání \\
-\hspace*{2em}scripts/ts/ & \# skripty pro spuštění a vyhodnocení \\
-\hspace*{3em}new-run.ts & \# založení a spuštění běhu \\
-\hspace*{3em}analyze-run.ts & \# extrakce deterministických metrik \\
-\hspace*{3em}judge.ts & \# LLM-as-judge hodnocení \\
-\hspace*{2em}judge/ & \# hodnoticí schémata \\
-\hspace*{1em}runs/ & \# výstupy jednotlivých běhů \\
-\hspace*{2em}pilot-rN/ & \\
-\hspace*{3em}transcript.json & \# úplný záznam session \\
-\hspace*{3em}FINDINGS.md & \# naměřené hodnoty a popis chování \\
-\hspace*{1em}reference/ & \# referenční implementace a testy \\
-\end{tabular}
-\end{minipage}
-\vspace{0.5em}
+\begin{lstlisting}[
+basicstyle=\footnotesize\ttfamily,
+frame=single,
+rulecolor=\color{gray!50},
+backgroundcolor=\color{gray!5},
+xleftmargin=0.8em,
+xrightmargin=0.8em,
+framesep=5pt,
+abovecaptionskip=4pt,
+belowcaptionskip=8pt,
+aboveskip=8pt,
+belowskip=10pt,
+breaklines=true,
+breakindent=0pt,
+columns=fullflexible,
+keepspaces=true,
+literate={č}{{\v{c}}}1{š}{{\v{s}}}1{ř}{{\v{r}}}1{ž}{{\v{z}}}1{ý}{{\'{y}}}1{á}{{\'{a}}}1{í}{{\'{i}}}1{é}{{\'{e}}}1{ě}{{\v{e}}}1{ú}{{\'{u}}}1{ů}{{\r{u}}}1{ó}{{\'{o}}}1{ť}{{\v{t}}}1{ď}{{\v{d}}}1{ň}{{\v{n}}}1,
+caption={Struktura experimentálních materiálů},
+label={lst:experiment-materials}
+]
+experiments/                         # měřicí infrastruktura, běhy a reference
+  infra/                             # měřicí infrastruktura a vstupy
+    inputs/                          # build.md, AGENTS.md a specifikace zadání
+    scripts/ts/                      # skripty pro spuštění a vyhodnocení
+      new-run.ts                     # založení a spuštění běhu
+      analyze-run.ts                 # extrakce deterministických metrik
+      judge.ts                       # LLM-as-judge hodnocení
+    judge/                           # hodnoticí schémata
+  runs/                              # výstupy jednotlivých běhů
+    pilot-rN/
+      transcript.json                # úplný záznam session
+      FINDINGS.md                    # naměřené hodnoty a popis chování
+  reference/                         # referenční implementace a testy
+\end{lstlisting}
 
 \textbf{Spuštění.} \texttt{new-run.ts} vytvoří pro daný běh lokální adresář
 \texttt{experiments/runs/runName/} a~soukromý GitHub repozitář
