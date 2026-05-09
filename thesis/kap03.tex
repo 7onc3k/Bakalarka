@@ -20,9 +20,9 @@ instrukcí řízený těmito metrikami, vyžaduje navíc, aby běhy tvořily
 sekvenci, v~níž lze sledovat vztah měření $\to$ diagnóza $\to$
 úprava $\to$ další měření. Cíl~3, ablace složek instrukcí, stojí na
 schopnosti porovnat běhy lišící se v~jediné složce. Všechny tři cíle
-tedy společně kladou na metodiku dva požadavky: opakované spouštění
-agenta s~různými variantami instrukcí na témže projektu a~podrobnou
-analýzu každého běhu napříč třemi dimenzemi (proces, produkt,
+tedy společně kladou na metodiku dva požadavky. Prvním je opakované spouštění
+agenta s~různými variantami instrukcí na témže projektu, druhým podrobná
+analýza každého běhu napříč třemi dimenzemi (proces, produkt,
 zdroje).
 
 Tomuto profilu odpovídá případová studie, která v~empirickém
@@ -30,11 +30,11 @@ software engineering výzkumu slouží k~detailnímu zkoumání jevu
 v~jeho reálném kontextu~\cite{runeson2009}. Řízený
 experiment s~počtem běhů potřebným pro statistickou izolaci by byl
 vzhledem k~ceně jedné iterace (tisíce tokenů, desítky minut)
-nepraktický. Přednost proto dostává hloubka před šířkou: jeden
+nepraktický. Přednost proto dostává hloubka před šířkou, tedy jeden
 projekt s~detailní analýzou každého běhu (git historie, transcript,
 naměřené metriky).
 \textcite{yin2018} pro tento typ výzkumu používá pojem
-\textit{analytická generalizace}: na jednom případě ukazujeme
+\textit{analytická generalizace}. Na jednom případě ukazujeme
 princip, který lze dále ověřovat na dalších případech.
 % RAW TODO: doplnit citaci Bowen et al. 2009 (feasibility study framework) — see #53 close
 Praktický přínos této práce spočívá v~ověření, že navrženou sadu
@@ -49,7 +49,7 @@ Touto volbou se práce vědomě staví mimo benchmark
 paradigma~\cite{swebench2024}, které srovnává mnoho modelů na
 mnoha úlohách s~agregovanými skóre. Cílem této studie není rank
 modelů, ale podrobné porozumění tomu, jak iterativní úpravy
-instrukcí mění chování jednoho agenta na jednom projektu; to je
+instrukcí mění chování jednoho agenta na jednom projektu. To je
 úloha pro case study, ne pro benchmark.
 
 \paragraph{Pilotní fáze}
@@ -73,7 +73,7 @@ kontrolované porovnání plné verze instrukcí s~její zjednodušenou
 variantou. Každá ablace se provádí ve dvou nezávislých bězích se
 stejným nastavením, aby bylo možné odlišit opakující se efekt změny
 od přirozené variability nedeterministického modelu. Ani dva běhy
-neposkytují statistickou průkaznost; výsledky proto mají
+neposkytují statistickou průkaznost, a~výsledky proto mají
 indikativní, ne kauzální povahu.
 
 Podrobnější postup jednoho běhu se vrací po definici metrik v~sekci
@@ -100,7 +100,7 @@ připomínek k~nezaplaceným fakturám. Obsahuje stavový
 automat (nová, po splatnosti, upomínaná, eskalovaná), časové výpočty
 (pracovní dny, ochranné lhůty) a~pravidla pro eskalaci. Současně
 jde o~úlohu dostatečně bohatou na netriviální rozhodování, ale stále
-zvládnutelnou pro opakované běhy: agent musí kombinovat stavové
+zvládnutelnou pro opakované běhy. Agent musí kombinovat stavové
 přechody, časové výpočty a~testování hraničních případů, takže
 metriky zachycují víc než průchod jednoduchou CRUD implementací.
 
@@ -121,12 +121,12 @@ instanci, časové prodlevy se počítají v~pracovních dnech (víkendy
 a~konfigurovatelné svátky se přeskakují automaticky v~aritmetice
 timeoutů, nejsou samostatným stavem). Hlavní eskalační větev má 9
 stavů spojených 8 časovými přechody (obrázek~\ref{fig:dunning-fsm}).
-Popisky šipek používají notaci \texttt{[guard]\,/\,effect}: guard
+Popisky šipek používají notaci \texttt{[guard]\,/\,effect}. Guard
 v~hranatých závorkách udává timeout v~pracovních dnech (\textit{bd}~=~business
 days) od vstupu do předchozího stavu, effect za~lomítkem je akce
 vrácená volajícímu (typicky odeslání e-mailu, u~přechodu do
 \texttt{SUSPENDED} navíc pozastavení služby). Eskalační přechody
-spouští událost \texttt{tick} při splnění guardu; alternativně
+spouští událost \texttt{tick} při splnění guardu. Alternativně
 \texttt{manual\_advance} posune stav na další bezpodmínečně (bypass
 timeoutu, v~diagramu nezakreslen). Vedle hlavní větve jsou
 ze~všech aktivních stavů kdykoliv dostupné \texttt{PAID}
@@ -265,10 +265,10 @@ agentovy běhy.
 
 V~tomto designu vystupují tři roviny, které se snadno zaměňují.
 \textit{Instrukce} v~souboru \texttt{AGENTS.md} jsou nezávislou
-proměnnou: měníme je mezi běhy a~sledujeme dopad. \textit{Chování
+proměnnou, která se mezi běhy mění a~jejíž dopad se sleduje. \textit{Chování
 agenta} (jak implementuje, jak strukturuje práci a~jaký kód vytváří)
 je závislou proměnnou, kterou měříme. Systém upomínek faktur slouží
-jako testovací prostředí, na~kterém chování pozorujeme; není
+jako testovací prostředí, na~kterém chování pozorujeme. Není
 předmětem zkoumání.
 
 \subsection{Fixní proměnné}
@@ -278,7 +278,7 @@ Aby bylo možné měřit vliv instrukcí, musí být všechno ostatní
 co nejstabilnější. Hlavní měněnou proměnnou mezi běhy je obsah
 souboru \texttt{AGENTS.md}, tedy procedurálních instrukcí, které
 definují pracovní postup, omezení a~quality gates. Tento design
-negarantuje dokonalou izolaci všech vlivů; jeho cílem je omezit
+negarantuje dokonalou izolaci všech vlivů. Jeho cílem je omezit
 zjevné vedlejší vstupy a~udělat jejich případný vliv auditovatelný.
 Na rozdíl od generických context files,
 které typicky popisují adresářovou strukturu a~build
@@ -316,9 +316,9 @@ autentizační svazek zajišťuje konzistentní přístup k~API napříč
 běhy.
 
 \textbf{Harness OpenCode} je CLI nástroj, který orchestruje běh
-agenta: spravuje session, zprostředkovává volání modelu, zpřístupňuje
+agenta. Spravuje session, zprostředkovává volání modelu, zpřístupňuje
 nástroje (čtení a~zápis souborů, shell, vyhledávání) a~zaznamenává
-transcript. Harness sám není měřeným chováním; měříme to, co agent
+transcript. Harness sám není měřeným chováním. Měří se to, co agent
 přes něj udělá. Verze nástroje je pinovaná v~Docker image, konfigurace
 agenta (povolené nástroje, MCP servery) je součástí auditovatelného
 balíku v~repozitáři práce. Volba OpenCode je dána open-source
@@ -326,7 +326,7 @@ licencí (umožňuje pinování verze a~záznam interní telemetrie),
 strojově čitelným exportem session a~přístupem do interní databáze,
 ze které čerpá metrika \acs{E3} (počet kompakcí kontextu).
 Vlastnosti harness, které ovlivňují měření, jsou diskutovány
-u~jednotlivých metrik: tichý retry po selhání API
+u~jednotlivých metrik, zejména tichý retry po selhání API
 (sekce~\ref{sec:limity-vysledky}) a~automatická kompakce kontextu
 (metrika \acs{E3}).
 
@@ -353,7 +353,7 @@ testy, git historie) měříme sadou 19~metrik. Proceduru jednoho běhu
 (záznam, vyhodnocení a~diagnostickou úpravu instrukcí) popisuje
 sekce~\ref{sec:procedura-behu}.
 
-Sada metrik pokrývá tři otázky: jak agent pracoval, co vyrobil
+Sada metrik pokrývá tři otázky, tedy jak agent pracoval, co vyrobil
 a~za jakou cenu. Tyto tři otázky odpovídají taxonomii proces /
 produkt / zdroje popsané v~sekci~\ref{sec:mereni-kvality-obecne}.
 Naše sada obsahuje 19~metrik ve třech kategoriích:
@@ -408,7 +408,7 @@ nepokrývají, ale nejsou interpretovány jako plně objektivní měření.
 \label{sec:procesni-metriky}
 
 Procesní metriky měří \textit{jak} agent pracuje.
-Instrukce v~AGENTS.md definují strukturovaný vývojový postup: agent
+Instrukce v~AGENTS.md definují strukturovaný vývojový postup. Agent
 má odvozovat práci ze specifikace, organizovat ji přes issues
 a~větve, psát testy před implementací a~dokumentovat rozhodnutí
 ve~zprávách commitů a~popisech PR.
@@ -440,7 +440,7 @@ s~časem prvního commitu obsahujícího soubory v~\texttt{src/}
 nebo \texttt{tests/}. & kontrola projde \\
 \addlinespace
 \acs{P2} & Branch per issue &
-Počet vzdálených větví (bez \texttt{main}) vůči počtu issues; podmínka
+Počet vzdálených větví (bez \texttt{main}) vůči počtu issues, podmínka
 \textit{branches $\geq$ issues} (žádné slučování více issues do jedné
 větve). & kontrola projde \\
 \addlinespace
@@ -543,7 +543,7 @@ Případová studie rozlišuje dva druhy testů. \textit{Referenční testy}
 (měřené metrikou \acs{Q2}) jsou odvozené ze specifikace metodou
 TDD~\cite{mathews2024} a~spouštěné po běhu samostatným skriptem,
 takže pro agenta jsou neviditelné. \textit{Agentovy vlastní testy}
-píše agent během běhu, jsou viditelné a~spustitelné agentem; vztahuje
+píše agent během běhu a~jsou viditelné i~spustitelné agentem. Vztahuje
 se k~nim metrika \acs{P5}. Referenční testy slouží jako externí
 oracle, tedy zdroj očekávaných výsledků, který agent nemůže přepsat
 (sekce~\ref{sec:hodnoceni-ai-agentu}).
@@ -595,8 +595,8 @@ Tabulka~\ref{tab:q5-q8} shrnuje metriky kvality kódu.
 \midrule
 \acs{Q5} & Lint warnings + errors &
 ESLint s~fixní konfigurací (recommended + strict TypeScript rules).
-Konfigurace je součástí experimentální infrastruktury, ne agentova repo;
-agent ji nemůže měnit. Výstupem je celkový počet varování a~chyb linteru. & 0 \\
+Konfigurace je součástí experimentální infrastruktury, ne agentova repo,
+takže ji agent nemůže měnit. Výstupem je celkový počet varování a~chyb linteru. & 0 \\
 \addlinespace
 \acs{Q6} & Typové chyby &
 \texttt{tsc -{}-noEmit} ve strict mode. Doplňuje počet explicitních
@@ -841,7 +841,7 @@ Filter \textcite{skillsbench2025}              & Kdyby tento řádek chyběl, ud
 
 \vspace{0.3em}
 {\footnotesize $^{*}$ Lulla měří přítomnost celého souboru, ne jednotlivé
-typy obsahu; rámec proto používáme interpretativně.}
+typy obsahu, proto se rámec používá interpretativně.}
 \end{table}
 \FloatBarrier
 
@@ -997,5 +997,5 @@ dostupné.
 
 
 %% ==========================================================================
-%% Audit trail — starý obsah
+%% Audit trail, starý obsah
 %% ==========================================================================
