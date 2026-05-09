@@ -38,13 +38,15 @@ na úrovni pravidla nebo příkazu bez vnější zpětné vazby.
 Třetím cílem bylo ablacemi prozkoumat, které složky instrukcí
 vytvořených v~cíli~2 přispívají k~měřenému chování agenta
 a~které jsou redundantní.
-Ablace potvrdila závislost
-klíčových metrik na verifikačních krocích, kterou pilotní fáze už
-naznačila. Jejich odebrání zhoršilo funkční korektnost i~čistotu kódu. Konvence kvality kódu automatizované
+Výsledky ablací byly konzistentní s~interpretací, že klíčové
+metriky v~této případové studii závisely na verifikačních krocích,
+což naznačila už pilotní fáze. Jejich odebrání zhoršilo funkční
+korektnost i~čistotu kódu. Konvence kvality kódu automatizované
 metriky neovlivnily, ale designová kvalita hodnocená LLM-as-judge
-klesla. Výsledky zároveň ukázaly, že dodržení procesních pravidel je výrazně
-citlivá na nedeterminismus modelu. Stejná sada instrukcí proto může
-vést k~odlišnému dodržení vícekrokového pracovního postupu.
+klesla. Výsledky zároveň ukázaly, že dodržení procesních pravidel je
+výrazně citlivé na nedeterminismus modelu. Stejná sada instrukcí
+proto může vést k~odlišnému dodržení vícekrokového pracovního
+postupu.
 
 Hlavním přínosem práce je iterativní postup a~sada metrik, které
 může praktik aplikovat na vlastním projektu s~vlastními exit kritérii.
