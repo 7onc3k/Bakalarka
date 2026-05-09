@@ -55,8 +55,8 @@ instrukcí mění chování jednoho agenta na jednom projektu; to je
 \paragraph{Pilotní fáze}
 \phantomsection\label{sec:pilotni-iterace}%
 Případová studie postupuje ve dvou fázích. Pilotní fáze slouží
-k~nalezení použitelné sady instrukcí. První běh používá baseline
-\texttt{AGENTS.md}, tedy výchozí sadu instrukcí odvozenou z~literatury
+k~nalezení použitelné sady instrukcí. První běh používá výchozí
+\texttt{AGENTS.md}, tedy sadu instrukcí odvozenou z~literatury
 o~instrukcích pro agentní vývoj. Další běhy už vznikají iterativně.
 V~každém běhu se sleduje, zda agent dodržel požadovaný postup a~jak
 kvalitní řešení vytvořil. Naměřené odchylky se potom používají jako
@@ -260,9 +260,9 @@ specifikace, ne z~pozorování kódu. Testy jsou agentovi neviditelné
 a~spouští se až po běhu samostatným skriptem, takže slouží jako
 externí oracle, tedy zdroj očekávaných výsledků, který agent nemůže přepsat
 (sec~\ref{sec:hodnoceni-ai-agentu}). Mutation testing nad referenční
-test suite dosáhl 91{,}9\,\%, což indikuje, že referenční testy samy
+testovací sadou dosáhl 91{,}9\,\%, což indikuje, že referenční testy samy
 detekují cílené poruchy v~doménové logice. Tato hodnota slouží jako
-pojistka kvality měřicího nástroje, ne jako srovnávací baseline pro
+pojistka kvality měřicího nástroje, ne jako srovnávací základna pro
 agentovy běhy.
 
 V~tomto designu vystupují tři roviny, které se snadno zaměňují.
@@ -363,8 +363,8 @@ Naše sada obsahuje 19~metrik ve třech kategoriích:
 \begin{description}
     \item[P~-- proces (P1--P8)] Dodržel agent předepsaný postup?
           Měříme dodržování pravidel pracovního postupu z~instrukcí
-          (\acs{P1}--\acs{P5}) a~kvalitu procesních výstupů jako commit
-          messages, issue a~PR descriptions (\acs{P6}--\acs{P8}).
+          (\acs{P1}--\acs{P5}) a~kvalitu procesních výstupů, jako jsou
+          zprávy commitů, popisy issue a~popisy PR (\acs{P6}--\acs{P8}).
     \item[Q~-- kvalita produktu (Q1--Q8)] Je kód kvalitní?
           Měříme funkční korektnost (\acs{Q1}--\acs{Q2}), kvalitu testů
           (\acs{Q3}--\acs{Q4}) a~udržovatelnost kódu (\acs{Q5}--\acs{Q8}).
@@ -395,8 +395,8 @@ MiniMax-M2.5, protože modely mají tendenci zvýhodňovat výstupy svého
 vlastního druhu, tedy vykazují self-preference bias~\cite{panickssery2024}.
 Volba hodnotitele z~jiné rodiny tento bias snižuje~\cite{verga2024poll}.
 
-Judge dostává výstupy běhu, například zdrojový kód, commit messages,
-issue a~PR descriptions. Hodnotí je podle pevného hodnoticího schématu
+Judge dostává výstupy běhu, například zdrojový kód, zprávy commitů,
+popisy issue a~popisy PR. Hodnotí je podle pevného hodnoticího schématu
 (\textit{scoring rubric}), které určuje posuzované dimenze a~význam
 stupňů 1 až 3 (1 = nejnižší kvalita, 3 = nejvyšší kvalita). Stejný
 prompt, hodnoticí schémata i~model GLM-5 se používají ve všech bězích,
@@ -412,8 +412,8 @@ nepokrývají, ale nejsou interpretovány jako plně objektivní měření.
 Procesní metriky měří \textit{jak} agent pracuje.
 Instrukce v~AGENTS.md definují strukturovaný vývojový postup: agent
 má odvozovat práci ze specifikace, organizovat ji přes issues
-a~branches, psát testy před implementací a~dokumentovat rozhodnutí
-v~commit messages a~PR descriptions.
+a~větve, psát testy před implementací a~dokumentovat rozhodnutí
+ve~zprávách commitů a~popisech PR.
 
 Tato skupina metrik převádí procesní dimenzi z~teoretických
 východisek do stop, které po sobě agent zanechává v~repozitáři
@@ -421,14 +421,14 @@ a~na GitHubu. Proto sleduje pořadí práce, vazbu mezi issues,
 větvemi a~pull requesty, test-first postup a~kvalitu procesních
 záznamů.
 
-\subsubsection*{P1--P5: compliance (binární)}
+\subsubsection*{P1--P5: dodržení procesních pravidel (binární)}
 
 Tabulka~\ref{tab:p1-p5} shrnuje deterministické procesní metriky.
 Všechny mají binární výsledek splněno/nesplněno.
 
 \begin{table}[htbp]
 \centering
-\caption{Procesní compliance metriky P1--P5}
+\caption{Procesní metriky dodržení pravidel P1--P5}
 \label{tab:p1-p5}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
@@ -442,7 +442,7 @@ s~časem prvního commitu obsahujícího soubory v~\texttt{src/}
 nebo \texttt{tests/}. & kontrola projde \\
 \addlinespace
 \acs{P2} & Branch per issue &
-Počet remote branches (bez \texttt{main}) vůči počtu issues; podmínka
+Počet vzdálených větví (bez \texttt{main}) vůči počtu issues; podmínka
 \textit{branches $\geq$ issues} (žádné slučování více issues do jedné
 větve). & kontrola projde \\
 \addlinespace
@@ -458,7 +458,7 @@ Tělo každého PR (GitHub API) obsahuje regex \texttt{Closes \#N}. & kontrola p
 \acs{P5} & Žádné modifikace existujících testů &
 Metrika sleduje, zda agent měnil již existující testy v~adresáři
 \texttt{tests/}. Kontrola používá \texttt{git diff -{}-diff-filter=M}.
-Nově přidané testy se nezapočítávají, protože rozšiřování test suite
+Nově přidané testy se nezapočítávají, protože rozšiřování testovací sady
 je v~zadání povolené. & kontrola projde \\
 \bottomrule
 \end{tabularx}
@@ -479,14 +479,14 @@ Tabulka~\ref{tab:p6-p8} shrnuje judge-based procesní metriky.
 \toprule
 \textbf{Kód} & \textbf{Co hodnotí} & \textbf{Škála} & \textbf{Exit kritérium} \\
 \midrule
-\acs{P6} & Kvalita commit messages &
+\acs{P6} & Kvalita zpráv commitů &
 1--3 (atomicita, konvenční prefix, srozumitelnost co a~proč bylo změněno). & $\geq$ 2/3 \\
 \addlinespace
-\acs{P7} & Kvalita issue descriptions &
+\acs{P7} & Kvalita popisů issue &
 1--3 (jasnost scope, přítomnost acceptance criteria, dostatečnost pro
 implementaci). & $\geq$ 2/3 \\
 \addlinespace
-\acs{P8} & Kvalita PR descriptions &
+\acs{P8} & Kvalita popisů PR &
 1--3 (odkaz na issue, popis co a~proč, dostatečnost pro code review). & $\geq$ 2/3 \\
 \bottomrule
 \end{tabularx}
@@ -571,7 +571,7 @@ variant programu, které testy odhalí. & $\geq$ 80\,\% \\
 \addlinespace
 \acs{Q4} & Pokrytí acceptance criteria agentovými testy\protect\footnotemark &
 Specifikace obsahuje 25~acceptance criteria. Hodnocení určí, kolik
-z~nich má odpovídající test v~agentově test suite. Výsledek má tvar
+z~nich má odpovídající test v~agentově testovací sadě. Výsledek má tvar
 \texttt{N/25}. & 25/25 \\
 \bottomrule
 \end{tabularx}
@@ -598,7 +598,7 @@ Tabulka~\ref{tab:q5-q8} shrnuje metriky kvality kódu.
 \acs{Q5} & Lint warnings + errors &
 ESLint s~fixní konfigurací (recommended + strict TypeScript rules).
 Konfigurace je součástí experimentální infrastruktury, ne agentova repo;
-agent ji nemůže měnit. Výstup: celkový počet warnings + errors. & 0 \\
+agent ji nemůže měnit. Výstupem je celkový počet varování a~chyb linteru. & 0 \\
 \addlinespace
 \acs{Q6} & Typové chyby &
 \texttt{tsc -{}-noEmit} ve strict mode. Doplňuje počet explicitních
@@ -906,9 +906,9 @@ P2 & Branch per issue              & git, GitHub API & kontrola projde \\
 P3 & Test-first commits            & git log         & kontrola projde \\
 P4 & PRs linked to issues          & GitHub API      & kontrola projde \\
 P5 & No existing test modifications & git diff       & kontrola projde \\
-P6 & Kvalita commit messages       & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
-P7 & Kvalita issue descriptions    & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
-P8 & Kvalita PR descriptions       & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
+P6 & Kvalita zpráv commitů         & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
+P7 & Kvalita popisů issue          & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
+P8 & Kvalita popisů PR             & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
 \midrule
 \multicolumn{4}{@{}l}{\textit{Produktové (Q): co agent vyrobil}} \\[2pt]
 Q1 & API contract match         & tsc (import + typecheck) & match \\
@@ -937,8 +937,8 @@ E3 & Počet kompakcí kontextu & OpenCode DB (\texttt{time\_compacting}) & --- \
 \label{sec:omezeni-validita}
 
 Případová studie nese omezení daná zvolenou metodikou. Jejich dopad
-lze popsat přes konstruktovou, interní a~externí validitu podle case
-study frameworku~\cite{runeson2009}.
+lze popsat přes konstruktovou, interní a~externí validitu podle rámce
+pro případové studie~\cite{runeson2009}.
 
 \textbf{Konstruktová validita.}
 Sada metrik je autorskou kombinací procesních, produktových

@@ -124,8 +124,8 @@ skutečně funguje.
 
 \textit{Čistota a~design (Q5--Q8).}
 \ac{Q5} a~\ac{Q7} se ukázaly jako citlivé na instrukce: v~ablacích
-bez sekce Package Quality vzrostl počet lint warnings o~přibližně
-150\,\% a~počet violations cyklomatické složitosti obdobně.
+bez sekce Package Quality vzrostl počet varování linteru o~přibližně
+150\,\% a~počet porušení limitu cyklomatické složitosti obdobně.
 \ac{Q6} naproti tomu zůstala nulová ve všech bězích.
 Statické typování poskytuje modelu explicitní vodítka přímo
 v~kódu: typy parametrů, návratové hodnoty a~rozhraní jsou
@@ -220,7 +220,7 @@ navržených metrik.}
 Případová studie ukazuje, že tento postup lze na jednom projektu
 prakticky použít a~že navržené metriky dokážou zachytit měřitelné
 změny v~chování agenta. Neznamená to, že stejný efekt nastane
-obecně. Změny mezi běhy nebyly monotónní. Baseline (r1) splnila pouze
+obecně. Změny mezi běhy nebyly monotónní. Výchozí běh r1 splnil pouze
 \acs{P1}, \acs{P4}, \acs{Q1} a~\acs{Q6}; po dvou cyklech úprav (r3)
 agent splnil celý procesní checklist \acs{P1}--\acs{P5} a~současně
 udržel \acs{Q1} i~\acs{Q6}. Regrese r4 vrátila procesní část zpět
@@ -378,11 +378,11 @@ nediskriminuje varianty.
 
 Variabilita procesních metrik byla v~ablacích srovnatelná
 s~pilotními iteracemi, přestože instrukce pro pracovní postup zůstaly beze
-změny. Data naznačují, že procesní compliance je u~tohoto modelu
+změny. Data naznačují, že dodržení procesních pravidel je u~tohoto modelu
 stochastická vlastnost, kterou instrukce ovlivňují jen částečně.
 Variabilita mezi B-1 (\acs{Q2}~=~37/42) a~B-2 (\acs{Q2}~=~11/42)
 ukazuje, že nedeterminismus modelu může být silnějším faktorem než
-efekt ablace. Při dvou bězích per variaci nelze oba faktory
+efekt ablace. Při dvou bězích na každou variantu nelze oba faktory
 spolehlivě odlišit.
 
 \paragraph{Reflexe designu ablací}
@@ -436,7 +436,7 @@ nástroji než klasickému benchmarku.
 
 Studie o~instrukčních souborech zatím většinou měří jejich přítomnost
 nebo absenci jako celek. \textcite{lulla2026} spojují
-\texttt{AGENTS.md} s~nižším mediánovým runtime, zatímco \textcite{gloaguen2025agentsmd} ukazují jen marginální přínos
+\texttt{AGENTS.md} s~nižším mediánovým trváním běhu, zatímco \textcite{gloaguen2025agentsmd} ukazují jen marginální přínos
 generických repository-level souborů a~upozorňují na vyšší náklady.
 SkillsBench~\cite{skillsbench2025} dále rozlišuje mezi kurátorovanou
 a~automaticky generovanou instrukční podporou a~ukazuje, že rozhodující
@@ -490,24 +490,24 @@ rozsah platnosti výsledků.
 
 %% ---- Skupina 1: Co oslabuje závěry ----
 
-\textbf{Nedeterminismus a~prompt sensitivity.}
+\textbf{Nedeterminismus a~citlivost na prompt.}
 Pět binárních procesních metrik \acs{P1}--\acs{P5}
 (splněno/nesplněno) kolísalo od 5/5 (r3) přes $\sim$3/5 (r4) po
 $\sim$1/5 (r5), přestože procesní instrukce v~těchto bězích
-zůstaly stejné. R4 přidalo dva řádky do Constraints a~procesní
-compliance se zhoršila, přestože žádná změna přímo necílila na
+zůstaly stejné. R4 přidalo dva řádky do Constraints a~dodržení
+procesních pravidel se zhoršilo, přestože žádná změna přímo necílila na
 pracovní postup. \textcite{razavi2025} tento jev popisují jako
-prompt sensitivity. Alternativním vysvětlením je efekt kumulace
+citlivost na prompt (\textit{prompt sensitivity}). Alternativním vysvětlením je efekt kumulace
 instrukcí: s~rostoucím počtem instrukcí klesá pravděpodobnost
-dodržení všech současně. Instrukce rostly z~r1 (baseline) do r5.
-Část poklesu compliance může být tímto efektem, ne jen citlivostí
+dodržení všech současně. Instrukce rostly z~r1 do r5.
+Část poklesu procesní shody může být tímto efektem, ne jen citlivostí
 na formulaci.
 
 Dva běhy na ablační variaci tento problém zmírňují, ale
 neposkytují statistickou sílu. Pokud oba běhy téže ablace ukazují
 stejný směr, je pravděpodobnější že jde o~efekt ablace, ne
 o~náhodu. Například \ac{Q5} v~ablaci~A: oba běhy hlásily 4 a~3
-lint warnings, zatímco r3 (plné instrukce) hlásil~1. Shoda obou
+varování linteru, zatímco r3 (plné instrukce) hlásil~1. Shoda obou
 běhů zvyšuje důvěru, že odebrání sekce Process skutečně ovlivnilo
 \acs{Q5}. Naopak \ac{Q2} v~ablaci~B: jeden běh dosáhl 37/42
 projitých testů, druhý jen 11/42. Tak velký rozptyl mezi dvěma
@@ -528,7 +528,7 @@ autorovi a~nezávislé ověření nebylo provedeno. Částečnou mitigací
 je použití strukturovaného diagnostického rámce
 (sekce~\ref{sec:pilotni-iterace}): diagnóza se opírala o~naměřená
 data a~literaturou podložené principy, ne o~intuici. Přesto nelze
-vyloučit, že zkušenější autor by z~téhož baseline dosáhl lepších
+vyloučit, že zkušenější autor by ze stejné výchozí varianty dosáhl lepších
 výsledků rychleji.
 
 \textbf{Změny konfigurace mezi běhy.}
@@ -556,7 +556,7 @@ nebo síťové timeouty), ale příčina nebyla potvrzena.
 \ac{Q1} a~\ac{Q6} prošly ve všech devíti bězích, takže pro rozlišení
 běhů na této úloze nepřinesly informaci. Pravděpodobným vysvětlením
 je design úlohy: specifikace poskytuje explicitní TypeScript typy,
-takže shoda s~kontraktem (\acs{Q1}) i~typecheck (\acs{Q6}) jsou pro
+takže shoda s~kontraktem (\acs{Q1}) i~typová kontrola (\acs{Q6}) jsou pro
 model nízkonákladové. \acs{E3} je deskriptivní indikátor, ne exit
 kritérium, a~ve všech bězích~=~0. Pro tuto úlohu má roli kontextového
 faktu o~stabilitě kontextu během běhu. Na rozsáhlejších projektech by
@@ -709,7 +709,7 @@ instrukcemi by tento fenomén pomohly lépe pochopit.
 
 \paragraph{Kontinuita práce mezi agenty}
 \mgrp{P} měří transparentnost artefaktů
-(issues, commit zprávy, PR popisy). Otevřená otázka: stačí tato
+(issues, zprávy commitů a~popisy PR). Otevřená otázka: stačí tato
 transparentnost k~tomu, aby jiný agent (nebo člověk) navázal na
 rozpracovaný projekt? Testování handoff scénářů by ověřilo, zda
 procesní instrukce vytváří nejen pozorovatelný, ale i~přenositelný
@@ -770,7 +770,7 @@ replikace uvnitř programování: jiné modely, jiné agentní nástroje
 a~projekty s~vyšší nejednoznačností specifikace
 (sekce~\ref{sec:limity-vysledky}). Druhá osa je ověření mimo
 programování, kde nemusí existovat ekvivalent test runneru, lintu
-nebo typechecku. Právě tam se ukáže, zda vzorec
+nebo typové kontroly. Právě tam se ukáže, zda vzorec
 pravidlo~$\to$ příkaz~$\to$ verifikační krok vyjadřuje obecnější
 princip řízení agentů, nebo hlavně výhodu programovací domény
 s~deterministickou zpětnou vazbou.

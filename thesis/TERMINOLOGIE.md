@@ -22,7 +22,7 @@ Kanonické pojmy pro konzistentní psani a pripravu na obhajobu.
 | Pojem | Definice | Poznamka |
 |-------|----------|----------|
 | Sada metrik | P1-P8, Q1-Q8, E1-E3 (19 celkem) | Fenton & Bieman: Process/Product/Resource; P/Q/E kody jsou nase adaptace |
-| Procesni metriky (P1-P8) | Jak agent pracuje | P1-P5 binarni compliance, P6-P8 LLM-as-judge |
+| Procesni metriky (P1-P8) | Jak agent pracuje | P1-P5 binarni dodrzeni procesnich pravidel, P6-P8 LLM-as-judge |
 | Produktove metriky (Q1-Q8) | Co agent vyrobil | Q1-Q2 funkcni korektnost, Q3-Q4 kvalita testu, Q5-Q8 kvalita kodu |
 | Metriky efektivity (E1-E3) | E1 = max prompt na kroku + soucet vystupu + soucet cache; E2 = cas; E3 = pocet kompakci kontextu (z OpenCode DB time_compacting) | Resource v Fentonove taxonomii |
 | Zdroje / naklady | Kategorie se jmenuje zdroje; naklady pouzivat pro interpretaci ceny nebo spotreby zdroju | V metodice a prehledech drzet "zdroje" / "spotreba zdroju"; ve vysledcich a zaveru muze byt "naklady", kdyz veta odpovida na "za jakou cenu" |
@@ -115,6 +115,21 @@ Souvisejici literatura:
 | Mutation testing | Hodnoceni sily testovaci sady pomoci zavadeni drobnych syntaktickych zmen do kodu a sledovani, kolik mutovanych variant programu testy odhali | Pri prvnim vysvetleni zavest "mutovane varianty programu, tzv. mutanty"; pak lze pouzivat "mutanti"; Papadakis 2019; metrika Q3 |
 | Coverage (line/branch) | Podil kodu vykonaneho testy | Sama o sobe nekoreluje silne s detekci chyb (Inozemtseva & Holmes 2014) |
 
+## Anglicismy v technickem textu
+
+| Vyraz | Pouziti |
+|-------|---------|
+| compliance | V bezne prose nepouzivat. Psat `dodrzeni procesnich pravidel`, `procesni shoda` nebo konkretni popis. |
+| baseline | V bezne prose preferovat `vychozi varianta`, `vychozi instrukce`, `vychozi beh`. Anglicky ponechat jen jako soucast nazvu behu, technickeho labelu nebo pri srovnani typu mutation-testing baseline. |
+| listing | V bezne prose `vypis`. LaTeXove prostredi `lstlisting` ma v dokumentu cesky popisek `Výpis`. |
+| test suite | `testovaci sada`. |
+| merge / mergovany | V prose `slouceny`, `zacleneny`, pripadne `merge` jen jako nazev Git operace nebo v kodu. |
+| runtime | V prose podle kontextu `trvani behu`, `behove prostredi` nebo `stabilita behem behu`. |
+| typecheck | V prose `typova kontrola`; v nazvu metriky nebo prikazu muze zustat. |
+| lint warnings | V prose `varovani linteru`; v tabulkovem labelu metriky muze zustat kratky anglicky nazev. |
+| judge-based | Odborny termin pro metriky hodnocene LLM-as-judge; ponechat. |
+| harness, tool calls, session, transcript, cache | Ponechat jako technicke terminy OpenCode/agentni infrastruktury, pri prvnim vyskytu vysvetlit roli. |
+
 ## Projekt
 
 | Pojem | Definice | Poznamka |
@@ -140,6 +155,10 @@ DSR (pristup)          --> CO delame (navrhujeme metriky + postup, evaluujeme)
 | instrukcni sada | Plete se s "sada metrik" | instrukce |
 | checkpointy | Anglicismus, zamenitelny | verifikacni kroky |
 | workflow (v textu) | Anglicismus | pracovni postup |
+| compliance | Slangovy hybrid | dodrzeni procesnich pravidel, procesni shoda |
+| listing | Slangovy hybrid mimo LaTeX | vypis |
+| test suite | Zbytecny anglicismus v prose | testovaci sada |
+| mergovany | Hovorovy Git slang | slouceny, zacleneny |
 | experiment (samostatne) | Nejednoznacne | pripadova studie (celek), experimentalni beh (jednotlivy) |
 | pilotni iterace (pro fazi) | Matouci — iterace je jeden cyklus | pilotni faze |
 | feasibility demonstrace | Hybridni anglicismus | demonstrace proveditelnosti |
