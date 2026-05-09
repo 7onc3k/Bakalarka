@@ -9,6 +9,7 @@ Kanonické pojmy pro konzistentní psani a pripravu na obhajobu.
 | DSR (Design Science Research) | Vyzkumny pristup: navrhujeme artefakt a evaluujeme ho | Peffers 2008, Hevner 2004 |
 | Pripadova studie (case study) | Vyzkumna strategie: evaluace na jednom pripadu do hloubky | Yin 2018; NE "experiment" pro celek studie |
 | Demonstrace proveditelnosti | Prakticke ramovani: pripadova studie ukazuje, ze navrzenou sadu metrik a iterativni postup lze aplikovat na jednom pripadu | NE "feasibility demonstrace" v ceske prose |
+| Overit proveditelnost | Sloveso pro akt cile 2: na jednom pripadu prokazat, ze postup lze aplikovat a produkuje meritelne diagnosticke vystupy | Kanonicky termin v cilech a zaveru; NE "demonstrovat" jako akt cile (vedouci 2026-04-27 anotace str. 13, 62) |
 | Analyticka generalizace | Metodologicke ramovani pripadove studie podle Yina: z jednoho pripadu lze formulovat principy pro dalsi overeni, ne statisticke tvrzeni o populaci | Neni synonymum demonstrace proveditelnosti; pouzit jen pri diskusi validity a logiky zobecneni |
 | Experimentalni beh | Jedno spusteni agenta s konkretni verzi instrukci | "run" v infrastrukture; "beh" v bezne prose |
 | Iterace | Jeden cyklus Spusteni/Mereni/Diagnoza/Uprava | |
@@ -21,10 +22,12 @@ Kanonické pojmy pro konzistentní psani a pripravu na obhajobu.
 | Pojem | Definice | Poznamka |
 |-------|----------|----------|
 | Sada metrik | P1-P8, Q1-Q8, E1-E3 (19 celkem) | Fenton & Bieman: Process/Product/Resource; P/Q/E kody jsou nase adaptace |
-| Procesni metriky (P1-P8) | Jak agent pracuje | P1-P5 binarni compliance, P6-P8 LLM-as-judge |
+| Procesni metriky (P1-P8) | Jak agent pracuje | P1-P5 binarni dodrzeni procesnich pravidel, P6-P8 LLM-as-judge |
 | Produktove metriky (Q1-Q8) | Co agent vyrobil | Q1-Q2 funkcni korektnost, Q3-Q4 kvalita testu, Q5-Q8 kvalita kodu |
 | Metriky efektivity (E1-E3) | E1 = max prompt na kroku + soucet vystupu + soucet cache; E2 = cas; E3 = pocet kompakci kontextu (z OpenCode DB time_compacting) | Resource v Fentonove taxonomii |
-| Exit kriteria | Meritelne prahy uspesnosti pro kazdou metriku | Patri do pilotni faze (3.3.3), ne k metrikam |
+| Zdroje / naklady | Kategorie se jmenuje zdroje; naklady pouzivat pro interpretaci ceny nebo spotreby zdroju | V metodice a prehledech drzet "zdroje" / "spotreba zdroju"; ve vysledcich a zaveru muze byt "naklady", kdyz veta odpovida na "za jakou cenu" |
+| Exit kriteria | Predem stanovene hranice nebo podminky, podle nichz se rozhoduje, zda metrika v danem behu splnila pozadavek | Kotvit per metriku podle povahy: specifikace/reference, standard nebo hodnotici schema; E metriky jsou deskriptivni bez exit prahu |
+| Hodnotici schema | Sada dimenzi a popisu stupnu pro LLM-as-judge hodnoceni | Pri prvnim vyskytu lze uvest anglicky termin `scoring rubric`; NE samotne "rubrika" jako hlavni cesky termin |
 | ~~evaluacni system~~ | NEPOUZIVAME | Prilis vague, konflikt se "sadou metrik" |
 
 **Pravidlo pro kody metrik:** Pri prvnim vyskytu skupiny v kazde kapitole pridat zavorku s kratkym vysvetlenim. Priklady:
@@ -32,6 +35,27 @@ Kanonické pojmy pro konzistentní psani a pripravu na obhajobu.
 - "funkcni korektnost a kvalita testu (Q1--Q4)"
 - "kvalita kodu (Q5--Q8)"
 Pri dalsich vyskytech ve stejne kapitole staci jen kod.
+
+### Klasifikace metrik
+
+Tri ortogonalni osy:
+
+1. **Zpusob mereni** — `deterministicka` (skript, regex, log parsing, staticka analyza) vs `judge-based` (LLM judge, GLM-5)
+2. **Role v hodnoceni** — `exit kriterium` (ma hranici uspesnosti) vs `deskriptivni indikator` (zadny prah, hodnotu jen zaznamenavame)
+3. **Kategorie (bucket)** — `procesni (P)` vs `produktove (Q)` vs `zdrojove (E)`
+
+#### Pravidla pouziti
+
+- `deterministicka metrika` = jen zpusob mereni; NIKDY jako synonymum pro "metrika s exit kriteriem"
+- `binarni exit kriterium` / `procesni a produktove kriterium s exit prahem` = role v hodnoceni; preferovat per-metric vycet pokud mozno
+- `splneno` / `nesplneno` = vysledek konkretniho behu vzhledem k exit kriteriu
+- `pass/fail` = jazyk benchmarku, test runneru nebo obecne kritiky jednoduche uspesnostni logiky; v popisu vlastni metricke sady preferovat `exit kriterium` a `splneno/nesplneno`
+- `deskriptivni indikator` = metrika bez exit prahu; v teto praci sem patri **cely E bucket** (E1, E2, E3) — soud o uspesnosti behu se opira jen o P + Q
+- judge-based metrika muze mit exit kriterium (Q4, Q8 maji prahy), ale je odlisena od deterministickych; nemichat „deterministicka" a „exit" do jednoho slova
+
+#### E3 specificky
+
+E3 (pocet kompakci kontextu) je **deskriptivni indikator stability kontextu behem behu**, ne exit kriterium. Cil 0 nema v teto praci roli exit prahu — je to kontextovy fakt, ze kontext zustal celistvy. E bucket je tim deskriptivni (E1, E2, E3 vsechny bez prahu).
 
 ## Instrukce a agent
 
@@ -86,8 +110,25 @@ Souvisejici literatura:
 | Behavior-driven test | Test odvozeny ze specifikace chovani (typicky AC nebo Given/When/Then), pracujici black-box pres rozhrani | Pouzivano v kap04 (42 behavioral testu); definovano v kap02 sec:testovani-mutation |
 | Acceptance criteria (AC) | Popisy ocekavaneho chovani v zadani, typicky ve formatu Given/When/Then | 25 AC v case study; zdroj ocekavani pro behavioral testy a metriku Q4 |
 | Spec-first TDD | TDD varianta kde expected values v testech pochazi ze specifikace, ne z pozorovani kodu | Obrana proti test oracle problemu (Mathews 2024); diskutovano v kap02 sec:procesni-kvalita |
-| Mutation testing | Sileni testovaci sady pomoci zavadeni drobnych zmen (mutantu) do kodu a sledovani kolik test odhali | Papadakis 2019; metrika Q3 |
+| Test oracle problem | Problem urceni spravneho ocekavaneho vysledku testu | Term "oracle" ponechat, ale pri prvnim pouziti vysvetlit jako "zdroj ocekavanych vysledku" |
+| Male a caste commity | Jeden commit odpovida jednomu logickemu kroku nebo zameru zmeny; zmeny se integruji casto | Blizsi Humble & Farley / Continuous Delivery nez "atomicita"; nepouzivat "atomicita" mimo prime vysvetleni anglickeho "atomic commit" |
+| Mutation testing | Hodnoceni sily testovaci sady pomoci zavadeni drobnych syntaktickych zmen do kodu a sledovani, kolik mutovanych variant programu testy odhali | Pri prvnim vysvetleni zavest "mutovane varianty programu, tzv. mutanty"; pak lze pouzivat "mutanti"; Papadakis 2019; metrika Q3 |
 | Coverage (line/branch) | Podil kodu vykonaneho testy | Sama o sobe nekoreluje silne s detekci chyb (Inozemtseva & Holmes 2014) |
+
+## Anglicismy v technickem textu
+
+| Vyraz | Pouziti |
+|-------|---------|
+| compliance | V bezne prose nepouzivat. Psat `dodrzeni procesnich pravidel`, `procesni shoda` nebo konkretni popis. |
+| baseline | V bezne prose preferovat `vychozi varianta`, `vychozi instrukce`, `vychozi beh`. Anglicky ponechat jen jako soucast nazvu behu, technickeho labelu nebo pri srovnani typu mutation-testing baseline. |
+| listing | V bezne prose `vypis`. LaTeXove prostredi `lstlisting` ma v dokumentu cesky popisek `Výpis`. |
+| test suite | `testovaci sada`. |
+| merge / mergovany | V prose `slouceny`, `zacleneny`, pripadne `merge` jen jako nazev Git operace nebo v kodu. |
+| runtime | V prose podle kontextu `trvani behu`, `behove prostredi` nebo `stabilita behem behu`. |
+| typecheck | V prose `typova kontrola`; v nazvu metriky nebo prikazu muze zustat. |
+| lint warnings | V prose `varovani linteru`; v tabulkovem labelu metriky muze zustat kratky anglicky nazev. |
+| judge-based | Odborny termin pro metriky hodnocene LLM-as-judge; ponechat. |
+| harness, tool calls, session, transcript, cache | Ponechat jako technicke terminy OpenCode/agentni infrastruktury, pri prvnim vyskytu vysvetlit roli. |
 
 ## Projekt
 
@@ -114,6 +155,16 @@ DSR (pristup)          --> CO delame (navrhujeme metriky + postup, evaluujeme)
 | instrukcni sada | Plete se s "sada metrik" | instrukce |
 | checkpointy | Anglicismus, zamenitelny | verifikacni kroky |
 | workflow (v textu) | Anglicismus | pracovni postup |
+| compliance | Slangovy hybrid | dodrzeni procesnich pravidel, procesni shoda |
+| listing | Slangovy hybrid mimo LaTeX | vypis |
+| test suite | Zbytecny anglicismus v prose | testovaci sada |
+| mergovany | Hovorovy Git slang | slouceny, zacleneny |
 | experiment (samostatne) | Nejednoznacne | pripadova studie (celek), experimentalni beh (jednotlivy) |
 | pilotni iterace (pro fazi) | Matouci — iterace je jeden cyklus | pilotni faze |
 | feasibility demonstrace | Hybridni anglicismus | demonstrace proveditelnosti |
+| „demonstrovat" jako sloveso v cili | Vedouci: „jak zmerite, ze bylo demonstrovano?" — neoperacionalizovatelne | „overit proveditelnost" v cilech a zaveru; „demonstruje" jako popis aktu pripustny v abstract |
+| „X z N deterministickych kriterii" | Slovo „deterministickych" je nadbytecne nebo zavadejici (mate zpusob mereni a roli v hodnoceni) | per-metric vycet, nebo „X binarnich exit kriterii" |
+| „kompakce jako kriterium" / „cil E3 = 0" | E3 je deskriptivni indikator stability kontextu behem behu, ne exit kriterium; cil 0 nema v teto praci roli exit prahu | „E3 = 0 potvrzuje, ze kontext zustal celistvy" |
+| runtime jako obecny anglicismus | V ceske prose preferuj konkretni vyraz podle kontextu: beh, behove prostredi, trvani behu, stabilita kontextu behem behu | Anglicke runtime nech jen v nazvu/terminu ze zdroje, napr. median runtime |
+| „deterministicka kriteria" jako synonymum pro exit kriteria | Mate zpusob mereni (det vs judge) a roli v hodnoceni (exit vs deskriptivni) | „exit kriteria" / „kriteria s exit prahem" |
+| harness vs behove prostredi | Dve ruzne vrstvy, ktere se v drivejsi verzi prekryvaly. **Harness** = orchestracni vrstva nastroje (CLI, sprava session, tool calls, transcript) — v praci konkretne OpenCode. **Behove prostredi** = sandbox / izolace, ve kterem agent bezi — v praci konkretne Docker container. Neglosuj harness jako „behove prostredi". | kap02 sec:agent: harness = orchestracni vrstva / rozhrani mezi modelem a prostredim; kap03 sec:experimentalni-nastaveni: „Behove prostredi (Docker container)" vs „Harness OpenCode" jako oddelene polozky |

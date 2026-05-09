@@ -33,6 +33,8 @@ Agent splní 80%+ cílových chování:
 - [ ] PR → merge → close per issue
 - [ ] Průběžné commity (ne blob na konci)
 
+> **Poznámka (2026-05-07, S2 #54):** Tato exit kritéria jsou **interní operační vrstva** experimentu (behaviorální checklist pro řízení iterací). Thesis (kap03) používá **metrickou vrstvu** kotvenou v hierarchii standard → referenční implementace → konvence (Q1–Q8 + P1–P8 striktní ideál). Obě vrstvy jsou komplementární, ne duplicitní: behaviorální vrstva odpovídá na *„dělá agent to, co má"*, metrická na *„s jakým výsledkem"*. Termín „operační prahy" v thesis zaniká.
+
 ## Soubory
 
 - `infra/inputs/AGENTS.md` — iterovaný vstup (jediná proměnná)

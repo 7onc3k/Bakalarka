@@ -47,3 +47,12 @@ coverage/
 thesis-checkpoint/
 docs/archive/
 thesis/.watch-*.lock
+
+# Local agent runtime state and secrets
+.local/share/opencode/auth.json
+.opencode/opencode.db*
+.opencode/opencode.log
+.experiment-snapshot/opencode-config.json
+experiments/**/.local/
+experiments/**/.opencode/
+experiments/**/.experiment-snapshot/

@@ -63,6 +63,86 @@ Rozlišuj tři režimy:
 
 Práce je teď primárně ve fázi revize a přepisu, ne jen dopisování.
 
+**Aktuální fáze (2026-05-07): review anotací vedoucího.**
+Vedoucí dodal anotovaný PDF (build 2026-04-27, 119 anotací). Text je hotový
+a buildí se. Primární pracovní pořadí je
+`konzultace/10-linear-checklist-anotace.md`: checklist vznikl z raw anotací
+v `konzultace/08-anotace-vedouci.md` a jede se podle něj po PDF stranách,
+jeden bod po druhém. `08` je raw audit trail s plnými anotacemi; `09` je
+historický tasklist/mapping a nemá přebíjet lineární checklist. Tracking v GH
+zůstává přes parent issue #51 + sub-issues:
+
+- **Strategie:** S1 (framing cíle 2), S2 (exit kritéria + prahy), S3
+  (anticipace výsledků v metodice), S4 (AGENTS.md figura vs. kód)
+- **Cross-cutting:** C1 (citace formát), C2 (1.→3. osoba), C3 (AI dvojtečkové
+  věty), C4 (středníky), C5 (forward refs v kap03), C6 (terminologie 19 termínů)
+- **Lokální:** L-Otevreni (abstract+úvod), L-Kap02, L-Kap03, L-Kap04
+
+Branch: `review/anotace-vedouci-2026-05-07` → `dev` (PR #52, draft).
+
+Stav: S1 ✅, S4 ✅, C1 ✅ (script pass globálně). S2 a S3 jsou rozhodnuté a
+routované do L-Kap03 (#65), neblokují lineární průchod. C2-C5 jsou routované
+do lokálních položek checklistu; C6 zůstává závěrečný terminologický polish.
+Strukturální přesuny v kap03 hotové (Setup před metriky, Procedura běh,
+K3-44b zdrojů z 3.3 do kap02, konsolidace duplicit).
+
+Workflow:
+- Lineárně podle `konzultace/10-linear-checklist-anotace.md`, jeden bod
+  checklistu po druhém
+- Při vstupu do nové kapitoly nebo sekce nejdřív načti celý aktuální text této
+  kapitoly/sekce a teprve potom hodnoť jednotlivé anotace. Checklist říká, co
+  vedoucí označil v PDF; aktuální thesis text rozhoduje, jestli je bod ještě
+  otevřený.
+- U každého bodu nejdřív určit roli/problém sekce, pak status
+  `keep` / `fix` / `rewrite` / `move` / `delete`, teprve potom edit
+- Buď proaktivní v dohledání kontextu a návrhu řešení: u každé anotace si
+  načti okolní text, vysvětli, proč je nebo není problém stále relevantní,
+  a předlož konkrétní řešení nebo navrženou formulaci. Do textu sahat až po
+  domluvě, pokud nejde o jednoznačnou technickou opravu. Nezůstávej jen
+  u hlášení „další položka je...“.
+- GH sub-issues (#63-#66) jsou tracking/commit hranice; pořadí uvnitř nich
+  určuje checklist `10`, ne starý DAG ani vrstvy v `09`
+- C6 (terminologie) jako závěrečný polish pass
+- S* řeš v kontextu kapitoly, kde anotace leží — žádné předem blokující
+  rozhodovací fáze, žádný DAG
+- Commituj po uzavřené sekci nebo jasném logickém celku, ne automaticky po
+  každé mikroúpravě. Před commitem krátce zkontroluj diff a vztah ke GH issue.
+- Per-issue postup: audit (subagent porovná anotovaný PDF s aktuální thesis
+  a postne komentář na issue) → diskuse v hlavním threadu → edit (main
+  thread nebo subagent na delší batch) → diff review → commit s
+  `Closes #NN` nebo `refs #NN`
+- Status check-off manuálně v issue UI
+- Realtime co-editing v sezení; subagent jen na audit a batch operace
+
+Globální guardraily z anotací vedoucího:
+- Piš výklad ve 3. osobě nebo neosobně. Nahrazuj formulace typu
+  „necháváme“, „měříme“, „upravujeme“, „zkoumáme“, „volíme“ podle role věty:
+  „práce navrhuje“, „studie ověřuje“, „běhy měří“, „metodika používá“.
+- Opravuj citace typu `Autor (Autor, rok)`: když je jméno součástí věty,
+  v závorce má zůstat jen rok nebo citační příkaz bez opakování jména.
+- Nepoužívej středník jako běžnou interpunkci. Pokud jen spojuje dvě věty,
+  rozděl ho na tečku, čárku nebo větu přepiš. Nech ho jen tam, kde opravdu
+  pomáhá vztahu mezi větami nebo je technicky nutný v tabulce, makru, výčtu
+  či kódu.
+- Omez „AI dvojtečkové věty“ typu `Tvrzení: vysvětlení`. V akademické próze je
+  většinou přepiš na normální větu, odrážku nebo explicitní signpost.
+  Dvojtečka je v pořádku u skutečného výčtu, definice nebo záměrného
+  signpostu; nesmí nahrazovat normální návaznost vět. Vedoucí tento vzorec
+  komentoval jako „Opět ten druh věty s dvojtečkou, není to hezké čtení“.
+- Sloveso „demonstrovat“ nepoužívej jako měřitelný cíl práce. Pro cíl 2 platí
+  kanonicky „ověřit proveditelnost“; „demonstruje“ může zůstat jen jako popis
+  toho, že případová studie něco ukazuje na jednom případu.
+- V metodice nepiš, jako by výsledky už byly známé. Metodika má říct, jaké
+  varianty lze udělat, podle čeho se rozhoduje a jak se bude měřit; výsledkový
+  pattern patří do kapitol 4 a 5.
+- Když anotace odhalí nevhodný nebo nejasný termín, neřeš jen lokální výskyt.
+  Projdi výskyty napříč thesis i v semanticky podobných větách, rozhodni
+  konzistentní termín s ohledem na kontext a zapiš ho do
+  `thesis/TERMINOLOGIE.md`, pokud má platit opakovaně. Potom uprav jen místa,
+  kde je změna skutečně potřeba.
+- Pokud anotace upozorní na globální vzorec, přidej ho sem jen tehdy, když jde
+  o opakovatelný guardrail. Neodkládej kvůli tomu lineární průchod checklistem.
+
 Default:
 - Nejprve určuj roli sekce, až potom lešti věty.
 - Preferuj zlepšení existujícího textu, ale pokud je kostra chybná, řekni to a navrhni přepis.
@@ -137,6 +217,9 @@ Vědecký text = přesný, ne složitý.
 - Když se sekce opakuje oproti jiné, smaž nebo odkaž, nezdvojuj.
 - Doménové termíny piš česky, industry standard může zůstat anglicky.
 - Em dash nepoužívej vůbec.
+- Nadpisová makra `\section`, `\subsection`, `\subsubsection` a `\paragraph`
+  piš jako nadpisy bez koncové tečky. Pokud je potřeba jen větný štítek
+  uvnitř odstavce, použij běžný tučný text, ne nadpisové makro.
 
 Metriky:
 - Kódy metrik v thesis prose zapisuj přes acro makra z `thesis/makra.tex`.

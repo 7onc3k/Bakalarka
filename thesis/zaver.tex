@@ -4,8 +4,8 @@
 Tato práce navrhla sadu metrik a~iterativní postup pro systematické
 navrhování a~vyhodnocování instrukcí pro AI coding agenty a~ablacemi
 prozkoumala vliv jednotlivých složek instrukcí. Pro všechny tři cíle
-případová studie systému upomínek faktur demonstrovala proveditelnost
-navrženého postupu a~přinesla indikativní poznatky. Studie zahrnovala
+případová studie systému upomínek faktur ověřila proveditelnost
+navrženého postupu na jednom případu a~přinesla indikativní poznatky. Studie zahrnovala
 pět pilotních iterací a~dvě ablace, každou ověřenou dvěma nezávislými
 běhy.
 
@@ -14,20 +14,24 @@ kvalitu produktu a~zdroje, a~tím rozšířit hodnocení nad rámec
 pass/fail výsledku. Výsledná sada 19~metrik
 pokrývá tři dimenze odvozené z~taxonomie Fentona a~Biemana.
 Procesní metriky odhalily problémy, které výsledkové metriky samy
-o~sobě nezachytily: běh s~téměř plným skóre funkčních testů
-vykazoval nestabilní procesní compliance. Kombinace deterministických
+o~sobě nezachytily. Běh s~téměř plným skóre funkčních testů
+vykazoval nestabilní dodržení procesních pravidel. Kombinace deterministických
 a~judge-based metrik přinesla komplementární pohled, protože
 každý typ zachycuje jinou dimenzi chování agenta.
 
-Druhým cílem bylo na~případové studii demonstrovat iterativní postup
-návrhu instrukcí řízený těmito metrikami a~vyhodnotit, zda a~jak vede
-k~měřitelným změnám v~chování agenta. Cyklus
-měření, diagnózy a~úpravy vedl k~měřitelnému zlepšení, ale ne
-monotónnímu: jedna iterace způsobila regresi, po které bylo nutné
-vrátit se k~předchozí verzi instrukcí. Opakujícím se vzorcem
-úspěšných úprav bylo nahrazení obecného pravidla konkrétním
-příkazem s~verifikačním krokem. Účinnost tohoto postupu závisela
-na dostupnosti deterministických nástrojů s~jednoznačným výstupem.
+Druhým cílem bylo na~případové studii ověřit proveditelnost
+iterativního postupu návrhu instrukcí řízeného těmito metrikami
+a~vyhodnotit, zda a~jak vede k~měřitelným změnám v~chování agenta.
+Metriky zachytily měřitelné změny mezi běhy, včetně zlepšení
+i~regresí. Jedna iterace způsobila regresi, po které bylo nutné
+vrátit se k~předchozí verzi instrukcí. Postup nevedl ke splnění
+všech exit kritérií. Zejména referenční testy zůstaly u~nejlepšího
+běhu na hodnotě 41/42. Právě toto nesplnění ale metriky lokalizovaly
+jako stabilní slabinu, kterou další úpravy instrukcí neodstranily.
+Opakujícím se vzorcem úspěšných úprav bylo nahrazení obecného
+pravidla konkrétním příkazem s~verifikačním krokem. Účinnost tohoto
+postupu závisela na dostupnosti deterministických nástrojů
+s~jednoznačným výstupem.
 U~požadavků bez takového nástroje zůstává instrukce
 na úrovni pravidla nebo příkazu bez vnější zpětné vazby.
 
@@ -36,23 +40,23 @@ vytvořených v~cíli~2 přispívají k~měřenému chování agenta
 a~které jsou redundantní.
 Ablace potvrdila závislost
 klíčových metrik na verifikačních krocích, kterou pilotní fáze už
-naznačila: jejich odebrání zhoršilo funkční korektnost i~čistotu kódu. Konvence kvality kódu automatizované
+naznačila. Jejich odebrání zhoršilo funkční korektnost i~čistotu kódu. Konvence kvality kódu automatizované
 metriky neovlivnily, ale designová kvalita hodnocená LLM-as-judge
-klesla. Výsledky zároveň ukázaly, že procesní compliance je výrazně
+klesla. Výsledky zároveň ukázaly, že dodržení procesních pravidel je výrazně
 citlivá na nedeterminismus modelu. Stejná sada instrukcí proto může
 vést k~odlišnému dodržení vícekrokového pracovního postupu.
 
 Hlavním přínosem práce je iterativní postup a~sada metrik, které
-může praktik aplikovat na vlastním projektu s~vlastními prahy.
+může praktik aplikovat na vlastním projektu s~vlastními exit kritérii.
 Konkrétní instrukce a~naměřené hodnoty platí pro tuto případovou
 studii. Přenositelný je postup, ne výsledná čísla. Práce tím
-demonstruje proveditelnost navrženého rámce na jednom případu,
-zatímco závěry mají povahu analytické generalizace: formulují
+ověřuje proveditelnost navrženého rámce na jednom případu,
+zatímco závěry mají povahu analytické generalizace. Formulují
 principy k~dalšímu ověření, zejména otázku platnosti vzorce
 operacionalizace mimo programování, nikoliv statistické tvrzení
 o~populaci.
 
-Pro praktika z~toho plyne jednoduché doporučení: nestačí sledovat,
+Pro praktika z~toho plyne jednoduché doporučení. Nestačí sledovat,
 zda agent úkol vyřešil, ale i~jak k~řešení došel a~jak kvalitní kód
 zanechal. Pro akademického čtenáře práce ukazuje, že instrukce lze
 studovat ne jen jako promptový artefakt, ale jako samostatně měřenou

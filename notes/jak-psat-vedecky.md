@@ -115,6 +115,8 @@ Propojení       → Jak to souvisí s BP
 | **Závěr** | Co z toho plyne pro výzkumnou otázku | "tedy", "z toho plyne", "potvrzuje" | "Verifikační kroky tedy nejsou redundantní." |
 
 **Pravidla:**
+- **Nejdřív vztah k textu, pak objekt** — tabulka nebo obrázek nesmí jen rozseknout proud textu. Před objektem má být věta, proč ho čtenář vidí a k jakému tvrzení patří; po objektu má následovat pozorování nebo interpretace, ne nový nesouvisející blok.
+- **Float není odstavec** — v LaTeXu nepoužívej `[H]` jako výchozí volbu. Běžná konvence je nechat tabulky a obrázky plout (`[htbp]` / `[tbp]`) a spoléhat na odkaz typu `tabulka X` nebo `obrázek Y`. Pevné umístění používej jen tam, kde je objekt konstrukčně svázaný s rozvržením stránky.
 - **Nenaruj tabulku** — čtenář vidí čísla, neopisuj "Q5 z 1 na 3-4, Q7 z 1 na 1-4". Místo toho: závěr + odkaz na tabulku + jen překvapivé číslo s vysvětlením proč.
 - **Interpretace ≠ fakt** — "jsou řízeny tréninkem" je interpretace, ne pozorování. Vždy hedging: "data naznačují, že..."
 - **Závěr bez pozorování = claim bez evidence** — nejdřív řekni co vidíš, pak co to znamená.

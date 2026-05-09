@@ -22,7 +22,7 @@
         {\textcolor{cQual}{\textbf{Q5}} {\scriptsize(lint warnings)}},
         {\textcolor{cQual}{\textbf{Q4}} {\scriptsize(AC coverage)}},
         {\textcolor{cQual}{\textbf{Q3}} {\scriptsize(mutation score)}},
-        {\textcolor{cQual}{\textbf{Q2}} {\scriptsize(ref.\ test pass rate)}},
+        {\textcolor{cQual}{\textbf{Q2}} {\scriptsize(úspěšnost ref.\ testů)}},
         {\textcolor{cQual}{\textbf{Q1}} {\scriptsize(API contract match)}}
     },
     yticklabel style={font=\small, anchor=east, text width=12em, align=left},
@@ -39,25 +39,22 @@
 
 \addplot[fill=cQual, draw=cQual!70!black, fill opacity=0.8] coordinates {
     (7,1)   % Q8 >=2/3: 7/9
-    (6,2)   % Q7 <=1: 6/9
+    (2,2)   % Q7 =0: 2/9
     (9,3)   % Q6 =0: 9/9
-    (4,4)   % Q5 <=1: 4/9
-    (7,5)   % Q4 >=24: 7/9
-    (4,6)   % Q3 >=70%: 4/7 (2 N/A)
-    (6,7)   % Q2 >=37: 6/9
+    (1,4)   % Q5 =0: 1/9
+    (6,5)   % Q4 =25/25: 6/9
+    (1,6)   % Q3 >=80%: 1/7 (2 N/A)
+    (0,7)   % Q2 =42/42: 0/9
     (9,8)   % Q1 match: 9/9
 };
 
 \end{axis}
 \end{tikzpicture}
-\caption{Míra splnění operačních prahů \mgrp{Q} napříč devíti běhy
-(\acs{Q2}~$\geq$~37, \acs{Q3}~$\geq$~70\,\%, \acs{Q4}~$\geq$~24,
-\acs{Q5}~$\leq$~1, \acs{Q7}~$\leq$~1; viz sekce~\ref{sec:pilotni-iterace}).
-Striktní exit z~tabulky~\ref{tab:metriky-prehled} (\acs{Q2}~=~42/42,
-\acs{Q5}~=~0, \acs{Q7}~=~0~porušení) nesplnil žádný běh.
-\acs{Q1} a~\acs{Q6} byly splněny ve všech bězích;
-\acs{Q3} a~\acs{Q5} nejméně často.
-\acs{Q3} počítáno ze~7 běhů (2~bez dat).
+\caption{Míra splnění exit kritérií \mgrp{Q} napříč devíti běhy.
+\acs{Q1} a~\acs{Q6} byly splněny ve všech bězích, zatímco
+\acs{Q2} nesplnil žádný autonomní běh.
+\acs{Q3} splnil jeden ze~7 měřitelných běhů; u~2 běhů nebylo možné
+mutation score vyhodnotit.
 Metriky efektivity (\acs{E1}--\acs{E3}) nemají exit kritérium a~nejsou zahrnuty.}
 \label{fig:variability-quality}
 \end{figure}

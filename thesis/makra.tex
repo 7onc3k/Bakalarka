@@ -56,12 +56,14 @@
 \usepackage{booktabs}       % lepší vodorovné linky v tabulkách / better horizontal lines in tables
 \usepackage{tabularx}       % tabulky s automatickou šířkou sloupců / tables with auto-width columns
 \usepackage{float}          % přesné umístění floatů ([H]) / exact float placement
+\usepackage{placeins}       % bariéry pro tabulky a obrázky / barriers for floats
 \makeatletter
 \@ifpackageloaded{xcolor}{
    \@ifpackagewith{xcolor}{usenames}{}{\PassOptionsToPackage{usenames}{xcolor}}
   }{\usepackage[usenames,table]{xcolor}} % barevná sazba / color typesetting
 \makeatother
 \usepackage{colortbl}       % \cellcolor v tabulkách / cell background colors
+\newcolumntype{M}{>{\raggedright\arraybackslash}p{0.23\linewidth}}
 \usepackage{tikz}           % diagramy / diagrams
 \usetikzlibrary{positioning,calc}
 \usepackage{pgfplots}       % grafy s daty / data plots
@@ -69,6 +71,13 @@
 \usepackage{multicol}       % práce s více sloupci na stránce / work with multiple columns on a page
 \usepackage{pdflscape}      % otočení stránky na šířku (landscape) / landscape pages
 \usepackage{caption}
+\counterwithout{table}{chapter} % prubezne cislovani tabulek v cele praci
+\counterwithout{figure}{chapter} % prubezne cislovani obrazku v cele praci
+\makeatletter
+\AtBeginDocument{%
+  \@ifundefined{c@lstlisting}{}{\counterwithout{lstlisting}{chapter}}%
+} % prubezne cislovani vypisu v cele praci
+\makeatother
 \usepackage{enumitem}
 \usepackage{needspace}
 \setlist[itemize]{noitemsep, topsep=0pt, partopsep=0pt}
@@ -204,6 +213,8 @@
 %%% programů. (Vyžaduje balíček listings -- fancy verbatim.)
 %%% Environment for source code typesetting, or computer input/output
 %%% programs. (Requires package listings - fancy verbatim.)
+\renewcommand{\lstlistingname}{Výpis}
+\renewcommand{\lstlistlistingname}{Seznam výpisů}
 \lstnewenvironment{code}{\lstset{basicstyle=\small, frame=single}}{}
 
 %%% Prostředí pro označení stavu obsahu (workflow: raw → draft → finální)
@@ -241,13 +252,13 @@
 \DeclareAcronym{P3}{short=P3, long=test-first commits, tag=process}
 \DeclareAcronym{P4}{short=P4, long=PRs linked to issues, tag=process}
 \DeclareAcronym{P5}{short=P5, long=no existing test modifications, tag=process}
-\DeclareAcronym{P6}{short=P6, long=commit message quality, tag=process}
-\DeclareAcronym{P7}{short=P7, long=issue description quality, tag=process}
-\DeclareAcronym{P8}{short=P8, long=PR description quality, tag=process}
+\DeclareAcronym{P6}{short=P6, long=kvalita commit messages, tag=process}
+\DeclareAcronym{P7}{short=P7, long=kvalita issue descriptions, tag=process}
+\DeclareAcronym{P8}{short=P8, long=kvalita PR descriptions, tag=process}
 
 % --- Produktové metriky (Q) ---
 \DeclareAcronym{Q1}{short=Q1, long=API contract match, tag=quality}
-\DeclareAcronym{Q2}{short=Q2, long=referenční test pass rate, tag=quality}
+\DeclareAcronym{Q2}{short=Q2, long=úspěšnost referenčních testů, tag=quality}
 \DeclareAcronym{Q3}{short=Q3, long=mutation score, tag=quality}
 \DeclareAcronym{Q4}{short=Q4, long=AC coverage, tag=quality}
 \DeclareAcronym{Q5}{short=Q5, long=lint warnings, tag=quality}
