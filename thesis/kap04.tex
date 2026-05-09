@@ -15,7 +15,7 @@
 \newcommand{\cna}[1]{\cellcolor{cNeutral}#1}
 
 Tato kapitola popisuje provedení případové studie. Specifikace
-projektu, referenční testy a~experimentální setup jsou popsané
+projektu, referenční testy a~experimentální nastavení jsou popsané
 v~kapitole~\ref{kap:metodika}. Struktura kapitoly sleduje chronologii
 studie. Nejprve popisuje výchozí instrukce použité v~prvním běhu, pak pilotní fázi
 kde se instrukce opakovaně upravují na základě naměřených metrik,
@@ -61,7 +61,7 @@ odpovídají měřeným vlastnostem. Plné znění výchozího
 \small
 \begin{tabularx}{\linewidth}{@{}p{0.30\linewidth}p{0.42\linewidth}X@{}}
 \toprule
-\textbf{Cíl} & \textbf{Sekce AGENTS.md} & \textbf{Metriky} \\
+\textbf{Cíl} & \textbf{Sekce \texttt{AGENTS.md}} & \textbf{Metriky} \\
 \midrule
 Spec-first             & Specification, Process krok~2 & \acs{P1} \\
 Strukturovaný pracovní postup & Process kroky 1--4            & \acs{P2}, \acs{P3}, \acs{P4} \\
@@ -244,10 +244,10 @@ straně, pokles \acs{Q2} a~\acs{Q3} ukazuje, že hromadná write strategie
 produkuje testy, které hůř zachytí chyby v~kódu než iterativní
 test-fix cyklus. Pro r3 přesouváme tři instrukce z~roviny příkazu
 do~verifikačního kroku. Přidává se explicitní výpis otevřených issues před
-výběrem práce, kontrolní \texttt{git log} mezi commity testů a~kódu
+výběrem práce, verifikační \texttt{git log} mezi commity testů a~kódu
 a~přesun požadavku na~JSDoc do~pre-PR checklistu. Na~\acs{Q2}/\acs{Q3}
 necílíme přímo, ale očekáváme nepřímý efekt přes test-fix cyklus,
-který kontrolní \texttt{git log} mezi commity testů a~kódu strukturálně
+který verifikační \texttt{git log} mezi commity testů a~kódu strukturálně
 podporuje (oproti hromadnému psaní testů ze specifikace)
 (obrázek~\ref{fig:agents-diff-r2-r3}).
 
@@ -524,7 +524,7 @@ verifikační kroky spouští i~bez instrukce.
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=\textwidth]{img/generated/agents-diff-r3-ablace-a.png}
-\caption[Změny AGENTS.md pro Ablaci~A]{Vizuální diff \texttt{AGENTS.md}
+\caption[Změny \texttt{AGENTS.md} pro Ablaci~A]{Vizuální diff \texttt{AGENTS.md}
 mezi pilot-r3 a~ablací~A.\protect\footnotemark}
 \label{fig:diff-r3-ablace-a}
 \end{figure}
@@ -683,9 +683,9 @@ znalostmi z~tréninku.
 \acs{Q8} kleslo z~r3 (3/3) na 2/3 v~obou bězích, ale s~odlišnými
 strukturálními mechanismy. B-1 zachoval 3-modulové oddělení
 (\texttt{business-days.ts}, \texttt{dunning.ts}, \texttt{index.ts}),
-chyběla mu ale dokumentace na utility funkcích. B-2 spadl do
-single-file monolithu s~date utilities zmíchanými se~state machine
-logikou a~JSDoc měl jen na hlavním API. Společným vzorcem napříč
+chyběla mu ale dokumentace na pomocných funkcích. B-2 spadl do
+jednosouborového monolitu s~pomocnými funkcemi pro práci s~daty
+smíchanými s~logikou stavového automatu a~JSDoc měl jen na hlavním API. Společným vzorcem napříč
 ablací~B je ztráta JSDoc na utility funkcích, tedy přesně požadavku,
 který sekce Package Quality explicitně formulovala. Modulární
 separace mezi dvěma běhy kolísala, což ukazuje, že tato strukturální
@@ -716,7 +716,7 @@ a~dvě ablační varianty, každou ve dvou nezávislých bězích. Pilotní slou
 ablační sloupce ukazují dopad odebrání jednotlivých složek a~současně
 variabilitu mezi opakováním téže varianty. Výchozí variantou pro srovnání je r3,
 jediný pilotní běh kde agent splnil celý procesní checklist.
-Sloupec E1 uvádí vstup (max.\ na kroku včetně \texttt{cache} v~exportu),
+Sloupec \acs{E1} uvádí vstup (max.\ na kroku včetně \texttt{cache} v~exportu),
 výstup a~součet \texttt{cache} přes kroky, vše v~tisících. Stejný přehled
 generuje skript \texttt{summary.ts} do \texttt{experiments/runs/SUMMARY.md}.
 Vývoj hodnot a~jejich interpretaci ve vztahu k~cílům práce rozebírá
@@ -730,7 +730,7 @@ další kapitola.
 \footnotesize
 \begin{tabularx}{\linewidth}{@{}X*{5}{c}|*{2}{c}*{2}{c}@{}}
 \toprule
- & \multicolumn{5}{c|}{\textit{Pilotní iterace}} & \multicolumn{2}{c}{\textit{Ablace~A}} & \multicolumn{2}{c}{\textit{Ablace~B}} \\
+ & \multicolumn{5}{c|}{\textit{Pilotní fáze}} & \multicolumn{2}{c}{\textit{Ablace~A}} & \multicolumn{2}{c}{\textit{Ablace~B}} \\
 \textbf{Metrika} & \textbf{r1} & \textbf{r2} & \textbf{r3} & \textbf{r4} & \textbf{r5} & \textbf{A-1} & \textbf{A-2} & \textbf{B-1} & \textbf{B-2} \\
 \midrule
 P1 issues before code   & \cmark & \cmark & \cmark & \cmark & \xmark    & \cmark & \cmark & \cmark & \cmark \\
@@ -759,12 +759,12 @@ E3 počet kompakcí       & \cna{0}    & \cna{0}    & \cna{0}         & \cna{0} 
 
 \smallskip
 \raggedright
-$^\ddagger$~P7 v~r5 hodnotila specifikační issue, ne agentovu.\\
+$^\ddagger$~\acs{P7} v~r5 hodnotila specifikační issue, ne agentovu.\\
 $^*$~Stryker nedokončil analýzu, protože agentovy testy selhávají a~mutace nelze odlišit od~výchozího selhání testů (r4, r5, A-2).\\
 Barvy v~procesních a~produktových metrikách odpovídají exit kritériím
 z~tabulky~\ref{tab:metriky-prehled}. Zelená znamená splnění,
 červená nesplnění a~šedá neměřitelnou nebo deskriptivní hodnotu.
-Q4 v~uložených judge artefaktech historicky používalo 24bodové
+\acs{Q4} v~uložených judge artefaktech historicky používalo 24bodové
 hodnoticí schéma. Ve thesis jsou hodnoty převedeny na 25 AC po manuálním
 dopočítání AC25 (\textit{custom holiday calendar}).
 \end{table}

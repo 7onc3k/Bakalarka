@@ -47,10 +47,10 @@ metrik.
 
 Touto volbou se práce vědomě staví mimo benchmark
 paradigma~\cite{swebench2024}, které srovnává mnoho modelů na
-mnoha úlohách s~agregovanými skóre. Cílem této studie není rank
+mnoha úlohách s~agregovanými skóre. Cílem této studie není sestavit žebříček
 modelů, ale podrobné porozumění tomu, jak iterativní úpravy
 instrukcí mění chování jednoho agenta na jednom projektu. To je
-úloha pro case study, ne pro benchmark.
+úloha pro případovou studii, ne pro benchmark.
 
 \paragraph{Pilotní fáze}
 \phantomsection\label{sec:pilotni-iterace}%
@@ -84,8 +84,8 @@ Podrobnější postup jednoho běhu se vrací po definici metrik v~sekci
 
 \textit{Případem} v~Yinově smyslu~\cite{yin2018} je projekt
 systému upomínek faktur popsaný níže. \textit{Jednotkami analýzy}
-jsou jednotlivé běhy agenta nad tímto projektem (pilotní iterace
-a~ablační varianty), z~nichž každý poskytuje vlastní data pro
+jsou jednotlivé běhy agenta nad tímto projektem (běhy z~pilotní fáze
+a~z~ablačních variant), z~nichž každý poskytuje vlastní data pro
 hodnocení napříč třemi dimenzemi (proces, produkt, zdroje).
 Případová studie potřebuje projekt, na kterém lze opakovaně spouštět
 agenta s~různými instrukcemi a~objektivně měřit výsledky. Projekt
@@ -127,8 +127,8 @@ days) od vstupu do předchozího stavu, effect za~lomítkem je akce
 vrácená volajícímu (typicky odeslání e-mailu, u~přechodu do
 \texttt{SUSPENDED} navíc pozastavení služby). Eskalační přechody
 spouští událost \texttt{tick} při splnění guardu. Alternativně
-\texttt{manual\_advance} posune stav na další bezpodmínečně (bypass
-timeoutu, v~diagramu nezakreslen). Vedle hlavní větve jsou
+\texttt{manual\_advance} posune stav na další bezpodmínečně (bez čekání
+na timeout, v~diagramu nezakreslen). Vedle hlavní větve jsou
 ze~všech aktivních stavů kdykoliv dostupné \texttt{PAID}
 a~\texttt{CANCELLED} (z~9 stavů, vše kromě terminálů) a~\texttt{PAUSED}
 (jen ze~6 aktivních: \texttt{OVERDUE} až \texttt{SUSPENDED}).
@@ -238,9 +238,11 @@ And the timeout resumes from where it left off
 
 Formát Given/When/Then usnadňuje převod požadavků do referenčních
 testů (\ac{Q2}) i~mapování acceptance criteria na agentovy vlastní
-testy (\ac{Q4}). Doménový slovník (9 pojmů: dunning, grace period,
-business days, action descriptor aj.) sjednocuje terminologii mezi
-specifikací a~implementací.
+testy (\ac{Q4}). Specifikace obsahuje anglický doménový slovník
+s~9~pojmy, například upomínkový proces (\textit{dunning}), ochrannou
+lhůtu (\textit{grace period}), pracovní dny (\textit{business days})
+a~popis akce (\textit{action descriptor}). Tyto pojmy sjednocují
+terminologii mezi specifikací a~implementací.
 
 \paragraph{Out of scope}
 Specifikace explicitně vylučuje šest oblastí: opakování plateb,
@@ -380,8 +382,8 @@ judge-based metriky hodnotí LLM-as-judge podle hodnoticího schématu. Třetí
 vlastností je role v~hodnocení. Procesní a~produktové metriky mají
 exit kritéria a~slouží k~posouzení, zda byl běh úspěšný. Metriky
 zdrojů \acs{E1}--\acs{E3} exit kritéria nemají. Jejich hodnoty se
-pouze zaznamenávají a~slouží jako kontext pro porovnání nákladů
-a~stability kontextu během běhu.
+pouze zaznamenávají a~slouží jako kontext pro porovnání spotřeby
+zdrojů a~stability kontextu během běhu.
 
 \paragraph{LLM-as-judge protokol}
 \phantomsection\label{sec:llm-as-judge-aplikace}%
@@ -408,7 +410,7 @@ nepokrývají, ale nejsou interpretovány jako plně objektivní měření.
 \label{sec:procesni-metriky}
 
 Procesní metriky měří \textit{jak} agent pracuje.
-Instrukce v~AGENTS.md definují strukturovaný vývojový postup. Agent
+Instrukce v~\texttt{AGENTS.md} definují strukturovaný vývojový postup. Agent
 má odvozovat práci ze specifikace, organizovat ji přes issues
 a~větve, psát testy před implementací a~dokumentovat rozhodnutí
 ve~zprávách commitů a~popisech PR.
@@ -478,7 +480,7 @@ Tabulka~\ref{tab:p6-p8} shrnuje judge-based procesní metriky.
 \textbf{Kód} & \textbf{Co hodnotí} & \textbf{Škála} & \textbf{Exit kritérium} \\
 \midrule
 \acs{P6} & Kvalita zpráv commitů &
-1--3 (atomicita, konvenční prefix, srozumitelnost co a~proč bylo změněno). & $\geq$ 2/3 \\
+1--3 (jeden logický záměr na commit, konvenční prefix, srozumitelnost co a~proč bylo změněno). & $\geq$ 2/3 \\
 \addlinespace
 \acs{P7} & Kvalita popisů issue &
 1--3 (jasnost scope, přítomnost acceptance criteria, dostatečnost pro
@@ -605,7 +607,7 @@ proxy pro obcházení typového systému. & 0 \\
 \addlinespace
 \acs{Q7} & Cyklomatická složitost &
 ESLint \texttt{complexity} rule reportuje funkce s~cyklomatickou
-složitostí nad limitem 10. Výstupem je počet porušení tohoto limitu. & 0 porušení limitu $\leq$ 10/fn \\
+složitostí nad limitem 10. Výstupem je počet porušení tohoto limitu. & 0 \\
 \addlinespace
 \acs{Q8} & Designová kvalita kódu &
 Hodnocení posuzuje pojmenování, oddělení zodpovědností, idiomatický
@@ -622,7 +624,7 @@ je minimum dílčích dimenzí, aby silná dimenze nemaskovala slabou. & $\geq$ 
 Metriky zdrojů zachycují, kolik běh agenta spotřeboval tokenů a~času
 a~zda během něj došlo ke kompakci kontextu. Na rozdíl od procesních
 a~produktových metrik nemají \acs{E1}--\acs{E3} exit kritérium. Jejich
-hodnoty slouží k~porovnání nákladů a~stability kontextu během běhu
+hodnoty slouží k~porovnání spotřeby zdrojů a~stability kontextu během běhu
 mezi iteracemi.
 
 Tato skupina metrik převádí zdrojovou dimenzi z~teoretických
@@ -649,8 +651,8 @@ kroku, součet výstupních tokenů a~součet cache tokenů. \\
 Reálný čas běhu v~minutách od spuštění agenta po poslední commit. \\
 \addlinespace
 \acs{E3} & Počet kompakcí &
-Počet kompakcí kontextu během běhu, čtený přímo z~OpenCode DB
-(pole \texttt{time\_compacting}). Kompakce indikuje, že agent
+Počet kompakcí kontextu během běhu, čtený přímo z~OpenCode
+(\texttt{time\_compacting}). Kompakce indikuje, že agent
 vyčerpal kontextové okno a~prostředí muselo obsah zhustit.
 Metrika nemá exit kritérium. \\
 \bottomrule
@@ -674,7 +676,7 @@ navazující úprava vychází z~poslední úspěšné verze instrukcí.
 V~ablační fázi se používá stejné spuštění a~měření, ale bez průběžné
 úpravy téže varianty instrukcí.
 
-\begin{figure}[tbp]
+\begin{figure}[H]
 \centering
 \begin{tikzpicture}[
     node distance=1.8cm,
@@ -930,13 +932,13 @@ Q3 & Mutation score              & Stryker                 & $\geq$ 80\,\% \\
 Q4 & AC coverage agentových testů (25 krit.) & LLM-as-judge (GLM-5)   & 25/25 \\
 Q5 & Lint warnings               & ESLint                  & 0 \\
 Q6 & Typecheck errors            & tsc \texttt{-{}-noEmit} & 0 \\
-Q7 & Cyklomatická složitost      & ESLint (complexity)     & 0 porušení limitu $\leq$ 10/fn \\
+Q7 & Cyklomatická složitost      & ESLint (complexity)     & 0 \\
 Q8 & Design quality              & LLM-as-judge (GLM-5)   & $\geq$ 2/3 \\
 \midrule
 \multicolumn{4}{@{}l}{\textit{Zdroje (E): za jakou cenu}} \\[2pt]
 E1 & Vstup / výstup / $\Sigma$ cache (tis.) z exportu & OpenCode export & --- \\
 E2 & Trvání (minuty)             & session timestamps & --- \\
-E3 & Počet kompakcí kontextu & OpenCode DB (\texttt{time\_compacting}) & --- \\
+E3 & Počet kompakcí kontextu & OpenCode (\texttt{time\_compacting}) & --- \\
 \bottomrule
 \end{tabularx}
 \end{table}

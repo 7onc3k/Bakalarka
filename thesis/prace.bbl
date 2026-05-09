@@ -19,22 +19,6 @@
 
 \refsection{0}
   \datalist[entry]{apa/apasortcite//global/global}
-    \entry{acebench2025}{article}{}
-      \field{sortinit}{A}
-      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labeltitlesource}{title}
-      \field{note}{212 tasks from 16 repos; Claude 4 Sonnet + OpenHands: 7.5\% on feature-level tasks}
-      \field{title}{{ACE-Bench}: End-to-End Feature Development Benchmark}
-      \field{year}{2025}
-      \verb{urlraw}
-      \verb https://openreview.net/forum?id=41xrZ3uGuI
-      \endverb
-      \verb{url}
-      \verb https://openreview.net/forum?id=41xrZ3uGuI
-      \endverb
-    \endentry
     \entry{agarwal2024promptwizard}{article}{}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=1a9ad0ac303357334953fb6584914a0e}{%
@@ -579,17 +563,6 @@
       \verb{url}
       \verb https://arxiv.org/abs/2601.15195
       \endverb
-    \endentry
-    \entry{featurebench2026}{article}{}
-      \field{sortinit}{F}
-      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{arXiv preprint arXiv:2602.10975}
-      \field{note}{Agents struggle when scope exceeds single-issue; feature-level tasks significantly harder}
-      \field{title}{{FeatureBench}: Benchmarking Agentic Coding for Complex Feature Development}
-      \field{year}{2026}
     \endentry
     \entry{fenton2014}{book}{}
       \name{author}{2}{}{%
@@ -1476,8 +1449,9 @@
            family={{ISO/IEC}},
            familyi={I\bibinitperiod}}}%
       }
-      \list{institution}{1}{%
+      \list{institution}{2}{%
         {International Organization for Standardization}%
+        {International Electrotechnical Commission}%
       }
       \list{location}{1}{%
         {Geneva}%
@@ -2903,44 +2877,6 @@
       \field{title}{Toolformer: Language Models Can Teach Themselves to Use Tools}
       \field{year}{2023}
     \endentry
-    \entry{schnabel2024sammo}{article}{}
-      \name{author}{2}{}{%
-        {{un=0,uniquepart=base,hash=73e823955ee5c9194126b4598743a619}{%
-           family={Schnabel},
-           familyi={S\bibinitperiod},
-           given={Tobias},
-           giveni={T\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=1933bd1245dcf04297b9c3cb5dbfa7a7}{%
-           family={Neville},
-           familyi={N\bibinitperiod},
-           given={Jennifer},
-           giveni={J\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{eb74ba702e528f2f3904df6f3156ec80}
-      \strng{fullhash}{eb74ba702e528f2f3904df6f3156ec80}
-      \strng{bibnamehash}{eb74ba702e528f2f3904df6f3156ec80}
-      \strng{authorbibnamehash}{eb74ba702e528f2f3904df6f3156ec80}
-      \strng{authornamehash}{eb74ba702e528f2f3904df6f3156ec80}
-      \strng{authorfullhash}{eb74ba702e528f2f3904df6f3156ec80}
-      \field{sortinit}{S}
-      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{arXiv preprint arXiv:2404.02319}
-      \field{title}{Symbolic Prompt Program Search: A Structure-Aware Approach to Efficient Compile-Time Prompt Optimization}
-      \field{year}{2024}
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/2404.02319
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/2404.02319
-      \endverb
-    \endentry
     \entry{solis2011}{article}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=e1df50bddbda9a4a1c657794be328fe9}{%
@@ -3633,6 +3569,105 @@
       \endverb
       \verb{url}
       \verb https://arxiv.org/abs/2306.05685
+      \endverb
+    \endentry
+    \entry{featurebench2026}{article}{}
+      \name{author}{12}{}{%
+        {{un=0,uniquepart=base,hash=404d3bc1614fcf5c70688a508f67ba19}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Qixing},
+           giveni={Q\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a08bd86912c236721251181fb0676bf7}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Jiacheng},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c0cc95ac48d2f40666d3f250780a377b}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Haiyang},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ba1967da960326c8ef90049f8412e3e0}{%
+           family={Hao},
+           familyi={H\bibinitperiod},
+           given={Rui},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=647132e724cdf25d73ab8aacf4d8549a}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Jiahe},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c275b2504af10cb58b294fadbc8cc04f}{%
+           family={Han},
+           familyi={H\bibinitperiod},
+           given={Minghao},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3a9053096eec9d04fb2f76d75de84183}{%
+           family={Yang},
+           familyi={Y\bibinitperiod},
+           given={Yuxue},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=59c5dbb2214edb940779cffde8b00116}{%
+           family={Wu},
+           familyi={W\bibinitperiod},
+           given={Shuzhe},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=302150517c6235d560ac3101ed64a2ce}{%
+           family={Pan},
+           familyi={P\bibinitperiod},
+           given={Feiyang},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c90c4ca0166455d47973ecd589986eb2}{%
+           family={Fan},
+           familyi={F\bibinitperiod},
+           given={Lue},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ecdee062cac8a7a077d92c7a91dca3c7}{%
+           family={Tu},
+           familyi={T\bibinitperiod},
+           given={Dandan},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=77e50c0612034d69f85600fe5af4d864}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Zhaoxiang},
+           giveni={Z\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{ea174546540f35627854bf3033e7d8c9}
+      \strng{fullhash}{77201b2edf612f730ec6a3684da6b83d}
+      \strng{bibnamehash}{77201b2edf612f730ec6a3684da6b83d}
+      \strng{authorbibnamehash}{77201b2edf612f730ec6a3684da6b83d}
+      \strng{authornamehash}{ea174546540f35627854bf3033e7d8c9}
+      \strng{authorfullhash}{77201b2edf612f730ec6a3684da6b83d}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:2602.10975}
+      \field{note}{Agents struggle when scope exceeds single-issue; feature-level tasks significantly harder}
+      \field{title}{{FeatureBench}: Benchmarking Agentic Coding for Complex Feature Development}
+      \field{year}{2026}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2602.10975
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2602.10975
       \endverb
     \endentry
     \entry{zi2025specificity}{article}{}
@@ -3682,22 +3717,6 @@
     \endentry
   \enddatalist
   \datalist[entry]{apa/global//global/global}
-    \entry{acebench2025}{article}{}
-      \field{sortinit}{A}
-      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labeltitlesource}{title}
-      \field{note}{212 tasks from 16 repos; Claude 4 Sonnet + OpenHands: 7.5\% on feature-level tasks}
-      \field{title}{{ACE-Bench}: End-to-End Feature Development Benchmark}
-      \field{year}{2025}
-      \verb{urlraw}
-      \verb https://openreview.net/forum?id=41xrZ3uGuI
-      \endverb
-      \verb{url}
-      \verb https://openreview.net/forum?id=41xrZ3uGuI
-      \endverb
-    \endentry
     \entry{agarwal2024promptwizard}{article}{}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=1a9ad0ac303357334953fb6584914a0e}{%
@@ -4242,17 +4261,6 @@
       \verb{url}
       \verb https://arxiv.org/abs/2601.15195
       \endverb
-    \endentry
-    \entry{featurebench2026}{article}{}
-      \field{sortinit}{F}
-      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{arXiv preprint arXiv:2602.10975}
-      \field{note}{Agents struggle when scope exceeds single-issue; feature-level tasks significantly harder}
-      \field{title}{{FeatureBench}: Benchmarking Agentic Coding for Complex Feature Development}
-      \field{year}{2026}
     \endentry
     \entry{fenton2014}{book}{}
       \name{author}{2}{}{%
@@ -5139,8 +5147,9 @@
            family={{ISO/IEC}},
            familyi={I\bibinitperiod}}}%
       }
-      \list{institution}{1}{%
+      \list{institution}{2}{%
         {International Organization for Standardization}%
+        {International Electrotechnical Commission}%
       }
       \list{location}{1}{%
         {Geneva}%
@@ -6566,44 +6575,6 @@
       \field{title}{Toolformer: Language Models Can Teach Themselves to Use Tools}
       \field{year}{2023}
     \endentry
-    \entry{schnabel2024sammo}{article}{}
-      \name{author}{2}{}{%
-        {{un=0,uniquepart=base,hash=73e823955ee5c9194126b4598743a619}{%
-           family={Schnabel},
-           familyi={S\bibinitperiod},
-           given={Tobias},
-           giveni={T\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=1933bd1245dcf04297b9c3cb5dbfa7a7}{%
-           family={Neville},
-           familyi={N\bibinitperiod},
-           given={Jennifer},
-           giveni={J\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{eb74ba702e528f2f3904df6f3156ec80}
-      \strng{fullhash}{eb74ba702e528f2f3904df6f3156ec80}
-      \strng{bibnamehash}{eb74ba702e528f2f3904df6f3156ec80}
-      \strng{authorbibnamehash}{eb74ba702e528f2f3904df6f3156ec80}
-      \strng{authornamehash}{eb74ba702e528f2f3904df6f3156ec80}
-      \strng{authorfullhash}{eb74ba702e528f2f3904df6f3156ec80}
-      \field{sortinit}{S}
-      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{arXiv preprint arXiv:2404.02319}
-      \field{title}{Symbolic Prompt Program Search: A Structure-Aware Approach to Efficient Compile-Time Prompt Optimization}
-      \field{year}{2024}
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/2404.02319
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/2404.02319
-      \endverb
-    \endentry
     \entry{solis2011}{article}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=e1df50bddbda9a4a1c657794be328fe9}{%
@@ -7296,6 +7267,105 @@
       \endverb
       \verb{url}
       \verb https://arxiv.org/abs/2306.05685
+      \endverb
+    \endentry
+    \entry{featurebench2026}{article}{}
+      \name{author}{12}{}{%
+        {{un=0,uniquepart=base,hash=404d3bc1614fcf5c70688a508f67ba19}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Qixing},
+           giveni={Q\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a08bd86912c236721251181fb0676bf7}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Jiacheng},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c0cc95ac48d2f40666d3f250780a377b}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Haiyang},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ba1967da960326c8ef90049f8412e3e0}{%
+           family={Hao},
+           familyi={H\bibinitperiod},
+           given={Rui},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=647132e724cdf25d73ab8aacf4d8549a}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Jiahe},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c275b2504af10cb58b294fadbc8cc04f}{%
+           family={Han},
+           familyi={H\bibinitperiod},
+           given={Minghao},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3a9053096eec9d04fb2f76d75de84183}{%
+           family={Yang},
+           familyi={Y\bibinitperiod},
+           given={Yuxue},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=59c5dbb2214edb940779cffde8b00116}{%
+           family={Wu},
+           familyi={W\bibinitperiod},
+           given={Shuzhe},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=302150517c6235d560ac3101ed64a2ce}{%
+           family={Pan},
+           familyi={P\bibinitperiod},
+           given={Feiyang},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c90c4ca0166455d47973ecd589986eb2}{%
+           family={Fan},
+           familyi={F\bibinitperiod},
+           given={Lue},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ecdee062cac8a7a077d92c7a91dca3c7}{%
+           family={Tu},
+           familyi={T\bibinitperiod},
+           given={Dandan},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=77e50c0612034d69f85600fe5af4d864}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Zhaoxiang},
+           giveni={Z\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{ea174546540f35627854bf3033e7d8c9}
+      \strng{fullhash}{77201b2edf612f730ec6a3684da6b83d}
+      \strng{bibnamehash}{77201b2edf612f730ec6a3684da6b83d}
+      \strng{authorbibnamehash}{77201b2edf612f730ec6a3684da6b83d}
+      \strng{authornamehash}{ea174546540f35627854bf3033e7d8c9}
+      \strng{authorfullhash}{77201b2edf612f730ec6a3684da6b83d}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:2602.10975}
+      \field{note}{Agents struggle when scope exceeds single-issue; feature-level tasks significantly harder}
+      \field{title}{{FeatureBench}: Benchmarking Agentic Coding for Complex Feature Development}
+      \field{year}{2026}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2602.10975
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2602.10975
       \endverb
     \endentry
     \entry{zi2025specificity}{article}{}

@@ -144,8 +144,8 @@ dokumentace jen na hlavním API, ne na utility funkcích).
 Plnou dokumentaci (3/3) přinesla teprve r3 po přidání explicitního
 verifikačního kroku do instrukcí. V~ablačních bězích bez sekce
 Package Quality \acs{Q8} navíc zachytila ztrátu dokumentace
-na utility funkcích v~obou bězích a~v~B-2 i~rozpad modulární
-struktury (single-file monolith). Deterministické metriky
+na pomocných funkcích v~obou bězích a~v~B-2 i~rozpad modulární
+struktury do jednosouborového monolitu. Deterministické metriky
 \acs{Q5}--\acs{Q7} ani jeden z~těchto problémů nehlásily.
 Kombinace \mmet{det} a~\mmet{qual} tak zachycuje víc než
 kterýkoliv typ sám.
@@ -220,7 +220,7 @@ navržených metrik.}
 Případová studie ukazuje, že tento postup lze na jednom projektu
 prakticky použít a~že navržené metriky dokážou zachytit měřitelné
 změny v~chování agenta. Neznamená to, že stejný efekt nastane
-obecně. Změny mezi běhy nebyly monotónní. Výchozí běh r1 splnil pouze
+obecně. Změny mezi běhy zahrnovaly zlepšení i~regrese. Výchozí běh r1 splnil pouze
 \acs{P1}, \acs{P4}, \acs{Q1} a~\acs{Q6}. Po dvou cyklech úprav (r3)
 agent splnil celý procesní checklist \acs{P1}--\acs{P5} a~současně
 udržel \acs{Q1} i~\acs{Q6}. Regrese r4 vrátila procesní část zpět
