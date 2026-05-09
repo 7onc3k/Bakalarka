@@ -92,10 +92,10 @@ verifikační kroky nejsou redundantní. Odebrání části kódových konvencí
 deterministické metriky téměř nezhoršilo, ale zhoršilo designovou
 kvalitu hodnocenou LLM-as-judge.
 %
-Přínosem práce je demonstrace proveditelnosti metrického rámce
-a~iterativního postupu návrhu instrukcí. Konkrétní naměřené hodnoty
-platí pro daný model, nástroj a~projekt. Přenositelný je postup
-a~sada metrik. Otevřenou otázkou zůstává, zda vzorec
+Přínosem práce je ověření proveditelnosti sady metrik
+a~iterativního postupu návrhu instrukcí na jednom případu.
+Konkrétní naměřené hodnoty platí pro daný model, nástroj a~projekt.
+Přenositelný je postup a~sada metrik. Otevřenou otázkou zůstává, zda vzorec
 operacionalizace platí i~mimo programování.
 }
 \def\AbstraktEN{%
@@ -109,7 +109,7 @@ instructions against such measurements.
 %
 This thesis proposes a~metric suite covering process, product quality, and
 resources, and shows how it can guide iterative instruction design. The
-process is demonstrated on a~case study of a~billing reminder system. The agent
+feasibility of the process is evaluated on a~case study of a~billing reminder system. The agent
 repeatedly implements the same specification, each run is evaluated using
 the proposed metrics, and the instructions are revised according to a
 diagnosis of observed failures. Subsequent ablations examine which parts of
@@ -126,10 +126,10 @@ verification step. Ablations showed that verification steps were not
 redundant. Removing part of the code-convention section had little effect on
 automated metrics, but reduced design quality as assessed by an LLM-as-judge.
 %
-The contribution is a feasibility demonstration of the metric framework and
-the iterative instruction-design process. The specific measured values are
-bound to the model, tool, and project used in the case study. What transfers
-is the process and the metric suite. An open question is whether the observed
+The contribution is a feasibility evaluation of the metric suite and
+the iterative instruction-design process on one case. The specific measured
+values are bound to the model, tool, and project used in the case study.
+What transfers is the process and the metric suite. An open question is whether the observed
 operationalization pattern also holds outside programming.
 }
 

@@ -229,6 +229,9 @@ udržel \acs{Q1} i~\acs{Q6}. Regrese r4 vrátila procesní část zpět
 ($\sim$3/5) a~ukázala, že lepší hodnoty v~jednom běhu nejsou trvalou
 vlastností instrukcí. Po neúspěšné iteraci bylo nutné vrátit se
 k~předchozí verzi instrukcí (r5 vycházel z~r3, ne z~r4).
+Pro ablace proto zůstává výchozí variantou r3. R5 sice testuje
+dodatečné verifikační kroky, ale selhává v~procesním základu, který
+ablační srovnání potřebuje držet stabilní.
 
 Metriky poskytly vodítka, kam zasáhnout. Tabulka metrik ukázala
 která kritéria agent nesplnil a~behaviorální popis
@@ -407,7 +410,7 @@ předvídatelný není. To zůstává námětem pro další výzkum.
 \label{sec:porovnani-literatura}
 %% ================================================================
 
-\subsection{Srovnání metrického rámce}
+\subsection{Srovnání sady metrik}
 
 Literatura shrnutá v~kapitole~\ref{kap:teorie} ukazuje, že hodnocení
 AI coding agentů je stále silně orientováno na funkční výsledek.
@@ -425,7 +428,7 @@ kterou by výsledkové benchmarky samy nezachytily. Běhy se stejnými
 nebo podobnými produktovými výsledky se lišily v~tom, zda agent
 vytvořil auditovatelný pracovní postup. Produktové metriky naopak
 ukázaly, že ani kvalitní procesní artefakty samy nezaručují správnou
-implementaci. Přínos rámce P/Q/E tedy nespočívá jen v~rozšíření
+implementaci. Přínos členění P/Q/E tedy nespočívá jen v~rozšíření
 počtu měřených veličin, ale v~tom, že umožňuje sledovat různé druhy
 selhání odděleně a~pak je znovu spojit při interpretaci.
 
@@ -433,8 +436,8 @@ Odlišnost vůči existujícím benchmarkům je i~v~tom, že metriky zde
 nejsou jen evaluačním výstupem, ale i~řídicím nástrojem pro další
 iteraci. To je důležité pro hlavní problém práce. Nestačí vědět, že
 agent selhal nebo uspěl, pokud z~výsledku neplyne, jak instrukce
-upravit. V~tomto smyslu je náš rámec bližší praktickému diagnostickému
-nástroji než klasickému benchmarku.
+upravit. V~tomto smyslu je navržená sada metrik bližší praktickému
+diagnostickému nástroji než klasickému benchmarku.
 
 \subsection{Vliv instrukcí na chování agenta}
 
@@ -464,7 +467,7 @@ Sekce Package Quality se chovala odlišně. Její odebrání nezhoršilo
 deterministické metriky stejným způsobem jako odebrání verifikačních
 kroků, ale projevilo se v~designové kvalitě hodnocené
 LLM-as-judge. Data jsou proto konzistentní s~tím, že část instrukcí
-nefunguje primárně jako přímá kontrola chování, ale jako rámec, který
+nefunguje primárně jako přímá kontrola chování, ale jako opora, která
 připomíná modelu relevantní znalosti z~tréninku. V~tomto ohledu je
 užitečná analogie s~promptingem. Minimální nápověda může vyvolat
 žádoucí chování i~bez detailního skriptu~\cite{wei2022cot,
@@ -689,9 +692,9 @@ protože jednodimenzionální měření (např. jen test pass rate)
 může zakrýt problém v~jiné dimenzi
 (sekce~\ref{sec:interpretace}).
 
-Praktický důsledek je přímočarý. Místo delšího a~obecnějšího
-\texttt{AGENTS.md} je účelnější budovat kratší, měřitelný pracovní
-postup s~jasnými verifikačními kroky a~opakovaně ho ladit podle dat.
+Praktický důsledek je přímočarý. Klíčové požadavky je účelnější
+převádět do měřitelného pracovního postupu s~jasnými verifikačními
+kroky než je jen přidávat jako další obecná pravidla.
 
 %% ================================================================
 \section{Náměty pro další výzkum}
