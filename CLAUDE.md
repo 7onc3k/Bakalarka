@@ -74,14 +74,15 @@ Audit trail s plnými citacemi anotací: `konzultace/08-anotace-vedouci.md`
 a `konzultace/09-tasklist-anotace.md`. PDF: `konzultace/prace-anotace.pdf`.
 
 Workflow:
-- Status check-off **manuálně v issue UI** (uživatel chce přehled
-  bez preklikávání)
-- Lineárně po stranách PDF; cross-cutting C1 (citace) jako úvodní
-  script pass, ostatní cestou
-- Strategická rozhodnutí (S1–S4) blokují příslušné lokální issues —
-  diskutovat a rozhodnout dřív než lokální fix
-- Realtime co-editing v sezení; subagent jen na batch operace
-  (issue create, citace globální regex)
+- Lineárně po stranách PDF, jeden sub-issue po druhém
+- C1 (citace) hotové globálně (commit fe5f760); C6 (terminologie) jako
+  závěrečný polish pass
+- Strategická rozhodnutí (S*) řeš v kontextu kapitoly, kde na ně narazíš
+  — žádné předem blokující rozhodovací fáze
+- Per-issue postup: audit (subagent) → diskuse → edit → commit
+  (`Closes #NN`) → close
+- Status check-off **manuálně v issue UI**
+- Realtime co-editing; subagent jen na audit a batch operace
 
 Default:
 - Nejprve určuj roli sekce, až potom lešti věty.
