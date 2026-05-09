@@ -4,8 +4,8 @@
 Tato práce navrhla sadu metrik a~iterativní postup pro systematické
 navrhování a~vyhodnocování instrukcí pro AI coding agenty a~ablacemi
 prozkoumala vliv jednotlivých složek instrukcí. Pro všechny tři cíle
-případová studie systému upomínek faktur demonstrovala proveditelnost
-navrženého postupu a~přinesla indikativní poznatky. Studie zahrnovala
+případová studie systému upomínek faktur ověřila proveditelnost
+navrženého postupu na jednom případu a~přinesla indikativní poznatky. Studie zahrnovala
 pět pilotních iterací a~dvě ablace, každou ověřenou dvěma nezávislými
 běhy.
 
@@ -21,9 +21,9 @@ každý typ zachycuje jinou dimenzi chování agenta.
 
 Druhým cílem bylo na~případové studii ověřit proveditelnost
 iterativního postupu návrhu instrukcí řízeného těmito metrikami
-a~vyhodnotit, zda a~jak vede k~měřitelným změnám v~chování agenta. Cyklus
-měření, diagnózy a~úpravy vedl k~měřitelnému zlepšení, ale ne
-monotónnímu: jedna iterace způsobila regresi, po které bylo nutné
+a~vyhodnotit, zda a~jak vede k~měřitelným změnám v~chování agenta.
+Metriky zachytily měřitelné změny mezi běhy, ale tyto změny nebyly
+monotónní: jedna iterace způsobila regresi, po které bylo nutné
 vrátit se k~předchozí verzi instrukcí. Postup nevedl ke splnění
 všech exit kritérií; zejména referenční testy zůstaly u~nejlepšího
 běhu na hodnotě 41/42. Právě toto nesplnění ale metriky lokalizovaly
@@ -50,7 +50,7 @@ Hlavním přínosem práce je iterativní postup a~sada metrik, které
 může praktik aplikovat na vlastním projektu s~vlastními exit kritérii.
 Konkrétní instrukce a~naměřené hodnoty platí pro tuto případovou
 studii. Přenositelný je postup, ne výsledná čísla. Práce tím
-demonstruje proveditelnost navrženého rámce na jednom případu,
+ověřuje proveditelnost navrženého rámce na jednom případu,
 zatímco závěry mají povahu analytické generalizace: formulují
 principy k~dalšímu ověření, zejména otázku platnosti vzorce
 operacionalizace mimo programování, nikoliv statistické tvrzení

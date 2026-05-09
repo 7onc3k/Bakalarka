@@ -217,6 +217,9 @@ Vědecký text = přesný, ne složitý.
 - Když se sekce opakuje oproti jiné, smaž nebo odkaž, nezdvojuj.
 - Doménové termíny piš česky, industry standard může zůstat anglicky.
 - Em dash nepoužívej vůbec.
+- Nadpisová makra `\section`, `\subsection`, `\subsubsection` a `\paragraph`
+  piš jako nadpisy bez koncové tečky. Pokud je potřeba jen větný štítek
+  uvnitř odstavce, použij běžný tučný text, ne nadpisové makro.
 
 Metriky:
 - Kódy metrik v thesis prose zapisuj přes acro makra z `thesis/makra.tex`.

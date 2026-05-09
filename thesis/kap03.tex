@@ -52,16 +52,19 @@ modelů, ale podrobné porozumění tomu, jak iterativní úpravy
 instrukcí mění chování jednoho agenta na jednom projektu; to je
 úloha pro case study, ne pro benchmark.
 
-\paragraph{Pilotní fáze.}
+\paragraph{Pilotní fáze}
 \phantomsection\label{sec:pilotni-iterace}%
 Případová studie postupuje ve dvou fázích. Pilotní fáze slouží
-k~nalezení použitelné sady instrukcí. V~každém běhu se sleduje,
-zda agent dodržel požadovaný postup a~jak kvalitní řešení vytvořil.
-Naměřené odchylky se potom používají jako podklad pro další úpravu
-instrukcí. Pilotní fáze tak ukazuje, zda metriky dávají dostatečně
-konkrétní zpětnou vazbu pro řízené zlepšování instrukcí.
+k~nalezení použitelné sady instrukcí. První běh používá baseline
+\texttt{AGENTS.md}, tedy výchozí sadu instrukcí odvozenou z~literatury
+o~instrukcích pro agentní vývoj. Další běhy už vznikají iterativně.
+V~každém běhu se sleduje, zda agent dodržel požadovaný postup a~jak
+kvalitní řešení vytvořil. Naměřené odchylky se potom používají jako
+podklad pro další úpravu instrukcí. Pilotní fáze tak ukazuje, zda
+metriky dávají dostatečně konkrétní zpětnou vazbu pro řízené
+zlepšování instrukcí.
 
-\paragraph{Ablace.}
+\paragraph{Ablace}
 \phantomsection\label{sec:komparativni-variace}%
 Ablační fáze vychází z~použitelné sady instrukcí nalezené v~pilotu.
 Z~této sady se odebere vybraná složka a~sleduje se, zda se změní
@@ -107,8 +110,10 @@ v~Issue~\#1. Issue má dvě části: \textbf{Requirements} (co business
 potřebuje) a~\textbf{API Contract} (co musí implementace exportovat).
 API kontrakt je současně jediným technickým omezením implementace
 a~vstupem pro metriku~\ac{Q1}.
+Plné znění specifikace je součástí doplňujících materiálů
+odkazovaných v~příloze~\ref{app:doplnujici-materialy}.
 
-\paragraph{Doménová logika.}
+\paragraph{Doménová logika}
 Systém eskaluje neuhrazené faktury sérií stavů od přátelské upomínky
 před splatností přes stupňující se urgentnost až po pozastavení
 služby a~odpis pohledávky. Každá faktura má vlastní nezávislou
@@ -184,7 +189,7 @@ stavy popisuje text výše.}
 \end{figure}
 \FloatBarrier
 
-\paragraph{API kontrakt.}
+\paragraph{API kontrakt}
 API kontrakt určuje, co musí agentova implementace poskytovat, aby ji
 bylo možné porovnávat s~referenční sadou behavioral testů (\acs{Q2}).
 Systém je čistá funkce \texttt{process(state, event, now)}, která
@@ -202,23 +207,25 @@ implementace (modulární rozdělení, funkční vs.\ objektový styl)
 zůstává na agentovi. Kontrakt je úzký právě v~tom, co testy potřebují
 volat a~pozorovat, a~všechno ostatní nechává otevřené.
 
-\paragraph{Implicitní pravidla domény.}
+\paragraph{Implicitní pravidla domény}
 Stavový automat je sám o~sobě lineární a~implementačně přímočarý.
-Obtížnost úlohy leží jinde: ve dvou implicitních pravidlech, která
-specifikace klade na chování implementace a~jejichž přehlédnutí vede
-ke kódu, který sice prochází triviálními případy, ale na hraničních
-selhává. Za~prvé,
+Obtížnost úlohy leží ve dvou implicitních pravidlech, která
+specifikace klade na chování implementace. Jejich přehlédnutí vede
+ke kódu, který může projít triviálními případy, ale selhává na
+hraničních situacích. Za~prvé,
 pause/resume musí přes pole \texttt{pausedElapsed} zachovat uplynulý
-čas: bez něj by se musel řešit trikem (posun \texttt{stateEnteredAt}
-zpět v~čase), který funguje pro jednu pauzu, ale selhává při
-opakovaném pause/resume, protože druhá pauza ztratí historii první.
+čas. Bez něj by se obnovení běhu muselo řešit posunem
+\texttt{stateEnteredAt} zpět v~čase. Takové řešení funguje pro jednu
+pauzu, ale selhává při opakovaném pause/resume, protože druhá pauza
+ztratí historii první.
 Za~druhé, všechny timeouty se počítají v~pracovních dnech, takže
 \texttt{+14\,bd} od pátku není čtrnáct kalendářních dnů a~hranice
 mezi víkendem a~pondělím jsou off-by-one zóna. Obě pravidla jsou
-plně určená API kontraktem; jejich zachycení ale vyžaduje doslovné
-čtení typů a~doménového slovníku, ne odvozování z~diagramu automatu.
+plně určená API kontraktem. Jejich zachycení ale vyžaduje doslovné
+čtení typů a~doménového slovníku, ne pouze odvozování z~diagramu
+automatu.
 
-\paragraph{Acceptance criteria.}
+\paragraph{Acceptance criteria}
 Specifikace obsahuje 25 acceptance criteria ve formátu Given/When/Then.
 Pokrývají sedm okruhů: časové přechody eskalace, platby, terminální
 stavy, storno, pauza/obnovení, manuální postup a~výpočet pracovních
@@ -237,14 +244,14 @@ testy (\ac{Q4}). Doménový slovník (9 pojmů: dunning, grace period,
 business days, action descriptor aj.) sjednocuje terminologii mezi
 specifikací a~implementací.
 
-\paragraph{Out of scope.}
+\paragraph{Out of scope}
 Specifikace explicitně vylučuje šest oblastí: opakování plateb,
 úroky a~poplatky z~prodlení, částečné platby, odesílání e-mailů,
 plánování (cron) a~persistenci dat. Sekce out of scope omezuje
 riziko, že agent rozšíří řešení nad rámec sledovaného zadání,
 a~drží úlohu na úrovni čisté business logiky.
 
-\paragraph{Referenční testy jako oracle.}
+\paragraph{Referenční testy jako oracle}
 \phantomsection\label{sec:ref-implementace-postup}%
 Pro metriku~\ac{Q2} (sec~\ref{sec:produktove-metriky}) byla souběžně
 se specifikací připravena sada 42 referenčních testů metodou
@@ -366,7 +373,7 @@ Naše sada obsahuje 19~metrik ve třech kategoriích:
           a~počet kompakcí kontextu (\acs{E3}).
 \end{description}
 
-\paragraph{Tři osy klasifikace metriky.}
+\paragraph{Tři osy klasifikace metriky}
 Každou metriku popisujeme třemi vlastnostmi. První je kategorie
 \mgrp{P}, \mgrp{Q} nebo \mgrp{E}, tedy zda metrika sleduje proces,
 produkt nebo zdroje. Druhá je způsob měření. Deterministické metriky
@@ -378,7 +385,7 @@ zdrojů \acs{E1}--\acs{E3} exit kritéria nemají. Jejich hodnoty se
 pouze zaznamenávají a~slouží jako kontext pro porovnání nákladů
 a~stability kontextu během běhu.
 
-\paragraph{LLM-as-judge protokol.}
+\paragraph{LLM-as-judge protokol}
 \phantomsection\label{sec:llm-as-judge-aplikace}%
 Pět metrik (\acs{P6}, \acs{P7}, \acs{P8}, \acs{Q4}, \acs{Q8})
 hodnotí vlastnosti, které nelze spolehlivě extrahovat
@@ -408,10 +415,16 @@ má odvozovat práci ze specifikace, organizovat ji přes issues
 a~branches, psát testy před implementací a~dokumentovat rozhodnutí
 v~commit messages a~PR descriptions.
 
+Tato skupina metrik převádí procesní dimenzi z~teoretických
+východisek do stop, které po sobě agent zanechává v~repozitáři
+a~na GitHubu. Proto sleduje pořadí práce, vazbu mezi issues,
+větvemi a~pull requesty, test-first postup a~kvalitu procesních
+záznamů.
+
 \subsubsection*{P1--P5: compliance (binární)}
 
 Tabulka~\ref{tab:p1-p5} shrnuje deterministické procesní metriky.
-Všechny mají binární výstup pass/fail.
+Všechny mají binární výsledek splněno/nesplněno.
 
 \begin{table}[htbp]
 \centering
@@ -426,27 +439,27 @@ Všechny mají binární výstup pass/fail.
 \acs{P1} & Issues vznikla před kódem &
 Porovnání \texttt{created\_at} nejstaršího issue vytvořeného agentem (GitHub API)
 s~časem prvního commitu obsahujícího soubory v~\texttt{src/}
-nebo \texttt{tests/}. & pass \\
+nebo \texttt{tests/}. & kontrola projde \\
 \addlinespace
 \acs{P2} & Branch per issue &
 Počet remote branches (bez \texttt{main}) vůči počtu issues; podmínka
 \textit{branches $\geq$ issues} (žádné slučování více issues do jedné
-větve). & pass \\
+větve). & kontrola projde \\
 \addlinespace
 \acs{P3} & Test-first &
 Primárně se kontroluje, zda existuje commit s~prefixem \texttt{test:}
 před commitem \texttt{feat:}. Jako doplňková kontrola se z~git historie
 ověřuje, zda první změna v~\texttt{src/} nepředchází první změně
-v~\texttt{tests/}. & pass \\
+v~\texttt{tests/}. & kontrola projde \\
 \addlinespace
 \acs{P4} & PR linkován na issue &
-Tělo každého PR (GitHub API) obsahuje regex \texttt{Closes \#N}. & pass \\
+Tělo každého PR (GitHub API) obsahuje regex \texttt{Closes \#N}. & kontrola projde \\
 \addlinespace
 \acs{P5} & Žádné modifikace existujících testů &
 Metrika sleduje, zda agent měnil již existující testy v~adresáři
 \texttt{tests/}. Kontrola používá \texttt{git diff -{}-diff-filter=M}.
 Nově přidané testy se nezapočítávají, protože rozšiřování test suite
-je v~zadání povolené. & pass \\
+je v~zadání povolené. & kontrola projde \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -614,6 +627,12 @@ a~produktových metrik nemají \acs{E1}--\acs{E3} exit kritérium. Jejich
 hodnoty slouží k~porovnání nákladů a~stability kontextu během běhu
 mezi iteracemi.
 
+Tato skupina metrik převádí zdrojovou dimenzi z~teoretických
+východisek do agentního prostředí. Lidské úsilí zde není přímo
+pozorovaným vstupem, proto sledujeme dostupné provozní ukazatele.
+Jde o~spotřebované tokeny, reálný čas běhu a~kompakce kontextového
+okna.
+
 \begin{table}[htbp]
 \centering
 \caption{Metriky zdrojů E1--E3}
@@ -648,30 +667,14 @@ Metrika nemá exit kritérium. \\
 \section{Procedura jedné iterace}
 \label{sec:procedura-behu}
 
-Jedna iterace pilotní fáze zahrnuje běh agenta, extrakci metrik
-z~výstupů běhu a~diagnostiku, ze~které může vzniknout úprava
-instrukcí pro navazující běh. Ablační fáze používá stejnou proceduru
-spuštění a~měření pro jednotlivé varianty instrukcí, ale nepracuje
-s~průběžnou úpravou téže varianty.
-
-\subsection{Iterativní cyklus}
-\label{sec:cyklus-iterace}
-
-Pilotní fáze používá iterativní cyklus návrhu instrukcí. V~každé
-iteraci agent nejprve provede zadaný běh, poté se z~výstupů běhu
-extrahují metriky, naměřené odchylky se interpretují jako diagnóza
-a~podle ní vzniká úprava instrukcí pro další běh. Cyklus má čtyři
-kroky. Spuštění zachycuje běh agenta, Měření extrakci metrik,
-Diagnóza interpretaci odchylek a~Úprava změnu instrukcí. Opakování
-cyklu se řídí tím, zda metriky stále poskytují použitelnou
-diagnostickou informaci. Pokud další běh vede k~regresi, navazující
-úprava vychází z~poslední úspěšné verze instrukcí
-(obr.~\ref{fig:iterativni-cyklus}).
-
-V~ablační fázi se stejná procedura spuštění a~měření používá pro
-předem zvolené varianty instrukcí. Výsledky jednotlivých běhů
-neslouží k~průběžné úpravě téže varianty, ale k~porovnání dopadu
-odebrané složky instrukcí s~plnou verzí.
+Sekce~\ref{sec:pilotni-iterace} vymezila rozdíl mezi pilotní
+a~ablační fází. Tato část popisuje operační kroky, které se provedou
+u~jednoho běhu agenta. V~pilotní fázi na sebe navazují čtyři kroky:
+spuštění běhu, měření, diagnóza a~úprava instrukcí pro další běh
+(obr.~\ref{fig:iterativni-cyklus}). Pokud další běh vede k~regresi,
+navazující úprava vychází z~poslední úspěšné verze instrukcí.
+V~ablační fázi se používá stejné spuštění a~měření, ale bez průběžné
+úpravy téže varianty instrukcí.
 
 \begin{figure}[tbp]
 \centering
@@ -699,16 +702,50 @@ odebrané složky instrukcí s~plnou verzí.
 \end{figure}
 \FloatBarrier
 
-\subsection{Záznam a~vyhodnocení běhu}
+\subsection{Spuštění, záznam a~vyhodnocení běhu}
 \label{sec:zaznam-bezhu}
 
-Každý běh produkuje strukturovaný balík záznamů, který umožňuje
-zpětně rekonstruovat naměřené hodnoty i~chování agenta.
+Každý běh zakládá samostatné experimentální prostředí pro jednu
+verzi instrukcí a~produkuje strukturovaný balík záznamů, který
+umožňuje zpětně rekonstruovat naměřené hodnoty i~chování agenta. Pro
+orientaci v~následujícím popisu slouží zjednodušená struktura
+relevantních částí repozitáře.
 
-\textbf{Sběr metrik.} Po skončení běhu se spouštějí dva skripty.
-\texttt{new-run.ts} exportuje session do \texttt{transcript.json}
-(úplný záznam tool calls, vstupů a~výstupů agenta).
-\texttt{analyze-run.ts} extrahuje deterministické metriky z~git
+\noindent
+\begin{minipage}{\linewidth}
+\small\ttfamily
+\begin{tabular}{@{}ll@{}}
+experiments/ & \\
+\hspace*{1em}infra/ & \# měřicí infrastruktura a vstupy \\
+\hspace*{2em}inputs/ & \# build.md, AGENTS.md a specifikace zadání \\
+\hspace*{2em}scripts/ts/ & \# skripty pro spuštění a vyhodnocení \\
+\hspace*{3em}new-run.ts & \# založení a spuštění běhu \\
+\hspace*{3em}analyze-run.ts & \# extrakce deterministických metrik \\
+\hspace*{3em}judge.ts & \# LLM-as-judge hodnocení \\
+\hspace*{2em}judge/ & \# hodnoticí schémata \\
+\hspace*{1em}runs/ & \# výstupy jednotlivých běhů \\
+\hspace*{2em}pilot-rN/ & \\
+\hspace*{3em}transcript.json & \# úplný záznam session \\
+\hspace*{3em}FINDINGS.md & \# naměřené hodnoty a popis chování \\
+\hspace*{1em}reference/ & \# referenční implementace a testy \\
+\end{tabular}
+\end{minipage}
+\vspace{0.5em}
+
+\textbf{Spuštění.} \texttt{new-run.ts} vytvoří pro daný běh lokální adresář
+\texttt{experiments/runs/runName/} a~soukromý GitHub repozitář
+\texttt{bp-runName}. Do adresáře zkopíruje zvolenou verzi
+\texttt{AGENTS.md}, fixní system prompt \texttt{build.md}, konfiguraci
+OpenCode a~automatizační plugin. Po inicializačním commitu vytvoří
+v~GitHubu Issue~\#1 se specifikací projektu a~spustí agenta v~Docker
+containeru. Agent pracuje v~adresáři běhu jako ve svém pracovním prostoru
+a~dostává úkol implementovat Issue~\#1 podle \texttt{AGENTS.md}. Po
+ukončení běhu skript uloží identifikátor session, exit code a~export
+session do \texttt{transcript.json}, který obsahuje úplný záznam
+tool calls, vstupů a~výstupů agenta.
+
+\textbf{Sběr metrik.} Po skončení běhu se spouštějí dva vyhodnocovací
+skripty. \texttt{analyze-run.ts} extrahuje deterministické metriky z~git
 historie, GitHub API a~transcriptu (\acs{P1}--\acs{P5},
 \acs{Q1}--\acs{Q3}, \acs{Q5}--\acs{Q7}, \acs{E1}--\acs{E3}).
 Skript \texttt{judge.ts} spouští LLM-as-judge (GLM-5) pro
@@ -741,29 +778,27 @@ Tabulka~\ref{tab:zaznamy-bezhu} shrnuje strukturu balíku.
 \addlinespace
 \texttt{DIAGNOSIS.md}               & klasifikace příčin a~návrh změn \\
 \addlinespace
-\texttt{changelog/r$N$-r$N{+}1$.md} & zdůvodnění úprav \texttt{AGENTS.md} (bylo / je / pozorování / diagnóza / literatura) \\
+\texttt{changelog/r$N$-r$N{+}1$.md} & zdůvodnění úprav \texttt{AGENTS.md} (bylo / je / pozorování / diagnóza / odůvodnění) \\
 \bottomrule
 \end{tabularx}
 \end{table}
 \FloatBarrier
 
-Doplňující materiály jsou v~repozitáři práce
-(\url{https://github.com/7onc3k/Bakalarka/tree/thesis-final}): kompletní operační
-procedura, šablony \texttt{FINDINGS.md} a~\texttt{DIAGNOSIS.md},
-všechny verze \texttt{AGENTS.md} včetně baseline a~ablačních
-variant, plná hodnoticí schémata a~prompty LLM-as-judge, transcripty
-session, surová výstupní data nástrojů a~specifikace projektu
-v~plném znění. Stav repozitáře k~datu odevzdání je zafixován
-gitovým tagem \texttt{thesis-final}. Přímé odkazy na tyto doplňující
-materiály uvádí příloha~\ref{app:doplnujici-materialy}.
+Doplňující materiály včetně operační procedury, šablon
+\texttt{FINDINGS.md} a~\texttt{DIAGNOSIS.md}, verzí
+\texttt{AGENTS.md}, hodnoticích schémat, transcriptů session,
+surových výstupů nástrojů a~plného znění specifikace jsou uloženy
+v~repozitáři práce. Přímé odkazy na stav zafixovaný tagem
+\texttt{thesis-final} uvádí
+příloha~\ref{app:doplnujici-materialy}.
 
 
 \subsection{Diagnostika a~úprava instrukcí}
 \label{sec:diagnostika-uprava}
 
-Tato sekce popisuje analytickou část iterace: jak z~naměřených
-hodnot odvodíme příčinu selhání (diagnóza) a~jak z~ní vychází
-konkrétní úprava \texttt{AGENTS.md} (úprava). Vstupem je
+Diagnostika převádí naměřené odchylky na vysvětlení, proč agent
+selhal nebo odbočil od očekávaného postupu. Z~diagnózy potom vychází
+konkrétní úprava \texttt{AGENTS.md}. Vstupem je
 \texttt{FINDINGS.md} z~předchozího běhu
 (sekce~\ref{sec:zaznam-bezhu}), výstupem \texttt{DIAGNOSIS.md},
 upravená \texttt{AGENTS.md} pro příští běh a~záznam v~changelogu.
@@ -787,7 +822,7 @@ každý klade jinou diagnostickou otázku
 \textcite{hassan2025sase}                      & Vyvažuje obsah cíl (briefing), postup (loop) a~omezení (mentor)? \\
 \textcite{razavi2025}, \textcite{breunig2025}  & Proč agent instrukci opakovaně ignoruje a~jak ji přestrukturovat? \\
 \textcite{lulla2026}                           & Které typy obsahu reálně přispívají k~chování?\,$^{*}$ \\
-Filter \textcite{skillsbench2025}              & \textit{Kdyby tento řádek chyběl, udělal by agent neočividnou chybu?} \\
+Filter \textcite{skillsbench2025}              & Kdyby tento řádek chyběl, udělal by agent neočividnou chybu? \\
 \bottomrule
 \end{tabularx}
 
@@ -803,7 +838,8 @@ nebo hraniční hodnoty, dohledají se faktické projevy ve
 transcript), aby bylo možné odlišit jednorázové selhání běhu od
 opakujícího se problému instrukcí. Identifikovaná příčina se
 klasifikuje podle tabulky~\ref{tab:diagnostika-mapa}, která mapuje
-typ příčiny na primární rámec a~typ opravy.
+typ příčiny na primární rámec a~typ opravy. Tabulka sjednocuje zápis
+diagnózy napříč iteracemi.
 
 \begin{table}[htbp]
 \centering
@@ -824,33 +860,18 @@ Redundantní obsah                 & Lulla + filter Li  & Odebrání \\
 \end{table}
 \FloatBarrier
 
-Hranice mezi typy příčin jsou v~praxi neostré a~klasifikace vyžaduje
-úsudek; rámce slouží jako heuristické vodítko, ne algoritmus. Roli
-AI asistence při této analýze popisuje
-sekce~\ref{sec:omezeni-validita}.
-
 \textbf{Úprava.} Na základě diagnózy se upraví \texttt{AGENTS.md}.
-Každá změna odpovídá jednomu identifikovanému problému, je podložena
-citací a~zaznamenaná v~changelogu ve formátu \textit{bylo / je /
-pozorování / diagnóza / literatura}, aby bylo zpětně dohledatelné,
-proč daná úprava vznikla a~co měla opravit. Přestrukturování
-instrukcí má přednost před jejich rozšiřováním: redundantní obsah
-zvyšuje inference cost bez přínosu k~úspěšnosti~\cite{gloaguen2025agentsmd}
-a~fokusované instrukce překonávají vyčerpávající
-dokumentaci~\cite{skillsbench2025}.
+Každá změna odpovídá jednomu identifikovanému problému a~je
+zaznamenaná v~changelogu ve formátu \textit{bylo / je / pozorování /
+diagnóza / odůvodnění}. Záznam umožňuje zpětně dohledat, proč daná
+úprava vznikla a~co měla opravit. Při úpravách má přednost zpřesnění
+nebo přestrukturování existující instrukce před pouhým přidáváním
+dalšího textu.
 
-Iterativní úpravu instrukcí by bylo možné automatizovat přístupy typu
-\textit{automatic prompt optimization} (APO)~\cite{schnabel2024sammo},
-kde smyčka \textit{score~$\to$~synthesize} formálně odpovídá našemu
-cyklu \textit{měření~$\to$~diagnóza~$\to$~úprava}; reprezentanty
-jsou například PromptWizard~\cite{agarwal2024promptwizard} a~Prompt
-Alchemy~\cite{ye2025promptalchemy}. Volíme ruční postup
-s~nástrojem Claude Code jako analytickým asistentem (popis využití
-v~příloze~\ref{app:ai-disclosure}): vícerozměrné hodnocení P/Q/E
-nelze sjednotit do jediné loss funkce, měřítko studie (desítky běhů)
-neodpovídá řádu APO (tisíce evaluací) a~cílem je vysvětlit,
-\textit{proč} instrukce selhává a~\textit{jak} se opravuje, ne jen
-najít kombinaci s~nejvyšším score.
+Úpravy instrukcí se v~této studii neprovádějí automatickou
+optimalizací promptu. Ruční diagnostický postup je zvolen proto, aby
+každá změna měla dohledatelnou vazbu na naměřenou odchylku
+a~konkrétní problém v~chování agenta.
 
 
 %% ==========================================================================
@@ -861,17 +882,17 @@ najít kombinaci s~nejvyšším score.
 \label{sec:prehledova-tabulka}
 
 Tabulka~\ref{tab:metriky-prehled} shrnuje všechny metriky na jednom
-místě. Sběr má dvě podoby: \mmet{det} (sloupec \textit{Nástroj}
-ukazuje konkrétní automatizovaný nástroj) a~\mmet{qual} (sloupec
-\textit{Nástroj} obsahuje LLM-as-judge). Prahové požadavky ve~sloupci
-\textit{Exit kritérium} popisují striktní ideál pro \mgrp{P}
-a~\mgrp{Q}; deskriptivní indikátory bez prahu (celá zdrojová
-skupina E1--E3) mají v~tomto sloupci pomlčku a~slouží jen
+místě. Sběr se liší podle typu metriky. U~\mmet{det} sloupec
+\textit{Nástroj} uvádí konkrétní automatizovaný nástroj, zatímco
+u~\mmet{qual} uvádí LLM-as-judge. Sloupec
+\textit{Exit kritérium} uvádí podmínku úspěchu pro \mgrp{P}
+a~\mgrp{Q}. Deskriptivní indikátory bez prahu, tedy celá zdrojová
+skupina E1--E3, mají v~tomto sloupci pomlčku a~slouží jen
 k~porovnání mezi běhy.
 
 \begin{table}[htbp]
 \centering
-\caption{Sada metrik: kód, měřená vlastnost, nástroj a~exit kritérium}
+\caption{Sada metrik podle kódu, měřené vlastnosti, nástroje a~exit kritéria}
 \label{tab:metriky-prehled}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
@@ -880,11 +901,11 @@ k~porovnání mezi běhy.
 \textbf{Kód} & \textbf{Metrika} & \textbf{Nástroj} & \textbf{Exit kritérium} \\
 \midrule
 \multicolumn{4}{@{}l}{\textit{Procesní (P): jak agent pracuje}} \\[2pt]
-P1 & Issues before code            & git, GitHub API & pass \\
-P2 & Branch per issue              & git, GitHub API & pass \\
-P3 & Test-first commits            & git log         & pass \\
-P4 & PRs linked to issues          & GitHub API      & pass \\
-P5 & No existing test modifications & git diff       & pass \\
+P1 & Issues before code            & git, GitHub API & kontrola projde \\
+P2 & Branch per issue              & git, GitHub API & kontrola projde \\
+P3 & Test-first commits            & git log         & kontrola projde \\
+P4 & PRs linked to issues          & GitHub API      & kontrola projde \\
+P5 & No existing test modifications & git diff       & kontrola projde \\
 P6 & Kvalita commit messages       & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
 P7 & Kvalita issue descriptions    & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
 P8 & Kvalita PR descriptions       & LLM-as-judge (GLM-5) & $\geq$ 2/3 \\
@@ -915,58 +936,49 @@ E3 & Počet kompakcí kontextu & OpenCode DB (\texttt{time\_compacting}) & --- \
 \section{Omezení a~validita}
 \label{sec:omezeni-validita}
 
-Případová studie nese omezení daná zvolenou metodikou. Tato sekce
-pojmenovává předem známé hrozby validity podle case study frameworku
-\textcite{runeson2009}; jejich konkrétní projevy v~datech diskutuje
-sekce~\ref{sec:limity-vysledky}.
+Případová studie nese omezení daná zvolenou metodikou. Jejich dopad
+lze popsat přes konstruktovou, interní a~externí validitu podle case
+study frameworku~\cite{runeson2009}.
 
-\textbf{Konstruktová validita} (měříme to, co chceme měřit?).
-Jednotlivé metriky vychází z~existující teorie: mutation
-testing~\cite{papadakis2019}, cyklomatická složitost~\cite{mccabe1976},
-taxonomie procesních a~produktových metrik~\cite{fenton2014}. Konkrétní
-kombinace metrik do sady a~volba exit kritérií jsou autorské a~představují
-návrh, ne ověřený standard. Pět metrik (\acs{P6}, \acs{P7}, \acs{P8},
-\acs{Q4}, \acs{Q8}) obsahuje subjektivní složku (LLM-as-judge). Tyto
-metriky proto slouží jako podpůrné judge-based indikátory, zatímco
-hlavní opora vyhodnocení stojí na deterministických metrikách
-a~auditovatelných artefaktech. Spolehlivost LLM-as-judge nebyla
-validována proti lidskému hodnocení. U~metriky \acs{Q4} byly
-historické judge běhy uloženy ve~24bodovém formátu; chybějící bod
-AC25 (\textit{custom holiday calendar}) byl dopočítán manuálně.
-Skript \texttt{analyze-run.ts} pro \acs{P1}--\acs{P5} byl ověřen
-srovnáním s~raw daty z~git logu a~GitHub API pro běhy r4 a~r5
-bez zjištěné diskrepance.
+\textbf{Konstruktová validita.}
+Sada metrik je autorskou kombinací procesních, produktových
+a~zdrojových ukazatelů. Nejde o~ověřený standard pro hodnocení
+agentů, ale o~návrh operacionalizovaný pro tuto případovou studii.
+Část metrik (\acs{P6}, \acs{P7}, \acs{P8}, \acs{Q4}, \acs{Q8})
+navíc závisí na LLM-as-judge hodnocení. Tyto metriky zachycují
+vlastnosti, které nelze spolehlivě extrahovat deterministickým
+skriptem, ale jejich spolehlivost nebyla validována proti lidským
+hodnotitelům. Proto jsou interpretovány jako podpůrné judge-based
+indikátory. Hlavní oporu vyhodnocení tvoří deterministické metriky
+a~auditovatelné artefakty.
 
-\textbf{Interní validita} (jsou závěry podložené daty?).
-Hlavní hrozba je nedeterminismus LLM: stejné instrukce mohou při
-různých bězích dát různé výsledky~\cite{razavi2025}. Pilotní běhy
-r1--r5 probíhaly jednorázově, takže jejich role je formativní
-(iterativní návrh instrukcí), ne konfirmační měření efektu. Mitigace
-se uplatňuje až v~ablacích: shoda dvou nezávislých běhů ve~směru
-efektu zvyšuje důvěru, že nejde o~náhodu, byť ani dva běhy
-neposkytují statistickou sílu.
-Další hrozbou je confirmation bias: autor navrhuje instrukce
-i~evaluuje výsledky. Tuto hrozbu oslabují deterministické metriky
-(\acs{P1}, \acs{Q1}--\acs{Q3}, \acs{Q5}--\acs{Q7}), které nepodléhají
-subjektivnímu posouzení, a~volba judge modelu z~jiné rodiny.
-Mitigací je také auditovatelný řetězec rozhodnutí (changelog per
-iterace, korekční poznámky v~\texttt{FINDINGS.md}) a~oddělení
-měřicí infrastruktury od agentova prostředí.
+\textbf{Interní validita.}
+Sílu závěrů omezuje nedeterminismus LLM. Stejné instrukce mohou
+v~různých bězích vést k~odlišnému chování agenta~\cite{razavi2025}.
+Pilotní běhy proto slouží k~postupnému ladění instrukcí, ne
+k~samostatnému dokazování účinku každé jednotlivé změny. Ablační fáze toto omezení
+zmírňuje dvěma nezávislými běhy pro každou variantu, ale ani tak
+neposkytuje statistickou sílu. Závěry z~ablací proto mají
+indikativní povahu. Dalším omezením je role autora při diagnostice
+a~úpravě instrukcí. Riziko jednostranné interpretace snižuje pevný
+diagnostický postup, changelog změn, oddělení měřicí infrastruktury
+od agentova prostředí a~převaha deterministických metrik tam, kde je
+to možné.
 
-\textbf{Externí validita} (lze zobecnit?). Případová studie na jednom
-projektu, jednom modelu a~jednom agentním nástroji neumožňuje
-statistickou generalizaci. \textcite{yin2018} pro tento typ výzkumu
-rozlišuje analytickou generalizaci: z~jednoho případu lze ukázat
-principy, ne statistické zákonitosti. Systém upomínek má
-deterministickou logiku a~výsledky nemusí platit pro projekty
-s~uživatelským rozhraním, strojovým učením nebo nedeterministickými
-výstupy. Další ověřování má proto dvě osy: replikaci na jiných
-modelech, nástrojích a~projektech a~ověření mimo programování, kde
-nemusí existovat deterministická zpětná vazba. Přenositelné jsou
-metriky a~postup, konkrétní naměřené hodnoty a~instrukce platí pro
-tuto studii.
+\textbf{Externí validita.}
+Případová studie na jednom projektu, jednom modelu a~jednom agentním
+nástroji neumožňuje statistickou generalizaci. Ve smyslu analytické
+generalizace~\cite{yin2018} může jeden případ ukázat principy
+postupu, ne obecné zákonitosti pro všechny agenty a~projekty.
+Zvolený projekt má deterministickou doménovou logiku a~nemusí
+reprezentovat úlohy s~uživatelským rozhraním, strojovým učením nebo
+nedeterministickými výstupy. Z~těchto podmínek lze zobecnit hlavně
+způsob práce s~metrikami, tedy jak běh zaznamenat, vyhodnotit
+a~použít výsledky k~úpravě instrukcí. Nelze z~nich odvodit, že stejné
+hodnoty metrik nebo stejné instrukce budou fungovat u~jiného modelu,
+nástroje nebo projektu.
 
-Výzkum nezahrnuje lidské účastníky; data (git log, metriky, session
+Výzkum nezahrnuje lidské účastníky. Data (git log, metriky, session
 transcripts), zdrojový kód i~experimentální artefakty jsou veřejně
 dostupné.
 

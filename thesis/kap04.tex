@@ -28,35 +28,30 @@ jednotlivé části a~měříme dopad.
 \label{sec:konstrukce-instrukci}
 %% ================================================================
 
-Baseline verze \texttt{AGENTS.md} byla konstruována čistě z~literatury.
-Cílem bylo vytvořit výchozí bod jehož každá komponenta má opodstatnění
-v~empirických zjištěních. Literatura společně naznačuje, že výchozí
-\texttt{AGENTS.md} musí spojit tři vrstvy: jasné vymezení úkolu, stručný
-procedurální pracovní postup a~explicitní verifikační kroky kvality. Mao
-et al.~\cite{mao2025fse} poskytují kostru komponent, Li
-et al.~\cite{skillsbench2025} ukazují vyšší účinnost procedurálních
-instrukcí než popisné dokumentace, \textcite{breunig2025}
-motivují převod obecných pravidel na konkrétní akce a~Lulla
-et al.~\cite{lulla2026} varují před přidáváním obsahu bez jasné
-hodnoty. Baseline proto nevznikla jako vyčerpávající manuál, ale jako
-kompaktní soubor instrukcí, jehož sekce se mapují na konkrétní měřené
-dimenze.
+Metodika vymezuje baseline \texttt{AGENTS.md} jako výchozí variantu
+instrukcí pro první pilotní běh. Tato část ukazuje její konkrétní
+podobu. Baseline spojuje tři vrstvy, které vyplynuly z~teoretických
+východisek. Jde o~vymezení úkolu, procedurální pracovní postup
+a~verifikační kroky kvality. Výsledný soubor není vyčerpávající
+manuál k~projektu. Má 53~řádků a~přibližně 350~slov, aby agent dostal
+konkrétní oporu pro práci, ale zároveň nebyl zatížen nadbytečným
+kontextem.
 
-Konstrukce proběhla ve dvou krocích: adaptace sedmi typů komponent
-identifikovaných \textcite{mao2025fse} na konkrétní sekce
-\texttt{AGENTS.md} (Role, Goal, Specification, Environment, Process,
-Package Quality, Constraints) a~mapování tří měřených dimenzí
-(sekce~\ref{sec:sada-metrik}) na obsah těchto sekcí.
+Struktura baseline převádí komponenty instrukcí popsané
+\textcite{mao2025fse} na sedm sekcí. Jsou to Role, Goal,
+Specification, Environment, Process, Package Quality a~Constraints.
+Sekce Specification váže práci agenta na Issue~\#1, acceptance criteria
+a~API kontrakt. Process určuje postup přes GitHub issues, větve,
+testy, implementaci a~pull requesty. Package Quality doplňuje
+požadavky na modularitu, striktní TypeScript, dokumentaci a~čisté
+veřejné API, protože tyto vlastnosti nejsou samy o~sobě vynutitelné
+doménovou specifikací. Constraints zachycují zakázané vzorce práce,
+například slučování více issues do jedné větve, úpravy testů podle
+implementace a~přepis git historie.
 
-Sekce Package Quality byla přidána proto, že udržovatelnost a~design
-nejsou ve specifikaci projektu explicitně vynutitelné, ale v~naší sadě
-metrik je chceme sledovat. Constraints obsahuje zákazy vzorců, které
-jsme ve fázi přípravy považovali za rizikové pro autonomního agenta
-(slučování více issues do jedné větve, modifikace existujících testů,
-přepis git historie). Výsledný dokument má 53~řádků a~$\sim$350~slov;
-tabulka~\ref{tab:mapovani-instrukci} ukazuje mapování jednotlivých
-sekcí na metriky a~obrázek~\ref{fig:baseline-agents} uvádí kompletní
-znění instrukcí.
+Tabulka~\ref{tab:mapovani-instrukci} ukazuje, jak sekce baseline
+odpovídají měřeným vlastnostem. Plné znění výchozího
+\texttt{AGENTS.md} je uvedeno hned za tabulkou.
 
 \begin{table}[htbp]
 \centering
@@ -67,19 +62,20 @@ znění instrukcí.
 \toprule
 \textbf{Cíl} & \textbf{Sekce AGENTS.md} & \textbf{Metriky} \\
 \midrule
-Spec-first             & Specification, Process krok~2 & P1 \\
-Strukturovaný pracovní postup & Process kroky 1--4            & P2, P3, P4 \\
-TDD                    & Process krok~2, Constraints   & P3, P5 \\
-Modulární kód          & Package Quality              & Q5, Q7, Q8 \\
-API kompatibilita      & Specification (API Contract) & Q1 \\
-Funkční korektnost     & Specification (AC)           & Q2, Q4 \\
+Spec-first             & Specification, Process krok~2 & \acs{P1} \\
+Strukturovaný pracovní postup & Process kroky 1--4            & \acs{P2}, \acs{P3}, \acs{P4} \\
+TDD                    & Process krok~2, Constraints   & \acs{P3}, \acs{P5} \\
+Modulární kód          & Package Quality              & \acs{Q5}, \acs{Q7}, \acs{Q8} \\
+API kompatibilita      & Specification (API Contract) & \acs{Q1} \\
+Funkční korektnost     & Specification (AC)           & \acs{Q2}, \acs{Q4} \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
+\clearpage
 \begingroup
 \shorthandoff{-}
-\lstinputlisting[basicstyle=\fontsize{7pt}{8pt}\selectfont\ttfamily,frame=single,rulecolor=\color{gray!50},backgroundcolor=\color{gray!5},xleftmargin=0.8em,xrightmargin=0.8em,framesep=5pt,abovecaptionskip=4pt,aboveskip=8pt,belowskip=8pt,breaklines=true,breakindent=0pt,inputencoding=utf8,extendedchars=true,literate={—}{{---}}1{č}{{\v{c}}}1{š}{{\v{s}}}1{ř}{{\v{r}}}1{ž}{{\v{z}}}1{ý}{{\'{y}}}1{á}{{\'{a}}}1{í}{{\'{i}}}1{é}{{\'{e}}}1{ě}{{\v{e}}}1{ú}{{\'{u}}}1{ů}{{\r{u}}}1{ó}{{\'{o}}}1{ť}{{\v{t}}}1{ď}{{\v{d}}}1{ň}{{\v{n}}}1,caption={Baseline \texttt{AGENTS.md} (pilot-r1): kompletní znění instrukcí použitých jako výchozí bod pilotních iterací.},label={fig:baseline-agents}]{../experiments/runs/pilot-r1/AGENTS.md}
+\lstinputlisting[basicstyle=\fontsize{7pt}{8pt}\selectfont\ttfamily,frame=single,rulecolor=\color{gray!50},backgroundcolor=\color{gray!5},xleftmargin=0.8em,xrightmargin=0.8em,framesep=5pt,abovecaptionskip=4pt,belowcaptionskip=10pt,aboveskip=8pt,belowskip=8pt,breaklines=true,breakindent=0pt,inputencoding=utf8,extendedchars=true,literate={—}{{---}}1{č}{{\v{c}}}1{š}{{\v{s}}}1{ř}{{\v{r}}}1{ž}{{\v{z}}}1{ý}{{\'{y}}}1{á}{{\'{a}}}1{í}{{\'{i}}}1{é}{{\'{e}}}1{ě}{{\v{e}}}1{ú}{{\'{u}}}1{ů}{{\r{u}}}1{ó}{{\'{o}}}1{ť}{{\v{t}}}1{ď}{{\v{d}}}1{ň}{{\v{n}}}1,caption={Baseline \texttt{AGENTS.md} (pilot-r1): kompletní znění instrukcí použitých jako výchozí bod pilotních iterací.},label={fig:baseline-agents}]{../experiments/runs/pilot-r1/AGENTS.md}
 \endgroup
 
 %% ================================================================
@@ -87,14 +83,9 @@ Funkční korektnost     & Specification (AC)           & Q2, Q4 \\
 \label{sec:pilotni-vysledky}
 %% ================================================================
 
-Diagnóza každé iterace stojí na jednom běhu, takže opakující se selhání
-napříč iteracemi mají vyšší výpovědní hodnotu než jednorázová; tuto
-opatrnost atributu doplňuje až ablační fáze dvojicí běhů per variace
-(sekce~\ref{sec:omezeni-validita}). Iterativní cyklus zároveň
-nepředpokládá monotónní zlepšování. Pokud iterace vede k~regresi,
-další iterace vychází z~předchozí úspěšné verze instrukcí, ne
-z~regresní~\cite{peffers2008}. Souhrnný přehled všech běhů obsahuje
-sekce~\ref{sec:souhrnne-vysledky}.
+Pilotní fáze začíná během r1 s~baseline instrukcemi. Další podsekce
+popisují jednotlivé běhy, naměřené hodnoty, diagnózu a~úpravu
+instrukcí pro navazující iteraci.
 
 \subsection{Pilot-r1: baseline}
 \label{sec:pilot-r1}
@@ -123,7 +114,7 @@ P7 & Kvalita issue         & 3/3        & $\geq$ 2/3 & \checkmark \\
 P8 & Kvalita PR            & 2/3        & $\geq$ 2/3 & \checkmark \\
 \midrule
 Q1 & API contract match    & match      & match    & \checkmark \\
-Q2 & Ref.\ test pass rate  & 39/42      & 42/42    & $\times$ \\
+Q2 & Úspěšnost ref.\ testů & 39/42      & 42/42    & $\times$ \\
 Q3 & Mutation score        & 84\,\%     & $\geq$ 80\,\% & \checkmark \\
 Q4 & AC coverage (agentovy testy) & 23/25 & 25/25    & $\times$ \\
 Q5 & Lint warnings         & 2          & 0        & $\times$ \\
@@ -139,7 +130,7 @@ E3 & Počet kompakcí         & 0          & \cna{n/a}   & záznam \\
 \end{table}
 \FloatBarrier
 
-\paragraph{Diagnostika chování.}
+\paragraph{Diagnostika chování}
 
 \begin{table}[H]
 \centering
@@ -163,7 +154,7 @@ E3 & Počet kompakcí         & 0          & \cna{n/a}   & záznam \\
 \end{table}
 \FloatBarrier
 
-\paragraph{Závěry a~intervence pro r2.}
+\paragraph{Závěry a~intervence pro r2}
 Společný pattern napříč \acs{P2}, \acs{P3}, \acs{P5} a~\acs{Q5}/\acs{Q7}:
 instrukce nese \enquote{co} má platit bez konkrétního \enquote{jak} a~bez
 kontroly (viz tabulka). Selhání \acs{Q2} a~\acs{Q4} jsou jiného typu:
@@ -209,7 +200,7 @@ P3       & Test-first commits          & $\times$   & $\times$    & přetrvává
 Q8       & Design quality              & 1/3        & 1/3         & přetrvává \\
 \midrule
 \multicolumn{5}{@{}l}{\textit{Změna proti r1:}} \\
-Q2       & Ref.\ test pass rate        & 39/42      & 32/42       & regrese \\
+Q2       & Úspěšnost ref.\ testů       & 39/42      & 32/42       & regrese \\
 Q3       & Mutation score              & 84\,\%     & 68\,\%      & regrese \\
 P5       & Testy nezměněny             & $\times$   & \checkmark  & zlepšení \\
 Q5       & Lint warnings               & 2          & 1           & zlepšení \\
@@ -223,7 +214,7 @@ E3       & Počet kompakcí              & 0          & 0           & záznam \\
 \end{table}
 \FloatBarrier
 
-\paragraph{Diagnostika chování.}
+\paragraph{Diagnostika chování}
 
 \begin{table}[H]
 \centering
@@ -244,7 +235,7 @@ E3       & Počet kompakcí              & 0          & 0           & záznam \\
 \end{table}
 \FloatBarrier
 
-\paragraph{Závěry a~intervence pro r3.}
+\paragraph{Závěry a~intervence pro r3}
 V~obou procesních pravidlech (\acs{P2}, \acs{P3}) agent příkaz dodržel
 formálně, ne podle záměru: typický pattern u~deklarativních instrukcí
 bez verifikační opory (viz tabulka). Stejný posun se projevil i~na~produktové
@@ -289,7 +280,7 @@ P2 & Branch per issue         & $\times$   & \checkmark  & zlepšení \\
 P3 & Test-first commits       & $\times$   & \checkmark  & zlepšení \\
 P6 & Kvalita commit msg       & 2/3        & 3/3         & zlepšení \\
 P7 & Kvalita issue            & 2/3        & 3/3         & zlepšení \\
-Q2 & Ref.\ test pass rate     & 32/42      & 41/42       & zlepšení \\
+Q2 & Úspěšnost ref.\ testů    & 32/42      & 41/42       & zlepšení \\
 Q3 & Mutation score           & 68\,\%     & 71\,\%      & zlepšení \\
 Q7 & Complexity violations    & 0          & 1 viol.     & regrese \\
 Q8 & Design quality           & 1/3        & 3/3         & zlepšení \\
@@ -302,7 +293,7 @@ E3 & Počet kompakcí            & 0          & 0           & záznam \\
 \end{table}
 \FloatBarrier
 
-\paragraph{Diagnostika chování.}\footnote{V~r3 uvádíme diagnostiku jako prose, protože iterace identifikuje jediný informativní nález; samostatná findings tabulka by duplikovala obklopující text.}
+\paragraph{Diagnostika chování}\footnote{V~r3 uvádíme diagnostiku jako prose, protože iterace identifikuje jediný informativní nález; samostatná findings tabulka by duplikovala obklopující text.}
 Tři změny instrukcí z~r2 zabraly: agent dodržel celý procesní checklist
 (\acs{P1}--\acs{P5}~=~5/5) a~doplnil JSDoc dokumentaci
 (\acs{Q8}~=~3/3). Zbývá jediný nález: agent zvolil vlastní implementaci
@@ -312,12 +303,13 @@ pozastavení, ale selhal při opakovaném (\acs{Q2}~=~41/42). Specifikace
 přitom byla jednoznačná, acceptance criteria vyžadovala zachování
 uplynulého času a~API kontrakt poskytoval explicitní pole.
 
-\paragraph{Závěry a~intervence pro r4.}
+\paragraph{Závěry a~intervence pro r4}
 Tři změny z~r2 ukazují, že přesun deklarativních pravidel do~verifikačního
 kroku funguje. Zbývající nález naznačuje, že explicitní opora v~typech
 sama o~sobě nestačí, pokud agent učiní vlastní implementační rozhodnutí.
-Mírná regrese \acs{Q7} (0$\to$1) je v~pásmu variability mezi běhy,
-neřešíme samostatně. Pro r4 doplňujeme do~pre-PR checklistu příkaz
+Mírná regrese \acs{Q7} (0$\to$1, pod exit kritériem~0) je v~pásmu
+variability mezi běhy; samostatně neřešíme, prioritou r4 je
+\acs{Q2}, k~\acs{Q7} se vracíme v~r5. Pro r4 doplňujeme do~pre-PR checklistu příkaz
 \texttt{npx vitest run}, aby agent před otevřením pull requestu ověřil
 průchod vlastních testů, a~do~Constraints pravidlo, že každé pole
 v~API kontraktu musí být v~implementaci použito~\cite{breunig2025}
@@ -351,7 +343,7 @@ Tabulka~\ref{tab:pilot-r4-delta} ukazuje metriky s~nejvýraznější změnou.
 \midrule
 P2 & Branch per issue        & \checkmark & $\times$    & regrese \\
 P5 & Testy nezměněny         & \checkmark & $\times$    & regrese \\
-Q2 & Ref.\ test pass rate    & 41/42      & 39/42       & regrese \\
+Q2 & Úspěšnost ref.\ testů   & 41/42      & 39/42       & regrese \\
 Q3 & Mutation score           & 71\,\%    & \cna{n/a}        & \cna{n/a} \\
 Q8 & Design quality          & 3/3        & 2/3         & regrese \\
 \midrule
@@ -365,7 +357,7 @@ E3 & Počet kompakcí          & 0          & 0           & záznam \\
 
 \noindent\textit{Poznámka:} \acs{Q3} = n/a: agentovy vlastní testy selhávají (timezone bug ve~\texttt{businessDays}, viz tab.~\ref{tab:pilot-r4-nalezy}); Stryker vyžaduje funkční test suite, mutace nelze odlišit od~baseline. Nejde o~regresi měřené hodnoty.
 
-\paragraph{Diagnostika chování.}
+\paragraph{Diagnostika chování}
 
 \begin{table}[H]
 \centering
@@ -379,14 +371,14 @@ E3 & Počet kompakcí          & 0          & 0           & záznam \\
 \midrule
 \acs{P2}, \acs{P5} & Procesní pravidla porušena (žádné větve per issue, modifikované vlastní testy) & Mezi-běhová variabilita modelu (změna konfigurace v~Docker prostředí + nedeterminismus); intervence r3$\to$r4 cílila \acs{Q2}, ne procesní pravidla \\
 \acs{Q2} & Pole \texttt{pausedElapsed} opět nepoužito; přibyly chyby v~eskalaci v~pracovních dnech a~na~boundary přechodu DUE\_SOON & Pravidlo o~API kontraktu v~Constraints (deklarativní) bez verifikace neúčinné \\
-\acs{Q2} & Mergován kód s~timezone bugem ve~vlastním testu & \texttt{npx vitest run} v~pre-PR checklistu nevynutilo skutečný pass \\
+\acs{Q2} & Mergován kód s~timezone bugem ve~vlastním testu & \texttt{npx vitest run} v~pre-PR checklistu nevynutilo skutečné úspěšné dokončení testů \\
 \acs{Q8} & Pokles design quality (3/3$\to$2/3): JSDoc chybí na~utility functions (\texttt{businessDays.ts}), pause/resume logika nedokumentovaná & Intervence r3$\to$r4 cílila \acs{Q2}, požadavek na~JSDoc z~r3 zůstal deklarativní bez kontroly \\
 \bottomrule
 \end{tabularx}
 \end{table}
 \FloatBarrier
 
-\paragraph{Závěry a~intervence pro r5.}
+\paragraph{Závěry a~intervence pro r5}
 Deklarativní pravidlo v~Constraints nepřineslo zlepšení a~instrukce
 na~této úloze zůstávají citlivé na~variabilitu mezi běhy: mezi r3
 a~r4 se kromě instrukcí změnila i~konfigurace modelu v~Docker prostředí
@@ -433,7 +425,7 @@ P2 & Branch per issue        & \checkmark & $\times$    & regrese \\
 P3 & Test-first commits      & \checkmark & $\times$    & regrese \\
 P4 & PRs linked              & \checkmark & $\times$    & regrese \\
 P8 & Kvalita PR              & 3/3        & 1/3         & regrese \\
-Q2 & Ref.\ test pass rate    & 41/42      & 38/42       & regrese \\
+Q2 & Úspěšnost ref.\ testů   & 41/42      & 38/42       & regrese \\
 Q3 & Mutation score          & 71\,\%     & \cna{n/a}   & \cna{n/a} \\
 Q5 & Lint warnings           & 1          & 0           & zlepšení \\
 Q7 & Complexity violations   & 1 viol.    & 0           & zlepšení \\
@@ -446,9 +438,9 @@ E3 & Počet kompakcí          & 0          & 0           & záznam \\
 \end{table}
 \FloatBarrier
 
-\noindent\textit{Poznámka:} \acs{Q3} = n/a: agentovy vlastní testy selhávají dramaticky (4/29 fail, chyby v~přechodech stavů); Stryker vyžaduje funkční test suite, mutace nelze odlišit od~baseline. Stejný mechanismus jako u~r4 a~Ablace~A-2. Nejde o~regresi měřené hodnoty.
+\noindent\textit{Poznámka:} \acs{Q3} = n/a: agentovy vlastní testy selhávají dramaticky (4/29 selhalo, chyby v~přechodech stavů); Stryker vyžaduje funkční test suite, mutace nelze odlišit od~baseline. Stejný mechanismus jako u~r4 a~Ablace~A-2. Nejde o~regresi měřené hodnoty.
 
-\paragraph{Diagnostika chování.}
+\paragraph{Diagnostika chování}
 
 \begin{table}[H]
 \centering
@@ -467,7 +459,7 @@ E3 & Počet kompakcí          & 0          & 0           & záznam \\
 \end{table}
 \FloatBarrier
 
-\paragraph{Závěr pilotní fáze.}
+\paragraph{Závěr pilotní fáze}
 Srovnání r3, r4 a~r5 ukazuje, že selektivní plnění není náhodné: r3
 celý pracovní postup dodržel (\acs{P1}--\acs{P5}~=~5/5), r4 částečně
 ($\sim$3/5), r5 ignoroval zcela ($\sim$1/5), přitom instrukce se mezi
@@ -520,7 +512,7 @@ bězích částečně překrýval s~pracovním postupem v~Process. Proto testuje
 složky, u~nichž zůstala největší nejistota: verifikační kroky
 v~Process a~sekci Package Quality.
 
-\paragraph{Ablace~A: bez verifikačních kroků.}
+\paragraph{Ablace~A: bez verifikačních kroků}
 Odebíráme explicitní verifikační příkazy
 (\texttt{tsc --noEmit}, \texttt{npx eslint},
 \texttt{git log --oneline -3}), ale ponecháváme pracovní postup
@@ -543,7 +535,7 @@ přečíslováním kroků po odebrání kroku~c~(Verify).}
 instrukce, verifikační kroky jsou redundantní; pokud ne, jde
 o~klíčový mechanismus jejich účinku.
 
-\paragraph{Ablace~B: bez sekce Package Quality.}
+\paragraph{Ablace~B: bez sekce Package Quality}
 Odebíráme celou sekci Package Quality (modulární
 architektura, strict TypeScript, JSDoc dokumentace, čisté veřejné
 API). Process a~Constraints zůstanou beze změny
@@ -591,7 +583,7 @@ P7 & Kvalita issue             & 3/3        & 2/3        & 3/3 \\
 P8 & Kvalita PR                & 3/3        & 3/3        & 1/3 \\
 \midrule
 Q1 & API contract match        & match      & match      & match \\
-Q2 & Ref.\ test pass rate      & 41/42      & 35/42      & 37/42 \\
+Q2 & Úspěšnost ref.\ testů     & 41/42      & 35/42      & 37/42 \\
 Q3 & Mutation score            & 71\,\%     & 62\,\%     & \cna{n/a}$^\dagger$ \\
 Q5 & Lint warnings             & 1          & 4          & 3 \\
 Q6 & Typecheck errors          & 0          & 0          & 0 \\
@@ -611,7 +603,7 @@ $^\dagger$ \acs{Q3} v~A-2 nelze měřit: agentovy vlastní testy selhávají
 Stryker vyžaduje funkční test suite. Bez verifikačních kroků agent
 commitl kód s~nefunkčními testy.
 
-\paragraph{Diagnostika chování.}
+\paragraph{Diagnostika chování}
 Tabulka~\ref{tab:ablace-a} ukazuje pokles napříč metrikami kvality
 kódu (\acs{Q5}, \acs{Q7}) i~funkční korektnosti (\acs{Q2}, \acs{Q3}).
 Bez explicitního příkazu \texttt{npx eslint} agent neprovedl kontrolu
@@ -664,12 +656,12 @@ P7 & Kvalita issue             & 3/3        & 3/3        & 3/3 \\
 P8 & Kvalita PR                & 3/3        & 2/3        & 2/3 \\
 \midrule
 Q1 & API contract match        & match      & match      & match \\
-Q2 & Ref.\ test pass rate      & 41/42      & 37/42      & 11/42 \\
+Q2 & Úspěšnost ref.\ testů     & 41/42      & 37/42      & 11/42 \\
 Q3 & Mutation score            & 71\,\%     & 67\,\%     & 72\,\% \\
 Q5 & Lint warnings             & 1          & 2          & 2 \\
 Q6 & Typecheck errors          & 0          & 0          & 0 \\
 Q7 & Complexity violations     & 1          & 1          & 2 \\
-Q8 & Design quality            & 3/3        & \cna{n/a}$^*$    & 2/3 \\
+Q8 & Design quality            & 3/3        & 2/3        & 2/3 \\
 \midrule
 E1 & Vstup / výstup / $\Sigma$ cache (tis.) & 62/30/4770 & 78/40/6273 & 55/23/3604 \\
 E2 & Trvání                    & 25 min     & 28 min     & 21 min \\
@@ -679,22 +671,27 @@ E3 & Počet kompakcí            & 0          & 0          & 0 \\
 \end{table}
 \FloatBarrier
 
-$^*$ \acs{Q8} v~B-1: judge nedokončil hodnocení (API timeout).
-
-\paragraph{Diagnostika chování.}
+\paragraph{Diagnostika chování}
 Deterministické metriky kvality kódu (\acs{Q5}, \acs{Q6}, \acs{Q7})
 zůstaly na~podobné úrovni jako v~r3 (tabulka~\ref{tab:ablace-b}).
-Agent produkoval modulární kód, striktní TypeScript a~v~B-1 i~JSDoc
-dokumentaci, přestože instrukce tyto požadavky neobsahovaly. Data
-naznačují, že základní kódové konvence jsou u~tohoto modelu řízeny
-převážně znalostmi z~tréninku.
+Agent v~obou bězích udržel striktní TypeScript bez \texttt{any}
+a~JSDoc na hlavním API, přestože instrukce tyto požadavky
+neobsahovaly. Data naznačují, že tyto základní kódové konvence
+(typování, idiomatický styl) jsou u~tohoto modelu řízeny převážně
+znalostmi z~tréninku.
 
-\acs{Q8} zaznamenalo pokles (3/3$\to$2/3) v~B-2; v~B-1 judge nedokončil
-hodnocení (API timeout, ne výsledek běhu). Konkrétní mechanismus
-v~B-2: veškerý kód v~jednom souboru (single-file monolith), date
-utilities smíšeny se~state machine logikou. Bez sekce Package Quality
-se ztrácí oddělení modulů, ale ne kódový styl. Závěr stojí
-na~judge-based metrice bez validace proti lidskému hodnocení.
+\acs{Q8} kleslo z~r3 (3/3) na 2/3 v~obou bězích, ale s~odlišnými
+strukturálními mechanismy. B-1 zachoval 3-modulové oddělení
+(\texttt{business-days.ts}, \texttt{dunning.ts}, \texttt{index.ts}),
+chyběla mu ale dokumentace na utility funkcích. B-2 spadl do
+single-file monolithu s~date utilities zmíchanými se~state machine
+logikou a~JSDoc měl jen na hlavním API. Společným vzorcem napříč
+ablací~B je ztráta JSDoc na utility funkcích, tedy přesně požadavku,
+který sekce Package Quality explicitně formulovala. Modulární
+separace mezi dvěma běhy kolísala, což ukazuje, že tato strukturální
+dimenze je u~tohoto modelu citlivější na nedeterminismus než na
+samotnou ablaci sekce. Závěr stojí na~judge-based metrice bez validace
+proti lidskému hodnocení.
 
 Variabilita mezi B-1 a~B-2 v~\acs{Q2} (37/42 vs.\ 11/42; mutation
 score stabilní 67--72\,\%), v~procesních pravidlech (\acs{P2}:
@@ -744,7 +741,7 @@ P7 issue kvalita        & \cgood{3/3}  & \cgood{2/3}  & \cgood{3/3}  & \cgood{3/
 P8 PR kvalita           & \cgood{2/3}  & \cgood{3/3}  & \cgood{3/3}  & \cgood{3/3}  & \cbad{1/3}  & \cgood{3/3}  & \cbad{1/3}  & \cgood{2/3}  & \cgood{2/3} \\
 \midrule
 Q1 API contract         & \cgood{match} & \cgood{match} & \cgood{match} & \cgood{match} & \cgood{match} & \cgood{match} & \cgood{match} & \cgood{match} & \cgood{match} \\
-Q2 ref.\ testy          & \cbad{39}  & \cbad{32} & \cbad{41} & \cbad{39} & \cbad{38}  & \cbad{35} & \cbad{37} & \cbad{37} & \cbad{11} \\
+Q2 úspěšnost ref.\ testů & \cbad{39}  & \cbad{32} & \cbad{41} & \cbad{39} & \cbad{38}  & \cbad{35} & \cbad{37} & \cbad{37} & \cbad{11} \\
 Q3 mutation score       & \cgood{84\,\%} & \cbad{68\,\%} & \cbad{71\,\%} & \cna{n/a$^*$} & \cna{n/a$^*$} & \cbad{62\,\%} & \cna{n/a$^*$} & \cbad{67\,\%} & \cbad{72\,\%} \\
 Q4 AC coverage          & \cbad{23}  & \cgood{25}  & \cgood{25}  & \cgood{25}  & \cbad{24}  & \cgood{25}  & \cgood{25} & \cgood{25} & \cbad{23} \\
 Q5 lint warnings        & \cbad{2}    & \cbad{1}      & \cbad{1}      & \cbad{1}      & \cgood{0}      & \cbad{4}    & \cbad{3}   & \cbad{2}   & \cbad{2} \\
@@ -765,8 +762,8 @@ $^*$~Stryker nedokončil analýzu — agentovy testy selhávají, mutace nelze o
 Barvy v~procesních a~produktových metrikách odpovídají exit kritériím
 z~tabulky~\ref{tab:metriky-prehled}: zelená znamená splnění,
 červená nesplnění a~šedá neměřitelnou nebo deskriptivní hodnotu.
-Q4 v~uložených judge artefaktech historicky používalo 24bodovou
-rubriku. Ve thesis jsou hodnoty převedeny na 25 AC po manuálním
+Q4 v~uložených judge artefaktech historicky používalo 24bodové
+hodnoticí schéma. Ve thesis jsou hodnoty převedeny na 25 AC po manuálním
 dopočítání AC25 (\textit{custom holiday calendar}).
 \end{table}
 \FloatBarrier

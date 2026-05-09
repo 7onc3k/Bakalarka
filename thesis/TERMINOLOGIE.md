@@ -26,7 +26,7 @@ Kanonické pojmy pro konzistentní psani a pripravu na obhajobu.
 | Produktove metriky (Q1-Q8) | Co agent vyrobil | Q1-Q2 funkcni korektnost, Q3-Q4 kvalita testu, Q5-Q8 kvalita kodu |
 | Metriky efektivity (E1-E3) | E1 = max prompt na kroku + soucet vystupu + soucet cache; E2 = cas; E3 = pocet kompakci kontextu (z OpenCode DB time_compacting) | Resource v Fentonove taxonomii |
 | Zdroje / naklady | Kategorie se jmenuje zdroje; naklady pouzivat pro interpretaci ceny nebo spotreby zdroju | V metodice a prehledech drzet "zdroje" / "spotreba zdroju"; ve vysledcich a zaveru muze byt "naklady", kdyz veta odpovida na "za jakou cenu" |
-| Exit kriteria | Striktni hranice uspechu pro metriky s pass/fail roli | Kotvit per metriku podle povahy: specifikace/reference, standard nebo hodnotici schema; E metriky jsou deskriptivni bez exit prahu |
+| Exit kriteria | Predem stanovene hranice nebo podminky, podle nichz se rozhoduje, zda metrika v danem behu splnila pozadavek | Kotvit per metriku podle povahy: specifikace/reference, standard nebo hodnotici schema; E metriky jsou deskriptivni bez exit prahu |
 | Hodnotici schema | Sada dimenzi a popisu stupnu pro LLM-as-judge hodnoceni | Pri prvnim vyskytu lze uvest anglicky termin `scoring rubric`; NE samotne "rubrika" jako hlavni cesky termin |
 | ~~evaluacni system~~ | NEPOUZIVAME | Prilis vague, konflikt se "sadou metrik" |
 
@@ -41,19 +41,21 @@ Pri dalsich vyskytech ve stejne kapitole staci jen kod.
 Tri ortogonalni osy:
 
 1. **Zpusob mereni** — `deterministicka` (skript, regex, log parsing, staticka analyza) vs `judge-based` (LLM judge, GLM-5)
-2. **Role v hodnoceni** — `exit kriterium` / `pass/fail kriterium` (ma prah uspesnosti) vs `deskriptivni indikator` (zadny prah, hodnotu jen zaznamenavame)
+2. **Role v hodnoceni** — `exit kriterium` (ma hranici uspesnosti) vs `deskriptivni indikator` (zadny prah, hodnotu jen zaznamenavame)
 3. **Kategorie (bucket)** — `procesni (P)` vs `produktove (Q)` vs `zdrojove (E)`
 
 #### Pravidla pouziti
 
-- `deterministicka metrika` = jen zpusob mereni; NIKDY jako synonymum pro "kriterium s pass/fail prahem"
-- `binarni pass/fail kriterium` / `procesni a produktove kriterium s exit prahem` = role v hodnoceni; preferovat per-metric vycet pokud mozno
-- `deskriptivni indikator` = metrika bez exit prahu; v teto praci sem patri **cely E bucket** (E1, E2, E3) — pass/fail soud o behu se opira jen o P + Q
-- judge-based metrika v pass/fail soudu existuje (Q4, Q8 maji prahy) ale je odlisena od deterministickych; nemichat „deterministicka" a „pass/fail" do jednoho slova
+- `deterministicka metrika` = jen zpusob mereni; NIKDY jako synonymum pro "metrika s exit kriteriem"
+- `binarni exit kriterium` / `procesni a produktove kriterium s exit prahem` = role v hodnoceni; preferovat per-metric vycet pokud mozno
+- `splneno` / `nesplneno` = vysledek konkretniho behu vzhledem k exit kriteriu
+- `pass/fail` = jazyk benchmarku, test runneru nebo obecne kritiky jednoduche uspesnostni logiky; v popisu vlastni metricke sady preferovat `exit kriterium` a `splneno/nesplneno`
+- `deskriptivni indikator` = metrika bez exit prahu; v teto praci sem patri **cely E bucket** (E1, E2, E3) — soud o uspesnosti behu se opira jen o P + Q
+- judge-based metrika muze mit exit kriterium (Q4, Q8 maji prahy), ale je odlisena od deterministickych; nemichat „deterministicka" a „exit" do jednoho slova
 
 #### E3 specificky
 
-E3 (pocet kompakci kontextu) je **deskriptivni indikator stability kontextu behem behu**, ne pass/fail kriterium. Cil 0 nema v teto praci roli exit prahu — je to kontextovy fakt, ze kontext zustal celistvy. E bucket je tim deskriptivni (E1, E2, E3 vsechny bez prahu).
+E3 (pocet kompakci kontextu) je **deskriptivni indikator stability kontextu behem behu**, ne exit kriterium. Cil 0 nema v teto praci roli exit prahu — je to kontextovy fakt, ze kontext zustal celistvy. E bucket je tim deskriptivni (E1, E2, E3 vsechny bez prahu).
 
 ## Instrukce a agent
 
@@ -142,7 +144,8 @@ DSR (pristup)          --> CO delame (navrhujeme metriky + postup, evaluujeme)
 | pilotni iterace (pro fazi) | Matouci — iterace je jeden cyklus | pilotni faze |
 | feasibility demonstrace | Hybridni anglicismus | demonstrace proveditelnosti |
 | „demonstrovat" jako sloveso v cili | Vedouci: „jak zmerite, ze bylo demonstrovano?" — neoperacionalizovatelne | „overit proveditelnost" v cilech a zaveru; „demonstruje" jako popis aktu pripustny v abstract |
-| „X z N deterministickych kriterii" | Slovo „deterministickych" je nadbytecne nebo zavadejici (mate zpusob mereni a roli v hodnoceni) | per-metric vycet, nebo „X binarnich pass/fail kriterii" |
-| „kompakce jako kriterium" / „cil E3 = 0" | E3 je deskriptivni indikator stability kontextu behem behu, ne pass/fail kriterium; cil 0 nema v teto praci roli exit prahu | „E3 = 0 potvrzuje, ze kontext zustal celistvy" |
+| „X z N deterministickych kriterii" | Slovo „deterministickych" je nadbytecne nebo zavadejici (mate zpusob mereni a roli v hodnoceni) | per-metric vycet, nebo „X binarnich exit kriterii" |
+| „kompakce jako kriterium" / „cil E3 = 0" | E3 je deskriptivni indikator stability kontextu behem behu, ne exit kriterium; cil 0 nema v teto praci roli exit prahu | „E3 = 0 potvrzuje, ze kontext zustal celistvy" |
 | runtime jako obecny anglicismus | V ceske prose preferuj konkretni vyraz podle kontextu: beh, behove prostredi, trvani behu, stabilita kontextu behem behu | Anglicke runtime nech jen v nazvu/terminu ze zdroje, napr. median runtime |
-| „deterministicka kriteria" jako synonymum pass/fail | Mate zpusob mereni (det vs judge) a roli v hodnoceni (exit vs deskriptivni) | „pass/fail kriteria" / „kriteria s exit prahem" |
+| „deterministicka kriteria" jako synonymum pro exit kriteria | Mate zpusob mereni (det vs judge) a roli v hodnoceni (exit vs deskriptivni) | „exit kriteria" / „kriteria s exit prahem" |
+| harness vs behove prostredi | Dve ruzne vrstvy, ktere se v drivejsi verzi prekryvaly. **Harness** = orchestracni vrstva nastroje (CLI, sprava session, tool calls, transcript) — v praci konkretne OpenCode. **Behove prostredi** = sandbox / izolace, ve kterem agent bezi — v praci konkretne Docker container. Neglosuj harness jako „behove prostredi". | kap02 sec:agent: harness = orchestracni vrstva / rozhrani mezi modelem a prostredim; kap03 sec:experimentalni-nastaveni: „Behove prostredi (Docker container)" vs „Harness OpenCode" jako oddelene polozky |

@@ -99,7 +99,7 @@ netestuje, test-driven development není rozšířený ani v~komunitě,
 která se k~němu hlásí, a~čas skutečně strávený testováním je výrazně
 nižší než ten, který si vývojáři sami přisuzují.
 
-\paragraph{Issue-driven vývoj a~větvení.}
+\paragraph{Issue-driven vývoj a~větvení}
 Změna v~projektu obvykle začíná \textit{issue}, tedy záznamem
 v~issue trackeru, který popisuje, co je třeba udělat a~jak poznat,
 že je úkol hotov. Issue plní dvě role současně: dává implementaci
@@ -115,7 +115,7 @@ implementace zapisuje. Práce na jedné změně tak zůstává izolovaná
 od ostatních, paralelní vývoj se vzájemně neruší a~code review
 může posuzovat rozsah změny ohraničeně.
 
-\paragraph{Malé commity a~konvence commitů.}
+\paragraph{Malé commity a~konvence commitů}
 Malé commity, kde každá změna odpovídá jednomu logickému
 kroku, usnadňují zpětnou analýzu chyb i~code
 review~\cite{humble2010}. Kromě malých a~častých commitů se v~praxi rozšířila
@@ -126,7 +126,7 @@ Malé commity a~konzistentní formát se ukazují jako nutná podmínka toho,
 aby commity nesly užitečnou informaci pro lidského i~automatizovaného
 čtenáře.
 
-\paragraph{Test-driven development a~stabilita testů.}
+\paragraph{Test-driven development a~stabilita testů}
 Testování v~průběhu implementace může mít různé pořadí, a~zvolené
 pořadí mění roli, kterou test ve vývoji hraje. \textit{Test-driven
 development} obrací nejběžnější \textit{test-after} pořadí: nejprve
@@ -140,7 +140,7 @@ Meta-analýza 27~studií ukazuje, že TDD má pozitivní efekt na
 kvalitu kódu měřenou hustotou defektů, přičemž efekt je výraznější
 v~průmyslových projektech než v~akademických experimentech~\cite{rafique2013}.
 
-\paragraph{Code review a~traceability pull requestů.}
+\paragraph{Code review a~traceability pull requestů}
 Začleňování změn do hlavního kódu strukturuje code review, dnes ve
 své \textit{modern code review} podobě integrované do pull
 requestů~\cite{bacchelli2013}. Kontrola probíhá průběžně nad menšími
@@ -190,7 +190,7 @@ statickou analýzou. Obě deterministické vrstvy doplňuje lidské peer
 review pro aspekty, které pravidly nelze vyjádřit. Následující
 odstavce postupně popisují, jak se každá z~těchto vrstev používá.
 
-\paragraph{Funkční vhodnost: testování.}
+\paragraph{Funkční vhodnost: testování}
 Funkční vhodnost se zajišťuje testováním, tedy systematickou
 kontrolou chování implementace vůči očekávání. Testovací přístupy se
 podle toho, na čem staví, dělí na dva základní typy: \textit{black-box}
@@ -223,7 +223,7 @@ simulují běžné programátorské chyby. Poté sleduje, kolik z~nich testy
 odhalí~\cite{papadakis2019}. Vysoký podíl zachycených mutantů indikuje,
 že testy skutečně ověřují chování, ne jen pokrývají kód.
 
-\paragraph{Udržovatelnost: statická analýza.}
+\paragraph{Udržovatelnost: statická analýza}
 Udržovatelnost se na rozdíl od funkční vhodnosti neprojevuje za
 běhu, ale ve vlastnostech zdrojového kódu, takže její část lze
 hodnotit i~bez spuštění programu.
@@ -253,7 +253,7 @@ návrhových rozhodnutí přesahují možnosti čistě deterministických
 nástrojů~\cite{mcconnell2004}, protože vyžadují posouzení záměru,
 kontextu a~srozumitelnosti z~pohledu jiného vývojáře.
 
-\paragraph{Peer review mimo deterministickou kontrolu.}
+\paragraph{Peer review mimo deterministickou kontrolu}
 K~aspektům, které deterministické nástroje nezachytí, slouží lidská
 kontrola kódu prováděná peer reviewerem. Jiný vývojář než autor čte
 navrhovanou změnu, typicky v~podobě komentářů u~pull requestu, a~posuzuje
@@ -277,7 +277,7 @@ prostředků~\cite{fenton2014}. Tato dimenze je samostatná v~tom
 smyslu, že ani z~hotového produktu, ani ze záznamu procesu nelze
 přímo odvodit, kolik úsilí a~času vznik stál.
 
-\paragraph{Tradiční nepřímé ukazatele a~jejich limity.}
+\paragraph{Tradiční nepřímé ukazatele a~jejich limity}
 V~tradičním softwarovém inženýrství se zdroje často měří přes nepřímé
 kvantitativní ukazatele. Modely odhadu pracnosti jako
 COCOMO~\cite{boehm1981cocomo} a~jeho aktualizace
@@ -294,7 +294,7 @@ vícerozměrný jev (čas, úsilí, kvalita výstupu, dopad na tým) na
 jedinou osu, a~samy o~sobě nezachytí, zda je vývoj efektivní v~širším
 slova smyslu.
 
-\paragraph{Víceosé měření a~přechod ke zdrojům agentů.}
+\paragraph{Víceosé měření a~přechod ke zdrojům agentů}
 Reakcí na tato omezení jsou rámce DORA~\cite{forsgren2018}
 a~navazující SPACE~\cite{forsgren2021space}, které explicitně varují
 před redukcí výkonnosti na jedinou metriku a~místo toho pracují
@@ -337,7 +337,8 @@ prostřednictvím tzv.~\textit{tool calls}~\cite{schick2023toolformer}
 a~na základě pozorovaného výsledku rozhoduje o~dalším kroku v~cyklu
 Thought~$\to$~Action~$\to$~Observation~\cite{yao2022react}. Vrstvu,
 která tool calls zprostředkovává a~spravuje stav session, tvoří
-\textit{harness}, tedy běhové prostředí poskytované nástrojem.
+\textit{harness} — orchestrační vrstva tvořící rozhraní mezi modelem
+a~prostředím.
 Harness agentovi zpravidla nabízí minimálně čtení souboru, zápis souboru
 a~spuštění shell příkazu. Přes tyto nástroje může v~repozitáři spouštět
 testy, používat verzovací systém i~volat externí API. Tyto akce po sobě
@@ -458,7 +459,7 @@ současně.
 Návrh takového rámce a~jeho operacionalizaci v~kontextu této
 práce popisuje kapitola~\ref{kap:metodika}.
 
-\paragraph{LLM-as-judge.}
+\paragraph{LLM-as-judge}
 Některé dimenze kvality, jako srozumitelnost commit zpráv, kvalita
 dokumentace nebo vhodnost návrhových vzorů, nelze spolehlivě hodnotit
 deterministickými nástroji. Jedním z~přístupů je využití LLM jako
@@ -477,7 +478,7 @@ dosahuje lepší shody s~lidským hodnocením než jednotlivý model.
 Praktickou implikací je volba hodnotícího modelu z~odlišné modelové
 rodiny, než ve které pracuje hodnocený agent.
 
-\paragraph{Test oracle problem.}
+\paragraph{Test oracle problem}
 \textit{Test oracle problem} je klasická obtíž testování: kdo
 nebo co určuje správný výsledek, proti kterému se test porovnává?
 U~autonomního agenta se zostřuje tím, že agent generuje
@@ -523,7 +524,7 @@ a~kontext čerpá z~meetingů, code review a~zkušenosti. V~\textit{SE4A}
 (\textit{Software Engineering for Agents}) je vývojářem autonomní
 systém, který pracuje výhradně s~tím, co dostane jako vstup.
 
-\paragraph{Scaffolding a~soubory s~instrukcemi.}
+\paragraph{Scaffolding a~soubory s~instrukcemi}
 \textit{Scaffolding} označuje strukturované artefakty v~prostředí
 agenta, které jeho chování řídí. V~praxi jde nejčastěji
 o~soubory s~instrukcemi umístěné v~repozitáři
@@ -535,7 +536,7 @@ jednorázových promptů jsou tyto soubory verzované a~iterativně
 upravované, což z~nich činí \enquote{living documents}, jejichž vývoj
 lze zpětně sledovat.
 
-\paragraph{Komponenty instrukcí.}
+\paragraph{Komponenty instrukcí}
 \textcite{mao2025fse} analyzovali 2\,163 produkčních
 prompt šablon a~identifikovali sedm typů komponent: Role,
 Directive, Context, Workflow, Output, Constraints a~Examples.
@@ -545,7 +546,7 @@ komponentou pro složité úkoly. Toto zjištění potvrzuje
 \textcite{skillsbench2025}, kteří ukazují, že procedurální
 instrukce jsou efektivnější než popisná dokumentace.
 
-\paragraph{Empirie účinnosti.}
+\paragraph{Empirie účinnosti}
 Dostupná evidence o~účinnosti instrukčních souborů je smíšená
 a~závisí na tom, co se měří a~jaký je obsah souboru. V~efektivitě
 běhu \textcite{lulla2026} pozorují, že přítomnost
@@ -560,7 +561,7 @@ efekt~\cite{skillsbench2025}. Rozhodující je tedy obsah, struktura
 a~relevance, ne pouhá přítomnost souboru. Účinnost jednotlivých
 typů obsahu přitom dosud nebyla izolována.
 
-\paragraph{Specificita a~citlivost.}
+\paragraph{Specificita a~citlivost}
 Instrukce musí být dostatečně konkrétní, ale ne nutně co nejdelší.
 \textcite{kim2025detail} v~benchmarku DETAIL a~\textcite{zi2025specificity}
 na úlohách s~kódem shodně ukazují, že vyšší
@@ -575,7 +576,7 @@ na to navazují praktickým doporučením: když agent pravidlo ignoruje,
 nepomůže ho zopakovat, je třeba ho přeformulovat tak, aby se stalo
 součástí pracovního postupu.
 
-\paragraph{Mechanismy účinku.}
+\paragraph{Mechanismy účinku}
 Výzkum promptingu navíc naznačuje, že instrukce nepůsobí na chování
 modelu jedním mechanismem. \textcite{wei2022cot} ukazují, že
 i~krátká nápověda (``think step by step'') aktivuje reasoning, který

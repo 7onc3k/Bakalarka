@@ -14,25 +14,30 @@ Routování: #63 otevření, #64 kap02, #65 kap03, #66 kap04, #62 závěrečná 
 
 ## Cross-cutting task items
 
-- [ ] `C-opener-signposts` **Šablonové openery sekcí/kapitol**
+- [x] `C-opener-signposts` **Šablonové openery sekcí/kapitol**
   - Problém: opakovaný vzor „Předchozí sekce/kapitola popsala... Tato sekce/kapitola... Následující sekce...“ působí mechanicky, pokud nenese skutečnou navigační funkci.
   - Postup: neprovádět globální rewrite naslepo. U každého openeru nejdřív určit, zda má navigační funkci, nebo jen vycpává začátek.
-- [ ] `C-opener-kap03` **kap03 opener**
+  - Kontrola: mechanické openery byly řešeny lokálně v kap03, kap04 a kap05; ponechané navigační věty mají konkrétní orientační funkci.
+- [x] `C-opener-kap03` **kap03 opener**
   - Místo: `thesis/kap03.tex` opener kapitoly 3.
   - Úkol: zkontrolovat, zda úvod metodiky nemá jen strukturální hlášení „Předchozí kapitoly... Tato kapitola... Sekce...“.
+  - Kontrola: kap03 nezačíná šablonovým signpostem, ale přímo odvozuje metodické požadavky ze tří cílů práce.
 - [x] `C-opener-kap03-33` **kap03 sekce 3.3**
   - Místo: `thesis/kap03.tex` sekce 3.3.
   - Úkol: přepsat „Tato sekce popisuje...“ na věcný vstup do procedury jedné iterace, pokud navigační věta jen opakuje nadpis.
   - Kontrola: opener sekce `Procedura jedné iterace` přepsán z navigační věty na věcnou definici iterace jako jednotky sběru dat.
-- [ ] `C-opener-kap03-diagnostika` **kap03 diagnostika a úprava instrukcí**
+- [x] `C-opener-kap03-diagnostika` **kap03 diagnostika a úprava instrukcí**
   - Místo: `thesis/kap03.tex` diagnostika a úprava instrukcí.
   - Úkol: zkontrolovat opener „Tato sekce popisuje analytickou část iterace“ a případně ho nahradit definicí role diagnostiky v metodice.
-- [ ] `C-opener-kap03-validita` **kap03 omezení a validita**
+  - Řešení: opener nahrazen věcnou definicí role diagnostiky jako převodu naměřených odchylek na vysvětlení a úpravu `AGENTS.md`.
+- [x] `C-opener-kap03-validita` **kap03 omezení a validita**
   - Místo: `thesis/kap03.tex` omezení a validita.
   - Úkol: nechat věcnou větu o omezeních případové studie, ale zvážit přepis „Tato sekce pojmenovává...“.
-- [ ] `C-opener-kap05` **kap05 opener**
+  - Řešení: opener ponechává informaci o omezeních případové studie, ale odstraňuje mechanické „Tato sekce pojmenovává...“.
+- [x] `C-opener-kap05` **kap05 opener**
   - Místo: `thesis/kap05.tex` opener kapitoly 5.
   - Úkol: zkontrolovat, zda kapitola vyhodnocení nezačíná mechanicky „Předchozí kapitola popsala... Tato kapitola...“ místo přímé interpretace výsledků.
+  - Řešení: opener kapitoly 5 přepsán na přímé sdělení výsledkové interpretace bez mechanického signpostu a bez výčtu sekcí.
 
 ## Checklist
 
@@ -338,95 +343,127 @@ Routování: #63 otevření, #64 kap02, #65 kap03, #66 kap04, #62 závěrečná 
   - Kontrola: role judge-based metrik je nově uvedena v centrálním LLM-as-judge protokolu před jednotlivými metrikami; jednotlivé metriky už judge znovu nevysvětlují.
 
 ## str. 32 — Fixní proměnné
-- [ ] `p32-01` (#65) **HL:** Tato sekce navazuje operačním detailem: jaké proměnné držíme fixní mezi běhy (sekce 3.3.1), jak jeden běh zaznamenáváme a vyhodnocujeme (sekce 3.3.2) a jakou procedurou diagnostikujeme a upravujeme instrukce (sekce 3.3.3).
+- [x] `p32-01` (#65) **HL:** Tato sekce navazuje operačním detailem: jaké proměnné držíme fixní mezi běhy (sekce 3.3.1), jak jeden běh zaznamenáváme a vyhodnocujeme (sekce 3.3.2) a jakou procedurou diagnostikujeme a upravujeme instrukce (sekce 3.3.3).
   - Vedoucí: AI formát
+  - Kontrola: původní šablonový opener už v textu není; sekce je nyní uvedena věcným popisem procedury jedné iterace.
 
 ## str. 33 — Diagnostika a úprava instrukcí
-- [ ] `p33-01` (#65) **HL:** exportuje session new-run.ts do ( transcript.json
+- [x] `p33-01` (#65) **HL:** exportuje session new-run.ts do ( transcript.json
   - Vedoucí: Možná by bylo někde dobré také uvést obecnou strukturu projektu před tím než se začne uvádět více souborů než build.md a agents.md
+  - Řešení: před konkrétní skripty v sekci záznamu běhu doplněn krátký ASCII strom rozlišující `experiments/infra`, `experiments/runs` a `experiments/reference`; přímé odkazy zůstávají centralizované v příloze.
 
 ## str. 34
-- [ ] `p34-01` (#65) **HL:** Kdyby tento řádek chyběl, udělal by agent neočividnou chybu?
+- [x] `p34-01` (#65) **HL:** Kdyby tento řádek chyběl, udělal by agent neočividnou chybu?
   - Vedoucí: Proč je to kurzívou?
-- [ ] `p34-02` (#65) **HL:** Hranice mezi typy příčin jsou v praxi neostré a klasifikace vyžaduje úsudek; rámce slouží jako heuristické vodítko, ne algoritmus. Roli AI asistence při této analýze popisuje sekce 3.5.
+  - Řešení: kurzíva z diagnostické otázky odstraněna.
+- [x] `p34-02` (#65) **HL:** Hranice mezi typy příčin jsou v praxi neostré a klasifikace vyžaduje úsudek; rámce slouží jako heuristické vodítko, ne algoritmus. Roli AI asistence při této analýze popisuje sekce 3.5.
   - Vedoucí: Tohle je úplně mimo, tento popis máte přeci už nahoře. Všechny tyto informace by měly být jasně řečeny na začátku metodiky.
-- [ ] `p34-03` (#65) **HL:** Přestrukturování instrukcí má přednost před jejich rozšiřováním: redundantní obsah zvyšuje inference cost bez přínosu k úspěšnosti (Gloaguen et al., 2026) a fokusované instrukce překonávají vyčerpávající dokumentaci (X. Li et al., 2026).
+  - Řešení: defenzivní odstavec odstraněn; užitečné jádro nahrazeno neutrální větou, že tabulka sjednocuje zápis diagnózy napříč iteracemi.
+- [x] `p34-03` (#65) **HL:** Přestrukturování instrukcí má přednost před jejich rozšiřováním: redundantní obsah zvyšuje inference cost bez přínosu k úspěšnosti (Gloaguen et al., 2026) a fokusované instrukce překonávají vyčerpávající dokumentaci (X. Li et al., 2026).
   - Vedoucí: Tady už jsou zdroje zbytečné ne? Pokud to je teoretický základ, tak to mělo být popsáno v teorii. Zde už jen ukážete co jste udělal a na to není potřeba se odkazovat na cizí práci
+  - Řešení: odstavec Úprava přepsán jako procedura bez opakovaných teoretických citací; changelog používá obecnější položku odůvodnění.
 
 ## str. 35 — Omezení a validita
-- [ ] `p35-01` (#65) **HL:** KAPITOLA 3. METODIKA optimization (APO) (Schnabel & Neville, 2024), kde smyčka score synthesize formálně → odpovídá našemu cyklu měření diagnóza úprava; reprezentanty jsou například PromptWi- → → zard (Agarwal et al., 2024) a Prompt Alchemy (Ye et al., 2025...
+- [x] `p35-01` (#65) **HL:** KAPITOLA 3. METODIKA optimization (APO) (Schnabel & Neville, 2024), kde smyčka score synthesize formálně → odpovídá našemu cyklu měření diagnóza úprava; reprezentanty jsou například PromptWi- → → zard (Agarwal et al., 2024) a Prompt Alchemy (Ye et al., 2025...
   - Vedoucí: Tady mám pocit, že trochu pletete výsledek s metodikou. Resp. předpokládáte určitý výsledek. Zkuste si texty v této kapitole projít a popsat je skutečně bez informace o výsledku. Tedy ne že přepokládáte něco, ale řeknete varianty, které můžete udělat a podle XY se rozhodnete.
-- [ ] `p35-02` (#65) **HL:** Tabulka 3.10:
+  - Řešení: APO exkurz v metodice zkrácen na metodické vymezení ruční diagnózy; plnější motiv automatizace zůstává v diskusi budoucí práce v kapitole 5.
+- [x] `p35-02` (#65) **HL:** Tabulka 3.10:
   - Vedoucí: Až teď to vidím, je zvykem, že všechny tabulky mají jednotné číáslování a ne s odkazem na kapitolu
+  - Řešení: tabulky přepnuty na průběžné číslování v celé práci pomocí `\counterwithout{table}{chapter}` v `thesis/makra.tex`; build ověřil číslování tabulek 1--24.
 - [x] `p35-03` (#65) **HL:** operační prahy
   - Vedoucí: Zpětně se také dívám a nejsem si jistý jestli operační prahy je zvoleno jako správný název pro to. Z čeho vycházíte?
   - Kontrola: podle rozhodnutí v #54 termín „operační prahy“ zaniká jako metodologická vrstva; z `kap03` byl odstraněn, tabulky drží striktní exit kritéria a navazující grafy v kap. 5 jsou přepočtené bez starých prahů.
-- [ ] `p35-04` (#65) **HL:** 3.1.3. Způsob sběru odpovídá rozlišení deterministické metriky, kvalitativní metriky a záznamové metriky zavedenému v kapitole 2.
+- [x] `p35-04` (#65) **HL:** 3.1.3. Způsob sběru odpovídá rozlišení deterministické metriky, kvalitativní metriky a záznamové metriky zavedenému v kapitole 2.
   - Vedoucí: Stále odkazuje skrz naskrz práci
+  - Kontrola: původní věta už v aktuální metodice není; přehledová tabulka nyní vysvětluje způsob sběru lokálně bez odkazu na starou sekci 3.1.3 ani kapitolu 2.
 
 ## str. 36
-- [ ] `p36-01` (#65) **HL:** hrozby validity,
+- [x] `p36-01` (#65) **HL:** hrozby validity,
   - Vedoucí: Validita nikomu nehrozí, to používáte špatně
-- [ ] `p36-02` (#65) **HL:** známe
+  - Řešení: formulace změněna na „omezení validity“.
+- [x] `p36-02` (#65) **HL:** známe
   - Vedoucí: nepoužívat první osobu
-- [ ] `p36-03` (#65) **HL:** Jak se tyto hrozby skutečně projevily v naměřených datech, diskutuje sekce 5.3.
+  - Řešení: sekce přepsána bez první osoby.
+- [x] `p36-03` (#65) **HL:** Jak se tyto hrozby skutečně projevily v naměřených datech, diskutuje sekce 5.3.
   - Vedoucí: Další odkazy
-- [ ] `p36-04` (#65) **HL:** (měříme to, co chceme měřit?).
+  - Řešení: forward odkaz na kapitolu 5 odstraněn; sekce 3.5 nyní stojí samostatně jako metodické omezení.
+- [x] `p36-04` (#65) **HL:** (měříme to, co chceme měřit?).
   - Vedoucí: I když chápu proč to tady je, tak to patří dovnitř textu, který je zatím.
-- [ ] `p36-05` (#65) **HL:** (Papadakis et al., 2019), cyklomatická složitost (McCabe, 1976), taxonomie procesních a produktových metrik (Fenton & Bieman, 2014)
+  - Řešení: závorková otázka odstraněna; konstruktová validita je vysvětlena souvislým textem.
+- [x] `p36-05` (#65) **HL:** (Papadakis et al., 2019), cyklomatická složitost (McCabe, 1976), taxonomie procesních a produktových metrik (Fenton & Bieman, 2014)
   - Vedoucí: Myslím, že ty zdroje jste už uváděl ne?
-- [ ] `p36-06` (#65) **HL:** Jednotlivé metriky vychází z existující teorie: mutation testing (Papadakis et al., 2019), cyklomatická složitost (McCabe, 1976), taxonomie procesních a produktových metrik (Fenton & Bieman, 2014). Konkrétní kombinace metrik do sady a volba exit kritérií js...
+  - Řešení: opakované citace metrik z validační sekce odstraněny.
+- [x] `p36-06` (#65) **HL:** Jednotlivé metriky vychází z existující teorie: mutation testing (Papadakis et al., 2019), cyklomatická složitost (McCabe, 1976), taxonomie procesních a produktových metrik (Fenton & Bieman, 2014). Konkrétní kombinace metrik do sady a volba exit kritérií js...
   - Vedoucí: Tady jen popisujete ty metriky? To je zbytečné
-- [ ] `p36-07` (#65) **HL:** U metriky Q4 byly historicky uložené judge běhy exportovány ve 24bodovém formátu; chybějící bod AC25 (custom holiday calendar) byl při finalizaci práce dopočítán manuálně.
+  - Řešení: přepis 3.5 odstranil zbytečný popis metrik a ponechal jen metodická omezení sady.
+- [x] `p36-07` (#65) **HL:** U metriky Q4 byly historicky uložené judge běhy exportovány ve 24bodovém formátu; chybějící bod AC25 (custom holiday calendar) byl při finalizaci práce dopočítán manuálně.
   - Vedoucí: Tohle by stálo za výrazně větší komentář než je to takto říci
-- [ ] `p36-08` (#65) **HL:** Konstruktová validita (měříme to, co chceme měřit?). Jednotlivé metriky vychází z existující teorie: mutation testing (Papadakis et al., 2019), cyklomatická složitost (McCabe, 1976), taxonomie procesních a produktových metrik (Fenton & Bieman, 2014). Konkré...
+  - Řešení: detail Q4/AC25 odstraněn z metodické validity; konkrétní korekce zůstává u výsledkové souhrnné tabulky v kapitole 4.
+- [x] `p36-08` (#65) **HL:** Konstruktová validita (měříme to, co chceme měřit?). Jednotlivé metriky vychází z existující teorie: mutation testing (Papadakis et al., 2019), cyklomatická složitost (McCabe, 1976), taxonomie procesních a produktových metrik (Fenton & Bieman, 2014). Konkré...
   - Vedoucí: Hlavně tady zase mluvíte o výsledcích, které ještě nejsou známé...
-- [ ] `p36-09` (#65) **HL:** (jsou závěry podložené daty?).
+  - Řešení: konstruktová validita přepsána bez výsledkových detailů a bez opakovaných citací metrik.
+- [x] `p36-09` (#65) **HL:** (jsou závěry podložené daty?).
   - Vedoucí: Jak jsem psal výše, toto sem nepatří
-- [ ] `p36-10` (#65) **HL:** Externí validita (lze zobecnit?). Případová studie na jednom projektu, jednom modelu a jednom agentním nástroji neumožňuje statistickou generalizaci. Yin (R. K. Yin, 2018) pro tento typ výzkumu rozlišuje analytickou generalizaci: z jednoho případu lze ukáza...
+  - Řešení: závorková otázka odstraněna; interní validita je vysvětlena souvislým textem.
+- [x] `p36-10` (#65) **HL:** Externí validita (lze zobecnit?). Případová studie na jednom projektu, jednom modelu a jednom agentním nástroji neumožňuje statistickou generalizaci. Yin (R. K. Yin, 2018) pro tento typ výzkumu rozlišuje analytickou generalizaci: z jednoho případu lze ukáza...
   - Vedoucí: Lze toto ještě také popsat svými slovy -> tedy něco jako. Na základě toho a toho můžeme říct, že nelze/lze a do jaké míry výzkum zobecnit?
+  - Řešení: externí validita doplněna vlastní formulací, co lze zobecnit (postup práce s metrikami) a co nelze (konkrétní hodnoty a instrukce pro jiné modely/projekty).
 
 ## str. 37 — Systém upomínek faktur
-- [ ] `p37-01` (#65) **HL:** Specifikace systému upomínek faktur tvoří fixní zadání, které agent dostává v Issue #1.
+- [x] `p37-01` (#65) **HL:** Specifikace systému upomínek faktur tvoří fixní zadání, které agent dostává v Issue #1.
   - Vedoucí: Lze se na něj někde podívat?
-- [ ] `p37-02` (#65) **HL:** API Contract (co musí implementace exportovat). API kontrakt je současně jediným technickým omezením implementace a vstupem pro metriku Q1 (API contract match).
+  - Řešení: u prvního zavedení specifikace doplněn odkaz na doplňující materiály v příloze; přímé GitHub odkazy zůstávají centralizované v příloze, aby se neduplikovaly v metodice.
+- [x] `p37-02` (#65) **HL:** API Contract (co musí implementace exportovat). API kontrakt je současně jediným technickým omezením implementace a vstupem pro metriku Q1 (API contract match).
   - Vedoucí: Vlastně si myslím, že toto mělo být popsáno dříve.
+  - Kontrola: API kontrakt je v aktuální metodice zaveden už při popisu specifikace projektu a samostatně rozepsán v sekci výběru projektu před metrikami; pozdější Q1 na něj jen navazuje.
 
 ## str. 39 — Konstrukce baseline instrukcí
-- [ ] `p39-01` (#66) **HL:** pauzu, ale selhává při opakovaném pause/resume, protože druhá pauza ztratí historii první. Za druhé, všechny timeouty se počítají v pracovních dnech, takže od pátku není čtrnáct +14 bd kalendářních dnů a hranice mezi víkendem a pondělím jsou off-by-one zóna...
+- [x] `p39-01` (#66) **HL:** pauzu, ale selhává při opakovaném pause/resume, protože druhá pauza ztratí historii první. Za druhé, všechny timeouty se počítají v pracovních dnech, takže od pátku není čtrnáct +14 bd kalendářních dnů a hranice mezi víkendem a pondělím jsou off-by-one zóna...
   - Vedoucí: Vlastně si myslím, že toto je spíše metodika ne?
+  - Řešení: popis implicitních doménových pravidel je v aktuální verzi přesunut do metodiky k výběru projektu a API kontraktu; odstavec byl stylisticky zjednodušen bez dvojteček a středníku.
 
 ## str. 40
-- [ ] `p40-01` (#66) **HL:** Toto mapování zakládá metodologickou otázku: pokud sekce instrukcí sledují měřené dimenze, hrozí, že metriky budou měřit shodu instrukce s vlastním zápisem, ne kvalitu výstupu. Procesní metriky P1–P5 skutečně měří dodržení postupu, který instrukce předepisu...
+- [x] `p40-01` (#66) **HL:** Toto mapování zakládá metodologickou otázku: pokud sekce instrukcí sledují měřené dimenze, hrozí, že metriky budou měřit shodu instrukce s vlastním zápisem, ne kvalitu výstupu. Procesní metriky P1–P5 skutečně měří dodržení postupu, který instrukce předepisu...
   - Vedoucí: Tady už žádné otázky nezakládejte.
-- [ ] `p40-02` (#66) **HL:** Konstrukce proběhla ve dvou krocích: návrh struktury podle pořadí komponent popsaných Mao et al. (Mao et al., 2025) a mapování tří dimenzí chování (sekce 3.2) na konkrétní instrukce. Výsledné sekce (Role, Goal, Specification, Environment, Process, Package Q...
+  - Řešení: původní formulace otevírající metodologickou otázku byla odstraněna; metodika nově jen ukotvuje baseline jako výchozí variantu instrukcí a praktická část ukazuje konkrétní realizaci.
+- [x] `p40-02` (#66) **HL:** Konstrukce proběhla ve dvou krocích: návrh struktury podle pořadí komponent popsaných Mao et al. (Mao et al., 2025) a mapování tří dimenzí chování (sekce 3.2) na konkrétní instrukce. Výsledné sekce (Role, Goal, Specification, Environment, Process, Package Q...
   - Vedoucí: Tohle by si zasloužilo konkrétnost a vizuál zřejmě
-- [ ] `p40-03` (#66) **HL:** Procesní sekce obsahuje stručné instrukce pro spec-first TDD (Mathews & Nagappan, 2024), dekompozici do sub-issues, branch-per-issue a conventional commits. Sekce Package Quality vymezuje očekávání na modularitu, striktní typování, dokumentaci a čisté veřej...
+  - Řešení: část konstrukce baseline přepsána konkrétně podle sekcí `AGENTS.md`; mapování sekcí na metriky zůstává jako přehledová tabulka.
+- [x] `p40-03` (#66) **HL:** Procesní sekce obsahuje stručné instrukce pro spec-first TDD (Mathews & Nagappan, 2024), dekompozici do sub-issues, branch-per-issue a conventional commits. Sekce Package Quality vymezuje očekávání na modularitu, striktní typování, dokumentaci a čisté veřej...
   - Vedoucí: Tak to by asi šlo ukázat celé
+  - Řešení: plné znění baseline `AGENTS.md` je vloženo přímo za mapovací tabulkou jako listing.
 
 ## str. 41 — Pilotní fáze
-- [ ] `p41-01` (#66) **HL:** Obrázek 4.2: Baseline (pilot-r1): kompletní znění instrukcí použitých jako výchozí AGENTS.md bod pilotních iterací.
+- [x] `p41-01` (#66) **HL:** Obrázek 4.2: Baseline (pilot-r1): kompletní znění instrukcí použitých jako výchozí AGENTS.md bod pilotních iterací.
   - Vedoucí: Nedělal bych to jako obrázek, ale jako text = kód
-- [ ] `p41-02` (#66) **HL:** Specifikace, referenční implementace a baseline instrukce tvoří výchozí bod experimentu. Následující sekce popisuje průběh pilotních iterací cyklem Spuštění/Měření/Diagnóza/Úprava (sekce 3.1.3).
+  - Kontrola: baseline `AGENTS.md` je vložený jako `lstinputlisting`, tedy text/kód; listing začíná na nové stránce a má doplněný odstup mezi captionem a prvním řádkem kódu.
+- [x] `p41-02` (#66) **HL:** Specifikace, referenční implementace a baseline instrukce tvoří výchozí bod experimentu. Následující sekce popisuje průběh pilotních iterací cyklem Spuštění/Měření/Diagnóza/Úprava (sekce 3.1.3).
   - Vedoucí: Zbytečný text a ještě zbytečnější odkaz
+  - Řešení: zbytečný přechodový text nahrazen krátkým uvedením pilotní fáze bez odkazu na metodickou proceduru.
 
 ## str. 42 — Pilot-r1: baseline
-- [ ] `p42-01` (#66) **HL:** Každá iterace sleduje cyklus Spuštění/Měření/Diagnóza/Úprava (sekce 3.1.3)
+- [x] `p42-01` (#66) **HL:** Každá iterace sleduje cyklus Spuštění/Měření/Diagnóza/Úprava (sekce 3.1.3)
   - Vedoucí: To je prakticky stejná věta jako nahoře
-- [ ] `p42-02` (#66) **HL:** Každá iterace sleduje cyklus Spuštění/Měření/Diagnóza/Úprava (sekce 3.1.3) a popisujeme ji ve stejné struktuře: tabulkou metrik, diagnostikou (pozorování chování agenta, interpretace selhání a posun do další iterace) a vizuálním diffem upravené verze md. U...
+  - Kontrola: anotovaná věta už v aktuální praktické části není; úvod pilotní fáze neodkazuje na metodický cyklus a `Pilot-r1` začíná konkrétním popisem běhu.
+- [x] `p42-02` (#66) **HL:** Každá iterace sleduje cyklus Spuštění/Měření/Diagnóza/Úprava (sekce 3.1.3) a popisujeme ji ve stejné struktuře: tabulkou metrik, diagnostikou (pozorování chování agenta, interpretace selhání a posun do další iterace) a vizuálním diffem upravené verze md. U...
   - Vedoucí: Tady opět AI spíše popisuje obecně co by se mělo dělat ale ne to jak se to udělalo
-- [ ] `p42-03` (#66) **HL:** Ze
+  - Kontrola: obecný popis struktury iterace byl odstraněn; jednotlivé podsekce uvádějí přímo naměřené hodnoty, diagnózu a navazující úpravu.
+- [x] `p42-03` (#66) **HL:** Ze
   - Vedoucí: z
+  - Kontrola: samostatný překlep „Ze“ už v aktuální praktické části nebyl nalezen.
 
 ## str. 57 — Cíl 1: Sada metrik
-- [ ] `p57-01` (#66 / #65) **HL:** (sekce 5.1), poté v kontextu existují- cího výzkumu (sekce 5.2) a nakonec diskutuje, jak se metodologická omezení identifikovaná v sekci 3.5 projevila v praxi (sekce 5.3).
+- [x] `p57-01` (#66 / #65) **HL:** (sekce 5.1), poté v kontextu existují- cího výzkumu (sekce 5.2) a nakonec diskutuje, jak se metodologická omezení identifikovaná v sekci 3.5 projevila v praxi (sekce 5.3).
   - Vedoucí: Už žádné odkazy prosím
-- [ ] `p57-02` (#66 / #65) **HL:** Na základě analýzy existujících standardů kvality softwaru a současných benchmarků pro AI agenty navrhnout sadu metrik pokrývající proces, kvalitu kódu a efektivitu (dimenze, které stávající benchmarky neměří). Sada 19 metrik byla navržena (kapitola 3) a po...
+  - Řešení: z openeru kap05 odstraněn výčet sekcí a odkazy; úvod nyní říká, co výsledky znamenají.
+- [x] `p57-02` (#66 / #65) **HL:** Na základě analýzy existujících standardů kvality softwaru a současných benchmarků pro AI agenty navrhnout sadu metrik pokrývající proces, kvalitu kódu a efektivitu (dimenze, které stávající benchmarky neměří). Sada 19 metrik byla navržena (kapitola 3) a po...
   - Vedoucí: Když jsem se teď vrátil ke kapitole 3, myslím, že máte zdroje na metriky jen Q - bylo by zřejmě dobré doplnit zdroje i na metriky další
+  - Řešení: v kap03 doplněny krátké můstky u procesních a zdrojových metrik, které explicitně převádějí teoretické dimenze z kap02 do konkrétní operacionalizace P a E metrik bez opakování literatury.
 
 ## str. 62 — Cíl 2: Iterativní postup
-- [ ] `p62-01` (#63 / #65) **HL:** může vést k měřitelnému zlepšení, nikoli však že stejný efekt nastane obecně. Postup vedl k měřitelnému zlepšení, ale ne monotónnímu. Baseline (r1) splnila čtyři z deseti tvrdých deterministických procesních a produktových kritérií. Po dvou cyklech úprav (r...
+- [x] `p62-01` (#63 / #65) **HL:** může vést k měřitelnému zlepšení, nikoli však že stejný efekt nastane obecně. Postup vedl k měřitelnému zlepšení, ale ne monotónnímu. Baseline (r1) splnila čtyři z deseti tvrdých deterministických procesních a produktových kritérií. Po dvou cyklech úprav (r...
   - Vedoucí: Opět jak jsem zmiňoval už na začátku - nejsem si jistý, že "demonstrace" proběhla - protože to se špatně měří. Zkusme tento cíl trochu upravit. nebo vynechat
+  - Řešení: formulace cíle 2 sjednocena v kap05, závěru a kap01; práce mluví o ověření proveditelnosti na jednom případu a o měřitelných změnách zachycených metrikami, ne o demonstraci obecného zlepšení.
 
 ## Pravidla průchodu
 
