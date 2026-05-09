@@ -354,19 +354,24 @@ a~domény mimo programování vyžaduje další výzkum.
 složky přispívají k~měřenému chování agenta a~které jsou
 redundantní.}
 
-Verifikační kroky (ablace~A) přispívají. Bez nich klesly metriky
-kvality i~korektnosti. Sekce Package Quality (ablace~B) je pro
-deterministické metriky převážně redundantní. \acs{Q5}, \acs{Q6}
-a~\acs{Q7} zůstaly na srovnatelné úrovni. Pouze \acs{Q8} zachytila
-pokles v~modularitě a~dokumentaci.
+Data z~ablace~A jsou konzistentní s~tím, že verifikační kroky
+v~tomto prostředí pomáhaly. Po jejich odebrání klesly vybrané
+metriky kvality i~korektnosti. Vzhledem ke dvěma běhům na variantu
+a~výrazné variabilitě mezi běhy však nejde o~statistický důkaz
+kauzálního efektu. Sekce Package Quality (ablace~B) se
+v~deterministických metrikách jeví převážně redundantní. \acs{Q5},
+\acs{Q6} a~\acs{Q7} zůstaly na srovnatelné úrovni. Pokles
+v~modularitě a~dokumentaci zachytila hlavně \acs{Q8}, tedy podpůrná
+judge-based metrika bez validace proti lidskému hodnocení.
 
 Co tyto výsledky znamenají pro cíl~3? Ablace rozlišily dva typy
-složek instrukcí. V~této případové studii mají verifikační kroky
-zjevný instrumentální přínos. Bez explicitní instrukce agent
-verifikační příkazy nespouštěl spolehlivě. Kódové konvence agent
-dodržuje i~bez instrukce, pravděpodobně ze znalostí z~tréninku.
-Instrukce ale ovlivňují strukturální rozhodnutí (modularita,
-dokumentace), která deterministické metriky nezachytí. Dimenze zdrojů hraje v~ablacích podpůrnou roli. \acs{E1}
+složek instrukcí. V~této případové studii data naznačují
+instrumentální roli verifikačních kroků. Bez explicitní instrukce
+agent verifikační příkazy nespouštěl spolehlivě. Kódové konvence
+agent dodržuje i~bez instrukce, pravděpodobně ze znalostí
+z~tréninku. Instrukce ale mohou ovlivňovat strukturální rozhodnutí
+(modularita, dokumentace), která deterministické metriky nezachytí.
+Dimenze zdrojů hraje v~ablacích podpůrnou roli. \acs{E1}
 (rekonstruovaná z~uložené OpenCode session DB) potvrzuje vzorce
 viditelné v~\mgrp{P} a~\mgrp{Q} (A-2 čerpá výrazně více
 kontextu kvůli opakovaným spuštěním testů, B-2 vykazuje nízké
@@ -440,9 +445,10 @@ a~automaticky generovanou instrukční podporou a~ukazuje, že rozhodující
 je kvalita a~relevance obsahu. Naše výsledky jsou s~těmito zjištěními
 kompatibilní. Ne všechny složky \texttt{AGENTS.md} přispívají stejně.
 
-Nejvýraznější efekt měly v~naší studii verifikační kroky. Ablace~A
-ukázala pokles jak ve funkční korektnosti, tak v~deterministických
-metrikách kvality kódu, když byly explicitní kontroly odstraněny.
+Nejvýraznější rozdíl se v~naší studii objevil u~verifikačních
+kroků. Ablace~A ukázala pokles jak ve funkční korektnosti, tak
+v~deterministických metrikách kvality kódu, když byly explicitní
+kontroly odstraněny.
 To doplňuje pozorování, že opakování ignorované instrukce nepomáhá
 a~účinnější je její přestrukturování do pracovního
 postupu~\cite{breunig2025}. Pilotní fáze v~našich datech ukázala stejný
@@ -625,7 +631,7 @@ V~pilotních iteracích se opakoval vzorec. Obecné pravidlo (``každé
 pole musí být použito'') agent ignoroval, zatímco explicitní příkaz
 s~okamžitou zpětnou vazbou (\texttt{npx eslint}, \texttt{tsc
 --noEmit}) dodržoval spolehlivě i~v~bězích, kde ignoroval zbytek
-pracovního postupu (sekce~\ref{sec:ablace-a}). Ablace potvrdila
+pracovního postupu (sekce~\ref{sec:ablace-a}). Ablační běhy ukázaly
 komplementární stranu. Odstranění verifikačních kroků (ablace~A)
 vedlo k~poklesu \ac{Q2} z~41/42 na 35--37/42 a~nárůstu \ac{Q5}
 z~1 na 3--4 varování. \textcite{breunig2025} formuloval stejný
