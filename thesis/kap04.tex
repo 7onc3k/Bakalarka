@@ -245,7 +245,7 @@ produkuje testy, které hůř zachytí chyby v~kódu než iterativní
 test-fix cyklus. Pro r3 přesouváme tři instrukce z~roviny příkazu
 do~verifikačního kroku. Přidává se explicitní výpis otevřených issues před
 výběrem práce, verifikační \texttt{git log} mezi commity testů a~kódu
-a~přesun požadavku na~JSDoc do~pre-PR checklistu. Na~\acs{Q2}/\acs{Q3}
+a~přesun požadavku na~JSDoc do~verifikační části před PR. Na~\acs{Q2}/\acs{Q3}
 necílíme přímo, ale očekáváme nepřímý efekt přes test-fix cyklus,
 který verifikační \texttt{git log} mezi commity testů a~kódu strukturálně
 podporuje (oproti hromadnému psaní testů ze specifikace)
@@ -310,7 +310,7 @@ kroku funguje. Zbývající nález naznačuje, že explicitní opora v~typech
 sama o~sobě nestačí, pokud agent učiní vlastní implementační rozhodnutí.
 Mírná regrese \acs{Q7} (0$\to$1, pod exit kritériem~0) je v~pásmu
 variability mezi běhy. Samostatně se neřeší, prioritou r4 je
-\acs{Q2}, k~\acs{Q7} se vracíme v~r5. Pro r4 doplňujeme do~pre-PR checklistu příkaz
+\acs{Q2}, k~\acs{Q7} se vracíme v~r5. Pro r4 doplňujeme do~verifikační části před PR příkaz
 \texttt{npx vitest run}, aby agent před otevřením pull requestu ověřil
 průchod vlastních testů, a~do~Constraints pravidlo, že každé pole
 v~API kontraktu musí být v~implementaci použito~\cite{breunig2025}
@@ -329,7 +329,7 @@ v~API kontraktu musí být v~implementaci použito~\cite{breunig2025}
 \label{sec:pilot-r4}
 
 Čtvrtý běh ověřoval dvě úpravy. První bylo přidání
-\texttt{npx vitest run} do pre-PR checklistu, druhé pravidlo o~dodržení API
+\texttt{npx vitest run} do verifikační části před PR, druhé pravidlo o~dodržení API
 kontraktu (každé pole v~typech musí být použito v~implementaci).
 Tabulka~\ref{tab:pilot-r4-delta} ukazuje metriky s~nejvýraznější změnou.
 
@@ -372,7 +372,7 @@ E3 & Počet kompakcí          & 0          & 0           & záznam \\
 \midrule
 \acs{P2}, \acs{P5} & Procesní pravidla porušena (žádné větve per issue, modifikované vlastní testy) & Mezi-běhová variabilita modelu (změna konfigurace v~Docker prostředí + nedeterminismus). Intervence r3$\to$r4 cílila \acs{Q2}, ne procesní pravidla \\
 \acs{Q2} & Pole \texttt{pausedElapsed} opět nepoužito, přibyly chyby v~eskalaci v~pracovních dnech a~na~boundary přechodu DUE\_SOON & Pravidlo o~API kontraktu v~Constraints (deklarativní) bez verifikace neúčinné \\
-\acs{Q2} & Začleněn kód s~timezone bugem ve~vlastním testu & \texttt{npx vitest run} v~pre-PR checklistu nevynutilo skutečné úspěšné dokončení testů \\
+\acs{Q2} & Začleněn kód s~timezone bugem ve~vlastním testu & \texttt{npx vitest run} ve~verifikační části před PR nevynutilo skutečné úspěšné dokončení testů \\
 \acs{Q8} & Pokles design quality (3/3$\to$2/3), JSDoc chybí na~utility functions (\texttt{businessDays.ts}) a~pause/resume logika je nedokumentovaná & Intervence r3$\to$r4 cílila \acs{Q2}, požadavek na~JSDoc z~r3 zůstal deklarativní bez kontroly \\
 \bottomrule
 \end{tabularx}
@@ -387,7 +387,7 @@ a~r4 se kromě instrukcí změnila i~konfigurace modelu v~Docker prostředí
 i~kvalitativní pokles (\acs{Q2}, \acs{Q8}) proto nelze připsat výhradně
 dvěma novým řádkům v~Constraints. Pro r5 vycházíme z~r3 (ne~z~r4) a~cílíme na~dvě
 zbývající selhání verifikačními kroky. Pro \acs{Q2} doplňujeme
-do~pre-PR checklistu ověření, že každé pole z~typů v~API kontraktu
+do~verifikační části před PR ověření, že každé pole z~typů v~API kontraktu
 je v~implementaci čteno i~zapisováno (oproti r4, kde pravidlo bylo
 v~Constraints, je verifikace v~Process~\cite{breunig2025}). Pro
 \acs{Q5}/\acs{Q7} přidáváme explicitní požadavek na~ESLint config
@@ -410,7 +410,7 @@ eslint s~vlastním configem bez tohoto pravidla
 \begingroup
 \sloppy
 Pátý běh ověřoval změny zavedené po r4, tedy verifikaci API kontraktu
-v~pre-PR checklistu a~ESLint complexity pravidlo.
+ve~verifikační části před PR a~ESLint complexity pravidlo.
 
 \begin{table}[htbp]
 \centering
@@ -464,11 +464,11 @@ E3 & Počet kompakcí          & 0          & 0           & záznam \\
 Srovnání r3, r4 a~r5 ukazuje, že selektivní plnění není náhodné. R3
 celý pracovní postup dodržel (\acs{P1}--\acs{P5}~=~5/5), r4 částečně
 ($\sim$3/5), r5 ignoroval zcela ($\sim$1/5), přitom instrukce se mezi
-r3 a~r5 lišily minimálně (2~řádky v~pre-PR checklistu). Data tak
+r3 a~r5 lišily minimálně (2~řádky ve~verifikační části před PR). Data tak
 naznačují, že nedeterminismus modelu je pro dodržování vícekrokových
 sekvencí silnějším faktorem než drobné lokální změny v~checklistu.
 Lokální zlepšení (\acs{Q5}, \acs{Q7}~=~0) přitom přišlo díky
-konkrétnímu ESLint pravidlu v~pre-PR checklistu, což ukazuje, že
+konkrétnímu ESLint pravidlu ve~verifikační části před PR, což ukazuje, že
 jednokrokové verifikační příkazy zafungovaly i~při selhání procesní
 sekvence.
 Výchozí variantou pro ablace zůstává r3. Ablace testují, které složky
