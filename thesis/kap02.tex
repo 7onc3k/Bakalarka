@@ -1,7 +1,7 @@
 \chapter{Teoretická východiska}
 \label{kap:teorie}
 
-Tato kapitola poskytuje teoretický základ pro metrický rámec
+Tato kapitola poskytuje teoretický základ pro sadu metrik
 a~postup případové studie zaměřené na návrh a~vyhodnocení instrukcí.
 První sekce se věnuje kvalitě
 software z~pohledu softwarového inženýrství, tedy proč je její
@@ -303,9 +303,8 @@ i~na hodnocení agenta, obsah zdrojové dimenze se však mění. U~autonomního
 agenta ustupuje lidské úsilí v~klasickém Fentonově smyslu do pozadí.
 Relevantními ukazateli se stávají spotřebované tokeny, reálný čas běhu
 a~stabilita session, k~níž v~agentním prostředí přibývá kontextové okno
-jako vzácný zdroj
-(sekce~\ref{sec:metriky-zdroju}). Tyto osy a~jejich specifika
-podrobněji popisuje sekce~\ref{sec:agenti-meni-sdlc}.
+jako vzácný zdroj. U~agentů se tak zdrojová dimenze přesouvá od
+lidského úsilí k~měřitelným stopám běhu a~využití kontextu.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{AI coding agenti}
@@ -359,14 +358,10 @@ skrze textový obsah, který agent dostane jako vstup.
 
 Předmětem této práce jsou \textit{autonomní coding agenti}, tedy
 systémy, které na základě specifikace a~instrukcí samostatně
-implementují softwarový projekt (např.\ Claude Code, OpenHands,
-SWE-agent)~\cite{guo2025benchmarks}.
-Na rozdíl od asistenčních nástrojů (GitHub Copilot) agent provádí celý
-vývojový proces, nikoli jen jednotlivé kroky. Jeho výstupy lze proto
-hodnotit ve všech třech dimenzích zavedených v~sekci~\ref{sec:swe-zivotni-cyklus}:
-produktové (jaký kód vznikl), procesní (jak při tom postupoval)
-a~zdrojové (kolik tokenů a~kontextu spotřeboval). Posun každé
-z~nich popisuje následující podkapitola.
+implementují softwarový projekt napříč soubory, příkazy a~verzovací
+historií~\cite{guo2025benchmarks}. Na rozdíl od autocomplete nástrojů
+nebo code-review botů v~CI nevytvářejí pouze dílčí návrhy či hodnocení,
+ale provádějí vícekrokový vývojový postup.
 
 \subsection{Jak agenti mění softwarové inženýrství}
 \label{sec:agenti-meni-sdlc}
@@ -430,19 +425,13 @@ v~reálných terminálových prostředích, kde i~frontier modely zatím
 překračují 50\,\% úspěšnosti jen výjimečně. Starší
 HumanEval~\cite{chen2021humaneval} zůstává referencí pro generování
 funkčně správného kódu na izolovaných programovacích úlohách.
-Společné je všem binární hodnocení, zda patch projde nebo neprojde.
+Společně tyto benchmarky měří především funkční úspěšnost, tedy zda
+patch projde nebo neprojde. Takové měření je užitečné pro srovnání
+modelů, ale samo nezachycuje review přijatelnost, udržovatelnost ani
+auditovatelnost postupu, na které upozorňují studie shrnuté
+v~kapitole~\ref{kap:vymezeni}.
 
-Tyto benchmarky měří \textit{funkční korektnost}, tedy zda výsledek dělá
-to, co má. Neměří však, jak agent pracoval (dodržoval proces?),
-jakou strukturální kvalitu má výsledný kód (je udržovatelný?) ani za
-jakou cenu výsledku dosáhl (kolik tokenů spotřeboval?).
-Tři empirické studie zmíněné v~kapitole~\ref{kap:vymezeni}
-(\textcite{metr2026}, \textcite{li2026beyondbugfixes},
-\textcite{ehsani2026failedprs}) shodně dokládají, že
-pass/fail výsledek nezachycuje, zda by patch obstál v~code review,
-byl udržovatelný nebo vznikl auditovatelným postupem.
-
-Existují benchmarky, které hodnocení rozšiřují nad rámec pass/fail.
+Novější benchmarky tuto perspektivu rozšiřují.
 SWE-bench Pro~\cite{swebenchpro2025} přidává strukturované požadavky
 a~FeatureBench~\cite{featurebench2026} hodnotí end-to-end implementaci
 celých funkcí. Evaluace sedmi agentních frameworků jde ještě dál
@@ -453,11 +442,9 @@ omezen na trasu reasoning kroků agenta a~strukturální kvalita kódu
 v~hodnocení chybí. Žádný z~uvedených benchmarků tedy systematicky
 neměří kvalitu procesu (jak agent organizoval práci), kvalitu produktu
 nad rámec funkční korektnosti (udržovatelnost, čistota)
-a~spotřebu zdrojů současně. Tato mezera naznačuje potřebu metrického
-rámce, který by dimenze procesu, kvality produktu a~zdrojů pokrýval
-současně.
-Návrh takového rámce a~jeho operacionalizaci v~kontextu této
-práce popisuje kapitola~\ref{kap:metodika}.
+a~spotřebu zdrojů současně. Tato mezera je důležitá pro tuto práci,
+protože vyžaduje sadu metrik, která pokrývá proces, kvalitu
+produktu a~spotřebu zdrojů současně.
 
 \paragraph{LLM-as-judge}
 Některé dimenze kvality, jako srozumitelnost commit zpráv, kvalita
@@ -497,7 +484,6 @@ Benchmarky i~doplňkové mechanismy z~této sekce hodnotí
 převážně izolované úlohy a~jednotlivé aspekty výstupu. Pro
 vyhodnocení agenta v~kontextu jedné případové studie je třeba metrik
 pokrývajících dimenze produktu, procesu i~zdrojů současně.
-Návrh takové sady je obsahem kapitoly~\ref{kap:metodika}.
 
 \subsection{Instrukce jako nezávislá proměnná}
 \label{sec:scaffolding}
@@ -591,11 +577,7 @@ rozhodnout předem.
 
 Otevřenou otázkou proto není jen to, zda instrukce obecně pomáhají,
 ale jak jejich obsah systematicky navrhovat a~jak poznat, které
-složky skutečně mění chování agenta.
-
-Z~této kapitoly plynou dvě motivace pro zbytek práce: současné
-hodnocení agentů nepokrývá tři dimenze měření společně a~návrh
-instrukcí nemá ustanovený systematický postup. Oba problémy
-adresuje kapitola~\ref{kap:metodika}, která
-zavádí sadu metrik pokrývajících tři dimenze a~iterativní postup
-návrhu instrukcí řízený těmito metrikami.
+složky skutečně mění chování agenta. Z~teoretické části proto
+plynou dvě východiska: současné hodnocení agentů nepokrývá proces,
+kvalitu produktu a~spotřebu zdrojů společně a~návrh instrukcí nemá
+ustálený systematický postup.

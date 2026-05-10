@@ -309,8 +309,8 @@ Tři změny z~r2 ukazují, že přesun deklarativních pravidel do~verifikační
 kroku funguje. Zbývající nález naznačuje, že explicitní opora v~typech
 sama o~sobě nestačí, pokud agent učiní vlastní implementační rozhodnutí.
 Mírná regrese \acs{Q7} (0$\to$1, pod exit kritériem~0) je v~pásmu
-variability mezi běhy. Samostatně se neřeší, prioritou r4 je
-\acs{Q2}, k~\acs{Q7} se vracíme v~r5. Pro r4 doplňujeme do~verifikační části před PR příkaz
+variability mezi běhy. Samostatná intervence proto není prioritou r4,
+který se zaměřuje na selhání \acs{Q2}. Pro r4 doplňujeme do~verifikační části před PR příkaz
 \texttt{npx vitest run}, aby agent před otevřením pull requestu ověřil
 průchod vlastních testů, a~do~Constraints pravidlo, že každé pole
 v~API kontraktu musí být v~implementaci použito~\cite{breunig2025}
@@ -472,9 +472,10 @@ konkrétnímu ESLint pravidlu ve~verifikační části před PR, což ukazuje, �
 jednokrokové verifikační příkazy zafungovaly i~při selhání procesní
 sekvence.
 Výchozí variantou pro ablace zůstává r3. Ablace testují, které složky
-fungujících instrukcí ke~zlepšení skutečně přispěly. Interpretaci
-pilotních pozorování ve~vztahu k~cílům práce uvádí
-kapitola~\ref{kap:vyhodnoceni}.
+fungujících instrukcí ke~zlepšení skutečně přispěly. R5 se proto
+nepoužívá jako výchozí varianta pro ablace. Zachycuje variabilitu
+dodržení pracovního postupu, ale nesplňuje podmínku fungujícího
+procesního základu.
 \endgroup
 
 %% ================================================================
@@ -715,12 +716,10 @@ Tabulka~\ref{tab:cross-run} shrnuje naměřené hodnoty všech metrik
 a~dvě ablační varianty, každou ve dvou nezávislých bězích. Pilotní sloupce ukazují evoluci instrukcí,
 ablační sloupce ukazují dopad odebrání jednotlivých složek a~současně
 variabilitu mezi opakováním téže varianty. Výchozí variantou pro srovnání je r3,
-jediný pilotní běh kde agent splnil celý procesní checklist.
+protože jde o~poslední variantu, která splnila celý procesní checklist.
 Sloupec \acs{E1} uvádí vstup (max.\ na kroku včetně \texttt{cache} v~exportu),
 výstup a~součet \texttt{cache} přes kroky, vše v~tisících. Stejný přehled
 generuje skript \texttt{summary.ts} do \texttt{experiments/runs/SUMMARY.md}.
-Vývoj hodnot a~jejich interpretaci ve vztahu k~cílům práce rozebírá
-další kapitola.
 
 \begin{landscape}
 \begin{table}[H]

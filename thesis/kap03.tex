@@ -76,14 +76,11 @@ od přirozené variability nedeterministického modelu. Ani dva běhy
 neposkytují statistickou průkaznost, a~výsledky proto mají
 indikativní, ne kauzální povahu.
 
-Podrobnější postup jednoho běhu se vrací po definici metrik v~sekci
-\ref{sec:procedura-behu}.
-
 \subsection{Případ a~jednotky analýzy}
 \label{sec:vyber-projektu}
 
 \textit{Případem} v~Yinově smyslu~\cite{yin2018} je projekt
-systému upomínek faktur popsaný níže. \textit{Jednotkami analýzy}
+systému upomínek faktur. \textit{Jednotkami analýzy}
 jsou jednotlivé běhy agenta nad tímto projektem (běhy z~pilotní fáze
 a~z~ablačních variant), z~nichž každý poskytuje vlastní data pro
 hodnocení napříč třemi dimenzemi (proces, produkt, zdroje).
@@ -299,15 +296,15 @@ zůstává napříč všemi běhy beze změny a~je dodávána agentovi
 v~GitHub Issue~\#1 jako hlavní věcný vstup vedle instrukcí.
 
 \textbf{Modely} jsou mezi běhy fixní. Agentní běhy provádí
-MiniMax-M2.5, model schopný autonomně dokončit zadaný úkol. Cílem
-práce je vyhodnotit sadu metrik a~iterativní postup, ne srovnávat
-výkon modelů. Konkrétní agentní model proto slouží jako součást
-experimentálního nastavení. Pro judge-based metriky je fixně použit
-GLM-5 (Zhipu AI), záměrně z~jiné modelové rodiny než agent. Tato volba
-navazuje na biasy LLM-as-judge popsané v~sekci~\ref{sec:llm-as-judge}.
+MiniMax-M2.5, zvolený kvůli nízké ceně a~rychlosti při opakovaných
+agentních bězích. Cílem práce je vyhodnotit sadu metrik a~iterativní
+postup, ne srovnávat výkon modelů. Konkrétní agentní model proto
+slouží jako součást experimentálního nastavení. Pro judge-based
+metriky je fixně použit GLM-5 (Zhipu AI), záměrně z~jiné modelové
+rodiny než agent. Volba vychází z~nízké ceny a~biasů LLM-as-judge
+popsaných v~sekci~\ref{sec:llm-as-judge}.
 Teplota modelu nebyla mezi běhy explicitně nastavena. Agent běžel
-s~výchozí konfigurací poskytovatele. Dopad této volby na variabilitu
-výsledků diskutuje sekce~\ref{sec:limity-vysledky}.
+s~výchozí konfigurací poskytovatele.
 
 \textbf{Běhové prostředí (Docker container)} zajišťuje, že agent
 nemá přístup ke globální konfiguraci nástroje, MCP serverům ani

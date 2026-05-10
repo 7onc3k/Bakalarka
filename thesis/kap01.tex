@@ -15,7 +15,7 @@ o~19\,\% pomalejší.
 
 Současné benchmarky jako SWE-bench~\cite{swebench2024} hodnotí
 izolované aspekty práce agenta, především funkční korektnost. Tři
-empirické studie ale shodně ukazují, že samotný pass/fail výsledek
+empirické studie ale shodně ukazují, že samotné binární hodnocení
 pro praktickou použitelnost nestačí. \textcite{metr2026}\footnote{Jiná
 studie téže organizace než~\cite{metr2025}. Zde jde o~analýzu SWE-bench
 pull requestů, ne randomizovaný experiment.} doložila, že polovina
@@ -25,9 +25,9 @@ pull requestech zjistili kvalitativní nedostatky i~v~přijatém kódu.
 \textcite{ehsani2026failedprs} pak z~33~tisíc agentních
 pull requestů identifikovali, že vedle funkčních chyb tvoří významný
 podíl odmítnutí i~procesní selhání. Každá studie pojmenovává jinou
-stranu téhož problému. Pass/fail neměří, zda by řešení obstálo
-v~code review, zda je kód udržovatelný a~zda vznikl auditovatelným
-postupem. Holistický pohled, který by tyto dimenze zachytil společně,
+stranu téhož problému. Praktická použitelnost agentního výstupu
+zahrnuje i~review přijatelnost, udržovatelnost a~auditovatelnost
+postupu. Holistický pohled, který by tyto dimenze zachytil společně,
 dosud chybí.
 
 Výsledky agenta nejsou dány jen schopnostmi modelu samotného. Lze je
@@ -81,7 +81,7 @@ modely ani programovací jazyky, protože experimentální design se snaží
 držet ostatní podmínky co nejstabilnější a~měnit především instrukce.
 Neporovnává agenta s~lidským vývojářem, protože
 měří zlepšení mezi iteracemi, ne absolutní výkon. Navržená sada
-metrik a~iterativní postup jsou koncipovány jako přenositelný rámec.
+metrik a~iterativní postup jsou koncipovány jako přenositelné výstupy práce.
 Konkrétní instrukce a~naměřené hodnoty platí pro tuto případovou studii
 a~slouží k~ověření proveditelnosti, nikoli jako obecně platný
 výsledek pro všechny modely a~projekty.
