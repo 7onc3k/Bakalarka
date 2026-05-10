@@ -2,7 +2,7 @@
 \label{kap:vyhodnoceni}
 \label{kap:vysledky}
 
-Výsledky případové studie ukazují, že samotný pass/fail výsledek
+Výsledky případové studie ukazují, že samotná binární úspěšnost
 nepostačuje k~posouzení chování AI coding agenta. Stejný běh může
 vytvořit téměř funkční řešení, ale současně porušit očekávaný pracovní
 postup nebo zanechat hůře udržovatelný kód. Interpretace se proto
@@ -15,10 +15,8 @@ zaměřuje na to, co jednotlivé skupiny metrik zachytily, jak pomohly
 %% ================================================================
 
 Tři cíle práce se hodnotí podle toho, co případová studie umožnila
-pozorovat. Vracíme se tím k~hlavnímu problému práce, tedy jak hodnotit
-a~iterativně zlepšovat chování AI coding agenta v~situaci, kdy
-samotný pass/fail výsledek nestačí pro praktické rozhodování
-o~použitelnosti řešení.
+pozorovat. Interpretace proto postupuje od sady metrik přes iterativní
+úpravy instrukcí k~ablacím.
 
 %% ----------------------------------------------------------------
 \subsection{Cíl~1: Sada metrik}
@@ -32,7 +30,7 @@ které stávající benchmarky neměří).}
 Sada 19~metrik byla navržena (kapitola~\ref{kap:metodika}) a~použita
 na devíti bězích (kapitola~\ref{kap:prakticka-cast}). Její přínos
 nespočívá v~tom, že „ukázala nějaká čísla“, ale v~tom, že rozšířila
-hodnocení agenta za hranici pass/fail výsledku. Právě to bylo potřeba
+hodnocení agenta za hranici binární úspěšnosti. Právě to bylo potřeba
 pro problém vymezený v~kapitole~\ref{kap:vymezeni}. Umožňuje odlišit řešení,
 které jen projde testy, od řešení, které je zároveň vytvořeno
 obhajitelným postupem a~zanechává použitelný kód.
@@ -327,18 +325,15 @@ verifikační kroky jsou účinnější než pravidla, ale při pěti bězích
 to nelze statisticky potvrdit.
 
 Postup měl i~slepá místa. \acs{Q2} zůstalo nesplněné ve všech pěti
-bězích (maximum 41/42). Agent opakovaně implementoval
-pause/resume posunem timestampu místo použití pole
-\texttt{pausedElapsed} z~API kontraktu. Pravděpodobným vysvětlením
-je, že posun timestampu je v~trénovacích datech častější pattern
-než explicitní pole pro elapsed time. Navíc název
-\texttt{pausedElapsed} neříká že hodnota musí přetrvat ve stavu
-i~po resume. Úpravou instrukcí se tento problém nepodařilo
-adresovat. Jde o~implementační rozhodnutí na úrovni kde
-instrukce typu pravidlo ani verifikační krok nestačí. Podobně nelze
-vyloučit, že některé regrese v~r4 byly vedlejším efektem úprav
-cílených na jiné metriky. Nedeterminismus modelu a~malý počet
-běhů neumožňují odlišit kauzální efekt úpravy od náhodného šumu.
+bězích (maximum 41/42). Opakovaně selhávalo právě implicitní pravidlo
+domény popsané v~metodice, zachování uplynulého času při pause/resume
+přes API kontrakt. Instrukce postupně zpřesňovaly práci s~kontraktem,
+ale tento problém neodstranily. To ukazuje hranici instrukcí. Pokud
+agent zvolí intuitivní, ale nesprávný implementační vzorec, samotné
+pravidlo ani kontrolní krok nemusí stačit. Podobně nelze vyloučit, že
+některé regrese v~r4 byly vedlejším efektem úprav cílených na jiné
+metriky. Nedeterminismus modelu a~malý počet běhů neumožňují odlišit
+kauzální efekt úpravy od náhodného šumu.
 
 Z~hlediska praktické proveditelnosti každá iterace trvala 25--40
 minut (běh agenta) plus řádově desítky minut na diagnostiku
@@ -412,25 +407,14 @@ předvídatelný není. To zůstává námětem pro další výzkum.
 
 \subsection{Srovnání sady metrik}
 
-Literatura shrnutá v~kapitole~\ref{kap:teorie} ukazuje, že hodnocení
-AI coding agentů je stále silně orientováno na funkční výsledek.
-SWE-bench a~jemu podobné benchmarky jsou postaveny především na
-pass/fail logice. Právě proti tomuto omezení vystupují novější
-empirické práce. \textcite{metr2026} ukazuje, že část patchů, které
-projdou testy, by nebyla přijata při code review. \textcite{li2026beyondbugfixes} dokládají, že ani sloučený pull
-request negarantuje udržovatelný kód. \textcite{ehsani2026failedprs} ukazují, že neúspěch agentních PR
-není jen otázkou chyb v~implementaci, ale i~procesních selhání.
+Případová studie konkretizuje problém vymezený
+v~kapitole~\ref{kap:teorie}. Běhy s~podobnou funkční úspěšností se
+lišily v~tom, zda agent dodržel pracovní postup, zanechal
+auditovatelnou stopu a~vytvořil udržovatelný kód.
 
-Naše sada metrik je s~těmito zjištěními konzistentní. Funkční
-korektnost zůstává nutnou složkou hodnocení, ale sama nestačí.
-V~naší případové studii právě procesní metriky ukázaly informaci,
-kterou by výsledkové benchmarky samy nezachytily. Běhy se stejnými
-nebo podobnými produktovými výsledky se lišily v~tom, zda agent
-vytvořil auditovatelný pracovní postup. Produktové metriky naopak
-ukázaly, že ani kvalitní procesní artefakty samy nezaručují správnou
-implementaci. Přínos členění P/Q/E tedy nespočívá jen v~rozšíření
-počtu měřených veličin, ale v~tom, že umožňuje sledovat různé druhy
-selhání odděleně a~pak je znovu spojit při interpretaci.
+Funkční korektnost proto zůstává nutnou složkou hodnocení, ale sama
+nestačí. Přidaná hodnota navržené sady metrik je v~tom, že odděluje
+výsledek, proces a~zdrojovou náročnost.
 
 Odlišnost vůči existujícím benchmarkům je i~v~tom, že metriky zde
 nejsou jen evaluačním výstupem, ale i~řídicím nástrojem pro další

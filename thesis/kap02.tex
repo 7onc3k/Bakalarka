@@ -425,19 +425,13 @@ v~reálných terminálových prostředích, kde i~frontier modely zatím
 překračují 50\,\% úspěšnosti jen výjimečně. Starší
 HumanEval~\cite{chen2021humaneval} zůstává referencí pro generování
 funkčně správného kódu na izolovaných programovacích úlohách.
-Společné je všem binární hodnocení, zda patch projde nebo neprojde.
+Společně tyto benchmarky měří především funkční úspěšnost, tedy zda
+patch projde nebo neprojde. Takové měření je užitečné pro srovnání
+modelů, ale samo nezachycuje review přijatelnost, udržovatelnost ani
+auditovatelnost postupu, na které upozorňují studie shrnuté
+v~kapitole~\ref{kap:vymezeni}.
 
-Tyto benchmarky měří \textit{funkční korektnost}, tedy zda výsledek dělá
-to, co má. Neměří však, jak agent pracoval (dodržoval proces?),
-jakou strukturální kvalitu má výsledný kód (je udržovatelný?) ani za
-jakou cenu výsledku dosáhl (kolik tokenů spotřeboval?).
-Tři empirické studie zmíněné v~kapitole~\ref{kap:vymezeni}
-(\textcite{metr2026}, \textcite{li2026beyondbugfixes},
-\textcite{ehsani2026failedprs}) shodně dokládají, že
-pass/fail výsledek nezachycuje, zda by patch obstál v~code review,
-byl udržovatelný nebo vznikl auditovatelným postupem.
-
-Existují benchmarky, které hodnocení rozšiřují nad rámec pass/fail.
+Novější benchmarky tuto perspektivu rozšiřují.
 SWE-bench Pro~\cite{swebenchpro2025} přidává strukturované požadavky
 a~FeatureBench~\cite{featurebench2026} hodnotí end-to-end implementaci
 celých funkcí. Evaluace sedmi agentních frameworků jde ještě dál
