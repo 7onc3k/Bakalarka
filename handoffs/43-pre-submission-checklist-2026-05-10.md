@@ -29,12 +29,8 @@ jsou nezávislé na tomto checklistu — projít je odděleně.
       `prohlaseniAI.tex` s AI disclosure — ponecháno (lepší přehnat
       než vynechat, AI disclosure je novější étiketa). Podpis se v
       PDF neřeší.
-- [ ] **Připravit EN název pro InSIS upload** (zítra ráno). Návrhy:
-      - "Design and Testing of an Environment for AI Agents in
-        Software Development" (doslovný překlad)
-      - "Designing and Testing an Environment for AI Coding Agents"
-      - Volba musí sednout se zadáním v InSIS (čl. 12 odst. 2
-        opatření 11/2018: téma odevzdané práce identické se zadáním).
+- [x] **EN název pro InSIS:** "Design and Testing of an Environment
+      for AI Agents in Software Development" (doslovný překlad CZ).
 - [x] **EN abstract zkrácen z 306 → ~264 slov** v `prace.tex` `\AbstraktEN`.
       Zachována parita s CZ obsahem; sémantické posuny opraveny
       ("Results show that the metrics can distinguish",
@@ -91,10 +87,12 @@ jsou nezávislé na tomto checklistu — projít je odděleně.
 - [ ] **Final build** — `make -C thesis prace-clean` po všech opravách.
 - [ ] **Verifikovat název v InSIS = název v PDF** (jinak InSIS nepřijme,
       opatření 11/2018 čl. 12 odst. 2).
-- [ ] **Git tag `thesis-final`** — už existuje, ale je na starším
-      commitu. Po final commitu:
-      `git tag -d thesis-final && git tag thesis-final HEAD && git push --tags --force`.
-      DESTRUKTIVNÍ, schválit s userem.
+- [x] **Git tag `thesis-final`** přesunut na `5f67391`
+      (release/thesis-final branch). Tento commit obsahuje POUZE
+      `experiments/`, `README.md`, `.gitmodules`, `.gitignore` —
+      thesis source, handoffs, notes a jiné autorské materiály
+      odstraněny pro čistý reader-facing snapshot.
+      Branch i tag pushnuty na origin.
 
 ### InSIS workflow (ráno 11. 5.)
 
