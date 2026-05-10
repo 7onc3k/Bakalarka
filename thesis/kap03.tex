@@ -34,9 +34,8 @@ nepraktický. Přednost proto dostává hloubka před šířkou, tedy jeden
 projekt s~detailní analýzou každého běhu (git historie, transcript,
 naměřené metriky).
 \textcite{yin2018} pro tento typ výzkumu používá pojem
-\textit{analytická generalizace}. Na jednom případě ukazujeme
+\textit{analytická generalizace}. Na jednom případě se ukazuje
 princip, který lze dále ověřovat na dalších případech.
-% RAW TODO: doplnit citaci Bowen et al. 2009 (feasibility study framework) — see #53 close
 Praktický přínos této práce spočívá v~ověření, že navrženou sadu
 metrik a~iterativní postup lze aplikovat na jednom případu, zatímco
 analytická generalizace vymezuje způsob, jak opatrně číst
@@ -266,8 +265,8 @@ V~tomto designu vystupují tři roviny, které se snadno zaměňují.
 \textit{Instrukce} v~souboru \texttt{AGENTS.md} jsou nezávislou
 proměnnou, která se mezi běhy mění a~jejíž dopad se sleduje. \textit{Chování
 agenta} (jak implementuje, jak strukturuje práci a~jaký kód vytváří)
-je závislou proměnnou, kterou měříme. Systém upomínek faktur slouží
-jako testovací prostředí, na~kterém chování pozorujeme. Není
+je závislou proměnnou, která se měří. Systém upomínek faktur slouží
+jako testovací prostředí, na~kterém se chování pozoruje. Není
 předmětem zkoumání.
 
 \subsection{Fixní proměnné}
@@ -348,30 +347,30 @@ rozptýlení mezi více vstupů.
 Každý experimentální běh probíhá tak, že agent dostane prázdné
 GitHub repo, specifikaci v~Issue~\#1 a~instrukce v~\texttt{AGENTS.md},
 a~autonomně implementuje zadaný projekt. Výstup jednoho běhu (kód,
-testy, git historie) měříme sadou 19~metrik. Proceduru jednoho běhu
+testy, git historie) se měří sadou 19~metrik. Proceduru jednoho běhu
 (záznam, vyhodnocení a~diagnostickou úpravu instrukcí) popisuje
 sekce~\ref{sec:procedura-behu}.
 
 Sada metrik pokrývá tři otázky, tedy jak agent pracoval, co vyrobil
 a~za jakou cenu. Tyto tři otázky odpovídají taxonomii proces /
 produkt / zdroje popsané v~sekci~\ref{sec:mereni-kvality-obecne}.
-Naše sada obsahuje 19~metrik ve třech kategoriích:
+Sada obsahuje 19~metrik ve třech kategoriích:
 
 \begin{description}
     \item[P~-- proces (P1--P8)] Dodržel agent předepsaný postup?
-          Měříme dodržování pravidel pracovního postupu z~instrukcí
-          (\acs{P1}--\acs{P5}) a~kvalitu procesních výstupů, jako jsou
+          Měří se dodržování pravidel pracovního postupu z~instrukcí
+          (\acs{P1}--\acs{P5}) a~kvalita procesních výstupů, jako jsou
           zprávy commitů, popisy issue a~popisy PR (\acs{P6}--\acs{P8}).
     \item[Q~-- kvalita produktu (Q1--Q8)] Je kód kvalitní?
-          Měříme funkční korektnost (\acs{Q1}--\acs{Q2}), kvalitu testů
+          Měří se funkční korektnost (\acs{Q1}--\acs{Q2}), kvalita testů
           (\acs{Q3}--\acs{Q4}) a~udržovatelnost kódu (\acs{Q5}--\acs{Q8}).
     \item[E~-- zdroje (E1--E3)] Za jakou cenu?
-          Zaznamenáváme spotřebované tokeny (\acs{E1}), čas (\acs{E2})
+          Zaznamenávají se spotřebované tokeny (\acs{E1}), čas (\acs{E2})
           a~počet kompakcí kontextu (\acs{E3}).
 \end{description}
 
 \paragraph{Tři osy klasifikace metriky}
-Každou metriku popisujeme třemi vlastnostmi. První je kategorie
+Každá metrika je popsána třemi vlastnostmi. První je kategorie
 \mgrp{P}, \mgrp{Q} nebo \mgrp{E}, tedy zda metrika sleduje proces,
 produkt nebo zdroje. Druhá je způsob měření. Deterministické metriky
 počítá skript, parser logu nebo statická analýza, zatímco
@@ -495,7 +494,7 @@ implementaci). & $\geq$ 2/3 \\
 
 Produktové metriky měří \textit{co} agent vyrobil. Z~osmi
 charakteristik ISO/IEC~25010 (sekce~\ref{sec:dimenze-kvality})
-v~této sadě sledujeme dvě: \textit{funkční vhodnost}
+tato sada sleduje dvě: \textit{funkční vhodnost}
 (\acs{Q1}--\acs{Q4}: agent vytváří správné řešení)
 a~\textit{udržovatelnost} (\acs{Q5}--\acs{Q8}: agent vytváří kód
 vhodný k~dalšímu pochopení a~rozvoji). Zbylé charakteristiky
@@ -602,7 +601,7 @@ takže ji agent nemůže měnit. Výstupem je celkový počet varování a~chyb 
 \texttt{any} ve zdrojových souborech (grep v~\texttt{src/**/*.ts}) jako
 proxy pro obcházení typového systému. & 0 \\
 \addlinespace
-\acs{Q7} & Cyklomatická složitost &
+\acs{Q7} & Porušení složitosti &
 ESLint \texttt{complexity} rule reportuje funkce s~cyklomatickou
 složitostí nad limitem 10. Výstupem je počet porušení tohoto limitu. & 0 \\
 \addlinespace
@@ -626,7 +625,7 @@ mezi iteracemi.
 
 Tato skupina metrik převádí zdrojovou dimenzi z~teoretických
 východisek do agentního prostředí. Lidské úsilí zde není přímo
-pozorovaným vstupem, proto sledujeme dostupné provozní ukazatele.
+pozorovaným vstupem, proto se sledují dostupné provozní ukazatele.
 Jde o~spotřebované tokeny, reálný čas běhu a~kompakce kontextového
 okna.
 
@@ -929,7 +928,7 @@ Q3 & Mutation score              & Stryker                 & $\geq$ 80\,\% \\
 Q4 & AC coverage agentových testů (25 krit.) & LLM-as-judge (GLM-5)   & 25/25 \\
 Q5 & Lint warnings               & ESLint                  & 0 \\
 Q6 & Typecheck errors            & tsc \texttt{-{}-noEmit} & 0 \\
-Q7 & Cyklomatická složitost      & ESLint (complexity)     & 0 \\
+Q7 & Porušení složitosti         & ESLint (complexity)     & 0 \\
 Q8 & Design quality              & LLM-as-judge (GLM-5)   & $\geq$ 2/3 \\
 \midrule
 \multicolumn{4}{@{}l}{\textit{Zdroje (E): za jakou cenu}} \\[2pt]

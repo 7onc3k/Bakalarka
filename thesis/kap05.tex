@@ -249,8 +249,8 @@ pravidlo (agent ignoruje)~$\to$ příkaz (agent obchází)~$\to$
 verifikační krok (agent dodržuje).
 
 Tento vzorec se zopakoval u~všech tří selhání. Tři nezávislá selhání
-v~rámci jedné případové studie prošla stejnými fázemi. Tuto opakující
-se strukturu interpretujeme v~režimu analytické
+v~rámci jedné případové studie prošla stejnými fázemi. Tato opakující
+se struktura odpovídá režimu analytické
 generalizace~\cite{yin2018}. Jde o~pozorovanou pravidelnost uvnitř
 jednoho případu, nikoli o~obecnou zákonitost. R4 řešilo dosud neadresovaný
 problém \acs{Q2} přidáním pravidla do Constraints (``every field in API
@@ -344,8 +344,8 @@ iteracích trval 13--37~minut (medián 26~minut) plus řádově desítky
 minut na diagnostiku a~úpravu instrukcí. Diagnóza se opírala o~tabulku metrik,
 behaviorální popis z~\texttt{FINDINGS.md} a~analýzu transcriptu
 agenta. Zjištěný vzorec na spektru operacionalizace
-(pravidlo~$\to$ příkaz~$\to$ verifikační krok) považujeme za
-jeden z~hlavních poznatků práce, ale vychází z~jedné případové
+(pravidlo~$\to$ příkaz~$\to$ verifikační krok) je jedním
+z~hlavních poznatků práce, ale vychází z~jedné případové
 studie s~jedním modelem a~z~domény, kde existují deterministické
 nástroje zpětné vazby. Jeho platnost pro jiné modely, typy úloh
 a~domény mimo implementaci kódu ze specifikace vyžaduje další výzkum.
@@ -385,10 +385,10 @@ spolehlivě odlišit.
 
 \paragraph{Reflexe designu ablací}
 Vzorec operacionalizace (pravidlo~$\to$ příkaz~$\to$ verifikační
-krok), identifikovaný v~cíli~2, jsme pojmenovali až při analýze
+krok), identifikovaný v~cíli~2, byl pojmenován až při analýze
 pilotních dat. Výběr ablací mu předcházel. Zpětně je zřejmé, že
 u~ablace~A byl pokles metrik do značné míry předvídatelný.
-\texttt{npx eslint} a~\texttt{git log} jsme do instrukcí přidali
+\texttt{npx eslint} a~\texttt{git log} byly do instrukcí přidány
 v~pilotních iteracích právě proto, že bez nich metriky selhávaly.
 Novým poznatkem byla dvojí funkce verifikačních kroků. Kromě
 kontroly kvality strukturují práci agenta a~zabraňují cyklickému
@@ -403,17 +403,21 @@ předvídatelný není. To zůstává námětem pro další výzkum.
 
 \subsection{Srovnání sady metrik}
 
-Případová studie konkretizuje problém vymezený
-v~kapitole~\ref{kap:teorie}. Literatura ukazuje, že funkční úspěšnost
-sama neříká, zda by patch obstál v~code review, zda je výsledný kód
-udržovatelný a~zda agent dodržel očekávaný pracovní postup. Stejné
-rozlišení se ukázalo i~v~této studii. Běhy s~podobnou funkční
-úspěšností se lišily v~tom, zda agent dodržel pracovní postup, zanechal
-auditovatelnou stopu a~vytvořil udržovatelný kód.
+Zjištění případové studie odpovídají problému vymezenému
+v~kapitole~\ref{kap:teorie}. Běhy s~podobnou funkční úspěšností
+se lišily v~tom, zda agent dodržel pracovní postup, zanechal
+auditovatelnou stopu a~vytvořil udržovatelný kód. Tím studie
+konkretizuje závěr \textcite{metr2026}, že část změn kódu, které
+projdou automatickými testy, nemusí obstát při code review.
+Současně navazuje na \textcite{li2026beyondbugfixes}, kteří ukazují
+kvalitativní nedostatky i~u~přijatého agentního kódu, a~na
+\textcite{ehsani2026failedprs}, kteří vedle implementačních chyb
+popisují i~procesní selhání agentních pull requestů.
 
-Funkční korektnost proto zůstává nutnou složkou hodnocení, ale sama
-nestačí. Přidaná hodnota navržené sady metrik je v~tom, že odděluje
-výsledek, proces a~zdrojovou náročnost.
+Přidaná hodnota navržené sady metrik proto nespočívá jen v~rozšíření
+počtu měřených veličin. Spočívá v~tom, že odděluje výsledek, proces
+a~zdrojovou náročnost, takže umožňuje rozlišit odlišné typy selhání,
+které by jediné výsledkové skóre spojilo dohromady.
 
 Odlišnost vůči existujícím benchmarkům je i~v~tom, že metriky zde
 nejsou jen evaluačním výstupem, ale i~řídicím nástrojem pro další
@@ -430,39 +434,47 @@ nebo absenci jako celek. \textcite{lulla2026} spojují
 generických repository-level souborů a~upozorňují na vyšší náklady.
 SkillsBench~\cite{skillsbench2025} dále rozlišuje mezi kurátorovanou
 a~automaticky generovanou instrukční podporou a~ukazuje, že rozhodující
-je kvalita a~relevance obsahu. Naše výsledky jsou s~těmito zjištěními
-kompatibilní. Ne všechny složky \texttt{AGENTS.md} přispívají stejně.
+je kvalita a~relevance obsahu. Výsledky této studie jsou s~těmito
+zjištěními kompatibilní. Jednotlivé složky \texttt{AGENTS.md} však
+nepřispívaly stejně.
 
-Nejvýraznější rozdíl se v~naší studii objevil u~verifikačních
+Nejvýraznější rozdíl se v~případové studii objevil u~verifikačních
 kroků. Ablace~A ukázala pokles jak ve funkční korektnosti, tak
 v~deterministických metrikách kvality kódu, když byly explicitní
 kontroly odstraněny.
 To doplňuje pozorování, že opakování ignorované instrukce nepomáhá
 a~účinnější je její přestrukturování do pracovního
-postupu~\cite{breunig2025}. Pilotní fáze v~našich datech ukázala stejný
-vzorec. Obecné pravidlo nestačilo, konkrétní příkaz pomohl jen
+postupu~\cite{breunig2025}. Pilotní fáze ukázala stejný vzorec.
+Obecné pravidlo nestačilo, konkrétní příkaz pomohl jen
 částečně a~stabilnější zlepšení přinesl až verifikační krok. Tento
-vývoj je konzistentní i~s~výzkumem specificity instrukcí, podle něhož
-vyšší konkrétnost pomáhá zejména u~procedurálních úloh, ale přílišný
-detail může omezovat flexibilitu modelu~\cite{kim2025detail, zi2025specificity}.
+vývoj je konzistentní i~s~výzkumem specificity instrukcí.
+\textcite{kim2025detail} ukazuje, že konkrétnější zadání pomáhá
+zejména u~procedurálních úloh, ale jeho přínos závisí na typu úlohy
+a~modelu. \textcite{zi2025specificity} u~generování kódu doplňují,
+že užitečný detail často tvoří vstupy, okrajové případy, omezení
+nebo postup řešení. Přínos detailu však není lineární a~další
+zpřesňování může přinášet jen malé zlepšení nebo omezovat flexibilitu
+řešení.
 
-Sekce Package Quality se chovala odlišně. Její odebrání nezhoršilo
-deterministické metriky stejným způsobem jako odebrání verifikačních
-kroků, ale projevilo se v~designové kvalitě hodnocené
-LLM-as-judge. Data jsou proto konzistentní s~tím, že část instrukcí
-nefunguje primárně jako přímá kontrola chování, ale jako opora, která
-připomíná modelu relevantní znalosti z~tréninku. V~tomto ohledu je
-užitečná analogie s~promptingem. Minimální nápověda může vyvolat
-žádoucí chování i~bez detailního skriptu~\cite{wei2022cot,
-min2022rethinking}. V~této práci tento rozdíl interpretujeme jako
-rozdíl mezi \textit{vynucením} a~\textit{aktivací}. Verifikační
-kroky vynucují měřitelné požadavky, zatímco obecnější konvence
-podporují designová rozhodnutí.
+Sekce Package Quality se v~ablaci~B chovala odlišně. Její odebrání
+nezhoršilo deterministické metriky stejným způsobem jako odebrání
+verifikačních kroků, ale projevilo se v~designové kvalitě hodnocené
+LLM-as-judge. Tento výsledek je konzistentní s~tím, že část instrukcí
+nemusí fungovat jako přímá kontrola chování, ale jako opora, která
+modelu připomíná relevantní způsob řešení.
+
+Jako analogii lze použít dvě pozorování z~promptingu.
+Chain-of-thought příklady mohou u~velkých modelů vyvolat krokové
+uvažování~\cite{wei2022cot} a~demonstrace v~kontextu mohou působit
+i~skrze formát, label space a~distribuci vstupů, nejen skrze přímé
+zadání správné odpovědi~\cite{min2022rethinking}. Tato práce tento
+rozdíl interpretuje jako rozdíl mezi \textit{vynucením}
+a~\textit{aktivací}.
 
 Zároveň ale platí, že vliv instrukcí nelze od nedeterminismu modelu
 oddělit dokonale. \textcite{razavi2025} upozorňují na vysokou
-citlivost modelů na drobné změny promptu a~naše pilotní i~ablační běhy
-tento problém potvrzují. Proto je třeba naše výsledky číst jako
+citlivost modelů na drobné změny promptu a~pilotní i~ablační běhy
+tento problém potvrzují. Proto je třeba výsledky číst jako
 indikativní syntézu na úrovni případové studie. Ukazují, které typy
 instrukcí se v~tomto prostředí osvědčily, ale neprokazují univerzální
 kauzální zákon.
@@ -473,66 +485,50 @@ kauzální zákon.
 %% ================================================================
 
 Sekce~\ref{sec:omezeni-validita} identifikovala metodologická
-omezení designu studie předem. Zde ukazujeme, jak se tato omezení
-projevila v~naměřených datech, a~popisujeme omezení která se
-objevila až v~průběhu studie. Omezení řadíme podle toho, co
+omezení designu studie předem. Tato sekce ukazuje, jak se tato omezení
+projevila v~naměřených datech, a~popisuje omezení, která se
+objevila až v~průběhu studie. Omezení jsou řazena podle toho, co
 ohrožují. Nejprve sílu závěrů, pak spolehlivost měření a~nakonec
 rozsah platnosti výsledků.
 
 %% ---- Skupina 1: Co oslabuje závěry ----
 
 \textbf{Nedeterminismus a~citlivost na prompt.}
-Pět binárních procesních metrik \acs{P1}--\acs{P5}
-(splněno/nesplněno) kolísalo od 5/5 (r3) přes $\sim$3/5 (r4) po
-$\sim$1/5 (r5), přestože procesní instrukce v~těchto bězích
-zůstaly stejné. R4 přidalo verifikační příkaz \texttt{npx vitest run}
-v~Process a~pravidlo o~API kontraktu v~Constraints (obojí cíleno
-na~\acs{Q2}). Dodržení procesních pravidel se přesto zhoršilo,
-přestože žádná z~úprav na~pracovní postup přímo necílila. \textcite{razavi2025} tento jev popisují jako
-citlivost na prompt (\textit{prompt sensitivity}). Alternativním vysvětlením je efekt kumulace
-instrukcí. S~rostoucím počtem instrukcí klesá pravděpodobnost
-dodržení všech současně. Instrukce rostly z~r1 do r5.
-Část poklesu procesní shody může být tímto efektem, ne jen citlivostí
-na formulaci.
+Procesní metriky kolísaly i~mezi běhy, které používaly stejný nebo
+velmi podobný pracovní postup. To omezuje sílu závěrů o~účinku
+jednotlivých úprav instrukcí. \textcite{razavi2025} tento typ jevu
+popisují jako citlivost modelů na prompt. V~této studii se k~ní
+přidává i~možný efekt kumulace instrukcí. S~rostoucím počtem pravidel
+může klesat pravděpodobnost, že agent dodrží všechna současně.
 
-Dva běhy na ablační variaci tento problém zmírňují, ale
-neposkytují statistickou sílu. Pokud oba běhy téže ablace ukazují
-stejný směr, je pravděpodobnější že jde o~efekt ablace, ne
-o~náhodu. Například \ac{Q5} v~ablaci~A vykazovala v~obou bězích 4 a~3
-varování linteru, zatímco r3 (plné instrukce) hlásil~1. Shoda obou
-běhů zvyšuje důvěru, že odebrání sekce Process skutečně ovlivnilo
-\acs{Q5}. Naopak u~\ac{Q2} v~ablaci~B jeden běh dosáhl 37/42
-projitých testů, druhý jen 11/42. Tak velký rozptyl mezi dvěma
-běhy se stejnými instrukcemi znamená, že rozdíl oproti r3 mohl
-být způsoben nedeterminismem modelu, ne ablací. Výsledky ablací
-proto interpretujeme jako indikace, ne jako statisticky podložené
-závěry. V~kombinaci s~vedlejšími efekty popsanými výše (r4) to
-znamená, že každá úprava instrukcí vyžaduje měření celé sady
-metrik, ne jen těch na které úprava cílila.
+Dva běhy na ablační variantu pomáhají odlišit náhodný výkyv od
+opakujícího se vzorce, ale neposkytují statistickou sílu. Výsledky
+ablací je proto vhodné číst jako indikace, ne jako statisticky
+podložené kauzální závěry. Metodický dopad spočívá v~tom, že každou
+úpravu instrukcí je nutné hodnotit celou sadou metrik. Změna cílená
+na jednu oblast může ovlivnit i~jiné části chování agenta.
 
 \textbf{Efekt učení autora.}
-Zlepšení mezi iteracemi nemusí plynout jen z~lepších instrukcí.
-Běh r1 splnil \acs{P1}, \acs{P4}, \acs{Q1} a~\acs{Q6}, zatímco r3 navíc
-splnil \acs{P2}--\acs{P5}. Autor se v~průběhu iterací učil
-diagnostikovat selhání a~formulovat opravy.
-Tento efekt nelze od efektu instrukcí oddělit. Diagnostická fáze
-(výběr příčiny selhání a~návrh opravy) závisí výhradně na
-autorovi a~nezávislé ověření nebylo provedeno. Částečnou mitigací
-je použití strukturovaného diagnostického rámce
-(sekce~\ref{sec:pilotni-iterace}). Diagnóza se opírala o~naměřená
-data a~literaturou podložené principy, ne o~intuici. Přesto nelze
-vyloučit, že zkušenější autor by ze stejné výchozí varianty dosáhl lepších
-výsledků rychleji.
+Zlepšení mezi iteracemi nemusí plynout jen ze změn instrukcí.
+Součástí postupu byla i~diagnostika selhání a~návrh dalších úprav,
+které prováděl autor práce. Tento vliv se mísí s~efektem samotných
+změn instrukcí. Výsledky proto nevypovídají pouze o~tom, jak
+silný byl konkrétní text instrukcí, ale také o~tom, jak použitelný byl
+navržený diagnostický postup pro jejich iterativní zlepšování.
+
+Riziko jednostranné interpretace snižoval pevný diagnostický rámec
+popsaný v~sekci~\ref{sec:pilotni-iterace}. Diagnóza vycházela
+z~naměřených metrik, artefaktů běhu a~analýzy transcriptu agenta.
+Přesto je možné, že jiný autor by ze stejných dat navrhl jiné
+úpravy nebo dosáhl podobného zlepšení jinou cestou.
 
 \textbf{Změny konfigurace mezi běhy.}
 Běhy r1--r2 proběhly bez kontejnerové izolace, od r3 běží agent
-v~Docker kontejneru. Od r4 byla změněna konfigurace modelu
-(parametry kontextového okna). Tyto změny jsou potenciálním
-zavádějícím faktorem. Regrese r4 mohla být částečně způsobena změnou
-konfigurace, ne pouze přidáním dvou řádků do Constraints. Hlavní
-proměnné (model, instrukce, specifikace) zůstaly konzistentní.
-Temperature modelu nebyla explicitně nastavena. Experiment používal
-výchozí konfiguraci poskytovatele.
+v~Docker kontejneru. Tato změna je potenciálním zavádějícím faktorem,
+protože upravila technické prostředí běhu. Hlavní proměnné relevantní
+pro chování agenta, tedy model, instrukce a~specifikace, zůstaly
+konzistentní. Temperature modelu nebyla explicitně nastavena.
+Experiment používal výchozí konfiguraci poskytovatele.
 
 \textbf{Tiché ukončení nástroje.}
 Při ablačních bězích se OpenCode v~některých případech tiše
@@ -543,21 +539,11 @@ byly opakovány. Pravděpodobnou příčinou je běh agenta uvnitř
 Docker kontejneru (spojení s~API poskytovatele, limity paměti
 nebo síťové timeouty), ale příčina nebyla potvrzena.
 
-%% ---- Skupina 2: Co omezuje měření ----
-
-\textbf{Nerozlišující exit kritéria.}
-\ac{Q1} a~\ac{Q6} prošly ve všech devíti bězích, takže pro rozlišení
-běhů na této úloze nepřinesly informaci. Pravděpodobným vysvětlením
-je design úlohy. Specifikace poskytuje explicitní TypeScript typy,
-takže shoda s~kontraktem (\acs{Q1}) i~typová kontrola (\acs{Q6}) jsou pro
-model nízkonákladové. \acs{E3} je deskriptivní indikátor, ne exit
-kritérium, a~ve všech bězích~=~0. Pro tuto úlohu má roli kontextového
-faktu o~stabilitě kontextu během běhu. Na rozsáhlejších projektech by
-mohla diskriminovat výrazněji.
-
 %% Q4 hodnotici schema opraveno (24→25 AC, 2026-04-04). Manuální ověření:
 %% AC25 (holiday calendar) pokryté ve všech 9 bězích. Formální
 %% přeměření LLM judge zatím neprovedeno, ale thesis reportuje 25 AC.
+
+%% ---- Skupina 2: Co omezuje měření ----
 
 \textbf{Judge-based metriky bez validace.}
 Hlavní závěry studie stojí na \mmet{det}. \mmet{qual} slouží
@@ -565,46 +551,35 @@ jako podpůrné indikátory, protože jejich spolehlivost nebyla
 validována proti lidskému hodnocení (Cohenovo~$\kappa$). Jedinou
 z~nich, na které stojí netriviální závěr, je \ac{Q8}. Jako jediná
 metrika zachytila pokles designové kvality v~ablacích, který
-\mmet{det} nehlásily. Bez $\kappa$ validace ale nelze sílu
-tohoto závěru plně posoudit.
+\mmet{det} nehlásily. Bez $\kappa$ validace zůstává síla tohoto
+závěru otevřená.
 
-\textbf{Optimalizace na fixní sadu metrik.}
-Iterativní postup ladí instrukce proti pevně dané sadě 19~metrik.
-S~každou iterací roste riziko, že úprava cílí na metriku samotnou,
-ne na chování, které metrika měří. Příkladem je přidání
-\texttt{npx eslint} do verifikačních kroků. \acs{Q5} kleslo,
-ale agent kvůli tomu nepíše čistší kód, jen ho po sobě kontroluje.
-Goodhartův zákon je v~úzké sadě metrik akutnější. Pokrytí třemi
-dimenzemi ho částečně omezuje, protože zlepšení jedné metriky bez
-zlepšení reálného chování se obvykle projeví zhoršením v~jiné.
-Spolehlivá ochrana proti přeučení by ale vyžadovala validaci na
-nezávislé sadě metrik nebo na jiném projektu, což přesahuje rozsah
-této studie.
+\textbf{Ladění na fixní sadu metrik.}
+Iterativní postup upravuje instrukce podle pevně dané sady
+19~metrik. S~každou iterací proto roste riziko, že výsledné instrukce
+budou dobře fungovat právě pro tuto úlohu, tuto sadu metrik a~tento
+způsob měření, ale hůře se přenesou na jiné projekty. To nemusí
+znamenat účelové obcházení metrik. Jde o~obecnější riziko závislosti
+návrhu instrukcí na evaluačním prostředí, podle kterého byly laděny.
+
+Spolehlivější ověření by vyžadovalo nezávislou sadu metrik nebo jiný
+projekt, což přesahuje rozsah této studie.
 
 
 %% ---- Skupina 3: Kde výsledky neplatí ----
 
-\textbf{Kontrolované podmínky vs.\ reálný vývoj.}
-Experiment probíhal v~kontrolovaném prostředí, tedy v~prázdném repozitáři,
-jedna úloha s~kompletní specifikací, fixní sada metrik. Reálný
-vývoj zahrnuje nejednoznačné požadavky, měnící se specifikace
-a~integraci s~existujícím kódem. Instrukce optimalizované pro
-kontrolované podmínky (verifikační kroky, explicitní příkazy)
-nemusí fungovat v~prostředí kde specifikace není kompletní nebo
-se mění v~průběhu práce.
+\textbf{Rozsah platnosti výsledků.}
+Experiment probíhal v~kontrolovaném prostředí jednoho projektu,
+jednoho modelu a~jednoho agentního nástroje. Úloha měla kompletní
+specifikaci, deterministickou doménovou logiku a~fixní sadu metrik.
+Výsledky proto nelze zobecnit statisticky na jiné modely, nástroje
+nebo typy projektů.
 
-\textbf{Jeden model, jeden nástroj, jeden projekt.}
-Omezení plynoucí z~jednoho modelu, jednoho projektu
-a~deterministické specifikace diskutuje
-sekce~\ref{sec:omezeni-validita}. V~praxi se tato omezení
-projevila zejména u~\mgrp{P}. Variabilita neumožňuje odlišit efekt
-instrukcí od nedeterminismu modelu bez většího počtu běhů.
-Výsledky jsou navíc specifické pro OpenCode a~model MiniMax-M2.5.
-Jiné nástroje (GitHub Copilot, Cursor, Claude Code) mohou
-zpracovávat soubory s~instrukcemi odlišně. Zda by instrukce fungovaly
-stejně na projektech s~vyšší nejednoznačností specifikace, na
-jiných modelech nebo s~jinými nástroji, zůstává otevřenou otázkou
-(sekce~\ref{sec:dalsi-vyzkum}).
+Přenositelný je především postup práce s~metrikami, tedy způsob, jak
+běh zaznamenat, vyhodnotit a~použít výsledky k~úpravě instrukcí.
+Konkrétní instrukce a~prahové hodnoty metrik mohou být jiné
+u~projektů s~neúplnou specifikací, existujícím kódem, uživatelským
+rozhraním nebo nedeterministickými výstupy.
 
 \section{Doporučení pro praxi}
 \label{sec:doporuceni}
@@ -615,53 +590,33 @@ kritérií platí pro tento model a~typ projektu. Přenositelný je iterační
 postup (měř~$\to$ diagnostikuj~$\to$ uprav~$\to$ měř znovu)
 a~principy strukturování instrukcí.
 
-\paragraph{Operacionalizace instrukcí}
-V~pilotních iteracích se opakoval vzorec. Obecné pravidlo (``každé
-pole musí být použito'') agent ignoroval, zatímco explicitní příkaz
-s~okamžitou zpětnou vazbou (\texttt{npx eslint}, \texttt{tsc
---noEmit}) dodržoval spolehlivě i~v~bězích, kde ignoroval zbytek
-pracovního postupu (sekce~\ref{sec:ablace-a}). Ablační běhy ukázaly
-komplementární stranu. Odstranění verifikačních kroků (ablace~A)
-vedlo k~poklesu \ac{Q2} z~41/42 na 35--37/42 a~nárůstu \ac{Q5}
-z~1 na 3--4 varování. \textcite{breunig2025} formuloval stejný
-princip, že když agent instrukci ignoruje, nepomůže ji zopakovat.
-Je třeba ji převést na konkrétní akci. Spektrum operacionalizace
-(obrázek~\ref{fig:operacionalizace}) popisuje, po jaké ose se
-intervence pohybují. Čím blíže je instrukce verifikovatelnému
-příkazu, tím spolehlivěji ji agent v~této případové studii
-dodržoval.
+\paragraph{Operacionalizovat měřitelné požadavky}
+Měřitelné požadavky je vhodné převádět na konkrétní pracovní kroky
+s~jasnou zpětnou vazbou. Pokud existuje deterministický nástroj
+(\texttt{eslint}, \texttt{tsc}, testovací sada), instrukce by neměla
+zůstat jen obecným pravidlem, ale měla by agenta vést k~jeho spuštění
+v~konkrétní fázi práce. Čím blíže je instrukce verifikovatelnému
+kroku, tím snáze lze její splnění pozorovat a~vyhodnotit.
 
-Ablace~B ale ukázala i~druhou stránku. Odstranění sekce Package
-Quality ponechalo deterministické metriky (\mmet{det}) beze změny,
-zatímco \ac{Q8} kleslo z~3/3 na 2/3 (sekce~\ref{sec:ablace-b}).
-Konvence zřejmě nepůsobí jako přímé vynucení, ale spíš jako
-\textit{aktivace} latentních znalostí modelu, tedy jako
-připomínka toho, co se model v~tréninkových datech naučil. Toto
-rozlišení je interpretační pojmenování výsledků této studie, ne
-převzatá taxonomie z~literatury. Z~toho plyne praktické
-rozlišení. Měřitelné požadavky je vhodné převést na verifikovatelné kroky
-ve~verifikační části před PR, zatímco požadavky, které nelze měřit
-deterministicky (srozumitelnost dokumentace, vhodnost dekompozice),
-strukturovat jako nápovědu, která modelu připomíná žádoucí směr.
-Účinnost deterministické větve přitom závisí na existenci nástroje
-s~jednoznačným výstupem. Tam, kde takový nástroj chybí, je míra
-operacionalizace principiálně nižší (sekce~\ref{sec:dalsi-vyzkum}).
-Závěr o~designové kvalitě stojí na~\acs{Q8}, tedy na podpůrné
-judge-based metrice bez $\kappa$ validace, a~je proto nutné jej
-číst opatrně.
+Požadavky, které nelze ověřit deterministicky, mají jinou roli.
+Konvence pro dokumentaci, modularitu nebo dekompozici kódu mohou
+sloužit jako nápověda pro designová rozhodnutí, ale nemají stejnou
+sílu jako kontrolní krok s~jednoznačným výsledkem. Je proto vhodné
+oddělovat instrukce, které něco vynucují, od instrukcí, které spíše
+aktivují žádoucí způsob řešení.
 
 \paragraph{Počítat s~nedeterminismem a~měřit proces}
-Agent dodržoval verifikační příkazy deterministicky, ale
-vícekrokový pracovní postup
-(issue~$\to$ branch~$\to$ test~$\to$ PR) nedeterministicky.
-pilotní běh r3 dosáhl \ac{P1}~=~5/5, běh r5 při téměř
-identických instrukcích \acs{P1}~=~$\sim$1/5
-(sekce~\ref{sec:limity-vysledky}). Na úrovni výsledku
-(\acs{Q2}) přitom rozdíl nemusel být patrný. \mgrp{P}
-zachytily problém, který \mgrp{Q} samy o~sobě neodhalily.
-Doporučením je nespoléhat na jednorázové ověření výstupu,
-zavést měřitelná exit kritéria pokrývající proces i~kvalitu
-a~kontrolovat je opakovaně.
+Jednorázové ověření výsledku nestačí. Agent může vytvořit funkčně
+podobný výstup různými pracovními postupy a~nemusí pokaždé dodržet
+stejné procesní instrukce. Proto je vhodné měřit nejen výsledný kód,
+ale i~průběh práce, tedy zda agent založil issue, pracoval na
+oddělené větvi, vytvořil testy před implementací, neměnil testy
+účelově a~zanechal auditovatelný PR.
+
+Procesní metriky nemají nahrazovat produktové metriky. Doplňují je
+o~informaci, zda je výsledek opakovatelný, auditovatelný a~použitelný
+v~běžném vývojovém procesu. U~agentních systémů je proto vhodné
+kontrolovat proces opakovaně, ne jen přijmout první funkční výstup.
 
 \paragraph{Iterovat na základě dat}
 Přínos této práce nespočívá v~konkrétních instrukcích,
@@ -670,15 +625,8 @@ příčinu selhání, provést cílenou úpravu instrukcí a~změřit
 znovu (sekce~\ref{sec:pilotni-iterace}). Tento cyklus lze přenést
 na jiný model nebo projekt jen po přizpůsobení metrik a~exit
 kritérií danému prostředí. Podmínkou je sada metrik pokrývající
-více dimenzí
-(proces, kvalitu produktu, zdroje),
-protože jednodimenzionální měření (např. jen test pass rate)
-může zakrýt problém v~jiné dimenzi
-(sekce~\ref{sec:interpretace}).
-
-Praktický důsledek je přímočarý. Klíčové požadavky je účelnější
-převádět do měřitelného pracovního postupu s~jasnými verifikačními
-kroky než je jen přidávat jako další obecná pravidla.
+více dimenzí (proces, kvalitu produktu, zdroje), protože
+jednodimenzionální měření může zakrýt problém v~jiné dimenzi.
 
 %% ================================================================
 \section{Náměty pro další výzkum}
@@ -689,94 +637,65 @@ Případová studie otevřela několik otázek, které přesahují rozsah
 této práce.
 
 \paragraph{Nedeterminismus vícekrokového pracovního postupu}
-Agent dodržoval verifikační příkazy (jednokrokové akce)
-deterministicky, ale vícekrokový pracovní postup
-(issue~$\to$ branch~$\to$ test~$\to$ implement~$\to$ PR)
-nedeterministicky. R3 kompletně, r5 vůbec, při téměř identických
-instrukcích. Možná vysvětlení zahrnují ztrátu pozornosti
-v~dlouhém kontextovém okně, stochastickou volbu mezi
-strukturovaným a~nestrukturovaným vývojem z~tréninku modelu
-a~pozici instrukce v~kontextu. Granulární ablace pracovního postupu
-(které kroky jsou kritické?) a~opakované běhy se stejnými
-instrukcemi by tento fenomén pomohly lépe pochopit.
+Výsledky naznačují rozdíl mezi jednorázovými verifikačními příkazy
+a~vícekrokovým pracovním postupem. Agent mohl spolehlivě provést
+konkrétní kontrolní příkaz, ale méně spolehlivě držel celý postup od
+založení issue po PR. Další výzkum by měl oddělit, které části
+pracovního postupu jsou pro agenta nejslabší a~zda pomáhá jejich
+přesnější pořadí, kratší instrukční blok nebo průběžné self-check
+body během práce.
 
 \paragraph{Kontinuita práce mezi agenty}
-\mgrp{P} měří transparentnost artefaktů
-(issues, zprávy commitů a~popisy PR). Otevřenou otázkou je, zda tato
-transparentnost k~tomu, aby jiný agent (nebo člověk) navázal na
-rozpracovaný projekt? Testování handoff scénářů by ověřilo, zda
+Procesní metriky (\acs{P1}--\acs{P8}) měří transparentnost artefaktů,
+například issues, zprávy commitů a~popisy PR. Otevřenou otázkou je, zda tato
+transparentnost stačí k~tomu, aby jiný agent nebo člověk navázal na
+rozpracovaný projekt. Testování handoff scénářů by ověřilo, zda
 procesní instrukce vytváří nejen pozorovatelný, ale i~přenositelný
 pracovní kontext.
 
 \paragraph{Automatizace iteračního postupu}
-Fáze Diagnóza a~Úprava jsou v~této práci prováděny manuálně
-autorem. Frameworky jako PromptWizard~\cite{agarwal2024promptwizard}
-a~Prompt Alchemy~\cite{ye2025promptalchemy} ukazují, že cyklus
-analýzy selhání a~návrhu úprav lze automatizovat. Kombinace
-automatizovaného prompt optimizeru s~metrikami P/Q/E by umožnila
-rychlejší iteraci bez manuální diagnózy.
-
-\paragraph{Ověření načtení instrukcí}
-Pilotní data ukazují, že agent instrukce přečte (v~transcriptu
-cituje jejich obsah), ale ne vždy je aktivuje jako řídicí smyčku
-běhu. Místo pracovního postupu z~\texttt{AGENTS.md} použije vlastní
-postup odvozený ze specifikace. Ověřitelný krok na začátku
-běhu (agent musí explicitně potvrdit přečtení a~aktivaci
-pracovního postupu před prvním zápisem kódu) by mohl tento problém
-adresovat.
+Fáze diagnózy a~úpravy instrukcí jsou v~této práci prováděny
+manuálně autorem. Frameworky jako
+PromptWizard~\cite{agarwal2024promptwizard} a~Prompt
+Alchemy~\cite{ye2025promptalchemy} ukazují, že cyklus analýzy
+selhání a~návrhu úprav lze automatizovat. Kombinace takového
+nástroje s~navrženou sadou procesních, produktových a~zdrojových
+metrik by umožnila rychlejší iteraci bez manuální diagnózy.
 
 \paragraph{Mechanismy účinku instrukcí}
-Naše data naznačují dva odlišné mechanismy, které v~této práci
-označujeme jako \textit{vynucení}
-(verifikační kroky přímo kontrolují výstup) a~\textit{aktivace}
-(obecné konvence připomínají modelu znalosti z~tréninku). Analogie
-existuje v~prompt engineeringu. Chain-of-thought prompting ukazuje,
-že minimální nápověda může aktivovat komplexní latentní schopnost
-modelu efektivněji než detailní instrukce. Systematický experiment
-s~odstupňovanou specificitou instrukcí, od nápověd (``piš
-modulární kód'') přes pravidla (``každé pole musí být použito'')
-po verifikační kroky (``spusť \texttt{tsc}, oprav chyby''), by
-mohl identifikovat, která míra konkrétnosti je pro který typ
-požadavku optimální. Otevřená je i~otázka, zda se toto optimum
-posouvá se schopnostmi modelu. Lepší modely by mohly potřebovat
-méně specifické instrukce (analogicky k~expertise reversal effect
-v~kognitivní psychologii, kde instrukce účinné pro nováčky
-zpomalují experty).
+Data této studie naznačují dva odlišné mechanismy, které tato práce
+označuje jako \textit{vynucení} a~\textit{aktivaci}. Verifikační
+kroky přímo kontrolují výstup, zatímco obecnější konvence mohou
+modelu připomínat vhodný způsob řešení. Další výzkum by měl ověřit,
+kdy stačí obecná nápověda a~kdy je potřeba instrukci převést na
+konkrétní pravidlo nebo verifikační krok.
 
-\paragraph{Generalizovatelnost verifikačních kroků}
-Účinnost verifikačních kroků v~naší studii závisela na existenci
-deterministických nástrojů (\texttt{eslint}, \texttt{tsc}, test
-runner), které produkují jednoznačný výstup zpět do kontextu
-agenta. Kódování je v~tomto ohledu specifická doména. Řada
-požadavků na kvalitu má odpovídající nástroj. U~jiných typů
-úloh (dokumentace, architektonická rozhodnutí, plánování) takové
-nástroje často neexistují a~operacionalizace se může zastavit na úrovni
-pravidla nebo příkazu bez externí zpětné vazby. Otevřená otázka
-je, zda principy operacionalizace platí i~mimo kódování, nebo
-zda je jejich účinnost podmíněna dostupností deterministické
-zpětné vazby.
+Vhodným designem by byl experiment s~odstupňovanou specificitou
+instrukcí, od nápověd přes pravidla až po verifikační kroky. Takový
+experiment by umožnil určit, která míra konkrétnosti je vhodná pro
+různé typy požadavků.
 
 \paragraph{Rozšíření na další modely, projekty a~domény}
-Výsledky platí pro jeden model (MiniMax-M2.5) a~jeden typ projektu
-(deterministická business logika). První osa dalšího výzkumu je
-replikace uvnitř programování. Je potřeba ověřit jiné modely, jiné agentní nástroje
-a~projekty s~vyšší nejednoznačností specifikace
-(sekce~\ref{sec:limity-vysledky}). Druhá osa je ověření mimo
-programování, kde nemusí existovat ekvivalent test runneru, lintu
-nebo typové kontroly. Právě tam se ukáže, zda vzorec
-pravidlo~$\to$ příkaz~$\to$ verifikační krok vyjadřuje obecnější
-princip řízení agentů, nebo hlavně výhodu programovací domény
-s~deterministickou zpětnou vazbou.
+Výsledky platí pro jeden model, jeden agentní nástroj a~jeden typ
+projektu s~deterministickou doménovou logikou. Další výzkum by měl
+ověřit, zda stejný postup funguje i~u~jiných modelů, jiných agentních
+nástrojů a~projektů s~vyšší nejednoznačností specifikace.
+
+Samostatnou otázkou je přenos mimo implementaci kódu ze specifikace.
+Účinnost verifikačních kroků v~této studii závisela na existenci
+deterministických nástrojů, jako jsou \texttt{eslint}, \texttt{tsc}
+nebo testovací sada. U~úloh bez podobné zpětné vazby, například
+u~dokumentace, architektonických rozhodnutí nebo plánování, se může
+operacionalizace zastavit na úrovni pravidla nebo příkazu.
 
 \paragraph{Exit kritéria jako součást instrukcí}
-V~naší studii zůstávala exit kritéria mimo \texttt{AGENTS.md}. Agent
+V~této studii zůstávala exit kritéria mimo \texttt{AGENTS.md}. Agent
 dostal instrukce, \textit{jak} pracovat, ne \textit{jakých hodnot}
-metrik dosáhnout. Otevřenou otázkou je, zda by zahrnutí kritérií
-přímo do instrukcí, například jako pre-PR self-check
-(``spusť \texttt{tsc -{}-noEmit}, žádné chyby''), výsledky zlepšilo,
-nebo zda by agent kritéria začal optimalizovat triviálními zkratkami
-(verbose kód proti prahu složitosti, povrchní testy proti pokrytí).
-Riziko Goodhartova zákona je v~úzké sadě metrik vyšší. Sada
-pokrývající tři dimenze ho částečně omezuje, protože gaming jedné
-metriky se projeví v~jiné. Hranice mezi legitimním řízením
-a~změnou povahy měřeného chování zůstává otevřenou otázkou.
+metrik dosáhnout. Další výzkum by mohl ověřit, zda zahrnutí
+vybraných kritérií přímo do instrukcí zlepší dodržování pracovního
+postupu a~kvalitu výstupu.
+
+Současně by bylo nutné sledovat, zda agent nezačne optimalizovat
+samotné kritérium místo chování, které má kritérium měřit. Otevřenou
+otázkou tak zůstává hranice mezi užitečným řízením agenta a~změnou
+povahy měřeného chování.

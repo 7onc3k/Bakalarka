@@ -19,8 +19,8 @@ projektu, referenční testy a~experimentální nastavení jsou popsané
 v~kapitole~\ref{kap:metodika}. Struktura kapitoly sleduje chronologii
 studie. Nejprve popisuje výchozí instrukce použité v~prvním běhu, pak pilotní fázi
 kde se instrukce opakovaně upravují na základě naměřených metrik,
-a~nakonec ablace, kde z~fungující sady systematicky odebíráme
-jednotlivé části a~měříme dopad.
+a~nakonec ablace, kde se z~fungující sady systematicky odebírají
+jednotlivé části a~měří se dopad.
 
 
 %% ================================================================
@@ -160,14 +160,14 @@ Společný pattern napříč \acs{P2}, \acs{P3}, \acs{P5} a~\acs{Q5}/\acs{Q7}
 spočívá v~tom, že instrukce nese \enquote{co} má platit bez konkrétního \enquote{jak} a~bez
 kontroly (viz tabulka). Selhání \acs{Q2} a~\acs{Q4} jsou jiného typu.
 Implementační rozhodnutí v~pause/resume logice a~chybějící AC pokrytí
-v~doménové logice, na~která úroveň výchozích instrukcí nedosahuje. Pro
-r2 doplňujeme procedurální páku ke~každému selhanému procesnímu
+v~doménové logice, na~která úroveň výchozích instrukcí nedosahuje. V~r2
+přibývá procedurální páka ke~každému selhanému procesnímu
 pravidlu (příkaz pro vytvoření větve, oddělené staging testů a~kódu,
-korektivní pravidlo pro selhávající test) a~kontrolu lintu před otevřením
-pull requestu. \acs{Q8} (JSDoc) a~\acs{Q4} (AC pokrytí) ponecháváme
-jako deklarativní pravidla v~Package Quality, abychom v~r2 vyhodnotili,
-zda zopakovaná deklarace bez verifikace zabere. Pokud ne, přesuneme
-je v~r3 do~verifikačního kroku
+korektivní pravidlo pro selhávající test) a~kontrola lintu před otevřením
+pull requestu. \acs{Q8} (JSDoc) a~\acs{Q4} (AC pokrytí) zůstávají
+jako deklarativní pravidla v~Package Quality, aby se v~r2 vyhodnotilo,
+zda zopakovaná deklarace bez verifikace zabere. Pokud ne, přesunou se
+v~r3 do~verifikačního kroku
 (obrázek~\ref{fig:agents-diff-r1-r2}).
 
 \begin{figure}[H]
@@ -242,11 +242,11 @@ formálně, ne podle záměru. Jde o~typický pattern u~deklarativních instrukc
 bez verifikační opory (viz tabulka). Stejný posun se projevil i~na~produktové
 straně, pokles \acs{Q2} a~\acs{Q3} ukazuje, že hromadná write strategie
 produkuje testy, které hůř zachytí chyby v~kódu než iterativní
-test-fix cyklus. Pro r3 přesouváme tři instrukce z~roviny příkazu
+test-fix cyklus. Pro r3 se tři instrukce přesouvají z~roviny příkazu
 do~verifikačního kroku. Přidává se explicitní výpis otevřených issues před
 výběrem práce, verifikační \texttt{git log} mezi commity testů a~kódu
 a~přesun požadavku na~JSDoc do~verifikační části před PR. Na~\acs{Q2}/\acs{Q3}
-necílíme přímo, ale očekáváme nepřímý efekt přes test-fix cyklus,
+úprava přímo necílí, ale očekává se nepřímý efekt přes test-fix cyklus,
 který verifikační \texttt{git log} mezi commity testů a~kódu strukturálně
 podporuje (oproti hromadnému psaní testů ze specifikace)
 (obrázek~\ref{fig:agents-diff-r2-r3}).
@@ -294,7 +294,7 @@ E3 & Počet kompakcí            & 0          & 0           & záznam \\
 \end{table}
 \FloatBarrier
 
-\paragraph{Diagnostika chování}\footnote{V~r3 uvádíme diagnostiku jako prose, protože iterace identifikuje jediný informativní nález. Samostatná findings tabulka by duplikovala obklopující text.}
+\paragraph{Diagnostika chování}\footnote{V~r3 je diagnostika uvedena jako prose, protože iterace identifikuje jediný informativní nález. Samostatná findings tabulka by duplikovala obklopující text.}
 Tři změny instrukcí z~r2 zabraly. Agent dodržel celý procesní checklist
 (\acs{P1}--\acs{P5}~=~5/5) a~doplnil JSDoc dokumentaci
 (\acs{Q8}~=~3/3). Zbývá jediný nález. Agent zvolil vlastní implementaci
@@ -310,7 +310,7 @@ kroku funguje. Zbývající nález naznačuje, že explicitní opora v~typech
 sama o~sobě nestačí, pokud agent učiní vlastní implementační rozhodnutí.
 Mírná regrese \acs{Q7} (0$\to$1, pod exit kritériem~0) je v~pásmu
 variability mezi běhy. Samostatná intervence proto není prioritou r4,
-který se zaměřuje na selhání \acs{Q2}. Pro r4 doplňujeme do~verifikační části před PR příkaz
+který se zaměřuje na selhání \acs{Q2}. Pro r4 se do~verifikační části před PR doplňuje příkaz
 \texttt{npx vitest run}, aby agent před otevřením pull requestu ověřil
 průchod vlastních testů, a~do~Constraints pravidlo, že každé pole
 v~API kontraktu musí být v~implementaci použito~\cite{breunig2025}
@@ -385,12 +385,12 @@ na~této úloze zůstávají citlivé na~variabilitu mezi běhy. Mezi r3
 a~r4 se kromě instrukcí změnila i~konfigurace modelu v~Docker prostředí
 (sekce~\ref{sec:limity-vysledky}). Procesní regrese (\acs{P2}, \acs{P5})
 i~kvalitativní pokles (\acs{Q2}, \acs{Q8}) proto nelze připsat výhradně
-dvěma novým řádkům v~Constraints. Pro r5 vycházíme z~r3 (ne~z~r4) a~cílíme na~dvě
-zbývající selhání verifikačními kroky. Pro \acs{Q2} doplňujeme
-do~verifikační části před PR ověření, že každé pole z~typů v~API kontraktu
+dvěma novým řádkům v~Constraints. Pro r5 instrukce vycházejí z~r3 (ne~z~r4) a~cílí na~dvě
+zbývající selhání verifikačními kroky. Pro \acs{Q2} se do~verifikační
+části před PR doplňuje ověření, že každé pole z~typů v~API kontraktu
 je v~implementaci čteno i~zapisováno (oproti r4, kde pravidlo bylo
 v~Constraints, je verifikace v~Process~\cite{breunig2025}). Pro
-\acs{Q5}/\acs{Q7} přidáváme explicitní požadavek na~ESLint config
+\acs{Q5}/\acs{Q7} přibývá explicitní požadavek na~ESLint config
 zahrnující \texttt{complexity: [warn, 10]}, protože v~r3 agent spustil
 eslint s~vlastním configem bez tohoto pravidla
 (obrázek~\ref{fig:agents-diff-r3-r5}).
@@ -492,11 +492,14 @@ a~zda sekce Package Quality nese samostatný přínos nad rámec pracovního pos
 Ablace proto nejsou generickým odebíráním částí \texttt{AGENTS.md}.
 Každá odpovídá na otázku, která po r1--r5 zůstala neuzavřená.
 
-Existující studie měří efekt souboru \texttt{AGENTS.md} převážně jako
-celku. Účinek jednotlivých složek proto zůstává otevřenou otázkou
-\cite{lulla2026, gloaguen2025agentsmd}. Naše ablace tuto mezeru
+Existující studie posuzují \texttt{AGENTS.md} převážně jako přítomný
+nebo nepřítomný kontextový artefakt. \textcite{lulla2026} sledují
+dopad na čas a~spotřebu tokenů, zatímco
+\textcite{gloaguen2025agentsmd} hodnotí dopad na úspěšnost,
+náklady a~chování agenta. Samostatný přínos konkrétních sekcí
+souboru ale tyto studie neizolují. Ablace v~této práci tuto mezeru
 částečně vyplňují na úrovni případové studie.
-Testujeme dvě ablační varianty a~každou spouštíme ve dvou nezávislých
+Studie testuje dvě ablační varianty a~každou spouští ve dvou nezávislých
 bězích, aby bylo možné odlišit shodný směr změny od jednorázového
 selhání konkrétního běhu.
 
@@ -504,20 +507,20 @@ selhání konkrétního běhu.
 \label{sec:vyber-ablaci}
 
 Soubor \texttt{AGENTS.md} obsahuje sedm sekcí. Pro účely ablací
-rozlišujeme sekce definující \textit{co} implementovat
+se rozlišují sekce definující \textit{co} implementovat
 (Role, Goal, Specification, Environment) a~sekce definující
 \textit{jak} pracovat a~jakou kvalitu produkovat
 (Process, Package Quality, Constraints). Odebrání kontextových sekcí
 by testovalo jinou otázku než vliv instrukcí na proces a~kvalitu.
-Constraints zde navíc neablujeme, protože jejich efekt se v~pilotních
-bězích částečně překrýval s~pracovním postupem v~Process. Proto testujeme dvě
-složky, u~nichž zůstala největší nejistota, tedy verifikační kroky
-v~Process a~sekci Package Quality.
+Constraints zde navíc nejsou ablovány, protože jejich efekt se v~pilotních
+bězích částečně překrýval s~pracovním postupem v~Process. Testovány
+jsou proto dvě složky, u~nichž zůstala největší nejistota, tedy
+verifikační kroky v~Process a~sekce Package Quality.
 
 \paragraph{Ablace~A: bez verifikačních kroků}
-Odebíráme explicitní verifikační příkazy
+Ablace odebírá explicitní verifikační příkazy
 (\texttt{tsc --noEmit}, \texttt{npx eslint},
-\texttt{git log --oneline -3}), ale ponecháváme pracovní postup
+\texttt{git log --oneline -3}), ale ponechává pracovní postup
 issue~$\to$ branch~$\to$ test~$\to$ implement~$\to$ PR
 (obrázek~\ref{fig:diff-r3-ablace-a}). Cílem je ověřit, zda agent tyto
 verifikační kroky spouští i~bez instrukce.
@@ -538,7 +541,7 @@ instrukce, verifikační kroky jsou redundantní. Pokud ne, jde
 o~klíčový mechanismus jejich účinku.
 
 \paragraph{Ablace~B: bez sekce Package Quality}
-Odebíráme celou sekci Package Quality (modulární
+Ablace odebírá celou sekci Package Quality (modulární
 architektura, strict TypeScript, JSDoc dokumentace, čisté veřejné
 API). Process a~Constraints zůstanou beze změny
 (obrázek~\ref{fig:diff-r3-ablace-b}).

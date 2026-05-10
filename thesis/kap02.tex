@@ -20,7 +20,7 @@ odlišné zdroje. Část pochází z~povahy řešeného problému, tedy z~domén
 ve kterých software pracuje, jsou samy o~sobě komplexní (mají mnoho
 stavů, výjimek a~vzájemných závislostí), a~tato složitost se
 nevyhnutelně přenáší do systému, který je má modelovat. Druhá část
-přichází z~nástrojů a~technologií, kterými software stavíme, například
+přichází z~nástrojů a~technologií, kterými se software staví, například
 programovací jazyky, frameworky, build systémy a~knihovny vnášejí
 vlastní vrstvu složitosti, která s~podstatou úlohy přímo nesouvisí.
 \textcite{brooks1987} tyto dva zdroje pojmenoval jako
@@ -378,11 +378,12 @@ projektu a~jeho výstup zůstává pravděpodobnostní. Selhání se proto
 v~každé dimenzi projevují trochu jinak.
 
 Procesní stránka se mění v~tom, kdo provádí jednotlivé kroky,
-a~v~tom, jakou stopu po sobě zanechávají. Typická procesní selhání
-dokládají pozorování agent-generovaných pull requestů.
-Ty se od těch lidských liší mírou nadbytečnosti, konzistencí commit
-zpráv a~ochotou reviewera je přijmout~\cite{watanabe2025agentprs,
-ehsani2026failedprs}.
+a~v~tom, jakou stopu po sobě zanechávají. Studie agentních pull
+requestů ukazují, že tyto příspěvky se od lidských liší rozsahem
+změn, podobou PR popisů a~mírou přijetí~\cite{watanabe2025agentprs}.
+U~neúspěšných agentních PR se navíc opakují selhání v~CI,
+nevhodně zvolené změny a~problémy v~review procesu
+\cite{ehsani2026failedprs}.
 
 Produktová stránka zůstává vymezena stejnými charakteristikami
 (viz sekce~\ref{sec:dimenze-kvality}), ale typické vzorce

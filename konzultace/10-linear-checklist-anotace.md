@@ -1,5 +1,7 @@
 # Lineární checklist anotací vedoucího
 
+Stav: **DONE** — všechny položky checklistu jsou vyřešené v textu a označené jako ověřené.
+
 Zdroj: `konzultace/08-anotace-vedouci.md` (`prace-anotace.pdf`, build 2026-04-27).
 
 Účel: pracovní checklist pro průchod jeden bod po druhém. `08` zůstává raw audit trail s plnými anotacemi; tento soubor slouží k odškrtávání a diskusi.
