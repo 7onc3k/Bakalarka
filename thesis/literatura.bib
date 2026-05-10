@@ -175,10 +175,10 @@
   isbn = {0-201-00650-2}
 }
 
-@inproceedings{brooks1987,
+@article{brooks1987,
   author = {Brooks, Frederick P.},
   title = {No Silver Bullet: Essence and Accidents of Software Engineering},
-  booktitle = {Computer},
+  journal = {Computer},
   volume = {20},
   number = {4},
   pages = {10--19},
@@ -573,7 +573,9 @@
   title = {On the Use of Agentic Coding: An Empirical Study of Pull Requests on {GitHub}},
   journal = {ACM Transactions on Software Engineering and Methodology},
   year = {2025},
-  note = {Under review. 567 Claude Code PRs, 157 projects, 83.8\% acceptance rate}
+  doi = {10.1145/3798166},
+  url = {https://arxiv.org/abs/2509.14745},
+  note = {567 Claude Code PRs, 157 projects, 83.8\% acceptance rate}
 }
 
 @inproceedings{ehsani2026failedprs,
@@ -837,13 +839,13 @@
   note = {Judgment attributes, methodologies, applications and benchmarks}
 }
 
-@INPROCEEDINGS{mathews2024,
+@article{mathews2024,
   author = {Mathews, Noble Saji and Nagappan, Meiyappan},
-  title = {{LLM}-Based Test Generation as Bug Validation: Insights from Reproducing Real-World Bugs},
-  booktitle = {Proceedings of the 1st ACM International Conference on AI-Powered Software (AIware)},
+  title = {Design Choices Made by {LLM}-based Test Generators Prevent Them from Finding Bugs},
+  journal = {arXiv preprint arXiv:2412.14137},
   year = {2024},
-  doi = {10.1145/3664646.3664766},
-  note = {68.1\% generated test suites validate bugs instead of detecting them}
+  url = {https://arxiv.org/abs/2412.14137},
+  note = {LLM test generators (CoverAgent, CoverUp) often validate buggy code instead of detecting it; oracles designed to pass mask defects}
 }
 
 @ARTICLE{rethinking2025,
@@ -873,11 +875,12 @@
   note = {70\% mutants unkilled despite full coverage; 73\% engineer acceptance rate; deployed on 10,795 classes}
 }
 
-@INPROCEEDINGS{yang2024sweagent,
+@inproceedings{yang2024sweagent,
   author = {Yang, John and Jimenez, Carlos E. and Wettig, Alexander and Liber, Kilian and Narasimhan, Karthik and Press, Ofir},
   title = {{SWE}-agent: Agent-Computer Interfaces Enable Automated Software Engineering},
-  booktitle = {NeurIPS},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
   year = {2024},
+  url = {https://arxiv.org/abs/2405.15793},
   note = {ACI ablation: +10.7pp over baseline shell; context management and error guardrails largest gains}
 }
 
@@ -905,10 +908,10 @@
   note = {1500+ merged PRs; ``do one change at a time''; 10 turns per session, 3 retries}
 }
 
-@ARTICLE{featurebench2026,
+@inproceedings{featurebench2026,
   author = {Zhou, Qixing and Zhang, Jiacheng and Wang, Haiyang and Hao, Rui and Wang, Jiahe and Han, Minghao and Yang, Yuxue and Wu, Shuzhe and Pan, Feiyang and Fan, Lue and Tu, Dandan and Zhang, Zhaoxiang},
   title = {{FeatureBench}: Benchmarking Agentic Coding for Complex Feature Development},
-  journal = {arXiv preprint arXiv:2602.10975},
+  booktitle = {International Conference on Learning Representations (ICLR)},
   year = {2026},
   url = {https://arxiv.org/abs/2602.10975},
   note = {Agents struggle when scope exceeds single-issue; feature-level tasks significantly harder}
@@ -946,11 +949,12 @@
   note = {18 LLMs tested; performance increasingly unreliable with input length; distractors amplify degradation}
 }
 
-@INPROCEEDINGS{jetbrains2025complexity,
+@inproceedings{jetbrains2025complexity,
   author = {Lindenbauer, Tobias and others},
   title = {The Complexity Trap: Simple Observation Masking Is as Efficient as {LLM} Summarization for Agent Context Management},
-  booktitle = {NeurIPS},
+  booktitle = {NeurIPS Workshop on Deep Learning for Code (DL4Code)},
   year = {2025},
+  url = {https://arxiv.org/abs/2508.21433},
   note = {Observation masking halves cost, matches LLM summarization; hybrid reduces cost 7--11\% further}
 }
 
@@ -1089,7 +1093,7 @@
 }
 
 @article{razavi2025,
-  author = {Razavi, Seyed Parsa and Fard, Fatemeh H.},
+  author = {Errica, Federico and Siracusano, Giuseppe and Sanvito, Davide and Bifulco, Roberto},
   title = {What Did {I} Do Wrong? Quantifying {LLMs}' Sensitivity and Consistency to Prompt Engineering},
   journal = {Proceedings of NAACL},
   year = {2025},
@@ -1251,10 +1255,10 @@
   note = {Foundational LLM-as-judge paper; position bias, verbosity bias, self-enhancement bias; GPT-4 >80\% human agreement}
 }
 
-@inproceedings{verga2024poll,
-  author = {Verga, Pat and Hofstätter, Sebastian and Cer, Daniel and Thorne, James},
+@article{verga2024poll,
+  author = {Verga, Pat and Hofstätter, Sebastian and Althammer, Sophia and Su, Yixuan and Piktus, Aleksandra and Arkhangorodsky, Arkady and Xu, Minjie and White, Naomi and Lewis, Patrick},
   title = {Replacing Judges with Juries: Evaluating {LLM} Generations with a Panel of Diverse Models},
-  booktitle = {arXiv preprint arXiv:2404.18796},
+  journal = {arXiv preprint arXiv:2404.18796},
   year = {2024},
   url = {https://arxiv.org/abs/2404.18796},
   note = {Panel of LLM evaluators (PoLL) outperforms single GPT-4 judge; disjoint model families reduce intra-model bias; 7x cheaper}
@@ -1408,7 +1412,7 @@
   url = {https://cgi.csc.liv.ac.uk/~comp208/2013/GetTRDoc.pdf}
 }
 
-@inproceedings{runeson2009,
+@article{runeson2009,
   author = {Runeson, Per and Höst, Martin},
   title = {Guidelines for Conducting and Reporting Case Study Research in Software Engineering},
   journal = {Empirical Software Engineering},
@@ -1416,6 +1420,7 @@
   number = {2},
   pages = {131--164},
   year = {2009},
+  publisher = {Springer},
   doi = {10.1007/s10664-008-9102-8}
 }
 
@@ -1555,9 +1560,9 @@
 }
 
 @article{li2026beyondbugfixes,
-  author = {Li, Beiyu and Latendresse, Jasmine and Abdalkareem, Rabe and Shang, Weiyi},
-  title = {Beyond Bug Fixes: Post-Merge Code Quality Issues in Agent-Generated Pull Requests},
-  journal = {Proceedings of the 23rd International Conference on Mining Software Repositories (MSR)},
+  author = {Cynthia, Shamse Tasnim and Al Muttakin and Roy, Banani},
+  title = {Beyond Bug Fixes: An Empirical Investigation of Post-Merge Code Quality Issues in Agent-Generated Pull Requests},
+  journal = {arXiv preprint arXiv:2601.20109},
   year = {2026},
   url = {https://arxiv.org/abs/2601.20109},
   note = {1210 merged agent PRs, SonarQube analysis. Merge success unreliable indicator of quality. Code smells, complexity, duplicated code persist.}
@@ -1741,10 +1746,10 @@
   title = {The {SPACE} of Developer Productivity: There's More to It than You Think},
   journal = {Communications of the ACM},
   volume = {64},
-  number = {11},
+  number = {6},
   pages = {46--53},
   year = {2021},
   publisher = {ACM},
-  doi = {10.1145/3453120},
+  doi = {10.1145/3453928},
   note = {Proposes the SPACE framework (Satisfaction, Performance, Activity, Communication, Efficiency) for individual developer productivity. Explicit warning against reducing productivity to a single metric (SLOC, commit counts). Conceptual precedent for multi-dimensional measurement used in this thesis.}
 }
