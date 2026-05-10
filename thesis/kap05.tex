@@ -69,7 +69,7 @@ jako nutná.
 
 Obrázek~\ref{fig:variability-process} shrnuje míru splnění exit
 kritérií procesních metrik napříč devíti běhy. Nejméně často byly
-splněny \acs{P2} a~\acs{P5} (3/9), zatímco \acs{P6} a~\acs{P7}
+splněny \acs{P2} (3/9) a~\acs{P5} (4/9), zatímco \acs{P6} a~\acs{P7}
 splnily exit kritérium ve všech bězích. Deterministické procesní
 metriky tak vykazují vyšší variabilitu než judge-based metriky
 procesních výstupů.
@@ -125,10 +125,10 @@ testuje, \acs{Q3} \textit{jak dobře}, a~\acs{Q2} zda implementace
 skutečně funguje.
 
 \textit{Čistota a~design (Q5--Q8).}
-\ac{Q5} a~\ac{Q7} se ukázaly jako citlivé na instrukce. V~ablacích
-bez sekce Package Quality vzrostl počet varování linteru o~přibližně
-150\,\% a~počet porušení limitu cyklomatické složitosti obdobně.
-\ac{Q6} naproti tomu zůstala nulová ve všech bězích.
+\ac{Q5} a~\ac{Q7} reagovaly na změny v~instrukcích nestejně podle toho,
+zda obsahovaly verifikační kroky. Podrobnější rozbor přináší ablační
+analýza (sekce~\ref{sec:vyhodnoceni-cil3}). \ac{Q6} naproti tomu
+zůstala nulová ve všech bězích.
 Statické typování poskytuje modelu explicitní vodítka přímo
 v~kódu. Typy parametrů, návratové hodnoty a~rozhraní jsou
 součástí trénovacích dat a~model je při generování dodržuje.
@@ -153,8 +153,8 @@ kterýkoliv typ sám.
 Obrázek~\ref{fig:variability-quality} shrnuje míru splnění exit
 kritérií produktových metrik napříč devíti běhy. \acs{Q1} a~\acs{Q6}
 byly splněny ve všech bězích, zatímco \acs{Q2} nesplnil žádný
-autonomní běh. \acs{Q3} splnil jeden ze sedmi měřitelných běhů, protože
-u~dvou běhů nebylo možné mutation score vyhodnotit.
+autonomní běh. \acs{Q3} splnil jeden ze šesti měřitelných běhů; u~tří
+běhů (r4, r5, A-2) nebylo možné mutation score vyhodnotit.
 
 \input{generated/variability-quality}
 
@@ -339,9 +339,9 @@ některé regrese v~r4 byly vedlejším efektem úprav cílených na jiné
 metriky. Nedeterminismus modelu a~malý počet běhů neumožňují odlišit
 kauzální efekt úpravy od náhodného šumu.
 
-Z~hlediska praktické proveditelnosti každá iterace trvala 25--40
-minut (běh agenta) plus řádově desítky minut na diagnostiku
-a~úpravu instrukcí. Diagnóza se opírala o~tabulku metrik,
+Z~hlediska praktické proveditelnosti běh agenta v~jednotlivých
+iteracích trval 13--37~minut (medián 26~minut) plus řádově desítky
+minut na diagnostiku a~úpravu instrukcí. Diagnóza se opírala o~tabulku metrik,
 behaviorální popis z~\texttt{FINDINGS.md} a~analýzu transcriptu
 agenta. Zjištěný vzorec na spektru operacionalizace
 (pravidlo~$\to$ příkaz~$\to$ verifikační krok) považujeme za
@@ -485,9 +485,10 @@ rozsah platnosti výsledků.
 Pět binárních procesních metrik \acs{P1}--\acs{P5}
 (splněno/nesplněno) kolísalo od 5/5 (r3) přes $\sim$3/5 (r4) po
 $\sim$1/5 (r5), přestože procesní instrukce v~těchto bězích
-zůstaly stejné. R4 přidalo dva řádky do Constraints a~dodržení
-procesních pravidel se zhoršilo, přestože žádná změna přímo necílila na
-pracovní postup. \textcite{razavi2025} tento jev popisují jako
+zůstaly stejné. R4 přidalo verifikační příkaz \texttt{npx vitest run}
+v~Process a~pravidlo o~API kontraktu v~Constraints (obojí cíleno
+na~\acs{Q2}). Dodržení procesních pravidel se přesto zhoršilo,
+přestože žádná z~úprav na~pracovní postup přímo necílila. \textcite{razavi2025} tento jev popisují jako
 citlivost na prompt (\textit{prompt sensitivity}). Alternativním vysvětlením je efekt kumulace
 instrukcí. S~rostoucím počtem instrukcí klesá pravděpodobnost
 dodržení všech současně. Instrukce rostly z~r1 do r5.
@@ -536,8 +537,8 @@ výchozí konfiguraci poskytovatele.
 \textbf{Tiché ukončení nástroje.}
 Při ablačních bězích se OpenCode v~některých případech tiše
 ukončil uprostřed práce agenta. Běhy s~vyšší spotřebou
-kontextového okna (ablace~A měla $\sim$44 spuštění testů oproti
-$\sim$20 u~ablace~B) byly postiženy častěji. Postižené běhy
+kontextového okna byly postiženy častěji (ablace~A spustila více
+testovacích cyklů než ablace~B, viz sekce~\ref{sec:ablace-a}). Postižené běhy
 byly opakovány. Pravděpodobnou příčinou je běh agenta uvnitř
 Docker kontejneru (spojení s~API poskytovatele, limity paměti
 nebo síťové timeouty), ale příčina nebyla potvrzena.
