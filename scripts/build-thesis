@@ -1,5 +1,0 @@
-#!/bin/bash
-# Kompilace BP do PDF (default: prace-full)
-
-cd "$(dirname "$0")/.."
-make prace-full

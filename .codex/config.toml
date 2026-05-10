@@ -1,5 +1,0 @@
-# GPT-5.4 is the 1M-capable OpenAI model for this repo.
-# These two knobs exist in Codex config, but long-context behavior still depends
-# on the active model/provider support.
-model_context_window = 1000000
-model_auto_compact_token_limit = 1000000
