@@ -879,7 +879,7 @@ else:
 # === Metadata lišta (jména + datum) ===
 META_Y = Inches(0.78)
 add_textbox(s, LEFT_X, META_Y, CONTENT_W, Inches(0.28),
-            [("Vedoucí: Ing. Jiří Korčák     ·     Oponent: Ing. Richard Antonín Novák, Ph.D.     ·     Obhajoba: 15. – 26. 6. 2026 (přesný den dle rozpisu SZZ, InSIS)", False)],
+            [("Vedoucí: Ing. Jiří Korčák     ·     Oponent: Ing. Richard Antonín Novák, Ph.D.     ·     Obhajoba: 23. 6. 2026, 12:45", False)],
             font_size=10, color=DARK_GRAY, align=PP_ALIGN.CENTER, italic=True)
 
 # === Sekce VEDOUCÍ (4 otázky, pod sebou, menší font) ===
