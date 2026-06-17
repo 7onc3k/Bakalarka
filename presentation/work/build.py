@@ -898,7 +898,7 @@ clone_title_placeholder(prs.slides[7], s, "Otázky z posudků")
 # metadata řádek). Datum obhajoby je na titulním slidu.
 
 # === VEDOUCÍ — sekce ===
-SEC_V_Y = Inches(2.05)
+SEC_V_Y = Inches(2.00)
 add_textbox(s, LEFT_X, SEC_V_Y, CONTENT_W, Inches(0.32),
             [("Vedoucí — Ing. Jiří Korčák    ·    4 otázky", True)],
             font_size=14, color=FIS_GREEN)
@@ -909,19 +909,19 @@ VEDOUCÍ_OTÁZKY = [
     "Jak jste rozlišoval mezi vlastním autorským přínosem a výstupy AI asistenta při tvorbě textu, diagnostiky experimentu a měřicí infrastruktury?",
     "V práci zmiňujete posun od obecného pravidla ke konkrétnímu příkazu a následně k verifikačnímu kroku. Uveďte konkrétní příklad z Vaší případové studie a vysvětlete, proč právě verifikační krok zlepšil chování agenta.",
 ]
-VQ_Y = SEC_V_Y + Inches(0.38)
-VQ_H = Inches(0.72)
+VQ_Y = SEC_V_Y + Inches(0.36)
+VQ_H = Inches(0.80)
 for i, q in enumerate(VEDOUCÍ_OTÁZKY):
     # 1) číslo + 2) text otázky
     add_textbox(s, LEFT_X, VQ_Y + i * VQ_H, Inches(0.35), VQ_H,
                 [(f"{i+1}.", True)],
-                font_size=12, color=FIS_GREEN, align=PP_ALIGN.LEFT)
+                font_size=13, color=FIS_GREEN, align=PP_ALIGN.LEFT)
     add_textbox(s, LEFT_X + Inches(0.35), VQ_Y + i * VQ_H,
                 ROW_W - Inches(0.35), VQ_H,
-                [q], font_size=11, color=DARK_GRAY, align=PP_ALIGN.LEFT)
+                [q], font_size=13, color=DARK_GRAY, align=PP_ALIGN.LEFT)
 
 # === OPONENT — sekce ===
-SEC_O_Y = VQ_Y + 4 * VQ_H + Inches(0.14)
+SEC_O_Y = VQ_Y + 4 * VQ_H + Inches(0.10)
 add_textbox(s, LEFT_X, SEC_O_Y, CONTENT_W, Inches(0.32),
             [("Oponent — Ing. Richard Antonín Novák, Ph.D.    ·    1 otázka", True)],
             font_size=14, color=FIS_GREEN)
@@ -929,15 +929,15 @@ add_textbox(s, LEFT_X, SEC_O_Y, CONTENT_W, Inches(0.32),
 OPONENT_OTÁZKY = [
     "V práci hodně používáte termín Ablace a Ablační studie, vysvětlete více do hloubky jakou tento termín hraje roli při vašem testování kvality SW při zapojení AI coding agenta?",
 ]
-OQ_Y = SEC_O_Y + Inches(0.38)
-OQ_H = Inches(0.95)
+OQ_Y = SEC_O_Y + Inches(0.36)
+OQ_H = Inches(0.85)
 for i, q in enumerate(OPONENT_OTÁZKY):
     add_textbox(s, LEFT_X, OQ_Y + i * OQ_H, Inches(0.35), OQ_H,
                 [(f"{i+1}.", True)],
-                font_size=12, color=FIS_GREEN, align=PP_ALIGN.LEFT)
+                font_size=13, color=FIS_GREEN, align=PP_ALIGN.LEFT)
     add_textbox(s, LEFT_X + Inches(0.35), OQ_Y + i * OQ_H,
                 ROW_W - Inches(0.35), OQ_H,
-                [q], font_size=11, color=DARK_GRAY, align=PP_ALIGN.LEFT)
+                [q], font_size=13, color=DARK_GRAY, align=PP_ALIGN.LEFT)
 
 # Throughline na tomto slidu nepatří (ponechán jen na slidu 2 a 8).
 
