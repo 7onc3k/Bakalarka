@@ -41,6 +41,26 @@ def remove_empty_placeholder(slide, idx):
             sp.getparent().remove(sp)
             return
 
+
+def clone_title_placeholder(src_slide, dst_slide, new_title):
+    """Copy the title placeholder (idx 0) from src_slide onto dst_slide.
+
+    The original FIS 'Otázky' template slide ships without a title
+    placeholder instance, so without this its title would fall back to a
+    loose textbox in the logo zone. Cloning the placeholder from a sibling
+    content slide makes the title pixel-identical (position, font, color).
+    """
+    src_title = next(
+        shp for shp in src_slide.shapes
+        if shp.is_placeholder and shp.placeholder_format.idx == 0
+    )
+    sp = deepcopy(src_title._element)
+    dst_slide.shapes._spTree.append(sp)  # noqa: SLF001
+    for shp in dst_slide.shapes:
+        if shp.is_placeholder and shp.placeholder_format.idx == 0:
+            replace_text_keep_format(shp, [new_title])
+            return
+
 # =============================================================================
 # HELPERS
 # =============================================================================
@@ -285,7 +305,7 @@ for shp in s.shapes:
         # Specializace odstraněna — program AIN ji nemá; vyprázdnit text
         replace_text_keep_format(shp, [""])
     elif "Datum obhajoby" in txt:
-        replace_text_keep_format(shp, ["Datum obhajoby: [TODO červen 2026]"])
+        replace_text_keep_format(shp, ["Datum obhajoby: 23. 6. 2026"])
 
 set_notes(s, """[HOOK ~30 s]
 
@@ -864,29 +884,21 @@ remove_slide(prs, 8)
 s = prs.slides[8]
 remove_empty_placeholder(s, 1)
 
-LEFT_X = Inches(0.55)
-CONTENT_W = Inches(8.40)
+# Geometrie sjednocená se slidy 2–8 (title placeholder x=0.688, w=8.508).
+LEFT_X = Inches(0.688)
+CONTENT_W = Inches(8.508)
 ROW_W = CONTENT_W
 
-# === Title (konzistentní se slide 1, 2, 3, …) ===
-TITLE_Y = Inches(0.25)
-for shp in s.shapes:
-    if shp.is_placeholder and shp.placeholder_format.idx == 0 and shp.has_text_frame:
-        replace_text_keep_format(shp, ["Otázky z posudků"])
-        break
-else:
-    add_textbox(s, LEFT_X, TITLE_Y, CONTENT_W, Inches(0.60),
-                [("Otázky z posudků", True)],
-                font_size=26, color=FIS_GREEN, align=PP_ALIGN.LEFT)
+# === Title — klonovaný placeholder ze slide 8 (Závěr) ===
+# Original FIS 'Otázky' slide nemá title placeholder; bez klonu by nadpis
+# spadl jako volný textbox do zóny loga. Klon = nadpis identický s ostatními.
+clone_title_placeholder(prs.slides[7], s, "Otázky z posudků")
 
-# === Metadata řádek (jména + datum) ===
-META_Y = Inches(0.92)
-add_textbox(s, LEFT_X, META_Y, CONTENT_W, Inches(0.32),
-            ["Vedoucí: Ing. Jiří Korčák    ·    Oponent: Ing. Richard Antonín Novák, Ph.D.    ·    Obhajoba: 23. 6. 2026"],
-            font_size=11, color=DARK_GRAY, align=PP_ALIGN.LEFT, italic=True)
+# Jména vedoucího/oponenta nesou až sekční hlavičky níže (žádný duplicitní
+# metadata řádek). Datum obhajoby je na titulním slidu.
 
 # === VEDOUCÍ — sekce ===
-SEC_V_Y = Inches(1.45)
+SEC_V_Y = Inches(2.05)
 add_textbox(s, LEFT_X, SEC_V_Y, CONTENT_W, Inches(0.32),
             [("Vedoucí — Ing. Jiří Korčák    ·    4 otázky", True)],
             font_size=14, color=FIS_GREEN)
@@ -898,7 +910,7 @@ VEDOUCÍ_OTÁZKY = [
     "V práci zmiňujete posun od obecného pravidla ke konkrétnímu příkazu a následně k verifikačnímu kroku. Uveďte konkrétní příklad z Vaší případové studie a vysvětlete, proč právě verifikační krok zlepšil chování agenta.",
 ]
 VQ_Y = SEC_V_Y + Inches(0.38)
-VQ_H = Inches(0.78)
+VQ_H = Inches(0.72)
 for i, q in enumerate(VEDOUCÍ_OTÁZKY):
     # 1) číslo + 2) text otázky
     add_textbox(s, LEFT_X, VQ_Y + i * VQ_H, Inches(0.35), VQ_H,
@@ -909,7 +921,7 @@ for i, q in enumerate(VEDOUCÍ_OTÁZKY):
                 [q], font_size=11, color=DARK_GRAY, align=PP_ALIGN.LEFT)
 
 # === OPONENT — sekce ===
-SEC_O_Y = VQ_Y + 4 * VQ_H + Inches(0.18)
+SEC_O_Y = VQ_Y + 4 * VQ_H + Inches(0.14)
 add_textbox(s, LEFT_X, SEC_O_Y, CONTENT_W, Inches(0.32),
             [("Oponent — Ing. Richard Antonín Novák, Ph.D.    ·    1 otázka", True)],
             font_size=14, color=FIS_GREEN)
@@ -918,7 +930,7 @@ OPONENT_OTÁZKY = [
     "V práci hodně používáte termín Ablace a Ablační studie, vysvětlete více do hloubky jakou tento termín hraje roli při vašem testování kvality SW při zapojení AI coding agenta?",
 ]
 OQ_Y = SEC_O_Y + Inches(0.38)
-OQ_H = Inches(1.10)
+OQ_H = Inches(0.95)
 for i, q in enumerate(OPONENT_OTÁZKY):
     add_textbox(s, LEFT_X, OQ_Y + i * OQ_H, Inches(0.35), OQ_H,
                 [(f"{i+1}.", True)],
