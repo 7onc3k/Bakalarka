@@ -857,13 +857,14 @@ Děkuji vám za pozornost.
 remove_slide(prs, 8)
 
 # -----------------------------------------------------------------------------
-# SLIDE 9: Otázky — dle FIS šablony s otázkami z posudků
+# SLIDE 9: Otázky — plné znění z posudků, layout pod sebou
+# Otázky z posudků zobrazené v plném znění (slide 9 je „kartička" k diskusi).
 # -----------------------------------------------------------------------------
 s = prs.slides[8]
 remove_empty_placeholder(s, 1)
 
-LEFT_X = Inches(0.688)
-CONTENT_W = Inches(8.508)
+LEFT_X = Inches(0.45)
+CONTENT_W = Inches(8.55)
 
 # === Title ===
 for shp in s.shapes:
@@ -871,49 +872,51 @@ for shp in s.shapes:
         replace_text_keep_format(shp, ["Otázky"])
         break
 else:
-    add_textbox(s, LEFT_X, Inches(1.20), CONTENT_W, Inches(0.60),
+    add_textbox(s, LEFT_X, Inches(0.20), CONTENT_W, Inches(0.50),
                 [("Otázky", True)],
-                font_size=36, color=FIS_GREEN, align=PP_ALIGN.CENTER)
+                font_size=28, color=FIS_GREEN, align=PP_ALIGN.CENTER)
 
-# === Dva sloupce: vedoucí vlevo, oponent vpravo ===
-COL_W = Inches(3.95)
-COL_L_X = LEFT_X
-COL_R_X = Inches(5.20)
-HDR_Y = Inches(2.00)
-HDR_H = Inches(0.35)
-Q_START_Y = Inches(2.60)
-Q_H = Inches(0.65)
+# === Metadata lišta (jména + datum) ===
+META_Y = Inches(0.78)
+add_textbox(s, LEFT_X, META_Y, CONTENT_W, Inches(0.28),
+            [("Vedoucí: Ing. Jiří Korčák     ·     Oponent: Ing. Richard Antonín Novák, Ph.D.     ·     Obhajoba: 15. – 26. 6. 2026 (přesný den dle rozpisu SZZ, InSIS)", False)],
+            font_size=10, color=DARK_GRAY, align=PP_ALIGN.CENTER, italic=True)
 
-# Levý sloupec — vedoucí (4 otázky)
-add_textbox(s, COL_L_X, HDR_Y, COL_W, HDR_H,
-            [("Otázky vedoucího", True)],
-            font_size=16, color=FIS_GREEN)
-add_textbox(s, COL_L_X, Inches(2.35), COL_W, Inches(0.25),
-            ["Ing. Jiří Korčák"],
-            font_size=11, color=DARK_GRAY, italic=True)
+# === Sekce VEDOUCÍ (4 otázky, pod sebou, menší font) ===
+SEC_V_Y = Inches(1.20)
+add_textbox(s, LEFT_X, SEC_V_Y, CONTENT_W, Inches(0.30),
+            [("Vedoucí — Ing. Jiří Korčák (4 otázky)", True)],
+            font_size=14, color=FIS_GREEN)
 
-for i, q in enumerate([
-    "1. Role ablační studie — proč nestačily pilotní iterace?",
-    "2. Rozdíl procesních, produktových a zdrojových metrik — konkrétní příklad?",
-    "3. Jak odlišit vlastní přínos od přínosu AI asistenta?",
-    "4. Pravidlo → příkaz → verifikační krok — konkrétní příklad?",
-]):
-    add_textbox(s, COL_L_X, Q_START_Y + i * Q_H, COL_W, Q_H,
-                [q], font_size=13, color=DARK_GRAY)
+VEDOUCÍ_OTÁZKY = [
+    "1) Vysvětlete vlastními slovy, jakou roli ve Vaší práci hraje ablační studie a proč nestačilo pouze porovnat jednotlivé pilotní běhy agenta.",
+    "2) Jaký je rozdíl mezi procesními, produktovými a zdrojovými metrikami ve Vašem návrhu? Uveďte konkrétní příklad metriky z každé skupiny a vysvětlete, proč je důležitá, jakou má oporu ve zdrojích a jak je v práci prakticky měřená.",
+    "3) Jak jste rozlišoval mezi vlastním autorským přínosem a výstupy AI asistenta při tvorbě textu, diagnostiky experimentu a měřicí infrastruktury?",
+    "4) V práci zmiňujete posun od obecného pravidla ke konkrétnímu příkazu a následně k verifikačnímu kroku. Uveďte konkrétní příklad z Vaší případové studie a vysvětlete, proč právě verifikační krok zlepšil chování agenta.",
+]
+VQ_Y = SEC_V_Y + Inches(0.32)
+VQ_H = Inches(0.78)
+for i, q in enumerate(VEDOUCÍ_OTÁZKY):
+    add_textbox(s, LEFT_X, VQ_Y + i * VQ_H, CONTENT_W, VQ_H,
+                [q], font_size=10, color=DARK_GRAY)
 
-# Pravý sloupec — oponent (1 otázka)
-add_textbox(s, COL_R_X, HDR_Y, COL_W, HDR_H,
-            [("Otázky oponenta", True)],
-            font_size=16, color=FIS_GREEN)
-add_textbox(s, COL_R_X, Inches(2.35), COL_W, Inches(0.25),
-            ["Ing. Richard Antonín Novák, Ph.D."],
-            font_size=11, color=DARK_GRAY, italic=True)
+# === Sekce OPONENT (1 otázka, pod sebou) ===
+SEC_O_Y = VQ_Y + 4 * VQ_H + Inches(0.10)
+add_textbox(s, LEFT_X, SEC_O_Y, CONTENT_W, Inches(0.30),
+            [("Oponent — Ing. Richard Antonín Novák, Ph.D. (1 otázka)", True)],
+            font_size=14, color=FIS_GREEN)
 
-add_textbox(s, COL_R_X, Q_START_Y, COL_W, Q_H,
-            ["1. Termín \"Ablace\" — hlubší vysvětlení pojmu a jeho role v práci?"],
-            font_size=13, color=DARK_GRAY)
+OPONENT_OTÁZKY = [
+    "1) V práci hodně používáte termín Ablace a Ablační studie, vysvětlete více do hloubky jakou tento termín hraje roli při vašem testování kvality SW při zapojení AI coding agenta?",
+]
+OQ_Y = SEC_O_Y + Inches(0.32)
+OQ_H = Inches(1.10)
+for i, q in enumerate(OPONENT_OTÁZKY):
+    add_textbox(s, LEFT_X, OQ_Y + i * OQ_H, CONTENT_W, OQ_H,
+                [q], font_size=10, color=DARK_GRAY)
 
 # Throughline na tomto slidu nepatří (ponechán jen na slidu 2 a 8).
+
 
 
 set_notes(s, """[Q&A slide — drží během diskuse.]
