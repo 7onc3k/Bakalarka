@@ -857,63 +857,75 @@ Děkuji vám za pozornost.
 remove_slide(prs, 8)
 
 # -----------------------------------------------------------------------------
-# SLIDE 9: Otázky — plné znění z posudků, layout pod sebou
-# Otázky z posudků zobrazené v plném znění (slide 9 je „kartička" k diskusi).
+# SLIDE 9: Otázky z posudků — konzistentní styl s ostatními slidy
+# Plné znění otázek (z posudků), layout pod sebou, velikosti sjednoceny se
+# slide 1–8 (title 26 pt, sekce 14 pt, otázky 11 pt, jména 10 pt kurzíva).
 # -----------------------------------------------------------------------------
 s = prs.slides[8]
 remove_empty_placeholder(s, 1)
 
-LEFT_X = Inches(0.45)
-CONTENT_W = Inches(8.55)
+LEFT_X = Inches(0.55)
+CONTENT_W = Inches(8.40)
+ROW_W = CONTENT_W
 
-# === Title ===
+# === Title (konzistentní se slide 1, 2, 3, …) ===
+TITLE_Y = Inches(0.25)
 for shp in s.shapes:
     if shp.is_placeholder and shp.placeholder_format.idx == 0 and shp.has_text_frame:
-        replace_text_keep_format(shp, ["Otázky"])
+        replace_text_keep_format(shp, ["Otázky z posudků"])
         break
 else:
-    add_textbox(s, LEFT_X, Inches(0.20), CONTENT_W, Inches(0.50),
-                [("Otázky", True)],
-                font_size=28, color=FIS_GREEN, align=PP_ALIGN.CENTER)
+    add_textbox(s, LEFT_X, TITLE_Y, CONTENT_W, Inches(0.60),
+                [("Otázky z posudků", True)],
+                font_size=26, color=FIS_GREEN, align=PP_ALIGN.LEFT)
 
-# === Metadata lišta (jména + datum) ===
-META_Y = Inches(0.78)
-add_textbox(s, LEFT_X, META_Y, CONTENT_W, Inches(0.28),
-            [("Vedoucí: Ing. Jiří Korčák     ·     Oponent: Ing. Richard Antonín Novák, Ph.D.     ·     Obhajoba: 23. 6. 2026, 12:45", False)],
-            font_size=10, color=DARK_GRAY, align=PP_ALIGN.CENTER, italic=True)
+# === Metadata řádek (jména + datum) ===
+META_Y = Inches(0.92)
+add_textbox(s, LEFT_X, META_Y, CONTENT_W, Inches(0.32),
+            ["Vedoucí: Ing. Jiří Korčák    ·    Oponent: Ing. Richard Antonín Novák, Ph.D.    ·    Obhajoba: 23. 6. 2026"],
+            font_size=11, color=DARK_GRAY, align=PP_ALIGN.LEFT, italic=True)
 
-# === Sekce VEDOUCÍ (4 otázky, pod sebou, menší font) ===
-SEC_V_Y = Inches(1.20)
-add_textbox(s, LEFT_X, SEC_V_Y, CONTENT_W, Inches(0.30),
-            [("Vedoucí — Ing. Jiří Korčák (4 otázky)", True)],
+# === VEDOUCÍ — sekce ===
+SEC_V_Y = Inches(1.45)
+add_textbox(s, LEFT_X, SEC_V_Y, CONTENT_W, Inches(0.32),
+            [("Vedoucí — Ing. Jiří Korčák    ·    4 otázky", True)],
             font_size=14, color=FIS_GREEN)
 
 VEDOUCÍ_OTÁZKY = [
-    "1) Vysvětlete vlastními slovy, jakou roli ve Vaší práci hraje ablační studie a proč nestačilo pouze porovnat jednotlivé pilotní běhy agenta.",
-    "2) Jaký je rozdíl mezi procesními, produktovými a zdrojovými metrikami ve Vašem návrhu? Uveďte konkrétní příklad metriky z každé skupiny a vysvětlete, proč je důležitá, jakou má oporu ve zdrojích a jak je v práci prakticky měřená.",
-    "3) Jak jste rozlišoval mezi vlastním autorským přínosem a výstupy AI asistenta při tvorbě textu, diagnostiky experimentu a měřicí infrastruktury?",
-    "4) V práci zmiňujete posun od obecného pravidla ke konkrétnímu příkazu a následně k verifikačnímu kroku. Uveďte konkrétní příklad z Vaší případové studie a vysvětlete, proč právě verifikační krok zlepšil chování agenta.",
+    "Vysvětlete vlastními slovy, jakou roli ve Vaší práci hraje ablační studie a proč nestačilo pouze porovnat jednotlivé pilotní běhy agenta.",
+    "Jaký je rozdíl mezi procesními, produktovými a zdrojovými metrikami ve Vašem návrhu? Uveďte konkrétní příklad metriky z každé skupiny a vysvětlete, proč je důležitá, jakou má oporu ve zdrojích a jak je v práci prakticky měřená.",
+    "Jak jste rozlišoval mezi vlastním autorským přínosem a výstupy AI asistenta při tvorbě textu, diagnostiky experimentu a měřicí infrastruktury?",
+    "V práci zmiňujete posun od obecného pravidla ke konkrétnímu příkazu a následně k verifikačnímu kroku. Uveďte konkrétní příklad z Vaší případové studie a vysvětlete, proč právě verifikační krok zlepšil chování agenta.",
 ]
-VQ_Y = SEC_V_Y + Inches(0.32)
+VQ_Y = SEC_V_Y + Inches(0.38)
 VQ_H = Inches(0.78)
 for i, q in enumerate(VEDOUCÍ_OTÁZKY):
-    add_textbox(s, LEFT_X, VQ_Y + i * VQ_H, CONTENT_W, VQ_H,
-                [q], font_size=10, color=DARK_GRAY)
+    # 1) číslo + 2) text otázky
+    add_textbox(s, LEFT_X, VQ_Y + i * VQ_H, Inches(0.35), VQ_H,
+                [(f"{i+1}.", True)],
+                font_size=12, color=FIS_GREEN, align=PP_ALIGN.LEFT)
+    add_textbox(s, LEFT_X + Inches(0.35), VQ_Y + i * VQ_H,
+                ROW_W - Inches(0.35), VQ_H,
+                [q], font_size=11, color=DARK_GRAY, align=PP_ALIGN.LEFT)
 
-# === Sekce OPONENT (1 otázka, pod sebou) ===
-SEC_O_Y = VQ_Y + 4 * VQ_H + Inches(0.10)
-add_textbox(s, LEFT_X, SEC_O_Y, CONTENT_W, Inches(0.30),
-            [("Oponent — Ing. Richard Antonín Novák, Ph.D. (1 otázka)", True)],
+# === OPONENT — sekce ===
+SEC_O_Y = VQ_Y + 4 * VQ_H + Inches(0.18)
+add_textbox(s, LEFT_X, SEC_O_Y, CONTENT_W, Inches(0.32),
+            [("Oponent — Ing. Richard Antonín Novák, Ph.D.    ·    1 otázka", True)],
             font_size=14, color=FIS_GREEN)
 
 OPONENT_OTÁZKY = [
-    "1) V práci hodně používáte termín Ablace a Ablační studie, vysvětlete více do hloubky jakou tento termín hraje roli při vašem testování kvality SW při zapojení AI coding agenta?",
+    "V práci hodně používáte termín Ablace a Ablační studie, vysvětlete více do hloubky jakou tento termín hraje roli při vašem testování kvality SW při zapojení AI coding agenta?",
 ]
-OQ_Y = SEC_O_Y + Inches(0.32)
+OQ_Y = SEC_O_Y + Inches(0.38)
 OQ_H = Inches(1.10)
 for i, q in enumerate(OPONENT_OTÁZKY):
-    add_textbox(s, LEFT_X, OQ_Y + i * OQ_H, CONTENT_W, OQ_H,
-                [q], font_size=10, color=DARK_GRAY)
+    add_textbox(s, LEFT_X, OQ_Y + i * OQ_H, Inches(0.35), OQ_H,
+                [(f"{i+1}.", True)],
+                font_size=12, color=FIS_GREEN, align=PP_ALIGN.LEFT)
+    add_textbox(s, LEFT_X + Inches(0.35), OQ_Y + i * OQ_H,
+                ROW_W - Inches(0.35), OQ_H,
+                [q], font_size=11, color=DARK_GRAY, align=PP_ALIGN.LEFT)
 
 # Throughline na tomto slidu nepatří (ponechán jen na slidu 2 a 8).
 
